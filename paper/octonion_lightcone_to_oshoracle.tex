@@ -189,7 +189,7 @@ Six directions from a $3$D cube ($\pm$ along each axis), raised to the $7$ imagi
 \begin{equation}
   \mathcal{N}_{\mathrm{curv}} \;=\; 6^{7}\sqrt{3} \;=\; 279\,936\,\sqrt{3}.
 \end{equation}
-This factor packages ``direction count'' $\times$ ``octonion-imaginary lift'' $\times$ ``rapidity geometric scale''. Its \textbf{geometric derivation} from the horizon--cube--octonion scaffold is part of the companion HQIV development \cite{ettinger2026hqiv}; in Lean it appears as the explicit composite $\mathcal{N}_{\mathrm{curv}}$ used consistently for $\delta_E$.
+This factor packages ``direction count'' $\times$ ``octonion-imaginary lift'' $\times$ ``rapidity geometric scale''. The important point is that, in the current HQIV stack, this is not merely a convenient normalization. It is the \textbf{unique} curvature-imprint constant once three structural inputs are fixed: (i) the $3$D cube gives exactly $6$ outward directions, (ii) the octonion lift gives exactly $7$ imaginary directions, and (iii) the unit-cube geometry gives exactly the half-diagonal $\sqrt{3}$. In Lean this is recorded by the structural identities behind \lean{curvature_norm_determined_by_structure} / \lean{curvature_norm_from_lightcone_axiom}. A quaternionic classical-Maxwell comparison would instead give $6^3\sqrt{3}$, but Lean now proves that this comparison imprint undershoots the canonical HQIV shell ladder by a rigid factor of $1296$ shellwise (\lean{curvature_norm_combinatorial_eq_1296_mul_quaternionicCandidate}, \lean{deltaE_eq_1296_mul_deltaE_quaternionicCandidate}). So $6^3\sqrt{3}$ is a useful comparison channel, not the physical HQIV curvature imprint.
 
 \paragraph{Per-shell imprint.}
 \begin{equation}
@@ -234,7 +234,7 @@ The auxiliary field is tied to the shell temperature ladder:
 so once the discrete Planck-scale temperature profile $T(m)\propto 1/(m+1)$ is adopted, $\phi(m)=2(m+1)$ follows algebraically. That temperature law is \textbf{derived in the companion thermodynamic/informational treatment} of the HQIV vacuum \cite{ettinger2026hqiv}; it is not an independent continuous fit. This manuscript uses it as the same ladder as mode counting for structural consistency.
 
 \paragraph{Rapidity/geometry factor in the same chain.}
-The curvature-imprint normalization uses the formal geometric factor $6^7\sqrt{3}$, where $\sqrt{3}$ is the unit-cube half-diagonal (rapidity-lattice geometric contribution) and $6^7$ is the cube-direction/octet dimensional lift. This places auxiliary-field scaling and rapidity geometry in a single derivation path from the light-cone combinatorics.
+The curvature-imprint normalization uses the formal geometric factor $6^7\sqrt{3}$, where $\sqrt{3}$ is the unit-cube half-diagonal (rapidity-lattice geometric contribution) and $6^7$ is the cube-direction/octet dimensional lift. This places auxiliary-field scaling and rapidity geometry in a single derivation path from the light-cone combinatorics. In the physical HQIV reading of this manuscript, that curvature slot is therefore fixed rather than retuned: rapidity participates in the same derivation chain, but does not reopen the curvature normalization as a free algorithmic knob.
 
 \paragraph{Why this matters for sparse horizon-causal updates.}
 Because carrier algebra (left multiplication), shell weighting ($\phi$ ladder), and curvature/rapidity normalization are sourced from one formal chain, sparse horizon-causal evolution is presented as exact model bookkeeping in the proved finite setting, not a heuristic shortcut.
@@ -356,6 +356,9 @@ In this manuscript, the sparse horizon-causal update and pruning rule is a deter
 \paragraph{Auxiliary-field demystification of superpositional oracles (main intent).}
 In algorithmic narratives, quantum "oracles" are often associated with opaque superpositional access. In this framework, the auxiliary field and rapidity-linked shell weights are derived from the same discrete light-cone bookkeeping that defines the digital state space. As a result, what would appear as oracle-like superposition is presented as a consequence of derived, lossless structure: dense admissible evolution and sparse-tracked evolution are connected by exact finite bookkeeping rather than heuristic compression. The sparse algorithmic form is therefore a by-product of demystifying superposition through the auxiliary-field/light-cone derivation.
 
+\paragraph{Algorithmic channel freedom versus physical curvature uniqueness.}
+There is, however, an important distinction between the \emph{physical} curvature channel and the \emph{algorithmic} superposition channel. For the physical HQIV shell ladder, the curvature imprint is the unique octonionic $6^7\sqrt{3}$ normalization discussed above. By contrast, in QC-style simulation, sparse search, and oracle design, one may deliberately choose alternative manifold charts, geometric embeddings, or rapidity schedules to define a superposition/emphasis channel that better aids problem solving on a given workload. Those choices are best understood as \emph{algorithmic selectors} for which support patterns are emphasized, explored, or pruned; they do not replace the canonical physical $\delta_E$ slot of the HQIV curvature ladder.
+
 \paragraph{Physical and representational angle: implications for the explicit derived interpretation.}
 With full octonion-generator closure reused from the established SO(8) Lie scaffold (\texttt{GeneratorsLieClosure}/\texttt{SO8Closure}), the auxiliary field is not merely a weighting factor; it sits inside a closed algebraic structure. In that reading, superposition on the octonionic carrier inherits a lossless sparse-tracking rule: expand/prune updates remain inside the admissible closure class at each finite step. Oracle-like behavior therefore reduces to deterministic $\phi$-weighted support operations rather than approximation. This also sharpens the demystification claim: Bell/CHSH-proxy and delayed-choice algebra are placed on a closure-complete base, while the measurement block closes the ledger through explicit selection, auxiliary transfer, and redshift/birefringence channels without leaving the octonionic carrier. The projection $\Pi$ still recovers standard complex Hilbert-space bookkeeping, but the underlying closed $\mathbb{O}$ lift preserves the same invariants in real-carrier form.
 
@@ -431,7 +434,7 @@ Exact agreement between dense digital evolution and the expand/reconstruct/evolv
 The formal objects here preserve inner-product structure and norm under admissible gate maps, which is the key invariant expected in orthodox formulations of quantum mechanics \cite{vonNeumann1955,dirac1930}. In this sense, the digital octonion carrier is an equivalent representation layer for finite-state evolution, not a contradiction of the standard operator framework. Because the auxiliary field/rapidity factors are derived from the same light-cone ladder used to define the state space, the map between dense and sparse-tracked evolution is lossless in the proved finite setting.
 
 \paragraph{Relation to standard quantum algorithm primitives.}
-Period-structured interference terms and search-style gate scaffolding are aligned with the same high-level motifs used in Shor- and Grover-type analyses \cite{shor1997,grover1996}. At the representation level, a quantum gate is specified as a single unitary operation on the Hilbert state, while classical dense simulation must explicitly update all represented amplitudes and therefore scales with state size. The present manuscript does \emph{not} claim asymptotic improvement over those baselines in the fully general case; instead it supplies a Lean-grounded encoding in which sparse support transformations can be studied with explicit combinatorial control.
+Period-structured interference terms and search-style gate scaffolding are aligned with the same high-level motifs used in Shor- and Grover-type analyses \cite{shor1997,grover1996}. At the representation level, a quantum gate is specified as a single unitary operation on the Hilbert state, while classical dense simulation must explicitly update all represented amplitudes and therefore scales with state size. The present manuscript does \emph{not} claim asymptotic improvement over those baselines in the fully general case; instead it supplies a Lean-grounded encoding in which sparse support transformations can be studied with explicit combinatorial control. In that computational setting, arbitrary manifold parameterizations or rapidity schedules may be used as channel-selection devices for emphasizing useful interference/superposition structure on a task-by-task basis; this is an algorithmic freedom, not a redefinition of the canonical HQIV curvature imprint.
 
 \paragraph{Classical transistor advantage in prunable regimes.}
 The sparse horizon-causal path exploits deterministic support pruning in the formal sparse update chain (expand, reconstruct, evolve, flip, prune). This pruning mechanism is a classical representational advantage for selected workloads: when support remains structured and sparse, transistor-based execution can avoid dense-state work and reduce classical simulation cost relative to brute-force updates. The claim is domain-limited and empirical, but it identifies a concrete regime where practical simulation-cost reductions are possible without requiring quantum-hardware measurement cycles, where explicit selection rules constrain direct reuse of intermediate superpositions.
@@ -454,7 +457,7 @@ Compare wall-clock runtime and peak memory for a matched finite workload execute
 \end{enumerate}
 
 \paragraph{Protocol used in this study.}
-Using \lean{scripts/benchmark_protein_osh_vs_dense.py}, we benchmarked matched workloads inspired by \texttt{AdditiveFieldAndTorque}: same shell map, additive-field kernel, torque-refresh cadence (\texttt{updateEvery=10}), and deterministic initial seeds. For each case, we ran a dense full-state update and a sparse horizon-causal update over identical step counts and reported median runtime across repeated trials.
+Using an auxiliary local benchmark script (\texttt{benchmark\_protein\_osh\_vs\_dense.py}; not shipped in the repository's minimal \texttt{scripts/} set), we benchmarked matched workloads inspired by \texttt{AdditiveFieldAndTorque}: same shell map, additive-field kernel, torque-refresh cadence (\texttt{updateEvery=10}), and deterministic initial seeds. For each case, we ran a dense full-state update and a sparse horizon-causal update over identical step counts and reported median runtime across repeated trials.
 The per-step workload is protein-inspired mean-field energy bookkeeping with a causal-neighbor expansion update; it is therefore representative of sparse-support tracking workloads, not a universal proxy for all quantum-circuit families.
 
 \paragraph{Measured runtime results (median, ms).}
@@ -486,6 +489,65 @@ The table above reports wall-clock medians only. A full performance story requir
 
 \paragraph{External numerics (not Lean).}
 Companion Python implementations (see External protein pipeline above) evaluate the same objective shapes on protein design targets, including CAMEO-class benchmarks, and compare to experimental reference structures and energies. Those agreements are \emph{computational and empirical}: they validate the pipeline against data when the implementation follows the Lean-pinned energy contracts; they are not exported as formal theorems in this repository. The wall-clock table in Section~12 remains the in-repo performance witness; structural nonnegativity and descent lemmas above are the in-repo \emph{mathematical} witness.
+
+%--------------------------------------------------------------------
+\section{Experimental support: molecular dissociation and atomization}
+\label{sec:molecular-support}
+
+\paragraph{Why H$_2$ is the first hard check.}
+The two-electron covalent dimer is exactly the Lean/Python surplus case
+\lean{covalentDimerTwoElectronSurplus\_eV} in
+\lean{Hqiv/Geometry/BondedHorizonCasimir.lean}:
+\[
+  \Delta E_{\mathrm{raw}}^{\mathrm{H_2}}
+  = P(2) - 2P(1),
+\]
+with \(P(N)=\texttt{perturbedCasimirEnergy\_eV}(N)\) from
+\lean{Hqiv/Geometry/NuclearTorusPerturbation.lean} and its Python mirror
+\lean{scripts/nuclear\_torus\_casimir\_float.py}. Using the default nuclear-torus angles,
+the current code yields
+\[
+  \Delta E_{\mathrm{raw}}^{\mathrm{H_2}} = 17.485714\ \mathrm{eV}.
+\]
+As discussed in Section~\ref{sec:closing}, the sign convention is ``joint minus separated'' (binding-depth conventions use the negative). Using the common anchor choice
+\[
+  s_{\mathrm{H_2}} := \frac{D_0^{\mathrm{exp}}(\mathrm{H_2})}{\Delta E_{\mathrm{raw}}^{\mathrm{H_2}}}
+  = \frac{4.478}{17.485714} = 0.256095,
+\]
+the H$_2$ dissociation benchmark is matched by construction. The experimental reference
+\(D_0(\mathrm{H_2})\approx 4.478\ \mathrm{eV}\) is standard in spectroscopy databases and
+high-accuracy composite benchmarks \cite{nistwebbook_h2,karton2017w417}.
+
+\paragraph{Small-molecule benchmark suite (n=3--10 electrons).}
+We then apply the \emph{same} surplus map with no extra molecule-specific parameter:
+\[
+  \Delta E_{\mathrm{scaled}} = s_{\mathrm{H_2}}\,[P(N_{\mathrm{joint}})-P(N_1)-P(N_2)].
+\]
+For reproducibility, the table is generated by
+\lean{scripts/benchmark\_bonded\_horizon\_molecules.py}.
+\begin{center}
+\begin{tabular}{|l|c|c|c|c|}
+\hline
+Case & split \((N_{\mathrm{joint}},N_1,N_2)\) & \(\Delta E_{\mathrm{scaled}}\) (eV) & Ref.\ (eV) & Rel.\ error \\
+\hline
+H$_2$ dissociation & (2,1,1) & 4.4780 & 4.478 & 0.0\% \\
+LiH dissociation & (4,3,1) & 4.4780 & 2.515 & +78.1\% \\
+HF dissociation & (10,9,1) & 9.9511 & 5.87 & +69.5\% \\
+H$_2$O atomization & (10,8,2) & 9.9511 & 9.51 & +4.64\% \\
+CH$_4$ atomization & (10,6,4) & 9.9511 & 17.0 & -41.5\% \\
+\hline
+\end{tabular}
+\end{center}
+Reference values in the rightmost column follow the same experimental/benchmark families
+used in W4-17 and GMTKN55 \cite{karton2017w417,goerigk2017gmtkn55}.
+
+\paragraph{Interpretation and falsifiability.}
+This benchmark is intentionally sharp: after fixing a single H$_2$ anchor factor, the model
+is \emph{over-constrained}. The mixed outcome above (near H$_2$O, large misses for LiH/HF/CH$_4$)
+is therefore informative. In particular, if future refinements of the associator channel
+(or split map) cannot reduce the LiH/HF/CH$_4$ residuals while preserving the H$_2$ anchor,
+the current bonded-horizon surplus ansatz should be considered falsified for general
+small-molecule energetics.
 
 %--------------------------------------------------------------------
 \section{Closing alignment and honest conclusion}

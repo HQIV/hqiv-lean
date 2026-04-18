@@ -8,7 +8,7 @@ Formalisation of the HQIV (Horizon-Quantized Informational Vacuum) framework in 
 - **DOI:** [10.5281/zenodo.18899939](https://doi.org/10.5281/zenodo.18899939)
 - **API documentation (GitHub Pages):** The [Lean docgen workflow](.github/workflows/lean_action_ci.yml) builds and deploys the API docs on each push to the default branch. Once enabled, they are published at [**disregardfiat.github.io/hqiv-lean/docs**](https://disregardfiat.github.io/hqiv-lean/docs), look for the hqiv section on the side.
 
-**Agent / contributor map:** [`AGENTS/README.md`](AGENTS/README.md) — table of contents, curated theorem index ([`AGENTS/THEOREMS.md`](AGENTS/THEOREMS.md)), and assumptions / trust boundary ([`AGENTS/ASSUMPTIONS.md`](AGENTS/ASSUMPTIONS.md)).
+**Agent / contributor docs (versioned):** curated theorem index ([`AGENTS/THEOREMS.md`](AGENTS/THEOREMS.md)) and assumptions / trust boundary ([`AGENTS/ASSUMPTIONS.md`](AGENTS/ASSUMPTIONS.md)). Other notes under `AGENTS/` may exist locally but are not tracked.
 
 ## CLASS numerical fork (Lean alignment)
 
