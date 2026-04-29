@@ -28,6 +28,11 @@ name = "HQIVWitnesses"
 globs = ["HQIVWitnesses", "Hqiv.Geometry.OctonionicLightCone", "Hqiv.Geometry.AuxiliaryField", "Hqiv.Physics.Baryogenesis", "Hqiv.Physics.FanoResonance", "Hqiv.Physics.DerivedGaugeAndLeptonSector", "Hqiv.Physics.DerivedNucleonMass", "Hqiv.Physics.QuarkMetaResonance"]
 
 [[lean_lib]]
+name = "HQIVRhFourierLift"
+# Discrete curvature → phase lift → spherical Fourier scaffold (RH model formalization).
+globs = ["RhFourierLift.Setup"]
+
+[[lean_lib]]
 name = "HQIVSO8Closure"
 # Dedicated heavy closure pack: build once, then import interface module.
 globs = [
