@@ -14,6 +14,7 @@ of generator columns, solve B c = v for each bracket vector v.
 from __future__ import annotations
 
 import sys
+from fractions import Fraction
 from pathlib import Path
 
 _REPO_LEAN = Path(__file__).resolve().parent.parent
@@ -41,6 +42,20 @@ def to_lean_real(x: float) -> str:
     if abs(x + 1) < TOL:
         return "(-1 : ℝ)"
     return f"({x:.14g} : ℝ)"
+
+
+def to_lean_q(x: float) -> str:
+    """Exact rational literal for chunked data (compiles without noncomputable ℝ division)."""
+    if abs(x) < TOL:
+        return "(0 : ℚ)"
+    if abs(x - 1) < TOL:
+        return "(1 : ℚ)"
+    if abs(x + 1) < TOL:
+        return "(-1 : ℚ)"
+    fr = Fraction(x).limit_denominator(10**18)
+    if fr.denominator == 1:
+        return f"({fr.numerator} : ℚ)"
+    return f"(({fr.numerator} : ℚ) / {fr.denominator})"
 
 
 def write_lean_file(out_path: Path, coeff: list) -> None:
@@ -72,28 +87,32 @@ def write_lean_chunked(repo_lean: Path, coeff: list) -> None:
     for i in range(28):
         path = hqiv / f"GeneratorsLieClosureData{i}.lean"
         with open(path, "w") as f:
-            f.write("import Hqiv.Generators\n\n")
+            f.write("import Hqiv.Generators\nimport Mathlib.Data.Rat.Defs\n\n")
             f.write(f"/-- Row i = {i} of lieBracketCoeff (j,k) ↦ coefficient. Chunked to avoid stack overflow. -/\n")
-            # Use array lookup to avoid large match/end; no namespace so each module has its own lieBracketCoeffRow.
-            f.write("private def rowData : Array ℝ := #[\n")
+            # ℚ literals: avoids Lean compiler IR errors on `Array ℝ` with noncomputable division.
+            f.write("private def rowData : Array ℚ := #[\n")
             for j in range(28):
                 c = coeff[i][j]
                 for k in range(28):
-                    val = to_lean_real(c[k])
+                    val = to_lean_q(c[k])
                     f.write(f"  {val},\n")
             f.write("]\n\n")
-            f.write(f"def lieBracketCoeffRow{i} (j k : Fin 28) : ℝ :=\n")
+            f.write(f"def lieBracketCoeffRow{i} (j k : Fin 28) : ℚ :=\n")
             f.write("  rowData[j.val * 28 + k.val]!\n")
         print(f"Wrote {path}", file=sys.stderr)
 
     main_path = hqiv / "GeneratorsLieClosureData.lean"
     with open(main_path, "w") as f:
+        f.write("import Mathlib.Data.Rat.Defs\nimport Mathlib.Data.Real.Basic\n\n")
         for i in range(28):
             f.write(f"import Hqiv.GeneratorsLieClosureData{i}\n")
         f.write("\nnamespace Hqiv\n\n")
-        f.write("/-- Coefficients for [so8Generator i, so8Generator j] = ∑ k, lieBracketCoeff i j k • so8Generator k. Chunked. -/\n")
+        f.write(
+            "/-- Coefficients for `[so8Generator i, so8Generator j] = ∑ k, lieBracketCoeff i j k • so8Generator k` (chunked).\n"
+            "Each chunk stores exact rationals `ℚ`; cast to `ℝ` for the matrix Lie algebra model. -/\n"
+        )
         for i in range(28):
-            f.write(f"private def row{i} (j k : Fin 28) : ℝ := lieBracketCoeffRow{i} j k\n")
+            f.write(f"private def row{i} (j k : Fin 28) : ℝ := (lieBracketCoeffRow{i} j k : ℝ)\n")
         f.write("private def rows : Array (Fin 28 → Fin 28 → ℝ) := #[\n")
         f.write("  " + ", ".join(f"row{i}" for i in range(28)) + "\n")
         f.write("]\n\n")
