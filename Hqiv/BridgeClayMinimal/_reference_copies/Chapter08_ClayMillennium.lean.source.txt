@@ -1,0 +1,13 @@
+import Hqiv.Story.Chapter07_PatchQFT
+import Hqiv.Bridge.LeanDojoClayMillennium
+
+/-!
+# Story — Chapter 8: Clay Millennium (Lean Dojo) problem statements and witness wiring
+
+Vendored `Problems.YangMills.*` / `Problems.NavierStokes.*` + `Hqiv.Bridge.LeanDojo`:
+sufficient conditions for the official `Prop`s. **Solving** the prizes still requires the missing
+constructions (QFT+gap, or a Fefferman disjunct) — the Story only orders *what you already have*
+leading up to the formal targets.
+
+**End of linear spine** — `import Hqiv.Story.Chapter08_ClayMillennium` or `HQIVStory.lean`.
+-/

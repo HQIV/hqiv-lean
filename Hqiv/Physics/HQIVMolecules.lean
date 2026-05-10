@@ -23,9 +23,20 @@ inductive definition. Native folds are global minima of the dihedral correction
 
 namespace Hqiv.Physics
 
+/-- Folding `+` shifts the initial accumulator across the sum (`listSumR` helper). -/
+theorem list_foldl_add_accum (xs : List ℝ) (a b : ℝ) :
+    xs.foldl (fun acc x => acc + x) (a + b) = a + xs.foldl (fun acc x => acc + x) b := by
+  induction xs generalizing a b with
+  | nil => simp [List.foldl]
+  | cons x xs ih =>
+      calc
+        xs.foldl (fun acc x => acc + x) ((a + b) + x) =
+            xs.foldl (fun acc x => acc + x) (a + (b + x)) := by rw [add_assoc]
+        _ = a + xs.foldl (fun acc x => acc + x) (b + x) := ih a (b + x)
+
 /-- Sum of a real list. -/
 noncomputable def listSumR (l : List ℝ) : ℝ :=
-  l.foldl (fun a x => a + x) 0
+  l.foldl (fun acc x => acc + x) 0
 
 @[simp] theorem listSumR_nil : listSumR ([] : List ℝ) = 0 := by simp [listSumR]
 
@@ -33,14 +44,7 @@ noncomputable def listSumR (l : List ℝ) : ℝ :=
 
 theorem listSumR_cons (x : ℝ) (xs : List ℝ) : listSumR (x :: xs) = x + listSumR xs := by
   unfold listSumR
-  revert x
-  induction xs with
-  | nil =>
-      intro x
-      simp [List.foldl]
-  | cons y ys ih =>
-      intro x
-      simp [List.foldl, ih, add_assoc, add_comm, add_left_comm]
+  rw [List.foldl_cons, add_comm (0 : ℝ) x, list_foldl_add_accum xs x 0]
 
 theorem listSumR_append (l₁ l₂ : List ℝ) : listSumR (l₁ ++ l₂) = listSumR l₁ + listSumR l₂ := by
   induction l₁ with
@@ -60,7 +64,9 @@ theorem listSumR_map_add (l : List α) (f g : α → ℝ) :
 theorem listSumR_map_abs_nonneg (l : List ℝ) : 0 ≤ listSumR (l.map fun x => |x|) := by
   induction l with
   | nil => simp [listSumR]
-  | cons x xs ih => simp [List.map, listSumR_cons, abs_nonneg, add_nonneg ih]
+  | cons x xs ih =>
+      rw [List.map_cons, listSumR_cons]
+      exact add_nonneg (abs_nonneg x) ih
 
 theorem listSumR_map_mul_left (c : ℝ) (l : List ℝ) :
     listSumR (l.map fun x => c * x) = c * listSumR l := by
@@ -83,14 +89,60 @@ def TorqueTree.rootAtom {m : ℕ} : TorqueTree m → AtomicSurfaceAt m
 
 def TorqueTree.WellFormed {m : ℕ} : TorqueTree m → Prop
   | .leaf _ => True
-  | .branch _ ts => ∀ t ∈ ts, WellFormed t
+  | .branch _ ts => ∀ t ∈ ts, TorqueTree.WellFormed t
 
-theorem TorqueTree.wf_leaf {m : ℕ} (a : AtomicSurfaceAt m) : TorqueTree.WellFormed (.leaf a) :=
-  trivial
+theorem TorqueTree.wf_leaf {m : ℕ} (a : AtomicSurfaceAt m) : TorqueTree.WellFormed (.leaf a) := by
+  simp [TorqueTree.WellFormed]
 
 theorem TorqueTree.wf_branch {m : ℕ} (a : AtomicSurfaceAt m) (ts : List (TorqueTree m))
-    (h : ∀ t ∈ ts, WellFormed t) : TorqueTree.WellFormed (.branch a ts) :=
-  h
+    (h : ∀ t ∈ ts, TorqueTree.WellFormed t) : TorqueTree.WellFormed (.branch a ts) := by
+  simpa [TorqueTree.WellFormed] using h
+
+/-- Size bound for well-founded reasoning on `TorqueTree` (nested inductive has no `induction` tactic). -/
+def torqueTreeSize {m : ℕ} : TorqueTree m → ℕ
+  | .leaf _ => 1
+  | .branch _ ts => 1 + (ts.map torqueTreeSize).foldl (· + ·) 0
+
+theorem torqueTreeSize_pos {m : ℕ} (t : TorqueTree m) : 0 < torqueTreeSize t := by
+  cases t <;> simp [torqueTreeSize, Nat.succ_pos, Nat.zero_lt_succ]
+
+theorem Nat_list_foldl_add_init (l : List ℕ) (x : ℕ) : x + l.foldl (· + ·) 0 = l.foldl (· + ·) x := by
+  induction l generalizing x with
+  | nil => simp [List.foldl]
+  | cons y ys ih =>
+    -- `List.foldl_cons` exposes `ys.foldl` with the head absorbed into the accumulator.
+    simp only [List.foldl_cons, Nat.zero_add]
+    rw [(ih y).symm, ← Nat.add_assoc x y (ys.foldl (· + ·) 0), ih (x + y)]
+
+theorem Nat_list_map_foldl_ge_mem {α : Type*} (ts : List α) (f : α → ℕ) (u : α) (hu : u ∈ ts) :
+    f u ≤ (ts.map f).foldl (· + ·) 0 := by
+  induction ts with
+  | nil => cases hu
+  | cons v vs ih =>
+    simp only [List.mem_cons] at hu
+    cases hu with
+    | inl hEq =>
+      have hf : f u = f v := congrArg f hEq
+      rw [hf]
+      simp only [List.map_cons, List.foldl, Nat.zero_add]
+      rw [(Nat_list_foldl_add_init (List.map f vs) (f v)).symm]
+      exact Nat.le_add_right (f v) ((List.map f vs).foldl (· + ·) 0)
+    | inr hmem =>
+      have ih' := ih hmem
+      have hsum :=
+        (Nat_list_foldl_add_init (List.map f vs) (f v)).symm
+      simp only [List.map_cons, List.foldl, Nat.zero_add]
+      rw [hsum]
+      exact Nat.le_trans ih' (Nat.le_add_left ((List.map f vs).foldl (· + ·) 0) (f v))
+
+theorem torqueTreeSize_mem_le_children_sum {m : ℕ} (ts : List (TorqueTree m)) (u : TorqueTree m)
+    (hu : u ∈ ts) : torqueTreeSize u ≤ (ts.map torqueTreeSize).foldl (· + ·) 0 :=
+  Nat_list_map_foldl_ge_mem ts torqueTreeSize u hu
+
+theorem torqueTreeSize_mem_lt_branch {m : ℕ} (a : AtomicSurfaceAt m) (ts : List (TorqueTree m)) (u : TorqueTree m)
+    (hu : u ∈ ts) : torqueTreeSize u < torqueTreeSize (.branch a ts) := by
+  simpa [torqueTreeSize, Nat.succ_eq_add_one, Nat.add_comm] using
+    Nat.lt_succ_of_le (torqueTreeSize_mem_le_children_sum ts u hu)
 
 /-!
 ## Bond energy (shared `m`)
@@ -108,9 +160,17 @@ noncomputable def monopoleTorque {m : ℕ} (_ : TorqueTree m) : ℝ := 0
 
 /-- Branch nodes carry no extra lumped torque beyond subtree recursion; with `monopoleTorque ≡ 0`
 this matches the purely pairwise `bondValleyEM` picture in `assembly_foldEnergy_branch_eq`. -/
+theorem listSumR_map_zero {α : Type*} (l : List α) : listSumR (l.map fun _ => (0 : ℝ)) = 0 := by
+  induction l with
+  | nil => simp [listSumR]
+  | cons _ xs ih => simp only [List.map_cons, listSumR_cons, ih, add_zero]
+
 theorem monopoleTorque_branch_eq_sum_children {m : ℕ} (a : AtomicSurfaceAt m) (ts : List (TorqueTree m)) :
     monopoleTorque (.branch a ts) = listSumR (ts.map monopoleTorque) := by
-  simp [monopoleTorque, listSumR]
+  simp [monopoleTorque]
+  induction ts with
+  | nil => simp [listSumR]
+  | cons _ xs ih => simp [List.map, listSumR_cons, monopoleTorque, ih, add_zero]
 
 noncomputable def sumAtomicElectronFieldEnergy {m : ℕ} (μ c Z_eff r : ℝ) : TorqueTree m → ℝ
   | .leaf a => atomic_electron_field_energy a.surf.nucleus_m a.Z μ c
@@ -129,10 +189,7 @@ theorem bondValleyEM_eq_root {m : ℕ} (Z_eff r : ℝ) (parent : AtomicSurfaceAt
 noncomputable def sumValleyPotentialEM {m : ℕ} (μ c Z_eff r : ℝ) : TorqueTree m → ℝ
   | .leaf _ => 0
   | .branch parent ts =>
-      listSumR (ts.map fun t =>
-          match t with
-          | .leaf child => bondValleyEM Z_eff r parent child
-          | .branch child _ => bondValleyEM Z_eff r parent child) +
+      listSumR (ts.map fun t => bondValleyEM Z_eff r parent (TorqueTree.rootAtom t)) +
         listSumR (ts.map (sumValleyPotentialEM μ c Z_eff r))
 
 /-- Total fold energy at shell `m`. -/
@@ -147,6 +204,49 @@ theorem foldEnergy_def {m : ℕ} (Z_eff r μ c : ℝ) (t : TorqueTree m) :
   rfl
 
 /-!
+### Branch fold energy (used by path-shaped trees below)
+-/
+
+/-- **Branch decomposition:** energy of a parent `p` with children `ts` equals the parent's
+atomic field term plus, for each child subtree, its own `foldEnergy` plus one **parent–root**
+interface bond. Same algebra underlies protein subchains, grain clusters, and multi-junction
+meshes. -/
+theorem assembly_foldEnergy_branch_eq {m : ℕ} (Z_eff r μ c : ℝ) (p : AtomicSurfaceAt m) (ts : List (TorqueTree m)) :
+    foldEnergy Z_eff r μ c (.branch p ts) =
+      atomic_electron_field_energy p.surf.nucleus_m p.Z μ c +
+        listSumR
+          (ts.map fun t =>
+            foldEnergy Z_eff r μ c t + bondValleyEM Z_eff r p (TorqueTree.rootAtom t)) := by
+  induction ts with
+  | nil =>
+      simp [foldEnergy, sumValleyPotentialEM, sumAtomicElectronFieldEnergy, monopoleTorque, listSumR]
+  | cons u us ih =>
+      have hsplit :
+          foldEnergy Z_eff r μ c (.branch p (u :: us)) =
+            foldEnergy Z_eff r μ c u + bondValleyEM Z_eff r p (TorqueTree.rootAtom u) +
+              foldEnergy Z_eff r μ c (.branch p us) := by
+        unfold foldEnergy sumValleyPotentialEM sumAtomicElectronFieldEnergy monopoleTorque
+        have hmap :
+            (u :: us).map (fun t => bondValleyEM Z_eff r p (TorqueTree.rootAtom t)) =
+              bondValleyEM Z_eff r p (TorqueTree.rootAtom u) ::
+                us.map (fun t => bondValleyEM Z_eff r p (TorqueTree.rootAtom t)) := by
+          simp [List.map_cons]
+        simp_rw [hmap, List.map_cons, listSumR_cons]
+        cases u <;> simp only [foldEnergy, sumValleyPotentialEM, sumAtomicElectronFieldEnergy, monopoleTorque,
+          TorqueTree.rootAtom, add_assoc, add_comm, add_left_comm] <;> ring
+      rw [hsplit, ih]
+      simp [List.map, listSumR_cons, add_assoc, add_comm, add_left_comm]
+
+/-- Corollary: two-child star (e.g. bridge site between two grains / ligands). -/
+theorem assembly_foldEnergy_binary_branch {m : ℕ} (Z_eff r μ c : ℝ) (p : AtomicSurfaceAt m) (t₁ t₂ : TorqueTree m) :
+    foldEnergy Z_eff r μ c (.branch p [t₁, t₂]) =
+      atomic_electron_field_energy p.surf.nucleus_m p.Z μ c + foldEnergy Z_eff r μ c t₁ +
+        foldEnergy Z_eff r μ c t₂ + bondValleyEM Z_eff r p (TorqueTree.rootAtom t₁) +
+        bondValleyEM Z_eff r p (TorqueTree.rootAtom t₂) := by
+  rw [assembly_foldEnergy_branch_eq]
+  simp [List.map, listSumR_cons, listSumR_nil, add_assoc, add_comm, add_left_comm]
+
+/-!
 ### Structural induction (branch bonds = `valleyPotentialEM` summands)
 -/
 
@@ -158,10 +258,25 @@ theorem molecule_from_atoms_inductive {m : ℕ} (P : TorqueTree m → Prop)
     (h_branch : ∀ (a : AtomicSurfaceAt m) (ts : List (TorqueTree m)),
         (∀ t ∈ ts, P t) → P (.branch a ts)) :
     ∀ t, TorqueTree.WellFormed t → P t := by
-  intro t _
-  induction t with
-  | leaf a => exact h_leaf a
-  | branch a ts ih => exact h_branch a ts ih
+  intro t ht
+  exact @Nat.strong_induction_on (fun (k : ℕ) => ∀ u : TorqueTree m, torqueTreeSize u = k → TorqueTree.WellFormed u → P u)
+      (torqueTreeSize t) (fun n ih => by
+        intro u hn hwf
+        cases u with
+        | leaf a =>
+          simp only [torqueTreeSize] at hn
+          have hn1 : n = 1 := hn.symm
+          subst hn1
+          exact h_leaf a
+        | branch a ts =>
+          have hw : ∀ t ∈ ts, TorqueTree.WellFormed t := by simpa [TorqueTree.WellFormed] using hwf
+          exact h_branch a ts fun t' ht' => by
+            have hlt := torqueTreeSize_mem_lt_branch a ts t' ht'
+            have hltn : torqueTreeSize t' < n := by
+              rw [← hn]
+              exact hlt
+            exact ih (torqueTreeSize t') hltn t' rfl (hw t' ht')
+      ) t rfl ht
 
 theorem molecule_valleys_additive_like_helium4 :
     valleyCount helium4 = 6 :=
@@ -188,18 +303,43 @@ theorem minimum_energy_fold_is_native {m : ℕ} (κ θ Z_eff r μ c : ℝ) (t : 
   unfold foldEnergyWithDihedral
   constructor
   · intro h
-    have hdiff := congr_arg (fun z => z - foldEnergy Z_eff r μ c t) h
-    simp [add_sub_cancel_right] at hdiff
+    have hdiff : κ * (1 - Real.cos θ) = 0 := by
+      have := congr_arg (fun z => z - foldEnergy Z_eff r μ c t) h
+      simp only [add_sub_cancel_right] at this
+      linarith
     have h1 : 1 - Real.cos θ = 0 := by
-      cases (mul_eq_zero.mp hdiff) with
-      | inl hκ0 => exact absurd hκ0 hκ
-      | inr h1 => exact h1
+      rcases (mul_eq_zero.mp hdiff) with hκ0 | h1
+      · exact absurd hκ0 hκ
+      · exact h1
     linarith [h1]
   · intro hcos
     have h1 : 1 - Real.cos θ = 0 := by
       rw [hcos]
       simp
     simp [h1]
+
+/-- Same pole-minimization statement with an additive shift `hb` on both sides (e.g. a fixed
+contact bookkeeping term that does not couple to the fold dihedral). -/
+theorem augmented_minimum_energy_fold_is_native {m : ℕ} (κ θFold Z_eff r μ c : ℝ) (hb : ℝ) (t : TorqueTree m)
+    (hκ : κ ≠ 0) :
+    foldEnergyWithDihedral κ θFold Z_eff r μ c t + hb =
+        foldEnergy Z_eff r μ c t + hb ↔ Real.cos θFold = 1 := by
+  unfold foldEnergyWithDihedral
+  constructor
+  · intro h
+    have hdiff : κ * (1 - Real.cos θFold) = 0 := by
+      have := congr_arg (fun z => z - foldEnergy Z_eff r μ c t - hb) h
+      simp only [add_assoc, add_sub_cancel_right] at this
+      linarith
+    have h1 : 1 - Real.cos θFold = 0 := by
+      rcases (mul_eq_zero.mp hdiff) with hκ0 | h1
+      · exact absurd hκ0 hκ
+      · exact h1
+    have : Real.cos θFold = 1 := by linarith [h1]
+    exact this
+  · intro hcos
+    have h1 : 1 - Real.cos θFold = 0 := by rw [hcos]; simp
+    simp [h1, add_assoc]
 
 theorem minimum_energy_fold_deriv_dihedral_vanishes (κ : ℝ) (hκ : κ ≠ 0) :
     deriv (fun θ : ℝ => κ * (1 - Real.cos θ)) 0 = 0 :=
@@ -216,7 +356,7 @@ theorem ligand_docking_energy {m : ℕ} (Z_eff r μ c : ℝ) (R L : AtomicSurfac
       foldEnergy Z_eff r μ c (.leaf R) + foldEnergy Z_eff r μ c (.leaf L) +
         bondValleyEM Z_eff r R L := by
   unfold foldEnergy sumValleyPotentialEM sumAtomicElectronFieldEnergy monopoleTorque
-  simp [listSumR]
+  simp [listSumR, sumValleyPotentialEM, sumAtomicElectronFieldEnergy, TorqueTree.rootAtom]
   ring
 
 /-!
@@ -248,7 +388,7 @@ theorem pathTorqueTree_wellFormed {m : ℕ} (l : List (AtomicSurfaceAt m)) (hl :
         intro t ht
         simp only [List.mem_singleton] at ht
         subst ht
-        exact ih (b :: rest) (List.cons_ne_nil b rest)
+        exact ih (List.cons_ne_nil b rest)
 
 /-- Sum of `bondValleyEM` along consecutive backbone sites. -/
 noncomputable def listConsecutiveBondEM (Z_eff r : ℝ) {m : ℕ} : List (AtomicSurfaceAt m) → ℝ
@@ -280,10 +420,10 @@ theorem path_foldEnergy_eq_sum_bonds_and_atoms {m : ℕ} (Z_eff r μ c : ℝ) (l
           _ = atomic_electron_field_energy a.surf.nucleus_m a.Z μ c +
                 foldEnergy Z_eff r μ c (pathTorqueTree (b :: rest) hsub) +
                 bondValleyEM Z_eff r a (TorqueTree.rootAtom (pathTorqueTree (b :: rest) hsub)) := by
-                rw [assembly_foldEnergy_branch_eq]; simp [listSumR, List.map]
+                rw [assembly_foldEnergy_branch_eq]; simp [listSumR, List.map, add_assoc]
           _ = atomic_electron_field_energy a.surf.nucleus_m a.Z μ c +
                 foldEnergy Z_eff r μ c (pathTorqueTree (b :: rest) hsub) + bondValleyEM Z_eff r a b := by
-                rw [hroot]
+                simp [add_assoc, hroot]
           _ = atomic_electron_field_energy a.surf.nucleus_m a.Z μ c +
                 (listAtomicFieldEnergy μ c (b :: rest) + listConsecutiveBondEM Z_eff r (b :: rest)) +
                 bondValleyEM Z_eff r a b := by
@@ -306,7 +446,7 @@ theorem path_torqueTree_nodes_eq_length {m : ℕ} (l : List (AtomicSurfaceAt m))
     | nil => simp [pathTorqueTree, torqueTreeNodes, List.map, List.foldl]
     | cons b rest =>
         have hsub : b :: rest ≠ [] := List.cons_ne_nil b rest
-        simp [pathTorqueTree, torqueTreeNodes, List.map, List.foldl, ih hsub]
+        simp [pathTorqueTree, torqueTreeNodes, List.map, List.foldl, Nat.add_assoc, Nat.add_comm, ih hsub]
 
 /-- Evaluating `foldEnergy` / `sumValleyPotentialEM` on `pathTorqueTree` unrolls once per residue along the
 backbone (Θ(n) scalar adds for fixed `m`, matching a sequential neighbor list in code). -/
@@ -342,56 +482,9 @@ theorem path_sumValley_eq_consecutive_bonds {m : ℕ} (μ c Z_eff r : ℝ) (l : 
 `TorqueTree` is a **tree of bonded sites** sharing one horizon shell `m`. The same
 additive energy bookkeeping applies whenever interfaces are modelled as pairwise
 `valleyPotentialEM` edges plus per-site `atomic_electron_field_energy` budgets.
+
+Branch decomposition lemmas live earlier as `assembly_foldEnergy_branch_eq`.
 -/
-
-/-- **Branch decomposition:** energy of a parent `p` with children `ts` equals the parent's
-atomic field term plus, for each child subtree, its own `foldEnergy` plus one **parent–root**
-interface bond. Same algebra underlies protein subchains, grain clusters, and multi-junction
-meshes. -/
-theorem assembly_foldEnergy_branch_eq {m : ℕ} (Z_eff r μ c : ℝ) (p : AtomicSurfaceAt m) (ts : List (TorqueTree m)) :
-    foldEnergy Z_eff r μ c (.branch p ts) =
-      atomic_electron_field_energy p.surf.nucleus_m p.Z μ c +
-        listSumR
-          (ts.map fun t =>
-            foldEnergy Z_eff r μ c t + bondValleyEM Z_eff r p (TorqueTree.rootAtom t)) := by
-  induction ts with
-  | nil =>
-      simp [foldEnergy, sumValleyPotentialEM, sumAtomicElectronFieldEnergy, monopoleTorque, listSumR]
-  | cons u us ih =>
-      have hsplit :
-          foldEnergy Z_eff r μ c (.branch p (u :: us)) =
-            foldEnergy Z_eff r μ c u + bondValleyEM Z_eff r p (TorqueTree.rootAtom u) +
-              foldEnergy Z_eff r μ c (.branch p us) := by
-        unfold foldEnergy sumValleyPotentialEM sumAtomicElectronFieldEnergy monopoleTorque
-        have hmap :
-            (u :: us).map (fun t =>
-                match t with
-                | .leaf child => bondValleyEM Z_eff r p child
-                | .branch child _ => bondValleyEM Z_eff r p child) =
-              bondValleyEM Z_eff r p (TorqueTree.rootAtom u) ::
-                us.map (fun t =>
-                  match t with
-                  | .leaf child => bondValleyEM Z_eff r p child
-                  | .branch child _ => bondValleyEM Z_eff r p child) := by
-          rw [List.map_cons]
-          congr 1
-          · exact bondValleyEM_eq_root
-          · rfl
-        simp_rw [hmap, List.map_cons, listSumR_cons]
-        simp_rw [bondValleyEM_eq_root]
-        simp only [foldEnergy, add_assoc, add_comm, add_left_comm]
-        ring
-      rw [hsplit, ih]
-      simp [List.map, listSumR_cons, add_assoc, add_comm, add_left_comm]
-
-/-- Corollary: two-child star (e.g. bridge site between two grains / ligands). -/
-theorem assembly_foldEnergy_binary_branch {m : ℕ} (Z_eff r μ c : ℝ) (p : AtomicSurfaceAt m) (t₁ t₂ : TorqueTree m) :
-    foldEnergy Z_eff r μ c (.branch p [t₁, t₂]) =
-      atomic_electron_field_energy p.surf.nucleus_m p.Z μ c + foldEnergy Z_eff r μ c t₁ +
-        foldEnergy Z_eff r μ c t₂ + bondValleyEM Z_eff r p (TorqueTree.rootAtom t₁) +
-        bondValleyEM Z_eff r p (TorqueTree.rootAtom t₂) := by
-  rw [assembly_foldEnergy_branch_eq]
-  simp [List.map, listSumR_cons, listSumR_nil, add_assoc, add_comm, add_left_comm]
 
 /-- Two ligands `L₁`, `L₂` on the same receptor site `R`: two `bondValleyEM` edges, three leaf budgets. -/
 theorem ligand_docking_energy_two_leaves {m : ℕ} (Z_eff r μ c : ℝ) (R L₁ L₂ : AtomicSurfaceAt m) :
@@ -399,8 +492,8 @@ theorem ligand_docking_energy_two_leaves {m : ℕ} (Z_eff r μ c : ℝ) (R L₁ 
       foldEnergy Z_eff r μ c (.leaf R) + foldEnergy Z_eff r μ c (.leaf L₁) +
         foldEnergy Z_eff r μ c (.leaf L₂) + bondValleyEM Z_eff r R L₁ + bondValleyEM Z_eff r R L₂ := by
   rw [assembly_foldEnergy_binary_branch]
-  simp [foldEnergy, sumValleyPotentialEM, sumAtomicElectronFieldEnergy, monopoleTorque, listSumR, add_assoc,
-    add_comm, add_left_comm]
+  simp [foldEnergy, sumValleyPotentialEM, sumAtomicElectronFieldEnergy, monopoleTorque, listSumR, TorqueTree.rootAtom,
+    add_assoc, add_comm, add_left_comm]
 
 /-!
 ## Electron density superposition
@@ -437,10 +530,10 @@ theorem water_bond_angle_from_minimization :
 ## Examples
 -/
 
-noncomputable example h2_fold {m : ℕ} (Z_eff r μ c : ℝ) (a : AtomicSurfaceAt m) : ℝ :=
+noncomputable def h2_fold_example {m : ℕ} (Z_eff r μ c : ℝ) (a : AtomicSurfaceAt m) : ℝ :=
   foldEnergy Z_eff r μ c (.leaf a)
 
-noncomputable example water_fold {m : ℕ} (Z_eff r μ c : ℝ) (o h₁ h₂ : AtomicSurfaceAt m) : ℝ :=
+noncomputable def water_fold_example {m : ℕ} (Z_eff r μ c : ℝ) (o h₁ h₂ : AtomicSurfaceAt m) : ℝ :=
   foldEnergy Z_eff r μ c (.branch o [.leaf h₁, .leaf h₂])
 
 end Hqiv.Physics

@@ -1,0 +1,612 @@
+{
+  "meta": {
+    "mode": "direct_defect_profile"
+  },
+  "N": 100,
+  "candidate_m": 4,
+  "candidate_abs_defect": 0.7523601325720819,
+  "all_holds": true,
+  "checks": [
+    {
+      "n": 0,
+      "abs_defect_n": 0.0035441109565816234,
+      "abs_defect_candidate": 0.7523601325720819,
+      "holds": true
+    },
+    {
+      "n": 1,
+      "abs_defect_n": 0.30125225054554455,
+      "abs_defect_candidate": 0.7523601325720819,
+      "holds": true
+    },
+    {
+      "n": 2,
+      "abs_defect_n": 0.5470082002309701,
+      "abs_defect_candidate": 0.7523601325720819,
+      "holds": true
+    },
+    {
+      "n": 3,
+      "abs_defect_n": 0.6946554765093558,
+      "abs_defect_candidate": 0.7523601325720819,
+      "holds": true
+    },
+    {
+      "n": 4,
+      "abs_defect_n": 0.7523601325720819,
+      "abs_defect_candidate": 0.7523601325720819,
+      "holds": true
+    },
+    {
+      "n": 5,
+      "abs_defect_n": 0.7185822723286271,
+      "abs_defect_candidate": 0.7523601325720819,
+      "holds": true
+    },
+    {
+      "n": 6,
+      "abs_defect_n": 0.6141687134643528,
+      "abs_defect_candidate": 0.7523601325720819,
+      "holds": true
+    },
+    {
+      "n": 7,
+      "abs_defect_n": 0.4184531337066515,
+      "abs_defect_candidate": 0.7523601325720819,
+      "holds": true
+    },
+    {
+      "n": 8,
+      "abs_defect_n": 0.1491702445070571,
+      "abs_defect_candidate": 0.7523601325720819,
+      "holds": true
+    },
+    {
+      "n": 9,
+      "abs_defect_n": 0.13377654957898794,
+      "abs_defect_candidate": 0.7523601325720819,
+      "holds": true
+    },
+    {
+      "n": 10,
+      "abs_defect_n": 0.3952982042692794,
+      "abs_defect_candidate": 0.7523601325720819,
+      "holds": true
+    },
+    {
+      "n": 11,
+      "abs_defect_n": 0.5937599389098819,
+      "abs_defect_candidate": 0.7523601325720819,
+      "holds": true
+    },
+    {
+      "n": 12,
+      "abs_defect_n": 0.6998435949965948,
+      "abs_defect_candidate": 0.7523601325720819,
+      "holds": true
+    },
+    {
+      "n": 13,
+      "abs_defect_n": 0.7129925512859573,
+      "abs_defect_candidate": 0.7523601325720819,
+      "holds": true
+    },
+    {
+      "n": 14,
+      "abs_defect_n": 0.636869059518687,
+      "abs_defect_candidate": 0.7523601325720819,
+      "holds": true
+    },
+    {
+      "n": 15,
+      "abs_defect_n": 0.48930135526271845,
+      "abs_defect_candidate": 0.7523601325720819,
+      "holds": true
+    },
+    {
+      "n": 16,
+      "abs_defect_n": 0.2707564035051727,
+      "abs_defect_candidate": 0.7523601325720819,
+      "holds": true
+    },
+    {
+      "n": 17,
+      "abs_defect_n": 0.01761617249926991,
+      "abs_defect_candidate": 0.7523601325720819,
+      "holds": true
+    },
+    {
+      "n": 18,
+      "abs_defect_n": 0.24680648199837052,
+      "abs_defect_candidate": 0.7523601325720819,
+      "holds": true
+    },
+    {
+      "n": 19,
+      "abs_defect_n": 0.471665877552695,
+      "abs_defect_candidate": 0.7523601325720819,
+      "holds": true
+    },
+    {
+      "n": 20,
+      "abs_defect_n": 0.6286674264837867,
+      "abs_defect_candidate": 0.7523601325720819,
+      "holds": true
+    },
+    {
+      "n": 21,
+      "abs_defect_n": 0.6861744548253331,
+      "abs_defect_candidate": 0.7523601325720819,
+      "holds": true
+    },
+    {
+      "n": 22,
+      "abs_defect_n": 0.6577025932990385,
+      "abs_defect_candidate": 0.7523601325720819,
+      "holds": true
+    },
+    {
+      "n": 23,
+      "abs_defect_n": 0.5400388922702732,
+      "abs_defect_candidate": 0.7523601325720819,
+      "holds": true
+    },
+    {
+      "n": 24,
+      "abs_defect_n": 0.3567053347820931,
+      "abs_defect_candidate": 0.7523601325720819,
+      "holds": true
+    },
+    {
+      "n": 25,
+      "abs_defect_n": 0.13109737075924255,
+      "abs_defect_candidate": 0.7523601325720819,
+      "holds": true
+    },
+    {
+      "n": 26,
+      "abs_defect_n": 0.12908838990954302,
+      "abs_defect_candidate": 0.7523601325720819,
+      "holds": true
+    },
+    {
+      "n": 27,
+      "abs_defect_n": 0.34680680852053225,
+      "abs_defect_candidate": 0.7523601325720819,
+      "holds": true
+    },
+    {
+      "n": 28,
+      "abs_defect_n": 0.5292683702265106,
+      "abs_defect_candidate": 0.7523601325720819,
+      "holds": true
+    },
+    {
+      "n": 29,
+      "abs_defect_n": 0.6396609025777441,
+      "abs_defect_candidate": 0.7523601325720819,
+      "holds": true
+    },
+    {
+      "n": 30,
+      "abs_defect_n": 0.6494944796073139,
+      "abs_defect_candidate": 0.7523601325720819,
+      "holds": true
+    },
+    {
+      "n": 31,
+      "abs_defect_n": 0.5763195140985432,
+      "abs_defect_candidate": 0.7523601325720819,
+      "holds": true
+    },
+    {
+      "n": 32,
+      "abs_defect_n": 0.43428148627489116,
+      "abs_defect_candidate": 0.7523601325720819,
+      "holds": true
+    },
+    {
+      "n": 33,
+      "abs_defect_n": 0.23455235178154576,
+      "abs_defect_candidate": 0.7523601325720819,
+      "holds": true
+    },
+    {
+      "n": 34,
+      "abs_defect_n": 0.012672459363372744,
+      "abs_defect_candidate": 0.7523601325720819,
+      "holds": true
+    },
+    {
+      "n": 35,
+      "abs_defect_n": 0.23118452287953473,
+      "abs_defect_candidate": 0.7523601325720819,
+      "holds": true
+    },
+    {
+      "n": 36,
+      "abs_defect_n": 0.42190245492361894,
+      "abs_defect_candidate": 0.7523601325720819,
+      "holds": true
+    },
+    {
+      "n": 37,
+      "abs_defect_n": 0.5606369642122665,
+      "abs_defect_candidate": 0.7523601325720819,
+      "holds": true
+    },
+    {
+      "n": 38,
+      "abs_defect_n": 0.6280613567231701,
+      "abs_defect_candidate": 0.7523601325720819,
+      "holds": true
+    },
+    {
+      "n": 39,
+      "abs_defect_n": 0.5973743931667759,
+      "abs_defect_candidate": 0.7523601325720819,
+      "holds": true
+    },
+    {
+      "n": 40,
+      "abs_defect_n": 0.49533220866978783,
+      "abs_defect_candidate": 0.7523601325720819,
+      "holds": true
+    },
+    {
+      "n": 41,
+      "abs_defect_n": 0.3232469121192573,
+      "abs_defect_candidate": 0.7523601325720819,
+      "holds": true
+    },
+    {
+      "n": 42,
+      "abs_defect_n": 0.11481268441462958,
+      "abs_defect_candidate": 0.7523601325720819,
+      "holds": true
+    },
+    {
+      "n": 43,
+      "abs_defect_n": 0.11574099514109738,
+      "abs_defect_candidate": 0.7523601325720819,
+      "holds": true
+    },
+    {
+      "n": 44,
+      "abs_defect_n": 0.322025883156647,
+      "abs_defect_candidate": 0.7523601325720819,
+      "holds": true
+    },
+    {
+      "n": 45,
+      "abs_defect_n": 0.48294307810477977,
+      "abs_defect_candidate": 0.7523601325720819,
+      "holds": true
+    },
+    {
+      "n": 46,
+      "abs_defect_n": 0.5765669251949257,
+      "abs_defect_candidate": 0.7523601325720819,
+      "holds": true
+    },
+    {
+      "n": 47,
+      "abs_defect_n": 0.5960256868754074,
+      "abs_defect_candidate": 0.7523601325720819,
+      "holds": true
+    },
+    {
+      "n": 48,
+      "abs_defect_n": 0.5325376092062526,
+      "abs_defect_candidate": 0.7523601325720819,
+      "holds": true
+    },
+    {
+      "n": 49,
+      "abs_defect_n": 0.39731199142632306,
+      "abs_defect_candidate": 0.7523601325720819,
+      "holds": true
+    },
+    {
+      "n": 50,
+      "abs_defect_n": 0.20975208993310776,
+      "abs_defect_candidate": 0.7523601325720819,
+      "holds": true
+    },
+    {
+      "n": 51,
+      "abs_defect_n": 0.008302206141976656,
+      "abs_defect_candidate": 0.7523601325720819,
+      "holds": true
+    },
+    {
+      "n": 52,
+      "abs_defect_n": 0.21590896435246307,
+      "abs_defect_candidate": 0.7523601325720819,
+      "holds": true
+    },
+    {
+      "n": 53,
+      "abs_defect_n": 0.3949407355796124,
+      "abs_defect_candidate": 0.7523601325720819,
+      "holds": true
+    },
+    {
+      "n": 54,
+      "abs_defect_n": 0.5128073522311244,
+      "abs_defect_candidate": 0.7523601325720819,
+      "holds": true
+    },
+    {
+      "n": 55,
+      "abs_defect_n": 0.5708931863128012,
+      "abs_defect_candidate": 0.7523601325720819,
+      "holds": true
+    },
+    {
+      "n": 56,
+      "abs_defect_n": 0.5532079140196492,
+      "abs_defect_candidate": 0.7523601325720819,
+      "holds": true
+    },
+    {
+      "n": 57,
+      "abs_defect_n": 0.4524710093080443,
+      "abs_defect_candidate": 0.7523601325720819,
+      "holds": true
+    },
+    {
+      "n": 58,
+      "abs_defect_n": 0.29163319553258976,
+      "abs_defect_candidate": 0.7523601325720819,
+      "holds": true
+    },
+    {
+      "n": 59,
+      "abs_defect_n": 0.10419514768049251,
+      "abs_defect_candidate": 0.7523601325720819,
+      "holds": true
+    },
+    {
+      "n": 60,
+      "abs_defect_n": 0.10215505724162154,
+      "abs_defect_candidate": 0.7523601325720819,
+      "holds": true
+    },
+    {
+      "n": 61,
+      "abs_defect_n": 0.2958764908612786,
+      "abs_defect_candidate": 0.7523601325720819,
+      "holds": true
+    },
+    {
+      "n": 62,
+      "abs_defect_n": 0.448759526120654,
+      "abs_defect_candidate": 0.7523601325720819,
+      "holds": true
+    },
+    {
+      "n": 63,
+      "abs_defect_n": 0.5245635416752387,
+      "abs_defect_candidate": 0.7523601325720819,
+      "holds": true
+    },
+    {
+      "n": 64,
+      "abs_defect_n": 0.5438168483514517,
+      "abs_defect_candidate": 0.7523601325720819,
+      "holds": true
+    },
+    {
+      "n": 65,
+      "abs_defect_n": 0.4905555452563815,
+      "abs_defect_candidate": 0.7523601325720819,
+      "holds": true
+    },
+    {
+      "n": 66,
+      "abs_defect_n": 0.3647525658636411,
+      "abs_defect_candidate": 0.7523601325720819,
+      "holds": true
+    },
+    {
+      "n": 67,
+      "abs_defect_n": 0.1940264878357956,
+      "abs_defect_candidate": 0.7523601325720819,
+      "holds": true
+    },
+    {
+      "n": 68,
+      "abs_defect_n": 0.0042191514051966176,
+      "abs_defect_candidate": 0.7523601325720819,
+      "holds": true
+    },
+    {
+      "n": 69,
+      "abs_defect_n": 0.196056788674177,
+      "abs_defect_candidate": 0.7523601325720819,
+      "holds": true
+    },
+    {
+      "n": 70,
+      "abs_defect_n": 0.3624678151757932,
+      "abs_defect_candidate": 0.7523601325720819,
+      "holds": true
+    },
+    {
+      "n": 71,
+      "abs_defect_n": 0.47091591204635763,
+      "abs_defect_candidate": 0.7523601325720819,
+      "holds": true
+    },
+    {
+      "n": 72,
+      "abs_defect_n": 0.5214462204790443,
+      "abs_defect_candidate": 0.7523601325720819,
+      "holds": true
+    },
+    {
+      "n": 73,
+      "abs_defect_n": 0.4986492028586877,
+      "abs_defect_candidate": 0.7523601325720819,
+      "holds": true
+    },
+    {
+      "n": 74,
+      "abs_defect_n": 0.41811269136955165,
+      "abs_defect_candidate": 0.7523601325720819,
+      "holds": true
+    },
+    {
+      "n": 75,
+      "abs_defect_n": 0.27299248939446275,
+      "abs_defect_candidate": 0.7523601325720819,
+      "holds": true
+    },
+    {
+      "n": 76,
+      "abs_defect_n": 0.09707069960216998,
+      "abs_defect_candidate": 0.7523601325720819,
+      "holds": true
+    },
+    {
+      "n": 77,
+      "abs_defect_n": 0.09320285010464104,
+      "abs_defect_candidate": 0.7523601325720819,
+      "holds": true
+    },
+    {
+      "n": 78,
+      "abs_defect_n": 0.26504387948082847,
+      "abs_defect_candidate": 0.7523601325720819,
+      "holds": true
+    },
+    {
+      "n": 79,
+      "abs_defect_n": 0.40721083002200953,
+      "abs_defect_candidate": 0.7523601325720819,
+      "holds": true
+    },
+    {
+      "n": 80,
+      "abs_defect_n": 0.4848240687323153,
+      "abs_defect_candidate": 0.7523601325720819,
+      "holds": true
+    },
+    {
+      "n": 81,
+      "abs_defect_n": 0.4966022301101565,
+      "abs_defect_candidate": 0.7523601325720819,
+      "holds": true
+    },
+    {
+      "n": 82,
+      "abs_defect_n": 0.44909565424039904,
+      "abs_defect_candidate": 0.7523601325720819,
+      "holds": true
+    },
+    {
+      "n": 83,
+      "abs_defect_n": 0.33386664858014403,
+      "abs_defect_candidate": 0.7523601325720819,
+      "holds": true
+    },
+    {
+      "n": 84,
+      "abs_defect_n": 0.17175417633597292,
+      "abs_defect_candidate": 0.7523601325720819,
+      "holds": true
+    },
+    {
+      "n": 85,
+      "abs_defect_n": 0.006412285979810868,
+      "abs_defect_candidate": 0.7523601325720819,
+      "holds": true
+    },
+    {
+      "n": 86,
+      "abs_defect_n": 0.1762255109362911,
+      "abs_defect_candidate": 0.7523601325720819,
+      "holds": true
+    },
+    {
+      "n": 87,
+      "abs_defect_n": 0.32799157001367596,
+      "abs_defect_candidate": 0.7523601325720819,
+      "holds": true
+    },
+    {
+      "n": 88,
+      "abs_defect_n": 0.43668874268253455,
+      "abs_defect_candidate": 0.7523601325720819,
+      "holds": true
+    },
+    {
+      "n": 89,
+      "abs_defect_n": 0.48111478609427333,
+      "abs_defect_candidate": 0.7523601325720819,
+      "holds": true
+    },
+    {
+      "n": 90,
+      "abs_defect_n": 0.4619711383287444,
+      "abs_defect_candidate": 0.7523601325720819,
+      "holds": true
+    },
+    {
+      "n": 91,
+      "abs_defect_n": 0.38145826384868914,
+      "abs_defect_candidate": 0.7523601325720819,
+      "holds": true
+    },
+    {
+      "n": 92,
+      "abs_defect_n": 0.24765205355418132,
+      "abs_defect_candidate": 0.7523601325720819,
+      "holds": true
+    },
+    {
+      "n": 93,
+      "abs_defect_n": 0.08687356099811322,
+      "abs_defect_candidate": 0.7523601325720819,
+      "holds": true
+    },
+    {
+      "n": 94,
+      "abs_defect_n": 0.08813359561344042,
+      "abs_defect_candidate": 0.7523601325720819,
+      "holds": true
+    },
+    {
+      "n": 95,
+      "abs_defect_n": 0.24699159989335318,
+      "abs_defect_candidate": 0.7523601325720819,
+      "holds": true
+    },
+    {
+      "n": 96,
+      "abs_defect_n": 0.3708280683846355,
+      "abs_defect_candidate": 0.7523601325720819,
+      "holds": true
+    },
+    {
+      "n": 97,
+      "abs_defect_n": 0.4437129183720531,
+      "abs_defect_candidate": 0.7523601325720819,
+      "holds": true
+    },
+    {
+      "n": 98,
+      "abs_defect_n": 0.46122521232955066,
+      "abs_defect_candidate": 0.7523601325720819,
+      "holds": true
+    },
+    {
+      "n": 99,
+      "abs_defect_n": 0.4143331242344989,
+      "abs_defect_candidate": 0.7523601325720819,
+      "holds": true
+    }
+  ],
+  "lean_target_shape": "IsWindowAbsPeak (sliceDefectProfileAtZ r observedArea z) N candidate_m (equivalently: forall n in Finset.range N, |defect n| <= |defect candidate_m|)"
+}

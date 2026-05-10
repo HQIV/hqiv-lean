@@ -1,7 +1,9 @@
 -- Physics/geometry build: no generator stack (avoids GeneratorsLieClosureData stack overflow).
+-- Prefer the curated `HQIVMeaningfulPhysics` target (same import graph) for a clearly named daily build.
 -- Use: lake build HQIVPhysics
 import Hqiv.Geometry.OctonionicLightCone
 import Hqiv.Geometry.SphericalHarmonicsBridge
+import Hqiv.Geometry.S7MetahorizonCasimir
 import Hqiv.Geometry.AuxiliaryField
 import Hqiv.Geometry.HQVMetric
 import Hqiv.Geometry.HQVMetricAnalytic
@@ -16,22 +18,37 @@ import Hqiv.Conservations
 import Hqiv.Physics.Baryogenesis
 import Hqiv.Physics.GlobalDetuning
 import Hqiv.Physics.LeptonResonanceGlobalDetuning
+import Hqiv.Physics.ModalFrequencyHorizon
 import Hqiv.Physics.QuarkLadderGlobalDetuning
 import Hqiv.Physics.HarmonicLadderGlobalDetuning
 import Hqiv.Physics.ModifiedMaxwell
 import Hqiv.Physics.SchematicPlasmaCurrent
 import Hqiv.Physics.GRFromMaxwell
+import Hqiv.Physics.HQIVGravityReadoutScalars
+import Hqiv.Physics.HQIVFluidClosureScaffold
+import Hqiv.Physics.ToyDiscreteHeat
+import Hqiv.Physics.ThermodynamicLawsFromLadder
+import Hqiv.Physics.LightConeFundamentalsPillars
+import Hqiv.Physics.HQIVPerturbationScaffold
 import Hqiv.Physics.Forces
+import Hqiv.Physics.PromotedOMaxwell
 import Hqiv.Physics.BoundStates
 import Hqiv.Physics.DerivedGaugeAndLeptonSector
+import Hqiv.Physics.DiscretePlaquetteHolonomy
+import Hqiv.Physics.ActionHolonomyGlue
+import Hqiv.Physics.ReadoutGaugeSeed
 import Hqiv.Physics.NuclearAndAtomicSpectra
 import Hqiv.Physics.HQIVNuclei
 import Hqiv.Physics.HQIVAtoms
 import Hqiv.Physics.HQIVMolecules
-import Hqiv.Physics.HQIVLongRange
 import Hqiv.Physics.HQIVAssembly
 import Hqiv.Physics.HQIVCollectiveModes
 import Hqiv.Physics.ForceCarrierWhip
 import Hqiv.QuantumMechanics.Schrodinger
+import Hqiv.QuantumMechanics.FiniteManyBodyCore
+import Hqiv.QuantumMechanics.HubbardDimerFinite
+import Hqiv.QuantumMechanics.HubbardDimerWitnessTable
+import Hqiv.QuantumMechanics.HubbardDimerGapBridge
+import Hqiv.QuantumMechanics.HubbardDimerHalfFilledObservables
 import Hqiv.QuantumMechanics.UncertaintyPrinciple
 import Hqiv.QuantumOptics.HorizonQED

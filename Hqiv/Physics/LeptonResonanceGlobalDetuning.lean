@@ -2,6 +2,10 @@ import Mathlib.Data.Real.Basic
 import Mathlib.Tactic
 import Hqiv.Physics.FanoResonance
 import Hqiv.Physics.GlobalDetuning
+import Hqiv.Physics.LeptonGenerationLockin
+import Hqiv.Physics.ModalFrequencyHorizon
+import Hqiv.Physics.QuarterPeriodRelaxation
+import Hqiv.Geometry.OctonionicLightCone
 
 /-!
 # Charged-lepton resonance ladder, global-detuning obstruction
@@ -16,11 +20,22 @@ Shell anchors **`m_tau`**, **`m_mu`**, **`m_e`** match **`LeptonGenerationLockin
 `deltaGlobal_eq_lambda_mul_lapseIncrement` (proved).
 
 **No PDG closure.**
+
+This file is now the preferred lightweight modal/horizon readout layer for the charged-lepton ladder:
+it stays independent of the thicker resonance-anchor phenomenology in `ChargedLeptonResonance.lean`
+while still exposing the same detuned-surface ratios through `ModalFrequencyHorizonSpec`.
+
+**Sphere-split relaxation:** `tauRelaxedQuarterSpec` / `muonRelaxedQuarterSpec` / `electronRelaxedQuarterSpec`
+keep the legacy `S⁷` spectral weight; `tauRelaxedQuarterSpecS3` / `muonRelaxedQuarterSpecS3` /
+`electronRelaxedQuarterSpecS3` and `kTauMuRelaxedQuarterS3` / `kMuERelaxedQuarterS3` use the quaternion
+phase-sphere `S³` bridge from `QuarterPeriodRelaxation`. The outer-shell neutrino readout
+`nuElectronRelaxedQuarterSpecS3` shares the same `S³` machinery on the outer readout `m_nu_e = referenceM + 2`.
 -/
 
 namespace Hqiv.Physics.LeptonResonanceGlobalDetuning
 
 open scoped Real
+open Hqiv
 
 noncomputable section
 
@@ -28,12 +43,27 @@ noncomputable section
 ### A. Local ladder
 -/
 
-/-- τ / μ / e shells — must match `LeptonGenerationLockin`. -/
-def m_tau : ℕ := 4
+/-- τ / μ / e shells — kept definitionally aligned with `LeptonGenerationLockin`. -/
+def m_tau : ℕ := leptonHeavyVertexShell
 
-def m_mu : ℕ := 81
+noncomputable def m_mu : ℕ := leptonMuonShell
 
-def m_e : ℕ := 16336
+noncomputable def m_e : ℕ := leptonElectronShell
+
+/-- Lightweight modal-frequency / horizon wrapper for the τ lock-in line. -/
+noncomputable def tauModalFrequencySpec : ModalFrequencyHorizonSpec :=
+  modalFrequencyHorizonFromShellNominal m_tau
+
+/-- Lightweight modal-frequency / horizon wrapper for the μ readout shell. -/
+noncomputable def muonModalFrequencySpec : ModalFrequencyHorizonSpec :=
+  modalFrequencyHorizonFromShellNominal m_mu
+
+/-- Lightweight modal-frequency / horizon wrapper for the e readout shell. -/
+noncomputable def electronModalFrequencySpec : ModalFrequencyHorizonSpec :=
+  modalFrequencyHorizonFromShellNominal m_e
+
+theorem m_tau_gt_referenceM : referenceM < m_tau := by
+  simpa [m_tau] using leptonHeavyVertexShell_gt_referenceM
 
 noncomputable def eff (m : ℕ) : ℝ :=
   shellSurface m / rindlerDetuningShared (m : ℝ)
@@ -41,6 +71,18 @@ noncomputable def eff (m : ℕ) : ℝ :=
 theorem eff_eq_detunedShellSurface (m : ℕ) : eff m = detunedShellSurface m := by
   unfold eff detunedShellSurface
   rfl
+
+theorem eff_eq_modal_detunedSurfaceReadout_tau (m : ℕ) :
+    tauModalFrequencySpec.detunedSurfaceReadout m = eff m := by
+  rw [show tauModalFrequencySpec = modalFrequencyHorizonFromShellNominal m_tau by rfl]
+  rw [detunedSurfaceReadout_fromShellNominal]
+  rw [eff_eq_detunedShellSurface]
+
+theorem eff_eq_modal_detunedSurfaceReadout_muon (m : ℕ) :
+    muonModalFrequencySpec.detunedSurfaceReadout m = eff m := by
+  rw [show muonModalFrequencySpec = modalFrequencyHorizonFromShellNominal m_mu by rfl]
+  rw [detunedSurfaceReadout_fromShellNominal]
+  rw [eff_eq_detunedShellSurface]
 
 theorem eff_pos (m : ℕ) : 0 < eff m := by
   simpa [eff_eq_detunedShellSurface] using detunedShellSurface_pos m
@@ -55,6 +97,118 @@ noncomputable def kTauMu : ℝ :=
 /-- e–μ surface ratio (outer / inner); same direction as `ChargedLeptonResonance.resonance_k_mu_e`. -/
 noncomputable def kMuE : ℝ :=
   eff m_e / eff m_mu
+
+/--
+Three-jet lepton effective surface readout candidate.
+This preserves the lock-in shell value and probes curvature away from `referenceM`.
+-/
+noncomputable def effThreeJet (m : ℕ) : ℝ :=
+  Hqiv.Physics.detunedShellSurfaceThreeJet m
+
+/-- Three-jet μ–τ surface ratio candidate. -/
+noncomputable def kTauMuThreeJet : ℝ :=
+  effThreeJet m_mu / effThreeJet m_tau
+
+/-- Three-jet e–μ surface ratio candidate. -/
+noncomputable def kMuEThreeJet : ℝ :=
+  effThreeJet m_e / effThreeJet m_mu
+
+/-- Cubic-phase relaxed quarter-period spec centered on the τ lock-in shell (`S⁷` Laplace weight). -/
+noncomputable def tauRelaxedQuarterSpec : RelaxedQuarterModalSpec :=
+  relaxedQuarterModalFromShellNominal Hqiv.Algebra.rep8SMinus 1 m_tau
+
+/-- Cubic-phase relaxed quarter-period spec centered on the μ shell (`S⁷` weight). -/
+noncomputable def muonRelaxedQuarterSpec : RelaxedQuarterModalSpec :=
+  relaxedQuarterModalFromShellNominal Hqiv.Algebra.rep8SPlus 1 m_mu
+
+/-- Cubic-phase relaxed quarter-period spec centered on the e shell (`S⁷` weight). -/
+noncomputable def electronRelaxedQuarterSpec : RelaxedQuarterModalSpec :=
+  relaxedQuarterModalFromShellNominal Hqiv.Algebra.rep8V 1 m_e
+
+/-- Same τ-centered packaging, but with **`S³`** (quaternion / spin–charge phase sphere) spectral weight. -/
+noncomputable def tauRelaxedQuarterSpecS3 : RelaxedQuarterModalSpec :=
+  relaxedQuarterModalFromShellNominalS3 Hqiv.Algebra.rep8SMinus 1 m_tau
+
+/-- μ shell readout with **`S³`** weight. -/
+noncomputable def muonRelaxedQuarterSpecS3 : RelaxedQuarterModalSpec :=
+  relaxedQuarterModalFromShellNominalS3 Hqiv.Algebra.rep8SPlus 1 m_mu
+
+/-- e shell readout with **`S³`** weight. -/
+noncomputable def electronRelaxedQuarterSpecS3 : RelaxedQuarterModalSpec :=
+  relaxedQuarterModalFromShellNominalS3 Hqiv.Algebra.rep8V 1 m_e
+
+/-- Electron-neutrino suppression shell index (same row as `DerivedGaugeAndLeptonSector.neutrinoSuppressionModalFrequencySpec`). -/
+def m_nu_e : ℕ := referenceM + 2
+
+/-- Outer electron-neutrino modal wrapper (shell-only; no mass anchor here). -/
+noncomputable def nuElectronModalFrequencySpec : ModalFrequencyHorizonSpec :=
+  modalFrequencyHorizonFromShellNominal m_nu_e
+
+/-- Electron-neutrino channel with **`S³`** relaxation: triality axis `rep8SMinus` on the outer neutrino shell. -/
+noncomputable def nuElectronRelaxedQuarterSpecS3 : RelaxedQuarterModalSpec :=
+  relaxedQuarterModalFromShellNominalS3 Hqiv.Algebra.rep8SMinus 1 m_nu_e
+
+/-- Relaxed quarter-period detuned surface readout candidate (τ-centered). -/
+noncomputable def effRelaxedQuarter (m : ℕ) : ℝ :=
+  tauRelaxedQuarterSpec.relaxedDetunedSurfaceReadout m
+
+/-- `S³`-weighted relaxed detuned surface readout (τ-centered). -/
+noncomputable def effRelaxedQuarterS3 (m : ℕ) : ℝ :=
+  tauRelaxedQuarterSpecS3.relaxedDetunedSurfaceReadout m
+
+/-- Relaxed-quarter μ–τ surface ratio candidate. -/
+noncomputable def kTauMuRelaxedQuarter : ℝ :=
+  tauRelaxedQuarterSpec.relaxedGeometricStepReadout m_mu m_tau
+
+/-- Relaxed-quarter e–μ surface ratio candidate. -/
+noncomputable def kMuERelaxedQuarter : ℝ :=
+  muonRelaxedQuarterSpec.relaxedGeometricStepReadout m_e m_mu
+
+/-- `S³`-weighted μ–τ ratio candidate (charged-lepton / spin–charge sector on `S³`). -/
+noncomputable def kTauMuRelaxedQuarterS3 : ℝ :=
+  tauRelaxedQuarterSpecS3.relaxedGeometricStepReadout m_mu m_tau
+
+/-- `S³`-weighted e–μ ratio candidate. -/
+noncomputable def kMuERelaxedQuarterS3 : ℝ :=
+  muonRelaxedQuarterSpecS3.relaxedGeometricStepReadout m_e m_mu
+
+lemma muonRelaxedQuarterSpec_base_detuning_ne_zero (m : ℕ) :
+    muonRelaxedQuarterSpec.base.detuning1Jet m ≠ 0 := by
+  unfold muonRelaxedQuarterSpec relaxedQuarterModalFromShellNominal
+    RelaxedQuarterModalSpec.fromBaseTagged modalFrequencyHorizonFromShellNominal
+  change rindlerDetuningShared (m : ℝ) ≠ 0
+  have hm : (0 : ℝ) ≤ (m : ℝ) := by exact_mod_cast Nat.zero_le m
+  have hpos : 0 < rindlerDetuningShared (m : ℝ) := by
+    unfold rindlerDetuningShared c_rindler_shared
+    rw [gamma_eq_2_5]
+    nlinarith
+  exact ne_of_gt hpos
+
+theorem kMuERelaxedQuarter_abs_le_kinetic_control
+    (κ : ℝ) (hκ : 0 ≤ κ) (A : Fin 8 → Fin 4 → ℝ) (x : ℝ)
+    (hctrl :
+      muonRelaxedQuarterSpec.relaxationLoad m_mu ≤
+        κ * (∑ a : Fin 8, ∑ i : Fin 4, ((Hqiv.Physics.linearEnd (F_from_A A a i (i + 1))) x - x) ^ 2)) :
+    |kMuERelaxedQuarter| ≤ |kMuE| * (1 + κ * ((-4 : ℝ) * L_O_kinetic A)) := by
+  have hbase :
+      muonRelaxedQuarterSpec.base.geometricStepReadout m_e m_mu = kMuE := by
+    unfold muonRelaxedQuarterSpec relaxedQuarterModalFromShellNominal
+      RelaxedQuarterModalSpec.fromBaseTagged
+    rw [geometricStepReadout_fromShellNominal]
+    unfold kMuE geometricResonanceStep
+    simp [eff_eq_detunedShellSurface]
+  have hdet_e : muonRelaxedQuarterSpec.base.detuning1Jet m_e ≠ 0 :=
+    muonRelaxedQuarterSpec_base_detuning_ne_zero m_e
+  have hdet_mu : muonRelaxedQuarterSpec.base.detuning1Jet m_mu ≠ 0 :=
+    muonRelaxedQuarterSpec_base_detuning_ne_zero m_mu
+  have hmain := RelaxedQuarterModalSpec.abs_relaxedGeometricStepReadout_le_kinetic_control
+      (spec := muonRelaxedQuarterSpec) m_e m_mu hdet_e hdet_mu κ hκ A x hctrl
+  have hmain' :
+      |kMuERelaxedQuarter| ≤
+        |muonRelaxedQuarterSpec.base.geometricStepReadout m_e m_mu| *
+          (1 + κ * ((-4 : ℝ) * L_O_kinetic A)) := by
+    simpa [kMuERelaxedQuarter] using hmain
+  simpa [hbase] using hmain'
 
 theorem kTauMu_pos : 0 < kTauMu :=
   div_pos (eff_pos m_mu) (eff_pos m_tau)
@@ -75,6 +229,18 @@ theorem kTauMu_eq_geometricResonanceStep : kTauMu = geometricResonanceStep m_mu 
 theorem kMuE_eq_geometricResonanceStep : kMuE = geometricResonanceStep m_e m_mu := by
   unfold kMuE geometricResonanceStep
   simp [eff_eq_detunedShellSurface]
+
+theorem kTauMu_eq_modal_geometricStepReadout :
+    kTauMu = tauModalFrequencySpec.geometricStepReadout m_mu m_tau := by
+  rw [show tauModalFrequencySpec = modalFrequencyHorizonFromShellNominal m_tau by rfl]
+  rw [geometricStepReadout_fromShellNominal]
+  simpa using kTauMu_eq_geometricResonanceStep
+
+theorem kMuE_eq_modal_geometricStepReadout :
+    kMuE = muonModalFrequencySpec.geometricStepReadout m_e m_mu := by
+  rw [show muonModalFrequencySpec = modalFrequencyHorizonFromShellNominal m_mu by rfl]
+  rw [geometricStepReadout_fromShellNominal]
+  simpa using kMuE_eq_geometricResonanceStep
 
 noncomputable def kTauMuCorrected (δ : ℝ) : ℝ :=
   effCorrected δ m_mu / effCorrected δ m_tau

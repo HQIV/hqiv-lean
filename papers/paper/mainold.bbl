@@ -1,0 +1,98 @@
+\begin{thebibliography}{12}
+\providecommand{\natexlab}[1]{#1}
+\providecommand{\url}[1]{\texttt{#1}}
+\expandafter\ifx\csname urlstyle\endcsname\relax
+  \providecommand{\doi}[1]{doi: #1}\else
+  \providecommand{\doi}{doi: \begingroup \urlstyle{rm}\Url}\fi
+
+\bibitem[Brodie(2026)]{brodie2026}
+K.~Brodie.
+\newblock Derivation of quantised inertia from {Jacobson} thermodynamics.
+\newblock Zenodo, 2026.
+\newblock URL \url{https://doi.org/10.5281/zenodo.18706746}.
+\newblock Backward-hemisphere overlap; factor $1/6$ and thermodynamic
+  coefficient $\gamma$.
+
+\bibitem[Dixon(1994)]{Dixon1994}
+Geoffrey~M. Dixon.
+\newblock \emph{Division Algebras: Octonions, Quaternions, Complex Numbers, and
+  the Algebraic Design of Physics}.
+\newblock Kluwer Academic Publishers, Dordrecht, 1994.
+\newblock ISBN 978-0-7923-2890-2.
+\newblock \doi{10.1007/978-94-011-1000-3}.
+
+\bibitem[{Ettinger, Steven Jr.} and {HQIV contributors}(2026)]{hqiv-lean}
+{Ettinger, Steven Jr.} and {HQIV contributors}.
+\newblock Hqiv lean 4 formalization.
+\newblock GitHub, 2026.
+\newblock URL \url{https://github.com/disregardfiat/hqiv-lean}.
+\newblock Machine-checked proofs cited by module and lemma names in text;
+  companion Zenodo manuscript DOI 10.5281/zenodo.18899939.
+
+\bibitem[G{\"u}naydin and G{\"u}rsey(1974)]{Gunaydin1974}
+Murat G{\"u}naydin and Feza G{\"u}rsey.
+\newblock Quark statistics and octonions.
+\newblock \emph{Physical Review D}, 9:\penalty0 3387--3396, 1974.
+\newblock \doi{10.1103/PhysRevD.9.3387}.
+
+\bibitem[G{\"u}naydin and G{\"u}rsey(1976)]{Gunaydin1975}
+Murat G{\"u}naydin and Feza G{\"u}rsey.
+\newblock Quark statistics and octonions.
+\newblock \emph{Journal of Mathematical Physics}, 17\penalty0 (4):\penalty0
+  680--694, 1976.
+\newblock \doi{10.1063/1.522968}.
+\newblock Extended treatment; key {Gunaydin1975} in manuscript.
+
+\bibitem[{HQIV Project}(2026)]{hqiv_repo}
+{HQIV Project}.
+\newblock Hqiv companion repositories (class patches, lattice drivers,
+  plotting), 2026.
+\newblock URL \url{https://doi.org/10.5281/zenodo.18899939}.
+\newblock Code paths such as \texttt{horizon\_modes/python/bulk.py} and
+  \texttt{class\_hqiv\_patches/} refer to the artifact tree bundled with the
+  Zenodo release.
+
+\bibitem[Jacobson(1995)]{Jacobson1995}
+Ted Jacobson.
+\newblock Thermodynamics of spacetime: The {Einstein} equation of state.
+\newblock \emph{Physical Review Letters}, 75\penalty0 (7):\penalty0 1260--1263,
+  1995.
+\newblock \doi{10.1103/PhysRevLett.75.1260}.
+
+\bibitem[Mueller(2026)]{mueller2026}
+Bernhard Mueller.
+\newblock Observer patch holography: overlapping horizon patches and emergent
+  gauge/gravity structure.
+\newblock GitHub book / preprint, 2026.
+\newblock URL
+  \url{https://github.com/FloatingPragma/observer-patch-holography}.
+\newblock Independent observer-centric holographic framework; compare
+  thermodynamic overlap with HQIV.
+
+\bibitem[Okubo(1978)]{Okubo1978}
+Susumu Okubo.
+\newblock Pseudo-quaternion and pseudo-octonion algebras.
+\newblock \emph{Hadronic Journal}, 1:\penalty0 1--27, 1978.
+
+\bibitem[Renda(2019)]{Renda2019}
+Michele Renda.
+\newblock A sceptical analysis of quantized inertia.
+\newblock \emph{Monthly Notices of the Royal Astronomical Society},
+  489\penalty0 (1):\penalty0 881--885, 2019.
+\newblock \doi{10.1093/mnras/stz2189}.
+
+\bibitem[Schuller(2020)]{Schuller2020}
+Frederic~P. Schuller.
+\newblock Constructive gravity: Foundations and applications, 2020.
+\newblock URL \url{https://arxiv.org/abs/2003.09726}.
+\newblock Constructive-gravity framework; hyperbolicity of the principal
+  polynomial and characteristic cones for matter coupled to metric geometry.
+
+\bibitem[Toppan(2021)]{Toppan2021}
+Francesco Toppan.
+\newblock Division algebras, generalized supersymmetries, and unphysical
+  states.
+\newblock \emph{Universe}, 7\penalty0 (11):\penalty0 456, 2021.
+\newblock \doi{10.3390/universe7110456}.
+
+\end{thebibliography}

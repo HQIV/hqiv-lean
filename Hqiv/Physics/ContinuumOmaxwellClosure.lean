@@ -2,6 +2,7 @@ import Hqiv.Physics.Action
 import Hqiv.Physics.ModifiedMaxwell
 import Hqiv.Geometry.ContinuumSpacetimeChart
 import Hqiv.Geometry.ContinuumMetricGradient
+import Hqiv.Geometry.HQVMContinuumMetricBridge
 import Hqiv.Geometry.SpacetimeMinkowski11Embed4
 
 /-!
@@ -15,8 +16,8 @@ This module **closes the loop** between:
   `EL_O_general` / `L_O_phi_coupling` (`grad_phi`).
 
 **Emergent equation:** `emergentMaxwellInhomogeneous_O_coordsField` replaces `grad_φ ν` by
-`coordsGradientComponents φF c ν` at a chosen basepoint `c`, keeping the same `alpha * log(phi_of_T …)`
-factor as `ModifiedMaxwell`.
+`coordsGradientComponents φF c ν` at a chosen basepoint `c`, keeping the same algebra-first
+`alpha * algebraicMaxwellCouplingLog …` factor as `ModifiedMaxwell`.
 
 **Action:** `L_O_phi_coupling_coords` and `EL_O_general_coordsField` use the same gradient components
 with `Real.log (φ_val + 1)` (action slot) instead of `phi_of_T (T ν)` (emergent slot). Aligning those
@@ -32,6 +33,9 @@ on the chart, these agree with the Euclidean `*_coordsField` names.
 
 **QM/QFT bridge (same chart):** `Hqiv.Physics.LightConeMaxwellQFTBridge` ties this continuum layer to
 `ContinuumManyBodyQFTScaffold` / `HorizonLimitedRenormLocality` via `LightConeFunctionalBridge`.
+
+**HQVM constant patch:** `Hqiv.Geometry.HQVMContinuumMetricBridge` supplies `hqvmInverseMetricConst`; the
+`*_hqvmConst` names below specialize `gInvAt` to frozen `HQVM_inverseMetric N a Φ` on the chart.
 -/
 
 namespace Hqiv.Physics
@@ -45,7 +49,7 @@ open Hqiv.Geometry
 /-- Emergent O-Maxwell RHS with continuum `(∇φ)_ν` from `coordsGradientComponents φF c`. -/
 noncomputable def emergentMaxwellInhomogeneous_O_coordsField (J_src : Fin 8 → Fin 4 → ℝ)
     (φF : (Fin 4 → ℝ) → ℝ) (c : Fin 4 → ℝ) (a : Fin 8) (ν : Fin 4) : ℝ :=
-  let phiCorrection := alpha * Real.log (phi_of_T (T ν.val)) * coordsGradientComponents φF c ν
+  let phiCorrection := alpha * algebraicMaxwellCouplingLog ν * coordsGradientComponents φF c ν
   (0 : ℝ) - 4 * Real.pi * J_src a ν - phiCorrection
 
 /-- Same φ-gradient slot as the default emergent equation when components match `grad_φ`. -/
@@ -71,7 +75,7 @@ noncomputable def emergentMaxwellInhomogeneous_O_coordsField_metric (J_src : Fin
     (φF : (Fin 4 → ℝ) → ℝ) (gInvAt : (Fin 4 → ℝ) → Fin 4 → Fin 4 → ℝ) (c : Fin 4 → ℝ) (a : Fin 8)
     (ν : Fin 4) : ℝ :=
   let phiCorrection :=
-    alpha * Real.log (phi_of_T (T ν.val)) * contravariantGradientComponentsAt gInvAt φF c ν
+    alpha * algebraicMaxwellCouplingLog ν * contravariantGradientComponentsAt gInvAt φF c ν
   (0 : ℝ) - 4 * Real.pi * J_src a ν - phiCorrection
 
 theorem emergent_coordsField_metric_eq_coordsField_of_euclidean (J_src : Fin 8 → Fin 4 → ℝ)
@@ -83,6 +87,25 @@ theorem emergent_coordsField_metric_eq_coordsField_of_euclidean (J_src : Fin 8 �
       emergentMaxwellInhomogeneous_O_coordsField J_src φF c a ν := by
   unfold emergentMaxwellInhomogeneous_O_coordsField_metric emergentMaxwellInhomogeneous_O_coordsField
   simp_rw [contravariantGradientComponentsAt_euclideanInv_eq_coordsGradientComponents gInvAt φF c hφ hg]
+
+/-- Emergent O-Maxwell with frozen HQVM inverse metric (`N`, `a`, `Φ` as in `HQVMetric`). -/
+noncomputable def emergentMaxwellInhomogeneous_O_coordsField_hqvmConst (J_src : Fin 8 → Fin 4 → ℝ)
+    (φF : (Fin 4 → ℝ) → ℝ) (N a Φ : ℝ) (c : Fin 4 → ℝ) (aIdx : Fin 8) (ν : Fin 4) : ℝ :=
+  emergentMaxwellInhomogeneous_O_coordsField_metric J_src φF (hqvmInverseMetricConst N a Φ) c aIdx ν
+
+@[simp]
+theorem emergentMaxwellInhomogeneous_O_coordsField_hqvmConst_eq_metric (J_src : Fin 8 → Fin 4 → ℝ)
+    (φF : (Fin 4 → ℝ) → ℝ) (N a Φ : ℝ) (c : Fin 4 → ℝ) (aIdx : Fin 8) (ν : Fin 4) :
+    emergentMaxwellInhomogeneous_O_coordsField_hqvmConst J_src φF N a Φ c aIdx ν =
+      emergentMaxwellInhomogeneous_O_coordsField_metric J_src φF (hqvmInverseMetricConst N a Φ) c aIdx ν :=
+  rfl
+
+theorem emergent_coordsField_metric_eq_of_hqvmInverseMetricConst (J_src : Fin 8 → Fin 4 → ℝ)
+    (φF : (Fin 4 → ℝ) → ℝ) (gInvAt : (Fin 4 → ℝ) → Fin 4 → Fin 4 → ℝ) (N a Φ : ℝ) (c : Fin 4 → ℝ)
+    (aIdx : Fin 8) (ν : Fin 4) (hg : gInvAt = hqvmInverseMetricConst N a Φ) :
+    emergentMaxwellInhomogeneous_O_coordsField_metric J_src φF gInvAt c aIdx ν =
+      emergentMaxwellInhomogeneous_O_coordsField_hqvmConst J_src φF N a Φ c aIdx ν := by
+  simp [emergentMaxwellInhomogeneous_O_coordsField_hqvmConst, hg]
 
 /-- φ–A coupling using continuum gradient components at `c`. -/
 noncomputable def L_O_phi_coupling_coords (A : Fin 8 → Fin 4 → ℝ) (φ_val : ℝ)
@@ -113,6 +136,17 @@ theorem L_O_phi_coupling_coords_metric_eq_coords_of_euclidean (A : Fin 8 → Fin
   intro ν _
   rw [contravariantGradientComponentsAt_euclideanInv_eq_coordsGradientComponents gInvAt φF c hφ hg]
 
+noncomputable def L_O_phi_coupling_coords_hqvmConst (A : Fin 8 → Fin 4 → ℝ) (φ_val : ℝ)
+    (φF : (Fin 4 → ℝ) → ℝ) (N a Φ : ℝ) (c : Fin 4 → ℝ) : ℝ :=
+  L_O_phi_coupling_coords_metric A φ_val φF (hqvmInverseMetricConst N a Φ) c
+
+@[simp]
+theorem L_O_phi_coupling_coords_hqvmConst_eq_metric (A : Fin 8 → Fin 4 → ℝ) (φ_val : ℝ)
+    (φF : (Fin 4 → ℝ) → ℝ) (N a Φ : ℝ) (c : Fin 4 → ℝ) :
+    L_O_phi_coupling_coords_hqvmConst A φ_val φF N a Φ c =
+      L_O_phi_coupling_coords_metric A φ_val φF (hqvmInverseMetricConst N a Φ) c :=
+  rfl
+
 theorem L_O_phi_coupling_coords_metric_const (A : Fin 8 → Fin 4 → ℝ) (φ_val : ℝ) (r : ℝ) (c : Fin 4 → ℝ) :
     L_O_phi_coupling_coords_metric A φ_val (fun _ : Fin 4 → ℝ => r) (fun _ => euclideanInv) c =
       L_O_phi_coupling A φ_val := by
@@ -138,6 +172,17 @@ noncomputable def L_O_Maxwell_general_coordsField_metric (J_src : Fin 8 → Fin 
     (φ_val : ℝ) (φF : (Fin 4 → ℝ) → ℝ) (gInvAt : (Fin 4 → ℝ) → Fin 4 → Fin 4 → ℝ) (c : Fin 4 → ℝ) : ℝ :=
   L_O_kinetic A + 4 * Real.pi * L_O_source_general J_src A +
     L_O_phi_coupling_coords_metric A φ_val φF gInvAt c
+
+noncomputable def L_O_Maxwell_general_coordsField_hqvmConst (J_src : Fin 8 → Fin 4 → ℝ)
+    (A : Fin 8 → Fin 4 → ℝ) (φ_val : ℝ) (φF : (Fin 4 → ℝ) → ℝ) (N a Φ : ℝ) (c : Fin 4 → ℝ) : ℝ :=
+  L_O_Maxwell_general_coordsField_metric J_src A φ_val φF (hqvmInverseMetricConst N a Φ) c
+
+@[simp]
+theorem L_O_Maxwell_general_coordsField_hqvmConst_eq_metric (J_src : Fin 8 → Fin 4 → ℝ)
+    (A : Fin 8 → Fin 4 → ℝ) (φ_val : ℝ) (φF : (Fin 4 → ℝ) → ℝ) (N a Φ : ℝ) (c : Fin 4 → ℝ) :
+    L_O_Maxwell_general_coordsField_hqvmConst J_src A φ_val φF N a Φ c =
+      L_O_Maxwell_general_coordsField_metric J_src A φ_val φF (hqvmInverseMetricConst N a Φ) c :=
+  rfl
 
 theorem L_O_Maxwell_general_coordsField_const (J_src : Fin 8 → Fin 4 → ℝ) (A : Fin 8 → Fin 4 → ℝ)
     (φ_val : ℝ) (r : ℝ) (c : Fin 4 → ℝ) :
@@ -182,6 +227,17 @@ noncomputable def action_O_Maxwell_general_coordsField_metric (J_src : Fin 8 →
     (c : Fin 4 → ℝ) : ℝ :=
   L_O_Maxwell_general_coordsField_metric J_src A φ_val φF gInvAt c
 
+noncomputable def action_O_Maxwell_general_coordsField_hqvmConst (J_src : Fin 8 → Fin 4 → ℝ)
+    (A : Fin 8 → Fin 4 → ℝ) (φ_val : ℝ) (φF : (Fin 4 → ℝ) → ℝ) (N a Φ : ℝ) (c : Fin 4 → ℝ) : ℝ :=
+  action_O_Maxwell_general_coordsField_metric J_src A φ_val φF (hqvmInverseMetricConst N a Φ) c
+
+@[simp]
+theorem action_O_Maxwell_general_coordsField_hqvmConst_eq_metric (J_src : Fin 8 → Fin 4 → ℝ)
+    (A : Fin 8 → Fin 4 → ℝ) (φ_val : ℝ) (φF : (Fin 4 → ℝ) → ℝ) (N a Φ : ℝ) (c : Fin 4 → ℝ) :
+    action_O_Maxwell_general_coordsField_hqvmConst J_src A φ_val φF N a Φ c =
+      action_O_Maxwell_general_coordsField_metric J_src A φ_val φF (hqvmInverseMetricConst N a Φ) c :=
+  rfl
+
 theorem action_O_Maxwell_general_coordsField_metric_eq_coordsField_of_euclidean (J_src : Fin 8 → Fin 4 → ℝ)
     (A : Fin 8 → Fin 4 → ℝ) (φ_val : ℝ) (φF : (Fin 4 → ℝ) → ℝ) (gInvAt : (Fin 4 → ℝ) → Fin 4 → Fin 4 → ℝ)
     (c : Fin 4 → ℝ)
@@ -217,7 +273,7 @@ theorem EL_O_general_coordsField_eq_EL_of_grad (J_src : Fin 8 → Fin 4 → ℝ)
     (h : coordsGradientComponents φF c ν = grad_phi ν) :
     EL_O_general_coordsField J_src A φ_val φF c a ν = EL_O_general J_src A φ_val a ν := by
   unfold EL_O_general_coordsField EL_O_general
-  simp [h]
+  simp [F_divergence_sum, h]
 
 theorem EL_O_general_coordsField_const (J_src : Fin 8 → Fin 4 → ℝ) (A : Fin 8 → Fin 4 → ℝ)
     (φ_val : ℝ) (r : ℝ) (c : Fin 4 → ℝ) (a : Fin 8) (ν : Fin 4) :
@@ -232,6 +288,17 @@ noncomputable def EL_O_general_coordsField_metric (J_src : Fin 8 → Fin 4 → �
     (ν : Fin 4) : ℝ :=
   (∑ μ : Fin 4, F_from_A A a μ ν) - 4 * Real.pi * J_src a ν
     - (if a = 0 then alpha * Real.log (φ_val + 1) * contravariantGradientComponentsAt gInvAt φF c ν else 0)
+
+noncomputable def EL_O_general_coordsField_hqvmConst (J_src : Fin 8 → Fin 4 → ℝ) (A : Fin 8 → Fin 4 → ℝ)
+    (φ_val : ℝ) (φF : (Fin 4 → ℝ) → ℝ) (N a Φ : ℝ) (c : Fin 4 → ℝ) (aIdx : Fin 8) (ν : Fin 4) : ℝ :=
+  EL_O_general_coordsField_metric J_src A φ_val φF (hqvmInverseMetricConst N a Φ) c aIdx ν
+
+@[simp]
+theorem EL_O_general_coordsField_hqvmConst_eq_metric (J_src : Fin 8 → Fin 4 → ℝ) (A : Fin 8 → Fin 4 → ℝ)
+    (φ_val : ℝ) (φF : (Fin 4 → ℝ) → ℝ) (N a Φ : ℝ) (c : Fin 4 → ℝ) (aIdx : Fin 8) (ν : Fin 4) :
+    EL_O_general_coordsField_hqvmConst J_src A φ_val φF N a Φ c aIdx ν =
+      EL_O_general_coordsField_metric J_src A φ_val φF (hqvmInverseMetricConst N a Φ) c aIdx ν :=
+  rfl
 
 theorem EL_O_general_coordsField_metric_eq (J_src : Fin 8 → Fin 4 → ℝ) (A : Fin 8 → Fin 4 → ℝ) (φ_val : ℝ)
     (φF : (Fin 4 → ℝ) → ℝ) (gInvAt : (Fin 4 → ℝ) → Fin 4 → Fin 4 → ℝ) (c : Fin 4 → ℝ) (a : Fin 8) (ν : Fin 4) :
@@ -297,6 +364,19 @@ theorem action_total_general_coordsField_metric_const (J_src : Fin 8 → Fin 4 �
   unfold action_total_general_coordsField_metric action_total_general
   congr 1
   exact action_O_Maxwell_general_coordsField_metric_const J_src A φ_val r c
+
+noncomputable def action_total_general_coordsField_hqvmConst (J_src : Fin 8 → Fin 4 → ℝ)
+    (A : Fin 8 → Fin 4 → ℝ) (φ_val : ℝ) (φF : (Fin 4 → ℝ) → ℝ) (N a Φ : ℝ) (c : Fin 4 → ℝ)
+    (rho_m rho_r : ℝ) : ℝ :=
+  action_total_general_coordsField_metric J_src A φ_val φF (hqvmInverseMetricConst N a Φ) c rho_m rho_r
+
+@[simp]
+theorem action_total_general_coordsField_hqvmConst_eq_metric (J_src : Fin 8 → Fin 4 → ℝ)
+    (A : Fin 8 → Fin 4 → ℝ) (φ_val : ℝ) (φF : (Fin 4 → ℝ) → ℝ) (N a Φ : ℝ) (c : Fin 4 → ℝ)
+    (rho_m rho_r : ℝ) :
+    action_total_general_coordsField_hqvmConst J_src A φ_val φF N a Φ c rho_m rho_r =
+      action_total_general_coordsField_metric J_src A φ_val φF (hqvmInverseMetricConst N a Φ) c rho_m rho_r :=
+  rfl
 
 end
 

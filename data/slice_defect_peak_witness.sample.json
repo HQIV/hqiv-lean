@@ -1,0 +1,36 @@
+{
+  "meta": {
+    "mode": "direct_defect_profile"
+  },
+  "N": 4,
+  "candidate_m": 1,
+  "candidate_abs_defect": 0.2,
+  "all_holds": true,
+  "checks": [
+    {
+      "n": 0,
+      "abs_defect_n": 0.1,
+      "abs_defect_candidate": 0.2,
+      "holds": true
+    },
+    {
+      "n": 1,
+      "abs_defect_n": 0.2,
+      "abs_defect_candidate": 0.2,
+      "holds": true
+    },
+    {
+      "n": 2,
+      "abs_defect_n": 0.05,
+      "abs_defect_candidate": 0.2,
+      "holds": true
+    },
+    {
+      "n": 3,
+      "abs_defect_n": 0.18,
+      "abs_defect_candidate": 0.2,
+      "holds": true
+    }
+  ],
+  "lean_target_shape": "IsWindowAbsPeak (sliceDefectProfileAtZ r observedArea z) N candidate_m (equivalently: forall n in Finset.range N, |defect n| <= |defect candidate_m|)"
+}

@@ -33,6 +33,15 @@ open scoped BigOperators
 
 /-!
 ## 1. Meta-horizon, spherical harmonics bookkeeping, nucleon metadata
+
+S⁷ metahorizon Casimir scaffold (non-interacting electron ladder): see
+`Hqiv/Geometry/S7MetahorizonCasimir.lean` for `laplaceBeltramiEigenvalueS7`,
+`sphericalHarmonicDimS7`, `occupationList`, and `noninteractingFermionLambdaSum`.
+Associator perturbation on occupied modes (octonion \((xy)z-x(yz)\) on fixed 120° tori): see
+`Hqiv/Geometry/NuclearTorusPerturbation.lean` (`perturbedCasimirEnergy`, `perturbedCasimirEnergy_eV`).
+Joint-vs-separated surplus (ionic / covalent / metallic **bookkeeping** via fragment counts): see
+`Hqiv/Geometry/BondedHorizonCasimir.lean` (`bondHorizonSurplusDimless`, `bondHorizonSurplus_eV`).
+Future screening layers reuse the same occupation list.
 -/
 
 /-- Proton vs neutron tag at the meta-horizon (isospin I = ½ with I₃ = ±½). -/
@@ -119,8 +128,8 @@ theorem sum_range_two_mul_add_one_real (m : ℕ) :
 /-- Constant real sum over `Finset.range N`. -/
 theorem sum_range_const_real (N : ℕ) (c : ℝ) :
     ∑ _ ∈ Finset.range N, c = (N : ℝ) * c := by
-  rw [Finset.sum_const, Nat.card_range]
-  simp
+  rw [Finset.sum_const, Finset.card_range]
+  simp [nsmul_eq_mul]
 
 /-- **Full mode-sum closed form:** `∑_{k < N} ω/2 = N · ω/2` with `N = available_modes m`. -/
 theorem casimir_energy_full_mode_sum {m : ℕ} (S : CasimirSurface m) :
@@ -128,7 +137,6 @@ theorem casimir_energy_full_mode_sum {m : ℕ} (S : CasimirSurface m) :
   unfold CasimirEnergySurface omegaCasimir
   rw [sum_range_const_real (availableModesNat m) (Hqiv.phi_of_shell m / 2)]
   simp only [availableModesNat_cast]
-  ring
 
 /-- **Nucleon Casimir identity:** full lattice sum over `available_modes` indices. -/
 theorem nucleon_is_casimir (n : Nucleon) :
@@ -258,6 +266,20 @@ def valleyCount {A Z : ℕ} : IsotopeLadder A Z → ℕ
   | IsotopeLadder.bindProton n => valleyCount n + 2
   | IsotopeLadder.bindNeutron n => valleyCount n + 2
 
+theorem IsotopeLadder_index_pos {A Z : ℕ} (n : IsotopeLadder A Z) : 0 < A := by
+  induction n with
+  | proton => exact Nat.succ_pos 0
+  | neutron => exact Nat.succ_pos 0
+  | bindProton n _ => exact Nat.succ_pos _
+  | bindNeutron n _ => exact Nat.succ_pos _
+
+theorem two_mul_pred_add_two_le (A : ℕ) (h : 0 < A) : 2 * (A - 1) + 2 ≤ 2 * A := by
+  cases A with
+  | zero => nomatch h
+  | succ a =>
+    simp only [Nat.succ_sub_succ, Nat.succ_eq_add_one]
+    omega
+
 theorem valleys_are_additive {A Z : ℕ} (n : IsotopeLadder A Z) :
     valleyCount (IsotopeLadder.bindProton n) = valleyCount n + 2 ∧
       valleyCount (IsotopeLadder.bindNeutron n) = valleyCount n + 2 := by
@@ -372,7 +394,6 @@ theorem spin_statistics_determines_half_life {ΔE : ℝ} (hΔ : 0 < ΔE) :
   have h𝔥 : hbar_MeV_s ≠ 0 := by unfold hbar_MeV_s; norm_num
   unfold half_life_from_width decayWidth_per_s resonance_half_life resonance_lifetime
   field_simp [hΔ.ne', h𝔥]
-  ring
 
 /-!
 ### Stability slice (A ≤ 16): valley count bound
@@ -385,19 +406,21 @@ theorem valleyCount_monotone_bind {A Z : ℕ} (n : IsotopeLadder A Z) :
 
 theorem valleyCount_le_two_mul_pred {A Z : ℕ} (n : IsotopeLadder A Z) :
     valleyCount n ≤ 2 * (A - 1) := by
-  cases n with
-  | proton =>
-      simp [valleyCount]
-  | neutron =>
-      simp [valleyCount]
-  | bindProton n =>
-      rw [valleyCount]
-      have ih := valleyCount_le_two_mul_pred n
-      omega
-  | bindNeutron n =>
-      rw [valleyCount]
-      have ih := valleyCount_le_two_mul_pred n
-      omega
+  induction n with
+  | proton => simp [valleyCount]
+  | neutron => simp [valleyCount]
+  | @bindProton A' Z' n ih =>
+    simp only [valleyCount] at ih ⊢
+    rw [Nat.succ_sub_one A']
+    have hA := IsotopeLadder_index_pos n
+    have hstep := two_mul_pred_add_two_le A' hA
+    exact Nat.le_trans (Nat.add_le_add_right ih 2) hstep
+  | @bindNeutron A' Z' n ih =>
+    simp only [valleyCount] at ih ⊢
+    rw [Nat.succ_sub_one A']
+    have hA := IsotopeLadder_index_pos n
+    have hstep := two_mul_pred_add_two_le A' hA
+    exact Nat.le_trans (Nat.add_le_add_right ih 2) hstep
 
 theorem isotope_ladder_stability_le_sixteen {A Z : ℕ} (n : IsotopeLadder A Z) (hA : A ≤ 16) :
     valleyCount n ≤ 30 := by

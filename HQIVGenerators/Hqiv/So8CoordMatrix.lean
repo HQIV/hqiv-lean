@@ -45,6 +45,11 @@ Lex order (0,1)..(0,7),(1,2)..(6,7). Derived from so8Generator and upperTriangle
 def so8CoordMatrix : Matrix (Fin 28) (Fin 28) ℝ :=
   Matrix.of (fun p k => (so8Generator k) (upperTriangleIdx p).1 (upperTriangleIdx p).2)
 
+@[simp]
+theorem so8CoordMatrix_eq_coord (p k : Fin 28) :
+    so8CoordMatrix p k = (so8Generator k) (upperTriangleIdx p).1 (upperTriangleIdx p).2 :=
+  rfl
+
 /-- Extract the p-th upper-triangle coordinate of an 8×8 matrix (same order as so8CoordMatrix). -/
 def coordVec (M : Matrix (Fin 8) (Fin 8) ℝ) (p : Fin 28) : ℝ :=
   M (upperTriangleIdx p).1 (upperTriangleIdx p).2

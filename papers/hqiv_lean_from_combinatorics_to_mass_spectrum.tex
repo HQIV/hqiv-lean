@@ -1,0 +1,239 @@
+% HQIV Lean: combinatorial backbone → electroweak closure → fermion/hadron layers.
+% pdflatex
+\documentclass[11pt]{article}
+
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage[hidelinks]{hyperref}
+\usepackage[margin=1in]{geometry}
+
+\title{Electroweak Scale and Fermion Masses from Horizon Readouts\\[0.35em]
+{\large\itshape First-principles electroweak closure in \texttt{HQIV\_LEAN}}}
+\author{}
+\date{}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+\textbf{Derived first:} from the null-lattice combinatorics and horizon-area functionals, the \texttt{HQIV\_LEAN} formalization produces a closed electroweak sector without importing PDG inputs for it---a geometric vacuum $v=T_{\mathrm{lockin}}\,S(\texttt{referenceM}+1)\,(1+\gamma)$ from the lock-in temperature and outer-horizon surfaces $S(m)=(m+1)(m+2)$, then gauge-boson and Higgs masses from $v$ with triality-fixed couplings; the file proves rational witnesses (e.g.\ $M_W^{\mathrm{derived}}=392/5$ in the module's units) and comparison theorems to electroweak reference values.
+\emph{Carrier cross-link (aligned with ``Projected complex carrier'' in \path{papers/paper/octonion_lightcone_to_oshoracle.tex}):}
+the weak doublet is packaged in Mathlib's \texttt{EuclideanSpace\,ℂ\,(Fin\,8)} model (\path{Hqiv/Algebra/WeakInComplexStructure.lean}); \texttt{weakCarrierCinner} is the explicit Hermitian slot sum and \texttt{weakCarrierCinner\_eq\_inner} rewrites it to Mathlib's \texttt{inner}.
+\path{Hqiv/Physics/WeakDoubletCarrierGaugeQuadratic.lean} defines the real Gram matrix \texttt{weakWPlaneGramMatrix\,g\,v} for the $(\sigma^1,\sigma^2)$ half-Pauli directions on the VEV ray; at $(g,v)=(\texttt{su2CouplingDerived},\texttt{vacuumExpectationValueGauge})$ it is $\lambda\,\mathbf{1}_2$, so both eigenvalues equal $\lambda$ with $\mathrm{tr}=2\lambda$ and $\det=\lambda^2$ (\texttt{weakWPlaneGramMatrix\_trace}, \texttt{weakWPlaneGramMatrix\_det}).
+The factor-$8$ identity \texttt{M\_W\_derived\^{}2\,=\,8\,*\,weakWPlaneGramEigenvalue\,…} is then packaged with the rational witnesses \texttt{boson\_witness\_M\_W} / \texttt{boson\_witness\_m\_H} from \path{Hqiv/Physics/DerivedGaugeAndLeptonSector.lean} in the single certificate \texttt{ew\_carrier\_gram\_mass\_certificate}.
+A carrier quartic \texttt{higgsQuarticPotentialCarrier} built from \texttt{higgsCarrierNormSq} and the same geometric gauge vev anchor yields \texttt{m\_H\_sq\_eq\_two\_lambda\_times\_vgauge\_sq} with \texttt{higgsQuarticLambdaGaugeWitness} reconstructed from the existing mass inputs (no new tunable coupling).
+Triality tags \texttt{So8RepIndex} enter through \texttt{weakPhiOfShellOnSo8Rep} and \texttt{weakOneOverAlphaEMAtRep}; rational \texttt{\#eval} mirrors plus \texttt{example} PDG-gap checks close the file.
+\emph{Strong color (triplet chart):} \path{Hqiv/Physics/QuarkColorCarrierGaugeScaffold.lean} fixes the abstract $3$-component chart; \path{StrongColorSu3ChartClosure.lean} exports Hermitian Gell--Mann data, half-generators $T^a$, and the real totally antisymmetric tensor $f^{abc}$; \path{StrongColorCarrierClosure.lean} conjugates $3\times 3$ operators into the same \texttt{EuclideanSpace\,ℂ\,(Fin\,8)} carrier as the electroweak layer. An optional Lake target \texttt{lake\ build\ HQIVStrongColorSu3Certificate} imports auto-generated \texttt{@[simp]} lemmas for nonzero $f^{abc}$ atoms (\path{Hqiv/Physics/StrongColorSu3fStructureSimp.lean}); the default \texttt{HQIVLEAN} cone includes the chart files but not that certificate table. Status of the full eight-generator matrix Lie law on all pairs $(a,b)$ is summarized in \path{AGENTS/THEOREMS.md} (strong-color table).
+The same backbone yields a derived neutrino ladder from $\gamma/S(\texttt{referenceM}+2)$ applied to the neutral-vector mass. \textbf{Derived next:} a stars-and-bars lattice ratio forces $\alpha=\tfrac{3}{5}$ at every depth, and ratios of detuned $S(m)$ readouts drive generation steps and a rank-$l^2$ mass-scaling ansatz on content classes. The updated modal path now treats modal frequency / horizon data as primary through \texttt{ModalFrequencyHorizon.lean}, with lightweight charged-lepton ratios in \texttt{LeptonResonanceGlobalDetuning.lean} and outer-closure witnesses in \texttt{DerivedGaugeAndLeptonSector.lean}; natural indices remain evaluation coordinates. \textbf{Quarks and nucleons} use the same detuned-area ratios and lock-in binding spine, but still rely on explicit scale witnesses (heavy quark GeV anchors and integer readout triples); see Section~\ref{sec:quarks}. Fermion Planck-mass labels and further SM alignment are exported in \texttt{SM\_GR\_Unification} and companion modules; status is tracked in \texttt{AGENTS/MASS\_DERIVATION\_ROADMAP.md}.
+\end{abstract}
+
+\input{include/patch_theory_messaging.tex}
+
+%============================================================================
+\section{The Core Derivation}
+\label{sec:core}
+
+\paragraph{(I) Electroweak scale from $T_{\mathrm{lockin}}$ and outer horizons.}
+Let $m_{\mathrm{lockin}}=\texttt{referenceM}$ and $T_{\mathrm{lockin}}=T(m_{\mathrm{lockin}})=1/(m_{\mathrm{lockin}}+1)$. \texttt{DerivedGaugeAndLeptonSector.lean} defines a geometric vacuum scale
+\[
+  v \;=\; T_{\mathrm{lockin}}\cdot S(\texttt{referenceM}+1)\cdot(1+\gamma),
+  \qquad S(m)=(m+1)(m+2),
+\]
+with $\gamma=1-\alpha=\tfrac{2}{5}$. Gauge and scalar masses are built from $v$ with triality-normalized couplings (\texttt{su2CouplingDerived}, \texttt{u1CouplingDerived}). The file proves closed rational witnesses, e.g.\
+\texttt{boson\_witness\_M\_W}: $M_W^{\mathrm{derived}}=392/5$ (GeV-normalized units in the module), and companion theorems for $M_Z$ and $m_H$, together with comparison theorems to PDG centrals (\texttt{raw\_ew\_boson\_W\_H\_below\_PDG\_Z\_above}, etc.). Neutrino masses begin with \texttt{m\_nu\_e\_derived} equal to $\bigl(\gamma/S(\texttt{referenceM}+2)\bigr)\,M_Z^{\mathrm{derived}}$ with cascade to higher generations (\texttt{neutrino\_masses\_from\_outer\_horizon}). \emph{No PDG literals are imported to define these objects.}
+
+\paragraph{(II) Combinatorial imprint and horizon-surface readouts.}
+\texttt{OctonionicLightCone.lean} proves a lattice ratio equals $\alpha=\tfrac{3}{5}$ for every truncation (\texttt{latticeAlphaRatio\_eq\_alpha}). \texttt{FanoResonance.lean} packages the shared surface $S(m)$ and detuned surfaces \texttt{detunedShellSurface}; resonance steps are ratios of these, hence a concrete ``$S(m)$-octave'' hierarchy feeding lepton and quark ladders (\texttt{ChargedLeptonResonance}, \texttt{QuarkMetaResonance}). Where a content-class ansatz is needed, \texttt{ConservedContentMassBridge.lean} formulates scaling with a rank-$l$ factor and shell correction (\texttt{massScalingAnsatz}), i.e.\ the expected $l^2$ weighting on top of the shell imprint---the combinatorial hierarchy is first-class, not an afterthought.
+
+The current preferred lepton path is now:
+\[
+  \texttt{ModalFrequencyHorizon} \;\to\;
+  \texttt{LeptonResonanceGlobalDetuning} \;\to\;
+  \texttt{DerivedGaugeAndLeptonSector},
+\]
+with \texttt{ChargedLeptonResonance} retained as a thicker phenomenology/scratch layer. This reflects the
+updated project stance that horizons and effective surfaces are primary, while shell numbers are sampled
+readouts.
+
+\paragraph{(III) Variational weak/Higgs scaffold now wired to the same lock-in/curvature channel.}
+Beyond the mass-ladder exports, \texttt{WeakHiggsFromOMaxwellScaffold.lean} now provides a typed Tier-III
+extension interface on the proved O-Maxwell action:
+\[
+  F^{a,\mathrm{weak}}_{\mu\nu}
+  =
+  (W^a_\nu-W^a_\mu)+g_w\,\mathrm{comm}^a_{\mu\nu},
+  \qquad
+  \mathcal{L}_{\mathrm{weak}}
+  =-\frac14\sum_{a,\mu,\nu}\frac{(F^{a,\mathrm{weak}}_{\mu\nu})^2}{2},
+\]
+with scalar potential \(\lambda(|\Phi|^2-v^2)^2\) on \(\Phi\in\mathbb{R}^8\). The lock-in vev proxy is
+\[
+  v_{\mathrm{lockin}}=\sqrt{\eta_{\mathrm{paper}}\Omega_k(m_{\mathrm{lockin}};m_{\mathrm{lockin}})}.
+\]
+Lean now proves reduction and normalization lemmas that push this further than pure placeholders:
+\texttt{weakF\_reduces\_to\_abelian}, \texttt{weakF\_diag\_eq\_zero\_of\_abelian},
+\texttt{lockinVev\_sq\_eq\_eta\_paper}, \texttt{lockinVev\_eq\_sqrt\_eta\_paper},
+\texttt{action\_O\_weak\_higgs\_reduces\_exactly\_to\_action\_O\_Maxwell}, and
+\texttt{weakHiggs\_triality\_tilt\_average\_eq\_one}.
+So the status is: abelian action dynamics are proved in \texttt{Action.lean}; weak/Higgs is now a
+formally controlled extension surface with proved collapse back to the abelian core and proved lock-in/triality consistency identities.
+
+%============================================================================
+\section{Maxwell spectrum + \texorpdfstring{$\Delta$}{Delta} triality spine (what the denominator stands on)}
+\label{sec:maxwell-delta-triality}
+
+The denominator used in the active path is no longer a free rapidity stub; it is sourced from the
+matrix-level O-Maxwell/Fano scaffold in \texttt{FanoOmaxwellSpectrum.lean}. The construction is:
+\begin{enumerate}
+  \item \textbf{Carrier and line projector.} A Fano vertex is embedded into the octonion matrix carrier
+  \(\mathrm{Fin}\,8\) as index \(1..7\) (scalar slot \(0\) reserved), then lifted to a diagonal selector.
+  Summing selectors over a line \(L\) gives
+  \[
+    \Pi_L \;=\; \sum_{v\in L}\Pi_v,
+    \qquad \operatorname{tr}(\Pi_L)=3
+  \]
+  (theorem \texttt{fanoLineSelector\_trace}).
+
+  \item \textbf{Phase-lift generator \(\Delta\).} \texttt{PhaseLiftDelta.lean} fixes the antisymmetric
+  \(8\times 8\) generator with nonzero \((1,7)\), \((7,1)\) entries; the scaffold proves
+  \[
+    \operatorname{tr}(\Delta\Delta^{\mathsf T})=2
+  \]
+  (theorem \texttt{phaseLiftDeltaQuadraticTrace\_eq\_two}).
+
+  \item \textbf{Projection normalization.} The spectral scalar is defined by
+  \[
+    \mathcal{N}(L)=\frac{\operatorname{tr}(\Pi_L)+\operatorname{tr}(\Delta\Delta^{\mathsf T})}{5}
+    =\frac{3+2}{5}=1
+  \]
+  (theorem \texttt{spectralProjectionNormalization\_eq\_one}).
+
+  \item \textbf{Projected mode strength and 1-jet.} For mode \((L,m)\), projected strength is
+  \(\mathcal{N}(L)\,\texttt{phaseLiftCoeff}(m)\), and the detuning source is
+  \[
+    D_L(m)\;=\;1+\frac{3\gamma}{2}\Bigl(\sigma_L(m)-\sigma_L(0)\Bigr).
+  \]
+  Using \(\mathcal{N}(L)=1\), \(\texttt{phaseLiftCoeff}(m)=\varphi(m)/6\), and
+  \(\varphi(m)=2(m+1)\), Lean proves
+  \[
+    D_L(m)=\texttt{rindlerDetuningShared}(m)=1+\frac{\gamma}{2}\,m
+  \]
+  (\texttt{spectralFanoRindler1Jet\_eq\_rindler},
+  \texttt{spectralFanoRindler1Jet\_eq\_one\_plus\_half\_gamma}).
+\end{enumerate}
+
+The public denominator \texttt{trialityProjectedDenominator} in
+\texttt{FanoTrialityDetuningScaffold.lean} is exactly this spectral 1-jet, and
+\texttt{trialityProjectedDenominator\_firstOrder} is therefore a proved corollary, not a placeholder.
+
+\paragraph{What ``triality'' means here today.}
+\texttt{Triality.lean} proves the Spin(8) representation cycle (order-3 permutation of \(8v,8s^+,8s^-\)).
+What is \emph{not} yet proved is the stronger forcing theorem that the denominator's unit constant is
+uniquely imposed by triality-equivariant mode selection. So the current status is:
+\emph{spectral \(\Delta\)+Fano construction proved and affine-compatible; full triality-forcing of the
+constant term remains an open theorem objective.}
+
+%============================================================================
+\section{Backbone definitions (one pass)}
+\label{sec:backbone}
+
+\texttt{AuxiliaryField.lean}: $T(m)=1/(m+1)$, $\varphi(m)=2(m+1)$, \texttt{shell\_shape}. \texttt{PhaseLiftDelta.lean}: fixed antisymmetric \(\Delta\) generator and \(\varphi/6\) phase-lift coefficient. \texttt{Triality.lean}: order-3 Spin(8) representation cycle bookkeeping. \texttt{SM\_GR\_Unification.lean}: $\alpha_{\mathrm{GUT}}=1/42$ from cube directions $\times$ octonion imaginary units. \texttt{Baryogenesis.lean}: lock-in index \texttt{m\_lockin} equals \texttt{referenceM}. \texttt{BoundStates.lean} / \texttt{HarmonicLadderMass.lean}: shell-resolved $\alpha_{\mathrm{eff}}(m)$ and hydrogenic $\alpha^2$ scalings.
+For the variational extension path, add \texttt{Action.lean} \(\rightarrow\) \texttt{WeakHiggsFromOMaxwellScaffold.lean}: proved abelian EL at base plus typed weak/Higgs layer with reduction theorems to the base action.
+
+%============================================================================
+\section{Fermion and hadron exports (what \texttt{SM\_GR\_Unification} names)}
+\label{sec:fermion}
+
+\texttt{SM\_GR\_Unification.lean} exports Planck-unit masses via \texttt{smMassFromGeometry}: scale \texttt{m\_tau\_Pl} divided by \texttt{resonanceProduct} (\texttt{ChargedLeptonResonance.lean}). Heavy triality slot has product $1$, so $\tau$, top, and bottom labels coincide at that functional's value.
+
+%============================================================================
+\section{Quarks and nucleons: what is derived, what is still a witness}
+\label{sec:quarks}
+
+\paragraph{Honesty (not ``no witnesses'').}
+The quark ladder in \texttt{QuarkMetaResonance.lean} is \emph{not} free of external numerals. In particular:
+\begin{itemize}
+  \item \textbf{Absolute scale:} the up-type ladder is normalized by a named real \texttt{m\_top\_GeV} (PDG-style pole-mass listing used as calibration witness). Ratios between generations are \emph{not} taken from PDG tables; they are fixed by \texttt{geometricResonanceStep} ratios built from detuned surfaces \texttt{detunedShellSurface} and explicit $\mathbb{N}$ shell endpoints (\texttt{m\_quark\_up\_*}).
+  \item \textbf{Readout tables:} the integer triples \texttt{m\_quark\_up\_*} and \texttt{m\_quark\_down\_*} are calibration inputs that determine internal resonance factors; uniqueness of these coordinates from the null lattice alone is \emph{not} proved in this module.
+  \item \textbf{Legacy down branch:} a separate real \texttt{m\_bottom\_GeV} still fixes the old down-type comparison ladder (\texttt{quarkMassDown}, \texttt{m\_strange\_GeV}, \texttt{m\_down\_GeV}) unless/until that path is replaced end-to-end by the active API.
+\end{itemize}
+
+\paragraph{Lock-in readout, \texttt{T\_lockin}, and the GeV top anchor (disambiguation).}
+The lock-in indices agree across modules: \texttt{m\_lockin} $=$ \texttt{referenceM} $=$ \texttt{m\_top\_at\_lockin} (\texttt{Baryogenesis}, \texttt{QuarkMetaResonance}), and
+\[
+  \texttt{T\_lockin} = T(\texttt{m\_top\_at\_lockin})
+\]
+on the auxiliary ladder (\texttt{AuxiliaryField.lean}: $T(m)=T_{\mathrm{Pl}}/(m+1)$ with $T_{\mathrm{Pl}}=1$ in natural units). \texttt{SM\_GR\_Unification} records this as \texttt{T\_lockin\_eq\_temperature\_at\_quark\_top\_birth\_shell}. So the \textbf{story} is exactly what you describe: lock-in, baryogenesis, and the ``top birth'' readout are the \emph{same} calibration row, and \texttt{T\_lockin} is the horizon temperature assigned to that row. That is \emph{not} the same proposition as ``the real number \texttt{T\_lockin} equals the pole mass $m_t$ in GeV'': at \texttt{referenceM}$=4$ one has $T=1/5$ in those units, not $\sim 172\ \mathrm{GeV}$. The explicit real \texttt{m\_top\_GeV} exists precisely to supply \textbf{laboratory GeV} normalization for the color-resonance ladder (\texttt{topLockinColorResonanceAnchorMass}, etc.); it is the witness that remains separate from the abstract ladder unless a future theorem closes the gap. A parallel export \texttt{m\_top\_quark\_natural} from \texttt{smMassFromGeometryLabel\,.top} uses the $\tau$ Planck mass and resonance products only---no import of \texttt{m\_top\_GeV} there. ADM lapse and plasma corrections (\texttt{HQVM\_lapse}; \texttt{QuarkMetaResonance} docstring) are \emph{not} applied inside \texttt{T} itself, so ``top energy'' in the physical paper sense may require that layer; the Lean \texttt{T\_lockin} identity is the lock-in temperature at that readout.
+
+\paragraph{Why top is the heavy anchor (current implementation).}
+The active color-composed API fixes the heavy up-like channel by
+\texttt{allowedColorResonanceMass\,.upLike\,.heavy = m\_top\_GeV}. This is not arbitrary bookkeeping: it
+matches the lock-in-heavy channel where the resonance product is $1$, so the heavy band is the unique
+non-relaxed reference from which mid/light bands are generated by the same detuned-surface readout map.
+In other words, top is used as the anchor because the current ladder is implemented as
+\emph{``heavy lock-in witness + horizon/surface relaxations''} rather than as three independently
+normalized flavor masses.
+
+What \emph{is} derived in-structure from the same spine as leptons ($S(m)$, Rindler detuning, $\gamma$, $\alpha$, \texttt{referenceM}) are the \textbf{ratio factors} between shells and the \textbf{composite-trace} binding \texttt{nucleonSharedBinding\_MeV} at \texttt{referenceM}.
+
+\paragraph{Active visible-state API (color-composed ladder).}
+The public masses \texttt{allowedColorResonanceMass} normalize the heavy up-like band to the top anchor, then compress the heavy down-like visible mass by a cross-channel detuning
+\[
+  \texttt{crossChannelHeavyShellDetuning}
+  \;=\;
+  \frac{\texttt{detunedShellSurface}(\texttt{m\_quark\_up\_top\_shell})}{\texttt{detunedShellSurface}(\texttt{m\_quark\_down\_bottom\_shell})}
+\]
+and a visible bookkeeping factor \texttt{chargedLeptonContentCount}$\times$\texttt{cubeAxes} $=2\times 3$ (two visible charge signs across three color channels). Mid/light bands descend by the same \texttt{downResonanceProduct} / \texttt{upResonanceProduct} machinery as elsewhere. Nucleon constituents use the active light masses \texttt{activeUpLightQuarkMass\_GeV}, \texttt{activeDownLightQuarkMass\_GeV} with a shared dressing scale and a smaller residual detuning tied to \texttt{alphaEffAtShell referenceM}; \texttt{DerivedNucleonMass.lean} exports \texttt{derivedProtonMass}, \texttt{derivedNeutronMass}.
+
+\paragraph{Representative numerics (module units, current witness set).}
+Evaluating the definitions with the literals in the repository (same formulas as \texttt{QuarkMetaResonance.lean}; approximate) gives:
+\begin{center}
+\begin{tabular}{l r}
+  charm (from top / first up-step) & $\approx 1.27\ \mathrm{GeV}$ \\
+  active up-like light (\texttt{allowedColorResonanceMass upLike light}) & $\approx 0.00220\ \mathrm{GeV}$ \\
+  active down-like heavy (compressed) & $\approx 4.88\ \mathrm{GeV}$ \\
+  active down-like light & $\approx 0.00550\ \mathrm{GeV}$ \\
+  \texttt{derivedProtonMass} & $\approx 970.4\ \mathrm{MeV}$ \\
+  \texttt{derivedNeutronMass} & $\approx 971.8\ \mathrm{MeV}$ \\
+  $m_n - m_p$ & $\approx 1.35\ \mathrm{MeV}$
+\end{tabular}
+\end{center}
+These are \textbf{not} PDG matches; they are the output of the closed Lean definitions given the current anchors and readout tables.
+
+\paragraph{Why they differ from observation.}
+PDG values for quarks and hadrons are quoted in different schemes (pole vs.\ $\overline{\mathrm{MS}}$, running scales) and include nonperturbative QCD and finite-volume/lattice input where applicable. This formalization instead implements a \textbf{finite-chart resonance surrogate}: fixed $\mathbb{N}$ readout endpoints, a single heavy-quark GeV anchor, and a composite-trace binding ansatz at \texttt{referenceM}. Differences are therefore expected:
+\begin{itemize}
+  \item \textbf{Proton $\sim 938\ \mathrm{MeV}$ vs.\ $\sim 970\ \mathrm{MeV}$ here:} the model does not claim a full nonperturbative nucleon mass calculation; the residual error reflects missing strong-sector closure and the simplicity of the dressing/binding split.
+  \item \textbf{Light quark ``masses'':} experimental light-quark masses are indirect and scheme-dependent; our GeV numbers are internal ladder coordinates, not a claim of pole masses for $u,d$.
+  \item \textbf{Heavy flavors:} charm/bottom/top comparisons would require either removing the top anchor or deriving it from a deeper lock-in theorem; until then, agreement with PDG is not the target of the proof artifact.
+\end{itemize}
+
+%============================================================================
+\section{Explicit inputs and proof obligations (AGENTS-aligned)}
+
+The file \texttt{AGENTS/MASS\_DERIVATION\_ROADMAP.md} is the authoritative status board. In short:
+
+\begin{itemize}
+  \item \textbf{Faithful to the light-cone spine today:} bosonic closure witnesses and neutrino witnesses in \texttt{DerivedGaugeAndLeptonSector.lean}; structural binding quantities (\texttt{nucleonSharedBinding\_MeV}, composite-trace packaging) tied to \texttt{referenceM}, $\alpha$, $\gamma$, and $S(m)$.
+  \item \textbf{Variational extension now formalized as scaffold:} \texttt{WeakHiggsFromOMaxwellScaffold.lean} defines non-abelian-form weak field strength, Higgs potential, lock-in vev proxy, and combined action slot, with proved reduction identities back to \texttt{action\_O\_Maxwell\_general}.
+  \item \textbf{Still carried by explicit numerals or boundary conditions:} substrate pins (\texttt{qcdShell}, \texttt{latticeStepCount} $\Rightarrow$ \texttt{referenceM}); \textbf{quark sector:} \texttt{m\_top\_GeV}, legacy \texttt{m\_bottom\_GeV}, and the $\mathbb{N}$ shell triples in \texttt{QuarkMetaResonance.lean} (Section~\ref{sec:quarks}); several SM alignment decimals in \texttt{SM\_GR\_Unification.lean} where the code matches paper fiducials by definition.
+  \item \textbf{What the roadmap asks next:} reduce anchor count and unify the legacy down ladder with the active visible-state API; for the variational side, promote the weak/Higgs scaffold from reduction-level theorems to full EL closure on weak/scalar channels---see the milestone table in \texttt{AGENTS/MASS\_DERIVATION\_ROADMAP.md}.
+\end{itemize}
+
+\noindent
+This division is intentional: the formalization \emph{separates} closure witnesses derived from $(T_{\mathrm{lockin}},S,\gamma,\alpha)$ from numerals whose job is alignment or unfinished closure. Readers evaluating the program should use the roadmap's honesty table, not footnotes in a survey note.
+
+%============================================================================
+\section{Octonions and the Standard Model bookkeeping layer}
+
+\texttt{SMEmbedding.lean}, \texttt{Triality.lean}, \texttt{Generators.lean}: octonionic $8$-dimensional carriers, $\mathfrak{so}(8)$ generators, and Standard Model quantum numbers. This layer fixes representation labels; the dynamical masses above come from the shell program in Sections~\ref{sec:core}--\ref{sec:quarks}.
+In parallel, the active color triplet is packaged on the $3\times 3$ chart (\texttt{QuarkColorCarrierGaugeScaffold.lean}, \texttt{StrongColorSu3ChartClosure.lean}) and embedded into the octonion-indexed carrier via \texttt{StrongColorCarrierClosure.lean}; optional \texttt{HQIVStrongColorSu3Certificate} supplies generated simp lemmas for nonzero $f^{abc}$ without enlarging the default \texttt{HQIVLEAN} glob.
+
+%============================================================================
+\section*{Reading order in the repository}
+
+\texttt{OctonionicLightCone.lean} $\rightarrow$ \texttt{AuxiliaryField.lean} $\rightarrow$ \texttt{PhaseLiftDelta.lean} $\rightarrow$ \texttt{FanoLine.lean} $\rightarrow$ \texttt{OMaxwellAlgebraSeed.lean} $\rightarrow$ \texttt{FanoOmaxwellSpectrum.lean} $\rightarrow$ \texttt{FanoTrialityDetuningScaffold.lean} $\rightarrow$ \texttt{ModalFrequencyHorizon.lean} $\rightarrow$ \texttt{LeptonResonanceGlobalDetuning.lean} $\rightarrow$ \texttt{DerivedGaugeAndLeptonSector.lean} $\rightarrow$ \texttt{FanoResonance.lean} / \texttt{QuarkMetaResonance.lean} (Section~\ref{sec:quarks}) $\rightarrow$ \texttt{DerivedNucleonMass.lean} $\rightarrow$ \texttt{SM\_GR\_Unification.lean}; color triplet chart + carrier embed: \texttt{QuarkColorCarrierGaugeScaffold.lean} $\rightarrow$ \texttt{StrongColorSu3ChartClosure.lean} $\rightarrow$ \texttt{StrongColorCarrierClosure.lean} (optional cert: \texttt{lake\ build\ HQIVStrongColorSu3Certificate}); variational branch: \texttt{Action.lean} $\rightarrow$ \texttt{WeakHiggsFromOMaxwellScaffold.lean}; optional thicker lepton phenomenology: \texttt{ChargedLeptonResonance.lean}; heavy $\mathfrak{so}(8)$ matrix closure: \texttt{lake\ build\ HQIVSO8Closure}; parallel: \texttt{AGENTS/MASS\_DERIVATION\_ROADMAP.md}, \texttt{AGENTS/THEOREMS.md}.
+
+\section*{Acknowledgments}
+Mathlib supplies analysis and linear algebra. Maintainership notes: \texttt{AGENTS/ASSUMPTIONS.md}, \texttt{AGENTS/THEOREMS.md}.
+
+\end{document}

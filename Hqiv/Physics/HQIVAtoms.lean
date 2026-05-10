@@ -99,7 +99,7 @@ theorem atomic_geometry_from_nuclear (m : ℕ) (S : CasimirSurface m) :
         (sphericalFresnelEnvelope S.harmonics S.horizon).curvature =
           S.harmonics.cumulativeCount / R_m m ∧
         (fresnelCaustic S).curvature = S.vacuumModes.count / R_m m :=
-  ⟨by rw [sphericalFresnelEnvelope_radius, fresnel_meta_horizon_driven],
+  ⟨by rw [sphericalFresnelEnvelope_radius]; rfl,
    rfl,
    causticCurvature_eq_vacuumModeDensity S⟩
 
@@ -120,8 +120,8 @@ noncomputable def casimirPromotionDelta (m : ℕ) : ℝ :=
 /-- Casimir energy gap between consecutive shells equals `casimirPromotionDelta`. -/
 theorem casimir_promotion_delta_sub {m : ℕ} (S : CasimirSurface m) (S' : CasimirSurface (m + 1)) :
     CasimirEnergySurface S' - CasimirEnergySurface S = casimirPromotionDelta m := by
-  rw [electronShellCasimirEnergy_eq_casimir S, electronShellCasimirEnergy_eq_casimir S']
-  unfold casimirPromotionDelta electronShellCasimirEnergy
+  rw [← electronShellCasimirEnergy_eq_casimir S', ← electronShellCasimirEnergy_eq_casimir S]
+  unfold casimirPromotionDelta
   ring
 
 /-- Promotion ΔE equals the shell-step Casimir gap; half-life uses `decayWidth_per_s ΔE = ΔE / ħ`. -/
@@ -175,9 +175,7 @@ theorem dihedral_penalty_nonneg (κ θ : ℝ) (hκ : 0 ≤ κ) : 0 ≤ κ * (1 -
 
 theorem allowed_binding_angles_minimize_budget (κ : ℝ) (_hκ : κ ≠ 0) :
     deriv (fun θ : ℝ => κ * (1 - Real.cos θ)) 0 = 0 := by
-  have h1 : HasDerivAt (fun θ : ℝ => (1 : ℝ) - Real.cos θ) (Real.sin 0) 0 :=
-    HasDerivAt.const_sub (1 : ℝ) (Real.hasDerivAt_cos 0)
-  simpa [Real.sin_zero, mul_zero] using (HasDerivAt.const_mul κ h1).deriv
+  simp [Real.deriv_cos, Real.sin_zero, mul_zero]
 
 /-!
 ### pH / ligand / solvent: explicit EM rescaling (no new axioms)

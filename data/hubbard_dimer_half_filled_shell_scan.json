@@ -1,0 +1,97 @@
+{
+  "beta": 2.5,
+  "coherence": 1.0,
+  "lambda0": 0.8,
+  "m_end": 8,
+  "m_start": 2,
+  "model": "hubbard_dimer_half_filled_canonical",
+  "rows": [
+    {
+      "U_shell": 0.48,
+      "double_occupancy_total": 0.4404273896907841,
+      "gap": 1.7743485299222672,
+      "ground_energy": -1.7743485299222672,
+      "m": 2,
+      "phi_of_shell": 6.0,
+      "spin_correlation": -0.41967945773191134,
+      "thermal_double_occupancy_total": 0.43726092544314593,
+      "thermal_energy": -1.7455639048246572,
+      "thermal_spin_correlation": -0.41038983445730787
+    },
+    {
+      "U_shell": 0.6400000000000001,
+      "double_occupancy_total": 0.42100474944666366,
+      "gap": 1.7054382241875459,
+      "ground_energy": -1.7054382241875459,
+      "m": 3,
+      "phi_of_shell": 8.0,
+      "spin_correlation": -0.43424643791500245,
+      "thermal_double_occupancy_total": 0.4168030102367925,
+      "thermal_energy": -1.6751284240004032,
+      "thermal_spin_correlation": -0.4235607002204079
+    },
+    {
+      "U_shell": 0.8,
+      "double_occupancy_total": 0.40194193243090764,
+      "gap": 1.6396078054371137,
+      "ground_energy": -1.6396078054371137,
+      "m": 4,
+      "phi_of_shell": 10.0,
+      "spin_correlation": -0.44854355067681906,
+      "thermal_double_occupancy_total": 0.39672262459164886,
+      "thermal_energy": -1.607387490847026,
+      "thermal_spin_correlation": -0.43617635440241265
+    },
+    {
+      "U_shell": 0.96,
+      "double_occupancy_total": 0.3833135237623374,
+      "gap": 1.5767936211491904,
+      "ground_energy": -1.5767936211491904,
+      "m": 5,
+      "phi_of_shell": 12.0,
+      "spin_correlation": -0.4625148571782467,
+      "thermal_double_occupancy_total": 0.3770991503068336,
+      "thermal_energy": -1.5423123574697197,
+      "thermal_spin_correlation": -0.4481689996296188
+    },
+    {
+      "U_shell": 1.1199999999999999,
+      "double_occupancy_total": 0.3651850372400144,
+      "gap": 1.5169207977195474,
+      "ground_energy": -1.5169207977195476,
+      "m": 6,
+      "phi_of_shell": 14.0,
+      "spin_correlation": -0.4761112220699893,
+      "thermal_double_occupancy_total": 0.3580030000678799,
+      "thermal_energy": -1.4798678436385722,
+      "thermal_spin_correlation": -0.45948129670429255
+    },
+    {
+      "U_shell": 1.2800000000000002,
+      "double_occupancy_total": 0.3476121364481082,
+      "gap": 1.4599047597450696,
+      "ground_energy": -1.4599047597450696,
+      "m": 7,
+      "phi_of_shell": 16.0,
+      "spin_correlation": -0.48929089766391887,
+      "thermal_double_occupancy_total": 0.33949474631951354,
+      "thermal_energy": -1.4200124167405506,
+      "thermal_spin_correlation": -0.47006718051012575
+    },
+    {
+      "U_shell": 1.4400000000000002,
+      "double_occupancy_total": 0.33064026586362927,
+      "gap": 1.4056528408938282,
+      "ground_energy": -1.4056528408938282,
+      "m": 8,
+      "phi_of_shell": 18.0,
+      "spin_correlation": -0.502019800602278,
+      "thermal_double_occupancy_total": 0.3216246314053574,
+      "thermal_energy": -1.3626983587046155,
+      "thermal_spin_correlation": -0.47989223531112807
+    }
+  ],
+  "scan_kind": "shell_index_sweep",
+  "t_hop": 1.0,
+  "time": 0.6283185307179586
+}

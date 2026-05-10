@@ -1,0 +1,16 @@
+{
+  "files": {
+    "proof_json": "proof.json",
+    "public_json": "public.json",
+    "verification_key_json": "verification_key.json"
+  },
+  "hashes": {
+    "proof.json": "49ee868fe3cc7742225772891911ef6df3635fd80462e8978c35ad8dc1b2fb2e",
+    "public.json": "d97a03fd0003431ccffa827307e6accd79a4dd4edf4e7bb66619f9e63acfe7c8",
+    "verification_key_json": "20c805361d6591ad5ba0a7503d5aeb85bbbd2d8a29da9cdcace40f2954c7c1be"
+  },
+  "message": "proof_json_sha256=49ee868fe3cc7742225772891911ef6df3635fd80462e8978c35ad8dc1b2fb2e\npublic_json_sha256=d97a03fd0003431ccffa827307e6accd79a4dd4edf4e7bb66619f9e63acfe7c8\nverification_key_json_sha256=20c805361d6591ad5ba0a7503d5aeb85bbbd2d8a29da9cdcace40f2954c7c1be\n",
+  "public_key_pem": "-----BEGIN PUBLIC KEY-----\nMCowBQYDK2VwAyEAvYBVWeiidgqm+1ZmKveJXEeipNPAVcLwsxxhuV6tPcc=\n-----END PUBLIC KEY-----\n",
+  "scheme": "Ed25519",
+  "signature_base64": "0NlZt+Es+34JzMmQNY3H32Q7+ZDCwKKhLR0iXHnLVQBRtSdo9r+seRxNaerKqnSNkkaLCHyW4q+0uxnw2nRrCQ=="
+}

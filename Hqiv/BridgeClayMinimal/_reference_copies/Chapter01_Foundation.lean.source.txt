@@ -1,0 +1,11 @@
+import Hqiv.Geometry.OctonionicLightCone
+import Hqiv.Geometry.AuxiliaryField
+
+/-!
+# Story — Chapter 1: light cone and auxiliary field
+
+**Read first.** Discrete null-lattice mode counts, curvature norm / `δ_E` ladder, reference shell `referenceM`,
+and the auxiliary field `φ` on the temperature ladder `T(m) = 1/(m+1)` in natural units.
+
+Downstream: `Chapter02_Metric` (HQVM metric built from the same data).
+-/

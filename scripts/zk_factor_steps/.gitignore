@@ -1,0 +1,14 @@
+node_modules/
+bin/circom
+build/
+pot12_*.ptau
+*.r1cs
+*.wasm
+*.zkey
+*.ptau
+verification_key.json
+proof.json
+public.json
+witness.wtns
+input.json
+payload.json

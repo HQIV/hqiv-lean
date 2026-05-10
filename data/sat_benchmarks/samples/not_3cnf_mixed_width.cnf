@@ -1,0 +1,4 @@
+c Intentionally not 3-CNF (2 literals in first clause) — for --skip-non-3cnf tests
+p cnf 3 2
+1 2 0
+1 2 -3 0

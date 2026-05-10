@@ -23,6 +23,8 @@ over the index sets (O components, spacetime indices).
 **Structure:**
 1. **Potential** A : Fin 8 → Fin 4 → ℝ (gauge potential in O, one component per spacetime index).
 2. **Field strength from potential** F_a μ ν = A a ν - A a μ (discrete exterior derivative).
+   **Kinetic EL slot:** `F_divergence_sum A a ν = ∑_μ F_{a μν}` is wrapped so it is not parsed as
+   `∑_μ (F_{a μν} - 4πJ - …)` when written next to subtraction (see `EL_O_general`).
 3. **O-Maxwell Lagrangian** L_O = -(1/4) F² + J·A + φ-coupling; **action** S_O = sum over indices.
 4. **Arbitrary source** `L_O_source_general J_src`, `EL_O_general J_src`, `action_O_Maxwell_general J_src`
    for any `J_src : Fin 8 → Fin 4 → ℝ` (default `J_O` recovers the earlier names).
@@ -30,6 +32,10 @@ over the index sets (O components, spacetime indices).
    `ModifiedMaxwell.emergentMaxwellInhomogeneous_O_general`).
 6. **Gravitational action** S_grav (φ, ρ): constraint form of the Friedmann equation; S_grav = 0 ⟺ HQVM Friedmann.
 7. **Total action** S_total = S_O + S_grav (or separately stationary); same φ, α link both.
+
+**Discrete holonomy slot:** `Hqiv.Physics.ActionHolonomyGlue` packages the **same** `F_from_A` flux
+data into cyclic `Fin 4` plaquette transports in `Function.End ℝ` (abelian layer); the kinetic
+`L_O_kinetic` sum is the global `8 × 4 × 4` aggregate over channels.
 
 Plasma / collective sources: `Hqiv.Physics.ActionPlasmaBridge` instantiates `J_src := J_O_plasma j₀ coord`.
 
@@ -43,6 +49,10 @@ def A_O (_a : Fin 8) (_ν : Fin 4) : ℝ := 0
 
 /-- **Field strength from potential** (discrete): F_a μ ν = A a ν - A a μ. Antisymmetric. -/
 def F_from_A (A : Fin 8 → Fin 4 → ℝ) (a : Fin 8) (μ ν : Fin 4) : ℝ := A a ν - A a μ
+
+/-- **Discrete `F`-divergence surrogate** (sum over the first spacetime index): `∑_μ F_{a μν}`. This is the kinetic piece that appears in `EL_O_general`. -/
+def F_divergence_sum (A : Fin 8 → Fin 4 → ℝ) (a : Fin 8) (ν : Fin 4) : ℝ :=
+  ∑ μ : Fin 4, F_from_A A a μ ν
 
 /-- **F_from_A is antisymmetric.** -/
 theorem F_from_A_antisymm (A : Fin 8 → Fin 4 → ℝ) (a : Fin 8) (μ ν : Fin 4) :
@@ -84,21 +94,43 @@ noncomputable def action_O_Maxwell_general (J_src : Fin 8 → Fin 4 → ℝ) (A 
 noncomputable def action_O_Maxwell (A : Fin 8 → Fin 4 → ℝ) (φ_val : ℝ) : ℝ :=
   action_O_Maxwell_general J_O A φ_val
 
-/-- **Euler–Lagrange** from varying A(a,ν): same `-4π J_src` coupling as `emergentMaxwellInhomogeneous_O_general`. -/
+/-- **Euler–Lagrange** from varying A(a,ν): same `-4π J_src` coupling as `emergentMaxwellInhomogeneous_O_general`.
+Uses `F_divergence_sum` so the discrete `∑_μ F_{μν}` is not parsed as `∑_μ (F_{μν} - 4πJ - …)`. -/
 noncomputable def EL_O_general (J_src : Fin 8 → Fin 4 → ℝ) (A : Fin 8 → Fin 4 → ℝ) (φ_val : ℝ) (a : Fin 8) (ν : Fin 4) : ℝ :=
-  (∑ μ : Fin 4, F_from_A A a μ ν) - 4 * Real.pi * J_src a ν
+  F_divergence_sum A a ν - 4 * Real.pi * J_src a ν
   - (if a = 0 then alpha * Real.log (φ_val + 1) * grad_phi ν else 0)
 
 /-- **Euler–Lagrange** with default `J_O`. -/
 noncomputable def EL_O (A : Fin 8 → Fin 4 → ℝ) (φ_val : ℝ) (a : Fin 8) (ν : Fin 4) : ℝ :=
   EL_O_general J_O A φ_val a ν
 
+/-- `EL_O_general` is `F_divergence_sum` minus the declared source and φ–A terms. -/
+theorem EL_O_general_eq_F_divergence_sub_sources (J_src : Fin 8 → Fin 4 → ℝ) (A : Fin 8 → Fin 4 → ℝ)
+    (φ_val : ℝ) (a : Fin 8) (ν : Fin 4) :
+    EL_O_general J_src A φ_val a ν =
+      F_divergence_sum A a ν - 4 * Real.pi * J_src a ν -
+        (if a = 0 then alpha * Real.log (φ_val + 1) * grad_phi ν else 0) :=
+  rfl
+
+/-- **Octonion channel `a = 0`:** EL splits into `F_divergence_sum` minus `4π J` and the φ–A gradient slot. -/
+theorem EL_O_general_zero_eq (J_src : Fin 8 → Fin 4 → ℝ) (A : Fin 8 → Fin 4 → ℝ) (φ_val : ℝ) (ν : Fin 4) :
+    EL_O_general J_src A φ_val 0 ν =
+      F_divergence_sum A 0 ν - 4 * Real.pi * J_src 0 ν -
+        alpha * Real.log (φ_val + 1) * grad_phi ν := by
+  simp [EL_O_general, F_divergence_sum]
+
+/-- **Vacuum EL₀:** default `J_O = 0` and placeholder `grad_phi = 0` ⇒ **EL at channel `0` is exactly the `F` divergence sum** `∑_μ F_{0 μν}`. -/
+theorem EL_O_zero_eq_F_divergence_sum (A : Fin 8 → Fin 4 → ℝ) (φ_val : ℝ) (ν : Fin 4) :
+    EL_O A φ_val 0 ν = F_divergence_sum A 0 ν := by
+  simp [EL_O, EL_O_general, F_divergence_sum, J_O, grad_phi]
+
 /-- **Equations from action:** `EL_O_general J_src` is the discrete EL covector with source `J_src`. -/
 theorem action_O_Maxwell_EL_eq_emergent_general (J_src : Fin 8 → Fin 4 → ℝ) (a : Fin 8) (ν : Fin 4) (φ_val : ℝ)
     (_hφ : φ_val + 1 > 0) (A : Fin 8 → Fin 4 → ℝ) :
     EL_O_general J_src A φ_val a ν = (∑ μ : Fin 4, F_from_A A a μ ν) - 4 * Real.pi * J_src a ν -
       (if a = 0 then alpha * Real.log (φ_val + 1) * grad_phi ν else 0) := by
-  unfold EL_O_general; rfl
+  rw [EL_O_general_eq_F_divergence_sub_sources]
+  simp [F_divergence_sum]
 
 theorem action_O_Maxwell_EL_eq_emergent (a : Fin 8) (ν : Fin 4) (φ_val : ℝ) (hφ : φ_val + 1 > 0)
     (A : Fin 8 → Fin 4 → ℝ) :
@@ -112,6 +144,22 @@ theorem L_O_source_general_add_J (J₁ J₂ : Fin 8 → Fin 4 → ℝ) (A : Fin 
       L_O_source_general J₁ A + L_O_source_general J₂ A := by
   unfold L_O_source_general
   simp_rw [add_mul, Finset.sum_add_distrib]
+
+/-- **Non-superposition of the full O-Maxwell density:** `L_O_kinetic` and `L_O_phi_coupling` are shared
+across `J_src`, so only the `4π · (J·A)` piece adds linearly (`L_O_source_general_add_J`). -/
+theorem L_O_Maxwell_general_add_J (J₁ J₂ : Fin 8 → Fin 4 → ℝ) (A : Fin 8 → Fin 4 → ℝ) (φ_val : ℝ) :
+    L_O_Maxwell_general (fun a ν => J₁ a ν + J₂ a ν) A φ_val =
+      L_O_Maxwell_general J₁ A φ_val + L_O_Maxwell_general J₂ A φ_val -
+        L_O_kinetic A - L_O_phi_coupling A φ_val := by
+  unfold L_O_Maxwell_general
+  rw [L_O_source_general_add_J]
+  ring
+
+theorem action_O_Maxwell_general_add_J (J₁ J₂ : Fin 8 → Fin 4 → ℝ) (A : Fin 8 → Fin 4 → ℝ) (φ_val : ℝ) :
+    action_O_Maxwell_general (fun a ν => J₁ a ν + J₂ a ν) A φ_val =
+      action_O_Maxwell_general J₁ A φ_val + action_O_Maxwell_general J₂ A φ_val -
+        L_O_kinetic A - L_O_phi_coupling A φ_val :=
+  L_O_Maxwell_general_add_J J₁ J₂ A φ_val
 
 /-- **Gravitational action (HQVM):** constraint form of the Friedmann equation.
     S_grav(φ, ρ_m, ρ_r) = (3−γ)φ² - 8π G_eff(φ)(ρ_m + ρ_r). Stationarity S_grav = 0 ⟺ Friedmann. -/
@@ -130,6 +178,17 @@ noncomputable def action_total_general (J_src : Fin 8 → Fin 4 → ℝ) (A : Fi
     (φ_val rho_m rho_r : ℝ) : ℝ :=
   action_O_Maxwell_general J_src A φ_val + S_HQVM_grav φ_val rho_m rho_r
 
+/-- **Total action with two currents:** `S_HQVM_grav` is independent of `J_src`, so it would be
+double-counted when naively adding two `action_total_general` values—subtract one copy. -/
+theorem action_total_general_add_J (J₁ J₂ : Fin 8 → Fin 4 → ℝ) (A : Fin 8 → Fin 4 → ℝ)
+    (φ_val rho_m rho_r : ℝ) :
+    action_total_general (fun a ν => J₁ a ν + J₂ a ν) A φ_val rho_m rho_r =
+      action_total_general J₁ A φ_val rho_m rho_r + action_total_general J₂ A φ_val rho_m rho_r -
+        L_O_kinetic A - L_O_phi_coupling A φ_val - S_HQVM_grav φ_val rho_m rho_r := by
+  unfold action_total_general
+  rw [action_O_Maxwell_general_add_J]
+  ring
+
 /-- **Total action** with default `J_O`. -/
 noncomputable def action_total (A : Fin 8 → Fin 4 → ℝ) (φ_val rho_m rho_r : ℝ) : ℝ :=
   action_total_general J_O A φ_val rho_m rho_r
@@ -142,7 +201,6 @@ theorem equations_from_action (φ rho_m rho_r : ℝ) (_hφ : 0 ≤ φ) :
     (∀ a ν, EL_O A_O (φ + 1) a ν = (∑ μ : Fin 4, F_from_A A_O a μ ν) - 4 * Real.pi * J_O a ν -
       (if a = 0 then alpha * Real.log (φ + 2) * grad_phi ν else 0)) := by
   refine ⟨S_HQVM_grav_zero_iff_Friedmann φ rho_m rho_r, fun a ν => ?_⟩
-  unfold EL_O EL_O_general A_O F_from_A J_O grad_phi
-  rw [add_assoc]; norm_num
+  simp [EL_O, EL_O_general, F_divergence_sum, F_from_A, A_O, J_O, grad_phi, add_assoc]
 
 end Hqiv

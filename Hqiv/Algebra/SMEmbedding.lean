@@ -92,6 +92,16 @@ theorem three_generations_from_triality_reps : Fintype.card So8RepIndex = 3 := c
 
 Three weak isospin generators as linear combinations inside the closed 28-dim algebra
 (G₂ ⊂ so(8)); they satisfy the su(2) relations and act as doublets on the 8s spinor.
+
+Separately, `Hqiv.Algebra.WeakFromLeftMulOctonion` packages exploratory **left-multiplication**
+combinations \(J\), \(W^\pm\), \(Z\) built directly from \(L(e_i)\); that module proves skewness
+identities only and explicitly **does not** claim \(\mathfrak{su}(2)\) closure for those
+\(GL(8,\mathbb{R})\) sums (see its module doc).
+
+`Hqiv.Algebra.WeakInComplexStructure` is the **complexified / projected-carrier** companion: the
+same frozen \(J\) is extended to \(\mathbb{C}^8\), the \(+i\) eigenspace is a \(\mathbb{C}\)-submodule,
+and standard Pauli matrices on the abstract doublet satisfy \(\mathfrak{su}(2)\) commutators by
+explicit \(2\times 2\) calculation (orthogonal to the \(\mathfrak{g}_2\) matrix closure proved here).
 -/
 
 /-- **SU(2)_L generator 1** (weak isospin): first G₂ generator. -/
@@ -160,6 +170,40 @@ def hyperchargeEigenvalue (i : Fin 8) : ℚ :=
 
 /-- **Electric charge Q = T₃ + Y/2:** component 0 (T₃=+1/2) → Q=2/3, component 1 (T₃=-1/2) → Q=-1/3, etc. -/
 def chargeFromY (i : Fin 8) (t3 : ℚ) : ℚ := t3 + hyperchargeEigenvalue i
+
+/-- Up-like quark component carries the familiar fractional residual `2/3` in the algebra layer. -/
+theorem up_component_charge_two_thirds : chargeFromY 0 (1/2) = 2/3 := by
+  unfold chargeFromY hyperchargeEigenvalue
+  norm_num
+
+/-- Down-like quark component carries the familiar fractional residual `-1/3` in the algebra layer. -/
+theorem down_component_charge_neg_one_third : chargeFromY 1 (-1/2) = -1/3 := by
+  unfold chargeFromY hyperchargeEigenvalue
+  norm_num
+
+/-- The neutral lepton doublet component is electrically neutral in the algebra table. -/
+theorem lepton_doublet_neutral_component_charge_zero : chargeFromY 4 (1/2) = 0 := by
+  unfold chargeFromY
+  have hY : hyperchargeEigenvalue 4 = -1 / 2 := by
+    simp [hyperchargeEigenvalue]
+  rw [hY]
+  norm_num
+
+/-- The charged lepton doublet component is `-1`, matching the visible integer shell charge. -/
+theorem lepton_doublet_charged_component_charge_neg_one : chargeFromY 5 (-1/2) = -1 := by
+  unfold chargeFromY
+  have hY : hyperchargeEigenvalue 5 = -1 / 2 := by
+    simp [hyperchargeEigenvalue]
+  rw [hY]
+  norm_num
+
+/-- The right-handed charged-lepton slot carries `+1` in the algebra table. -/
+theorem charged_lepton_singlet_charge_pos_one : chargeFromY 6 0 = 1 := by
+  unfold chargeFromY
+  have hY : hyperchargeEigenvalue 6 = 1 := by
+    simp [hyperchargeEigenvalue]
+  rw [hY]
+  norm_num
 
 /-- **ν_R has Y = 0** (singlet): component 7. -/
 theorem nu_R_hypercharge_zero : hyperchargeEigenvalue 7 = 0 := by

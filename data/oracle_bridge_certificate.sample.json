@@ -1,0 +1,52 @@
+{
+  "meta": {
+    "n_min": 8,
+    "n_max": 8,
+    "trials": 1,
+    "seed_base": 1234,
+    "rounds": 2,
+    "max_steps": 240,
+    "top_k": 10,
+    "tol": 1e-09,
+    "formula": "oracle/optimal <= 1 + n^(1/n)"
+  },
+  "summary": {
+    "total": 1,
+    "all_valid": 1,
+    "pass_rate": 1.0
+  },
+  "rows": [
+    {
+      "n": 8,
+      "seed": 81290,
+      "oracleCost": 5.391806900284328,
+      "seedCost": 6.016032941576382,
+      "optimalCost": 5.391806900284328,
+      "optimalTour": [
+        0,
+        2,
+        1,
+        4,
+        6,
+        3,
+        5,
+        7
+      ],
+      "\u03b5": 0.7293530756786465,
+      "tensorResidualErr": 0.0,
+      "rapidityErr": 0.7293530756786465,
+      "axisErr": 0.0,
+      "ratio": 1.0,
+      "bound": 2.29683955465101,
+      "checks": {
+        "hOptPos": true,
+        "hProjResidual": true,
+        "hResidualBudget": true,
+        "hLocalCompletion": true,
+        "hEpsEnvelope": true,
+        "envelopeRatio": true,
+        "valid": true
+      }
+    }
+  ]
+}

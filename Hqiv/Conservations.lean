@@ -27,25 +27,28 @@ We start from:
 4. **Later:** Prove that this structure is identical to a known gauge structure.
    For now we stay in pure math.
 
-## Where matrices.py comes in — degrees of freedom
+## Degrees of freedom — Lean SO(8) closure stack (not a Python script)
 
-The **authoritative construction** of the structure from counting over O is in
-`HQVM/matrices.py`: octonion left-multiplication matrices L(e_i), the phase-lift
-generator Δ, Lie closure to full so(8) (dimension 28), and the explicit basis.
-Here we need to **prove our degrees of freedom**: that the counting over O in
-the light cone yields exactly the right number of independent generators (e.g.
-28 for the Lie algebra closure), and that the conservations forced by the
-metric live in that structure. So the flow is: light-cone counting → structure
-(matrices.py constructs it) → **prove** the dimension and that conservations
-hold in it; then later identify with known forces.
+The **checked-in, proof-bearing** construction lives in Lean:
+
+- `Hqiv.OctonionLeftMultiplication` — the 8×8 matrices `L(e_i)` for imaginary units.
+- `Hqiv.So8CoordMatrix` — upper-triangle indexing and the `so8CoordMatrix` packaging used in closure.
+- `Hqiv.GeneratorsLieClosureData0` … `Hqiv.GeneratorsLieClosureData27` — chunked Lie-bracket coefficient
+  data feeding `Hqiv.GeneratorsLieClosure` (row files split for elaboration limits; **27** is one chunk).
+- `Hqiv.SO8Closure` — re-exports `so8_closure_dim_eq_28` and `so8_closure_theorem` from the generator closure.
+- `Hqiv.SO8ClosureInterface` — thin facade (`so8_closure_dim_eq_28_interface`, …) so physics layers avoid
+  pulling the whole data closure graph unless needed (`lake build HQIVSO8Closure`).
+
+Companion Python in `HQVM/matrices.py` (and `scripts/print_lean_octonion_L.py` mentioned in
+`OctonionLeftMultiplication`) is for **regeneration / cross-check**, not what this file cites as authority.
 -/
 
 /-- **Dimension of the structure from counting over O.** The octonion algebra
 has 8 dimensions (1 + 7 imaginary); the Lie algebra that closes from the
 counting (e.g. so(8)) has dimension 28. We record 28 as the dimension of the
 closure; the “8” is the octonion dimension already used in the curvature norm.
-This is what we must **prove** as the number of degrees of freedom (matrices.py
-computes the closure explicitly). -/
+This is what we must **prove** as the number of degrees of freedom (the SO(8) closure
+theorem in `Hqiv.SO8Closure` / `Hqiv.SO8ClosureInterface` matches this count). -/
 def structure_from_O_dim : ℕ := 28
 
 theorem structure_from_O_dim_eq : structure_from_O_dim = 28 := rfl
@@ -69,15 +72,16 @@ theorem lapse_forces_time_angle_as_horizon_term (Φ φ t : ℝ) :
   lapse_decompose Φ φ t
 
 /-!
-## Structure from counting over O — degrees of freedom (matrices.py)
+## Structure from counting over O — degrees of freedom (Lean modules above)
 
-The **structure** that is the result of counting over O in the light cone is
-constructed in `HQVM/matrices.py`: L(e_i), Δ, g₂ + Δ closure to so(8), 28-element
-basis. We need to **prove our degrees of freedom**: that the light-cone counting
-(8 × stars-and-bars, 6⁷√3, etc.) yields this structure and that its dimension
-and conservations are as stated. Conservations forced by the metric (phase, and
-later charge-like quantities) live **in** this structure. Later we can prove
-that this structure is identical to SO(8) or the known gauge algebra.
+The **structure** that is the result of counting over O in the light cone is the
+same one closed in Lean: `L(e_i)` in `OctonionLeftMultiplication`, bracket data in
+`GeneratorsLieClosureData*`, and the packaged theorems in `SO8Closure` /
+`SO8ClosureInterface`. We still need to **prove** end-to-end that light-cone counting
+alone forces that Lie data (the narrative link is conceptual; the dimension **28**
+here matches the closure proof). Conservations forced by the metric (phase, and
+later charge-like quantities) live **in** this structure. Later: identify with the
+standard gauge-algebra names if desired.
 -/
 
 /-- **Statement:** conservations hold in the structure from O (dim 28, phase mod 2π). -/

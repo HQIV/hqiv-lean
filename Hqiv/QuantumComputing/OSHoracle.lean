@@ -2,6 +2,29 @@ import Mathlib.Data.List.Basic
 import Mathlib.Algebra.BigOperators.Ring.Finset
 import Hqiv.QuantumComputing.DigitalGates
 
+/-!
+# Sparse OSH oracle (digital sparse simulation)
+
+This module is the **proved combinatorial spine** behind sparse HQIV simulation: a `SparseRegister` is
+explicit superposition bookkeeping (wrapped index × octonion amplitude). One step **expands** support
+along the horizon-causal rule (`causalExpandSupport`), applies the digital gate on a materialized dense
+slice (`applyGateSparse`), then **difference detection** (`detectFlippedKets`) and **pruning**
+(`pruneToFlipped`) shrink the tracked list.
+
+That expand → evolve → flip-detect → prune pattern is the formal analogue of what we informally call
+**sparse Shor-style** bookkeeping: the “period” is not proved here as a Fourier peak, but **support
+and flip lists** are exactly what Lean counts (`applyGateSparse_length_eq_two_mul`,
+`pruneToFlipped_length_le`, `detectFlippedKets_length_le_sum`, `horizonCausal_support_o_twoPow_practice`).
+
+Rapidity / shell phase elsewhere in HQIV (`SpatialSliceRapidityScaffold`, phase channels in the
+integrated factor driver) supplies the **angular coordinate** story; **this** file pins down the
+**list algebra** on sparse kets. For dense vs sparse memory crossover (and the caveat that one formal
+step builds a full `DiscreteState`), see `SparseSimulationDensityCrossover`.
+
+`Hqiv.Geometry.HQIVOSHIntegratedFactorDriver` cites these lemmas for the integrated Python driver; divisor
+soundness for classical monolithic hits is in `Hqiv.Geometry.MonolithicGeometricFactorizer`.
+-/
+
 namespace Hqiv.QuantumComputing
 
 open scoped BigOperators

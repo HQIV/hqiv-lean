@@ -1,10 +1,10 @@
-import Hqiv.Physics.HQIVLongRange
+import Hqiv.Physics.HQIVMolecules
 
 /-!
 # Generic hierarchical assembly (HQIV)
 
 This module packages the **same** mathematical objects used for biomolecular folding
-(`TorqueTree`, `foldEnergy`, long-range contact proxy) under **domain-neutral** names:
+(`TorqueTree`, `foldEnergy`) under **domain-neutral** names:
 
 * **Polycrystalline metals:** `TorqueTree` = tree of grains / sub-grains; `bondValleyEM` =
   grain-boundary or phase-interface energy; `foldEnergy` = total interface + bulk-site budget.
@@ -12,8 +12,9 @@ This module packages the **same** mathematical objects used for biomolecular fol
   horizon index for matched Brillouin / Casimir bookkeeping.
 * **Nanoscale manufacturing:** part–part attachment graph with pairwise EM+valley edges.
 
-All theorems are proved in `HQIVMolecules` / `HQIVLongRange`; this file is the **conceptual
-bridge** so applications share one formal substrate without biology-specific naming.
+All theorems are proved in `HQIVMolecules`; this file is the **conceptual bridge** so
+applications share one formal substrate without biology-specific naming. (Long-range contact
+scaffolding lives in `Hqiv.Archive.Physics.HQIVLongRange` and is not part of default builds.)
 -/
 
 namespace Hqiv.Physics
@@ -35,7 +36,7 @@ theorem assembly_graph_inductive {m : ℕ} (P : TorqueTree m → Prop)
   molecule_from_atoms_inductive P h_leaf h_branch
 
 /-- Total assembly / folding energy (interfaces + site budgets). -/
-abbrev assemblyEnergy {m : ℕ} (Z_eff r μ c : ℝ) (g : AssemblyGraph m) : ℝ :=
+noncomputable abbrev assemblyEnergy {m : ℕ} (Z_eff r μ c : ℝ) (g : AssemblyGraph m) : ℝ :=
   foldEnergy Z_eff r μ c g
 
 /-- Branch energy = parent site budget + Σ (subtree + one parent–root interface). -/
@@ -56,14 +57,14 @@ theorem assembly_path_foldEnergy_eq {m : ℕ} (Z_eff r μ c : ℝ) (l : List (As
   path_foldEnergy_eq_sum_bonds_and_atoms Z_eff r μ c l hl
 
 /-- Superposed mode-density stack (e.g. shell-resolved occupancy in any layered solid). -/
-abbrev rho_layered_stack (ms : List ℕ) : ℝ :=
+noncomputable abbrev rho_layered_stack (ms : List ℕ) : ℝ :=
   rhoProtein ms
 
 theorem layered_stack_density_superposition (ms : List ℕ) :
     rho_layered_stack ms = listSumR (ms.map fun m => (Hqiv.available_modes m) / R_m m) :=
   protein_electron_density_superposition ms
 
-/-- Dihedral-style penalty + fixed long-range contact: native alignment unchanged (`HQIVLongRange`). -/
+/-- Dihedral-style penalty plus an additive shift `hb`: native alignment unchanged (`HQIVMolecules`). -/
 theorem assembly_dihedral_argmin_unchanged_by_contact {m : ℕ} (κ θFold Z_eff r μ c : ℝ) (hb : ℝ)
     (t : AssemblyGraph m) (hκ : κ ≠ 0) :
     foldEnergyWithDihedral κ θFold Z_eff r μ c t + hb =

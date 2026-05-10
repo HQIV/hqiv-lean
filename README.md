@@ -16,20 +16,27 @@ The modified **CLASS** tree lives in the separate **`HQIV/class_hqiv`** checkout
 
 ## Building
 
-**Default (CI and daily use):** builds **HQIVPhysics** (geometry + physics, no generator stack). Finishes in reasonable time.
+**`lakefile.toml` default target:** `defaultTargets = ["HQIVLeptonResonance"]` (Fano / lepton detuning cone only). Plain `lake build` follows that default.
 
-```bash
-lake build
-```
+**Common explicit targets:**
 
-- **Full build (with SO(8) closure):** for HQIVLEAN you must raise the stack limit, then:
+| Command | Role |
+|---------|------|
+| `lake build HQIVPhysics` | Geometry + physics + conservations (no `GeneratorsLieClosureData*`) |
+| `lake build HQIVMeaningfulPhysics` | Curated physics surface used in CI (import closure of `HQIVMeaningfulPhysics.lean` + `HQIVPhysics.lean`; regenerate globs with `python3 scripts/physics_lib_globs.py`) |
+| `lake build HQIVLEAN` | Full library glob in `lakefile.toml` (includes strong-color **chart** modules; **excludes** matrix SO(8) certificate slices and the optional SU(3) simp certificate) |
+| `lake build HQIVSO8Closure` | Heavy \(\mathfrak{so}(8)\) matrix Lie-closure pack |
+| `lake build HQIVStrongColorSu3Certificate` | Optional \(\mathfrak{su}(3)\) `f^{abc}` `@[simp]` table + certificate entrypoint |
+| `lake build HQIVStory` | Linear narrative spine (`HQIVStory.lean`) |
+
+- **Full `HQIVLEAN` build:** raise the stack limit, then:
   ```bash
   ulimit -s 65536
   lake build HQIVLEAN
   ```
-  Or run `./scripts/build.sh HQIVLEAN`. The full build can take hours; CI uses the default (HQIVPhysics) only.
+  Or run `./scripts/build.sh HQIVLEAN`. This can take a long time; CI additionally builds `HQIVMeaningfulPhysics`, `HQIVStory`, and `HQIVStrongColorSu3Certificate` (see `.github/workflows/lean_action_ci.yml`).
 
-**Default build (HQIVPhysics)** includes geometry (`OctonionicLightCone`, `AuxiliaryField`, `HQVMetric`, `Now`, `UniverseAge`), `Conservations`, and physics (`Baryogenesis`, `ModifiedMaxwell`, `GRFromMaxwell`, `Forces`, `Action`, `CovariantSolution`, `SM_GR_Unification`). No generator stack. First run will build mathlib and can take 30–60+ minutes.
+**`HQIVPhysics`** includes geometry (`OctonionicLightCone`, `AuxiliaryField`, `HQVMetric`, `Now`, `UniverseAge`), `Conservations`, and physics (`Baryogenesis`, `ModifiedMaxwell`, `GRFromMaxwell`, `Forces`, `Action`, `CovariantSolution`, `SM_GR_Unification`). No generator stack. First run will build mathlib and can take 30–60+ minutes.
 
 **ProofWidgets:** If the build fails with `ProofWidgets not up-to-date. Please run lake exe cache get`, the widget cache may be unavailable. A workaround is to comment out the `errorOnBuild` check in `.lake/packages/proofwidgets/lakefile.lean` (the block `if let some msg := get_config? errorOnBuild then error msg`) so the widget is built from source. Re-apply this change after `lake update` if the package is reset.
 If you see errors like `failed to load header from ... setup.json: unexpected end of input`, the mathlib build cache may be corrupted; then run:
@@ -38,7 +45,7 @@ If you see errors like `failed to load header from ... setup.json: unexpected en
 cd .lake/packages/mathlib && lake clean && cd ../../..
 lake build
 ```  
-**HQIVLEAN** (full build) adds the generator stack: `Generators`, `OctonionLeftMultiplication`, `GeneratorsFromAxioms`, `GeneratorsLieClosureData*`, `So8CoordMatrix`, `GeneratorsLieClosure`, `SO8Closure`. Scripts: `scripts/print_lie_bracket_closure.py --write`, `scripts/print_linear_independence.py [--write]`.
+**HQIVLEAN** (full formal cone in `lakefile.toml`) adds the generator stack through `Generators` / `GeneratorsFromAxioms` and the abstract colour/triality algebra used in the main narrative, but **matrix** Lie-closure data lives under **`lake build HQIVSO8Closure`** (`GeneratorsLieClosureData*`, `LieBracketCell*`, `GeneratorsLieClosure`, `So8CoordMatrix`, `SO8Closure`, …). Scripts for regenerating numeric tables: `scripts/print_lie_bracket_closure.py --write`, `scripts/print_linear_independence.py [--write]`.
 
 **100 % PROVED** (zero sorrys, zero extra axioms, zero matrix edits). Full Spin(8) closure + proton-to-Higgs prediction derived purely from the two HQIV axioms + concrete octonion tables.
 

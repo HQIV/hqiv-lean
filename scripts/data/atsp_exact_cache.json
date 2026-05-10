@@ -1,0 +1,329 @@
+{
+  "entries": {
+    "169bd7e67f8c7b47a2775a74c461083218e5b84c862c39f5e10b75cdfbda01cd": {
+      "computed_at": "2026-05-08T17:35:13.737537+00:00",
+      "elapsed_s": 0.025424210998608032,
+      "exact_cost": 7.130610706420997,
+      "exact_tour": [
+        0,
+        5,
+        3,
+        6,
+        8,
+        2,
+        4,
+        7,
+        1
+      ],
+      "matrix_hash": "169bd7e67f8c7b47a2775a74c461083218e5b84c862c39f5e10b75cdfbda01cd",
+      "n": 9
+    },
+    "2f4bc2c3eee429404a42359a5efaad5b626df8f44d245d7151df4548141e79b8": {
+      "computed_at": "2026-05-08T17:35:25.476404+00:00",
+      "elapsed_s": 0.24854060799771105,
+      "exact_cost": 5.818948591024144,
+      "exact_tour": [
+        0,
+        6,
+        4,
+        3,
+        1,
+        5,
+        8,
+        2,
+        7,
+        9
+      ],
+      "matrix_hash": "2f4bc2c3eee429404a42359a5efaad5b626df8f44d245d7151df4548141e79b8",
+      "n": 10
+    },
+    "2fcad8ce6130f3bb443afef380f32f72b6bcfdd62baee15d1f7b24c8c3a4ea12": {
+      "computed_at": "2026-05-08T17:35:20.319283+00:00",
+      "elapsed_s": 0.03578106500208378,
+      "exact_cost": 5.542097264572846,
+      "exact_tour": [
+        0,
+        3,
+        5,
+        8,
+        2,
+        1,
+        4,
+        6,
+        7
+      ],
+      "matrix_hash": "2fcad8ce6130f3bb443afef380f32f72b6bcfdd62baee15d1f7b24c8c3a4ea12",
+      "n": 9
+    },
+    "38fd39fa5c99f172869c8bc887b2fbeada3f913d200b20c0f8c997128feda26f": {
+      "computed_at": "2026-05-08T17:35:30.061313+00:00",
+      "elapsed_s": 0.25731240499953856,
+      "exact_cost": 6.0317431337514495,
+      "exact_tour": [
+        0,
+        5,
+        7,
+        3,
+        8,
+        1,
+        6,
+        4,
+        9,
+        2
+      ],
+      "matrix_hash": "38fd39fa5c99f172869c8bc887b2fbeada3f913d200b20c0f8c997128feda26f",
+      "n": 10
+    },
+    "3fca078f9d6e79dedc21989c298a026df807ebe4ea053f849f9bceb746ea2898": {
+      "computed_at": "2026-05-08T17:35:27.754215+00:00",
+      "elapsed_s": 0.25677075200292165,
+      "exact_cost": 6.037933358719738,
+      "exact_tour": [
+        0,
+        5,
+        4,
+        2,
+        7,
+        9,
+        3,
+        1,
+        6,
+        8
+      ],
+      "matrix_hash": "3fca078f9d6e79dedc21989c298a026df807ebe4ea053f849f9bceb746ea2898",
+      "n": 10
+    },
+    "436cda394621bc0878e7fd093fc3abca805063d6d1f0ec80b51d21dc836e9aaa": {
+      "computed_at": "2026-05-08T17:35:08.105511+00:00",
+      "elapsed_s": 0.0028035430004820228,
+      "exact_cost": 5.391806900284328,
+      "exact_tour": [
+        0,
+        2,
+        1,
+        4,
+        6,
+        3,
+        5,
+        7
+      ],
+      "matrix_hash": "436cda394621bc0878e7fd093fc3abca805063d6d1f0ec80b51d21dc836e9aaa",
+      "n": 8
+    },
+    "7ee1fa8ee1134ad96498c22ab3a3170beae9edffe184a26b5a271af8c90e4ad7": {
+      "computed_at": "2026-05-08T17:35:17.275546+00:00",
+      "elapsed_s": 0.029884648000006564,
+      "exact_cost": 5.269243378862072,
+      "exact_tour": [
+        0,
+        5,
+        2,
+        4,
+        7,
+        3,
+        6,
+        8,
+        1
+      ],
+      "matrix_hash": "7ee1fa8ee1134ad96498c22ab3a3170beae9edffe184a26b5a271af8c90e4ad7",
+      "n": 9
+    },
+    "81c8d31c3d67b6cbf42f58463fc5984b8285caeb15564f09659d4db21d11efd2": {
+      "computed_at": "2026-05-08T17:35:15.515660+00:00",
+      "elapsed_s": 0.024715218001801986,
+      "exact_cost": 5.873256622180652,
+      "exact_tour": [
+        0,
+        7,
+        4,
+        2,
+        5,
+        6,
+        1,
+        8,
+        3
+      ],
+      "matrix_hash": "81c8d31c3d67b6cbf42f58463fc5984b8285caeb15564f09659d4db21d11efd2",
+      "n": 9
+    },
+    "905bd9de068f8eb8f35c20f437eb0f6aecb8a07587014bc62442e6bb85a679aa": {
+      "computed_at": "2026-05-08T17:35:18.826729+00:00",
+      "elapsed_s": 0.024283013000967912,
+      "exact_cost": 5.658893020778591,
+      "exact_tour": [
+        0,
+        8,
+        5,
+        7,
+        2,
+        6,
+        3,
+        4,
+        1
+      ],
+      "matrix_hash": "905bd9de068f8eb8f35c20f437eb0f6aecb8a07587014bc62442e6bb85a679aa",
+      "n": 9
+    },
+    "9afbdffd5b705489df6f41510c3a0ad207c498452cad51924e8e674ae0d49c1e": {
+      "computed_at": "2026-05-08T17:35:10.795179+00:00",
+      "elapsed_s": 0.0029100559986545704,
+      "exact_cost": 5.0514593534513486,
+      "exact_tour": [
+        0,
+        3,
+        1,
+        5,
+        2,
+        7,
+        4,
+        6
+      ],
+      "matrix_hash": "9afbdffd5b705489df6f41510c3a0ad207c498452cad51924e8e674ae0d49c1e",
+      "n": 8
+    },
+    "ad16eb5846419f48e4fcd73aba3e64b9d34922b4f9a400e2c00d995ef33f9bb0": {
+      "computed_at": "2026-05-08T17:35:34.658692+00:00",
+      "elapsed_s": 0.24750014100209228,
+      "exact_cost": 5.563420610012067,
+      "exact_tour": [
+        0,
+        4,
+        7,
+        8,
+        5,
+        1,
+        6,
+        3,
+        2,
+        9
+      ],
+      "matrix_hash": "ad16eb5846419f48e4fcd73aba3e64b9d34922b4f9a400e2c00d995ef33f9bb0",
+      "n": 10
+    },
+    "b46723f05d276b92df830924bc1a874256c492124b2556798c2d097a26f6dab3": {
+      "computed_at": "2026-05-08T17:35:09.117293+00:00",
+      "elapsed_s": 0.00276410700098495,
+      "exact_cost": 4.994481258844395,
+      "exact_tour": [
+        0,
+        6,
+        4,
+        7,
+        2,
+        5,
+        3,
+        1
+      ],
+      "matrix_hash": "b46723f05d276b92df830924bc1a874256c492124b2556798c2d097a26f6dab3",
+      "n": 8
+    },
+    "bb8502e416e4b33d1cfd29056f3695d5bcc3a8dee4edcc03dd9aea8008accdd2": {
+      "computed_at": "2026-05-08T17:35:21.770596+00:00",
+      "elapsed_s": 0.028393199998390628,
+      "exact_cost": 6.114311814160408,
+      "exact_tour": [
+        0,
+        8,
+        5,
+        4,
+        1,
+        3,
+        2,
+        6,
+        7
+      ],
+      "matrix_hash": "bb8502e416e4b33d1cfd29056f3695d5bcc3a8dee4edcc03dd9aea8008accdd2",
+      "n": 9
+    },
+    "d202aa18509b827abf65d7a782f633ae75cdef49ca249c8ce980adc4c38178e6": {
+      "computed_at": "2026-05-08T17:35:11.398791+00:00",
+      "elapsed_s": 0.002903995002270676,
+      "exact_cost": 5.399478471013438,
+      "exact_tour": [
+        0,
+        1,
+        4,
+        6,
+        7,
+        3,
+        5,
+        2
+      ],
+      "matrix_hash": "d202aa18509b827abf65d7a782f633ae75cdef49ca249c8ce980adc4c38178e6",
+      "n": 8
+    },
+    "d7b6e479b710c5859f5b969f22ced12e6daa5acd8a41c7d8b868a1cacf127471": {
+      "computed_at": "2026-05-08T17:35:32.794985+00:00",
+      "elapsed_s": 0.2589174809982069,
+      "exact_cost": 6.513446770769734,
+      "exact_tour": [
+        0,
+        7,
+        4,
+        3,
+        6,
+        2,
+        9,
+        1,
+        8,
+        5
+      ],
+      "matrix_hash": "d7b6e479b710c5859f5b969f22ced12e6daa5acd8a41c7d8b868a1cacf127471",
+      "n": 10
+    },
+    "daec6890b312cb01e048ab37d8d764c76d94c9dd5054451286abf00aab27b030": {
+      "computed_at": "2026-05-08T17:35:23.608228+00:00",
+      "elapsed_s": 0.24088904800009914,
+      "exact_cost": 5.969975937528645,
+      "exact_tour": [
+        0,
+        7,
+        6,
+        1,
+        8,
+        2,
+        9,
+        5,
+        4,
+        3
+      ],
+      "matrix_hash": "daec6890b312cb01e048ab37d8d764c76d94c9dd5054451286abf00aab27b030",
+      "n": 10
+    },
+    "e9d95e73725a4892731480949f862dfc51c4ce05bc7be5ca5a7ac3252eb1501b": {
+      "computed_at": "2026-05-08T17:35:12.019457+00:00",
+      "elapsed_s": 0.002898714999901131,
+      "exact_cost": 4.23609259670771,
+      "exact_tour": [
+        0,
+        6,
+        3,
+        2,
+        7,
+        1,
+        5,
+        4
+      ],
+      "matrix_hash": "e9d95e73725a4892731480949f862dfc51c4ce05bc7be5ca5a7ac3252eb1501b",
+      "n": 8
+    },
+    "f8a05943e5df296701ee25605d345c5210eb78b5c47db6f18cbf57e25e2e1182": {
+      "computed_at": "2026-05-08T17:35:09.738647+00:00",
+      "elapsed_s": 0.0029061890018056147,
+      "exact_cost": 4.855037694234352,
+      "exact_tour": [
+        0,
+        6,
+        2,
+        1,
+        3,
+        5,
+        7,
+        4
+      ],
+      "matrix_hash": "f8a05943e5df296701ee25605d345c5210eb78b5c47db6f18cbf57e25e2e1182",
+      "n": 8
+    }
+  },
+  "updated_at": "2026-05-08T17:35:34.658713+00:00"
+}

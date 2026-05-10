@@ -1,4 +1,5 @@
 import Mathlib.Analysis.SpecialFunctions.Exp
+import Mathlib.Algebra.Order.Field.Basic
 import Hqiv.Geometry.HQVMetric
 import Hqiv.Geometry.HQVMetricAnalytic
 import Hqiv.Physics.ModifiedMaxwell
@@ -48,6 +49,28 @@ theorem lambdaDebye_pos : 0 < lambdaDebye := by
 noncomputable def plasmaRadialProfile (r : ℝ) : ℝ :=
   Real.exp (-r / lambdaDebye) / (1 + max r 0 / lambdaDebye)
 
+/-- For nonnegative proxy radius, the Debye profile is at most `1` (`exp ≤ 1` and denominator `≥ 1`). -/
+theorem plasmaRadialProfile_le_one_of_nonneg {r : ℝ} (hr : 0 ≤ r) : plasmaRadialProfile r ≤ 1 := by
+  unfold plasmaRadialProfile
+  have hmax : max r 0 = r := max_eq_left hr
+  have hden : 0 < 1 + max r 0 / lambdaDebye := by
+    rw [hmax]
+    have hterm : 0 ≤ r / lambdaDebye := div_nonneg hr (le_of_lt lambdaDebye_pos)
+    linarith
+  have hexp_le_one : Real.exp (-r / lambdaDebye) ≤ 1 := by
+    have h0 : 0 ≤ r / lambdaDebye := div_nonneg hr (le_of_lt lambdaDebye_pos)
+    have hneg : -r / lambdaDebye ≤ 0 := by
+      rw [neg_div]
+      exact neg_nonpos.mpr h0
+    exact (Real.exp_le_one_iff).mpr hneg
+  have hone_le_den : 1 ≤ 1 + max r 0 / lambdaDebye := by
+    have hterm : 0 ≤ max r 0 / lambdaDebye := div_nonneg (le_max_right r 0) (le_of_lt lambdaDebye_pos)
+    linarith
+  have hexp_le_den : Real.exp (-r / lambdaDebye) ≤ 1 + max r 0 / lambdaDebye :=
+    hexp_le_one.trans hone_le_den
+  rw [div_le_one hden]
+  exact hexp_le_den
+
 theorem plasmaRadialProfile_pos (r : ℝ) : 0 < plasmaRadialProfile r := by
   have hden : 0 < 1 + max r 0 / lambdaDebye := by
     have hLam : 0 < lambdaDebye := lambdaDebye_pos
@@ -84,9 +107,29 @@ theorem schematicPlasmaScalar_add (j₁ j₂ r : ℝ) :
     schematicPlasmaScalar (j₁ + j₂) r = schematicPlasmaScalar j₁ r + schematicPlasmaScalar j₂ r := by
   simp [schematicPlasmaScalar, add_mul]
 
+/-- Absolute value factorizes because `plasmaRadialProfile r > 0` (same screening factor as in `lambdaDebye`). -/
+theorem abs_schematicPlasmaScalar (j₀ r : ℝ) :
+    |schematicPlasmaScalar j₀ r| = |j₀| * plasmaRadialProfile r := by
+  rw [schematicPlasmaScalar, abs_mul]
+  congr 1
+  exact abs_of_pos (plasmaRadialProfile_pos r)
+
 /-- Inject the scalar source along octonion component `0`; `coord ν` supplies the radial proxy. -/
 noncomputable def J_O_plasma (j₀ : ℝ) (coord : Fin 4 → ℝ) (a : Fin 8) (ν : Fin 4) : ℝ :=
   if _ : a.val = 0 then schematicPlasmaScalar j₀ (coord ν) else 0
+
+/-- On the EM octonion leg `a = 0`, the plasma current equals the schematic scalar (fluid/O-Maxwell hook). -/
+theorem J_O_plasma_eq_schematic_on_em (j₀ : ℝ) (coord : Fin 4 → ℝ) (ν : Fin 4) :
+    J_O_plasma j₀ coord (0 : Fin 8) ν = schematicPlasmaScalar j₀ (coord ν) := by
+  simp [J_O_plasma]
+
+theorem J_O_plasma_nonem_zero (j₀ : ℝ) (coord : Fin 4 → ℝ) (a : Fin 8) (ν : Fin 4) (ha : a.val ≠ 0) :
+    J_O_plasma j₀ coord a ν = 0 := by
+  simp [J_O_plasma, ha]
+
+theorem abs_J_O_plasma_em (j₀ : ℝ) (coord : Fin 4 → ℝ) (ν : Fin 4) :
+    |J_O_plasma j₀ coord (0 : Fin 8) ν| = |j₀| * plasmaRadialProfile (coord ν) := by
+  rw [J_O_plasma_eq_schematic_on_em, abs_schematicPlasmaScalar]
 
 theorem J_O_plasma_zero (coord : Fin 4 → ℝ) : J_O_plasma 0 coord = J_O := by
   funext a ν

@@ -2,7 +2,7 @@ import Mathlib.Data.Real.Basic
 import Mathlib.Tactic
 import Hqiv.Physics.GlobalDetuning
 import Hqiv.Physics.ComptonHorizonPhase
-import Hqiv.Physics.Baryogenesis
+import Hqiv.Physics.BaryogenesisCore
 
 /-!
 # Surface-wave self-clock and rapidity updates (time-only dynamics)

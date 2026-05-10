@@ -33,6 +33,9 @@ O-Maxwell φ slot and the action / EL φ-coupling alongside the plasma bridge wh
 where the scalar is differentiable (see `contravariantGradientComponents_euclideanInv_eq`). The same file
 has `coordCovariantDivergence` / `coordCovariantDivergence_constDet` for `∇_μ J^μ` with metric determinant
 weighting.
+
+**Spatial slice embed:** `Hqiv.Geometry.SpatialSliceContinuumBridge` relates `spatialSliceToSpacetimeCoords`
+to `spacetimeCoordsEquiv` / `spacetimeOfCoords` and records thin-slice membership (`mem_spacetimeThinSlice_iff`).
 -/
 
 namespace Hqiv.Geometry

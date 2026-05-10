@@ -4,6 +4,17 @@ on:
   push:
   pull_request:
   workflow_dispatch:
+    inputs:
+      build_hqiv_yang_mills:
+        description: Build the promoted HQIVYangMills target
+        required: false
+        default: false
+        type: boolean
+      extra_docs_facets:
+        description: Extra doc facets to append (for example: HQIVYangMills:docs)
+        required: false
+        default: ""
+        type: string
 
 # Sets permissions for the GITHUB_TOKEN
 permissions:
@@ -17,6 +28,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Factor oracle (Python) unit tests
+        run: python3 -m unittest scripts.test_factor_from_curvature -v
+
       - name: Build and test
         id: lean
         uses: leanprover/lean-action@v1
@@ -24,11 +38,39 @@ jobs:
           build: true
           test: false
 
+      - name: Physics-only target (excludes bulk HQIVLEAN: TSP, SAT, factor, CNF, RH-θ scaffolds)
+        run: lake build HQIVMeaningfulPhysics
+
+      - name: Story spine (patch QFT, Dojo YM interface `hqivInterfaceQuantumYangMills`, promotion obligations)
+        run: lake build HQIVStory
+
+      - name: SU(3) chart `f^{abc}` certificate (optional `@[simp]` table; not in default HQIVLEAN)
+        run: lake build HQIVStrongColorSu3Certificate
+
+  yang_mills_package:
+    if: github.event_name == 'workflow_dispatch' && github.event.inputs.build_hqiv_yang_mills == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build promoted HQIVYangMills target
+        uses: leanprover/lean-action@v1
+        with:
+          build: false
+          test: false
+
+      - name: lake build HQIVYangMills
+        run: lake build HQIVYangMills
+
   # Docs and Pages in a separate job so only one artifact named "github-pages" is produced.
-  # lean-action installs elan/lake and restores build cache; docgen-action then builds docs and uploads once.
+  # API HTML: scripts/build_api_docs.sh (doc-gen4 from Git; upstream docgen-action used Reservoir-only resolution).
   pages:
     needs: build
-    if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master')
+    if: |
+      (github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master')) ||
+      (github.event_name == 'workflow_dispatch' &&
+        github.ref == 'refs/heads/main' &&
+        github.event.inputs.extra_docs_facets != '')
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -39,9 +81,57 @@ jobs:
           build: true
           test: false
 
-      - name: Build docs and deploy to GitHub Pages
-        uses: leanprover-community/docgen-action@v1
+      - name: Parse project metadata (docgen cache + facets)
+        id: docgen_meta
+        run: python3 scripts/docgen_metadata.py
+        env:
+          EXTRA_DOCS_FACETS: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.extra_docs_facets || '' }}
+
+      - name: Cache docbuild HTML fragments
+        if: steps.docgen_meta.outputs.cached_docbuild_dependencies != ''
+        uses: actions/cache@5a3ec84eff668545956fd18022155c47e93e2684
         with:
-          api_docs: true
-          lake_package_directory: .
-          build_args: --log-level=warning
+          path: ${{ steps.docgen_meta.outputs.cached_docbuild_dependencies }}
+          key: Docs-${{ hashFiles('lake-manifest.json') }}
+
+      - name: Build API documentation (doc-gen4)
+        run: scripts/build_api_docs.sh
+        env:
+          NAME: ${{ steps.docgen_meta.outputs.name }}
+          DOCS_FACETS: ${{ steps.docgen_meta.outputs.docs_facets }}
+          HOMEPAGE: docs
+
+      - name: Check for docs folder
+        id: check_docs
+        run: |
+          if [ -d docs ]; then
+            echo "The 'docs' folder exists in the repository."
+            echo "exists=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "The 'docs' folder does not exist in the repository."
+            echo "exists=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Bundle Jekyll dependencies
+        if: steps.check_docs.outputs.exists == 'true'
+        uses: ruby/setup-ruby@eaecf785f6a34567a6d97f686bbb7bccc1ac1e5c
+        with:
+          working-directory: docs
+          ruby-version: "3.1"
+          bundler-cache: true
+
+      - name: Build website using Jekyll
+        if: steps.check_docs.outputs.exists == 'true'
+        working-directory: docs
+        env:
+          JEKYLL_GITHUB_TOKEN: ${{ github.token }}
+        run: JEKYLL_ENV=production bundle exec jekyll build
+
+      - name: Upload website (API documentation and home page)
+        uses: actions/upload-pages-artifact@56afc609e74202658d3ffba0e8f6dda462b719fa
+        with:
+          path: ${{ steps.check_docs.outputs.exists == 'true' && 'docs/_site' || 'docs/' }}
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@d6db90164ac5ed86f2b6aed7e0febac5b3c0c03e

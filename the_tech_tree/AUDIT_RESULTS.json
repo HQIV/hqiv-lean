@@ -1,0 +1,905 @@
+[
+  {
+    "path": "scripts/bench_factor_grok_semiprimes.py",
+    "exit_code": 1,
+    "seconds": 0.153,
+    "stdout_tail": "factor_grok semiprime bench\n",
+    "stderr_tail": "Traceback (most recent call last):\n  File \"/home/jr/Repos/HQIV_LEAN/scripts/bench_factor_grok_semiprimes.py\", line 84, in <module>\n    main()\n    ~~~~^^\n  File \"/home/jr/Repos/HQIV_LEAN/scripts/bench_factor_grok_semiprimes.py\", line 65, in main\n    print(f\"_dynamic_p_max(10**6) = {mod._dynamic_p_max(10**6)}\")\n                                     ^^^^^^^^^^^^^^^^^^\nAttributeError: module 'factor_grok' has no attribute '_dynamic_p_max'\n"
+  },
+  {
+    "path": "scripts/benchmark_atsp_dual_oracles.py",
+    "exit_code": -124,
+    "seconds": 30.033,
+    "stdout_tail": "",
+    "stderr_tail": "TIMEOUT after 30s"
+  },
+  {
+    "path": "scripts/benchmark_atsp_stepdown.py",
+    "exit_code": 0,
+    "seconds": 15.724,
+    "stdout_tail": "n,no_prune_mean_s,no_prune_p90_s,stepdown_mean_s,stepdown_p90_s,stepdown/no_prune,mean_unique,mean_levels\n8,0.001978,0.002412,0.003419,0.003889,1.73,81.0,2.0\n9,0.001894,0.001921,0.028302,0.029447,14.94,81.0,3.0\n10,0.002085,0.002122,0.269951,0.277117,129.47,81.0,4.0\n11,0.002358,0.002749,2.824558,2.962921,1197.96,81.0,5.0\n",
+    "stderr_tail": ""
+  },
+  {
+    "path": "scripts/benchmark_bonded_horizon_molecules.py",
+    "exit_code": 0,
+    "seconds": 0.06,
+    "stdout_tail": "r_%\tnote\nH2 dissociation\t(2,1,1)\t4.478000000000\t4.478000000000\t4.478000\t0.000000\t0.000000\tNIST / W4-17\nLiH dissociation\t(4,3,1)\t4.478000000000\t4.701049789716\t2.515000\t78.051690\t86.920469\tW4-17/GMTKN55\nHF dissociation\t(10,9,1)\t9.951111111111\t12.334808228685\t5.870000\t69.524891\t110.133019\tW4-17/GMTKN55\nH2O atomization\t(10,8,2)\t9.951111111111\t16.082406487805\t9.510000\t4.638392\t69.110478\tW4-17/GMTKN55\nCH4 atomization\t(10,6,4)\t9.951111111111\t24.082012844513\t17.000000\t-41.464052\t41.658899\tW4-17/GMTKN55\n",
+    "stderr_tail": ""
+  },
+  {
+    "path": "scripts/benchmark_edge_topology_calibration.py",
+    "exit_code": -124,
+    "seconds": 30.031,
+    "stdout_tail": "",
+    "stderr_tail": "TIMEOUT after 30s"
+  },
+  {
+    "path": "scripts/benchmark_euclidean_factor_peel_u64.py",
+    "exit_code": 1,
+    "seconds": 0.082,
+    "stdout_tail": "",
+    "stderr_tail": "missing corpus file: data/semiprimes_u64.json\n"
+  },
+  {
+    "path": "scripts/benchmark_geometric_factorization_solver.py",
+    "exit_code": -124,
+    "seconds": 30.064,
+    "stdout_tail": "",
+    "stderr_tail": "TIMEOUT after 30s"
+  },
+  {
+    "path": "scripts/benchmark_hqiv_rapidity_sat_solver.py",
+    "exit_code": 1,
+    "seconds": 0.106,
+    "stdout_tail": "",
+    "stderr_tail": "Traceback (most recent call last):\n  File \"/home/jr/Repos/HQIV_LEAN/scripts/benchmark_hqiv_rapidity_sat_solver.py\", line 242, in <module>\n    raise SystemExit(main())\n                     ~~~~^^\n  File \"/home/jr/Repos/HQIV_LEAN/scripts/benchmark_hqiv_rapidity_sat_solver.py\", line 147, in main\n    bench_pysat(cw, args.pysat_solver)\n    ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/jr/Repos/HQIV_LEAN/scripts/benchmark_hqiv_rapidity_sat_solver.py\", line 73, in bench_pysat\n    from pysat.solvers import Solver\nModuleNotFoundError: No module named 'pysat'\n"
+  },
+  {
+    "path": "scripts/benchmark_omaxwell_torus_ode.py",
+    "exit_code": -124,
+    "seconds": 30.032,
+    "stdout_tail": "",
+    "stderr_tail": "TIMEOUT after 30s"
+  },
+  {
+    "path": "scripts/benchmark_protein_osh_vs_dense.py",
+    "exit_code": 0,
+    "seconds": 9.135,
+    "stdout_tail": "05     252.21       0.75                  336.79                 9\n    192     24  0.20     259.23       6.19                   41.90                28\n    384     20  0.05     844.95       2.14                  395.53                18\n    384     20  0.30     867.14      39.90                   21.73                80\n\nInterpretation:\n- speedup > 1.0  => OSH-style sparse path is faster\n- speedup < 1.0  => dense path is faster\n- Expect sparse advantage mainly when active support remains small.\n",
+    "stderr_tail": ""
+  },
+  {
+    "path": "scripts/benchmark_rapidity_first_atsp.py",
+    "exit_code": -124,
+    "seconds": 30.032,
+    "stdout_tail": "",
+    "stderr_tail": "TIMEOUT after 30s"
+  },
+  {
+    "path": "scripts/bonded_horizon_casimir_float.py",
+    "exit_code": 0,
+    "seconds": 0.021,
+    "stdout_tail": "",
+    "stderr_tail": ""
+  },
+  {
+    "path": "scripts/bristol_solver.py",
+    "exit_code": 2,
+    "seconds": 0.063,
+    "stdout_tail": "",
+    "stderr_tail": "usage: bristol_solver.py [-h] [--target TARGET] [--max-steps MAX_STEPS]\n                         circuit_file\nbristol_solver.py: error: the following arguments are required: circuit_file\n"
+  },
+  {
+    "path": "scripts/bristol_to_dimacs.py",
+    "exit_code": 2,
+    "seconds": 0.066,
+    "stdout_tail": "",
+    "stderr_tail": "usage: bristol_to_dimacs.py [-h] [-o OUTPUT] [--fix-output-hex FIX_OUTPUT_HEX]\n                            [--fix-output-md5 FIX_OUTPUT_MD5]\n                            [--n-output-bits N_OUTPUT_BITS]\n                            bristol\nbristol_to_dimacs.py: error: the following arguments are required: bristol\n"
+  },
+  {
+    "path": "scripts/build_semiprime_u64_list.py",
+    "exit_code": 0,
+    "seconds": 0.047,
+    "stdout_tail": "wrote data/semiprimes_u64.json rows=49\n",
+    "stderr_tail": ""
+  },
+  {
+    "path": "scripts/char_count_no_comments.py",
+    "exit_code": 2,
+    "seconds": 0.045,
+    "stdout_tail": "",
+    "stderr_tail": "usage: char_count_no_comments.py [-h] [--json] paths [paths ...]\nchar_count_no_comments.py: error: the following arguments are required: paths\n"
+  },
+  {
+    "path": "scripts/check_fano_mass_coherence.py",
+    "exit_code": 1,
+    "seconds": 0.11,
+    "stdout_tail": "",
+    "stderr_tail": "Traceback (most recent call last):\n  File \"/home/jr/Repos/HQIV_LEAN/scripts/check_fano_mass_coherence.py\", line 553, in <module>\n    main()\n    ~~~~^^\n  File \"/home/jr/Repos/HQIV_LEAN/scripts/check_fano_mass_coherence.py\", line 538, in main\n    rep = run_checks(\n        lapse_lambda=args.lapse_lambda,\n    ...<2 lines>...\n        t_coord=args.lapse_t,\n    )\n  File \"/home/jr/Repos/HQIV_LEAN/scripts/check_fano_mass_coherence.py\", line 400, in run_checks\n    m_tau, m_mu, m_e = cpr.derived_lepton_readouts()\n                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAttributeError: module 'cubic_phase_relax_probe' has no attribute 'derived_lepton_readouts'. Did you mean: 'derived_lepton_coordinates'?\n"
+  },
+  {
+    "path": "scripts/check_rapidity_prune_safety.py",
+    "exit_code": 0,
+    "seconds": 1.669,
+    "stdout_tail": "cost=3.999791 sample_opt=[0, 2, 4, 6, 3, 1, 5]\nn=8\n  scale=1.000000 unsafe=36/100 rate=0.3600\n    first_counterexample trial=0 dominated_edges=23 best_cost=4.684210 sample_opt=[0, 7, 4, 6, 5, 3, 2, 1]\n  scale=1.414214 unsafe=13/100 rate=0.1300\n    first_counterexample trial=0 dominated_edges=17 best_cost=4.684210 sample_opt=[0, 7, 4, 6, 5, 3, 2, 1]\n  scale=2.000000 unsafe=2/100 rate=0.0200\n    first_counterexample trial=7 dominated_edges=20 best_cost=4.417249 sample_opt=[0, 7, 3, 6, 1, 4, 5, 2]\n",
+    "stderr_tail": ""
+  },
+  {
+    "path": "scripts/compare_hubbard_dimer_half_filled_scan.py",
+    "exit_code": 1,
+    "seconds": 0.027,
+    "stdout_tail": "",
+    "stderr_tail": "Missing data/hubbard_dimer_half_filled_witnesses.json. Run: lake env lean --run scripts/export_hubbard_dimer_half_filled_witnesses.lean\n"
+  },
+  {
+    "path": "scripts/compare_hubbard_dimer_scan.py",
+    "exit_code": 1,
+    "seconds": 0.026,
+    "stdout_tail": "",
+    "stderr_tail": "Missing data/hubbard_dimer_witnesses.json. Run: lake env lean --run scripts/export_hubbard_dimer_witnesses.lean\n"
+  },
+  {
+    "path": "scripts/compare_quantum_chem_witnesses.py",
+    "exit_code": 1,
+    "seconds": 0.025,
+    "stdout_tail": "",
+    "stderr_tail": "Missing data/quantum_chem_witnesses.json. Run: lake env lean --run scripts/export_quantum_chem_witnesses.lean\n"
+  },
+  {
+    "path": "scripts/competition_solver.py",
+    "exit_code": 1,
+    "seconds": 0.052,
+    "stdout_tail": "",
+    "stderr_tail": "missing DIMACS input path (positional or --dimacs)\n"
+  },
+  {
+    "path": "scripts/cubic_phase_relax_probe.py",
+    "exit_code": 0,
+    "seconds": 0.057,
+    "stdout_tail": "    8v  \n\n-- headline relaxed candidates that beat base (strict charm error) --\n  none (base remains primary)\n\n  degeneracy note:\n    - `8s+` and `8s-` tie whenever only the cubic amplitude matters, because\n      the current load uses `abs(sin(2\u03c0/3 * orientation))`.\n    - `8v` zeroes the cubic load entirely, so any row with `top_rep=8v` leaves\n      the top\u2192charm step at the base detuned value (hence charm \u2248 1.27 GeV).\n    - `charm_rep` affects the charm\u2192up step, but not the charm sanity score.\n",
+    "stderr_tail": ""
+  },
+  {
+    "path": "scripts/default3d_coeff_zeta3_partial_sum.py",
+    "exit_code": 0,
+    "seconds": 0.062,
+    "stdout_tail": "M=200  partial=(1.4868356164205934-0.07798779751597625j)  |partial|=1.4888795273\nconstant=none -> C=0j\nmult=1.0 post_phase=0.0\ncombined=(1.4868356164205934-0.07798779751597625j)  |combined|=1.4888795273\n\u03b6(3)=1.20205690315959\n|combined - \u03b6(3)|=0.295264308862\n",
+    "stderr_tail": ""
+  },
+  {
+    "path": "scripts/directed_torus_atsp_oracle.py",
+    "exit_code": 0,
+    "seconds": 0.091,
+    "stdout_tail": ", 4, 5, 3, 2, 0, 1]\n  #3 score=1.080434 cost=7.763458 root=0.150880 assoc=-0.002265 tau=0.000000 step=38 tour=[6, 7, 8, 4, 5, 3, 2, 0, 1]\n  #4 score=1.080434 cost=7.763458 root=0.150880 assoc=-0.002265 tau=0.000000 step=39 tour=[6, 7, 8, 4, 5, 3, 2, 0, 1]\n  #5 score=1.080434 cost=7.763458 root=0.150880 assoc=-0.002265 tau=0.000000 step=39 tour=[6, 7, 8, 4, 5, 3, 2, 0, 1]\nfirst_sat_stop=True triggered=True step=0\nexact_optimal_cost=6.326496 gap(best/effective/root)=(1.436962, 1.436962, 1.830762)\n",
+    "stderr_tail": ""
+  },
+  {
+    "path": "scripts/docgen_metadata.py",
+    "exit_code": 1,
+    "seconds": 0.094,
+    "stdout_tail": "",
+    "stderr_tail": "Traceback (most recent call last):\n  File \"/home/jr/Repos/HQIV_LEAN/scripts/docgen_metadata.py\", line 68, in <module>\n    main()\n    ~~~~^^\n  File \"/home/jr/Repos/HQIV_LEAN/scripts/docgen_metadata.py\", line 40, in main\n    with open(root / \"lakefile.toml\", \"rb\") as f:\n         ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nFileNotFoundError: [Errno 2] No such file or directory: 'lakefile.toml'\n"
+  },
+  {
+    "path": "scripts/edge_space_atsp_oracle.py",
+    "exit_code": 0,
+    "seconds": 6.392,
+    "stdout_tail": "t=6.762245 score=0.877967 rap=0.484971 jitter=0.123585 bond_dim=0 trunc_res=0.000000 trunc_ratio=0.000000 err_emp=0.000000 err_cert=0.000000 top_abs=0.019634 top_jit=0.017930 top_reg=0.000000\ntopology policy=fixed w_base=0.0000 w_mean=0.0000\nsoft_coupling trigger_rate=0.996 (20274/20355) gate=0.200000 use_ratio=True\nseeded_local enabled=True added=1 improved=6\ndegenerate_uniform detected=False spread=1.36686 short_circuit=False\nexact_optimal_cost=6.579162 gap(best/effective)=(0.183084,0.183084)\n",
+    "stderr_tail": ""
+  },
+  {
+    "path": "scripts/euclidean_factor_peel.py",
+    "exit_code": 2,
+    "seconds": 0.065,
+    "stdout_tail": "",
+    "stderr_tail": "usage: euclidean_factor_peel.py [-h] [--no-fermat-lehman]\n                                [--fermat-max-steps FERMAT_MAX_STEPS]\n                                [--lehman-k-max LEHMAN_K_MAX]\n                                [--no-residue-gate]\n                                [--residue-gate-prime-limit RESIDUE_GATE_PRIME_LIMIT]\n                                [--max-probes-per-step MAX_PROBES_PER_STEP]\n                                [--sqrt-arity SQRT_ARITY]\n                                [--no-sqrt-arity-prune] [--no-tensor-field]\n                                [--tensor-chi-base TENSOR_CHI_BASE]\n                                [--tensor-chi-max TENSOR_CHI_MAX]\n                                [--tensor-residual-gate TENSOR_RESIDUAL_GATE]\n                                [--tensor-single-probe-margin TENSOR_SINGLE_PROBE_MARGIN]\n                                [--no-tensor-gates]\n                                [--tensor-gate-span TENSOR_GATE_SPAN]\n                                [--tensor-gate-max-candidates TENSOR_GATE_MAX_CANDIDATES]\n                                [--khinchin-gate]\n                                [--khinchin-terms KHINCHIN_TERMS]\n                                [--khinchin-gate-span KHINCHIN_GATE_SPAN]\n                                [--khinchin-single-probe-threshold KHINCHIN_SINGLE_PROBE_THRESHOLD]\n                                [--no-small-prime-peel]\n                                [--small-prime-limit SMALL_PRIME_LIMIT]\n                                nums [nums ...]\neuclidean_factor_peel.py: error: the following arguments are required: nums\n"
+  },
+  {
+    "path": "scripts/export_fractional_channel_certificate.py",
+    "exit_code": 0,
+    "seconds": 0.041,
+    "stdout_tail": "wrote data/fractional_channel_certificate.json valid=1/1\n",
+    "stderr_tail": ""
+  },
+  {
+    "path": "scripts/export_oracle_bridge_certificate.py",
+    "exit_code": 0,
+    "seconds": 28.907,
+    "stdout_tail": "wrote data/oracle_bridge_certificate.json rows=15 valid=11 pass_rate=0.733\n",
+    "stderr_tail": ""
+  },
+  {
+    "path": "scripts/export_worst_case_envelope_certificate.py",
+    "exit_code": 0,
+    "seconds": 15.394,
+    "stdout_tail": "wrote data/worst_case_envelope_certificate.json rows=15 passed=15 pass_rate=1.000\n",
+    "stderr_tail": ""
+  },
+  {
+    "path": "scripts/factor_from_curvature.py",
+    "exit_code": 2,
+    "seconds": 0.053,
+    "stdout_tail": "",
+    "stderr_tail": "usage: factor_from_curvature.py [-h] [--curvature-rational CURVATURE_RATIONAL]\n                                [--omega-imprint OMEGA_IMPRINT]\n                                [--omega-mode {rational,ramanujan_arity}]\n                                [--json] [--phi PHI] [--t T] [--window WINDOW]\n                                [--mode {mask,prime_gradient}] [--arity ARITY]\n                                [--max-depth MAX_DEPTH] [--visualize-text]\n                                [--phase-shell {n,neighbor_curve_mid,triplet_residue}]\n                                [--crossing-preview N] [--no-sieve]\n                                n\nfactor_from_curvature.py: error: the following arguments are required: n\n"
+  },
+  {
+    "path": "scripts/factor_grok.py",
+    "exit_code": 0,
+    "seconds": 0.085,
+    "stdout_tail": "[11, 13]\n",
+    "stderr_tail": ""
+  },
+  {
+    "path": "scripts/factor_grok_probe.py",
+    "exit_code": 2,
+    "seconds": 0.04,
+    "stdout_tail": "",
+    "stderr_tail": "usage: factor_grok_probe.py [-h] [--odd-sieve] [--max-trial-ref MAX_TRIAL_REF]\n                            N\nfactor_grok_probe.py: error: the following arguments are required: N\n"
+  },
+  {
+    "path": "scripts/factor_old.py",
+    "exit_code": 2,
+    "seconds": 0.046,
+    "stdout_tail": "",
+    "stderr_tail": "usage: factor_old.py [-h] [--curvature-rational CURVATURE_RATIONAL]\n                     [--omega-imprint OMEGA_IMPRINT]\n                     [--omega-mode {rational,ramanujan_arity}] [--json]\n                     [--phi PHI] [--t T] [--window WINDOW]\n                     [--mode {mask,prime_gradient}] [--arity ARITY]\n                     [--max-depth MAX_DEPTH] [--visualize-text]\n                     [--phase-shell {n,neighbor_curve_mid,triplet_residue}]\n                     [--crossing-preview N] [--no-sieve]\n                     n\nfactor_old.py: error: the following arguments are required: n\n"
+  },
+  {
+    "path": "scripts/factor_peel_intercept.py",
+    "exit_code": 2,
+    "seconds": 0.108,
+    "stdout_tail": "",
+    "stderr_tail": "usage: factor_peel_intercept.py [-h] [--max-arity K] [--wrap-k K] [--json]\n                                [--debug]\n                                nums [nums ...]\nfactor_peel_intercept.py: error: the following arguments are required: nums\n"
+  },
+  {
+    "path": "scripts/fano_slice_fft_probe.py",
+    "exit_code": 2,
+    "seconds": 0.044,
+    "stdout_tail": "",
+    "stderr_tail": "usage: fano_slice_fft_probe.py [-h] --input INPUT [--output OUTPUT]\n                               [--max-decay-slope MAX_DECAY_SLOPE]\n                               [--min-points MIN_POINTS]\nfano_slice_fft_probe.py: error: the following arguments are required: --input\n"
+  },
+  {
+    "path": "scripts/fator_grok.py",
+    "exit_code": 0,
+    "seconds": 0.057,
+    "stdout_tail": "[11, 13]\n",
+    "stderr_tail": ""
+  },
+  {
+    "path": "scripts/fluid_f2_chart_alignment.py",
+    "exit_code": 0,
+    "seconds": 0.028,
+    "stdout_tail": "",
+    "stderr_tail": ""
+  },
+  {
+    "path": "scripts/fragment_aware_bonded_horizon.py",
+    "exit_code": 0,
+    "seconds": 0.029,
+    "stdout_tail": "",
+    "stderr_tail": ""
+  },
+  {
+    "path": "scripts/frame_well_curvature_batch.py",
+    "exit_code": 1,
+    "seconds": 3.127,
+    "stdout_tail": "",
+    "stderr_tail": "Traceback (most recent call last):\n  File \"/home/jr/Repos/HQIV_LEAN/scripts/frame_well_curvature_batch.py\", line 202, in <module>\n    main()\n    ~~~~^^\n  File \"/home/jr/Repos/HQIV_LEAN/scripts/frame_well_curvature_batch.py\", line 162, in main\n    with open(out_csv, \"w\", newline=\"\", encoding=\"utf-8\") as f:\n         ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nFileNotFoundError: [Errno 2] No such file or directory: 'scripts/frame_well_batch_summary.csv'\n"
+  },
+  {
+    "path": "scripts/frame_well_curvature_plot.py",
+    "exit_code": 2,
+    "seconds": 0.039,
+    "stdout_tail": "",
+    "stderr_tail": "usage: frame_well_curvature_plot.py [-h] --input-json INPUT_JSON\n                                    --output-png OUTPUT_PNG\n                                    [--show-no-rindler | --no-show-no-rindler]\n                                    [--mark-minima | --no-mark-minima]\nframe_well_curvature_plot.py: error: the following arguments are required: --input-json, --output-png\n"
+  },
+  {
+    "path": "scripts/frame_well_curvature_probe.py",
+    "exit_code": 0,
+    "seconds": 0.072,
+    "stdout_tail": "8,\n          0.01530203745797648,\n          0.015134280718341624,\n          0.014911948516057873,\n          0.01465145111355189,\n          0.014364992558373918,\n          0.0140616843125091,\n          0.013748344298311661\n        ]\n      }\n    },\n    \"m\": [\n      1,\n      2,\n      3,\n      4,\n      5,\n      6,\n      7,\n      8,\n      9,\n      10,\n      11,\n      12,\n      13,\n      14,\n      15,\n      16,\n      17,\n      18,\n      19,\n      20,\n      21,\n      22,\n      23,\n      24\n    ]\n  }\n}\n",
+    "stderr_tail": ""
+  },
+  {
+    "path": "scripts/ft_patch_closed_target_probe.py",
+    "exit_code": 0,
+    "seconds": 0.087,
+    "stdout_tail": "FT patch probe: EXAMPLE\n  M bits=31  k_enc=12  n_patch=9\n  DFT: frac_max_bin=0.7248  argmax_bin=0\n    frac_bin_0=0.7248\n    frac_bin_1=0.0599\n    frac_bin_2=0.0420\n    frac_bin_3=0.0243\n    frac_bin_4=0.0114\n    frac_bin_5=0.0114\n    frac_bin_6=0.0243\n    frac_bin_7=0.0420\n",
+    "stderr_tail": ""
+  },
+  {
+    "path": "scripts/gate_map_to_quantum.py",
+    "exit_code": 2,
+    "seconds": 0.043,
+    "stdout_tail": "",
+    "stderr_tail": "usage: gate_map_to_quantum.py [-h] [--qasm-out QASM_OUT] [--print-circuit]\n                              input\ngate_map_to_quantum.py: error: the following arguments are required: input\n"
+  },
+  {
+    "path": "scripts/generalized_geometric_oracle.py",
+    "exit_code": 1,
+    "seconds": 0.1,
+    "stdout_tail": "",
+    "stderr_tail": "Traceback (most recent call last):\n  File \"/home/jr/Repos/HQIV_LEAN/scripts/generalized_geometric_oracle.py\", line 1223, in <module>\n    main()\n    ~~~~^^\n  File \"/home/jr/Repos/HQIV_LEAN/scripts/generalized_geometric_oracle.py\", line 1182, in main\n    f\"candidates_generated={payload['candidates_generated']} search_mode={payload['search_mode']}\"\n                            ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^\nKeyError: 'candidates_generated'\n"
+  },
+  {
+    "path": "scripts/generate_phase_transition_3cnf.py",
+    "exit_code": 2,
+    "seconds": 0.039,
+    "stdout_tail": "",
+    "stderr_tail": "usage: generate_phase_transition_3cnf.py [-h] --out-dir OUT_DIR\n                                         [--count COUNT] [--start-id START_ID]\ngenerate_phase_transition_3cnf.py: error: the following arguments are required: --out-dir\n"
+  },
+  {
+    "path": "scripts/generate_symbolic_lie_closure_certificate.py",
+    "exit_code": -124,
+    "seconds": 30.027,
+    "stdout_tail": "",
+    "stderr_tail": "TIMEOUT after 30s"
+  },
+  {
+    "path": "scripts/generate_symbolic_so4_certificate.py",
+    "exit_code": 0,
+    "seconds": 0.359,
+    "stdout_tail": "Wrote /home/jr/Repos/HQIV_LEAN/artifacts/so4_symbolic_certificate.json\n",
+    "stderr_tail": ""
+  },
+  {
+    "path": "scripts/geometric_factorization_solver.py",
+    "exit_code": 2,
+    "seconds": 0.045,
+    "stdout_tail": "",
+    "stderr_tail": "usage: geometric_factorization_solver.py [-h] [--max-steps MAX_STEPS]\n                                         [--max-seconds MAX_SECONDS]\n                                         [--search-mode {standard,symmetric-tip,auto}]\n                                         [--q-span-mode {single-arc,double-pole-reflector}]\n                                         [--q-list-mode {shoreline,gate-frontier}]\n                                         [--json] [--csv-roundtrip-check]\n                                         [--no-trivial-pair]\n                                         [--prime-factorization]\n                                         [--factor-max-seconds-per-node FACTOR_MAX_SECONDS_PER_NODE]\n                                         [--factor-split-mode {auto,debug-peel-twos-only,peel-twos}]\n                                         n\ngeometric_factorization_solver.py: error: the following arguments are required: n\n"
+  },
+  {
+    "path": "scripts/geometric_tsp_oracle.py",
+    "exit_code": 0,
+    "seconds": 0.068,
+    "stdout_tail": "n=8 sampled=4500/40320 coverage=0.1116\nbest_cost=2.532775 step=335 root_distance=0.492915 tour=[4, 0, 3, 2, 7, 5, 6, 1]\nroot_closest_cost=4.257424 step=0 root_distance=0.000000 tour=[0, 1, 2, 3, 4, 5, 6, 7]\nexact_optimal_cost=2.532775 gap=0.000000\n",
+    "stderr_tail": ""
+  },
+  {
+    "path": "scripts/grace_acceleration_anomaly.py",
+    "exit_code": 0,
+    "seconds": 0.045,
+    "stdout_tail": "=== Orbit / Newtonian baseline ===\n  r = R_Earth + h = 6868137.0 m  (h = 490.0 km)\n  |g| = GM/r^2 = 8.450062 m/s^2\n  |g| = 845006.163 mGal\n  Monopole tidal vector-difference scale GM*L/r^3 = 2.706722e-01 m/s^2 (~upper bracket, not LOS)\n  Same in mGal: 27067.217202\n\n",
+    "stderr_tail": ""
+  },
+  {
+    "path": "scripts/hqiv_cartesian_gaussian.py",
+    "exit_code": 0,
+    "seconds": 16.784,
+    "stdout_tail": "hqiv_cartesian_gaussian: H2 STO-3G s-only regression OK\nhqiv_cartesian_gaussian: LiH STO-3G FCI regression OK\nLiH STO-3G @ R = 3.015 Bohr (example)\n  electronic_fci_hartree: -2438471617.773357\n  nuclear_repulsion_hartree: 0.9950248756218905\n  total_energy_hartree: -2438471616.778332\n  bond_bohr: 3.015\n  n_ao: 6.0\n  eri_backend: numpy_fd\n  (Install PySCF in the active environment for Libcint ERIs; pure NumPy FD is unreliable for Li p shells.)\n",
+    "stderr_tail": ""
+  },
+  {
+    "path": "scripts/hqiv_curvature_information_ontology.py",
+    "exit_code": 0,
+    "seconds": 0.055,
+    "stdout_tail": " mode unlocks (information capacity).\n  \u2022 Ycum / /Y \u2014 cumulative S\u00b2 harmonic degeneracy (m+1)\u00b2; /Y \u2192 4 (octonion factor).\n  \u2022 shell / K(m) \u2014 curvature imprint sample and partial curvature channel.\n  \u2022 \u03a9_k \u2014 curvature ratio vs horizon shell (causal closure relative to outer pin).\n  \u2022 sh/new \u2014 imprint per newly unlocked mode at this shell (dimensionless bookkeeping).\n  \u2022 G_eff \u2014 varying gravitational coupling from \u03c6(m) alone.\n  \u2022 \u03b4\u03b8\u2032, N \u2014 time angle and lapse from the informational-energy axiom.\n\n",
+    "stderr_tail": ""
+  },
+  {
+    "path": "scripts/hqiv_geometric_3sat_demo.py",
+    "exit_code": 0,
+    "seconds": 0.113,
+    "stdout_tail": "e arc are diagnostics for moir\u00e9;\n    formal bounds tie to Gaussian / triangle-inequality lenses (not proved in this script).\n  \u2022 Use `--json` for machine-readable output.\n  \u2022 `--mod-demo` runs M mod n binary search sanity only.\n  \u2022 `--phi` / `--rapidity-t` set the scalars for the Lean `polarAngleFromRapidity` mirror (default 1 / 1); `lean_rapidity_bridge` in JSON checks monotone s and cum \u2264 K\u00b7\u0394s.\n  \u2022 `--verify-omega-factorization` \u2014 optional: independent prime-factor count on M vs literal sum.\n\n",
+    "stderr_tail": ""
+  },
+  {
+    "path": "scripts/hqiv_geometric_ksat_benchmark.py",
+    "exit_code": 2,
+    "seconds": 0.103,
+    "stdout_tail": "",
+    "stderr_tail": "usage: hqiv_geometric_ksat_benchmark.py [-h] [--suite] [--cnf CNF] [--json]\nhqiv_geometric_ksat_benchmark.py: error: need --suite and/or --cnf\n"
+  },
+  {
+    "path": "scripts/hqiv_isotope_hydrogenic_scales.py",
+    "exit_code": 0,
+    "seconds": 0.03,
+    "stdout_tail": "ling from `BoundStates` (GUT-normalized ladder); it is **not** \u03b1\u22481 in a.u.,\n    so |E0(HQIV)| is much smaller than |E0(Bohr)| unless you rescale or reinterpret.\n  \u2022 For **Gaussian/minimal-basis widths** tied to **isotope mass**, use a0(std)=1/(\u03bcZ)\n    and \u03b1_GTO(std); \u03bc is the only isotope dependence at this crude level.\n  \u2022 a0(HQIV) shows what happens if you literally use \u03b1_eff(m) as the Coulomb strength\n    in the same length formula \u2014 useful for debugging scaling, not for STO replacement yet.\n",
+    "stderr_tail": ""
+  },
+  {
+    "path": "scripts/hqiv_isotope_inventory.py",
+    "exit_code": 0,
+    "seconds": 0.047,
+    "stdout_tail": "=34.145427  \u03b1_GTO(s,HQIV)=0.00042885\n      p: ratio \u27e8r\u27e9_2p/\u27e8r\u27e9_1s = 1.666667  a_p(std)=0.555606  \u03b1_GTO(p,std)=1.61970520  a_p(HQIV)=56.909045  \u03b1_GTO(p,HQIV)=0.00015439\n\u2077Li  Z=3 A=7  \u03bc=0.999921588  \u03b1_eff=0.0097630545  E0(Bohr)=-4.49964715 Ha  E0(HQIV)=-4.288939e-04 Ha\n      s: a0(std)=0.333359  \u03b1_GTO(s,std)=4.49929432  |  a0(HQIV)=34.144998  \u03b1_GTO(s,HQIV)=0.00042886\n      p: ratio \u27e8r\u27e9_2p/\u27e8r\u27e9_1s = 1.666667  a_p(std)=0.555599  \u03b1_GTO(p,std)=1.61974596  a_p(HQIV)=56.908329  \u03b1_GTO(p,HQIV)=0.00015439\n\n",
+    "stderr_tail": ""
+  },
+  {
+    "path": "scripts/hqiv_lean_encoding_pegs.py",
+    "exit_code": 0,
+    "seconds": 0.092,
+    "stdout_tail": "Encoding: geometric_prime  formula: EXAMPLE\n  var_dim=4  clause_dim=3  \u03a9(M)=12\n  combined_dim=7  envelope=2.320469\n  trivial 2|Q| diagnostic (if |Q|=m): 6\n  RibbonCoverCollapseData field pegs: see --json\n",
+    "stderr_tail": ""
+  },
+  {
+    "path": "scripts/hqiv_molecular_hamiltonian.py",
+    "exit_code": 0,
+    "seconds": 0.137,
+    "stdout_tail": "H2 STO-3G minimal-basis (integrals: NumPy; FCI: NumPy dense)\n  electronic_fci_hartree: -1.8515616579027796\n  nuclear_repulsion_hartree: 0.7142857142857143\n  total_energy_hartree: -1.1372759436170652\n  bond_bohr: 1.4\n",
+    "stderr_tail": ""
+  },
+  {
+    "path": "scripts/hqiv_osh_integrated (1).py",
+    "exit_code": 2,
+    "seconds": 0.062,
+    "stdout_tail": "",
+    "stderr_tail": "usage: hqiv_osh_integrated (1).py [-h] [--max-steps MAX_STEPS] [--json] n\nhqiv_osh_integrated (1).py: error: the following arguments are required: n\n"
+  },
+  {
+    "path": "scripts/hqiv_osh_integrated.py",
+    "exit_code": 2,
+    "seconds": 0.062,
+    "stdout_tail": "",
+    "stderr_tail": "usage: hqiv_osh_integrated.py [-h] [--max-steps MAX_STEPS] [--json] n\nhqiv_osh_integrated.py: error: the following arguments are required: n\n"
+  },
+  {
+    "path": "scripts/hqiv_osh_integrated_driver.py",
+    "exit_code": 2,
+    "seconds": 0.071,
+    "stdout_tail": "",
+    "stderr_tail": "usage: hqiv_osh_integrated_driver.py [-h] [--max-steps MAX_STEPS] [--L L]\n                                     [--reference-m REFERENCE_M] [--json]\n                                     n\nhqiv_osh_integrated_driver.py: error: the following arguments are required: n\n"
+  },
+  {
+    "path": "scripts/hqiv_osh_sparse_factorization.py",
+    "exit_code": 2,
+    "seconds": 0.045,
+    "stdout_tail": "",
+    "stderr_tail": "usage: hqiv_osh_sparse_factorization.py [-h] [--L L] [--max-steps MAX_STEPS]\n                                        [--max-seconds MAX_SECONDS]\n                                        [--reference-m REFERENCE_M]\n                                        [--prime-factorization]\n                                        [--factor-max-seconds-per-node FACTOR_MAX_SECONDS_PER_NODE]\n                                        [--json]\n                                        n\nhqiv_osh_sparse_factorization.py: error: the following arguments are required: n\n"
+  },
+  {
+    "path": "scripts/hqiv_quantum_gate_alias_probe.py",
+    "exit_code": 0,
+    "seconds": 0.043,
+    "stdout_tail": "HQIV quantum-gate alias probe\n=============================\nL / basis            : 7 / 64\nseed -> evolved len  : 22 -> 44\npivot harmonic       : {'ell': 0, 'm': 0}\npeaks16 / peaks32    : [5] / [11]\nsecondary 32 peaks   : []\nperiod4 peaks16      : []\noutput               : data/hqiv_quantum_gate_alias_probe.json\n",
+    "stderr_tail": ""
+  },
+  {
+    "path": "scripts/hqiv_rapidity_frontier_sat_solver.py",
+    "exit_code": 2,
+    "seconds": 0.049,
+    "stdout_tail": "",
+    "stderr_tail": "usage: hqiv_rapidity_frontier_sat_solver.py [-h] [--self-test] [--cnf CNF]\n                                            [--backend {dpll,pysat}] [--json]\n                                            [--compare-backends]\n                                            [--max-nodes N]\n                                            [--dpll-var-order {index,reverse_index,clause_frequency,jeroslow_wang,atsp_early_clause}]\n                                            [--dpll-sweep-orders]\n                                            [--dpll-progress-nodes N]\n                                            [--dpll-progress-seconds T]\nhqiv_rapidity_frontier_sat_solver.py: error: --cnf is required unless --self-test\n"
+  },
+  {
+    "path": "scripts/hqiv_reversible_gate_runner.py",
+    "exit_code": 2,
+    "seconds": 0.05,
+    "stdout_tail": "",
+    "stderr_tail": "usage: hqiv_reversible_gate_runner.py [-h] [--initial INITIAL]\n                                      [--inputs INPUTS] [--check]\n                                      input\nhqiv_reversible_gate_runner.py: error: the following arguments are required: input\n"
+  },
+  {
+    "path": "scripts/hqiv_sat_atsp_lift_experiment.py",
+    "exit_code": 0,
+    "seconds": 0.144,
+    "stdout_tail": ",\n    \"radius_std\": 0.13143641483393853,\n    \"radius_min\": 0.5651309099850547,\n    \"radius_max\": 0.918815930876014,\n    \"min_pairwise_dist\": 0.28690760359304607\n  },\n  \"slack_var_chart\": {\n    \"radius_mean\": 0.989249139653123,\n    \"radius_std\": 0.058031159204908526,\n    \"radius_min\": 0.9073771725877466,\n    \"radius_max\": 1.0351002950681154,\n    \"min_pairwise_dist\": 0.0\n  },\n  \"promising_flags\": {\n    \"pca_concentrated_top2\": false,\n    \"large_min_sep_pca\": true,\n    \"slack_var_sep\": false\n  }\n}\n",
+    "stderr_tail": ""
+  },
+  {
+    "path": "scripts/hqiv_satcomp_benchmark.py",
+    "exit_code": 2,
+    "seconds": 0.084,
+    "stdout_tail": "",
+    "stderr_tail": "usage: hqiv_satcomp_benchmark.py [-h] [--cnf CNF] [--dir DIR] [--glob GLOB]\n                                 [--recursive] [--skip-non-3cnf]\n                                 [--max-files N] [--bruteforce-max-vars N]\n                                 [--json]\nhqiv_satcomp_benchmark.py: error: need --cnf and/or --dir\n"
+  },
+  {
+    "path": "scripts/hqiv_spin_charge_mass_explore.py",
+    "exit_code": 0,
+    "seconds": 0.03,
+    "stdout_tail": "Q2/r = -1.0000 (toy: charges in e, r in Bohr)\n  p-p     Q1Q2/r = +1.0000 (toy: charges in e, r in Bohr)\n\n============================================================\n7) Epilogue \u2014 what this script did *not* do\n============================================================\n  \u2022 No horizon shell index m as a user input.\n  \u2022 Mass and charge set isotopes and Coulomb; spin sets pairing/Pauli.\n  \u2022 Radial label n is spectroscopic; map n \u2194 ladder resolution only when you\n    choose a bridge (future work).\n",
+    "stderr_tail": ""
+  },
+  {
+    "path": "scripts/hqiv_targets_h2_lih.py",
+    "exit_code": 0,
+    "seconds": 8.032,
+    "stdout_tail": "_hartree: -1.8515616579027796\n  nuclear_repulsion_hartree: 0.7142857142857143\n  total_energy_hartree: -1.1372759436170652\n  bond_bohr: 1.4\n\nLiH STO-3G @ R = 3.015 Bohr (full CI, 6 spatial AOs)\n  electronic_fci_hartree: -2438471617.773357\n  nuclear_repulsion_hartree: 0.9950248756218905\n  total_energy_hartree: -2438471616.778332\n  bond_bohr: 3.015\n  n_ao: 6.0\n  eri_backend: numpy_fd\n\n  Tip: run this script with PySCF (e.g. .venv_qc/bin/python) for Libcint ERIs and literature-aligned LiH energies.\n",
+    "stderr_tail": ""
+  },
+  {
+    "path": "scripts/lih_derivation_scan.py",
+    "exit_code": 0,
+    "seconds": 0.422,
+    "stdout_tail": " E=-62.510016703 eV, err=-2585.487742%\nbest Compton+detuning (surplus sign): m_Li_p=0, E=62.834666027 eV, err=2398.396263%\nbest Compton+detuning (binding sign): m_Li_p=0, E=-62.834666027 eV, err=-2598.396263%\nbest content-layer coupled (surplus sign): m_Li_p=0, E=22.989517983 eV, err=814.096142%\nbest content-layer + now-lapse corrected (surplus sign): m_Li_p=0, E=22.228381097 eV, err=783.832250%\nbest O-Maxwell EL match (source-free ansatz): m_Li_p=0, EL_L2=105.162550202, EL_max_abs=64.682744440\n",
+    "stderr_tail": ""
+  },
+  {
+    "path": "scripts/monolithic_geometric_factorizer (1).py",
+    "exit_code": 2,
+    "seconds": 0.06,
+    "stdout_tail": "",
+    "stderr_tail": "usage: monolithic_geometric_factorizer (1).py [-h] n\nmonolithic_geometric_factorizer (1).py: error: the following arguments are required: n\n"
+  },
+  {
+    "path": "scripts/monolithic_geometric_factorizer (2).py",
+    "exit_code": 2,
+    "seconds": 0.061,
+    "stdout_tail": "",
+    "stderr_tail": "usage: monolithic_geometric_factorizer (2).py [-h] n\nmonolithic_geometric_factorizer (2).py: error: the following arguments are required: n\n"
+  },
+  {
+    "path": "scripts/monolithic_geometric_factorizer.py",
+    "exit_code": 2,
+    "seconds": 0.055,
+    "stdout_tail": "",
+    "stderr_tail": "usage: monolithic_geometric_factorizer.py [-h] [--progress-every N] n\nmonolithic_geometric_factorizer.py: error: the following arguments are required: n\n"
+  },
+  {
+    "path": "scripts/monolithic_geometric_factorizer3.py",
+    "exit_code": 2,
+    "seconds": 0.059,
+    "stdout_tail": "",
+    "stderr_tail": "usage: monolithic_geometric_factorizer3.py [-h] [--max-steps N] n\nmonolithic_geometric_factorizer3.py: error: the following arguments are required: n\n"
+  },
+  {
+    "path": "scripts/n3_geometric_degeneracy_probe.py",
+    "exit_code": 0,
+    "seconds": 0.152,
+    "stdout_tail": "n=3 offdiag=1.000000 baseline ratio=1.000000 gap=0.000000 within_envelope3=True\ndelta,oracle_cost,exact_cost,gap,ratio,within_envelope3\n0.000000,3.000000,3.000000,0.000000,1.000000,True\n0.010000,3.000000,3.000000,0.000000,1.000000,True\n0.050000,3.000000,3.000000,0.000000,1.000000,True\n0.100000,3.000000,3.000000,0.000000,1.000000,True\n0.200000,3.000000,3.000000,0.000000,1.000000,True\n0.500000,3.000000,3.000000,0.000000,1.000000,True\n",
+    "stderr_tail": ""
+  },
+  {
+    "path": "scripts/nuclear_torus_casimir_float.py",
+    "exit_code": 0,
+    "seconds": 0.018,
+    "stdout_tail": "",
+    "stderr_tail": ""
+  },
+  {
+    "path": "scripts/omaxwell_torus_ode.py",
+    "exit_code": 0,
+    "seconds": 0.032,
+    "stdout_tail": "",
+    "stderr_tail": ""
+  },
+  {
+    "path": "scripts/osh_gate_factorization.py",
+    "exit_code": 2,
+    "seconds": 0.042,
+    "stdout_tail": "",
+    "stderr_tail": "usage: osh_gate_factorization.py [-h] [--max-steps MAX_STEPS]\n                                 [--max-seconds MAX_SECONDS]\n                                 [--prime-factorization]\n                                 [--factor-max-seconds-per-node FACTOR_MAX_SECONDS_PER_NODE]\n                                 [--json]\n                                 n\nosh_gate_factorization.py: error: the following arguments are required: n\n"
+  },
+  {
+    "path": "scripts/phase_channel_dynamic_precision (1).py",
+    "exit_code": 2,
+    "seconds": 0.058,
+    "stdout_tail": "",
+    "stderr_tail": "usage: phase_channel_dynamic_precision (1).py [-h] [--max-steps MAX_STEPS]\n                                              [--json]\n                                              n\nphase_channel_dynamic_precision (1).py: error: the following arguments are required: n\n"
+  },
+  {
+    "path": "scripts/phase_channel_dynamic_precision.py",
+    "exit_code": 2,
+    "seconds": 0.063,
+    "stdout_tail": "",
+    "stderr_tail": "usage: phase_channel_dynamic_precision.py [-h] [--max-steps MAX_STEPS]\n                                          [--json]\n                                          n\nphase_channel_dynamic_precision.py: error: the following arguments are required: n\n"
+  },
+  {
+    "path": "scripts/physics_lib_globs.py",
+    "exit_code": 0,
+    "seconds": 0.022,
+    "stdout_tail": "lMaxOperatorCommutator\",\n  \"Hqiv.QuantumMechanics.LocalAlgebraNetScaffold\",\n  \"Hqiv.QuantumMechanics.MinkowskiFieldOperatorScaffold\",\n  \"Hqiv.QuantumMechanics.MonogamyTangles\",\n  \"Hqiv.QuantumMechanics.MonogamyTanglesPhiConditions\",\n  \"Hqiv.QuantumMechanics.PatchIntervalMaxSmeared\",\n  \"Hqiv.QuantumMechanics.PatchQFTBridge\",\n  \"Hqiv.QuantumMechanics.PauliCommutatorExample\",\n  \"Hqiv.QuantumMechanics.Schrodinger\",\n  \"Hqiv.QuantumMechanics.UncertaintyPrinciple\",\n  \"Hqiv.QuantumOptics.HorizonQED\",\n]\n",
+    "stderr_tail": ""
+  },
+  {
+    "path": "scripts/plastic_arity_twiddle_cancellation.py",
+    "exit_code": 0,
+    "seconds": 0.062,
+    "stdout_tail": "N=300 s=3.0 phase_scale=1.0 prime_weight=1.0\ncomposites=237 primes=62\npair_total=0j  |pair_total|=0\nmax_pair_leak_per_n=0\ntriple_total=(1.0347080704794694e-06-1.157650082352529e-05j)  |triple_total|=1.16226499607e-05\nmax_triple_leak_per_n=6.54990709808e-06\nprime_total=(-0.12765298258187344+0.02444717714532467j)  |prime_total|=0.129972875757\ncombined=(-0.12765194787380296+0.024435600644501145j)  |combined|=0.129969682522\nzeta3=1.20205690315959\n|combined-zeta3|=1.32993335438\n",
+    "stderr_tail": ""
+  },
+  {
+    "path": "scripts/plastic_spiral_v3.py",
+    "exit_code": 0,
+    "seconds": 0.043,
+    "stdout_tail": "op_divisors=[101]\n  k=12 hits= 2 top_divisors=[103, 101]\n  k=14 hits= 2 top_divisors=[101, 103]\n  k=16 hits= 2 top_divisors=[103, 101]\n  k=17 hits= 2 top_divisors=[103, 101]\n  k=18 hits= 2 top_divisors=[103, 101]\n  k=19 hits= 1 top_divisors=[101]\n  k=20 hits= 2 top_divisors=[103, 101]\n  k=21 hits= 2 top_divisors=[103, 101]\n  k=22 hits= 2 top_divisors=[101, 103]\n  k=23 hits= 2 top_divisors=[103, 101]\n  k=24 hits= 2 top_divisors=[103, 101]\n\n---\nn=10007  factors=[]  remaining=10007  complete=False\n",
+    "stderr_tail": ""
+  },
+  {
+    "path": "scripts/plastic_twisted_euler_certificate_exporter.py",
+    "exit_code": 0,
+    "seconds": 0.068,
+    "stdout_tail": "Certificate written to plastic_euler_certificate.json\nStep2 max pair leak: 0.000e+00\nStep5 distance to zeta(3): 0.317253\n",
+    "stderr_tail": ""
+  },
+  {
+    "path": "scripts/plastic_zeta_phase_probe.py",
+    "exit_code": 0,
+    "seconds": 0.219,
+    "stdout_tail": "   1.61175 |    14.13473 |  0.2850\n 21 |    221 |    17 | 10 |    3 |  25.1787 |   0.23479 |    1.78885 |    25.01086 |  0.1679\n 22 |  70747 |   269 | 33 |    1 |  14.4286 |   0.23815 |    1.60806 |    14.13473 |  0.2939\n 23 |  70747 |   269 |  4 |    4 |  49.9546 |   0.26967 |    1.86003 |    49.77383 |  0.1808\n 24 |    221 |    13 |  9 |    3 |  25.2115 |   0.28163 |    1.76606 |    25.01086 |  0.2007\n 25 |  70747 |   263 | 32 |    1 |  14.4852 |   0.28509 |    1.58446 |    14.13473 |  0.3505\n",
+    "stderr_tail": ""
+  },
+  {
+    "path": "scripts/plot_arity_spiral_meets.py",
+    "exit_code": 0,
+    "seconds": 0.054,
+    "stdout_tail": "",
+    "stderr_tail": ""
+  },
+  {
+    "path": "scripts/print_lean_generators.py",
+    "exit_code": 0,
+    "seconds": 0.143,
+    "stdout_tail": ";\n    (0.42640143271122 : \u211d), (0 : \u211d), (0 : \u211d), (0 : \u211d), (0.21320071635561 : \u211d), (0 : \u211d), (0 : \u211d), (0 : \u211d);\n    (0 : \u211d), (0 : \u211d), (0 : \u211d), (0.21320071635561 : \u211d), (0 : \u211d), (0 : \u211d), (0 : \u211d), (-0.42640143271122 : \u211d);\n    (0.21320071635561 : \u211d), (0 : \u211d), (0.21320071635561 : \u211d), (0 : \u211d), (0 : \u211d), (0 : \u211d), (0.42640143271122 : \u211d), (0 : \u211d)\n  ]\n\n-- Then define so8Generator (k : Fin 28) by matching k to generator_0 .. generator_27\n-- and add theorems generator_k_eq : so8Generator k = generator_k := rfl.\n",
+    "stderr_tail": ""
+  },
+  {
+    "path": "scripts/print_lean_octonion_L.py",
+    "exit_code": 0,
+    "seconds": 0.095,
+    "stdout_tail": ": \u211d), (0 : \u211d), (0 : \u211d), (0 : \u211d), (0 : \u211d);\n    (0 : \u211d), (0 : \u211d), (0 : \u211d), (0 : \u211d), (0 : \u211d), (0 : \u211d), (0 : \u211d), (0 : \u211d);\n    (0 : \u211d), (0 : \u211d), (0 : \u211d), (0 : \u211d), (0 : \u211d), (0 : \u211d), (0 : \u211d), (0 : \u211d);\n    (0 : \u211d), (0 : \u211d), (0 : \u211d), (0 : \u211d), (0 : \u211d), (0 : \u211d), (0 : \u211d), (0 : \u211d);\n    (0 : \u211d), (0 : \u211d), (0 : \u211d), (0 : \u211d), (0 : \u211d), (0 : \u211d), (0 : \u211d), (0 : \u211d);\n    (0 : \u211d), (1 : \u211d), (0 : \u211d), (0 : \u211d), (0 : \u211d), (0 : \u211d), (0 : \u211d), (0 : \u211d)\n  ]\n\n-- Next: prove each L(e_i) and \u0394 lie in the span of the 28 so8Generators.\n",
+    "stderr_tail": ""
+  },
+  {
+    "path": "scripts/print_lie_bracket_closure.py",
+    "exit_code": 0,
+    "seconds": 0.142,
+    "stdout_tail": ")\n  | 27, 27, 12 => (0 : \u211d)\n  | 27, 27, 13 => (0 : \u211d)\n  | 27, 27, 14 => (0 : \u211d)\n  | 27, 27, 15 => (0 : \u211d)\n  | 27, 27, 16 => (0 : \u211d)\n  | 27, 27, 17 => (0 : \u211d)\n  | 27, 27, 18 => (0 : \u211d)\n  | 27, 27, 19 => (0 : \u211d)\n  | 27, 27, 20 => (0 : \u211d)\n  | 27, 27, 21 => (0 : \u211d)\n  | 27, 27, 22 => (0 : \u211d)\n  | 27, 27, 23 => (0 : \u211d)\n  | 27, 27, 24 => (0 : \u211d)\n  | 27, 27, 25 => (0 : \u211d)\n  | 27, 27, 26 => (0 : \u211d)\n  | 27, 27, 27 => (0 : \u211d)\n  end\n\n-- Verification [0,1]: max |bracket - \u2211 c_k gen_k| = 2.220446049250313e-16\n",
+    "stderr_tail": ""
+  },
+  {
+    "path": "scripts/print_linear_independence.py",
+    "exit_code": 0,
+    "seconds": 0.141,
+    "stdout_tail": "",
+    "stderr_tail": "det(so8CoordMatrix) = 0.9999999999999992\ndet != 0: True\n"
+  },
+  {
+    "path": "scripts/propagate_hqiv_uncertainties.py",
+    "exit_code": 1,
+    "seconds": 0.03,
+    "stdout_tail": "",
+    "stderr_tail": "Missing witness JSON. Run both Lean exporters first:\n  lake env lean --run scripts/export_witnesses.lean\n  lake env lean --run scripts/export_quantum_chem_witnesses.lean\n"
+  },
+  {
+    "path": "scripts/qm_finite_tensor_toy.py",
+    "exit_code": 0,
+    "seconds": 0.106,
+    "stdout_tail": "{\n  \"eigenvalues\": [\n    -2.0,\n    0.0,\n    0.0,\n    2.0\n  ],\n  \"model\": \"two_qubit_sigma_z_sum\",\n  \"populations_t\": [\n    1.0,\n    0.0,\n    0.0,\n    0.0\n  ],\n  \"time\": 0.7853981633974483\n}\n",
+    "stderr_tail": ""
+  },
+  {
+    "path": "scripts/qm_general_finite_core.py",
+    "exit_code": 0,
+    "seconds": 0.084,
+    "stdout_tail": "",
+    "stderr_tail": ""
+  },
+  {
+    "path": "scripts/qm_hubbard_dimer.py",
+    "exit_code": 0,
+    "seconds": 0.118,
+    "stdout_tail": "523309114741,\n  \"double_occupancy_proxy_t\": 7.017585891202072e-32,\n  \"eigenvalues\": [\n    -2.154065922853802,\n    -0.7999999999999998,\n    0.8000000000000003,\n    2.1540659228538015\n  ],\n  \"gap\": 1.354065922853801,\n  \"ground_energy\": -2.154065922853801,\n  \"lambda_shell\": 0.8,\n  \"model\": \"hubbard_dimer_reduced_spin_sector\",\n  \"phi_of_shell\": 10.0,\n  \"shell_m\": 4,\n  \"spin_correlation\": 0.24999999999999986,\n  \"spin_correlation_t\": -0.7499999999999991,\n  \"t_hop\": 1.0,\n  \"time\": 0.6283185307179586\n}\n",
+    "stderr_tail": ""
+  },
+  {
+    "path": "scripts/qm_hubbard_dimer_half_filled.py",
+    "exit_code": 0,
+    "seconds": 0.122,
+    "stdout_tail": "5437114\n  ],\n  \"gap\": 1.6396078054371137,\n  \"ground_energy\": -1.6396078054371137,\n  \"model\": \"hubbard_dimer_half_filled_canonical\",\n  \"partition_function\": 1.2981719101952645,\n  \"phi_of_shell\": 10.0,\n  \"shell_m\": 4,\n  \"spin_correlation\": -0.44854355067681906,\n  \"spin_correlation_t\": -0.08752692910590586,\n  \"t_hop\": 1.0,\n  \"thermal_double_occupancy_total\": 0.3845843154522511,\n  \"thermal_energy\": -1.177480276428368,\n  \"thermal_spin_correlation\": -0.3120776052608934,\n  \"time\": 0.6283185307179586\n}\n",
+    "stderr_tail": ""
+  },
+  {
+    "path": "scripts/rapidity_first_atsp_oracle.py",
+    "exit_code": 0,
+    "seconds": 0.121,
+    "stdout_tail": "ase=0.712910 omega=1.000000 slots=24 cands=4 flips=22 best_cost=7.538179\n  shell=4 phase=0.891137 omega=1.000000 slots=24 cands=4 flips=19 best_cost=7.689570\n  shell=5 phase=1.069364 omega=1.000000 slots=24 cands=4 flips=22 best_cost=7.538179\n  shell=6 phase=1.247592 omega=1.000000 slots=24 cands=4 flips=22 best_cost=7.707150\n  shell=7 phase=1.425819 omega=1.000000 slots=24 cands=4 flips=22 best_cost=7.538179\nexact_optimal_cost=6.326496 gap(best/research/rapidity)=(1.211683, 1.729328, 1.729328)\n",
+    "stderr_tail": ""
+  },
+  {
+    "path": "scripts/rapidity_polar_probe.py",
+    "exit_code": 0,
+    "seconds": 0.046,
+    "stdout_tail": "\ncheck |exp(i\u03b8)|\u22481   : True\noctant lock frac    : 0.118\noctant peak frac    : 0.765\npeak bins (8/16/24/32): 1/3/5/7\noutput              : data/rapidity_polar_probe.json\npreview (m, angle, inferred d, tau(m), deltaE_selected, ramanujan_imprint):\n    0, 0.000000, None, 0, 6.000000, 0.003361\n    1, 0.740220, 8, 1, 4.247665, 0.019037\n    2, 1.043463, 6, 2, 3.318335, 0.050193\n    3, 1.177198, 5, 2, 2.747665, 0.098516\n    4, 1.249554, 5, 3, 2.358795, 0.165182\n    5, 1.294400, 5, 2, 2.075056, 0.251099\n",
+    "stderr_tail": ""
+  },
+  {
+    "path": "scripts/rationalize_active_lie_closure_data.py",
+    "exit_code": 0,
+    "seconds": 0.08,
+    "stdout_tail": "Archived 29 files to /home/jr/Repos/HQIV_LEAN/Hqiv/ArchivedFloatLieClosureData\nRewrote active closure data files with rational literals.\n",
+    "stderr_tail": ""
+  },
+  {
+    "path": "scripts/run_bulk_equivalent.py",
+    "exit_code": 0,
+    "seconds": 0.013,
+    "stdout_tail": "e_integral=1.000000  omega_k_partial=3.604340e-03  eta_partial=2.243518e-10\n  n= 10  curvature_integral=4.544275  omega_k_partial=1.637911e-02  eta_partial=1.019516e-09\n  n=100  curvature_integral=11.519763  omega_k_partial=4.152115e-02  eta_partial=2.584480e-09\n  n=500  curvature_integral=18.339268  omega_k_partial=6.610096e-02  eta_partial=4.114448e-09\n\nResult (curvature integral at reference horizon): 2.7189440994029224\nResult (omega_k at reference): 0.0098\nResult (eta at reference): 6.1e-10\n",
+    "stderr_tail": ""
+  },
+  {
+    "path": "scripts/run_fano_to_peak_pipeline.py",
+    "exit_code": 2,
+    "seconds": 0.046,
+    "stdout_tail": "",
+    "stderr_tail": "usage: run_fano_to_peak_pipeline.py [-h] --input INPUT\n                                    [--fft-report FFT_REPORT]\n                                    [--peak-input PEAK_INPUT]\n                                    [--peak-witness PEAK_WITNESS]\n                                    [--max-decay-slope MAX_DECAY_SLOPE]\n                                    [--min-points MIN_POINTS] [--N N]\n                                    [--candidate-mode {auto,last}]\nrun_fano_to_peak_pipeline.py: error: the following arguments are required: --input\n"
+  },
+  {
+    "path": "scripts/run_tsplib_atsp_named.py",
+    "exit_code": 0,
+    "seconds": 0.046,
+    "stdout_tail": "instance,n,solver_cost,best_known,ratio_vs_best_known,envelope_1_plus_n_pow_1_over_n,under_envelope,unique_sampled,coverage_ratio\n",
+    "stderr_tail": ""
+  },
+  {
+    "path": "scripts/scan_factor_grok_semiprimes.py",
+    "exit_code": -124,
+    "seconds": 30.032,
+    "stdout_tail": "",
+    "stderr_tail": "TIMEOUT after 30s"
+  },
+  {
+    "path": "scripts/search_slice_defect_peak.py",
+    "exit_code": 2,
+    "seconds": 0.045,
+    "stdout_tail": "",
+    "stderr_tail": "usage: search_slice_defect_peak.py [-h] --input INPUT [--output OUTPUT]\nsearch_slice_defect_peak.py: error: the following arguments are required: --input\n"
+  },
+  {
+    "path": "scripts/self_clock_rapidity_update.py",
+    "exit_code": 0,
+    "seconds": 0.012,
+    "stdout_tail": "self_clock_rapidity_update round-trip OK\n",
+    "stderr_tail": ""
+  },
+  {
+    "path": "scripts/shor_angle_period_factorization.py",
+    "exit_code": 2,
+    "seconds": 0.042,
+    "stdout_tail": "",
+    "stderr_tail": "usage: shor_angle_period_factorization.py [-h] [--max-steps MAX_STEPS]\n                                          [--max-seconds MAX_SECONDS]\n                                          [--prime-factorization]\n                                          [--factor-max-seconds-per-node FACTOR_MAX_SECONDS_PER_NODE]\n                                          [--json]\n                                          n\nshor_angle_period_factorization.py: error: the following arguments are required: n\n"
+  },
+  {
+    "path": "scripts/test_bonded_horizon_casimir_float.py",
+    "exit_code": 0,
+    "seconds": 0.089,
+    "stdout_tail": "",
+    "stderr_tail": "..\n----------------------------------------------------------------------\nRan 2 tests in 0.015s\n\nOK\n"
+  },
+  {
+    "path": "scripts/test_euclidean_factor_peel_enhancements.py",
+    "exit_code": 0,
+    "seconds": 0.068,
+    "stdout_tail": "",
+    "stderr_tail": ".....\n----------------------------------------------------------------------\nRan 5 tests in 0.000s\n\nOK\n"
+  },
+  {
+    "path": "scripts/test_factor_from_curvature.py",
+    "exit_code": 0,
+    "seconds": 0.076,
+    "stdout_tail": "",
+    "stderr_tail": ".............\n----------------------------------------------------------------------\nRan 13 tests in 0.024s\n\nOK\n"
+  },
+  {
+    "path": "scripts/test_factor_grok.py",
+    "exit_code": 0,
+    "seconds": 0.096,
+    "stdout_tail": "",
+    "stderr_tail": ".....\n----------------------------------------------------------------------\nRan 5 tests in 0.004s\n\nOK\n"
+  },
+  {
+    "path": "scripts/test_fator_grok.py",
+    "exit_code": 0,
+    "seconds": 18.135,
+    "stdout_tail": "",
+    "stderr_tail": "..........\n----------------------------------------------------------------------\nRan 10 tests in 18.065s\n\nOK\n"
+  },
+  {
+    "path": "scripts/test_fluid_f2_chart_alignment.py",
+    "exit_code": 0,
+    "seconds": 0.047,
+    "stdout_tail": "",
+    "stderr_tail": "...\n----------------------------------------------------------------------\nRan 3 tests in 0.000s\n\nOK\n"
+  },
+  {
+    "path": "scripts/test_fragment_aware_bonded_horizon.py",
+    "exit_code": 0,
+    "seconds": 0.054,
+    "stdout_tail": "",
+    "stderr_tail": "..\n----------------------------------------------------------------------\nRan 2 tests in 0.006s\n\nOK\n"
+  },
+  {
+    "path": "scripts/test_hqiv_geometric_3sat_demo.py",
+    "exit_code": 0,
+    "seconds": 0.082,
+    "stdout_tail": ".013  test_assignment_from_patch_matches_bruteforce_order\n      0.047  test_moire_checker_finds_sat_on_patch_when_small\n      0.029  test_golden_moire_checker_unsat_x_and_not_x\n      0.022  test_golden_moire_checker_sat_single_positive_clause\n      0.004  test_literal_and_clause_products\n      0.093  test_moire_sine_factor_matches_sin_of_phase_plus_theta\n      0.015  test_fourier_peak_correlation_matches_lean_phasor_sum\n      0.008  test_kernel_harmonic_matches_lean_character\n     11.181  TOTAL\n",
+    "stderr_tail": ""
+  },
+  {
+    "path": "scripts/test_hqiv_geometric_3sat_heuristics.py",
+    "exit_code": 0,
+    "seconds": 0.163,
+    "stdout_tail": "hqiv_geometric_3sat_heuristics: OK (89.39 ms total)\n",
+    "stderr_tail": ""
+  },
+  {
+    "path": "scripts/test_hqiv_geometric_3sat_optional_omega_trial_div.py",
+    "exit_code": 0,
+    "seconds": 0.07,
+    "stdout_tail": "optional omega trial-div check: OK\n",
+    "stderr_tail": ""
+  },
+  {
+    "path": "scripts/test_hqiv_satcomp_benchmark.py",
+    "exit_code": 0,
+    "seconds": 0.091,
+    "stdout_tail": "ok\n",
+    "stderr_tail": ""
+  },
+  {
+    "path": "scripts/test_integer_lattice_shell_count8.py",
+    "exit_code": 0,
+    "seconds": 0.364,
+    "stdout_tail": "m=0  r8=1\nm=1  r8=16\nm=2  r8=112\nm=3  r8=448\nm=4  r8=1136\nm=5  r8=2016\n",
+    "stderr_tail": ""
+  },
+  {
+    "path": "scripts/test_mgf3_semiprimes.py",
+    "exit_code": -124,
+    "seconds": 30.038,
+    "stdout_tail": "",
+    "stderr_tail": "TIMEOUT after 30s"
+  },
+  {
+    "path": "scripts/test_mgf4_semiprimes.py",
+    "exit_code": 1,
+    "seconds": 0.324,
+    "stdout_tail": "",
+    "stderr_tail": "Traceback (most recent call last):\n  File \"/home/jr/Repos/HQIV_LEAN/scripts/test_mgf4_semiprimes.py\", line 113, in <module>\n    main()\n    ~~~~^^\n  File \"/home/jr/Repos/HQIV_LEAN/scripts/test_mgf4_semiprimes.py\", line 77, in main\n    mgf4 = load_factorizer()\n  File \"/home/jr/Repos/HQIV_LEAN/scripts/test_mgf4_semiprimes.py\", line 27, in load_factorizer\n    spec.loader.exec_module(mod)\n    ~~~~~~~~~~~~~~~~~~~~~~~^^^^^\n  File \"<frozen importlib._bootstrap_external>\", line 755, in exec_module\n  File \"<frozen importlib._bootstrap_external>\", line 892, in get_code\n  File \"<frozen importlib._bootstrap_external>\", line 950, in get_data\nFileNotFoundError: [Errno 2] No such file or directory: '/home/jr/Repos/HQIV_LEAN/scripts/monolithic_geometric_factorizer4.py'\n"
+  },
+  {
+    "path": "scripts/test_nuclear_torus_casimir_float.py",
+    "exit_code": 0,
+    "seconds": 0.06,
+    "stdout_tail": "",
+    "stderr_tail": "...\n----------------------------------------------------------------------\nRan 3 tests in 0.017s\n\nOK\n"
+  },
+  {
+    "path": "scripts/test_octonion_sphere_construction.py",
+    "exit_code": 0,
+    "seconds": 0.012,
+    "stdout_tail": "Octonion / R^8 sphere construction \u2014 numeric witnesses\n  m = 143, r = sqrt(m) = 11.958261\n  V8(r) = pi^4/24 * r^8 = 1.697198e+09\n  A7(r) = pi^4/3 * r^7 = 1.135414e+09\n  finite-diff dV8/dr \u2248 1.135414e+09 (tol 1e-05)\n  lattice vector (9, 7, 3, 2, 0, 0, 0, 0) has sum of squares = 143\n  double-unwrap phases (rad): phi1=6.071730, phi2=1.167389\nOK\n",
+    "stderr_tail": ""
+  },
+  {
+    "path": "scripts/test_qm_finite_tensor_toy.py",
+    "exit_code": 0,
+    "seconds": 0.139,
+    "stdout_tail": "ok\n",
+    "stderr_tail": ""
+  },
+  {
+    "path": "scripts/test_qm_general_finite_core.py",
+    "exit_code": 0,
+    "seconds": 0.161,
+    "stdout_tail": "ok\n",
+    "stderr_tail": ""
+  },
+  {
+    "path": "scripts/test_qm_hubbard_dimer.py",
+    "exit_code": 0,
+    "seconds": 0.184,
+    "stdout_tail": "ok\n",
+    "stderr_tail": ""
+  },
+  {
+    "path": "scripts/test_qm_hubbard_dimer_half_filled.py",
+    "exit_code": 0,
+    "seconds": 0.161,
+    "stdout_tail": "ok\n",
+    "stderr_tail": ""
+  },
+  {
+    "path": "scripts/test_zk_export_witness.py",
+    "exit_code": 1,
+    "seconds": 0.109,
+    "stdout_tail": "",
+    "stderr_tail": "Traceback (most recent call last):\n  File \"/home/jr/Repos/HQIV_LEAN/scripts/test_zk_export_witness.py\", line 15, in <module>\n    import export_witness as ez  # noqa: E402\n    ^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/jr/Repos/HQIV_LEAN/scripts/zk_factor_steps/export_witness.py\", line 44, in <module>\n    DEFAULT_MAX_STEPS = ffc.MAX_PRIME_SIEVE_BOUND\n                        ^^^^^^^^^^^^^^^^^^^^^^^^^\nAttributeError: module 'factor_from_curvature' has no attribute 'MAX_PRIME_SIEVE_BOUND'\n"
+  },
+  {
+    "path": "scripts/universal_dynamics_equations.py",
+    "exit_code": 0,
+    "seconds": 0.045,
+    "stdout_tail": "4788332,\n          \"lapse\": 1.0981463530224826,\n          \"m\": 24,\n          \"omega_state\": 1.1257690486778302,\n          \"omega_target\": 2.501637728592757,\n          \"phase_mismatch\": 0.1127448616798659,\n          \"phase_step\": 6.9915821655465145,\n          \"rindler_support\": 5.800000000000001,\n          \"spin_stat_term\": 0.28284271247600784,\n          \"temperature\": 0.04,\n          \"uncertainty_term\": 0.103806849817166,\n          \"width_gamma\": 0.5484081654057571\n        }\n      ]\n    }\n  ]\n}\n",
+    "stderr_tail": ""
+  }
+]

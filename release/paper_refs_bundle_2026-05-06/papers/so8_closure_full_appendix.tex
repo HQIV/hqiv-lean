@@ -1,0 +1,78 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath,amssymb}
+\usepackage{hyperref}
+\usepackage{fancyvrb}
+
+% Same Zenodo deposit as the companion manuscript; replace placeholder DOI at publication.
+\newcommand{\PaperZenodoDoi}{10.5281/zenodo.XXXXXXXX}
+\newcommand{\PaperArtifactBundleZip}{\path{paper_refs_bundle_2026-05-06.zip}}
+\newcommand{\PaperArtifactBundleDir}{\path{paper_refs_bundle_2026-05-06}}
+\newcommand{\PaperZenodoDeposit}{\href{https://doi.org/\PaperZenodoDoi}{\texttt{doi:\PaperZenodoDoi}}}
+% Local mirror for inline \lstinputlisting{} when compiling from \texttt{papers/} (repository checkout).
+% If you run \LaTeX{} from the repository root instead, set this to \texttt{release/paper\_refs\_bundle\_2026-05-06}.
+\newcommand{\ArtifactRoot}{../release/paper_refs_bundle_2026-05-06}
+
+\title{Appendix: Full \texorpdfstring{$\mathfrak{so}(8)$}{so(8)} Closure Artifact Bundle}
+\author{Steven Ettinger Jr\\\textit{Independent Researcher}\\\texttt{steven@disregardfiat.tech}}
+\date{\today}
+
+\newcommand{\lstinputlisting}[1]{%
+  \VerbatimInput[fontsize=\scriptsize,frame=single]{#1}%
+}
+
+\begin{document}
+\maketitle
+
+\input{include/patch_theory_messaging.tex}
+
+\section*{Scope}
+This standalone appendix is intentionally minimal and contains only the symbolic
+proof-object pipeline and artifacts (exact rational certificates). It omits the
+full Lean file dump.
+The authoritative frozen copy of these files (and the companion Lean modules cited in the main manuscript) is the archive \PaperArtifactBundleZip, deposited on the \emph{same} Zenodo record as the paper: \PaperZenodoDeposit.
+After unpacking, paths below are relative to \PaperArtifactBundleDir/ (see \path{MANIFEST.json}).
+
+\section*{Current Lean build split}
+The repository currently exposes two SO(8)-related build paths:
+\begin{itemize}
+\item \texttt{lake build HQIVPaperClaims}: lightweight manuscript target, using
+the symbolic interface module \path{Hqiv/SO8ClosureSymbolic.lean};
+\item \texttt{lake build HQIVSO8Closure}: full certified matrix-closure target
+(\path{Hqiv/GeneratorsLieClosureData*.lean}, \path{Hqiv/GeneratorsLieClosure.lean},
+\path{Hqiv/Algebra/SO8ClosureAbstract.lean}).
+\end{itemize}
+Both paths and their referenced files are included in \PaperArtifactBundleZip{}.
+
+\section*{Exact Symbolic Certificate (New)}
+
+\subsection*{Generator script}
+Download \PaperArtifactBundleZip{} from \PaperZenodoDeposit, unpack, \texttt{cd} into \PaperArtifactBundleDir/, then run:
+\begin{quote}\ttfamily\small
+python3 scripts/generate\_symbolic\_lie\_closure\_certificate.py
+\end{quote}
+This script computes a rank-28 closure basis and all bracket coefficients exactly
+as rational numbers, and writes:
+\begin{quote}\ttfamily\small
+artifacts/so8\_symbolic\_certificate.json
+\end{quote}
+
+\subsection*{\texttt{scripts/generate\_symbolic\_lie\_closure\_certificate.py}}
+\lstinputlisting{\ArtifactRoot/scripts/generate_symbolic_lie_closure_certificate.py}
+
+\subsection*{\texttt{artifacts/so8\_symbolic\_certificate.json} (header excerpt)}
+\VerbatimInput[fontsize=\scriptsize,frame=single,firstline=1,lastline=120]{\ArtifactRoot/artifacts/so8_symbolic_certificate.json}
+
+\section*{Toy Model Certificate: \texorpdfstring{$\mathfrak{so}(3)+\Delta_4\to\mathfrak{so}(4)$}{so(3)+Delta4 to so(4)}}
+
+This compact pedagogical artifact mirrors the exact-rational certificate pipeline
+in the smallest nontrivial closure setting.
+
+\subsection*{\texttt{scripts/generate\_symbolic\_so4\_certificate.py}}
+\lstinputlisting{\ArtifactRoot/scripts/generate_symbolic_so4_certificate.py}
+
+\subsection*{\texttt{artifacts/so4\_symbolic\_certificate.json}}
+\VerbatimInput[fontsize=\scriptsize,frame=single,firstline=1,lastline=120]{\ArtifactRoot/artifacts/so4_symbolic_certificate.json}
+
+\end{document}

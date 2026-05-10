@@ -24,6 +24,15 @@ def digitalEvolution : List (DigitalTimeStep L) → DiscreteState L ≃ Discrete
   | [] => Equiv.refl _
   | h :: t => h.toEquiv.trans (digitalEvolution t)
 
+/-- Concatenating gate lists composes their digital evolutions (first list applied first). -/
+theorem digitalEvolution_append (xs ys : List (DigitalTimeStep L)) :
+    digitalEvolution (xs ++ ys) = (digitalEvolution xs).trans (digitalEvolution ys) := by
+  induction xs with
+  | nil =>
+      simp [digitalEvolution]
+  | cons a xs ih =>
+      simp [digitalEvolution, ← ih, Equiv.trans_assoc]
+
 theorem digitalEvolution_preserves_ip (steps : List (DigitalTimeStep L)) (f g : DiscreteState L) :
     discreteIp (digitalEvolution steps f) (digitalEvolution steps g) = discreteIp f g := by
   induction steps generalizing f g with

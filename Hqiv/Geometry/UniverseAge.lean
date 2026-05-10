@@ -195,9 +195,7 @@ theorem age_apparent_Gyr_three_sigfigs : age_apparent_Gyr_paper = 13.8 := rfl
 
 /-- Proton mass central value is positive (derived witness). -/
 theorem m_proton_derived_pos : 0 < m_proton_derived_MeV := by
-  unfold m_proton_derived_MeV derivedProtonMass sharedBindingEnergy emExternalContribution
-  -- derivedProtonMass = nucleonSharedBinding_MeV - emBlockShift_MeV
-  norm_num [emBlockShift_MeV, nucleonSharedBinding_MeV]
+  simpa [m_proton_derived_MeV] using derivedProtonMass_pos
 
 /-- **Years per decade (for docstring):** 10. Used only to state "one sigfig in ~2–4 decades". -/
 def yearsPerDecade : ℕ := 10

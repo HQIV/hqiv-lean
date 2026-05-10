@@ -1,0 +1,21 @@
+{
+  "rows": [
+    {
+      "n": 12,
+      "oracleCost": 100.0,
+      "seedCost": 100.000000000001,
+      "optimalCost": 100.0,
+      "tensorResidualErr": 20.501258426299522,
+      "rapidityErr": 20.501258426299522,
+      "axisErr": 20.501258426299522,
+      "rhoT": 0.4100251685259904,
+      "rhoR": 0.4100251685259904,
+      "rhoA": 0.4100251685259904,
+      "note": "synthetic degenerate-ish demo; tighten for real oracle runs",
+      "valid": true,
+      "validReason": "ok"
+    }
+  ],
+  "validCount": 1,
+  "total": 1
+}

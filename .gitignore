@@ -1,54 +1,44 @@
-# Accidental copy of `.git/` metadata — never commit
-.git_disabled/
-
-.venv/
-/.lake
-HQIV
-hqvmpy
-PROtien
-
-# Local doc tooling (Verso etc.); tree is huge — not versioned here.
-docbuild/
-
-# Nested Lake build cache for the standalone generators package.
+# Lake / Lean 4 (primary build products live under .lake)
+.lake/
+**/.lake/
 HQIVGenerators/.lake/
 
-# Stray editor/build dumps at repo root (real sources live under Hqiv/).
-/Mathlib
-/Hqiv.Geometry.AuxiliaryField
-/Hqiv.Geometry.OctonionicLightCone
+# API / Verso / local doc build trees
+docbuild/
 
-# Archive and scratch — not part of default lake targets (see AGENTS/ASSUMPTIONS.md).
-archive/
-scratch/
-tmp_*.lean
+# LaTeX auxiliary and sync outputs
+paper/*.aux
+paper/*.bbl
+paper/*.blg
+paper/*.log
+paper/*.out
+paper/*.toc
+paper/*.fdb_latexmk
+paper/*.fls
+paper/*.synctex.gz
+papers/*.aux
+papers/*.bbl
+papers/*.blg
+papers/*.log
+papers/*.out
+papers/*.toc
+papers/*.fdb_latexmk
+papers/*.fls
+papers/*.synctex.gz
 
-# Extra local venvs (e.g. SAT / tooling experiments)
-.venv_sat/
+# Local Python virtual environments (not portable; keep out of git)
+.venv/
+.venv_*/
 
-# Root scratch Lean probes (not library modules)
-_check_name.lean
-_scratch_check.lean
+# Exceeds GitHub's 100MB per-file limit; keep locally or use Git LFS
+data/sat2026_bench/timed_unbounded/who_indeed.csv
 
-# Agent notes: only ASSUMPTIONS + THEOREMS are versioned
-AGENTS/*
-!AGENTS/ASSUMPTIONS.md
-!AGENTS/THEOREMS.md
+# Python bytecode from running repository scripts
+**/__pycache__/
+*.pyc
+*.pyo
 
-# Generated / bench data — keep checked-in witness JSON only
-data/*
-!data/hqiv_witnesses.json
+# SAIR Equational Theories Stage 2 (clone locally to run judge / harness against solver)
+external/equational-theories-lean-stage2/
 
-# scripts: minimal whitelist (build, CI docs, witnesses, Lie-regeneration, Alectryon)
-scripts/*
-!scripts/build.sh
-!scripts/build_api_docs.sh
-!scripts/docgen_metadata.py
-!scripts/regenerate_hqiv_witnesses.sh
-!scripts/export_witnesses.lean
-!scripts/alectryon.sh
-!scripts/print_lie_bracket_closure.py
-!scripts/print_lean_generators.py
-!scripts/print_linear_independence.py
-!scripts/print_lean_octonion_L.py
-scripts/__pycache__/
+scripts/equational_stage2/__pycache__/

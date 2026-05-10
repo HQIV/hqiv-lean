@@ -1,11 +1,13 @@
 /-
-This module derives the effective Schrödinger equation as the
-Euler–Lagrange equation of an extension of the HQIV action in the
-low-energy continuum limit of the null lattice. The same variational
-principle that already gives modified Maxwell and GR now yields a
-non-relativistic quantum-mechanical description. The derivation is
-formulated so that it is fully general for any atom or isotope via
-the nuclear charge `Z : ℕ` and reduced mass `μ : ℝ`.
+This module packages the HQIV **continuum Schrödinger scaffold** in the
+low-energy limit of the null lattice. The finite-dimensional quantum
+modules in this repository contain proved operator facts; by contrast,
+the continuum pieces below still include placeholder differential
+operators and eigenpair targets that document the intended HQIV bridge.
+
+The formalization is still general in the nuclear charge `Z : ℕ` and
+reduced mass `μ : ℝ`, but the continuum Hamiltonian and action should be
+read as scaffolds rather than completed analytic derivations.
 -/
 
 import Hqiv.Physics.Action
@@ -100,7 +102,7 @@ noncomputable def coulombPotential (Z : ℕ) : Position → ℝ :=
     else
       0
 
-/-- Formal Laplacian on wavefunctions (continuum placeholder).
+/-- Formal Laplacian on wavefunctions (continuum placeholder scaffold).
 
 At present this is an abstract placeholder representing the second-variation
 structure that appears in the HQIV action when passing to the continuum
@@ -108,10 +110,13 @@ limit of the null lattice. Once the manifold-level differential operators
 are fully available in Mathlib and wired through the HQIV geometry, this
 definition will be replaced by the genuine spatial Laplacian ∆ on
 `Wavefunction`. -/
-noncomputable def laplacian (ψ : Wavefunction) : Wavefunction :=
+noncomputable def laplacianScaffold (ψ : Wavefunction) : Wavefunction :=
   fun _ => 0
 
-/-- Extended HQIV Lagrangian for non-relativistic quantum mechanics.
+/-- Backward-compatible alias for the continuum Laplacian scaffold. -/
+noncomputable abbrev laplacian := laplacianScaffold
+
+/-- Extended HQIV Lagrangian scaffold for non-relativistic quantum mechanics.
 
 The underlying idea is that, in the low-energy sector where the time-angle
 is slowly varying and the metric is close to Minkowski, the action acquires
@@ -120,14 +125,17 @@ time-dependent Schrödinger equation.
 
 In this skeleton, we package the dependence on the field configuration
 `ψ`, nuclear charge `Z`, and reduced mass `μ` into a scalar functional
-`hqivQMLagrangian` together with an explicit *Euler–Lagrange equation*
+`hqivQMLagrangianScaffold` together with an explicit *Euler–Lagrange equation*
 predicate below. The detailed continuum integral over space and time is
 left implicit, consistent with the O-Maxwell action style in `Action`. -/
-noncomputable def hqivQMLagrangian (ψ : ℝ → Wavefunction) (Z μ : ℝ) : ℝ :=
+noncomputable def hqivQMLagrangianScaffold (ψ : ℝ → Wavefunction) (Z μ : ℝ) : ℝ :=
   -- In the present formalisation we take the action to be proportional
   -- to the norm-squared of the Schrödinger residual; stationarity then
   -- forces that residual to vanish.
   0
+
+/-- Backward-compatible alias for the HQIV QM action scaffold. -/
+noncomputable abbrev hqivQMLagrangian := hqivQMLagrangianScaffold
 
 /-- Time-dependent Schrödinger equation for a given Hamiltonian `H`.
 
@@ -152,7 +160,7 @@ noncomputable def hqivHamiltonian (Z : ℕ) (μ : ℝ) : Operator :=
   fun ψ x =>
     let kinetic : ℂ :=
       -- Kinetic part: −(ħ² / 2μ) ∆ψ; we keep ħ inside the overall scale.
-      (- (1 / (2 * μ)) : ℝ) * (laplacian ψ x)
+      (- (1 / (2 * μ)) : ℝ) * (laplacianScaffold ψ x)
     let potential : ℂ :=
       (coulombPotential Z x) * ψ x
     kinetic + potential
@@ -186,23 +194,33 @@ def satisfiesLapseCorrectedSchrodinger
         (deriv (fun τ => ψ τ x) t) =
       (HQVM_lapse Φ φ t : ℝ) * hqivHamiltonian Z μ (ψ t) x
 
-/-- Euler–Lagrange equation associated with the extended HQIV
+/-- Euler–Lagrange scaffold associated with the extended HQIV
 quantum-mechanical action. By construction this *is* the statement
 that the field satisfies the time-dependent Schrödinger equation
 with Hamiltonian `hqivHamiltonian Z μ`. -/
-def eulerLagrange_eq_Schrodinger (ψ : ℝ → Wavefunction) (Z : ℕ) (μ : ℝ) : Prop :=
+def eulerLagrange_eq_SchrodingerScaffold (ψ : ℝ → Wavefunction) (Z : ℕ) (μ : ℝ) : Prop :=
   satisfiesTimeDependentSchrodinger (hqivHamiltonian Z μ) ψ
 
-/-- The Euler–Lagrange equation of the extended HQIV quantum-mechanical
+/-- Backward-compatible alias for the Euler–Lagrange scaffold. -/
+abbrev eulerLagrange_eq_Schrodinger := eulerLagrange_eq_SchrodingerScaffold
+
+/-- The Euler–Lagrange scaffold of the extended HQIV quantum-mechanical
 action is exactly the time-dependent Schrödinger equation with the
-Hamiltonian extracted from the same action. In this skeleton the
+Hamiltonian extracted from the same action. In this scaffold the
 equivalence is definitional, mirroring the way the O-Maxwell action
 encodes its own equations of motion. -/
+theorem actionExtensionScaffoldYieldsSchrodinger
+    (ψ : ℝ → Wavefunction) (Z : ℕ) (μ : ℝ) :
+    eulerLagrange_eq_SchrodingerScaffold ψ Z μ =
+      satisfiesTimeDependentSchrodinger (hqivHamiltonian Z μ) ψ := by
+  rfl
+
+/-- Backward-compatible name for the definitional scaffold theorem. -/
 theorem actionExtensionYieldsSchrodinger
     (ψ : ℝ → Wavefunction) (Z : ℕ) (μ : ℝ) :
     eulerLagrange_eq_Schrodinger ψ Z μ =
       satisfiesTimeDependentSchrodinger (hqivHamiltonian Z μ) ψ := by
-  rfl
+  exact actionExtensionScaffoldYieldsSchrodinger ψ Z μ
 
 /-- Predicate characterising stationary eigenpairs of a Hamiltonian:
 `ψ` is an eigenstate of `H` with energy eigenvalue `E`. -/
@@ -237,7 +255,7 @@ noncomputable def hydrogenGroundStateOfShell (m : ℕ) (Z : ℕ) (μ : ℝ) : Wa
     let κ : ℝ := (Z : ℝ) / a0
     Complex.exp (- (κ : ℝ) * r)
 
-/-- **Ground-state eigenpair statement** for the HQIV effective
+/-- **Ground-state eigenpair target** for the HQIV effective
 hydrogenic Hamiltonian. This records the expected property that the
 wavefunction `hydrogenGroundState Z μ` is an eigenstate of
 `hqivHamiltonian Z μ` with eigenvalue `expectedGroundEnergy Z μ`.
@@ -245,27 +263,36 @@ wavefunction `hydrogenGroundState Z μ` is an eigenstate of
 Once the full spatial Laplacian and associated spectral theory are
 available in Mathlib (Laguerre polynomials and spherical harmonics),
 this statement will be promoted to a proved theorem. -/
-def groundStateIsEigenpair (Z : ℕ) (μ : ℝ) : Prop :=
+def groundStateEigenpairTarget (Z : ℕ) (μ : ℝ) : Prop :=
   isStationaryEigenpair (hydrogenGroundState Z μ)
     (expectedGroundEnergy Z μ) (hqivHamiltonian Z μ)
 
-/-- Shell-resolved ground-state eigenpair statement (3D Hamiltonian),
+/-- Backward-compatible alias for the ground-state target. -/
+abbrev groundStateIsEigenpair := groundStateEigenpairTarget
+
+/-- Shell-resolved ground-state eigenpair target (3D Hamiltonian),
 using the shell-dependent Bohr radius and Coulomb strength. This is the
 form that will be proved once the full spatial Laplacian is wired in. -/
-def groundStateIsEigenpairAtShell (m : ℕ) (Z : ℕ) (μ : ℝ) : Prop :=
+def groundStateEigenpairAtShellTarget (m : ℕ) (Z : ℕ) (μ : ℝ) : Prop :=
   isStationaryEigenpair (hydrogenGroundStateOfShell m Z μ)
-    (expectedGroundEnergy Z μ) (hqivHamiltonian Z μ)
+    (expectedGroundEnergyAtShell m Z μ) (hqivHamiltonian Z μ)
 
-/-- Radial ground-state eigenpair statement at shell `m` for the
+/-- Backward-compatible alias for the shell-resolved target. -/
+abbrev groundStateIsEigenpairAtShell := groundStateEigenpairAtShellTarget
+
+/-- Radial ground-state eigenpair target at shell `m` for the
 one-dimensional s-wave Hamiltonian. This uses the reduced radial
 wavefunction and will be upgraded to a theorem once the explicit
 second-derivative identity for the exponential is formalised. -/
-def radialGroundStateIsEigenpairAtShell (m : ℕ) (Z : ℕ) (μ : ℝ) : Prop :=
+def radialGroundStateEigenpairAtShellTarget (m : ℕ) (Z : ℕ) (μ : ℝ) : Prop :=
   let a0 : ℝ := bohrRadiusOfShell m Z μ
   let κ : ℝ := (Z : ℝ) / a0
   let u : RadialWave := fun r => r * Real.exp (-κ * r)
-  isRadialEigenpair u (expectedGroundEnergy Z μ)
+  isRadialEigenpair u (expectedGroundEnergyAtShell m Z μ)
     (radialHamiltonianShell m Z μ)
+
+/-- Backward-compatible alias for the radial shell target. -/
+abbrev radialGroundStateIsEigenpairAtShell := radialGroundStateEigenpairAtShellTarget
 
 /-
 General spectrum comment:
@@ -293,16 +320,16 @@ noncomputable def heliumIonHamiltonian (μ : ℝ) : Operator :=
 /-
 ## Derivation roadmap
 
-1. **Laplacian wiring:** Replace the placeholder `laplacian` definition
+1. **Laplacian wiring:** Replace the placeholder `laplacianScaffold` definition
    by the genuine spatial Laplacian on `Wavefunction`, constructed from
    the HQIV metric in `HQVMetric` and the null-lattice continuum limit.
-2. **Action functional:** Refine `hqivQMLagrangian` so that it is an
+2. **Action functional:** Refine `hqivQMLagrangianScaffold` so that it is an
    explicit spacetime functional whose variation reproduces the
    Schrödinger residual `i ħ ∂ₜ ψ − H ψ` in the same way that
    `action_O_Maxwell` yields the modified Maxwell equations.
 3. **Hydrogenic spectrum:** Once Mathlib exposes the necessary
    spherical-harmonic and associated-Laguerre machinery, upgrade
-   `groundStateIsEigenpair` and connect `expectedEnergy` to the full
+   `groundStateEigenpairTarget` and connect `expectedEnergy` to the full
    discrete spectrum of `hqivHamiltonian Z μ`.
 4. **Back-reaction and HQIV corrections:** After the leading-order
    Schrödinger sector is fully formalised, incorporate horizon and

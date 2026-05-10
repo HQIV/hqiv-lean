@@ -1,8 +1,9 @@
 import Hqiv.Geometry.AuxiliaryField
 import Hqiv.Geometry.HQVMetric
 import Hqiv.Geometry.OctonionicLightCone
+import Hqiv.Physics.OMaxwellAlgebraSeed
 import Mathlib.Geometry.Manifold.VectorBundle.Basic
-import Mathlib.Analysis.SpecialFunctions.Trigonometric.Arctan
+import Mathlib.Order.Monotone.Basic
 
 namespace Hqiv
 
@@ -28,13 +29,21 @@ Maxwell's 3D equations** by holding one axis fixed.
 - **Placeholder (API only):** `grad_φ`, `div_μ`, `g_rr`, `J_O` return constants; continuum
   calculus on the same `Fin 4` index convention lives in `Hqiv.Geometry.ContinuumSpacetimeChart`
   (`coordsGradientComponents`, `coordsDivergence`). The **φ-gradient slot** is wired to
-  `coordsGradientComponents` in `Hqiv.Physics.ContinuumOmaxwellClosure` (`emergentMaxwellInhomogeneous_O_coordsField`,
-  matching `EL_O_general_coordsField` / `L_O_phi_coupling_coords` on the action side). 3D div E / curl B terms TBD.
+`coordsGradientComponents` in `Hqiv.Physics.ContinuumOmaxwellClosure` (`emergentMaxwellInhomogeneous_O_coordsField`,
+  matching `EL_O_general_coordsField` / `L_O_phi_coupling_coords` on the action side). The
+  algebra-first seed path in `Hqiv.Physics.OMaxwellAlgebraSeed` now packages the `G₂ ∪ {Δ}` seed
+  set, the `so(8)` H-block witness, and the rapidity/tipping slot before any `phi_of_T` projection.
+  The promoted operator path in `Hqiv.Physics.PromotedOMaxwell` then replaces the dead LHS with the
+  identity-metric specialization of the metric-aware divergence surrogate from `CovariantSolution`.
+  3D div E / curl B terms remain TBD.
 
 **Plasma-facing note:** `J_O` is the natural hook for collective currents; filling
 it in (and the manifold placeholders) is how dense plasma couples back to the same
 φ ladder used in fermion mass ladders (`ChargedLeptonResonance`, `QuarkMetaResonance`).
 See README “Roadmap: plasmas, modified inertia, and fermion ladders”.
+
+For hyperspherical **scalar** spectra aligned with this O → H split (`S³` for the quaternion
+sector, `S⁴` as the next shell), see `Hqiv.Geometry.QuaternionMaxwellS3OMaxwellS4Spectral`.
 -/
 
 /-- Placeholder for (∇φ)_ν; full manifold version later. -/
@@ -61,7 +70,7 @@ The φ-correction is unchanged; plasma or other collective sources are injected 
 noncomputable def emergentMaxwellInhomogeneous_O_general (J_src : Fin 8 → Fin 4 → ℝ) (a : Fin 8) (ν : Fin 4) :
     ℝ :=
   let _divTerm := 0.0   -- placeholder for ∇_μ (√-g F_O^{a μν}) in O
-  let phiCorrection := alpha * (Real.log (phi_of_T (T ν.val))) * (grad_φ ν)
+  let phiCorrection := alpha * algebraicMaxwellCouplingLog ν * (grad_φ ν)
   0.0 - 4 * Real.pi * J_src a ν - phiCorrection
 
 /-- **Emergent inhomogeneous equation in O** with the default placeholder current `J_O`. -/
@@ -82,11 +91,11 @@ noncomputable def classicMaxwellInhomogeneous (ν : Fin 4) : ℝ :=
     and the metric is flat.** -/
 theorem O_reduces_to_classic_Maxwell_in_H (ν : Fin 4)
     (_h_flat : ∀ x, g_rr x = 1)
-    (h_phi_const : ∀ x, phi_of_T x = phiTemperatureCoeff)
+    (_h_phi_const : ∀ x, phi_of_T x = phiTemperatureCoeff)
     (h_grad_zero : ∀ ν, grad_φ ν = 0) :
     emergentMaxwellInHomogeneous_H ν = classicMaxwellInhomogeneous ν := by
   unfold emergentMaxwellInHomogeneous_H classicMaxwellInhomogeneous
-  simp only [emergentMaxwellInhomogeneous_O, emergentMaxwellInhomogeneous_O_general, h_phi_const, h_grad_zero,
+  simp only [emergentMaxwellInhomogeneous_O, emergentMaxwellInhomogeneous_O_general, h_grad_zero,
     J_O, mul_zero, sub_zero]
   ring_nf
   norm_num
@@ -130,59 +139,23 @@ theorem classic_Maxwell_in_H_under_flat_limit (ν : Fin 4)
     emergentMaxwellInHomogeneous_H ν = classicMaxwellInhomogeneous ν :=
   O_reduces_to_classic_Maxwell_in_H ν g_rr_flat h_phi_const h_grad_zero
 
+/-- In the rest / non-relativistic sanity limit, the algebraic rapidity seed vanishes and the
+    quaternionic `H`-sector still collapses to classic Maxwell on a flat constant-`φ` background. -/
+theorem algebraic_nonrelativistic_limit_reduces_to_classic_Maxwell_in_H (ν : Fin 4)
+    (h_phi_const : ∀ x, phi_of_T x = phiTemperatureCoeff)
+    (h_grad_zero : ∀ ν, grad_φ ν = 0) :
+    algebraicMaxwellRapiditySeed 0 = 0 ∧
+      emergentMaxwellInHomogeneous_H ν = classicMaxwellInhomogeneous ν := by
+  refine ⟨algebraicMaxwellRapiditySeed_zero, ?_⟩
+  exact classic_Maxwell_in_H_under_flat_limit ν h_phi_const h_grad_zero
+
 /-!
 ## Phase-horizon tipping angle (weak-force emergence)
 
-The time angle δθ′ in the HQVM lapse (HQVMetric.timeAngle) is the cumulative phase for
-interaction with newly unlocked horizon modes. When the **local electric energy** E′
-(modified Maxwell sector) is non-zero, it induces a **tipping angle** δθ′(E′) that
-rotates octonion components and flips weak-isospin — the geometric origin of the
-charged-current (V–A) interaction. No new gauge bosons; the "W" is a resummed tipped
-photon on the causal horizon. Follows from the two axioms: discrete light-cone
-combinatorics + informational-energy + entanglement monogamy.
-
-The factor π/2 in the tipping angle is **not** inserted by hand: it is the **quarter
-period** of the horizon phase. The time angle has period twoPi = 2π (HQVMetric);
-one quarter of that period is the natural scale for the electric field to "tilt" the
-phase before the next quadrant. So δθ′(E′) = arctan(E′) · (twoPi / 4), and
-horizonQuarterPeriod_eq_pi_div_two shows twoPi / 4 = π/2.
+The algebra-first seed layer in `Hqiv.Physics.OMaxwellAlgebraSeed` now owns the
+phase-horizon tipping angle `delta_theta_prime`, the quarter-period normalization, and
+the algebraic Maxwell projection slot. This file consumes those definitions when writing
+the emergent O-equation.
 -/
-
-/-- **Quarter period of the horizon phase.** The time angle δθ′ has period twoPi = 2π
-    (HQVMetric.timeAngle, spin conserved mod 2π). One quarter of that period is the
-    natural angular scale for the tipping: the electric field rotates the phase by
-    a fraction of the full period. This equals π/2 (proved in horizonQuarterPeriod_eq_pi_div_two). -/
-noncomputable def horizonQuarterPeriod : ℝ := twoPi / 4
-
-/-- **The quarter period equals π/2.** So the tipping scale is not an inserted constant;
-    it arises from the horizon phase period (twoPi = 2π) and the choice of quarter-turn. -/
-theorem horizonQuarterPeriod_eq_pi_div_two : horizonQuarterPeriod = Real.pi / 2 := by
-  unfold horizonQuarterPeriod twoPi
-  ring
-
-/-- **Phase-horizon tipping angle** δθ′(E′) from local electric energy E′.
-    δθ′(E′) = arctan(E′) · (quarter period) = arctan(E′) · (twoPi/4) = arctan(E′) · π/2.
-    The π/2 is thus derived from the horizon phase period, not inserted. When applied via
-    the tipping operator to a nucleon in V_nuc, it induces octonion rotations that
-    reproduce the V–A charged-current structure (Forces.weak_is_electric_tipping). -/
-noncomputable def delta_theta_prime (E' : ℝ) : ℝ := Real.arctan E' * horizonQuarterPeriod
-
-/-- **Tipping angle at zero field:** δθ′(0) = 0 (no tipping when E′ = 0). -/
-theorem tipping_delta_theta_zero : delta_theta_prime 0 = 0 := by
-  unfold delta_theta_prime
-  rw [Real.arctan_zero, zero_mul]
-
-/-- **Tipping angle bounded by (quarter period)².** |δθ′(E′)| < horizonQuarterPeriod² for all E′:
-    arctan lives in (-π/2, π/2), so |δθ′| = |arctan E′| · horizonQuarterPeriod < (π/2) · (π/2).
-    The bound is expressed in the same scale that defines the tipping (quarter period). -/
-theorem tipping_delta_theta_bounded (E' : ℝ) :
-    |delta_theta_prime E'| < horizonQuarterPeriod ^ 2 := by
-  unfold delta_theta_prime
-  rw [horizonQuarterPeriod_eq_pi_div_two]
-  have h₁ := Real.neg_pi_div_two_lt_arctan E'
-  have h₂ := Real.arctan_lt_pi_div_two E'
-  have hπ2 : 0 < Real.pi / 2 := div_pos Real.pi_pos (by norm_num)
-  rw [abs_mul, abs_of_pos hπ2, sq]
-  exact mul_lt_mul_of_pos_right (abs_lt.mpr ⟨by linarith, h₂⟩) hπ2
 
 end Hqiv

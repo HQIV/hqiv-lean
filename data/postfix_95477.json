@@ -1,0 +1,167 @@
+{
+  "inputs": {
+    "phi": 0.6,
+    "t": 1.25,
+    "m_min": 95477,
+    "m_max": 95477,
+    "dim_p": 2,
+    "curvature_model": "intrinsic_sphere",
+    "sphere_dim": 3,
+    "sparse_candidate_mode": "spiral_locked",
+    "sparse_allow_fallback": false,
+    "target_angle": null,
+    "angle_eps": 0.2,
+    "bidirectional": true
+  },
+  "constants": {
+    "horizon_quarter_period": 1.5707963267948966,
+    "pi_over_2": 1.5707963267948966,
+    "alpha": 0.6,
+    "curvature_norm_combinatorial": 484863.3748676012,
+    "curvature_norm_selected": 6.0,
+    "dim_weight_normalizer": 9116048484.0
+  },
+  "checks": {
+    "angle_zero_at_m0": true,
+    "horizon_quarter_period_equals_pi_over_2": true,
+    "unit_phase_magnitude_deviation_max": 0.0,
+    "unit_phase_magnitude_near_one": true
+  },
+  "aliasing_summary": {
+    "octant_counts": [
+      0,
+      0,
+      1,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "octant_weighted_counts": [
+      0.0,
+      0.0,
+      47.27994408037765,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "octant_peak_index": 2,
+    "octant_peak_fraction": 1.0,
+    "octant_peak_weighted_index": 2,
+    "octant_peak_weighted_fraction": 1.0,
+    "octant_lock_eps_deg": 5.0,
+    "octant_lock_hits": 0,
+    "octant_lock_fraction": 0.0,
+    "octant_lock_weighted_fraction": 0.0,
+    "peak_bin_by_sector_count": {
+      "8": 2,
+      "16": 4,
+      "24": 7,
+      "32": 9
+    },
+    "recovery_hint": "Recover aliased secondary peaks by increasing sector count (8->16->24->32), then tracking stable peak bins under weighting."
+  },
+  "points": [
+    {
+      "m": 95477.0,
+      "delta_theta_prime_m": 2.46738464818098,
+      "angle": 1.850538486135735,
+      "triplet_rule_valid_original": true,
+      "adjacent_shell_mod3": 95476.0,
+      "angle_adjacent": 1.8505384860064975,
+      "shell_even_anchor": 95478.0,
+      "shell_odd_multiple3_anchor": 95475.0,
+      "angle_even_anchor": 1.8505384862649696,
+      "angle_odd_multiple3_anchor": 1.8505384858772573,
+      "spiral_step_base_to_even": 1.2923440095846672e-10,
+      "spiral_step_even_to_odd_multiple3": -3.8771208465959717e-10,
+      "spiral_step_base_to_odd_multiple3": -2.5847768370113045e-10,
+      "local_spiral_theta": 5.034132662306966,
+      "ray8_scores": [
+        0.31622124620772296,
+        -0.447219742417339,
+        -0.9486854712953259,
+        -0.8944241175148225,
+        -0.3162212462077231,
+        0.44721974241733886,
+        0.9486854712953259,
+        0.8944241175148225
+      ],
+      "best_ray8_index": 6.0,
+      "best_ray8_angle": 4.71238898038469,
+      "spiral_target_divisor_spot": 178.0,
+      "factor_pair_ranking_top8": [
+        {
+          "a": 307,
+          "b": 311,
+          "pair_theta": 0.7918705649247438,
+          "ray_error_rad": 2.3626668917196403
+        },
+        {
+          "a": 1,
+          "b": 95477,
+          "pair_theta": 1.5707858530682404,
+          "ray_error_rad": 3.1415821798631374
+        }
+      ],
+      "factor_pair_orbit3_ranking_top8": [
+        {
+          "a": 307,
+          "b": 311,
+          "pair_theta": 0.7918705649247438,
+          "orbit_error_rad": 0.05347189259583107,
+          "orbit_branch": 1
+        },
+        {
+          "a": 1,
+          "b": 95477,
+          "pair_theta": 1.5707858530682404,
+          "orbit_error_rad": 0.7254433955476656,
+          "orbit_branch": 1
+        }
+      ],
+      "factor_pair_contains_11_17_any": false,
+      "factor_pair_contains_11_17_top8": false,
+      "sparse_pruned_candidates_checked": 3.0,
+      "sparse_candidate_mode": "spiral_locked",
+      "sparse_target_angle": null,
+      "sparse_target_angle_reverse": null,
+      "sparse_angle_eps": 0.2,
+      "sparse_bidirectional": true,
+      "sparse_filtered_out_by_angle": 0.0,
+      "sparse_guarantee_no_prune": false,
+      "sparse_fallback_scan_used": false,
+      "sparse_fallback_checked": 0.0,
+      "sparse_factor_pair_ranking_top8": [],
+      "sparse_factor_pair_contains_11_17_any": false,
+      "sparse_factor_pair_contains_11_17_top8": false,
+      "radius_shell_succ": 95478.0,
+      "radius_reciprocal": 1.047361695888058e-05,
+      "phase_argument_match": 1.850538486135735,
+      "exp_i_angle_re": -0.27610784021284335,
+      "exp_i_angle_im": 0.96112666208622,
+      "theta_mod_two_pi": 1.850538486135735,
+      "inferred_divisor_from_angle": 3,
+      "reconstructed_theta_from_divisor": 2.0943951023931953,
+      "angle_to_divisor_error_rad": 0.24385661625746025,
+      "inferred_divisor_from_angle_adjacent": 3,
+      "reconstructed_theta_from_divisor_adjacent": 2.0943951023931953,
+      "angle_to_divisor_error_rad_adjacent": 0.24385661638669776,
+      "divisor_count_tau_m": 4,
+      "curvature_density": 8.253200402252815e-05,
+      "shell_shape": 8.253200402252815e-05,
+      "deltaE_combinatorial": 40.01674600494944,
+      "deltaE_selected": 0.0004951920241351689,
+      "dim_shell_weight": 95478.0,
+      "ramanujan_dim_imprint": 47.27994408037765,
+      "phase_curvature_imprint": 0.00037139401810137667,
+      "spiral_succ_x": -26362.224367841856,
+      "spiral_succ_y": 91766.45144266811,
+      "spiral_rec_x": -2.891847757733125e-06,
+      "spiral_rec_y": 1.0066472507658519e-05
+    }
+  ]
+}

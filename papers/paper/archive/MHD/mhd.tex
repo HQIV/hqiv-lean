@@ -1,0 +1,148 @@
+% ARCHIVED (Mega Huge Deconstruction / patch SAT narrative). See paper/archive/README.md.
+% Moire Hurwitz Diophantine search — Lean-aligned narrative (HQIV_LEAN repository)
+% Build: cd paper/archive/MHD && pdflatex mhd.tex
+\documentclass[11pt,a4paper]{article}
+
+\usepackage{amsmath,amssymb,amsthm,mathtools,booktabs}
+\usepackage{microtype}
+\usepackage[hidelinks]{hyperref}
+\usepackage{xurl}
+\newcommand{\lean}[1]{\path{#1}}
+\usepackage[margin=1in]{geometry}
+\usepackage{array}
+\setlength{\emergencystretch}{3em}
+
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\title{Moire Hurwitz Diophantine Search\\\large Mega Huge Deconstruction:\\
+Moire--cusp search, arithmetic encoding, and Diophantine bookkeeping for structured witnesses}
+\author{Steven Ettinger Jr}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+This note maps the \textbf{formally proved} fragments of the HQIV Lean library that touch a
+\textbf{geometric SAT demo} pipeline (\texttt{scripts/hqiv\_geometric\_3sat\_demo.py}). The \textbf{only}
+supported \textbf{patch search geometry} in the Lean corpus is \textbf{one-dimensional} in the patch
+index~$j$: \textbf{moir\'e cumulative variation}, \textbf{cusp / threshold crossing}, and \textbf{binary
+search} (\lean{Hqiv/Algebra/MoireCuspBracket.lean}, \lean{Hqiv/Algebra/MoireToyThresholdSearch.lean}).
+Fourier correlations, $\Omega$-axis angles, and integer-shell embeddings feed the \textbf{same}
+ordered-index score. The acronym \textbf{MHD} is \textbf{Mega Huge Deconstruction}: an explicit inventory of proved logic, analytic hooks, and open encoding bridges---without conflating BST on a monotone trace with worst-case SAT over~$2^n$
+assignments.
+\end{abstract}
+
+\paragraph{Repository.}
+\url{https://github.com/disregardfiat/hqiv-lean}
+
+\paragraph{Related HQIV physics (magneto-fluid / O-Maxwell).}
+The acronym \textbf{MHD} in \emph{this} document means \textbf{Mega Huge Deconstruction} (patch SAT
+geometry), not magnetohydrodynamics. For the Lean \textbf{F2 chart hypothesis} tying continuum
+$\varphi_F$, $\dot F$, and \texttt{delta\_theta\_prime}$(E')$ to the modified fluid vacuum source
+\lean{hqivVacuumMomentumSource3}, see \path{../../HQIV_OMaxwell_fluid_chart.tex} and
+\path{../../../scripts/fluid_f2_chart_alignment.py}.
+
+\paragraph{Reader guide.}
+\textbf{Green (proved):} Lean identifiers cited inline.
+\textbf{Amber (scaffolds):} Fourier concentration bundles, encoding completeness for abstract~$P$.
+\textbf{Red (gap):} no theorem identifies moir\'e diagnostics with \texttt{CNFFormula.eval} in general.
+
+%--------------------------------------------------------------------
+\section{Introduction: patch search = moir\'e--cusp}
+
+Classical NP witnesses live in a huge discrete space. The HQIV pipeline separates:
+\begin{enumerate}
+  \item \textbf{Semantic SAT} (truth of a CNF).
+  \item \textbf{Ordered patch search} along $j\in\{0,\ldots,n_{\mathrm{patch}}-1\}$ using \textbf{monotone}
+        cumulative variation and BST --- the \textbf{moir\'e--cusp} layer.
+\end{enumerate}
+\textbf{No claim:} $\mathrm{P}=\mathrm{NP}$. \textbf{Claim in Lean:} the discrete search mechanics for
+the patch are \textbf{order-theoretic} (threshold crossings, least indices).
+
+\paragraph{``Hurwitz'' and ``Diophantine''.}
+Division-algebra / Hurwitz language may appear in other HQIV scaffolds
+(\lean{Hqiv/Physics/DivisionAlgebraZetaScaffold.lean}). \textbf{Diophantine} here means $\Omega$-style
+literal weights and shell integers (\lean{Hqiv/Logic/CNF.lean}), not Matiyasevich.
+
+%--------------------------------------------------------------------
+\section{Logic and assignment indexing (combinatorial layer)}
+\label{sec:logic}
+
+\lean{Hqiv/Logic/CNF.lean}: literals, clauses, evaluation, satisfiability, $\omega$-encoding weights.
+
+\lean{Hqiv/Logic/CNFPatchBridge.lean}: \texttt{assignmentFromPatchIndex}; \\
+\texttt{CNFFormula.satisfiable\_iff\_exists\_patch\_index} reindexes assignments by
+$j\in\mathrm{Fin}(2^n)$ (Python order). \textbf{This is reindexing, not a poly-time finder.}
+
+\lean{Hqiv/Logic/GeometricEncodingCompleteness.lean}: abstract null-pattern $P(\phi,k)$;
+\texttt{encodingCompleteness\_iff\_null\_globally\_implies\_unsat}; corollaries for ``all $k$ null
+$\Rightarrow$ UNSAT'' under an encoding-completeness hypothesis.
+
+%--------------------------------------------------------------------
+\section{Moir\'e--cusp: the formal patch search layer}
+\label{sec:cusp}
+
+\lean{Hqiv/Algebra/MoireCuspBracket.lean}: \texttt{moireCumulativeAbsVariation} (monotone in $j$),
+split lemmas, triangle / Gaussian-lens step on second differences.
+
+\lean{Hqiv/Algebra/MoireToyThresholdSearch.lean}: upward closure of ``$\mathrm{cum}[j]\ge T$'',
+existence of a least index above threshold --- the \textbf{BST} interface. \textbf{Explicit:} no link
+to SAT in this file.
+
+\lean{Hqiv/Algebra/MoireJerkSphereModeBridge.lean}: discrete jerk of a patch score; closed forms for
+sinusoid models; ties $\Omega$ to jerk factors when the score is the intrinsic-axis sinusoid. Module doc
+now states that \textbf{patch search} is the moir\'e--cusp story, not spatial vector search.
+
+\paragraph{Conclusion (proved).}
+Along the patch, the **search** object is **one-dimensional** and **order-theoretic** in~$j$; outer
+$k$-sweeps are indexed diagnostics (null vs non-null), not a replacement for semantic SAT.
+
+%--------------------------------------------------------------------
+\section{Analytic hooks: $\Omega$, $\pi/(2k)$, Fourier sums (supporting the 1D score)}
+\label{sec:hooks}
+
+\lean{Hqiv/Algebra/OctonionAxisAngles.lean}: \texttt{axisAngle}, \texttt{intrinsicShellAxisAngle},
+\texttt{two\_mul\_axisAngle\_eq\_pi\_div\_k}.
+
+\lean{Hqiv/Algebra/OctonionSphereFourierPatch.lean}: peak/side correlations, \texttt{KernelIsHarmonic},
+\texttt{FourierPatchConcentration}, discrete roots-of-unity sums. \textbf{Character orthogonality}
+here means Fourier / DFT orthogonality on $\mathbb{Z}/n\mathbb{Z}$ --- not the removed ray geometry.
+
+These supply **phase and spectral** structure for the **same** real score sampled along $j$. They do
+\textbf{not} assert a second independent ``search direction'' in~$\mathbb{R}^8$ for the patch pipeline.
+
+%--------------------------------------------------------------------
+\section{Synthesis and gaps}
+\label{sec:synth}
+
+\textbf{Encoding completeness} for a concrete $P$ instantiated from moir\'e diagnostics remains a
+\textbf{paper / analysis target}. \textbf{Target~0} (toy vs.\ Lean Fourier score) remains open; see
+\texttt{AGENTS/FT\_PATCH\_CLOSED\_TARGET.md}.
+
+\begin{center}
+\begin{tabular}{@{}p{0.30\linewidth}p{0.65\linewidth}@{}}
+\toprule
+\textbf{Topic} & \textbf{Status} \\
+\midrule
+Moir\'e--cusp / BST on $j$
+& Proved order theory (\lean{MoireCuspBracket}, \lean{MoireToyThresholdSearch}). \\
+SAT $\leftrightarrow$ score
+& Not proved. \\
+Quantum ray / 2D slice search
+& \textbf{Removed} from Lean (\lean{OctonionPatchQuantum} deleted). \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\paragraph{Acknowledgement.}
+Rebuild: \texttt{lake build HQIVLEAN}.
+
+\end{document}

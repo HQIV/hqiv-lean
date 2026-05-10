@@ -1,0 +1,1893 @@
+{
+  "inputs": {
+    "phi": 0.6,
+    "t": 1.0,
+    "m_min": 0,
+    "m_max": 16,
+    "dim_p": 2,
+    "curvature_model": "intrinsic_sphere",
+    "sphere_dim": 3,
+    "sparse_candidate_mode": "projected_window",
+    "sparse_allow_fallback": false,
+    "spiral_window": 8,
+    "target_angle": null,
+    "angle_eps": 0.2,
+    "bidirectional": true
+  },
+  "constants": {
+    "horizon_quarter_period": 1.5707963267948966,
+    "pi_over_2": 1.5707963267948966,
+    "alpha": 0.6,
+    "curvature_norm_combinatorial": 484863.3748676012,
+    "curvature_norm_selected": 6.0,
+    "dim_weight_normalizer": 1785.0
+  },
+  "checks": {
+    "angle_zero_at_m0": true,
+    "horizon_quarter_period_equals_pi_over_2": true,
+    "unit_phase_magnitude_deviation_max": 1.1102230246251565e-16,
+    "unit_phase_magnitude_near_one": true
+  },
+  "aliasing_summary": {
+    "octant_counts": [
+      1,
+      3,
+      13,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "octant_weighted_counts": [
+      0.003361344537815126,
+      0.1677461696097567,
+      14.93042636552312,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "octant_peak_index": 2,
+    "octant_peak_fraction": 0.7647058823529411,
+    "octant_peak_weighted_index": 2,
+    "octant_peak_weighted_fraction": 0.9886695275121746,
+    "octant_lock_eps_deg": 5.0,
+    "octant_lock_hits": 2,
+    "octant_lock_fraction": 0.11764705882352941,
+    "octant_lock_weighted_fraction": 0.0014831935909168164,
+    "peak_bin_by_sector_count": {
+      "8": 1,
+      "16": 3,
+      "24": 5,
+      "32": 7
+    },
+    "recovery_hint": "Recover aliased secondary peaks by increasing sector count (8->16->24->32), then tracking stable peak bins under weighting."
+  },
+  "points": [
+    {
+      "m": 0.0,
+      "delta_theta_prime_m": 0.0,
+      "angle": 0.0,
+      "triplet_rule_valid_original": false,
+      "adjacent_shell_mod3": 0.0,
+      "angle_adjacent": 0.0,
+      "shell_even_anchor": 0.0,
+      "shell_odd_multiple3_anchor": 3.0,
+      "angle_even_anchor": 0.0,
+      "angle_odd_multiple3_anchor": 1.1771979067691234,
+      "spiral_step_base_to_even": 0.0,
+      "spiral_step_even_to_odd_multiple3": 1.1771979067691234,
+      "spiral_step_base_to_odd_multiple3": 1.1771979067691234,
+      "local_spiral_theta": 1.5707963267948966,
+      "ray8_scores": [
+        6.123233995736766e-17,
+        0.7071067811865476,
+        1.0,
+        0.7071067811865476,
+        6.123233995736766e-17,
+        -0.7071067811865475,
+        -1.0,
+        -0.7071067811865477
+      ],
+      "best_ray8_index": 2.0,
+      "best_ray8_angle": 1.5707963267948966,
+      "spiral_target_divisor_spot": 1.0,
+      "factor_pair_ranking_top8": [],
+      "factor_pair_orbit3_ranking_top8": [],
+      "factor_pair_contains_11_17_any": false,
+      "factor_pair_contains_11_17_top8": false,
+      "direct_factor_pair_3spiral_mask": null,
+      "sparse_pruned_candidates_checked": 1.0,
+      "sparse_candidate_mode": "projected_window",
+      "sparse_target_angle": null,
+      "sparse_target_angle_reverse": null,
+      "sparse_angle_eps": 0.2,
+      "sparse_bidirectional": true,
+      "sparse_filtered_out_by_angle": 0.0,
+      "sparse_guarantee_no_prune": false,
+      "sparse_fallback_scan_used": false,
+      "sparse_fallback_checked": 0.0,
+      "sparse_factor_pair_ranking_top8": [
+        {
+          "a": 1,
+          "b": 0,
+          "pair_theta": 0.0,
+          "ray_error_rad": 1.5707963267948966
+        }
+      ],
+      "sparse_factor_pair_contains_11_17_any": false,
+      "sparse_factor_pair_contains_11_17_top8": false,
+      "radius_shell_succ": 1.0,
+      "radius_reciprocal": 1.0,
+      "phase_argument_match": 0.0,
+      "exp_i_angle_re": 1.0,
+      "exp_i_angle_im": 0.0,
+      "theta_mod_two_pi": 0.0,
+      "inferred_divisor_from_angle": null,
+      "reconstructed_theta_from_divisor": 0.0,
+      "angle_to_divisor_error_rad": 0.0,
+      "inferred_divisor_from_angle_adjacent": null,
+      "reconstructed_theta_from_divisor_adjacent": 0.0,
+      "angle_to_divisor_error_rad_adjacent": 0.0,
+      "divisor_count_tau_m": 0,
+      "curvature_density": 1.0,
+      "shell_shape": 1.0,
+      "deltaE_combinatorial": 484863.3748676012,
+      "deltaE_selected": 6.0,
+      "dim_shell_weight": 0.0005602240896358543,
+      "ramanujan_dim_imprint": 0.003361344537815126,
+      "phase_curvature_imprint": 3.5999999999999996,
+      "spiral_succ_x": 1.0,
+      "spiral_succ_y": 0.0,
+      "spiral_rec_x": 1.0,
+      "spiral_rec_y": 0.0
+    },
+    {
+      "m": 1.0,
+      "delta_theta_prime_m": 1.2337005501361697,
+      "angle": 0.7402203300817018,
+      "triplet_rule_valid_original": true,
+      "adjacent_shell_mod3": 2.0,
+      "angle_adjacent": 1.043463083475982,
+      "shell_even_anchor": 2.0,
+      "shell_odd_multiple3_anchor": 3.0,
+      "angle_even_anchor": 1.043463083475982,
+      "angle_odd_multiple3_anchor": 1.1771979067691234,
+      "spiral_step_base_to_even": 0.3032427533942803,
+      "spiral_step_even_to_odd_multiple3": 0.13373482329314168,
+      "spiral_step_base_to_odd_multiple3": 0.43697757668742154,
+      "local_spiral_theta": 0.41535753343659787,
+      "ray8_scores": [
+        0.914972108126559,
+        0.9323126524156548,
+        0.4035170892916931,
+        -0.3616533120900271,
+        -0.914972108126559,
+        -0.9323126524156548,
+        -0.4035170892916936,
+        0.36165331209002655
+      ],
+      "best_ray8_index": 1.0,
+      "best_ray8_angle": 0.7853981633974483,
+      "spiral_target_divisor_spot": 1.0,
+      "factor_pair_ranking_top8": [
+        {
+          "a": 1,
+          "b": 1,
+          "pair_theta": 0.7853981633974483,
+          "ray_error_rad": 0.0
+        }
+      ],
+      "factor_pair_orbit3_ranking_top8": [
+        {
+          "a": 1,
+          "b": 1,
+          "pair_theta": 0.7853981633974483,
+          "orbit_error_rad": 0.3700406299608505,
+          "orbit_branch": 0
+        }
+      ],
+      "factor_pair_contains_11_17_any": false,
+      "factor_pair_contains_11_17_top8": false,
+      "direct_factor_pair_3spiral_mask": [
+        1,
+        1
+      ],
+      "sparse_pruned_candidates_checked": 1.0,
+      "sparse_candidate_mode": "projected_window",
+      "sparse_target_angle": null,
+      "sparse_target_angle_reverse": null,
+      "sparse_angle_eps": 0.2,
+      "sparse_bidirectional": true,
+      "sparse_filtered_out_by_angle": 0.0,
+      "sparse_guarantee_no_prune": false,
+      "sparse_fallback_scan_used": false,
+      "sparse_fallback_checked": 0.0,
+      "sparse_factor_pair_ranking_top8": [
+        {
+          "a": 1,
+          "b": 1,
+          "pair_theta": 0.7853981633974483,
+          "ray_error_rad": 0.0
+        }
+      ],
+      "sparse_factor_pair_contains_11_17_any": false,
+      "sparse_factor_pair_contains_11_17_top8": false,
+      "radius_shell_succ": 2.0,
+      "radius_reciprocal": 0.5,
+      "phase_argument_match": 0.7402203300817018,
+      "exp_i_angle_re": 0.7383199748955249,
+      "exp_i_angle_im": 0.6744506020979382,
+      "theta_mod_two_pi": 0.7402203300817018,
+      "inferred_divisor_from_angle": 8,
+      "reconstructed_theta_from_divisor": 0.7853981633974483,
+      "angle_to_divisor_error_rad": 0.04517783331574643,
+      "inferred_divisor_from_angle_adjacent": 6,
+      "reconstructed_theta_from_divisor_adjacent": 1.0471975511965976,
+      "angle_to_divisor_error_rad_adjacent": 0.0037344677206156973,
+      "divisor_count_tau_m": 1,
+      "curvature_density": 0.7079441541679836,
+      "shell_shape": 0.7079441541679836,
+      "deltaE_combinatorial": 343256.1918076779,
+      "deltaE_selected": 4.247664925007902,
+      "dim_shell_weight": 0.004481792717086834,
+      "ramanujan_dim_imprint": 0.01903715372552561,
+      "phase_curvature_imprint": 2.5485989550047408,
+      "spiral_succ_x": 1.4766399497910498,
+      "spiral_succ_y": 1.3489012041958763,
+      "spiral_rec_x": 0.36915998744776246,
+      "spiral_rec_y": 0.3372253010489691
+    },
+    {
+      "m": 2.0,
+      "delta_theta_prime_m": 1.7391051391266368,
+      "angle": 1.043463083475982,
+      "triplet_rule_valid_original": false,
+      "adjacent_shell_mod3": 1.0,
+      "angle_adjacent": 0.7402203300817018,
+      "shell_even_anchor": 2.0,
+      "shell_odd_multiple3_anchor": 3.0,
+      "angle_even_anchor": 1.043463083475982,
+      "angle_odd_multiple3_anchor": 1.1771979067691234,
+      "spiral_step_base_to_even": 0.0,
+      "spiral_step_even_to_odd_multiple3": 0.13373482329314168,
+      "spiral_step_base_to_odd_multiple3": 0.13373482329314168,
+      "local_spiral_theta": 1.5707963267948966,
+      "ray8_scores": [
+        6.123233995736766e-17,
+        0.7071067811865476,
+        1.0,
+        0.7071067811865476,
+        6.123233995736766e-17,
+        -0.7071067811865475,
+        -1.0,
+        -0.7071067811865477
+      ],
+      "best_ray8_index": 2.0,
+      "best_ray8_angle": 1.5707963267948966,
+      "spiral_target_divisor_spot": 1.0,
+      "factor_pair_ranking_top8": [
+        {
+          "a": 1,
+          "b": 2,
+          "pair_theta": 1.1071487177940904,
+          "ray_error_rad": 0.46364760900080615
+        }
+      ],
+      "factor_pair_orbit3_ranking_top8": [
+        {
+          "a": 1,
+          "b": 2,
+          "pair_theta": 1.1071487177940904,
+          "orbit_error_rad": 0.46364760900080615,
+          "orbit_branch": 0
+        }
+      ],
+      "factor_pair_contains_11_17_any": false,
+      "factor_pair_contains_11_17_top8": false,
+      "direct_factor_pair_3spiral_mask": [
+        1,
+        2
+      ],
+      "sparse_pruned_candidates_checked": 1.0,
+      "sparse_candidate_mode": "projected_window",
+      "sparse_target_angle": null,
+      "sparse_target_angle_reverse": null,
+      "sparse_angle_eps": 0.2,
+      "sparse_bidirectional": true,
+      "sparse_filtered_out_by_angle": 0.0,
+      "sparse_guarantee_no_prune": false,
+      "sparse_fallback_scan_used": false,
+      "sparse_fallback_checked": 0.0,
+      "sparse_factor_pair_ranking_top8": [
+        {
+          "a": 1,
+          "b": 2,
+          "pair_theta": 1.1071487177940904,
+          "ray_error_rad": 0.46364760900080615
+        }
+      ],
+      "sparse_factor_pair_contains_11_17_any": false,
+      "sparse_factor_pair_contains_11_17_top8": false,
+      "radius_shell_succ": 3.0,
+      "radius_reciprocal": 0.3333333333333333,
+      "phase_argument_match": 1.043463083475982,
+      "exp_i_angle_re": 0.5032306498400716,
+      "exp_i_angle_im": 0.8641521353682691,
+      "theta_mod_two_pi": 1.043463083475982,
+      "inferred_divisor_from_angle": 6,
+      "reconstructed_theta_from_divisor": 1.0471975511965976,
+      "angle_to_divisor_error_rad": 0.0037344677206156973,
+      "inferred_divisor_from_angle_adjacent": 8,
+      "reconstructed_theta_from_divisor_adjacent": 0.7853981633974483,
+      "angle_to_divisor_error_rad_adjacent": 0.04517783331574643,
+      "divisor_count_tau_m": 2,
+      "curvature_density": 0.5530557910669552,
+      "shell_shape": 0.5530557910669552,
+      "deltaE_combinatorial": 268156.4973467949,
+      "deltaE_selected": 3.3183347464017316,
+      "dim_shell_weight": 0.015126050420168067,
+      "ramanujan_dim_imprint": 0.05019329868506821,
+      "phase_curvature_imprint": 1.9910008478410388,
+      "spiral_succ_x": 1.5096919495202148,
+      "spiral_succ_y": 2.592456406104807,
+      "spiral_rec_x": 0.16774354994669052,
+      "spiral_rec_y": 0.288050711789423
+    },
+    {
+      "m": 3.0,
+      "delta_theta_prime_m": 1.9619965112818725,
+      "angle": 1.1771979067691234,
+      "triplet_rule_valid_original": false,
+      "adjacent_shell_mod3": 2.0,
+      "angle_adjacent": 1.043463083475982,
+      "shell_even_anchor": 4.0,
+      "shell_odd_multiple3_anchor": 9.0,
+      "angle_even_anchor": 1.2495537096537221,
+      "angle_odd_multiple3_anchor": 1.376148686231432,
+      "spiral_step_base_to_even": 0.07235580288459875,
+      "spiral_step_even_to_odd_multiple3": 0.12659497657771013,
+      "spiral_step_base_to_odd_multiple3": 0.19895077946230888,
+      "local_spiral_theta": 1.051556035101392,
+      "ray8_scores": [
+        0.49622070507897237,
+        0.9647885966847954,
+        0.8681964131755715,
+        0.263026545631773,
+        -0.4962207050789725,
+        -0.9647885966847954,
+        -0.8681964131755714,
+        -0.2630265456317729
+      ],
+      "best_ray8_index": 1.0,
+      "best_ray8_angle": 0.7853981633974483,
+      "spiral_target_divisor_spot": 2.0,
+      "factor_pair_ranking_top8": [
+        {
+          "a": 1,
+          "b": 3,
+          "pair_theta": 1.2490457723982544,
+          "ray_error_rad": 0.46364760900080615
+        }
+      ],
+      "factor_pair_orbit3_ranking_top8": [
+        {
+          "a": 1,
+          "b": 3,
+          "pair_theta": 1.2490457723982544,
+          "orbit_error_rad": 0.1974897372968627,
+          "orbit_branch": 0
+        }
+      ],
+      "factor_pair_contains_11_17_any": false,
+      "factor_pair_contains_11_17_top8": false,
+      "direct_factor_pair_3spiral_mask": [
+        1,
+        3
+      ],
+      "sparse_pruned_candidates_checked": 1.0,
+      "sparse_candidate_mode": "projected_window",
+      "sparse_target_angle": null,
+      "sparse_target_angle_reverse": null,
+      "sparse_angle_eps": 0.2,
+      "sparse_bidirectional": true,
+      "sparse_filtered_out_by_angle": 0.0,
+      "sparse_guarantee_no_prune": false,
+      "sparse_fallback_scan_used": false,
+      "sparse_fallback_checked": 0.0,
+      "sparse_factor_pair_ranking_top8": [
+        {
+          "a": 1,
+          "b": 3,
+          "pair_theta": 1.2490457723982544,
+          "ray_error_rad": 0.46364760900080615
+        }
+      ],
+      "sparse_factor_pair_contains_11_17_any": false,
+      "sparse_factor_pair_contains_11_17_top8": false,
+      "radius_shell_succ": 4.0,
+      "radius_reciprocal": 0.25,
+      "phase_argument_match": 1.1771979067691234,
+      "exp_i_angle_re": 0.3835141577672761,
+      "exp_i_angle_im": 0.9235349970586154,
+      "theta_mod_two_pi": 1.1771979067691234,
+      "inferred_divisor_from_angle": 5,
+      "reconstructed_theta_from_divisor": 1.2566370614359172,
+      "angle_to_divisor_error_rad": 0.07943915466679385,
+      "inferred_divisor_from_angle_adjacent": 6,
+      "reconstructed_theta_from_divisor_adjacent": 1.0471975511965976,
+      "angle_to_divisor_error_rad_adjacent": 0.0037344677206156973,
+      "divisor_count_tau_m": 2,
+      "curvature_density": 0.4579441541679836,
+      "shell_shape": 0.4579441541679836,
+      "deltaE_combinatorial": 222040.3480907776,
+      "deltaE_selected": 2.7476649250079017,
+      "dim_shell_weight": 0.035854341736694675,
+      "ramanujan_dim_imprint": 0.09851571719916286,
+      "phase_curvature_imprint": 1.648598955004741,
+      "spiral_succ_x": 1.5340566310691044,
+      "spiral_succ_y": 3.6941399882344617,
+      "spiral_rec_x": 0.09587853944181902,
+      "spiral_rec_y": 0.23088374926465385
+    },
+    {
+      "m": 4.0,
+      "delta_theta_prime_m": 2.082589516089537,
+      "angle": 1.2495537096537221,
+      "triplet_rule_valid_original": false,
+      "adjacent_shell_mod3": 5.0,
+      "angle_adjacent": 1.2943997279607147,
+      "shell_even_anchor": 4.0,
+      "shell_odd_multiple3_anchor": 3.0,
+      "angle_even_anchor": 1.2495537096537221,
+      "angle_odd_multiple3_anchor": 1.1771979067691234,
+      "spiral_step_base_to_even": 0.0,
+      "spiral_step_even_to_odd_multiple3": -0.07235580288459875,
+      "spiral_step_base_to_odd_multiple3": -0.07235580288459875,
+      "local_spiral_theta": 4.71238898038469,
+      "ray8_scores": [
+        -1.8369701987210297e-16,
+        -0.7071067811865477,
+        -1.0,
+        -0.7071067811865475,
+        6.123233995736766e-17,
+        0.7071067811865476,
+        1.0,
+        0.7071067811865476
+      ],
+      "best_ray8_index": 6.0,
+      "best_ray8_angle": 4.71238898038469,
+      "spiral_target_divisor_spot": 1.0,
+      "factor_pair_ranking_top8": [
+        {
+          "a": 2,
+          "b": 2,
+          "pair_theta": 0.7853981633974483,
+          "ray_error_rad": 2.356194490192345
+        },
+        {
+          "a": 1,
+          "b": 4,
+          "pair_theta": 1.3258176636680326,
+          "ray_error_rad": 2.896613990462929
+        }
+      ],
+      "factor_pair_orbit3_ranking_top8": [
+        {
+          "a": 2,
+          "b": 2,
+          "pair_theta": 0.7853981633974483,
+          "orbit_error_rad": 0.26179938779915,
+          "orbit_branch": 1
+        },
+        {
+          "a": 1,
+          "b": 4,
+          "pair_theta": 1.3258176636680326,
+          "orbit_error_rad": 0.8022188880697341,
+          "orbit_branch": 1
+        }
+      ],
+      "factor_pair_contains_11_17_any": false,
+      "factor_pair_contains_11_17_top8": false,
+      "direct_factor_pair_3spiral_mask": [
+        2,
+        2
+      ],
+      "sparse_pruned_candidates_checked": 2.0,
+      "sparse_candidate_mode": "projected_window",
+      "sparse_target_angle": null,
+      "sparse_target_angle_reverse": null,
+      "sparse_angle_eps": 0.2,
+      "sparse_bidirectional": true,
+      "sparse_filtered_out_by_angle": 0.0,
+      "sparse_guarantee_no_prune": false,
+      "sparse_fallback_scan_used": false,
+      "sparse_fallback_checked": 0.0,
+      "sparse_factor_pair_ranking_top8": [
+        {
+          "a": 2,
+          "b": 2,
+          "pair_theta": 0.7853981633974483,
+          "ray_error_rad": 2.356194490192345
+        },
+        {
+          "a": 1,
+          "b": 4,
+          "pair_theta": 1.3258176636680326,
+          "ray_error_rad": 2.896613990462929
+        }
+      ],
+      "sparse_factor_pair_contains_11_17_any": false,
+      "sparse_factor_pair_contains_11_17_top8": false,
+      "radius_shell_succ": 5.0,
+      "radius_reciprocal": 0.2,
+      "phase_argument_match": 1.2495537096537221,
+      "exp_i_angle_re": 0.31574585365341723,
+      "exp_i_angle_im": 0.9488437995269162,
+      "theta_mod_two_pi": 1.2495537096537221,
+      "inferred_divisor_from_angle": 5,
+      "reconstructed_theta_from_divisor": 1.2566370614359172,
+      "angle_to_divisor_error_rad": 0.007083351782195102,
+      "inferred_divisor_from_angle_adjacent": 5,
+      "reconstructed_theta_from_divisor_adjacent": 1.2566370614359172,
+      "angle_to_divisor_error_rad_adjacent": 0.03776266652479743,
+      "divisor_count_tau_m": 3,
+      "curvature_density": 0.3931325494920921,
+      "shell_shape": 0.3931325494920921,
+      "deltaE_combinatorial": 190615.57471704003,
+      "deltaE_selected": 2.3587952969525525,
+      "dim_shell_weight": 0.0700280112044818,
+      "ramanujan_dim_imprint": 0.1651817434840723,
+      "phase_curvature_imprint": 1.4152771781715314,
+      "spiral_succ_x": 1.5787292682670861,
+      "spiral_succ_y": 4.744218997634581,
+      "spiral_rec_x": 0.06314917073068345,
+      "spiral_rec_y": 0.18976875990538325
+    },
+    {
+      "m": 5.0,
+      "delta_theta_prime_m": 2.1573328799345246,
+      "angle": 1.2943997279607147,
+      "triplet_rule_valid_original": true,
+      "adjacent_shell_mod3": 4.0,
+      "angle_adjacent": 1.2495537096537221,
+      "shell_even_anchor": 6.0,
+      "shell_odd_multiple3_anchor": 3.0,
+      "angle_even_anchor": 1.3247916986486452,
+      "angle_odd_multiple3_anchor": 1.1771979067691234,
+      "spiral_step_base_to_even": 0.03039197068793076,
+      "spiral_step_even_to_odd_multiple3": -0.1475937918795216,
+      "spiral_step_base_to_odd_multiple3": -0.11720182119159128,
+      "local_spiral_theta": 4.915466784605355,
+      "ray8_scores": [
+        0.20168483809795543,
+        -0.5499633535379356,
+        -0.9794504714794932,
+        -0.8351887869010861,
+        -0.20168483809795557,
+        0.5499633535379355,
+        0.9794504714794932,
+        0.8351887869010861
+      ],
+      "best_ray8_index": 6.0,
+      "best_ray8_angle": 4.71238898038469,
+      "spiral_target_divisor_spot": 1.0,
+      "factor_pair_ranking_top8": [
+        {
+          "a": 1,
+          "b": 5,
+          "pair_theta": 1.373400766945016,
+          "ray_error_rad": 2.9441970937399127
+        }
+      ],
+      "factor_pair_orbit3_ranking_top8": [
+        {
+          "a": 1,
+          "b": 5,
+          "pair_theta": 1.373400766945016,
+          "orbit_error_rad": 0.6467241871260523,
+          "orbit_branch": 1
+        }
+      ],
+      "factor_pair_contains_11_17_any": false,
+      "factor_pair_contains_11_17_top8": false,
+      "direct_factor_pair_3spiral_mask": [
+        1,
+        5
+      ],
+      "sparse_pruned_candidates_checked": 1.0,
+      "sparse_candidate_mode": "projected_window",
+      "sparse_target_angle": null,
+      "sparse_target_angle_reverse": null,
+      "sparse_angle_eps": 0.2,
+      "sparse_bidirectional": true,
+      "sparse_filtered_out_by_angle": 0.0,
+      "sparse_guarantee_no_prune": false,
+      "sparse_fallback_scan_used": false,
+      "sparse_fallback_checked": 0.0,
+      "sparse_factor_pair_ranking_top8": [
+        {
+          "a": 1,
+          "b": 5,
+          "pair_theta": 1.373400766945016,
+          "ray_error_rad": 2.9441970937399127
+        }
+      ],
+      "sparse_factor_pair_contains_11_17_any": false,
+      "sparse_factor_pair_contains_11_17_top8": false,
+      "radius_shell_succ": 6.0,
+      "radius_reciprocal": 0.16666666666666666,
+      "phase_argument_match": 1.2943997279607147,
+      "exp_i_angle_re": 0.27289079360363966,
+      "exp_i_angle_im": 0.9620450170165509,
+      "theta_mod_two_pi": 1.2943997279607147,
+      "inferred_divisor_from_angle": 5,
+      "reconstructed_theta_from_divisor": 1.2566370614359172,
+      "angle_to_divisor_error_rad": 0.03776266652479743,
+      "inferred_divisor_from_angle_adjacent": 5,
+      "reconstructed_theta_from_divisor_adjacent": 1.2566370614359172,
+      "angle_to_divisor_error_rad_adjacent": 0.007083351782195102,
+      "divisor_count_tau_m": 2,
+      "curvature_density": 0.34584261358947216,
+      "shell_shape": 0.34584261358947216,
+      "deltaE_combinatorial": 167686.4167980232,
+      "deltaE_selected": 2.075055681536833,
+      "dim_shell_weight": 0.12100840336134454,
+      "ramanujan_dim_imprint": 0.2510991749086588,
+      "phase_curvature_imprint": 1.2450334089220998,
+      "spiral_succ_x": 1.637344761621838,
+      "spiral_succ_y": 5.772270102099306,
+      "spiral_rec_x": 0.04548179893393994,
+      "spiral_rec_y": 0.16034083616942513
+    },
+    {
+      "m": 6.0,
+      "delta_theta_prime_m": 2.2079861644144088,
+      "angle": 1.3247916986486452,
+      "triplet_rule_valid_original": false,
+      "adjacent_shell_mod3": 5.0,
+      "angle_adjacent": 1.2943997279607147,
+      "shell_even_anchor": 6.0,
+      "shell_odd_multiple3_anchor": 9.0,
+      "angle_even_anchor": 1.3247916986486452,
+      "angle_odd_multiple3_anchor": 1.376148686231432,
+      "spiral_step_base_to_even": 0.0,
+      "spiral_step_even_to_odd_multiple3": 0.05135698758278684,
+      "spiral_step_base_to_odd_multiple3": 0.05135698758278684,
+      "local_spiral_theta": 1.5707963267948966,
+      "ray8_scores": [
+        6.123233995736766e-17,
+        0.7071067811865476,
+        1.0,
+        0.7071067811865476,
+        6.123233995736766e-17,
+        -0.7071067811865475,
+        -1.0,
+        -0.7071067811865477
+      ],
+      "best_ray8_index": 2.0,
+      "best_ray8_angle": 1.5707963267948966,
+      "spiral_target_divisor_spot": 1.0,
+      "factor_pair_ranking_top8": [
+        {
+          "a": 1,
+          "b": 6,
+          "pair_theta": 1.4056476493802699,
+          "ray_error_rad": 0.1651486774146269
+        },
+        {
+          "a": 2,
+          "b": 3,
+          "pair_theta": 0.982793723247329,
+          "ray_error_rad": 0.5880026035475674
+        }
+      ],
+      "factor_pair_orbit3_ranking_top8": [
+        {
+          "a": 1,
+          "b": 6,
+          "pair_theta": 1.4056476493802699,
+          "orbit_error_rad": 0.1651486774146269,
+          "orbit_branch": 0
+        },
+        {
+          "a": 2,
+          "b": 3,
+          "pair_theta": 0.982793723247329,
+          "orbit_error_rad": 0.5880026035475674,
+          "orbit_branch": 0
+        }
+      ],
+      "factor_pair_contains_11_17_any": false,
+      "factor_pair_contains_11_17_top8": false,
+      "direct_factor_pair_3spiral_mask": [
+        2,
+        3
+      ],
+      "sparse_pruned_candidates_checked": 2.0,
+      "sparse_candidate_mode": "projected_window",
+      "sparse_target_angle": null,
+      "sparse_target_angle_reverse": null,
+      "sparse_angle_eps": 0.2,
+      "sparse_bidirectional": true,
+      "sparse_filtered_out_by_angle": 0.0,
+      "sparse_guarantee_no_prune": false,
+      "sparse_fallback_scan_used": false,
+      "sparse_fallback_checked": 0.0,
+      "sparse_factor_pair_ranking_top8": [
+        {
+          "a": 1,
+          "b": 6,
+          "pair_theta": 1.4056476493802699,
+          "ray_error_rad": 0.1651486774146269
+        },
+        {
+          "a": 2,
+          "b": 3,
+          "pair_theta": 0.982793723247329,
+          "ray_error_rad": 0.5880026035475674
+        }
+      ],
+      "sparse_factor_pair_contains_11_17_any": false,
+      "sparse_factor_pair_contains_11_17_top8": false,
+      "radius_shell_succ": 7.0,
+      "radius_reciprocal": 0.14285714285714285,
+      "phase_argument_match": 1.3247916986486452,
+      "exp_i_angle_re": 0.2435308294836877,
+      "exp_i_angle_im": 0.9698931565337426,
+      "theta_mod_two_pi": 1.3247916986486452,
+      "inferred_divisor_from_angle": 5,
+      "reconstructed_theta_from_divisor": 1.2566370614359172,
+      "angle_to_divisor_error_rad": 0.06815463721272796,
+      "inferred_divisor_from_angle_adjacent": 5,
+      "reconstructed_theta_from_divisor_adjacent": 1.2566370614359172,
+      "angle_to_divisor_error_rad_adjacent": 0.03776266652479743,
+      "divisor_count_tau_m": 4,
+      "curvature_density": 0.30964944134759825,
+      "shell_shape": 0.30964944134759825,
+      "deltaE_combinatorial": 150137.6731576638,
+      "deltaE_selected": 1.8578966480855894,
+      "dim_shell_weight": 0.19215686274509805,
+      "ramanujan_dim_imprint": 0.35700759120076037,
+      "phase_curvature_imprint": 1.1147379888513536,
+      "spiral_succ_x": 1.7047158063858139,
+      "spiral_succ_y": 6.789252095736199,
+      "spiral_rec_x": 0.03479011849766967,
+      "spiral_rec_y": 0.13855616521910608
+    },
+    {
+      "m": 7.0,
+      "delta_theta_prime_m": 2.2445097281171043,
+      "angle": 1.3467058368702625,
+      "triplet_rule_valid_original": true,
+      "adjacent_shell_mod3": 8.0,
+      "angle_adjacent": 1.3632388389718124,
+      "shell_even_anchor": 8.0,
+      "shell_odd_multiple3_anchor": 9.0,
+      "angle_even_anchor": 1.3632388389718124,
+      "angle_odd_multiple3_anchor": 1.376148686231432,
+      "spiral_step_base_to_even": 0.016533002101549954,
+      "spiral_step_even_to_odd_multiple3": 0.012909847259619411,
+      "spiral_step_base_to_odd_multiple3": 0.029442849361169365,
+      "local_spiral_theta": 0.6629565267840002,
+      "ray8_scores": [
+        0.7881760850650652,
+        0.9925133830786694,
+        0.6154498021215924,
+        -0.12213592595847578,
+        -0.7881760850650651,
+        -0.9925133830786695,
+        -0.6154498021215922,
+        0.1221359259584761
+      ],
+      "best_ray8_index": 1.0,
+      "best_ray8_angle": 0.7853981633974483,
+      "spiral_target_divisor_spot": 3.0,
+      "factor_pair_ranking_top8": [
+        {
+          "a": 1,
+          "b": 7,
+          "pair_theta": 1.4288992721907328,
+          "ray_error_rad": 0.6435011087932843
+        }
+      ],
+      "factor_pair_orbit3_ranking_top8": [
+        {
+          "a": 1,
+          "b": 7,
+          "pair_theta": 1.4288992721907328,
+          "orbit_error_rad": 0.7659427454067327,
+          "orbit_branch": 0
+        }
+      ],
+      "factor_pair_contains_11_17_any": false,
+      "factor_pair_contains_11_17_top8": false,
+      "direct_factor_pair_3spiral_mask": [
+        1,
+        7
+      ],
+      "sparse_pruned_candidates_checked": 1.0,
+      "sparse_candidate_mode": "projected_window",
+      "sparse_target_angle": null,
+      "sparse_target_angle_reverse": null,
+      "sparse_angle_eps": 0.2,
+      "sparse_bidirectional": true,
+      "sparse_filtered_out_by_angle": 0.0,
+      "sparse_guarantee_no_prune": false,
+      "sparse_fallback_scan_used": false,
+      "sparse_fallback_checked": 0.0,
+      "sparse_factor_pair_ranking_top8": [
+        {
+          "a": 1,
+          "b": 7,
+          "pair_theta": 1.4288992721907328,
+          "ray_error_rad": 0.6435011087932843
+        }
+      ],
+      "sparse_factor_pair_contains_11_17_any": false,
+      "sparse_factor_pair_contains_11_17_top8": false,
+      "radius_shell_succ": 8.0,
+      "radius_reciprocal": 0.125,
+      "phase_argument_match": 1.3467058368702625,
+      "exp_i_angle_re": 0.22221968491444896,
+      "exp_i_angle_im": 0.9749966213462091,
+      "theta_mod_two_pi": 1.3467058368702625,
+      "inferred_divisor_from_angle": 5,
+      "reconstructed_theta_from_divisor": 1.2566370614359172,
+      "angle_to_divisor_error_rad": 0.09006877543434522,
+      "inferred_divisor_from_angle_adjacent": 5,
+      "reconstructed_theta_from_divisor_adjacent": 1.2566370614359172,
+      "angle_to_divisor_error_rad_adjacent": 0.10660177753589517,
+      "divisor_count_tau_m": 2,
+      "curvature_density": 0.2809581156259877,
+      "shell_shape": 0.2809581156259877,
+      "deltaE_combinatorial": 136226.30013885812,
+      "deltaE_selected": 1.6857486937559263,
+      "dim_shell_weight": 0.2868347338935574,
+      "ramanujan_dim_imprint": 0.4835312779848931,
+      "phase_curvature_imprint": 1.0114492162535558,
+      "spiral_succ_x": 1.7777574793155917,
+      "spiral_succ_y": 7.799972970769673,
+      "spiral_rec_x": 0.02777746061430612,
+      "spiral_rec_y": 0.12187457766827614
+    },
+    {
+      "m": 8.0,
+      "delta_theta_prime_m": 2.2720647316196874,
+      "angle": 1.3632388389718124,
+      "triplet_rule_valid_original": false,
+      "adjacent_shell_mod3": 7.0,
+      "angle_adjacent": 1.3467058368702625,
+      "shell_even_anchor": 8.0,
+      "shell_odd_multiple3_anchor": 9.0,
+      "angle_even_anchor": 1.3632388389718124,
+      "angle_odd_multiple3_anchor": 1.376148686231432,
+      "spiral_step_base_to_even": 0.0,
+      "spiral_step_even_to_odd_multiple3": 0.012909847259619411,
+      "spiral_step_base_to_odd_multiple3": 0.012909847259619411,
+      "local_spiral_theta": 1.5707963267948966,
+      "ray8_scores": [
+        6.123233995736766e-17,
+        0.7071067811865476,
+        1.0,
+        0.7071067811865476,
+        6.123233995736766e-17,
+        -0.7071067811865475,
+        -1.0,
+        -0.7071067811865477
+      ],
+      "best_ray8_index": 2.0,
+      "best_ray8_angle": 1.5707963267948966,
+      "spiral_target_divisor_spot": 1.0,
+      "factor_pair_ranking_top8": [
+        {
+          "a": 1,
+          "b": 8,
+          "pair_theta": 1.446441332248135,
+          "ray_error_rad": 0.12435499454676169
+        },
+        {
+          "a": 2,
+          "b": 4,
+          "pair_theta": 1.1071487177940904,
+          "ray_error_rad": 0.46364760900080615
+        }
+      ],
+      "factor_pair_orbit3_ranking_top8": [
+        {
+          "a": 1,
+          "b": 8,
+          "pair_theta": 1.446441332248135,
+          "orbit_error_rad": 0.12435499454676169,
+          "orbit_branch": 0
+        },
+        {
+          "a": 2,
+          "b": 4,
+          "pair_theta": 1.1071487177940904,
+          "orbit_error_rad": 0.46364760900080615,
+          "orbit_branch": 0
+        }
+      ],
+      "factor_pair_contains_11_17_any": false,
+      "factor_pair_contains_11_17_top8": false,
+      "direct_factor_pair_3spiral_mask": [
+        1,
+        8
+      ],
+      "sparse_pruned_candidates_checked": 2.0,
+      "sparse_candidate_mode": "projected_window",
+      "sparse_target_angle": null,
+      "sparse_target_angle_reverse": null,
+      "sparse_angle_eps": 0.2,
+      "sparse_bidirectional": true,
+      "sparse_filtered_out_by_angle": 0.0,
+      "sparse_guarantee_no_prune": false,
+      "sparse_fallback_scan_used": false,
+      "sparse_fallback_checked": 0.0,
+      "sparse_factor_pair_ranking_top8": [
+        {
+          "a": 1,
+          "b": 8,
+          "pair_theta": 1.446441332248135,
+          "ray_error_rad": 0.12435499454676169
+        },
+        {
+          "a": 2,
+          "b": 4,
+          "pair_theta": 1.1071487177940904,
+          "ray_error_rad": 0.46364760900080615
+        }
+      ],
+      "sparse_factor_pair_contains_11_17_any": false,
+      "sparse_factor_pair_contains_11_17_top8": false,
+      "radius_shell_succ": 9.0,
+      "radius_reciprocal": 0.1111111111111111,
+      "phase_argument_match": 1.3632388389718124,
+      "exp_i_angle_re": 0.20607042798116956,
+      "exp_i_angle_im": 0.9785371626625418,
+      "theta_mod_two_pi": 1.3632388389718124,
+      "inferred_divisor_from_angle": 5,
+      "reconstructed_theta_from_divisor": 1.2566370614359172,
+      "angle_to_divisor_error_rad": 0.10660177753589517,
+      "inferred_divisor_from_angle_adjacent": 5,
+      "reconstructed_theta_from_divisor_adjacent": 1.2566370614359172,
+      "angle_to_divisor_error_rad_adjacent": 0.09006877543434522,
+      "divisor_count_tau_m": 4,
+      "curvature_density": 0.2575927496001924,
+      "shell_shape": 0.2575927496001924,
+      "deltaE_combinatorial": 124897.28991257423,
+      "deltaE_selected": 1.5455564976011544,
+      "dim_shell_weight": 0.4084033613445378,
+      "ramanujan_dim_imprint": 0.6312104687682025,
+      "phase_curvature_imprint": 0.9273338985606926,
+      "spiral_succ_x": 1.854633851830526,
+      "spiral_succ_y": 8.806834463962876,
+      "spiral_rec_x": 0.02289671422012995,
+      "spiral_rec_y": 0.10872635140694908
+    },
+    {
+      "m": 9.0,
+      "delta_theta_prime_m": 2.2935811437190536,
+      "angle": 1.376148686231432,
+      "triplet_rule_valid_original": false,
+      "adjacent_shell_mod3": 8.0,
+      "angle_adjacent": 1.3632388389718124,
+      "shell_even_anchor": 10.0,
+      "shell_odd_multiple3_anchor": 15.0,
+      "angle_even_anchor": 1.3865051682255753,
+      "angle_odd_multiple3_anchor": 1.4177016438790766,
+      "spiral_step_base_to_even": 0.010356481994143074,
+      "spiral_step_even_to_odd_multiple3": 0.031196475653501032,
+      "spiral_step_base_to_odd_multiple3": 0.04155295764764455,
+      "local_spiral_theta": 1.250267846543463,
+      "ray8_scores": [
+        0.3150681688373218,
+        0.8938799950656404,
+        0.9490690433185022,
+        0.4483063176238439,
+        -0.3150681688373217,
+        -0.8938799950656403,
+        -0.9490690433185022,
+        -0.448306317623844
+      ],
+      "best_ray8_index": 2.0,
+      "best_ray8_angle": 1.5707963267948966,
+      "spiral_target_divisor_spot": 1.0,
+      "factor_pair_ranking_top8": [
+        {
+          "a": 1,
+          "b": 9,
+          "pair_theta": 1.460139105621001,
+          "ray_error_rad": 0.11065722117389587
+        },
+        {
+          "a": 3,
+          "b": 3,
+          "pair_theta": 0.7853981633974483,
+          "ray_error_rad": 0.7853981633974483
+        }
+      ],
+      "factor_pair_orbit3_ranking_top8": [
+        {
+          "a": 1,
+          "b": 9,
+          "pair_theta": 1.460139105621001,
+          "orbit_error_rad": 0.2098712590775378,
+          "orbit_branch": 0
+        },
+        {
+          "a": 3,
+          "b": 3,
+          "pair_theta": 0.7853981633974483,
+          "orbit_error_rad": 0.4648696831460146,
+          "orbit_branch": 0
+        }
+      ],
+      "factor_pair_contains_11_17_any": false,
+      "factor_pair_contains_11_17_top8": false,
+      "direct_factor_pair_3spiral_mask": [
+        3,
+        3
+      ],
+      "sparse_pruned_candidates_checked": 2.0,
+      "sparse_candidate_mode": "projected_window",
+      "sparse_target_angle": null,
+      "sparse_target_angle_reverse": null,
+      "sparse_angle_eps": 0.2,
+      "sparse_bidirectional": true,
+      "sparse_filtered_out_by_angle": 0.0,
+      "sparse_guarantee_no_prune": false,
+      "sparse_fallback_scan_used": false,
+      "sparse_fallback_checked": 0.0,
+      "sparse_factor_pair_ranking_top8": [
+        {
+          "a": 1,
+          "b": 9,
+          "pair_theta": 1.460139105621001,
+          "ray_error_rad": 0.11065722117389587
+        },
+        {
+          "a": 3,
+          "b": 3,
+          "pair_theta": 0.7853981633974483,
+          "ray_error_rad": 0.7853981633974483
+        }
+      ],
+      "sparse_factor_pair_contains_11_17_any": false,
+      "sparse_factor_pair_contains_11_17_top8": false,
+      "radius_shell_succ": 10.0,
+      "radius_reciprocal": 0.1,
+      "phase_argument_match": 1.376148686231432,
+      "exp_i_angle_re": 0.19342084153676575,
+      "exp_i_angle_im": 0.9811158841131915,
+      "theta_mod_two_pi": 1.376148686231432,
+      "inferred_divisor_from_angle": 5,
+      "reconstructed_theta_from_divisor": 1.2566370614359172,
+      "angle_to_divisor_error_rad": 0.1195116247955148,
+      "inferred_divisor_from_angle_adjacent": 5,
+      "reconstructed_theta_from_divisor_adjacent": 1.2566370614359172,
+      "angle_to_divisor_error_rad_adjacent": 0.10660177753589517,
+      "divisor_count_tau_m": 3,
+      "curvature_density": 0.23815510557964276,
+      "shell_shape": 0.23815510557964276,
+      "deltaE_combinatorial": 115472.68823329547,
+      "deltaE_selected": 1.4289306334778566,
+      "dim_shell_weight": 0.5602240896358543,
+      "ramanujan_dim_imprint": 0.8005213632929169,
+      "phase_curvature_imprint": 0.857358380086714,
+      "spiral_succ_x": 1.9342084153676575,
+      "spiral_succ_y": 9.811158841131915,
+      "spiral_rec_x": 0.019342084153676577,
+      "spiral_rec_y": 0.09811158841131916
+    },
+    {
+      "m": 10.0,
+      "delta_theta_prime_m": 2.3108419470426256,
+      "angle": 1.3865051682255753,
+      "triplet_rule_valid_original": false,
+      "adjacent_shell_mod3": 11.0,
+      "angle_adjacent": 1.3949957294818616,
+      "shell_even_anchor": 10.0,
+      "shell_odd_multiple3_anchor": 9.0,
+      "angle_even_anchor": 1.3865051682255753,
+      "angle_odd_multiple3_anchor": 1.376148686231432,
+      "spiral_step_base_to_even": 0.0,
+      "spiral_step_even_to_odd_multiple3": -0.010356481994143074,
+      "spiral_step_base_to_odd_multiple3": -0.010356481994143074,
+      "local_spiral_theta": 4.71238898038469,
+      "ray8_scores": [
+        -1.8369701987210297e-16,
+        -0.7071067811865477,
+        -1.0,
+        -0.7071067811865475,
+        6.123233995736766e-17,
+        0.7071067811865476,
+        1.0,
+        0.7071067811865476
+      ],
+      "best_ray8_index": 6.0,
+      "best_ray8_angle": 4.71238898038469,
+      "spiral_target_divisor_spot": 1.0,
+      "factor_pair_ranking_top8": [
+        {
+          "a": 2,
+          "b": 5,
+          "pair_theta": 1.1902899496825317,
+          "ray_error_rad": 2.761086276477428
+        },
+        {
+          "a": 1,
+          "b": 10,
+          "pair_theta": 1.4711276743037347,
+          "ray_error_rad": 3.0419240010986313
+        }
+      ],
+      "factor_pair_orbit3_ranking_top8": [
+        {
+          "a": 2,
+          "b": 5,
+          "pair_theta": 1.1902899496825317,
+          "orbit_error_rad": 0.6666911740842334,
+          "orbit_branch": 1
+        },
+        {
+          "a": 1,
+          "b": 10,
+          "pair_theta": 1.4711276743037347,
+          "orbit_error_rad": 0.9475288987054364,
+          "orbit_branch": 1
+        }
+      ],
+      "factor_pair_contains_11_17_any": false,
+      "factor_pair_contains_11_17_top8": false,
+      "direct_factor_pair_3spiral_mask": [
+        2,
+        5
+      ],
+      "sparse_pruned_candidates_checked": 2.0,
+      "sparse_candidate_mode": "projected_window",
+      "sparse_target_angle": null,
+      "sparse_target_angle_reverse": null,
+      "sparse_angle_eps": 0.2,
+      "sparse_bidirectional": true,
+      "sparse_filtered_out_by_angle": 0.0,
+      "sparse_guarantee_no_prune": false,
+      "sparse_fallback_scan_used": false,
+      "sparse_fallback_checked": 0.0,
+      "sparse_factor_pair_ranking_top8": [
+        {
+          "a": 2,
+          "b": 5,
+          "pair_theta": 1.1902899496825317,
+          "ray_error_rad": 2.761086276477428
+        },
+        {
+          "a": 1,
+          "b": 10,
+          "pair_theta": 1.4711276743037347,
+          "ray_error_rad": 3.0419240010986313
+        }
+      ],
+      "sparse_factor_pair_contains_11_17_any": false,
+      "sparse_factor_pair_contains_11_17_top8": false,
+      "radius_shell_succ": 11.0,
+      "radius_reciprocal": 0.09090909090909091,
+      "phase_argument_match": 1.3865051682255753,
+      "exp_i_angle_re": 0.1832497414356921,
+      "exp_i_angle_im": 0.9830663926021233,
+      "theta_mod_two_pi": 1.3865051682255753,
+      "inferred_divisor_from_angle": 5,
+      "reconstructed_theta_from_divisor": 1.2566370614359172,
+      "angle_to_divisor_error_rad": 0.1298681067896581,
+      "inferred_divisor_from_angle_adjacent": 5,
+      "reconstructed_theta_from_divisor_adjacent": 1.2566370614359172,
+      "angle_to_divisor_error_rad_adjacent": 0.13835866804594432,
+      "divisor_count_tau_m": 4,
+      "curvature_density": 0.22170337851627472,
+      "shell_shape": 0.22170337851627472,
+      "deltaE_combinatorial": 107495.84832695019,
+      "deltaE_selected": 1.3302202710976483,
+      "dim_shell_weight": 0.7456582633053221,
+      "ramanujan_dim_imprint": 0.9918897371602072,
+      "phase_curvature_imprint": 0.798132162658589,
+      "spiral_succ_x": 2.0157471557926128,
+      "spiral_succ_y": 10.813730318623357,
+      "spiral_rec_x": 0.016659067403244736,
+      "spiral_rec_y": 0.08936967205473847
+    },
+    {
+      "m": 11.0,
+      "delta_theta_prime_m": 2.324992882469769,
+      "angle": 1.3949957294818616,
+      "triplet_rule_valid_original": true,
+      "adjacent_shell_mod3": 10.0,
+      "angle_adjacent": 1.3865051682255753,
+      "shell_even_anchor": 12.0,
+      "shell_odd_multiple3_anchor": 9.0,
+      "angle_even_anchor": 1.402081895170064,
+      "angle_odd_multiple3_anchor": 1.376148686231432,
+      "spiral_step_base_to_even": 0.007086165688202417,
+      "spiral_step_even_to_odd_multiple3": -0.025933208938631935,
+      "spiral_step_base_to_odd_multiple3": -0.018847043250429518,
+      "local_spiral_theta": 4.97912450176522,
+      "ray8_scores": [
+        0.2635838115383929,
+        -0.4957191089403296,
+        -0.9646364985293128,
+        -0.8684829100399188,
+        -0.263583811538393,
+        0.4957191089403295,
+        0.9646364985293128,
+        0.8684829100399188
+      ],
+      "best_ray8_index": 6.0,
+      "best_ray8_angle": 4.71238898038469,
+      "spiral_target_divisor_spot": 1.0,
+      "factor_pair_ranking_top8": [
+        {
+          "a": 1,
+          "b": 11,
+          "pair_theta": 1.4801364395941514,
+          "ray_error_rad": 3.0509327663890478
+        }
+      ],
+      "factor_pair_orbit3_ranking_top8": [
+        {
+          "a": 1,
+          "b": 11,
+          "pair_theta": 1.4801364395941514,
+          "orbit_error_rad": 0.6898021426153225,
+          "orbit_branch": 1
+        }
+      ],
+      "factor_pair_contains_11_17_any": false,
+      "factor_pair_contains_11_17_top8": false,
+      "direct_factor_pair_3spiral_mask": [
+        1,
+        11
+      ],
+      "sparse_pruned_candidates_checked": 1.0,
+      "sparse_candidate_mode": "projected_window",
+      "sparse_target_angle": null,
+      "sparse_target_angle_reverse": null,
+      "sparse_angle_eps": 0.2,
+      "sparse_bidirectional": true,
+      "sparse_filtered_out_by_angle": 0.0,
+      "sparse_guarantee_no_prune": false,
+      "sparse_fallback_scan_used": false,
+      "sparse_fallback_checked": 0.0,
+      "sparse_factor_pair_ranking_top8": [
+        {
+          "a": 1,
+          "b": 11,
+          "pair_theta": 1.4801364395941514,
+          "ray_error_rad": 3.0509327663890478
+        }
+      ],
+      "sparse_factor_pair_contains_11_17_any": false,
+      "sparse_factor_pair_contains_11_17_top8": false,
+      "radius_shell_succ": 12.0,
+      "radius_reciprocal": 0.08333333333333333,
+      "phase_argument_match": 1.3949957294818616,
+      "exp_i_angle_re": 0.17489645113266944,
+      "exp_i_angle_im": 0.9845868328294858,
+      "theta_mod_two_pi": 1.3949957294818616,
+      "inferred_divisor_from_angle": 5,
+      "reconstructed_theta_from_divisor": 1.2566370614359172,
+      "angle_to_divisor_error_rad": 0.13835866804594432,
+      "inferred_divisor_from_angle_adjacent": 5,
+      "reconstructed_theta_from_divisor_adjacent": 1.2566370614359172,
+      "angle_to_divisor_error_rad_adjacent": 0.1298681067896581,
+      "divisor_count_tau_m": 2,
+      "curvature_density": 0.20757866582273335,
+      "shell_shape": 0.20757866582273335,
+      "deltaE_combinatorial": 100647.29246132448,
+      "deltaE_selected": 1.2454719949364002,
+      "dim_shell_weight": 0.9680672268907563,
+      "ramanujan_dim_imprint": 1.205700620308179,
+      "phase_curvature_imprint": 0.7472831969618401,
+      "spiral_succ_x": 2.0987574135920335,
+      "spiral_succ_y": 11.81504199395383,
+      "spiral_rec_x": 0.014574704261055785,
+      "spiral_rec_y": 0.08204890273579048
+    },
+    {
+      "m": 12.0,
+      "delta_theta_prime_m": 2.3368031586167732,
+      "angle": 1.402081895170064,
+      "triplet_rule_valid_original": false,
+      "adjacent_shell_mod3": 11.0,
+      "angle_adjacent": 1.3949957294818616,
+      "shell_even_anchor": 12.0,
+      "shell_odd_multiple3_anchor": 15.0,
+      "angle_even_anchor": 1.402081895170064,
+      "angle_odd_multiple3_anchor": 1.4177016438790766,
+      "spiral_step_base_to_even": 0.0,
+      "spiral_step_even_to_odd_multiple3": 0.015619748709012615,
+      "spiral_step_base_to_odd_multiple3": 0.015619748709012615,
+      "local_spiral_theta": 1.5707963267948966,
+      "ray8_scores": [
+        6.123233995736766e-17,
+        0.7071067811865476,
+        1.0,
+        0.7071067811865476,
+        6.123233995736766e-17,
+        -0.7071067811865475,
+        -1.0,
+        -0.7071067811865477
+      ],
+      "best_ray8_index": 2.0,
+      "best_ray8_angle": 1.5707963267948966,
+      "spiral_target_divisor_spot": 1.0,
+      "factor_pair_ranking_top8": [
+        {
+          "a": 1,
+          "b": 12,
+          "pair_theta": 1.4876550949064553,
+          "ray_error_rad": 0.08314123188844125
+        },
+        {
+          "a": 2,
+          "b": 6,
+          "pair_theta": 1.2490457723982544,
+          "ray_error_rad": 0.32175055439664213
+        },
+        {
+          "a": 3,
+          "b": 4,
+          "pair_theta": 0.9272952180016122,
+          "ray_error_rad": 0.6435011087932843
+        }
+      ],
+      "factor_pair_orbit3_ranking_top8": [
+        {
+          "a": 1,
+          "b": 12,
+          "pair_theta": 1.4876550949064553,
+          "orbit_error_rad": 0.08314123188844125,
+          "orbit_branch": 0
+        },
+        {
+          "a": 2,
+          "b": 6,
+          "pair_theta": 1.2490457723982544,
+          "orbit_error_rad": 0.32175055439664213,
+          "orbit_branch": 0
+        },
+        {
+          "a": 3,
+          "b": 4,
+          "pair_theta": 0.9272952180016122,
+          "orbit_error_rad": 0.6435011087932843,
+          "orbit_branch": 0
+        }
+      ],
+      "factor_pair_contains_11_17_any": false,
+      "factor_pair_contains_11_17_top8": false,
+      "direct_factor_pair_3spiral_mask": [
+        2,
+        6
+      ],
+      "sparse_pruned_candidates_checked": 3.0,
+      "sparse_candidate_mode": "projected_window",
+      "sparse_target_angle": null,
+      "sparse_target_angle_reverse": null,
+      "sparse_angle_eps": 0.2,
+      "sparse_bidirectional": true,
+      "sparse_filtered_out_by_angle": 0.0,
+      "sparse_guarantee_no_prune": false,
+      "sparse_fallback_scan_used": false,
+      "sparse_fallback_checked": 0.0,
+      "sparse_factor_pair_ranking_top8": [
+        {
+          "a": 1,
+          "b": 12,
+          "pair_theta": 1.4876550949064553,
+          "ray_error_rad": 0.08314123188844125
+        },
+        {
+          "a": 2,
+          "b": 6,
+          "pair_theta": 1.2490457723982544,
+          "ray_error_rad": 0.32175055439664213
+        },
+        {
+          "a": 3,
+          "b": 4,
+          "pair_theta": 0.9272952180016122,
+          "ray_error_rad": 0.6435011087932843
+        }
+      ],
+      "sparse_factor_pair_contains_11_17_any": false,
+      "sparse_factor_pair_contains_11_17_top8": false,
+      "radius_shell_succ": 13.0,
+      "radius_reciprocal": 0.07692307692307693,
+      "phase_argument_match": 1.402081895170064,
+      "exp_i_angle_re": 0.16791517300597802,
+      "exp_i_angle_im": 0.985801447896265,
+      "theta_mod_two_pi": 1.402081895170064,
+      "inferred_divisor_from_angle": 4,
+      "reconstructed_theta_from_divisor": 1.5707963267948966,
+      "angle_to_divisor_error_rad": 0.16871443162483257,
+      "inferred_divisor_from_angle_adjacent": 5,
+      "reconstructed_theta_from_divisor_adjacent": 1.2566370614359172,
+      "angle_to_divisor_error_rad_adjacent": 0.13835866804594432,
+      "divisor_count_tau_m": 6,
+      "curvature_density": 0.19530535495976326,
+      "shell_shape": 0.19530535495976326,
+      "deltaE_combinatorial": 94696.4135355056,
+      "deltaE_selected": 1.1718321297585796,
+      "dim_shell_weight": 1.230812324929972,
+      "ramanujan_dim_imprint": 1.442305428055798,
+      "phase_curvature_imprint": 0.7030992778551478,
+      "spiral_succ_x": 2.1828972490777145,
+      "spiral_succ_y": 12.815418822651445,
+      "spiral_rec_x": 0.012916551769690619,
+      "spiral_rec_y": 0.075830880607405
+    },
+    {
+      "m": 13.0,
+      "delta_theta_prime_m": 2.346808095464675,
+      "angle": 1.408084857278805,
+      "triplet_rule_valid_original": true,
+      "adjacent_shell_mod3": 14.0,
+      "angle_adjacent": 1.4132349579087293,
+      "shell_even_anchor": 14.0,
+      "shell_odd_multiple3_anchor": 15.0,
+      "angle_even_anchor": 1.4132349579087293,
+      "angle_odd_multiple3_anchor": 1.4177016438790766,
+      "spiral_step_base_to_even": 0.005150100629924381,
+      "spiral_step_even_to_odd_multiple3": 0.004466685970347051,
+      "spiral_step_base_to_odd_multiple3": 0.009616786600271432,
+      "local_spiral_theta": 0.7144526697428646,
+      "ray8_scores": [
+        0.7554519673411066,
+        0.997484423860351,
+        0.6552040331381146,
+        -0.07088599407487842,
+        -0.7554519673411066,
+        -0.997484423860351,
+        -0.6552040331381146,
+        0.07088599407487851
+      ],
+      "best_ray8_index": 1.0,
+      "best_ray8_angle": 0.7853981633974483,
+      "spiral_target_divisor_spot": 4.0,
+      "factor_pair_ranking_top8": [
+        {
+          "a": 1,
+          "b": 13,
+          "pair_theta": 1.4940244355251187,
+          "ray_error_rad": 0.7086262721276704
+        }
+      ],
+      "factor_pair_orbit3_ranking_top8": [
+        {
+          "a": 1,
+          "b": 13,
+          "pair_theta": 1.4940244355251187,
+          "orbit_error_rad": 0.7795717657822543,
+          "orbit_branch": 0
+        }
+      ],
+      "factor_pair_contains_11_17_any": false,
+      "factor_pair_contains_11_17_top8": false,
+      "direct_factor_pair_3spiral_mask": [
+        1,
+        13
+      ],
+      "sparse_pruned_candidates_checked": 1.0,
+      "sparse_candidate_mode": "projected_window",
+      "sparse_target_angle": null,
+      "sparse_target_angle_reverse": null,
+      "sparse_angle_eps": 0.2,
+      "sparse_bidirectional": true,
+      "sparse_filtered_out_by_angle": 0.0,
+      "sparse_guarantee_no_prune": false,
+      "sparse_fallback_scan_used": false,
+      "sparse_fallback_checked": 0.0,
+      "sparse_factor_pair_ranking_top8": [
+        {
+          "a": 1,
+          "b": 13,
+          "pair_theta": 1.4940244355251187,
+          "ray_error_rad": 0.7086262721276704
+        }
+      ],
+      "sparse_factor_pair_contains_11_17_any": false,
+      "sparse_factor_pair_contains_11_17_top8": false,
+      "radius_shell_succ": 14.0,
+      "radius_reciprocal": 0.07142857142857142,
+      "phase_argument_match": 1.408084857278805,
+      "exp_i_angle_re": 0.1619944543598263,
+      "exp_i_angle_im": 0.9867916683660549,
+      "theta_mod_two_pi": 1.408084857278805,
+      "inferred_divisor_from_angle": 4,
+      "reconstructed_theta_from_divisor": 1.5707963267948966,
+      "angle_to_divisor_error_rad": 0.1627114695160916,
+      "inferred_divisor_from_angle_adjacent": 4,
+      "reconstructed_theta_from_divisor_adjacent": 1.5707963267948966,
+      "angle_to_divisor_error_rad_adjacent": 0.15756136888616723,
+      "divisor_count_tau_m": 2,
+      "curvature_density": 0.1845310284120825,
+      "shell_shape": 0.1845310284120825,
+      "deltaE_combinatorial": 89472.33720367152,
+      "deltaE_selected": 1.107186170472495,
+      "dim_shell_weight": 1.5372549019607844,
+      "ramanujan_dim_imprint": 1.7020273679420317,
+      "phase_curvature_imprint": 0.664311702283497,
+      "spiral_succ_x": 2.2679223610375683,
+      "spiral_succ_y": 13.815083357124768,
+      "spiral_rec_x": 0.011571032454273305,
+      "spiral_rec_y": 0.07048511916900392
+    },
+    {
+      "m": 14.0,
+      "delta_theta_prime_m": 2.355391596514549,
+      "angle": 1.4132349579087293,
+      "triplet_rule_valid_original": false,
+      "adjacent_shell_mod3": 13.0,
+      "angle_adjacent": 1.408084857278805,
+      "shell_even_anchor": 14.0,
+      "shell_odd_multiple3_anchor": 15.0,
+      "angle_even_anchor": 1.4132349579087293,
+      "angle_odd_multiple3_anchor": 1.4177016438790766,
+      "spiral_step_base_to_even": 0.0,
+      "spiral_step_even_to_odd_multiple3": 0.004466685970347051,
+      "spiral_step_base_to_odd_multiple3": 0.004466685970347051,
+      "local_spiral_theta": 1.5707963267948966,
+      "ray8_scores": [
+        6.123233995736766e-17,
+        0.7071067811865476,
+        1.0,
+        0.7071067811865476,
+        6.123233995736766e-17,
+        -0.7071067811865475,
+        -1.0,
+        -0.7071067811865477
+      ],
+      "best_ray8_index": 2.0,
+      "best_ray8_angle": 1.5707963267948966,
+      "spiral_target_divisor_spot": 1.0,
+      "factor_pair_ranking_top8": [
+        {
+          "a": 1,
+          "b": 14,
+          "pair_theta": 1.4994888620096063,
+          "ray_error_rad": 0.07130746478529026
+        },
+        {
+          "a": 2,
+          "b": 7,
+          "pair_theta": 1.2924966677897853,
+          "ray_error_rad": 0.27829965900511144
+        }
+      ],
+      "factor_pair_orbit3_ranking_top8": [
+        {
+          "a": 1,
+          "b": 14,
+          "pair_theta": 1.4994888620096063,
+          "orbit_error_rad": 0.07130746478529026,
+          "orbit_branch": 0
+        },
+        {
+          "a": 2,
+          "b": 7,
+          "pair_theta": 1.2924966677897853,
+          "orbit_error_rad": 0.27829965900511144,
+          "orbit_branch": 0
+        }
+      ],
+      "factor_pair_contains_11_17_any": false,
+      "factor_pair_contains_11_17_top8": false,
+      "direct_factor_pair_3spiral_mask": [
+        1,
+        14
+      ],
+      "sparse_pruned_candidates_checked": 2.0,
+      "sparse_candidate_mode": "projected_window",
+      "sparse_target_angle": null,
+      "sparse_target_angle_reverse": null,
+      "sparse_angle_eps": 0.2,
+      "sparse_bidirectional": true,
+      "sparse_filtered_out_by_angle": 0.0,
+      "sparse_guarantee_no_prune": false,
+      "sparse_fallback_scan_used": false,
+      "sparse_fallback_checked": 0.0,
+      "sparse_factor_pair_ranking_top8": [
+        {
+          "a": 1,
+          "b": 14,
+          "pair_theta": 1.4994888620096063,
+          "ray_error_rad": 0.07130746478529026
+        },
+        {
+          "a": 2,
+          "b": 7,
+          "pair_theta": 1.2924966677897853,
+          "ray_error_rad": 0.27829965900511144
+        }
+      ],
+      "sparse_factor_pair_contains_11_17_any": false,
+      "sparse_factor_pair_contains_11_17_top8": false,
+      "radius_shell_succ": 15.0,
+      "radius_reciprocal": 0.06666666666666667,
+      "phase_argument_match": 1.4132349579087293,
+      "exp_i_angle_re": 0.15691025210455053,
+      "exp_i_angle_im": 0.9876128658459682,
+      "theta_mod_two_pi": 1.4132349579087293,
+      "inferred_divisor_from_angle": 4,
+      "reconstructed_theta_from_divisor": 1.5707963267948966,
+      "angle_to_divisor_error_rad": 0.15756136888616723,
+      "inferred_divisor_from_angle_adjacent": 4,
+      "reconstructed_theta_from_divisor_adjacent": 1.5707963267948966,
+      "angle_to_divisor_error_rad_adjacent": 0.1627114695160916,
+      "divisor_count_tau_m": 4,
+      "curvature_density": 0.17498867471075508,
+      "shell_shape": 0.17498867471075508,
+      "deltaE_combinatorial": 84845.59938386557,
+      "deltaE_selected": 1.0499320482645305,
+      "dim_shell_weight": 1.8907563025210083,
+      "ramanujan_dim_imprint": 1.9851656374749524,
+      "phase_curvature_imprint": 0.6299592289587183,
+      "spiral_succ_x": 2.353653781568258,
+      "spiral_succ_y": 14.814192987689523,
+      "spiral_rec_x": 0.010460683473636703,
+      "spiral_rec_y": 0.06584085772306454
+    },
+    {
+      "m": 15.0,
+      "delta_theta_prime_m": 2.3628360731317946,
+      "angle": 1.4177016438790766,
+      "triplet_rule_valid_original": false,
+      "adjacent_shell_mod3": 14.0,
+      "angle_adjacent": 1.4132349579087293,
+      "shell_even_anchor": 16.0,
+      "shell_odd_multiple3_anchor": 21.0,
+      "angle_even_anchor": 1.4216123176846687,
+      "angle_odd_multiple3_anchor": 1.435594641856411,
+      "spiral_step_base_to_even": 0.003910673805592069,
+      "spiral_step_even_to_odd_multiple3": 0.013982324171742277,
+      "spiral_step_base_to_odd_multiple3": 0.017892997977334346,
+      "local_spiral_theta": 1.2980779249322862,
+      "ray8_scores": [
+        0.26935036452870587,
+        0.871433176962627,
+        0.9630422530337147,
+        0.4905142384159943,
+        -0.2693503645287057,
+        -0.8714331769626268,
+        -0.9630422530337147,
+        -0.49051423841599456
+      ],
+      "best_ray8_index": 2.0,
+      "best_ray8_angle": 1.5707963267948966,
+      "spiral_target_divisor_spot": 1.0,
+      "factor_pair_ranking_top8": [
+        {
+          "a": 1,
+          "b": 15,
+          "pair_theta": 1.5042281630190728,
+          "ray_error_rad": 0.06656816377582375
+        },
+        {
+          "a": 3,
+          "b": 5,
+          "pair_theta": 1.0303768265243125,
+          "ray_error_rad": 0.540419500270584
+        }
+      ],
+      "factor_pair_orbit3_ranking_top8": [
+        {
+          "a": 1,
+          "b": 15,
+          "pair_theta": 1.5042281630190728,
+          "orbit_error_rad": 0.20615023808678679,
+          "orbit_branch": 0
+        },
+        {
+          "a": 3,
+          "b": 5,
+          "pair_theta": 1.0303768265243125,
+          "orbit_error_rad": 0.26770109840797396,
+          "orbit_branch": 0
+        }
+      ],
+      "factor_pair_contains_11_17_any": false,
+      "factor_pair_contains_11_17_top8": false,
+      "direct_factor_pair_3spiral_mask": [
+        1,
+        15
+      ],
+      "sparse_pruned_candidates_checked": 2.0,
+      "sparse_candidate_mode": "projected_window",
+      "sparse_target_angle": null,
+      "sparse_target_angle_reverse": null,
+      "sparse_angle_eps": 0.2,
+      "sparse_bidirectional": true,
+      "sparse_filtered_out_by_angle": 0.0,
+      "sparse_guarantee_no_prune": false,
+      "sparse_fallback_scan_used": false,
+      "sparse_fallback_checked": 0.0,
+      "sparse_factor_pair_ranking_top8": [
+        {
+          "a": 1,
+          "b": 15,
+          "pair_theta": 1.5042281630190728,
+          "ray_error_rad": 0.06656816377582375
+        },
+        {
+          "a": 3,
+          "b": 5,
+          "pair_theta": 1.0303768265243125,
+          "ray_error_rad": 0.540419500270584
+        }
+      ],
+      "sparse_factor_pair_contains_11_17_any": false,
+      "sparse_factor_pair_contains_11_17_top8": false,
+      "radius_shell_succ": 16.0,
+      "radius_reciprocal": 0.0625,
+      "phase_argument_match": 1.4177016438790766,
+      "exp_i_angle_re": 0.15249734496336745,
+      "exp_i_angle_im": 0.9883038802813251,
+      "theta_mod_two_pi": 1.4177016438790766,
+      "inferred_divisor_from_angle": 4,
+      "reconstructed_theta_from_divisor": 1.5707963267948966,
+      "angle_to_divisor_error_rad": 0.15309468291581996,
+      "inferred_divisor_from_angle_adjacent": 4,
+      "reconstructed_theta_from_divisor_adjacent": 1.5707963267948966,
+      "angle_to_divisor_error_rad_adjacent": 0.15756136888616723,
+      "divisor_count_tau_m": 4,
+      "curvature_density": 0.1664720770839918,
+      "shell_shape": 0.1664720770839918,
+      "deltaE_combinatorial": 80716.21311616372,
+      "deltaE_selected": 0.9988324625039509,
+      "dim_shell_weight": 2.2946778711484592,
+      "ramanujan_dim_imprint": 2.291998748692539,
+      "phase_curvature_imprint": 0.5992994775023704,
+      "spiral_succ_x": 2.439957519413879,
+      "spiral_succ_y": 15.812862084501202,
+      "spiral_rec_x": 0.009531084060210466,
+      "spiral_rec_y": 0.06176899251758282
+    },
+    {
+      "m": 16.0,
+      "delta_theta_prime_m": 2.369353862807781,
+      "angle": 1.4216123176846687,
+      "triplet_rule_valid_original": false,
+      "adjacent_shell_mod3": 17.0,
+      "angle_adjacent": 1.4250646018636022,
+      "shell_even_anchor": 16.0,
+      "shell_odd_multiple3_anchor": 15.0,
+      "angle_even_anchor": 1.4216123176846687,
+      "angle_odd_multiple3_anchor": 1.4177016438790766,
+      "spiral_step_base_to_even": 0.0,
+      "spiral_step_even_to_odd_multiple3": -0.003910673805592069,
+      "spiral_step_base_to_odd_multiple3": -0.003910673805592069,
+      "local_spiral_theta": 4.71238898038469,
+      "ray8_scores": [
+        -1.8369701987210297e-16,
+        -0.7071067811865477,
+        -1.0,
+        -0.7071067811865475,
+        6.123233995736766e-17,
+        0.7071067811865476,
+        1.0,
+        0.7071067811865476
+      ],
+      "best_ray8_index": 6.0,
+      "best_ray8_angle": 4.71238898038469,
+      "spiral_target_divisor_spot": 1.0,
+      "factor_pair_ranking_top8": [
+        {
+          "a": 4,
+          "b": 4,
+          "pair_theta": 0.7853981633974483,
+          "ray_error_rad": 2.356194490192345
+        },
+        {
+          "a": 2,
+          "b": 8,
+          "pair_theta": 1.3258176636680326,
+          "ray_error_rad": 2.896613990462929
+        },
+        {
+          "a": 1,
+          "b": 16,
+          "pair_theta": 1.5083775167989393,
+          "ray_error_rad": 3.0791738435938356
+        }
+      ],
+      "factor_pair_orbit3_ranking_top8": [
+        {
+          "a": 4,
+          "b": 4,
+          "pair_theta": 0.7853981633974483,
+          "orbit_error_rad": 0.26179938779915,
+          "orbit_branch": 1
+        },
+        {
+          "a": 2,
+          "b": 8,
+          "pair_theta": 1.3258176636680326,
+          "orbit_error_rad": 0.8022188880697341,
+          "orbit_branch": 1
+        },
+        {
+          "a": 1,
+          "b": 16,
+          "pair_theta": 1.5083775167989393,
+          "orbit_error_rad": 0.9847787412006408,
+          "orbit_branch": 1
+        }
+      ],
+      "factor_pair_contains_11_17_any": false,
+      "factor_pair_contains_11_17_top8": false,
+      "direct_factor_pair_3spiral_mask": [
+        2,
+        8
+      ],
+      "sparse_pruned_candidates_checked": 3.0,
+      "sparse_candidate_mode": "projected_window",
+      "sparse_target_angle": null,
+      "sparse_target_angle_reverse": null,
+      "sparse_angle_eps": 0.2,
+      "sparse_bidirectional": true,
+      "sparse_filtered_out_by_angle": 0.0,
+      "sparse_guarantee_no_prune": false,
+      "sparse_fallback_scan_used": false,
+      "sparse_fallback_checked": 0.0,
+      "sparse_factor_pair_ranking_top8": [
+        {
+          "a": 4,
+          "b": 4,
+          "pair_theta": 0.7853981633974483,
+          "ray_error_rad": 2.356194490192345
+        },
+        {
+          "a": 2,
+          "b": 8,
+          "pair_theta": 1.3258176636680326,
+          "ray_error_rad": 2.896613990462929
+        },
+        {
+          "a": 1,
+          "b": 16,
+          "pair_theta": 1.5083775167989393,
+          "ray_error_rad": 3.0791738435938356
+        }
+      ],
+      "sparse_factor_pair_contains_11_17_any": false,
+      "sparse_factor_pair_contains_11_17_top8": false,
+      "radius_shell_succ": 17.0,
+      "radius_reciprocal": 0.058823529411764705,
+      "phase_argument_match": 1.4216123176846687,
+      "exp_i_angle_re": 0.148631254620445,
+      "exp_i_angle_im": 0.9888926888949844,
+      "theta_mod_two_pi": 1.4216123176846687,
+      "inferred_divisor_from_angle": 4,
+      "reconstructed_theta_from_divisor": 1.5707963267948966,
+      "angle_to_divisor_error_rad": 0.1491840091102279,
+      "inferred_divisor_from_angle_adjacent": 4,
+      "reconstructed_theta_from_divisor_adjacent": 1.5707963267948966,
+      "angle_to_divisor_error_rad_adjacent": 0.14573172493129438,
+      "divisor_count_tau_m": 5,
+      "curvature_density": 0.15881929449610174,
+      "shell_shape": 0.15881929449610174,
+      "deltaE_combinatorial": 77005.65912347133,
+      "deltaE_selected": 0.9529157669766104,
+      "dim_shell_weight": 2.7523809523809524,
+      "ramanujan_dim_imprint": 2.6227872062499085,
+      "phase_curvature_imprint": 0.5717494601859662,
+      "spiral_succ_x": 2.526731328547565,
+      "spiral_succ_y": 16.811175711214734,
+      "spiral_rec_x": 0.008743014977673234,
+      "spiral_rec_y": 0.058170158170293196
+    }
+  ]
+}
