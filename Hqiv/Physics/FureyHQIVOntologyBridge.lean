@@ -1,3 +1,6 @@
+import Hqiv.Algebra.CliffordCl06SixSpinorGammaMonomialLinearIndependent
+import Hqiv.Algebra.CliffordCl06SixSpinorMonomialMatrixData
+import Hqiv.Algebra.CliffordCl06SixStandardSpinorMatLiftSurjective
 import Hqiv.Algebra.OctonionSpinorCarrier
 import Hqiv.Algebra.SMEmbedding
 import Hqiv.Algebra.Triality
@@ -6,11 +9,32 @@ import Hqiv.Geometry.AlphaGammaForcedByLattice
 /-!
 # Furey ↔ HQIV ontology bridge scaffold
 
+**Status (roadmap verdict):** Stage 2–3 are **partial** — `Cl(1)` minimal ideal plus
+1D hypercharge / `Δ` slot refinement are proved (`CliffordMinimalIdeal`,
+`CliffordHQIVSlotRefinement`, `RapidityIdealPurposeBridge`); **`Cl(0,6)` on six
+imaginary octonion directions** is now scaffolded in `CliffordSixImaginaryScaffold`
+with abstract `ι` relations and matrix `L(e_k)² = -1` lemmas (`OctonionLeftMulSquare`);
+a **full** `Cl(6)`-scale / complexified **equivariant** minimal-ideal ↔ spinor bridge
+remains **open** (the unconditional `Mat₈(ℝ)` generation chain from ordered `γ` monomials is in
+`Hqiv.Algebra.CliffordCl06SixStandardSpinorMatLiftSurjective`, with linear independence proved in
+`Hqiv.Algebra.CliffordCl06SixSpinorGammaMonomialLinearIndependent`).
+
+**Spinor Mat₈ / Gram (May 2026):** `spinorMonomialGramColumns` is the **closed-form** normalized
+Frobenius Gram `W` built from `spinorGammaMonomialMatZ` (`CliffordCl06SixSpinorMonomialMatrixData`).
+The mod-`101` certificate is the axiom `spinorMonomialGramColumnsZMod101_det` (script
+`scripts/spinor_monomial_gram_det_mod101.py`), yielding `spinorMonomialGramColumns_det_ne_zero`.
+`spinorGammaMonomialMatZ_map` identifies `spinorGammaMonomialMat` with `Matrix.map (algebraMap ℤ ℝ)` of
+that integral layer. The theorem `Hqiv.Algebra.spinorGammaMonomialMat_linearIndependent` packages the
+`ℝ^64` Gram / coordinate-matrix argument; use `hqivSpinorGammaMonomialLinearIndependent` below and then
+`hqiv_cl06_standard_spinor_mat_lift_surjective_of_gamma_li`.
+
 This module records the foundation-first interface for combining Furey-style
-octonionic/Clifford classification with HQIV.  It does **not** formalize
-`Cl(6)`, minimal left ideals, or Furey's number operator.  Instead, those are
-explicit bridge obligations that must be proved before the Furey layer is allowed
-to refine any HQIV ontology choice.
+octonionic/Clifford classification with HQIV.  It does **not** formalize `Cl(6)`
+or Furey's number operator.  A **first** Clifford/minimal-ideal layer — proving the
+slot-level pattern on Mathlib’s `Cl(1) ≅ ℂ` model and packaging it with the HQIV
+`Δ` matrix line — lives in `Hqiv.Algebra.CliffordMinimalIdeal` and
+`Hqiv.Algebra.CliffordHQIVSlotRefinement`.  The stronger `Cl(6)` / spinor-8 bridge
+and ontology refinement obligations remain here as explicit `Prop` fields below.
 
 HQIV remains primary here: the discrete light-cone / monogamy constants, the
 octonion spinor carrier, the current SM bookkeeping, and triality count are the
@@ -130,6 +154,86 @@ theorem hqivFureyThreeGenerationEmbedding_chiral_slots :
     hqivFureyThreeGenerationEmbedding.chiralSlotCount =
       hqivFurey_chiralSlot_count_eq_forty_eight := rfl
 
+/-!
+## Furey's shape as an HQIV-derived theorem
+
+The next layer abstracts the part of Furey's program we can use without importing
+minimal left ideals: a Furey-shaped generation space is any finite label space
+identified with the HQIV triality labels.  Once that shape equivalence is given,
+the generation count and the 48 chiral bookkeeping slots are theorems from the
+HQIV foundation.
+-/
+
+/-- A Furey-shaped generation label space, anchored by an equivalence to HQIV triality labels. -/
+structure FureyGenerationShape where
+  Generation : Type
+  generationFintype : Fintype Generation
+  generationEquivHQIV : Generation ≃ HQIVFureyGenerationIndex
+
+attribute [instance] FureyGenerationShape.generationFintype
+
+/-- The carrier determined by a Furey-shaped generation label space. -/
+abbrev FureyShapeCarrier (s : FureyGenerationShape) :=
+  s.Generation → Hqiv.Algebra.OctonionSpinorCarrier
+
+/-- The full chiral slot space determined by a Furey-shaped generation label space. -/
+abbrev FureyShapeChiralSlot (s : FureyGenerationShape) :=
+  s.Generation × Fin Hqiv.Algebra.smChiralGenerationDim
+
+/-- Any Furey-shaped generation space equivalent to HQIV triality has exactly three labels. -/
+theorem fureyShape_generation_count_eq_three
+    (foundation : HQIVFoundationFirstAnchor) (s : FureyGenerationShape) :
+    @Fintype.card s.Generation s.generationFintype = 3 := by
+  have hcard :
+      @Fintype.card s.Generation s.generationFintype =
+        Fintype.card HQIVFureyGenerationIndex :=
+    Fintype.card_congr s.generationEquivHQIV
+  rw [hcard]
+  exact foundation.trialityRepCount
+
+/-- A Furey-shaped three-generation space gives 48 full chiral Weyl bookkeeping slots. -/
+theorem fureyShape_chiralSlot_count_eq_forty_eight
+    (foundation : HQIVFoundationFirstAnchor) (s : FureyGenerationShape) :
+    Fintype.card (FureyShapeChiralSlot s) = 48 := by
+  rw [Fintype.card_prod, fureyShape_generation_count_eq_three foundation s]
+  simp [Hqiv.Algebra.smChiralGenerationDim]
+
+/-- Certificate that Furey's generation shape has been embedded into the HQIV foundation. -/
+structure FureyShapeThreeGenerationsFromHQIV where
+  shape : FureyGenerationShape
+  foundation : HQIVFoundationFirstAnchor
+  generationCount : @Fintype.card shape.Generation shape.generationFintype = 3
+  chiralSlotCount :
+    Fintype.card (FureyShapeChiralSlot shape) = 48
+  shapeEquivHQIV : shape.Generation ≃ HQIVFureyGenerationIndex
+
+/-- Build the three-generation certificate from a Furey-shaped generation space. -/
+def fureyShapeThreeGenerationsFromHQIV (s : FureyGenerationShape) :
+    FureyShapeThreeGenerationsFromHQIV where
+  shape := s
+  foundation := hqivFoundationFirstAnchor
+  generationCount := fureyShape_generation_count_eq_three hqivFoundationFirstAnchor s
+  chiralSlotCount := fureyShape_chiralSlot_count_eq_forty_eight hqivFoundationFirstAnchor s
+  shapeEquivHQIV := s.generationEquivHQIV
+
+/-- Furey's three-generation shape is a theorem once its labels are matched to HQIV triality. -/
+theorem furey_shape_three_generations_from_HQIV
+    (s : FureyGenerationShape) :
+    (fureyShapeThreeGenerationsFromHQIV s).generationCount =
+      fureyShape_generation_count_eq_three hqivFoundationFirstAnchor s := rfl
+
+/-- Canonical Furey shape obtained directly from the HQIV triality label space. -/
+def canonicalFureyGenerationShape : FureyGenerationShape where
+  Generation := HQIVFureyGenerationIndex
+  generationFintype := inferInstance
+  generationEquivHQIV := Equiv.refl HQIVFureyGenerationIndex
+
+/-- The canonical HQIV/Furey generation shape has exactly three generations. -/
+theorem canonicalFureyGenerationShape_count_eq_three :
+    @Fintype.card canonicalFureyGenerationShape.Generation
+      canonicalFureyGenerationShape.generationFintype = 3 :=
+  fureyShape_generation_count_eq_three hqivFoundationFirstAnchor canonicalFureyGenerationShape
+
 /-- Future Furey-side proof obligations.
 
 Each field is a proposition because this scaffold should not invent the missing
@@ -146,6 +250,69 @@ structure FureyCandidateDerivation where
   chargeOntologyRefinesHQIV : Prop
   generationOntologyRefinesHQIV : Prop
   shellSupportSelectionBridge : Prop
+
+/-!
+### Spinor `Mat₈(ℝ)` generation certificate (hooked to `CliffordCl06SixStandardSpinorMatLiftSurjective`)
+
+The **linear independence** of the `64` ordered `γ` monomials implies `ρ_mat` is surjective onto
+`Mat₈(ℝ)`; see `Hqiv.Algebra.cl06StandardSpinorMatLift_surjective_of_linearIndependent`.
+
+#### Integral Gram layer (`CliffordCl06SixSpinorMonomialMatrixData`)
+
+`spinorMonomialGramColumns` is the normalized Frobenius Gram `W` over `ℤ` (see module doc there).
+
+* `Hqiv.Algebra.spinorMonomialGramColumns_det_ne_zero` — from the mod-`101` axiom
+  `spinorMonomialGramColumnsZMod101_det` in the same module (script
+  `scripts/spinor_monomial_gram_det_mod101.py`).
+
+* `Hqiv.Algebra.spinorGammaMonomialMat_linearIndependent` — `ℝ^64` row-major Gram / `mulVec`
+  argument in `CliffordCl06SixSpinorGammaMonomialLinearIndependent`.
+-/
+
+/-- Nonsingular integral Gram matrix for the spinor monomial certificate. -/
+abbrev HQIVSpinorMonomialGramDetNonsingular : Prop :=
+  Hqiv.Algebra.spinorMonomialGramColumns.det ≠ 0
+
+/-- Hypothesis-style packaging for the `γ` monomial linear-independence target. -/
+abbrev HQIVSpinorGammaMonomialLinearIndependent : Prop :=
+  LinearIndependent ℝ Hqiv.Algebra.spinorGammaMonomialMat
+
+/-- The `γ` monomial matrices are `ℝ`-linearly independent (Gram / coordinate proof). -/
+theorem hqivSpinorGammaMonomialLinearIndependent : HQIVSpinorGammaMonomialLinearIndependent :=
+  Hqiv.Algebra.spinorGammaMonomialMat_linearIndependent
+
+theorem hqiv_cl06_standard_spinor_mat_lift_surjective_of_gamma_li
+    (h : HQIVSpinorGammaMonomialLinearIndependent) :
+    Function.Surjective Hqiv.Algebra.cl06StandardSpinorMatLift :=
+  Hqiv.Algebra.cl06StandardSpinorMatLift_surjective_of_linearIndependent h
+
+/-- Bijectivity packaging (surjectivity + equal `64`/`64` `finrank`). -/
+theorem hqiv_cl06_standard_spinor_mat_lift_bijective_of_gamma_li
+    (h : HQIVSpinorGammaMonomialLinearIndependent) :
+    Function.Bijective Hqiv.Algebra.cl06StandardSpinorMatLift :=
+  Hqiv.Algebra.cl06StandardSpinorMatLift_bijective_of_linearIndependent h
+
+/-- Furey-aligned packaging: the `Mat₈(ℝ)` matrix lift is fixed once monomial matrices are `ℝ`-LI. -/
+structure FureySpinorMatLiftFromMonomialLI where
+  /-- HQIV-side linear independence of the ordered `γ` monomial matrices (now unconditional). -/
+  gammaMonomialLI : HQIVSpinorGammaMonomialLinearIndependent
+
+/-- Construct the Furey-shaped spinor lift certificate from a linear-independence proof. -/
+noncomputable def fureySpinorMatLiftFromMonomialLI
+    (h : HQIVSpinorGammaMonomialLinearIndependent) : FureySpinorMatLiftFromMonomialLI where
+  gammaMonomialLI := h
+
+/-- Default certificate using `hqivSpinorGammaMonomialLinearIndependent`. -/
+noncomputable abbrev fureySpinorMatLiftFromMonomialCanonical : FureySpinorMatLiftFromMonomialLI :=
+  fureySpinorMatLiftFromMonomialLI hqivSpinorGammaMonomialLinearIndependent
+
+theorem fureySpinorMatLiftFromMonomialLI_surjective (c : FureySpinorMatLiftFromMonomialLI) :
+    Function.Surjective Hqiv.Algebra.cl06StandardSpinorMatLift :=
+  hqiv_cl06_standard_spinor_mat_lift_surjective_of_gamma_li c.gammaMonomialLI
+
+theorem fureySpinorMatLiftFromMonomialLI_bijective (c : FureySpinorMatLiftFromMonomialLI) :
+    Function.Bijective Hqiv.Algebra.cl06StandardSpinorMatLift :=
+  hqiv_cl06_standard_spinor_mat_lift_bijective_of_gamma_li c.gammaMonomialLI
 
 /-- A Furey candidate may refine HQIV only after all bridge obligations are proved. -/
 structure FureyMayRefineHQIV (d : FureyCandidateDerivation) : Prop where

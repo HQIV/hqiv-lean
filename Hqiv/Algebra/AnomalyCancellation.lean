@@ -20,6 +20,10 @@ the sum over left-handed minus right-handed of Tr(T^a {T^b, T^c}). For the SM wi
 three generations from 8v, 8s⁺, 8s⁻, the contributions cancel (Spin(8) is anomaly-free).
 
 **Reference:** HQIV preprint v2, Zenodo 10.5281/zenodo.18899939, Section 4.4.
+
+**TODO (Furey-gap / SM consistency):** replace the literal-zero `anomalyCoeff` scaffold with an explicit
+`SU(5)` (or `SU(3)×SU(2)×U(1)`) cubic trace polynomial normalized against the packaged SM quantum
+numbers once the electroweak/chiral carrier bridge is upgraded beyond bookkeeping.
 -/
 
 namespace Hqiv.Algebra

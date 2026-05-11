@@ -187,16 +187,44 @@ Roadmap **M6 — No fundamental graviton target**: not a QG metaphysics theorem,
 
 ## Furey ↔ HQIV ontology bridge scaffold (`Hqiv.Physics.FureyHQIVOntologyBridge`)
 
+The module doc opens with the **Stage 2–3** line: **`Cl(1)` + 1D hypercharge refinement
+proved; full `Cl(6)`-scale equivariant ideals open.** Until a paper-aligned `Cl(6)`
+layer lands, these rows are **bookkeeping / partial slot** material — **not** tagged
+**`Furey claim supported`** (reserve that phrase in this file for theorems that
+explicitly carry the full Furey Clifford claim).
+
 | Name | Output / meaning |
 |------|------------------|
 | `Hqiv.Physics.HQIVFoundationFirstAnchor` / `hqivFoundationFirstAnchor` | Lightweight record and canonical instance bundling the current HQIV-first anchors: spinor carrier dimension, one-generation SM quantum-number witness, triality count, and forced `α/γ`. |
 | `Hqiv.Physics.HQIVFureyGenerationIndex` / `HQIVFureyThreeGenerationCarrier` | HQIV-derived landing zone for Furey's three-generation embedding: `So8RepIndex` labels, with one `OctonionSpinorCarrier` per generation label. |
 | `Hqiv.Physics.hqivFurey_generation_count_eq_three` / `hqivFurey_generationSlot_count_eq_twenty_four` / `hqivFurey_chiralSlot_count_eq_forty_eight` | Concrete finite bookkeeping: three generation labels, 24 real 8s carrier slots, and 48 chiral Weyl generation slots from HQIV foundations. |
 | `Hqiv.Physics.FureyThreeGenerationEmbeddingFromHQIV` / `hqivFureyThreeGenerationEmbedding` / `hqivFureyThreeGenerationEmbedding_exists` | The theorem-backed HQIV-side certificate that supplies the three-generation embedding target for future Furey minimal-ideal equivalence proofs. |
+| `Hqiv.Physics.FureyGenerationShape` / `FureyShapeThreeGenerationsFromHQIV` | Furey-shaped generation abstraction: any finite generation-label type equivalent to the HQIV triality labels inherits the HQIV three-generation result. |
+| `Hqiv.Physics.fureyShape_generation_count_eq_three` / `fureyShape_chiralSlot_count_eq_forty_eight` / `canonicalFureyGenerationShape_count_eq_three` | Main proof layer for “Furey’s shape + HQIV foundation ⇒ three generations”: cardinality `3` and 48 chiral bookkeeping slots follow from `HQIVFoundationFirstAnchor.trialityRepCount`. |
 | `Hqiv.Physics.FureyCandidateDerivation` | Record of future Furey-side bridge obligations: complex carrier, minimal-left-ideal one-generation bridge, number-operator charge match, three-generation split, and ontology refinements. |
 | `Hqiv.Physics.FureyMayRefineHQIV` | Predicate/certificate that all Furey bridge obligations are proved before the Furey layer may refine HQIV ontology. |
 | `Hqiv.Physics.hqivFoundationFirstAnchor_exists` | The HQIV foundation-first anchor exists without any Furey/Clifford assumptions. |
 | `Hqiv.Physics.furey_refinement_requires_{carrier,charge,generation,shell_support}_bridge` | Projection lemmas making the conflict rule explicit: Furey can refine carrier, charge, generation, or shell/support ontology only through proved bridge obligations. |
+
+### Partial Clifford / hypercharge slot refinement (Stage 2–3 slice; abstract `Cl(0,6)` dimension)
+
+| Name | Output / meaning |
+|------|------------------|
+| `Hqiv.Algebra.IsMinimalLeftIdeal` / `Hqiv.Algebra.LeftIdeal` | Definitions: nonzero minimal left ideals as submodules of `R` over itself. |
+| `Hqiv.Algebra.cliffordOneDim_top_isMinimalLeftIdeal` | `⊤` is minimal in `CliffordOneDim` (Mathlib `Cl(1) ≅ ℂ` model). |
+| `Hqiv.Algebra.phaseLiftDelta_ne_zero` / `hqiv_hypercharge_line_finrank_one` | `Δ` is nonzero; the ℝ-span of `phaseLiftDelta` has `finrank` 1. |
+| `Hqiv.Algebra.CliffordHyperchargeSlotRefinement` / `canonicalCliffordHyperchargeSlotRefinement` | Bundles the `Cl(1)` minimal-ideal fact with the 1D matrix line for `Δ`. |
+| `Hqiv.Physics.sm_hyperchargeGenerator_eq_phaseLiftDelta` / `rapidity_carrier_zeta_phase_arg_eq_polarAngle` | SM hypercharge generator is `Δ`; zeta phase exponent matches the rapidity polar-angle scaffold (`RapidityIdealPurposeBridge`). |
+| `Hqiv.octonionLeftMul_N_mul_self` (`Hqiv.Algebra.OctonionLeftMulSquare`) | For each `k = 1,…,7`, `L(e_k)² = -I₈` as `8×8` real matrices (entrywise `fin_cases` proof). |
+| `Hqiv.Algebra.quadFormCl06Six` / `CliffordCl06Six` / `imaginarySixIndex` / `imaginarySixLeftMulMatrix` | **\(\mathrm{Cl}(0,6)\)** quadratic form on `Fin 6 → ℝ`, Clifford algebra type, embedding `e₁..e₆ → Fin 8`, and matched left-mult matrices `L(e_{j+1})`. |
+| `Hqiv.Algebra.quadFormCl06Six_basisVec` / `cliffordCl06Six_iota_sq` / `cliffordCl06Six_iota_sq_eval` | Clifford generator squares: `ι(δⱼ)²` maps to `Q(δⱼ) = -1` in `ℝ → CliffordCl06Six`. |
+| `Hqiv.Algebra.imaginarySix_leftMul_matrix_mul_self` | On the six directions, `L(e_{j+1})² = -I₈` (specializes `octonionLeftMul_N_mul_self`). |
+| `Hqiv.Algebra.cliffordCl06Six_finrank` / `Hqiv.Algebra.finrank_extCl06` | **Furey claim supported — partial (abstract `Cl(0,6)` + concrete `8`-dim spinor `ρ`)**: `Module.finrank ℝ CliffordCl06Six = 64` via `CliffordAlgebra.equivExterior` and the `⋀^k ℝ⁶` grading (`Nat.sum_range_choose`). |
+| `Hqiv.Algebra.cl06StandardSpinorMatLift` / `Hqiv.Algebra.cl06StandardSpinorRho` / `Hqiv.Algebra.cl06StandardSpinorMatLift_ι` | Mathlib `CliffordAlgebra.lift` of `quadFormCl06Six` into `Matrix (Fin 8) (Fin 8) ℝ`, then `algEquivMatrix'` into `CliffordCl06Six →ₐ[ℝ] End(OctonionSpinorCarrier)`; six explicit `γ` Kronecker matrices (`cl06SpinorGammaMat`), **not** octonion left-mult on `e₁…e₆`. |
+| `Hqiv.Algebra.cl06StandardSpinorRhoRange_finrank_le` | The `ℝ`-linear range of `ρ` sits in `End(ℝ⁸)` hence has `finrank ≤ 64` (ambient `8×8` real dimension). (A tight `8`-dimensional **minimal-ideal** image still needs further simple-module / surjectivity packaging.) |
+| `Hqiv.Algebra.cliffordCl06SixLeftIdealGenerated` / `cliffordCl06SixLeftIdealGenerated_one_eq_top` / `exists_nonzero_idempotent_cliffordCl06Six` | Abstract left-ideal packaging in `CliffordCl06Six`; `⟨1⟩_L = ⊤`; nontrivial idempotent `1`. |
+| `Hqiv.Algebra.cliffordIdealToSpinorVec` | Representation-conditional bridge `I →ₗ[ℝ] OctonionSpinorCarrier` from any `ρ : CliffordCl06Six →ₐ[ℝ] End(ℝ⁸)` (instantiate with `cl06StandardSpinorRho`) and a seed vector (orthogonal to the naive left-mult matrix lift obstruction below). |
+| `Hqiv.Algebra.octonionLeftMul_1_mul_2_add_mul_swap_ne_zero` / `octonionLeftMul_add_sum_square_entry_33_ne` (`Hqiv.Algebra.OctonionLeftMulCliffordObstruction`) | **Matrix obstruction (kept explicit):** naive octonion **left** `L(e₁),L(e₂)` fail mixed Clifford relations, so they cannot be the six generators of a `Cl(0,6)` `CliffordAlgebra.lift` into `Mat₈(ℝ)` for the standard `Q` on `ℝ⁶`. |
 
 ## Conserved-content mass bridge (`Hqiv.Physics.ConservedContentMassBridge`)
 

@@ -79,8 +79,6 @@ theorem so8ActOn8s_linear (M : Matrix (Fin 8) (Fin 8) ℝ) (a b : ℝ) (x y : Oc
   funext i
   simp [Pi.add_apply, Pi.smul_apply, smul_eq_mul]
 
-theorem G2_contains_SM_subgroup : True := trivial
-def hyperchargeBlockCorrect : Prop := True
 theorem one_generation_from_8s : octonionSpinorDim = 8 ∧ smChiralGenerationDim = 16 := by constructor <;> rfl
 
 /-- Spin(8) has three 8-dim irreps related by triality (`So8RepIndex` has cardinality 3).
@@ -112,6 +110,13 @@ def su2_L_gen_2 : Matrix (Fin 8) (Fin 8) ℝ := g2Generator 1
 
 /-- **SU(2)_L generator 3**: defined as -[T₁,T₂] so that [T₁,T₂] = -T₃ holds (su(2) relation). -/
 def su2_L_gen_3 : Matrix (Fin 8) (Fin 8) ℝ := -Hqiv.lieBracket su2_L_gen_1 su2_L_gen_2
+
+/-- `SU(2)ₗ` building blocks are explicit `G₂` Lie polynomials (not yet a full `𝔰𝔲(2) ⊆ 𝔤₂` subalgebra inclusion). -/
+theorem su2_L_generators_from_g2_building_blocks :
+    su2_L_gen_1 = g2Generator 0 ∧ su2_L_gen_2 = g2Generator 1 ∧
+      su2_L_gen_3 = -Hqiv.lieBracket (g2Generator 0) (g2Generator 1) := by
+  unfold su2_L_gen_1 su2_L_gen_2 su2_L_gen_3
+  exact And.intro rfl (And.intro rfl rfl)
 
 /-- **SU(2)_L generators are in so(8)** (antisymmetric). T₁,T₂ from G₂; T₃ = -[T₁,T₂] is bracket hence in so(8). -/
 theorem su2_generators_in_so8 :
@@ -223,6 +228,13 @@ theorem hypercharge_assignments_correct :
     hyperchargeEigenvalue 6 = 1 ∧ hyperchargeEigenvalue 7 = 0 := by
   refine ⟨?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_⟩
   all_goals simp [hyperchargeEigenvalue]
+
+/-- Witness-level hypercharge table (defeq with `hypercharge_assignments_correct`; not a spectral/block derivation). -/
+def hyperchargeBlockCorrect : Prop :=
+  hyperchargeEigenvalue 0 = 1/6 ∧ hyperchargeEigenvalue 1 = 1/6 ∧
+    hyperchargeEigenvalue 2 = -2/3 ∧ hyperchargeEigenvalue 3 = 1/3 ∧
+    hyperchargeEigenvalue 4 = -1/2 ∧ hyperchargeEigenvalue 5 = -1/2 ∧
+    hyperchargeEigenvalue 6 = 1 ∧ hyperchargeEigenvalue 7 = 0
 
 /-!
 ## Gap 3: Full branching rules of 8s under G₂ ⊃ SM

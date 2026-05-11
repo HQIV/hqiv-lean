@@ -71,6 +71,7 @@ import Hqiv.Physics.LeptonGenerationLockin
 import Hqiv.Physics.SurfaceWaveSelfClock
 import Hqiv.Physics.OctonionicZeta
 import Hqiv.Physics.RapidityZetaPhaseBridge
+import Hqiv.Physics.RapidityIdealPurposeBridge
 import Hqiv.Physics.HodgeRapidityZetaBridge
 import Hqiv.Physics.DivisionAlgebraZetaScaffold
 import Hqiv.Physics.HQIVHeatFlowDeformation
@@ -122,6 +123,12 @@ import Hqiv.QuantumComputing.OSHoracle
 import Hqiv.QuantumComputing.ShoreOracle
 import Hqiv.QuantumComputing.ProteinFoldingHook
 import Hqiv.Algebra.OctonionBasics
+import Hqiv.Algebra.CliffordSixImaginaryScaffold
+import Hqiv.Algebra.CliffordCl06SixDimension
+import Hqiv.Algebra.CliffordCl06SixIdeal
+import Hqiv.Algebra.CliffordCl06SixSpinorBridge
+import Hqiv.Algebra.CliffordCl06SixStandardSpinorRho
+import Hqiv.Algebra.OctonionLeftMulCliffordObstruction
 import Hqiv.Algebra.OctonionSphereConstruction
 import Hqiv.Algebra.OctonionAxisAngles
 import Hqiv.Algebra.IntegerLatticeShellCount8
@@ -140,6 +147,7 @@ import Hqiv.Archive.Algebra.MoireToyThresholdSearch
 import Hqiv.Algebra.ShellResidueCRT
 import Hqiv.Algebra.G2Embedding
 import Hqiv.Algebra.PhaseLiftDelta
+import Hqiv.Algebra.CliffordHQIVSlotRefinement
 import Hqiv.Algebra.Triality
 import Hqiv.Algebra.SMEmbedding
 import Hqiv.Algebra.WeakFromLeftMulOctonion
