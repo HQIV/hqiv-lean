@@ -115,3 +115,8 @@ globs = ["Hqiv.Geometry.AuxiliaryField"]
 name = "paper_3d_causal_growth"
 # Lean modules cited by papers/3d_causal_growth/ (gold subset; broken/WIP excluded).
 globs = ["Hqiv.Generators", "Hqiv.Geometry.AlphaGammaForcedByLattice", "Hqiv.Geometry.HQVMetric", "Hqiv.Geometry.OctonionicLightCone", "Hqiv.Geometry.SATRapidityManifold", "Hqiv.Geometry.SharedManifoldRapidity", "Hqiv.Story.CausalRapidityForcing"]
+
+[[lean_lib]]
+name = "paper_closure"
+# Lean modules cited by papers/closure/ (gold subset; broken/WIP excluded).
+globs = ["Hqiv.Generators", "Hqiv.Geometry.OctonionicLightCone", "Hqiv.So8CoordMatrix", "Hqiv.Story.CausalRapidityForcing"]
