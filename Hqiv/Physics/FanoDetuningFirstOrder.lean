@@ -14,6 +14,9 @@ hook used by downstream quotients.
 `spectralFanoRindler1Jet (FanoLine.ofTag canonicalSpectralTag)`. The open step is no longer a missing
 spectral object, but deriving that same 1-jet law from full mode-selection/eigen-shell dynamics rather
 than from the current proved spectral scaffold.
+
+**Proved action chain:** `FanoActionToDetuningJet.lean` (projected strength increment →
+`spectralFanoRindler1Jet` → `detunedShellSurface` → `modalFrequencyHorizonFromFanoLine`).
 -/
 
 open Hqiv

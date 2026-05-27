@@ -5,6 +5,7 @@ import Hqiv.Geometry.HQVMetric
 import Hqiv.Geometry.ContinuumSpacetimeChart
 import Hqiv.Physics.ModifiedMaxwell
 import Hqiv.Physics.SchematicPlasmaCurrent
+import Hqiv.Physics.FanoResonance
 
 /-!
 # HQIV effective fluid closure (scaffold)
@@ -141,6 +142,36 @@ theorem hqivVacuumMomentumSource3_add_dot (γ phi dot₁ dot₂ : ℝ) (gradPhi 
   funext i
   simp [hqivVacuumMomentumSource3, Pi.add_apply]
   ring
+
+/-- Directional longitudinal HQIV stress tensor.
+
+`κ_L ρ Λ (s·∇φ) s ⊗ s` is the neutral-medium analogue of the conductor longitudinal
+O-Maxwell source: it is a directional stress, not a pure scalar pressure gradient. The
+simulator supplies the divergence of this tensor as a separate resolved callback. -/
+noncomputable def hqivLongitudinalStressTensor3 (kappaL rho couplingLog gradPhiAlong : ℝ)
+    (direction : Fin 3 → ℝ) : Fin 3 → Fin 3 → ℝ := fun i j =>
+  kappaL * rho * couplingLog * gradPhiAlong * direction i * direction j
+
+/-- Simulator-facing longitudinal force density: the divergence of the directional
+stress tensor, already evaluated by the mesh/discretization layer. -/
+def hqivLongitudinalStressForce3 (stressDivergence : Fin 3 → ℝ) : Fin 3 → ℝ :=
+  stressDivergence
+
+theorem hqivLongitudinalStressTensor3_eq_zero_of_kappa_zero
+    (rho couplingLog gradPhiAlong : ℝ) (direction : Fin 3 → ℝ) :
+    hqivLongitudinalStressTensor3 0 rho couplingLog gradPhiAlong direction = 0 := by
+  funext i j
+  simp [hqivLongitudinalStressTensor3]
+
+theorem hqivLongitudinalStressTensor3_eq_zero_of_grad_zero
+    (kappaL rho couplingLog : ℝ) (direction : Fin 3 → ℝ) :
+    hqivLongitudinalStressTensor3 kappaL rho couplingLog 0 direction = 0 := by
+  funext i j
+  simp [hqivLongitudinalStressTensor3]
+
+theorem hqivLongitudinalStressForce3_zero :
+    hqivLongitudinalStressForce3 (0 : Fin 3 → ℝ) = 0 := by
+  rfl
 
 /-!
 ## F2 — Typed O-Maxwell ↔ fluid chart hypothesis
@@ -323,6 +354,73 @@ theorem hqivEddyViscosity_HQIV_shell_debye_pos (m : ℕ) (dotTheta C : ℝ) (hC 
   exact
     hqivEddyViscosity_pos gamma_HQIV (T m) dotTheta lambdaDebye C hγ (T_pos m) lambdaDebye_pos hC
       hdot
+
+/-!
+### IR/UV feedback envelope for second-order vacuum divergence
+
+The second-order scalar channel used by the Python RANS mirror is
+`∇·S_vac = -(γ/6) Δ(φ |δ̇θ′|)`.  HQIV is IR/UV by construction, so the discrete transport
+coefficient should not use an arbitrary multiple of the first-order drag.  The scaffold records the
+natural shell/Debye envelope with a **lapse/thermal/angular Rindler activity gate**:
+
+* **IR:** `T m` suppresses late / coarse shells.
+* **Rindler:** `1 + (γ/2)m A_R`, where `A_R ≥ 0` is the local horizon activity proxy
+  (Python uses positive lapse increment times angular and thermal factors).
+* **UV:** `lambdaDebye⁻²` bounds the curvature of the scalar product.
+* **Coherence:** the same `C ∈ [0,1]` channel used by shell/Debye eddy viscosity.
+-/
+
+/-- HQIV IR/UV envelope for the second-order vacuum-divergence scalar.
+
+`(|γ|/6) * T(m) * C * |φ * dot| / (λ_D² * (1 + (γ/2)m A_R))`.
+
+Setting `rindlerActivity = 0` leaves the Rindler/horizon denominator inactive; this is the intended
+near-wall / low-energy limit where lapse transport, not horizon cutoff, carries the geometry.
+
+This is the Lean anchor mirrored by Python
+`hqiv_ir_uv_vacuum_divergence_limit`. -/
+noncomputable def hqivIRUVVacuumDivergenceLimit (m : ℕ) (phi dot C rindlerActivity : ℝ) : ℝ :=
+  (|gamma_HQIV| / 6) * T m * C * |phi * dot| /
+    (lambdaDebye ^ 2 * (1 + c_rindler_shared * (m : ℝ) * rindlerActivity))
+
+theorem hqivIRUVVacuumDivergenceLimit_eq (m : ℕ) (phi dot C rindlerActivity : ℝ) :
+    hqivIRUVVacuumDivergenceLimit m phi dot C rindlerActivity =
+      (|gamma_HQIV| / 6) * T m * C * |phi * dot| /
+        (lambdaDebye ^ 2 * (1 + c_rindler_shared * (m : ℝ) * rindlerActivity)) := rfl
+
+theorem hqivIRUVVacuumDivergenceLimit_nonneg (m : ℕ) (phi dot C rindlerActivity : ℝ)
+    (hC : 0 ≤ C) (hA : 0 ≤ rindlerActivity) :
+    0 ≤ hqivIRUVVacuumDivergenceLimit m phi dot C rindlerActivity := by
+  unfold hqivIRUVVacuumDivergenceLimit
+  have hγ : 0 ≤ |gamma_HQIV| / 6 := div_nonneg (abs_nonneg _) (by norm_num)
+  have hT : 0 ≤ T m := le_of_lt (T_pos m)
+  have habs : 0 ≤ |phi * dot| := abs_nonneg _
+  have hnum : 0 ≤ (|gamma_HQIV| / 6) * T m * C * |phi * dot| :=
+    mul_nonneg (mul_nonneg (mul_nonneg hγ hT) hC) habs
+  have hden : 0 ≤ lambdaDebye ^ 2 := sq_nonneg lambdaDebye
+  have hR : 0 ≤ 1 + c_rindler_shared * (m : ℝ) * rindlerActivity := by
+    unfold c_rindler_shared
+    rw [gamma_eq_2_5]
+    have hm : (0 : ℝ) ≤ (m : ℝ) := Nat.cast_nonneg m
+    nlinarith
+  exact div_nonneg hnum (mul_nonneg hden hR)
+
+/-- Smooth feedback form for second-order vacuum divergence.
+
+`raw / (1 + |raw| / B)` where `B = hqivIRUVVacuumDivergenceLimit`.
+When `raw` is small relative to the shell/Debye bound this is transparent; for UV-sized curvature it
+saturates smoothly instead of hard clipping. -/
+noncomputable def hqivIRUVFeedbackLimitedVacuumDivergence
+    (m : ℕ) (phi dot C rindlerActivity raw : ℝ) : ℝ :=
+  raw / (1 + |raw| / hqivIRUVVacuumDivergenceLimit m phi dot C rindlerActivity)
+
+theorem hqivIRUVFeedbackLimitedVacuumDivergence_zero (m : ℕ) (phi dot C rindlerActivity : ℝ) :
+    hqivIRUVFeedbackLimitedVacuumDivergence m phi dot C rindlerActivity 0 = 0 := by
+  simp [hqivIRUVFeedbackLimitedVacuumDivergence]
+
+theorem hqivIRUVFeedbackLimitedVacuumDivergence_eq (m : ℕ) (phi dot C rindlerActivity raw : ℝ) :
+    hqivIRUVFeedbackLimitedVacuumDivergence m phi dot C rindlerActivity raw =
+      raw / (1 + |raw| / hqivIRUVVacuumDivergenceLimit m phi dot C rindlerActivity) := rfl
 
 /-!
 ### F3 — constructor when `Θ = T m` and `ℓ_coh = lambdaDebye`

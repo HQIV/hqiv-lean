@@ -208,6 +208,24 @@ theorem visibleChargeState_toRat_ne_neg_one_third (q : VisibleChargeState) :
     q.toRat ≠ (-1 / 3 : ℚ) := by
   cases q <;> norm_num [VisibleChargeState.toRat, VisibleChargeState.toInt]
 
+/-- Within the current three-class fermion taxonomy, the neutral/spin-only class
+is the first closure rung. This is an enumerated-class theorem, not a uniqueness
+claim over all possible future fermionic closure records. -/
+theorem neutral_spinOnly_is_first_current_fermionic_closure_rung :
+    closureLayerOfContent .neutrino = FermionClosureLayer.spinOnly ∧
+      (∀ c : FermionContentClass,
+        (closureLayerOfContent .neutrino).rank ≤ (closureLayerOfContent c).rank) ∧
+      (∀ c : FermionContentClass,
+        (closureLayerOfContent c).rank = (closureLayerOfContent .neutrino).rank ↔
+          c = .neutrino) := by
+  constructor
+  · rfl
+  constructor
+  · intro c
+    cases c <;> decide
+  · intro c
+    cases c <;> simp [closureLayerOfContent, FermionClosureLayer.rank]
+
 theorem visible_shell_states_match_integer_lepton_charges :
     VisibleChargeState.toRat .neutral = Hqiv.Algebra.chargeFromY 4 (1 / 2) ∧
       VisibleChargeState.toRat .negative = Hqiv.Algebra.chargeFromY 5 (-1 / 2) ∧
@@ -508,6 +526,26 @@ theorem massScalingAnsatz_lt_of_lt_l {k δ : ℝ} {l1 l2 m : ℕ} (hk : 0 < k)
     _ < (l2 : ℝ) ^ 2 * (k * effCorrected δ m) := mul_lt_mul_of_pos_right hsq (mul_pos hk heff)
     _ = k * (l2 : ℝ) ^ 2 * effCorrected δ m := by ring
 
+/-- At fixed positive `k` and `RindlerDenDeltaPos δ m`, the three fermion content rungs are strictly
+ordered by closure rank (hence by `conservedTripleCount`): spin-only < charge-decorated < color-composed. -/
+theorem massScalingAnsatz_fermion_three_rungs_strict_order (k δ : ℝ) (m : ℕ) (hk : 0 < k)
+    (hδ : RindlerDenDeltaPos δ m) :
+    massScalingAnsatz k δ (closureLayerOfContent .neutrino).rank m <
+        massScalingAnsatz k δ (closureLayerOfContent .chargedLepton).rank m ∧
+      massScalingAnsatz k δ (closureLayerOfContent .chargedLepton).rank m <
+        massScalingAnsatz k δ (closureLayerOfContent .quark).rank m := by
+  refine ⟨?_, ?_⟩
+  · have hν := closureLayer_rank_neutrino_lt_chargedLepton
+    have h0 : 0 < (closureLayerOfContent .neutrino).rank := by
+      rw [closureLayer_rank_matches_triple_count .neutrino]
+      decide
+    exact massScalingAnsatz_lt_of_lt_l hk h0 hν hδ
+  · have hχ := closureLayer_rank_chargedLepton_lt_quark
+    have h0 : 0 < (closureLayerOfContent .chargedLepton).rank := by
+      rw [closureLayer_rank_matches_triple_count .chargedLepton]
+      decide
+    exact massScalingAnsatz_lt_of_lt_l hk h0 hχ hδ
+
 /-- Larger shell index ⇒ larger ansatz at fixed `k`, `l` (`k > 0`, `l > 0`, `0 ≤ δ`). -/
 theorem massScalingAnsatz_lt_of_lt_m {k δ : ℝ} {l m n : ℕ} (hk : 0 < k) (hl : 0 < l)
     (hδ : 0 ≤ δ) (hmn : m < n) (_hδm : RindlerDenDeltaPos δ m) (_hδn : RindlerDenDeltaPos δ n) :
@@ -562,6 +600,23 @@ theorem neutrino_ladder_from_neutralClosureWitness :
   · unfold m_nu_tau_derived m_nu_mu_derived
     rw [m_nu_e_derived_from_neutralClosureWitness]
     ring
+
+/-- Consolidated M3 package: in the current content bridge, the neutrino ladder
+is the neutral/spin-only first fermionic rung and it descends from
+`neutralClosureWitness`. The theorem deliberately quantifies only over
+`FermionContentClass`, so it does not claim uniqueness in any larger future
+fermion-closure search space. -/
+theorem neutrino_ladder_is_current_neutral_spin_first_rung :
+    closureLayerOfContent .neutrino = FermionClosureLayer.spinOnly ∧
+      (∀ c : FermionContentClass,
+        (closureLayerOfContent .neutrino).rank ≤ (closureLayerOfContent c).rank) ∧
+      m_nu_e_derived = outerHorizonNeutrinoSuppression * neutralClosureWitness ∧
+      m_nu_mu_derived = outerHorizonNeutrinoSuppression ^ 2 * neutralClosureWitness ∧
+      m_nu_tau_derived = outerHorizonNeutrinoSuppression ^ 3 * neutralClosureWitness := by
+  rcases neutral_spinOnly_is_first_current_fermionic_closure_rung with
+    ⟨hspin, hmin, _huniqCurrent⟩
+  rcases neutrino_ladder_from_neutralClosureWitness with ⟨he, hmu, htau⟩
+  exact ⟨hspin, hmin, he, hmu, htau⟩
 
 theorem m_nu_e_derived_lt_m_tau_from_resonance_anchor :
     m_nu_e_derived < m_tau_from_resonance := by
@@ -618,6 +673,24 @@ theorem chargeDecorated_candidate_ladder_descends :
   exact ⟨m_nu_e_derived_lt_m_tau_from_resonance_anchor,
     m_e_from_lockin_surface_candidate_lt_m_mu_from_lockin_surface_candidate,
     m_mu_from_lockin_surface_candidate_lt_m_tau_from_lockin_surface_candidate⟩
+
+/-- Consolidated M4 package: the charged-lepton candidate ladder is the current
+charge-decorated rung above the neutral/spin-only base, with signed visible
+charges and the existing τ→μ→e relaxation order. This packages the rung; it does
+not remove the active τ GeV witness. -/
+theorem chargedLepton_ladder_is_chargeDecorated_rung_on_neutral_base :
+    closureLayerOfContent .chargedLepton = FermionClosureLayer.chargeDecorated ∧
+      (closureLayerOfContent .neutrino).rank <
+        (closureLayerOfContent .chargedLepton).rank ∧
+      visibleChargeStateAllowed (closureLayerOfContent .chargedLepton) .positive ∧
+      visibleChargeStateAllowed (closureLayerOfContent .chargedLepton) .negative ∧
+      m_nu_e_derived < m_tau_from_resonance ∧
+      m_e_from_lockin_surface_candidate < m_mu_from_lockin_surface_candidate ∧
+      m_mu_from_lockin_surface_candidate < m_tau_from_lockin_surface_candidate := by
+  rcases chargedLepton_visible_charge_is_signed with ⟨hpos, hneg⟩
+  rcases chargeDecorated_candidate_ladder_descends with ⟨hντ, heμ, hμτ⟩
+  exact ⟨closureLayerOfContent_chargedLepton,
+    closureLayer_rank_neutrino_lt_chargedLepton, hpos, hneg, hντ, heμ, hμτ⟩
 
 theorem chargeDecorated_tau_candidate_lt_colorComposed_heavy_visible_band :
     m_tau_from_lockin_surface_candidate < allowedColorResonanceMass .upLike .heavy := by

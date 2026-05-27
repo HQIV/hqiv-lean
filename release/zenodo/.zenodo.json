@@ -1,12 +1,12 @@
 {
-  "title": "HQIV LEAN: Rapidity-Manifold SO(8) Closure Proof Objects and Certificates",
+  "title": "From Discrete Null-Lattice Growth to so(8):Concrete Realization and Exact Lie Closure",
   "upload_type": "dataset",
   "publication_type": "other",
-  "description": "Draft Zenodo metadata for the HQIV_LEAN publication bundle containing manuscript and appendix sources/PDFs, Lean formal proof modules, and exact symbolic closure certificates.",
+  "description": "Complete reproducibility package for the preprint 'From Discrete Null-Lattice Growth to so(8): Concrete Realization and Exact Lie Closure'. Contains machine-checked Lean 4 proofs (G₂ antisymmetry, full so(8) Lie closure), exact rational symbolic certificates over ℚ, generator scripts, LaTeX sources, and both manuscript + appendix PDFs. All nontrivial steps are formally verified.",
   "creators": [
     {
-      "name": "REPLACE_WITH_AUTHOR_NAME, REPLACE_WITH_GIVEN_NAMES",
-      "affiliation": "REPLACE_WITH_AFFILIATION",
+      "name": "ETTINGER, STEVEN JR",
+      "affiliation": "INDEPENDENT RESEARCHER",
       "orcid": "0009-0004-9940-3666"
     }
   ],
@@ -23,10 +23,5 @@
   "license": "MIT",
   "notes": "Update creators, description, related identifiers, and versioning before publication.",
   "related_identifiers": [
-    {
-      "relation": "isSupplementTo",
-      "scheme": "url",
-      "identifier": "REPLACE_WITH_MANUSCRIPT_URL_OR_DOI"
-    }
   ]
 }

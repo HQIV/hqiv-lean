@@ -1,4 +1,5 @@
 import Hqiv.QuantumChemistry.FiniteSiteQuantumChemistry
+import Hqiv.Physics.ReadoutGaugeSeed
 
 /-!
 # LiH finite-site orbital scaffold (`s` + `p`)
@@ -13,6 +14,7 @@ is introduced here.
 namespace Hqiv.QuantumChemistry
 
 open Hqiv
+open Hqiv.Physics
 
 /-- Three-site valence scaffold for LiH:
 `0 = Li(s)`, `1 = Li(p)`, `2 = H(s)`. -/
@@ -74,6 +76,120 @@ theorem lihValenceModeBudgetTrace_nonneg (mLiS mLiP mH : ℕ) :
   nlinarith [Hqiv.Physics.accessibleModeBudgetUpToShell_nonneg mLiS,
     Hqiv.Physics.accessibleModeBudgetUpToShell_nonneg mLiP,
     Hqiv.Physics.accessibleModeBudgetUpToShell_nonneg mH]
+
+/-! ## LiH Compton-shell ξ / Ωₖ bridge -/
+
+/-- Li(s) shell used by the Compton LiH readout. -/
+def lihComptonLiSShell : ℕ := 4
+
+/-- Li(p) shell used by the Compton LiH readout. -/
+def lihComptonLiPShell : ℕ := 3
+
+/-- H(s) shell used by the Compton LiH readout. -/
+def lihComptonHSShell : ℕ := 1
+
+theorem lihValenceSpec_compton_LiS :
+    (lihValenceSpec lihComptonLiSShell lihComptonLiPShell lihComptonHSShell).shell
+      ⟨0, by decide⟩ = lihComptonLiSShell := by
+  simp [lihValenceSpec]
+
+theorem lihValenceSpec_compton_LiP :
+    (lihValenceSpec lihComptonLiSShell lihComptonLiPShell lihComptonHSShell).shell
+      ⟨1, by decide⟩ = lihComptonLiPShell := by
+  simp [lihValenceSpec]
+
+theorem lihValenceSpec_compton_HS :
+    (lihValenceSpec lihComptonLiSShell lihComptonLiPShell lihComptonHSShell).shell
+      ⟨2, by decide⟩ = lihComptonHSShell := by
+  simp [lihValenceSpec]
+
+/-- Canonical Compton LiH valence assignment: `lihValenceSpec 4 3 1`. -/
+noncomputable def lihComptonValenceSpec : OrbitalSiteChemistrySpec 3 :=
+  lihValenceSpec lihComptonLiSShell lihComptonLiPShell lihComptonHSShell
+
+theorem lihComptonValenceSpec_eq :
+    lihComptonValenceSpec =
+      lihValenceSpec lihComptonLiSShell lihComptonLiPShell lihComptonHSShell := rfl
+
+/--
+The three Compton shells used by `lihComptonValenceSpec` are exactly
+`lihComptonLiSShell = 4`, `lihComptonLiPShell = 3`, and `lihComptonHSShell = 1`.
+-/
+theorem lihComptonUsedShells_eq_spec :
+    lihComptonLiSShell = 4 ∧
+      lihComptonLiPShell = 3 ∧
+        lihComptonHSShell = 1 ∧
+          lihComptonValenceSpec.shell ⟨0, by decide⟩ = lihComptonLiSShell ∧
+            lihComptonValenceSpec.shell ⟨1, by decide⟩ = lihComptonLiPShell ∧
+              lihComptonValenceSpec.shell ⟨2, by decide⟩ = lihComptonHSShell := by
+  refine ⟨rfl, rfl, rfl, ?_, ?_, ?_⟩
+  · exact lihValenceSpec_compton_LiS
+  · exact lihValenceSpec_compton_LiP
+  · exact lihValenceSpec_compton_HS
+
+/--
+Local increment form of the discrete-continuous Ωₖ bridge at one integer shell.
+
+This is intentionally weaker than `ContinuousXiPath.OmegaKIntegerBridge`: LiH only
+needs adjacent increments at its three Compton readout shells, not a global
+identification of the analytic primitive with the finite null-lattice sum.
+-/
+def lihLocalOmegaKIncrementBridge (n : ℕ) : Prop :=
+  ContinuousXiPath.omegaK_xi (xiOfShell (n + 1)) -
+      ContinuousXiPath.omegaK_xi (xiOfShell n) =
+    omega_k_partial (n + 1) - omega_k_partial n
+
+/-- Finite Ωₖ bridge payload for the LiH Compton shells `(4,3,1)`. -/
+structure LiHComptonOmegaKBridge where
+  liS : lihLocalOmegaKIncrementBridge lihComptonLiSShell
+  liP : lihLocalOmegaKIncrementBridge lihComptonLiPShell
+  hS : lihLocalOmegaKIncrementBridge lihComptonHSShell
+
+theorem lihLocalOmegaKIncrementBridge_from_global
+    (hΩ : Hqiv.readoutOmegaKIntegerBridge) (n : ℕ) :
+    lihLocalOmegaKIncrementBridge n :=
+  ContinuousXiPath.omegaK_xi_integer_increment_bridge hΩ n
+
+theorem liHComptonOmegaKBridge_from_global
+    (hΩ : Hqiv.readoutOmegaKIntegerBridge) : LiHComptonOmegaKBridge where
+  liS := lihLocalOmegaKIncrementBridge_from_global hΩ lihComptonLiSShell
+  liP := lihLocalOmegaKIncrementBridge_from_global hΩ lihComptonLiPShell
+  hS := lihLocalOmegaKIncrementBridge_from_global hΩ lihComptonHSShell
+
+theorem imprintWeightedReadoutPhase_xi_matches_integer_step_of_local_bridge
+    {n : ℕ} (hΩ : lihLocalOmegaKIncrementBridge n) :
+    Hqiv.imprintWeightedReadoutPhase_xi_alias
+        (xiOfShell n) (xiOfShell (n + 1)) =
+      Hqiv.imprintWeightedReadoutPhase n := by
+  unfold Hqiv.imprintWeightedReadoutPhase_xi_alias
+  unfold ContinuousXiPath.imprintWeightedReadoutPhase_xi
+  unfold Hqiv.imprintWeightedReadoutPhase
+  rw [ContinuousXiPath.phi_xi_chart]
+  rw [hΩ]
+
+/-- Li(s) Compton shell: continuous-ξ and discrete imprint phases match at `m = 4`. -/
+theorem lihCompton_LiS_imprintWeightedReadoutPhase_xi_matches
+    (hΩ : LiHComptonOmegaKBridge) :
+    Hqiv.imprintWeightedReadoutPhase_xi_alias
+        (xiOfShell lihComptonLiSShell) (xiOfShell (lihComptonLiSShell + 1)) =
+      Hqiv.imprintWeightedReadoutPhase lihComptonLiSShell :=
+  imprintWeightedReadoutPhase_xi_matches_integer_step_of_local_bridge hΩ.liS
+
+/-- Li(p) Compton shell: continuous-ξ and discrete imprint phases match at `m = 3`. -/
+theorem lihCompton_LiP_imprintWeightedReadoutPhase_xi_matches
+    (hΩ : LiHComptonOmegaKBridge) :
+    Hqiv.imprintWeightedReadoutPhase_xi_alias
+        (xiOfShell lihComptonLiPShell) (xiOfShell (lihComptonLiPShell + 1)) =
+      Hqiv.imprintWeightedReadoutPhase lihComptonLiPShell :=
+  imprintWeightedReadoutPhase_xi_matches_integer_step_of_local_bridge hΩ.liP
+
+/-- H(s) Compton shell: continuous-ξ and discrete imprint phases match at `m = 1`. -/
+theorem lihCompton_HS_imprintWeightedReadoutPhase_xi_matches
+    (hΩ : LiHComptonOmegaKBridge) :
+    Hqiv.imprintWeightedReadoutPhase_xi_alias
+        (xiOfShell lihComptonHSShell) (xiOfShell (lihComptonHSShell + 1)) =
+      Hqiv.imprintWeightedReadoutPhase lihComptonHSShell :=
+  imprintWeightedReadoutPhase_xi_matches_integer_step_of_local_bridge hΩ.hS
 
 end Hqiv.QuantumChemistry
 

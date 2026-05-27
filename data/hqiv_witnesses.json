@@ -1,5 +1,9 @@
 {
-  "m_H": 23.52,
+  "scale_witness_default": "proton_lockin",
+  "referenceM": 4,
+  "geV_per_MeV": 0.001,
+  "CODATA_inv_alpha": 137.035999177,
+"m_H": 23.52,
   "M_W": 3.92,
   "M_Z": 5.488,
   "m_nu_e": 0.0392,

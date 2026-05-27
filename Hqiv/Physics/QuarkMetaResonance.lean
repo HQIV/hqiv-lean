@@ -148,13 +148,18 @@ def m_quark_down_strange_shell : ℕ := 123
 def m_quark_down_light_shell : ℕ := 7
 
 /--
-**Heavy up-type mass anchor (GeV).** PDG-style central pole mass for the top quark, used as the **absolute
-scale** for the up-type resonance ladder in this file.
+**Legacy heavy up-type comparison value (GeV).**  This PDG-style top literal is
+kept so existing ratio lemmas and exported comparisons continue to build, but it
+is no longer the preferred normalization route for the heavy lock-in sector.
+The age-first replacement lives in `Hqiv.Physics.AgeNormalizedHeavyMass`
+(`ageNormalizedTopMass` / `paperAgeTopMass`), where the absolute top readout is
+the output of the universe-age/lapse now-scale.
 
 **Downstream (same module):** `m_charm_GeV := m_top_GeV / resonanceK_internal 0`,
 `m_up_GeV := m_charm_GeV / resonanceK_internal 1`, with each `resonanceK_internal _` a
 `geometricResonanceStep` ratio between the readout triple above. The **machinery** is the same
-detuned-surface formalism as charged leptons; the **numeral** is an external SM calibration witness.
+detuned-surface formalism as charged leptons; the **numeral** is now only a
+comparison witness.
 -/
 def m_top_GeV : ℝ := 172.57
 
@@ -544,7 +549,10 @@ def ResidualChargeChannel.heavyMassWeight : ResidualChargeChannel → ℕ
   | .upLike => 2
   | .downLike => 1
 
-/-- The public color-composed ladder is normalized from the top-at-lockin heavy channel. -/
+/-- Legacy public color-composed comparison normalization.  The age-normalized
+replacement is parameterized by `AgeLapseNowScale` in
+`Hqiv.Physics.AgeNormalizedHeavyMass`; this unparameterized value is retained as
+a comparison/export witness for existing downstream APIs. -/
 def topLockinColorResonanceAnchorMass : ℝ := m_top_GeV
 
 /-- Cross-channel detuning between the heavy up-like and down-like shell witnesses. This is the

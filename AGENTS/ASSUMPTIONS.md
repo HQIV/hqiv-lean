@@ -2,6 +2,8 @@
 
 This is an **honest inventory** of what the formal development rests on besides “proofs in Lean.” It is aimed at agents who must not confuse marketing language in comments with Mathlib’s logical foundations.
 
+**Patch ontology (agent contract):** [PATCH_ONTOLOGY.md](./PATCH_ONTOLOGY.md) — accessible patch as observable universe, continuum as readout not foundation, patch-closed “completeness,” simulation aliasing. Read before conflating `main.tex` “complete GUT” language with proved continuum QFT.
+
 ## 1. Conceptual “axioms” of HQIV (paper-level)
 
 These are **not** necessarily `axiom` declarations in Lean. They are the **narrative foundations** repeated in module docs:
@@ -14,6 +16,7 @@ These are **not** necessarily `axiom` declarations in Lean. They are the **narra
 - **Exact shell occupancy may be too rigid for standing-wave modes:** for charged leptons especially, agents should allow that a mode may occupy a **shell band / support region** or a potential difference rather than one exact shell index. Exact shell labels may still be useful as peaks, anchors, or representative indices, but they should not automatically be treated as the whole physical support of the mode.
 - **No physically fundamental sub-Planck continuum:** when files use calculus, derivatives, charts, or metric coefficients, agents should read these as **IR / observer-readout structures built over the discrete null-lattice shell ladder**, not as a commitment that HQIV’s primary ontology is a smooth manifold below the lattice cutoff. The lattice is UV-complete bookkeeping; the continuum is an effective language for large-scale or observer-side normalization.
 - **Experimental precision and HQIV witness precision are different budgets:** when a mass candidate lands close to a PDG central value but not within the laboratory error bars, agents should not describe that as “inside experimental uncertainty.” The better HQIV reading is that the **measurement** uncertainty remains small while the current **theory/readout** uncertainty is larger, because lapse/readout normalization, shell/support selection, and other observer-side layers are not yet fully collapsed to a unique final observable prediction.
+- **Single active scale witness (2026 discipline):** at most **one** dimensionful witness may pin a given Python export or coupling solve. Default: **`proton_lockin`** — `derivedProtonMass` at `referenceM` sets the mass/unit chart; CODATA `1/α`, CMB horizons, and PDG centrals are **predictions or comparison layers**, not simultaneous anchors. Legacy **`codata_alpha`** mode keeps the continuous Gauss→EW brace as the sole EM scale row. See `Hqiv.Physics.ScaleWitness`, `data/hqiv_witnesses.json`, `scripts/hqiv_scale_witness.py`.
 
 Agents should treat **Mathlib** as the substrate for analysis, linear algebra, and `ℝ`.
 
@@ -44,7 +47,9 @@ A search for user-declared `axiom` statements in `Hqiv/` shows **no free-standin
 ## 4. Script-generated and numeric data in Lean
 
 - **`GeneratorsLieClosureData0` … `GeneratorsLieClosureData27` and related files:** Large **precomputed** coefficient data (from Python scripts in `scripts/`, per `README.md`) to keep the SO(8) Lie closure proof tractable in Lean. This is **not** magic: it is **imported data** baked into lemmas. Agents should treat it as “verified external input” unless they re-run the scripts and regenerate.
+- **Strong-color SU(3) certificate stack (optional `HQIVStrongColorSu3Certificate`):** `StrongColorSu3fStructureSimp` and `StrongColorSu3LieChartLaw` are **generated Lean** from `scripts/gen_strong_color_su3_f_simp.py` and `scripts/gen_strong_color_su3_lie_chart_law.py`. The Lie-chart file proves the global `su(3)` bracket identity on the abstract `3×3` chart by **64 explicit matrix cases** (not a single abstract Lie-algebra tactic). Trust boundary is “regen scripts + `lake build` agree”; default `HQIVLEAN` does not import this cone.
 - **`so8Generator` matrices:** Originate from the same pipeline as `matrices.py` / project scripts (see repo docs).
+- **Spinor monomial Gram certificate:** `CliffordCl06SixSpinorMonomialMatrixData.lean` declares the Frobenius divisibility by `8` and the mod-`101` determinant certificate as axioms (`eight_dvd_spinorMonomialGramFrobSum`, `spinorMonomialGramColumnsZMod101_det`). The intended verification scripts are `scripts/verify_spinor_frob_sum_div8.py` and `scripts/spinor_monomial_gram_det_mod101.py`. Treat downstream LI / mat-lift theorems as relative to this trusted finite computation unless the heavy cert is rebuilt.
 
 ## 5. `sorry` (known gaps)
 
@@ -97,6 +102,17 @@ Many “physical outputs” (e.g. `1/α_EM(M_Z) = 127.9`, Higgs mass ratio) are 
   same check for numerics.
 - `CoefficientsTowardClassicalNS` is a separate **coefficient-level** slot toward classical NS form;
   it does **not** assert global well-posedness for 3D Navier–Stokes.
+- `HQIVFirstPrinciplesNSBridge` is a **conditional first-principles bridge**: O-Maxwell action/EL
+  chart data, F2 chart identification, F3 scalar viscosity closure, and an explicit
+  continuum/coarse-graining momentum-balance hypothesis imply the HQIV DNS-shaped momentum equation.
+  It still does **not** derive molecular viscosity, a closed kinetic stress tensor, existence,
+  uniqueness, or regularity.
+- The reduced bridge variants discharge more bookkeeping: `HQIVFirstPrinciplesMomentumData.canonical_chartHypothesis`
+  makes F2 chart identification definitional; `HQIVCanonicalShellDebyeClosure.to_continuumBalanceClosure`
+  constructs the F3 shell/Debye closure from canonical eddy/total-viscosity equalities; and
+  `HQIVPlasmaAmplitudeCoherence.coherence_mem_unit` derives `C ∈ [0,1]` from
+  `coherenceFromPlasmaAmp` when `κ ≥ 0`. The remaining fluid assumption is therefore the continuum
+  stress/balance decomposition (`OMaxwellToFluidBalanceHypothesis`), not the HQIV closure bookkeeping.
 
 ## 7e. SAT / ATSP search certificates (`GeneralizedGeometricOracle`, not solver correctness)
 
@@ -144,6 +160,41 @@ Many “physical outputs” (e.g. `1/α_EM(M_Z) = 127.9`, Higgs mass ratio) are 
 - **Nucleon / composite trace:** the multi-channel 8×8 witness is **explicit and documented**; treat it
   as an HQIV-shaped binding ansatz backed by theorems **given** those inputs, not as the only
   mathematically possible trace.
+- **Spinor mass probe policy:** `scripts/spinor_mass_operator_reality_probe.py` defaults to HQIV-internal
+  spectral/shell diagnostics. Any PDG-style quark/lepton mass table in that script is an opt-in
+  external yardstick (`--comparison-mode external`), not a promoted mass-selection rule and not a
+  substitute for constituent/network binding theorems.
+- **Proton lock-in vs quark GeV anchors:** under **`proton_lockin`**, exported nucleon masses (`derivedProtonMass`, `derivedNeutronMass`, `derivedDeltaM`) are the **primary** mass witnesses in Python (`scripts/informational_energy_mass.py`, `scripts/hqiv_scale_witness.py`). The quark **ladder** still uses **`m_top_GeV`** and shell tables for color-composed ratios; that anchor is **sector-local** to the quark module and must not be treated as a second active scale witness in the same solve as proton lock-in. `protonAnchorMass_MeV = 938.272` in `QuarkMetaResonance` is a **legacy reference row** for lapse readout lemmas (`LapseMassReadout`), not an independent physics input when `derivedProtonMass` is already exported.
+
+## 7g. Single-scale witness (`ScaleWitness`)
+
+- **Lean enum:** `Hqiv.Physics.ScaleWitness` — `proton_lockin` (default), `codata_alpha`, `cmb_now`.
+- **JSON bundle:** `data/hqiv_witnesses.json` (fields include `scale_witness_default`, `referenceM`, `derivedProtonMass_MeV`, boson masses, `CODATA_inv_alpha` as **comparison only** under default mode).
+- **Python:** `scripts/hqiv_scale_witness.py` loads the bundle; `scripts/hqiv_coupling_linear_system.py --scale-witness` selects the active witness; `scripts/informational_energy_mass.py` defaults to `proton_lockin`.
+- **Rule for agents:** never wire CODATA α **and** proton mass **and** a third cosmology anchor into the **same** solve/export without documenting which one is active and which are predictions.
+- **Export caveat:** full Lean re-evaluation of noncomputable `derivedProtonMass` via `scripts/export_witnesses.lean` may fail to compile; metadata refresh uses `scripts/export_witnesses_metadata.lean`. Mass numerals in JSON are the current derived snapshot until a computable export path lands.
+
+## 7h. Informational-energy mass row and Fano coupling
+
+- **Informational energy (natural units):** `E_tot = m_rest + 1/Θ_local(ξ)` with `Θ_local(ξ) = T_Pl/ξ` (`InformationalEnergyMass.lean`). Not a new Mathlib `axiom`; packaged as defs + gauge lemmas.
+- **Readout gauges:** bosons → `additiveLocalization` (full `E_tot`); hadrons → `multiplicativeLapse` / `hadronMassFromXi` (rest ÷ `HQVM_lapse`, localization in lapse increment). `gauge_transformation_localization_to_lapse` calibrates when gauges agree.
+- **Default mass row (Lean + Python):** `c₀ + loc(ξ_G) = 2π·Ω_k(ξ_G)` (`informationalEnergyMassRow` in `ContinuousXiCoupling.lean`). Legacy row `holonomyRowRhs(0)·Ω_k` is `informationalEnergyMassRowLegacy` — regression only.
+- **Three Ω_k charts (do not conflate):** brace/coupling @ ξ_G≈3.47 with ξ_lock=5 (~0.72); shallow ξ≈1.07 (~0.03); Ω_k^true / CMB horizons — comparison layers, not interchangeable with the brace mass row.
+- **Coupling solve under `proton_lockin`:** normalize `c₀=1`; report braced `1/α` as prediction vs CODATA; mass row at ξ_lock = `referenceM+1`.
+
+## 7i. Excited hadrons (calculator + MetaHorizonExcitedStates)
+
+- **Lean module:** `Hqiv.Physics.MetaHorizonExcitedStates` — radial/orbital modes on the lock-in drum via `totalModeMass(n,ℓ)` and composite-trace binding at `referenceM+n+ℓ`.
+- **Calculator rule:** ground mass from witness/coupling/informational-energy stack **without** excitation tag; then add ΔM from `scripts/hqiv_excited_states.py`:
+  - `decuplet` → radial `n=1` (spin-3/2 excitation on same valence content),
+  - `vector` → orbital `ℓ=1` on meson ground anchor.
+- **Light Δ(1232) multiplet:** for `u,d`-only decuplet configs, spin ground is **proton lock-in** (isospin split ≪ radial excitation in PDG chart), not uuu constituent scaling.
+- **Not legacy scaffold:** the old `constituent − E_bind·scale` meson/baryon heuristic is retired from the benchmark path; do not reintroduce ad hoc `0.38` meson binding factors as if they were part of informational energy.
+- **Open theorem/export gaps:**
+  1. Lean `totalModeMass` is noncomputable — export `derivedDeltaM_radial_1_MeV` (or full mode table) when a computable snapshot exists.
+  2. Raw composite-trace binding **increases** with shell index → sign wrong for baryon excitation; fix in Lean or prove an inverted readout layer before dropping the surface-step operational ΔM.
+  3. PDG comparison table `data/hadron_published_masses.json` must use **Δ(1232) ≈ 1232 MeV**, not 2452 MeV rows, for decuplet benchmark stats to be meaningful.
+  4. Strange decuplet (Σ*, Ξ*, Ω*): ground should track **octet partner** at same valence, not proton + constituent scaling alone.
 
 ## 8. Imports = logical dependency (not “handwaving,” but easy to miss)
 
@@ -184,7 +235,7 @@ Rough priority for **actually reducing** handwaving or confusion:
 | **§1 — paper-level “two axioms”** | **No (in-repo).** | Physics design; formalised as definitions + theorems. |
 | **§3 — Mathlib** | **No.** | Standard trust unless you port to a smaller foundation (out of scope). |
 | **§7–8 — conventions / imports** | **Documentation only.** | Already honest; expand module docs if something is still ambiguous. |
-| **§7 / 7b / 7f — shell pins + SM anchors** | **Documentation + clear `def` docstrings.** | Pins: `qcdShell`, `latticeStepCount`, `referenceM`. Anchors: `m_tau_from_resonance`, `m_top_GeV`, shell triples, composite trace. Same detuned-surface **machinery** across sectors; **uniqueness** of witnesses is open. |
+| **§7 / 7b / 7f — shell pins + SM anchors** | **Documentation + clear `def` docstrings.** | Pins: `qcdShell`, `latticeStepCount`, `referenceM`. Anchors: `m_tau_from_resonance`, `m_top_GeV`, shell triples, composite trace. Same detuned-surface **machinery** across sectors; **uniqueness** of witnesses is open. **New:** §7g single-scale witness; §7h informational mass row — do not double-anchor CODATA α + proton in one solve. |
 
 **Highest ROI:** (1) **Done in-repo:** Lie-subalgebra closure from `G₂ ∪ {Δ}` — `G2DeltaGeneratedLie` (see §5). (2) Optional: delete local root `tmp_*.lean` if you want cleaner `rg` sweeps (they are gitignored). (3) Optional CI on regeneration of `GeneratorsLieClosureData*`. (4) Dedupe “closure” story between `SO8ClosureAbstract` and `G2DeltaGeneratedLie` module docs.
 
@@ -198,7 +249,7 @@ Read this as **dependency order**: each layer uses the previous ones as **defini
 | **L1 — HQVM metric** | `HQVMetric` | `N = 1 + Φ + φ t`, `γ = 1 − α`, `G_eff` packaging | Lapse form is a **definitional** HQVM story, not derived from Einstein equations in Lean |
 | **L2 — O-Maxwell / gauge** | `OMaxwellAlgebraSeed`, `ModifiedMaxwell`, `PromotedOMaxwell`, `SO8ClosureAbstract` / `G2DeltaGeneratedLie` | H-block = algebraic seed; flat `H` → classical Maxwell; **Lie** closure `g2DeltaGeneratedLie_eq_so8LieSubalgebra`; linear span obstruction | **`PromotedOMaxwell*Hypotheses`**, chart-gradient bridges, optional `phi_of_T` recovery |
 | **L3 — SM–GR packaging** | `SM_GR_Unification`, `HQIVYangMillsPackage` | `α_GUT`, `1/α_EM` symbolic forms, `HQIV_satisfies_YangMills_SM_GR_Unification` bundle structure | Numeric `rfl` anchors (§6); **unification** is a **structured witness**, not uniqueness |
-| **L4 — Mass / sector ladders** | `DerivedGaugeAndLeptonSector`, `ChargedLeptonResonance`, `QuarkMetaResonance`, `ConservedContentMassBridge` | Inequalities and ordering lemmas **given** shell selection; closure-layer bookkeeping; many bridge theorems | **Threshold** `chargedLeptonDetunedSurfaceOctaveRatio = 2`; **PDG / named** τ and top anchors; **quark shell** tables; **baryon** composite trace ansatz |
+| **L4 — Mass / sector ladders** | `DerivedGaugeAndLeptonSector`, `ChargedLeptonResonance`, `QuarkMetaResonance`, `ConservedContentMassBridge`, `DerivedNucleonMass`, `InformationalEnergyMass`, `ContinuousXiCoupling`, `ScaleWitness` | Inequalities and ordering lemmas **given** shell selection; closure-layer bookkeeping; nucleon gap from dressed constituents; informational-energy gauges; mass row `c₀+loc=2π·Ω_k` | **Threshold** `chargedLeptonDetunedSurfaceOctaveRatio = 2`; **PDG / named** τ and **quark** top anchors; **quark shell** tables; **baryon** composite trace ansatz; **single active scale witness** must be chosen per pipeline (§7g) |
 | **L5 — Zeta / modular / analytic** | `OctonionicZeta`, `ModularThetaBridgeScaffold`, `ThetaCompletedLFunctionalScaffold` | Convergence, residue partitions, trivial-character Dirichlet hooks, `r₈` bounds | **`ThetaZ8ModularRealization.coeff_eq`** (classical θ = `r₈`); **weight-4 completed L** involution for HQIV coefficients |
 | **L6 — Continuum / QFT bridges** | `LightConeMaxwellQFTBridge`, `HorizonLimitedRenormLocality`, `ContinuumManyBodyQFTScaffold` | Mode budgets, shell↔harmonic limits, microcausality scaffolds, cluster kernels | **`HorizonContinuumAxioms*`** records; full renormalised QFT **not** a goal |
 
@@ -213,6 +264,6 @@ Read this as **dependency order**: each layer uses the previous ones as **defini
 ### 11b. Build better (engineering quality)
 
 - **One closure narrative:** point all “G₂ + Δ = 𝔰𝔬(8)” claims to `G2DeltaGeneratedLie`; point all “15 matrices don’t span” claims to `SO8ClosureAbstract` — avoid mixed wording in module headers.
-- **Witness dictionary:** central table of **numeric `rfl`** names (`one_over_alpha_EM_at_MZ_eq`, Higgs, **etc.**) with one-line “paper alignment” in a single module or `THEOREMS.md` only (avoid duplicating magic numbers).
+- **Witness dictionary:** central table of **numeric `rfl`** names (`one_over_alpha_EM_at_MZ_eq`, Higgs, **etc.**) with one-line “paper alignment” in a single module or `THEOREMS.md` only (avoid duplicating magic numbers). Include **`ScaleWitness`**, **`informationalEnergyMassRow`**, and **`data/hqiv_witnesses.json`** keys in the same dictionary.
 - **CI:** optional `scripts/print_*.py --write` diff check for `GeneratorsLieClosureData*` (§4, §10).
 - **API:** where §7b says **band vs exact shell**, add a **typed** “band occupancy” layer when you refactor leptons so the formalism matches the docstring in `OctonionicLightCone` (readout grid vs support).

@@ -38,6 +38,8 @@ When `main.tex` is available in a workspace, add a short `\paragraph{Lean anchor
 
 These are **authoring** recommendations only (not applied in this repo).
 
+**Ontology (before FLRW wording):** apply [PATCH_ONTOLOGY.md](./PATCH_ONTOLOGY.md) — include or paraphrase `papers/include/patch_theory_messaging.tex` near the abstract; use **patch-closed** instead of unqualified “complete grand-unified theory”; treat CLASS/FLRW as **homogeneous readout**, not “the universe.”
+
 1. **Lead every FLRW comparison with “homogeneous \(\phi\) channel / single-node constraint.”** Avoid phrasing that sounds like a full competing numerical cosmology unless you also cite external CLASS/CAMB runs and likelihoods.
 
 2. **Separate three layers** in notation: (i) **standard** flat \(3H^2=8\pi\rho\); (ii) **HQVM** \((3-\gamma)\phi^2 = 8\pi G_{\mathrm{eff}}(\phi)(\rho_m+\rho_r)\); (iii) **CLASS code normalization** \(H^2=(3/(3-\gamma))G_{\mathrm{eff}}\rho_{\mathrm{crit}}\). Point to Lean `HQVM_Friedmann_eq_iff_CLASS_H_squared` for (ii)↔(iii).

@@ -1,0 +1,70 @@
+{
+  "catalog_key": "chae2026_58",
+  "chae_id": 58,
+  "gaia_a": 5607190344506642432,
+  "gaia_b": 5607189485513198208,
+  "literature": {
+    "chae_2026": "arXiv:2601.21728",
+    "saad_ting_2026": "arXiv:2603.11015",
+    "rv_source": "HARPS",
+    "merits": "3,5",
+    "vobs_over_vesc_chae": 0.35,
+    "Gamma_chae": -0.299,
+    "gamma_chae_from_Gamma": 0.25234807724805747
+  },
+  "velocity_mode": "chae_vovervesc",
+  "observed": {
+    "distance_pc": 38.08,
+    "separation_au": 12334.594593867743,
+    "separation_proj_au": 12334.594593867743,
+    "v_obs_gaia_pm_rv_km_s": 100.30274541575902,
+    "v_obs_chae_scaled_km_s": 0.18913342994003643,
+    "v_esc_newton_km_s": 0.540381228400104,
+    "g_newton_m_s2": 7.912618385282445e-11,
+    "vr_kms": -0.08,
+    "mass_a_msun": 1.15,
+    "mass_b_msun": 0.88
+  },
+  "vis_viva": {
+    "semi_major_au": 7028.259027844867,
+    "period_yr": 413547.3627885329
+  },
+  "instantaneous_hqiv": {
+    "star1": {
+      "newton_m_s2": 3.430100580812095e-11,
+      "hqiv_m_s2": 3.430120310036148e-11,
+      "gamma_eff": 1.0000057517917007,
+      "f": 0.9999942482413823,
+      "one_minus_f": 5.75175861772248e-06
+    },
+    "star2": {
+      "newton_m_s2": 4.4825178044703506e-11,
+      "hqiv_m_s2": 4.482532901618795e-11,
+      "gamma_eff": 1.0000033680063534,
+      "f": 0.9999966320049901,
+      "one_minus_f": 3.3679950098841616e-06
+    }
+  },
+  "integration_classical": {
+    "final_separation_au": 12334.589449702711,
+    "final_relative_speed_km_s": 0.18913375189271203,
+    "newton_acceleration_at_separation_m_s2": 7.912624985230255e-11,
+    "classical_only": true,
+    "integration": {
+      "t_yr": 0.05,
+      "dt_days": 5.0,
+      "steps": 10
+    }
+  },
+  "integration_hqiv": {
+    "final_separation_au": 12334.589449702711,
+    "final_relative_speed_km_s": 0.18913375189412904,
+    "newton_acceleration_at_separation_m_s2": 7.912624985230255e-11,
+    "classical_only": false,
+    "integration": {
+      "t_yr": 0.05,
+      "dt_days": 5.0,
+      "steps": 10
+    }
+  }
+}

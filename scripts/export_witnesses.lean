@@ -25,6 +25,10 @@ unsafe def main : IO Unit := do
   -- We write only derived outputs requested by the pure-derivation pipeline.
   let json :=
     "{\n" ++
+    "  \"scale_witness_default\": \"proton_lockin\",\n" ++
+    "  \"referenceM\": " ++ toString referenceM ++ ",\n" ++
+    "  \"geV_per_MeV\": 0.001,\n" ++
+    "  \"CODATA_inv_alpha\": 137.035999177,\n" ++
     "  \"m_H\": " ++ showReal m_H_derived ++ ",\n" ++
     "  \"M_W\": " ++ showReal M_W_derived ++ ",\n" ++
     "  \"M_Z\": " ++ showReal M_Z_derived ++ ",\n" ++

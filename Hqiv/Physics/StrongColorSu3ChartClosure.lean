@@ -21,9 +21,11 @@ Completes the **abstract `3 × 3` chart** story from `QuarkColorCarrierGaugeScaf
   `HQIVStrongColorSu3Certificate` (`lake build HQIVStrongColorSu3Certificate`; see
   `Hqiv/Physics/StrongColorSu3LieCertificate.lean` and `scripts/gen_strong_color_su3_f_simp.py`). This stays
   out of the default `HQIVLEAN` cone so it elaborates only when you ask for it.
-* Global chart Lie law `[T^a,T^b] = \mathrm{i}\sum_c f^{abc}T^c` for **all** `(a,b)` is still a **target**;
-  layer it on the certificate table (`colorSu3fSorted_congrProofs`, `Finset.sum_eq_single`, per-chart
-  `fin_cases`) when you extend the optional build.
+* Global chart Lie law `[T^a,T^b] = \mathrm{i}\sum_c f^{abc}T^c` for **all** ordered pairs `(a,b)` on the
+  abstract chart is proved in the same optional certificate as `StrongColorSu3LieChartLaw.lean`
+  (`colorHalfGellMannFull_lieBracket_eq_I_smul_f_sum`; regenerate `scripts/gen_strong_color_su3_lie_chart_law.py`).
+  Statements use **`Complex.I •`** so they agree with explicit `Complex.I` matrix entries here and in
+  `QuarkColorCarrierGaugeScaffold`.
 
 The structural carrier lift `colorGellMannEmbed_chart_lieBracket_smul` in `StrongColorCarrierClosure` maps any
 chart identity to `8×8` once `lieBracketMat₃` is known on the triplet.
@@ -47,7 +49,7 @@ def colorGellMannLambda4 : Matrix (Fin 3) (Fin 3) ℂ :=
 
 /-- `λ₅` (Hermitian). -/
 def colorGellMannLambda5 : Matrix (Fin 3) (Fin 3) ℂ :=
-  !![0, 0, -I; 0, 0, 0; I, 0, 0]
+  !![0, 0, -Complex.I; 0, 0, 0; Complex.I, 0, 0]
 
 /-- `λ₆` (Hermitian). -/
 def colorGellMannLambda6 : Matrix (Fin 3) (Fin 3) ℂ :=
@@ -55,7 +57,7 @@ def colorGellMannLambda6 : Matrix (Fin 3) (Fin 3) ℂ :=
 
 /-- `λ₇` (Hermitian). -/
 def colorGellMannLambda7 : Matrix (Fin 3) (Fin 3) ℂ :=
-  !![0, 0, 0; 0, 0, -I; 0, I, 0]
+  !![0, 0, 0; 0, 0, -Complex.I; 0, Complex.I, 0]
 
 /-- `λ₈ = (1/√3) diag(1,1,-2)` (Hermitian). -/
 noncomputable def colorGellMannLambda8 : Matrix (Fin 3) (Fin 3) ℂ :=
@@ -93,7 +95,7 @@ theorem colorHalfGellMannFull_two : colorHalfGellMannFull 2 = colorHalfGellMann 
 /-! ### `f^{abc}` tensor (totally antisymmetric, real) -/
 
 /-- Value on strictly increasing triples `(i < j < k)` for the **Hermitian** Gell–Mann basis used here
-(signs fixed so `[T^a,T^b] = I • ∑_c f^{abc} T^c` holds for all `a,b`). -/
+(signs fixed so `[T^a,T^b] = Complex.I • ∑_c f^{abc} T^c` holds for all `a,b`). -/
 noncomputable def colorSu3fSorted (i j k : Fin 8) (hij : i < j) (hjk : j < k) : ℝ :=
   match i, j, k with
   | 0, 1, 2 => 1
@@ -180,7 +182,7 @@ theorem lieBracketMat₃_neg_swap (A B : Matrix (Fin 3) (Fin 3) ℂ) :
 
 /-- Schematic covariant slot with all eight color generators. -/
 noncomputable def colorTripletCovariantTermFull (g : ℝ) (G : Fin 8 → ℂ) (ψ : Fin 3 → ℂ) : Fin 3 → ℂ :=
-  ∑ a : Fin 8, (-I * (g : ℂ) * G a) • (colorHalfGellMannFull a).mulVec ψ
+  ∑ a : Fin 8, (-Complex.I * (g : ℂ) * G a) • (colorHalfGellMannFull a).mulVec ψ
 
 end -- noncomputable section
 

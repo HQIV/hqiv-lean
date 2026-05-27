@@ -20,7 +20,7 @@ This parallels the electroweak **projected complex carrier** story in
   inclusion (`colorTriplet_inner_eq_weakCarrierCinner`).
 * **Color gauge (local closure):** the first three Gell–Mann matrices `λ₁,λ₂,λ₃` (Hermitian), scaled to
   `T^a = λ^a/2`, satisfy the same **commutator identity** as an `su(2)` triple:
-  `[T¹,T²] = I * T³` (`colorHalfGellMann_comm_12`).
+  `[T¹,T²] = Complex.I * T³` (`colorHalfGellMann_comm_12`).
   This is **not** the full eight-generator `su(3)` closure (that belongs with the `G₂` / `so(8)`
   matrix backbone in `Hqiv.Algebra.SMEmbedding` and the heavy Lie-closure targets); it is the
   honest minimal analogue of “prove a generator algebra on the active chart”. The eight-generator
@@ -86,7 +86,7 @@ def colorGellMannLambda1 : Matrix (Fin 3) (Fin 3) ℂ :=
 
 /-- `λ₂` (Hermitian). -/
 def colorGellMannLambda2 : Matrix (Fin 3) (Fin 3) ℂ :=
-  !![0, -I, 0; I, 0, 0; 0, 0, 0]
+  !![0, -Complex.I, 0; Complex.I, 0, 0; 0, 0, 0]
 
 /-- `λ₃` (Hermitian). -/
 def colorGellMannLambda3 : Matrix (Fin 3) (Fin 3) ℂ :=
@@ -105,11 +105,11 @@ def colorHalfGellMann (a : Fin 3) : Matrix (Fin 3) (Fin 3) ℂ :=
 
 /-- Schematic covariant kinetic slot `-i g ∑_a G_a T^a ψ` (one static term, same packaging as `weakDoubletCovariantTerm`). -/
 def colorTripletCovariantTerm (g : ℝ) (G : Fin 3 → ℂ) (ψ : Fin 3 → ℂ) : Fin 3 → ℂ :=
-  ∑ a : Fin 3, (-I * (g : ℂ) * G a) • (colorHalfGellMann a).mulVec ψ
+  ∑ a : Fin 3, (-Complex.I * (g : ℂ) * G a) • (colorHalfGellMann a).mulVec ψ
 
 /-- Same commutator law as the Pauli half-spin `su(2)` normalisation, specialised to the `(λ₁,λ₂,λ₃)` triple. -/
 theorem colorHalfGellMann_comm_12 :
-    lieBracketMat₃ (colorHalfGellMann 0) (colorHalfGellMann 1) = I • colorHalfGellMann 2 := by
+    lieBracketMat₃ (colorHalfGellMann 0) (colorHalfGellMann 1) = Complex.I • colorHalfGellMann 2 := by
   unfold lieBracketMat₃
   ext i j
   fin_cases i <;> fin_cases j <;>

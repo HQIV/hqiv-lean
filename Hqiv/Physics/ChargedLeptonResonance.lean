@@ -30,12 +30,16 @@ the **outer** shell in the numerator so `resonance_k_* > 1` along τ → μ → 
 The Rindler slack `δ_rindler_*` compares each step to standing-wave-lift thresholds exported by
 `LeptonGenerationLockin`, rather than fixed shell numerals.
 
-**Absolute τ scale:** dimensionful GeV masses still use `m_tau_from_resonance` (PDG central value)
-as an explicit anchor. Ratios `m_mu_from_resonance`, `m_e_from_resonance` are **then** fixed by the
-proved surface ratios `resonance_k_*` on the selected shells. The separate witness
-`m_tau_from_lockin_surface_candidate` lives in the `E_Pl = 1` / lock-in normalization story (`= 16/9`);
-`m_tau_from_lockin_surface_candidate_approx_resonance` is an **alignment check** between those two
-languages, not a derivation of the PDG number from discrete lattice axioms.
+**Legacy τ comparison scale:** dimensionful GeV comparison masses still expose
+`m_tau_from_resonance` (PDG central value) for continuity with older exports.
+The age-first replacement is downstream in `Hqiv.Physics.AgeNormalizedHeavyMass`
+(`ageNormalizedTauMass` / `paperAgeTauMass`).  Ratios
+`m_mu_from_resonance`, `m_e_from_resonance` are **then** fixed by the proved
+surface ratios `resonance_k_*` on the selected shells. The separate witness
+`m_tau_from_lockin_surface_candidate` lives in the `E_Pl = 1` / lock-in
+normalization story (`= 4/5`); `m_tau_from_lockin_surface_candidate_approx_resonance`
+is an **alignment check** between those two languages, not a derivation of the
+PDG number from discrete lattice axioms.
 
 The abandoned **τ = highest ℕ shell** (Planck-volume) model is preserved only as
 `archive/abandoned/GenerationResonanceTauHighestShell.lean` (not part of the default build).
@@ -167,6 +171,24 @@ theorem resonance_k_mu_e_eq_geometricResonanceStep :
   unfold resonance_k_mu_e geometricResonanceStep m_mu m_e
   simp only [effectiveSurface_eq_detunedShellSurface]
 
+/-- τ→μ resonance factor as the readout between the heavy representative shell
+and the μ modal closed-support representative shell. -/
+theorem resonance_k_tau_mu_eq_closed_support_readout :
+    resonance_k_tau_mu =
+      detunedRatioReadoutOfClosedSupport leptonHeavyVertexShell
+        (modalQuarterClosedSurfaceSupport leptonMuonShell) := by
+  rw [resonance_k_tau_mu_eq_geometricResonanceStep]
+  rfl
+
+/-- μ→e resonance factor as the readout between the μ representative shell and
+the e modal closed-support representative shell. -/
+theorem resonance_k_mu_e_eq_closed_support_readout :
+    resonance_k_mu_e =
+      detunedRatioReadoutOfClosedSupport leptonMuonShell
+        (modalQuarterClosedSurfaceSupport leptonElectronShell) := by
+  rw [resonance_k_mu_e_eq_geometricResonanceStep]
+  rfl
+
 theorem resonance_k_tau_mu_eq_modal_readout :
     resonance_k_tau_mu = tauModalFrequencySpec.geometricStepReadout m_mu m_tau := by
   rw [show tauModalFrequencySpec = modalFrequencyHorizonFromShellNominal leptonHeavyVertexShell by
@@ -217,10 +239,140 @@ theorem m_tau_from_lockin_surface_candidate_closed_form :
   field_simp
   ring
 
+/-- The current charge-decorated standing-wave selector is exactly shell `15`.
+
+This discharges the heavy charged-lepton shell readout from the threshold `Nat.find`
+definition, using only the lock-in baseline, the `4` charge-decorated lift, and the
+shared detuned-surface ladder. -/
+theorem leptonHeavyVertexShell_eq_fifteen : leptonHeavyVertexShell = 15 := by
+  unfold leptonHeavyVertexShell
+  apply Nat.le_antisymm
+  · apply firstShellAtOrAboveResonanceThreshold_min
+    constructor
+    · norm_num [spinOnlyBaselineShell, referenceM, qcdShell, stepsFromQCDToLockin,
+        latticeStepCount]
+    · rw [chargeDecoratedStandingWaveLift_eq_four]
+      unfold geometricResonanceStep detunedShellSurface shellSurface rindlerDetuningShared
+        c_rindler_shared
+      rw [gamma_eq_2_5]
+      norm_num [spinOnlyBaselineShell, referenceM, qcdShell, stepsFromQCDToLockin,
+        latticeStepCount]
+  · by_contra hnot
+    set n := firstShellAtOrAboveResonanceThreshold spinOnlyBaselineShell
+      chargeDecoratedStandingWaveLift with hn
+    have hlt : n < 15 := Nat.lt_of_not_ge hnot
+    have hgt : spinOnlyBaselineShell < n := by
+      simpa [hn] using
+        firstShellAtOrAboveResonanceThreshold_gt spinOnlyBaselineShell
+          chargeDecoratedStandingWaveLift
+    have hspec :
+        leptonResonanceThresholdPred spinOnlyBaselineShell chargeDecoratedStandingWaveLift n := by
+      simpa [hn] using
+        firstShellAtOrAboveResonanceThreshold_spec spinOnlyBaselineShell
+          chargeDecoratedStandingWaveLift
+    rcases hspec with ⟨_, hthr⟩
+    rw [chargeDecoratedStandingWaveLift_eq_four] at hthr
+    have href : referenceM = 4 := by
+      unfold referenceM qcdShell stepsFromQCDToLockin latticeStepCount
+      norm_num
+    unfold spinOnlyBaselineShell at hgt
+    rw [href] at hgt
+    interval_cases n <;>
+      unfold geometricResonanceStep detunedShellSurface shellSurface rindlerDetuningShared
+        c_rindler_shared at hthr <;>
+      rw [gamma_eq_2_5] at hthr <;>
+      norm_num [spinOnlyBaselineShell, referenceM, qcdShell, stepsFromQCDToLockin,
+        latticeStepCount] at hthr
+
+/-- Anchor-free closed value of the current τ lock-in candidate. -/
+theorem m_tau_from_lockin_surface_candidate_eq_four_fifths :
+    m_tau_from_lockin_surface_candidate = (4 : ℝ) / 5 := by
+  rw [m_tau_from_lockin_surface_candidate_closed_form]
+  simp [m_tau, leptonHeavyVertexShell_eq_fifteen]
+  norm_num
+
+/-- First μ-shell above the heavy τ vertex for the τ→μ standing-wave threshold is exactly `33`. -/
+theorem derivedLeptonMuonShell_eq_thirtyThree : derivedLeptonMuonShell = 33 := by
+  unfold derivedLeptonMuonShell
+  apply Nat.le_antisymm
+  · apply firstShellAtOrAboveResonanceThreshold_min
+    constructor
+    · simpa [leptonHeavyVertexShell_eq_fifteen] using derivedLeptonMuonShell_gt_heavy
+    · rw [chargedLeptonTauMuThreshold_value, leptonHeavyVertexShell_eq_fifteen]
+      unfold geometricResonanceStep detunedShellSurface shellSurface rindlerDetuningShared
+        c_rindler_shared
+      rw [gamma_eq_2_5]
+      norm_num
+  · by_contra hnot
+    have hspec :=
+      firstShellAtOrAboveResonanceThreshold_spec leptonHeavyVertexShell chargedLeptonTauMuThreshold
+    set n :=
+      firstShellAtOrAboveResonanceThreshold leptonHeavyVertexShell chargedLeptonTauMuThreshold
+    rcases hspec with ⟨hμgt, hthr⟩
+    have h15 : leptonHeavyVertexShell = 15 := leptonHeavyVertexShell_eq_fifteen
+    rw [h15] at hμgt hthr
+    rw [chargedLeptonTauMuThreshold_value] at hthr
+    have hn15 : 15 < n := hμgt
+    have hn32 : n ≤ 32 := by omega
+    interval_cases n <;> try omega
+    all_goals
+      unfold geometricResonanceStep detunedShellSurface shellSurface rindlerDetuningShared
+        c_rindler_shared at hthr
+      rw [gamma_eq_2_5] at hthr
+      norm_num at hthr
+
+/-- First e-shell above the μ shell for the μ→e standing-wave threshold is exactly `58`. -/
+theorem derivedLeptonElectronShell_eq_fiftyEight : derivedLeptonElectronShell = 58 := by
+  unfold derivedLeptonElectronShell
+  apply Nat.le_antisymm
+  · apply firstShellAtOrAboveResonanceThreshold_min
+    constructor
+    · simpa [derivedLeptonMuonShell_eq_thirtyThree] using derivedLeptonElectronShell_gt_muon
+    · rw [chargedLeptonMuEThreshold_value, derivedLeptonMuonShell_eq_thirtyThree]
+      unfold geometricResonanceStep detunedShellSurface shellSurface rindlerDetuningShared
+        c_rindler_shared
+      rw [gamma_eq_2_5]
+      norm_num
+  · by_contra hnot
+    have hspec :=
+      firstShellAtOrAboveResonanceThreshold_spec derivedLeptonMuonShell chargedLeptonMuEThreshold
+    set n :=
+      firstShellAtOrAboveResonanceThreshold derivedLeptonMuonShell chargedLeptonMuEThreshold
+    rcases hspec with ⟨hegt, hthr⟩
+    have hμ33 : derivedLeptonMuonShell = 33 := derivedLeptonMuonShell_eq_thirtyThree
+    rw [hμ33] at hegt hthr
+    rw [chargedLeptonMuEThreshold_value] at hthr
+    have hn33 : 33 < n := hegt
+    have hn57 : n ≤ 57 := by omega
+    interval_cases n <;> try omega
+    all_goals
+      unfold geometricResonanceStep detunedShellSurface shellSurface rindlerDetuningShared
+        c_rindler_shared at hthr
+      rw [gamma_eq_2_5] at hthr
+      norm_num at hthr
+
+theorem resonance_k_tau_mu_eq_rat : resonance_k_tau_mu = (175 : ℝ) / 76 := by
+  unfold resonance_k_tau_mu m_tau m_mu
+  rw [leptonMuonShell_eq_derived, leptonHeavyVertexShell_eq_fifteen,
+    derivedLeptonMuonShell_eq_thirtyThree]
+  simp only [effectiveSurface_eq_detunedShellSurface]
+  unfold detunedShellSurface shellSurface rindlerDetuningShared c_rindler_shared
+  rw [gamma_eq_2_5]
+  norm_num
+
+theorem resonance_k_mu_e_eq_rat : resonance_k_mu_e = (4484 : ℝ) / 2499 := by
+  unfold resonance_k_mu_e m_mu m_e
+  rw [leptonMuonShell_eq_derived, leptonElectronShell_eq_derived,
+    derivedLeptonMuonShell_eq_thirtyThree, derivedLeptonElectronShell_eq_fiftyEight]
+  simp only [effectiveSurface_eq_detunedShellSurface]
+  unfold detunedShellSurface shellSurface rindlerDetuningShared c_rindler_shared
+  rw [gamma_eq_2_5]
+  norm_num
+
 theorem m_tau_from_lockin_surface_candidate_pos :
     0 < m_tau_from_lockin_surface_candidate := by
-  rw [m_tau_from_lockin_surface_candidate_closed_form]
-  positivity
+  rw [m_tau_from_lockin_surface_candidate_eq_four_fifths]
+  norm_num
 
 theorem m_tau_from_lockin_surface_candidate_le_eight_fifths :
     m_tau_from_lockin_surface_candidate ≤ 8 / 5 := by
@@ -239,27 +391,49 @@ theorem m_tau_from_lockin_surface_candidate_le_eight_fifths :
   nlinarith
 
 /--
-**Phenomenological τ mass anchor (GeV).** Numeric literal `1776.86e-3` = `1776.86 MeV` expressed in GeV,
-using a PDG-style central value for the τ pole mass (same convention as other SM scale witnesses in
-this repo).
+**Legacy τ mass comparison value (GeV).** Numeric literal `1776.86e-3` =
+`1776.86 MeV` expressed in GeV, using a PDG-style central value for the τ pole
+mass.
 
-**Not Lean-derived:** this is **not** the same statement as `m_tau_from_lockin_surface_candidate`
-(which stays a shell-readout candidate in the Planck-unit τ line). Treat it as the **dimensionful
-calibration** that fixes the charged-lepton GeV ladder once the geometric factors `resonance_k_*` are
+**Not the preferred normalization path:** this is **not** the same statement as
+`m_tau_from_lockin_surface_candidate` (which stays a shell-readout candidate in
+the Planck-unit τ line), nor the age/lapse replacement in
+`AgeNormalizedHeavyMass`. Treat it as a **dimensionful comparison witness** for
+the charged-lepton GeV ladder once the geometric factors `resonance_k_*` are
 known.
 
 **Downstream definitions (same file):**
 `m_mu_from_resonance := m_tau_from_resonance / resonance_k_tau_mu`,
 `m_e_from_resonance := m_mu_from_resonance / resonance_k_mu_e`.
 
-**Removing handwaving:** any claim to “derive τ without external input” must replace this `def` with a
-proved closure equality, or introduce a different absolute normalization theorem; until then the
-machinery is **the same** as for quarks (detuned surfaces, geometric steps), but the **overall mass
-unit** for this sector is explicitly anchored here.
+**Age-normalized route:** claims that do not use this comparison literal should
+go through `ageNormalizedTauMass`, where the overall mass unit comes from an
+`AgeLapseNowScale` rather than from this decimal.
 -/
 def m_tau_from_resonance : ℝ := 1776.86e-3
 noncomputable def m_mu_from_resonance : ℝ := m_tau_from_resonance / resonance_k_tau_mu
 noncomputable def m_e_from_resonance : ℝ := m_mu_from_resonance / resonance_k_mu_e
+
+/--
+The single remaining normalization that carries the lock-in τ candidate ladder
+to the active GeV resonance ladder. Step C is exactly the problem of deriving or
+eliminating this factor, not of changing the already-shared resonance ratios.
+-/
+noncomputable def tauLockinToResonanceScale : ℝ :=
+  m_tau_from_resonance / m_tau_from_lockin_surface_candidate
+
+theorem tauLockinToResonanceScale_pos : 0 < tauLockinToResonanceScale := by
+  unfold tauLockinToResonanceScale
+  have hτres : 0 < m_tau_from_resonance := by
+    unfold m_tau_from_resonance
+    norm_num
+  exact div_pos hτres m_tau_from_lockin_surface_candidate_pos
+
+theorem tauLockinToResonanceScale_mul_tau_candidate_eq_resonance :
+    tauLockinToResonanceScale * m_tau_from_lockin_surface_candidate =
+      m_tau_from_resonance := by
+  unfold tauLockinToResonanceScale
+  field_simp [ne_of_gt m_tau_from_lockin_surface_candidate_pos]
 
 theorem m_tau_from_lockin_surface_candidate_lt_resonance :
     m_tau_from_lockin_surface_candidate < m_tau_from_resonance := by
@@ -377,6 +551,38 @@ theorem m_e_from_lockin_surface_candidate_lt_resonance :
   unfold m_e_from_lockin_surface_candidate m_e_from_resonance
   exact (div_lt_div_iff_of_pos_right resonance_k_mu_e_pos).2
     m_mu_from_lockin_surface_candidate_lt_resonance
+
+/-- The same single τ normalization maps the μ lock-in candidate to the active
+μ resonance witness because both use the same τ→μ surface ratio. -/
+theorem tauLockinToResonanceScale_mul_mu_candidate_eq_resonance :
+    tauLockinToResonanceScale * m_mu_from_lockin_surface_candidate =
+      m_mu_from_resonance := by
+  unfold m_mu_from_lockin_surface_candidate m_mu_from_resonance
+  rw [← tauLockinToResonanceScale_mul_tau_candidate_eq_resonance]
+  ring
+
+/-- The same single τ normalization maps the e lock-in candidate to the active
+e resonance witness because both use the same τ→μ→e surface-ratio product. -/
+theorem tauLockinToResonanceScale_mul_e_candidate_eq_resonance :
+    tauLockinToResonanceScale * m_e_from_lockin_surface_candidate =
+      m_e_from_resonance := by
+  unfold m_e_from_lockin_surface_candidate m_e_from_resonance
+  rw [← tauLockinToResonanceScale_mul_mu_candidate_eq_resonance]
+  ring
+
+/-- Step-C reduction: replacing the active charged-lepton GeV anchor is now
+equivalent, for the whole τ/μ/e ladder, to deriving the single scale
+`tauLockinToResonanceScale`. The resonance ratios themselves are shared. -/
+theorem chargedLepton_resonance_ladder_eq_scaled_lockin_candidate_ladder :
+    tauLockinToResonanceScale * m_tau_from_lockin_surface_candidate =
+      m_tau_from_resonance ∧
+    tauLockinToResonanceScale * m_mu_from_lockin_surface_candidate =
+      m_mu_from_resonance ∧
+    tauLockinToResonanceScale * m_e_from_lockin_surface_candidate =
+      m_e_from_resonance := by
+  exact ⟨tauLockinToResonanceScale_mul_tau_candidate_eq_resonance,
+    tauLockinToResonanceScale_mul_mu_candidate_eq_resonance,
+    tauLockinToResonanceScale_mul_e_candidate_eq_resonance⟩
 
 theorem resonanceProduct_eq_fano_core (gen : So8RepIndex) :
     resonanceProduct gen =

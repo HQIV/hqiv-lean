@@ -32,8 +32,10 @@ bit-identical agreement with `toEquiv` for arbitrary sparse data is **future wor
 6. **Scale checks:** `oshSparseSequentialFold_length` / `nBodySequentialSparseLength_bound` track
    worst-case `2^{#gates}` support growth without pruning.
 
-**Out of scope:** continuum limits, continuous `U(1)` angles in `HQIVGate`, unbounded simultaneous
-many-body updates.
+**Out of scope:** continuum limits, unbounded simultaneous many-body updates, and full `(L+1)^2`
+Hilbert simulation claims. Continuous single-qubit rotations are only in scope through the certified
+two-level realification witness in `DigitalGates.twoLevelUnitaryGate`; Hamiltonian-wide continuum
+flows still require separate modeling.
 -/
 
 import Mathlib.Data.List.Basic
@@ -282,7 +284,9 @@ def harmonicSlotShell1 (L : ℕ) (hL : 0 < L) : HarmonicIndex L :=
 different `HarmonicIndex` labels, while `SkewIncrement.hoFrequencySkew` ties `θ` to `φ_rat(ℓ)`
 and advances lapse via `HQVM_lapse Φ φ (k·δt)` on tick `k`.
 
-This is still a **digital** model (`phaseGate` only); continuous `U(1)` rotations remain out of scope.
+This schedule remains a **discrete π-phase** oscillator proxy (`phaseGate` only). Continuous
+single-qubit rotations now live separately as certified two-level local mixes in
+`DigitalGates.twoLevelUnitaryGate`; this HO translator does not claim a continuous `U(1)` flow.
 -/
 noncomputable def hoFrequencyBeatingSequential (hL : 0 < L) (Φ φ δt : ℝ) (m : ℕ) (n : ℕ) :
     SequentialHQIVEvolution L where
@@ -369,8 +373,9 @@ noncomputable def spinHalfZeemanSequential (ij : HarmonicIndex L) (m : ℕ) (n :
         desc := "PauliZ_digital_pi"
       }, [phaseGate ij], SkewIncrement.minkowski⟩ : HQIVEvolutionStep L))
 
-/-- **Two-level Rabi / dipole drive:** modeled as the same sequential `π` channel as the
-Zeeman stub; continuous Rabi angle scheduling needs richer gates (**explicitly out of scope**). -/
+/-- **Two-level Rabi / dipole drive:** modeled here as the same sequential `π` channel as the
+Zeeman stub. Angle-resolved Rabi scheduling should use the two-level local-mix witness from
+`DigitalGates` rather than this legacy phase-only stub. -/
 noncomputable def twoLevelRabiSequential (ij : HarmonicIndex L) (m : ℕ) (n : ℕ) :
     SequentialHQIVEvolution L where
   steps :=

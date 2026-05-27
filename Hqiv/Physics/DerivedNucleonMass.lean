@@ -1,6 +1,8 @@
 import Hqiv.Geometry.OctonionicLightCone
 import Hqiv.Physics.QuarkMetaResonance
 import Hqiv.Physics.GRFromMaxwell
+import Hqiv.Physics.Forces
+import Mathlib.Tactic
 
 namespace Hqiv.Physics
 
@@ -53,6 +55,148 @@ noncomputable def derivedNeutronMass : ℝ :=
 
 noncomputable def derivedDeltaM : ℝ :=
   derivedNeutronMass - derivedProtonMass
+
+/-! ### Interaction-aware binding split (self + pair channels) -/
+
+/--
+Interaction-aware split of nucleon binding into a self channel and a pair/network
+channel. This is intentionally more general than a pure self-well model.
+-/
+structure InteractionBindingSplit where
+  selfInteractionEnergy : ℝ
+  pairInteractionEnergy : ℝ
+  total_eq_sharedBinding :
+    selfInteractionEnergy + pairInteractionEnergy = sharedBindingEnergy
+
+/-- Interaction-aware raw mass: constituent energy minus total interaction energy. -/
+noncomputable def interactionAwareMass
+    (constituentEnergy : ℝ) (split : InteractionBindingSplit) : ℝ :=
+  constituentEnergy - (split.selfInteractionEnergy + split.pairInteractionEnergy)
+
+theorem interactionAwareMass_eq_constituent_minus_shared
+    (constituentEnergy : ℝ) (split : InteractionBindingSplit) :
+    interactionAwareMass constituentEnergy split =
+      constituentEnergy - sharedBindingEnergy := by
+  unfold interactionAwareMass
+  rw [split.total_eq_sharedBinding]
+
+theorem derivedProtonMass_eq_interactionAware
+    (split : InteractionBindingSplit) :
+    derivedProtonMass = interactionAwareMass protonConstituentEnergy split := by
+  rw [interactionAwareMass_eq_constituent_minus_shared]
+  rfl
+
+theorem derivedNeutronMass_eq_interactionAware
+    (split : InteractionBindingSplit) :
+    derivedNeutronMass = interactionAwareMass neutronConstituentEnergy split := by
+  rw [interactionAwareMass_eq_constituent_minus_shared]
+  rfl
+
+theorem interactionAware_split_preserves_nucleon_gap
+    (split : InteractionBindingSplit) :
+    interactionAwareMass neutronConstituentEnergy split -
+      interactionAwareMass protonConstituentEnergy split =
+      derivedDeltaM := by
+  rw [interactionAwareMass_eq_constituent_minus_shared,
+    interactionAwareMass_eq_constituent_minus_shared]
+  unfold derivedDeltaM derivedNeutronMass derivedProtonMass
+  ring
+
+/-- One-parameter interaction split: `η` controls the self-channel share; the
+rest is pair/network interaction. -/
+noncomputable def interactionBindingSplitFromShare (η : ℝ) :
+    InteractionBindingSplit where
+  selfInteractionEnergy := η * sharedBindingEnergy
+  pairInteractionEnergy := (1 - η) * sharedBindingEnergy
+  total_eq_sharedBinding := by ring
+
+theorem interactionBindingSplitFromShare_self_component (η : ℝ) :
+    (interactionBindingSplitFromShare η).selfInteractionEnergy =
+      η * sharedBindingEnergy := rfl
+
+theorem interactionBindingSplitFromShare_pair_component (η : ℝ) :
+    (interactionBindingSplitFromShare η).pairInteractionEnergy =
+      (1 - η) * sharedBindingEnergy := rfl
+
+theorem interactionBindingSplitFromShare_recovers_raw_proton (η : ℝ) :
+    interactionAwareMass protonConstituentEnergy
+      (interactionBindingSplitFromShare η) = derivedProtonMass := by
+  rw [interactionAwareMass_eq_constituent_minus_shared]
+  rfl
+
+/-! ### Discrete-Maxwell well path budget (interaction + path integration) -/
+
+/-- Single-shell well contribution from the discrete/modified Maxwell effective potential. -/
+noncomputable def maxwellWellShellBudget
+    (m : Hqiv.ShellIndex) (config : Hqiv.OctonionConfig) : ℝ :=
+  Hqiv.nuclear_effective_potential m config
+
+/-- Integrated well budget along a discrete shell path.
+
+The current placeholder integration is linear in the discrete step count; this keeps
+the bookkeeping explicit while higher-fidelity path accumulation is developed.
+-/
+noncomputable def integratedMaxwellWellBudget
+    (m : Hqiv.ShellIndex) (config : Hqiv.OctonionConfig) (pathSteps : ℕ) : ℝ :=
+  (pathSteps : ℝ) * maxwellWellShellBudget m config
+
+theorem integratedMaxwellWellBudget_zero
+    (m : Hqiv.ShellIndex) (config : Hqiv.OctonionConfig) :
+    integratedMaxwellWellBudget m config 0 = 0 := by
+  unfold integratedMaxwellWellBudget
+  norm_num
+
+theorem integratedMaxwellWellBudget_succ
+    (m : Hqiv.ShellIndex) (config : Hqiv.OctonionConfig) (n : ℕ) :
+    integratedMaxwellWellBudget m config (n + 1) =
+      integratedMaxwellWellBudget m config n + maxwellWellShellBudget m config := by
+  unfold integratedMaxwellWellBudget
+  simp [Nat.cast_add, Nat.cast_one, add_mul]
+
+/-- Full interaction-aware mass budget including:
+1) self interaction, 2) pair/network interaction, 3) integrated Maxwell well path. -/
+noncomputable def interactionAndWellAwareMass
+    (constituentEnergy : ℝ) (split : InteractionBindingSplit)
+    (m : Hqiv.ShellIndex) (config : Hqiv.OctonionConfig) (pathSteps : ℕ) : ℝ :=
+  constituentEnergy - (split.selfInteractionEnergy + split.pairInteractionEnergy)
+    - integratedMaxwellWellBudget m config pathSteps
+
+theorem interactionAndWellAwareMass_eq_interactionAware_minus_path
+    (constituentEnergy : ℝ) (split : InteractionBindingSplit)
+    (m : Hqiv.ShellIndex) (config : Hqiv.OctonionConfig) (pathSteps : ℕ) :
+    interactionAndWellAwareMass constituentEnergy split m config pathSteps =
+      interactionAwareMass constituentEnergy split -
+        integratedMaxwellWellBudget m config pathSteps := by
+  unfold interactionAndWellAwareMass interactionAwareMass
+  ring
+
+theorem interactionAndWellAwareMass_eq_constituent_minus_shared_and_path
+    (constituentEnergy : ℝ) (split : InteractionBindingSplit)
+    (m : Hqiv.ShellIndex) (config : Hqiv.OctonionConfig) (pathSteps : ℕ) :
+    interactionAndWellAwareMass constituentEnergy split m config pathSteps =
+      constituentEnergy - sharedBindingEnergy - integratedMaxwellWellBudget m config pathSteps := by
+  rw [interactionAndWellAwareMass_eq_interactionAware_minus_path,
+    interactionAwareMass_eq_constituent_minus_shared]
+
+theorem interactionAndWellAwareMass_zero_path_recovers_interactionAware
+    (constituentEnergy : ℝ) (split : InteractionBindingSplit)
+    (m : Hqiv.ShellIndex) (config : Hqiv.OctonionConfig) :
+    interactionAndWellAwareMass constituentEnergy split m config 0 =
+      interactionAwareMass constituentEnergy split := by
+  rw [interactionAndWellAwareMass_eq_interactionAware_minus_path]
+  unfold integratedMaxwellWellBudget
+  norm_num
+
+/-- `η = 0` sends all shared binding budget to the pair/network channel, then adds
+the integrated Maxwell-well path contribution. -/
+theorem interactionAndWellAwareMass_share_zero
+    (constituentEnergy : ℝ) (m : Hqiv.ShellIndex) (config : Hqiv.OctonionConfig)
+    (pathSteps : ℕ) :
+    interactionAndWellAwareMass constituentEnergy (interactionBindingSplitFromShare 0)
+        m config pathSteps
+      = constituentEnergy - sharedBindingEnergy
+        - integratedMaxwellWellBudget m config pathSteps := by
+  rw [interactionAndWellAwareMass_eq_constituent_minus_shared_and_path]
 
 /-! ### HQVM-lapse wired readouts -/
 
@@ -142,6 +286,16 @@ theorem constituent_isospin_splitting :
 theorem proton_neutron_closeness_from_shared_surface :
     derivedNeutronMass - derivedProtonMass = derivedDeltaM := by
   rfl
+
+theorem derivedProtonMass_eq_meta_harmonics :
+    derivedProtonMass = protonMassFromMetaHarmonics_MeV := by
+  simp [derivedProtonMass, protonConstituentEnergy, sharedBindingEnergy,
+    protonMassFromMetaHarmonics_MeV]
+
+theorem derivedNeutronMass_eq_meta_harmonics :
+    derivedNeutronMass = neutronMassFromMetaHarmonics_MeV := by
+  simp [derivedNeutronMass, neutronConstituentEnergy, sharedBindingEnergy,
+    neutronMassFromMetaHarmonics_MeV]
 
 end Hqiv.Physics
 

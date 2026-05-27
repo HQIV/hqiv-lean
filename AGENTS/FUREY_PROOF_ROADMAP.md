@@ -38,13 +38,13 @@ layer exists.
 | Component | Lean location | Status | Notes |
 |-----------|---------------|--------|-------|
 | Real 8s carrier | `Hqiv.Algebra.OctonionSpinorCarrier` (`OctonionSpinorCarrier`, `octonionSpinorCarrier_dim`) | **proved** | `Fin 8 → ℝ`; dependency-light by design. |
-| SM-facing matrices + charges | `Hqiv.Algebra.SMEmbedding` | **proved** + **placeholder** | `su2_generators_in_so8`, `su2_bracket_12`, `hyperchargeGenerator`, `hypercharge_assignments_correct`, charge witnesses (`up_component_charge_two_thirds`, …) are real. `G2_contains_SM_subgroup : True` and `hyperchargeBlockCorrect : Prop := True` are **placeholders**. |
-| Triality labels | `Hqiv.Algebra.Triality` (`trialityCycle`, `triality_cycle_order_3`, `card_so8_eight_dim_irreps`, `exactly_three_fermion_generations_from_HQIV_axioms`) | **bookkeeping** | Order-3 cycle on `So8RepIndex := Fin 3`. `triality_preserves_bracket` is `rfl` on matrices—**not** Spin(8) outer automorphism on \(\mathfrak{so}(8)\). |
+| SM-facing matrices + charges | `Hqiv.Algebra.SMEmbedding` | **proved bookkeeping** + structural gaps | `su2_generators_in_so8`, `su2_bracket_12`, `hyperchargeGenerator`, `hypercharge_assignments_correct`, `hyperchargeBlockCorrect_holds`, and charge witnesses (`up_component_charge_two_thirds`, …) are real witness/table facts. They are not a number-operator derivation or a full gauge-subalgebra branching theorem. |
+| Triality labels | `Hqiv.Algebra.Triality` (`trialityCycle`, `triality_cycle_order_3`, `card_so8_eight_dim_irreps`, `triality_label_count_and_order_three`, `exactly_three_fermion_generations_from_HQIV_axioms`) | **bookkeeping** | Order-3 cycle on `So8RepIndex := Fin 3`. `triality_preserves_bracket` is `rfl` on matrices—**not** Spin(8) outer automorphism on \(\mathfrak{so}(8)\). Prefer `triality_label_count_and_order_three` as the conservative citation target. |
 | Packaged gauge object | `Hqiv.Physics.HQIVYangMillsPackage` (`HQIVYangMillsPackage`, `hqivYangMillsPackage`, …) | **proved** (as packaged record) | Bundles carrier, basis/bracket expansion fields, membership of \(G_2\)/\(\Delta\)/`SU(2)_L`/hypercharge, triality count, \(\alpha/\gamma\), rapidity phase bridge, unification `Prop`. See `AGENTS/THEOREMS.md` § “Canonical Yang-Mills package”. |
 | Octonion multiplication / \(\mathbb{R}^8\) model | `Hqiv.Algebra.OctonionBasics`, `Hqiv.OctonionLeftMultiplication` | **proved** | Fano-plane matrices; not bundled `Octonion ℝ` in Mathlib (see module doc). |
 | Generated Lie algebra from \(G_2\cup\{\Delta\}\) equals the honest Euclidean \(\mathfrak{so}(8)\) model | `Hqiv.Algebra.G2DeltaGeneratedLie` | **proved** | Main identification: `Hqiv.Algebra.g2DeltaGeneratedLie_eq_so8LieSubalgebra` (see `AGENTS/THEOREMS.md`). |
 | Matrix SO(8) closure certificate | `Hqiv.Algebra.SO8ClosureAbstract`, `Hqiv.GeneratorsLieClosure*`, `HQIVSO8Closure` target in `lakefile.toml` | **proved** / **heavy build** | Use smallest `lake` target that contains the import chain you need (`AGENTS/README.md`). |
-| Strong-color \(\mathfrak{su}(3)\) chart | `Hqiv.Physics.StrongColorSu3ChartClosure`, scaffolds in `QuarkColorCarrierGaugeScaffold`, `StrongColorCarrierClosure` | **proved** / **scaffold** | Structure constants and embed lemmas per `THEOREMS.md`; full chart Lie law for all pairs may still be open (see `THEOREMS.md` “still open” row). |
+| Strong-color \(\mathfrak{su}(3)\) chart | `Hqiv.Physics.StrongColorSu3ChartClosure`, scaffolds in `QuarkColorCarrierGaugeScaffold`, `StrongColorCarrierClosure`; optional `StrongColorSu3LieChartLaw` | **proved** / **scaffold** | Structure constants, embed API, and (under `HQIVStrongColorSu3Certificate`) **full** `3×3` chart Lie law `colorHalfGellMannFull_lieBracket_eq_I_smul_f_sum` per `THEOREMS.md`. Carrier/octonion-side branching and Fock-style charge quantization remain separate gaps (Stages B–C below). |
 | “Anomaly-free three generations” | `Hqiv.Algebra.AnomalyCancellation` (`anomalyCoeff`, `sm_anomaly_free_three_generations`, …) | **placeholder** | Coefficients and index are definitionally `0`; documents intent but **not** cubic/trace anomaly calculation. |
 
 **One-sentence honest summary:** HQIV has a strong **matrix + Lie algebra + SM
@@ -113,7 +113,7 @@ and algebra package remain the foundation.
 | Furey-sized sub-claim | HQIV peg | Status |
 |------------------------|----------|--------|
 | Normed division octonions with fixed basis | `OctonionBasics` + `OctonionLeftMultiplication` | **proved** (real \(\mathbb{R}^8\) model) |
-| Complexified octonion / spinor carrier as \(\mathbb{C}\)-module of stated dimension | Partial: `Mathlib.Data.Complex.Basic` imported in `SMEmbedding`; no dedicated `TensorProduct ℂ OctonionVec` package | **absent** as named theory |
+| Complexified octonion / spinor carrier as \(\mathbb{C}\)-module of stated dimension | `Hqiv.Algebra.ComplexOctonionSpinorCarrier` (`Fin 8 → ℂ`, `finrank`, real embedding, `StarModule ℝ/ℂ`, `ℂ ⊗[ℝ] ℝ⁸ ≃ ℂ⁸`) | **proved** for this coordinate model; **extension of scalars** is `ℂ ⊗[ℝ] (Fin 8 → ℝ)` (`complexOctonionSpinorTensorEquiv`), not a `⊗[ℂ]` tensor over `ℂ` acting on the real carrier |
 | `CliffordAlgebra` over chosen \(Q\), action on modules, minimal left ideals | `CliffordMinimalIdeal`, `CliffordHQIVSlotRefinement`, `RapidityIdealPurposeBridge` | **partial**: **proved** for `Cl(1)` minimal ideal + **1D** `Δ` / phase alignment; **`Cl(6)`-scale** construction and **ideal ↔ generation** identification **absent** |
 | Identification: minimal ideal ↔ one generation of Weyl fields | — | **absent** |
 
@@ -121,10 +121,11 @@ and algebra package remain the foundation.
 
 | Furey-sized sub-claim | HQIV peg | Status |
 |------------------------|----------|--------|
-| Explicit color sector on a chart | `StrongColorSu3ChartClosure`, `colorGellMannEmbed`, … | **proved** / partial (see `THEOREMS.md`) |
+| Explicit color sector on a chart | `StrongColorSu3ChartClosure`, `colorGellMannEmbed`, optional `StrongColorSu3LieChartLaw` | **proved** on the active `3×3` chart (incl. global bracket law in optional cert; see `THEOREMS.md`) |
 | \(U(1)_Y\) / EM charge table on 8 slots | `SMEmbedding.hyperchargeEigenvalue`, `chargeFromY`, witness theorems | **proved** (assignment + witnesses) |
-| \(G_2 \supset SU(3)_c \times \cdots\) as subalgebra inclusion theorem | `G2_contains_SM_subgroup` | **placeholder** |
-| Hypercharge as derived spectral/block property | `hyperchargeBlockCorrect` | **placeholder** |
+| \(G_2 \supset SU(3)_c \times \cdots\) as subalgebra inclusion theorem | dedicated gauge/color modules, not a single `SMEmbedding` theorem | **partial / distributed** |
+| Hypercharge table on slots | `hyperchargeBlockCorrect`, `hyperchargeBlockCorrect_holds` | **proved bookkeeping** |
+| Hypercharge as derived spectral/block property | future theorem extending the `Δ` line and gauge span | **absent** |
 | “Number operator” in a Fock/Clifford sense ⇒ charge quantization | — | **absent** |
 
 ### C. 64\(\mathbb{C}\)-dimensional space; three generations under color + EM
@@ -161,9 +162,10 @@ are required for the HQIV-native anchor in Stage 0 to remain valid.
 
 ### Stage 1 — Complexified carrier and dimension
 
-- Define a \(\mathbb{C}\)-module structure on `Fin 8 → ℂ` (or `TensorProduct ℂ (Fin 8 → ℝ)` with a chosen linear equiv).
-- Prove `finrank ℂ (Fin 8 → ℂ) = 8` (or the chosen model’s rank).
-- Optional: record `StarModule` / conjugation compatible with SM bookkeeping.
+- Define a \(\mathbb{C}\)-module structure on `Fin 8 → ℂ` (or `TensorProduct ℂ (Fin 8 → ℝ)` with a chosen linear equiv). **Progress:** `Hqiv.Algebra.ComplexOctonionSpinorCarrier` packages `Fin 8 → ℂ` with `Module ℂ` / `Module ℝ`, the injective real embedding `octonionSpinorRealToComplex`, the **`ℂ ⊗[ℝ] (Fin 8 → ℝ) ≃ₗ[ℂ] (Fin 8 → ℂ)`** equiv (`complexOctonionSpinorTensorEquiv` + `complexOctonionSpinorTensorEquiv_apply_tmul_one`), and **`StarModule ℝ` / `StarModule ℂ`** (`complexOctonionSpinorCarrier_starModuleReal` / `…_starModuleComplex`) with slotwise `star` lemmas.
+- Prove `finrank ℂ (Fin 8 → ℂ) = 8` (or the chosen model’s rank). **Proved:** `complexOctonionSpinorCarrier_finrank_complex`; also `complexOctonionSpinorCarrier_finrank_real` (`16` over `ℝ`).
+- Optional: a `TensorProduct` over **`ℂ`** acting on the real carrier is not part of the same formal picture (the real carrier is not a `ℂ`-module); use extension of scalars `⊗[ℝ]` instead.
+- Optional: record `StarModule` / conjugation compatible with SM bookkeeping. **Partial:** conjugation on `Fin 8 → ℂ` is packaged above; SM-sector compatibility remains separate wiring.
 
 ### Stage 2 — Clifford algebra layer
 
@@ -188,7 +190,7 @@ are required for the HQIV-native anchor in Stage 0 to remain valid.
 
 - Define minimal left ideals in `CliffordAlgebra Q` (e.g. as `Submodule` generated by a primitive idempotent).
 - Prove ideal dimension and construct linear maps to/from `OctonionSpinorCarrier` or `Fin 8 → ℂ`.
-- Replace or sharpen `G2_contains_SM_subgroup` / `hyperchargeBlockCorrect` with actual subalgebra statements linking \(G_2\), color, and hypercharge blocks.
+- Replace table-level `hyperchargeBlockCorrect_holds` and distributed gauge/color witnesses with actual subalgebra statements linking \(G_2\), color, and hypercharge blocks.
 
 **Future citation hygiene:** When a theorem is intended as the **paper-aligned** Furey claim (not bookkeeping), mark it in the **module doc** and in [`THEOREMS.md`](./THEOREMS.md) with an explicit phrase such as **`Furey claim supported`** so audits do not conflate partial stages with the full `Cl(6)` story.
 
@@ -223,7 +225,10 @@ are required for the HQIV-native anchor in Stage 0 to remain valid.
   Stage 3 isomorphisms.
 - HQIV project rules still apply: no PDG mass **fitting** as a substitute for
   proofs; Clifford work should remain **algebra-first** and clearly scoped in
-  `AGENTS/ASSUMPTIONS.md` when new trust assumptions appear.
+  `AGENTS/ASSUMPTIONS.md` when new trust assumptions appear. External quark/lepton
+  mass tables in `scripts/spinor_mass_operator_reality_probe.py` are opt-in
+  yardsticks only; promoted ranking should use HQIV-internal diagnostics or
+  constituent/network formulas.
 
 ---
 

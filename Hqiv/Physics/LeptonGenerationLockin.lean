@@ -29,16 +29,20 @@ evaluation. A standing-wave picture allows **support bands**; natural indices re
 where `shellSurface` and detuned ratios are evaluated.
 
 **Anchored now:** the τ-generation line is selected as the first shell at or above `referenceM`
-that supports the charge-decorated standing-wave lift; μ and e are then selected by successive
-standing-wave lifts (`τ→μ`, `μ→e`) instead of a fixed octave constant.
+that supports the charge-decorated standing-wave lift. The μ/e exact-shell selector below is now best
+read as a **readout proxy**: particles should correspond to closed standing-wave support on horizon
+surfaces, while detuned ratios are the measurement/readout effect of comparing representative closed
+surfaces. The current threshold crossing keeps the old resonance formulas alive, but it should not be
+treated as the final reason the particle exists.
 
 **Substrate trace:** `referenceM` unfolds to `qcdShell + latticeStepCount` in `OctonionicLightCone`;
 those naturals are the **lowest substrate pins** in Lean, below `α`/`γ` and `T_lockin` formulas.
 
-**Threshold rule (not Koide):** μ/e readouts are the first outer crossings where
+**Threshold proxy (not Koide):** μ/e readouts are the first outer crossings where
 `geometricResonanceStep` reaches standing-wave-lift thresholds derived from spherical-harmonic
 cumulative mode budgets (`τ→μ = 9/4`, `μ→e = 16/9`). This keeps the selector tied to standing-wave
-rank growth rather than fixed shell IDs.
+rank growth rather than fixed shell IDs, but it is still a proxy for the stronger closed-surface
+support rule.
 
 Lock-in supplies the **birth** condition; `SurfaceWaveSelfClock` + rapidity updates model relaxation
 along the horizon ladder.
@@ -126,6 +130,51 @@ theorem chargedLeptonSpinClass_is_halfInteger :
 def leptonResonanceThresholdPred (current_m : ℕ) (threshold : ℝ) (m' : ℕ) : Prop :=
   current_m < m' ∧ threshold ≤ geometricResonanceStep m' current_m
 
+/--
+Closed-surface support comes before detuned ratios in the intended physics.
+
+The `supportCondition` field is intentionally abstract: a future theorem should
+replace the current threshold proxy by a genuine closed-surface / standing-wave
+closure condition. The representative shell is only the readout location used by
+existing resonance formulas.
+-/
+structure OuterHorizonClosedSurfaceSupport where
+  representativeShell : ℕ
+  supportCondition : Prop
+
+/-- Detuned ratio as a readout effect of comparing a current shell with the
+representative shell of an already-supported closed surface. -/
+noncomputable def detunedRatioReadoutOfClosedSupport
+    (current_m : ℕ) (support : OuterHorizonClosedSurfaceSupport) : ℝ :=
+  geometricResonanceStep support.representativeShell current_m
+
+theorem detunedRatioReadoutOfClosedSupport_eq_geometricResonanceStep
+    (current_m : ℕ) (support : OuterHorizonClosedSurfaceSupport) :
+    detunedRatioReadoutOfClosedSupport current_m support =
+      geometricResonanceStep support.representativeShell current_m := rfl
+
+/-- Modal quarter-period closure packaged as closed-surface support at a
+representative shell. This is stronger than the threshold proxy in one respect:
+the support condition is a closed modal phase relation, not a detuned-ratio
+crossing. It is still generic, so it does not by itself select the shell. -/
+noncomputable def modalQuarterClosedSurfaceSupport
+    (m : ℕ) : OuterHorizonClosedSurfaceSupport :=
+  { representativeShell := m
+    supportCondition :=
+      (modalFrequencyHorizonFromShellNominal m).nominalOmega *
+        (modalFrequencyHorizonFromShellNominal m).interactionQuarterPeriod =
+          Hqiv.horizonQuarterPeriod }
+
+theorem modalQuarterClosedSurfaceSupport_condition (m : ℕ) :
+    (modalQuarterClosedSurfaceSupport m).supportCondition := by
+  exact (modalFrequencyHorizonFromShellNominal m).quarterPhase_eq_horizonQuarter
+
+theorem modalQuarterClosedSurfaceSupport_readout
+    (current_m m : ℕ) :
+    detunedRatioReadoutOfClosedSupport current_m
+        (modalQuarterClosedSurfaceSupport m) =
+      geometricResonanceStep m current_m := rfl
+
 noncomputable instance decidable_leptonResonanceThresholdPred (current_m : ℕ) (threshold : ℝ)
     (m' : ℕ) : Decidable (leptonResonanceThresholdPred current_m threshold m') :=
   by
@@ -176,6 +225,28 @@ theorem firstShellAtOrAboveResonanceThreshold_min (current_m : ℕ) (threshold :
     firstShellAtOrAboveResonanceThreshold current_m threshold ≤ m' :=
   Nat.find_min' (exists_leptonResonanceThresholdPred current_m threshold) hm
 
+/-- Current exact-shell threshold proxy packaged as a closed-support readout
+placeholder. This records the roadblock: the support condition is still the
+threshold predicate, not a genuine closed-surface theorem. -/
+noncomputable def thresholdProxyClosedSurfaceSupport
+    (current_m : ℕ) (threshold : ℝ) : OuterHorizonClosedSurfaceSupport :=
+  { representativeShell := firstShellAtOrAboveResonanceThreshold current_m threshold
+    supportCondition :=
+      leptonResonanceThresholdPred current_m threshold
+        (firstShellAtOrAboveResonanceThreshold current_m threshold) }
+
+theorem thresholdProxyClosedSurfaceSupport_condition
+    (current_m : ℕ) (threshold : ℝ) :
+    (thresholdProxyClosedSurfaceSupport current_m threshold).supportCondition := by
+  exact firstShellAtOrAboveResonanceThreshold_spec current_m threshold
+
+theorem thresholdProxyClosedSurfaceSupport_readout
+    (current_m : ℕ) (threshold : ℝ) :
+    detunedRatioReadoutOfClosedSupport current_m
+        (thresholdProxyClosedSurfaceSupport current_m threshold) =
+      geometricResonanceStep
+        (firstShellAtOrAboveResonanceThreshold current_m threshold) current_m := rfl
+
 /--
 Heavy charged-lepton shell from standing-wave quantum numbers:
 the first shell above the spin-only baseline where the geometric resonance readout
@@ -183,6 +254,13 @@ reaches the charge-decorated standing-wave lift (`4`).
 -/
 noncomputable def leptonHeavyVertexShell : ℕ :=
   firstShellAtOrAboveResonanceThreshold spinOnlyBaselineShell chargeDecoratedStandingWaveLift
+
+/-- Heavy charged-lepton representative shell carries modal quarter-period closed
+support. This proves closed-surface existence at the representative shell; the
+separate threshold machinery is only a way of choosing/readout-indexing it. -/
+theorem leptonHeavyVertexShell_has_modal_closed_surface_support :
+    (modalQuarterClosedSurfaceSupport leptonHeavyVertexShell).supportCondition :=
+  modalQuarterClosedSurfaceSupport_condition leptonHeavyVertexShell
 
 /-- Interface for a charged-lepton shell selection on the outer horizon. -/
 structure OuterHorizonLeptonShellSelection where
@@ -309,6 +387,32 @@ theorem derivedLeptonElectronShell_is_chargeDecorated_support :
     chargeDecoratedElectronSupportPred derivedLeptonElectronShell := by
   simpa [chargeDecoratedElectronSupportPred, derivedLeptonElectronShell] using
     (firstShellAtOrAboveResonanceThreshold_spec derivedLeptonMuonShell chargedLeptonMuEThreshold)
+
+/-- The derived μ representative shell carries modal quarter-period closed support.
+This is independent of the threshold proof except for the chosen representative shell. -/
+theorem derivedLeptonMuonShell_has_modal_closed_surface_support :
+    (modalQuarterClosedSurfaceSupport derivedLeptonMuonShell).supportCondition :=
+  modalQuarterClosedSurfaceSupport_condition derivedLeptonMuonShell
+
+/-- The derived e representative shell carries modal quarter-period closed support.
+This is independent of the threshold proof except for the chosen representative shell. -/
+theorem derivedLeptonElectronShell_has_modal_closed_surface_support :
+    (modalQuarterClosedSurfaceSupport derivedLeptonElectronShell).supportCondition :=
+  modalQuarterClosedSurfaceSupport_condition derivedLeptonElectronShell
+
+/-- The τ→μ detuned ratio is the readout between the heavy representative shell
+and the μ closed-support representative shell. -/
+theorem derivedLeptonMuonShell_detuned_ratio_is_closed_support_readout :
+    detunedRatioReadoutOfClosedSupport leptonHeavyVertexShell
+        (modalQuarterClosedSurfaceSupport derivedLeptonMuonShell) =
+      geometricResonanceStep derivedLeptonMuonShell leptonHeavyVertexShell := rfl
+
+/-- The μ→e detuned ratio is the readout between the μ representative shell and
+the e closed-support representative shell. -/
+theorem derivedLeptonElectronShell_detuned_ratio_is_closed_support_readout :
+    detunedRatioReadoutOfClosedSupport derivedLeptonMuonShell
+        (modalQuarterClosedSurfaceSupport derivedLeptonElectronShell) =
+      geometricResonanceStep derivedLeptonElectronShell derivedLeptonMuonShell := rfl
 
 theorem derivedLeptonMuonShell_is_first_threshold_crossing {m' : ℕ}
     (hm : leptonResonanceThresholdPred leptonHeavyVertexShell chargedLeptonTauMuThreshold m') :

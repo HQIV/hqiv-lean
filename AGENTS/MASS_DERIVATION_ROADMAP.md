@@ -21,6 +21,13 @@ conditions** of the **lifted** O-Maxwell + \(\varphi\) dynamics with **Fano
 projections** replacing hand-picked quark shell tables—is stated in
 [`O_MAXWELL_EIGEN_SHELL_SELECTION.md`](./O_MAXWELL_EIGEN_SHELL_SELECTION.md).
 
+**Parallel mining (TUFT / Hopf):** Nielsen’s topological unified field theory on the
+complex Hopf fibration (PhilArchive `NIETTU`, bib `NielsenTUFT2026`) supplies Beltrami
+contact spectra, fiber-winding generation rigidity, and zeta-determinant mass scales.
+Actionable HQIV mapping and open Lean milestones are in
+[`TUFT_HOPF_SPECTRAL_MINING.md`](./TUFT_HOPF_SPECTRAL_MINING.md); proofs start in
+[`Hqiv/Physics/HopfShellBeltramiMassBridge.lean`](../Hqiv/Physics/HopfShellBeltramiMassBridge.lean).
+
 ---
 
 ## 0. Effective narrative (what we are trying to formalize)
@@ -82,6 +89,13 @@ The goal is **not** “some masses exist in Lean.” The goal is:
   and [`Hqiv/Physics/QuarkMetaResonance.lean`](../Hqiv/Physics/QuarkMetaResonance.lean)
   express binding through `E_bind_from_network` /
   `E_bind_from_composite_trace`, with the proton lock-in condition made explicit.
+- **M4a — Hadron mass readout export (2026-05):**
+  [`Hqiv/Physics/HadronMassReadout.lean`](../Hqiv/Physics/HadronMassReadout.lean)
+  wires the calculator/benchmark stack: valence-scaled `hadronBindingMeV`,
+  meson `l²` factor **4/9** (`hadronIntrinsicScale_meson_eq_four_ninths`),
+  informational `hadronMassFromXiAfterGround`, and operational excitation deltas
+  (`radialExcitationDeltaOperational`, `orbitalExcitationDeltaOperational`).
+  Python mirror: `scripts/hqiv_mass_calculator_core.py`, `scripts/hqiv_excited_states.py`.
 
 ### Faithful now
 
@@ -124,14 +138,17 @@ choices:
 - **Charged-lepton resonance ladder**
   in [`LeptonGenerationLockin.lean`](../Hqiv/Physics/LeptonGenerationLockin.lean)
   and [`ChargedLeptonResonance.lean`](../Hqiv/Physics/ChargedLeptonResonance.lean):
-  τ is anchored at `referenceM`, but `muonShell` / `electronShell` are still
-  provisional. More importantly, exact shell occupancy may itself be too rigid:
-  a standing-wave mode may live on a support band or potential difference rather
-  than one exact shell.
+  τ has an age-normalized heavy readout in
+  [`AgeNormalizedHeavyMass.lean`](../Hqiv/Physics/AgeNormalizedHeavyMass.lean);
+  `m_tau_from_resonance` remains only a legacy GeV comparison witness. Exact
+  shell occupancy may itself be too rigid: a standing-wave mode may live on a
+  support band or potential difference rather than one exact shell.
 - **Quark ladders**
   in [`QuarkMetaResonance.lean`](../Hqiv/Physics/QuarkMetaResonance.lean):
-  geometric resonance drops are real, but `m_top_GeV`, `m_bottom_GeV`, and the
-  shell tables are still witness inputs.
+  geometric resonance drops are real. The heavy up/top channel now has an
+  age-normalized readout in `AgeNormalizedHeavyMass.lean`; `m_top_GeV` is kept
+  as a legacy comparison/export literal. `m_bottom_GeV` and the shell tables are
+  still witness inputs.
 - **Proton / neutron masses**
   in [`QuarkMetaResonance.lean`](../Hqiv/Physics/QuarkMetaResonance.lean)
   and [`DerivedNucleonMass.lean`](../Hqiv/Physics/DerivedNucleonMass.lean):
@@ -150,9 +167,9 @@ choices:
 
 These should **not** be described as derived from first principles yet:
 
-- the **absolute charged-lepton masses** without the τ anchor,
+- the **full charged-lepton GeV table** without comparison witnesses,
 - the **μ/e shell integers** as axiom outputs,
-- the **absolute quark masses** without top/bottom anchors,
+- the **full quark mass table** without bottom/shell-table witnesses,
 - the **proton mass** as a prediction rather than a boundary condition,
 - any claim that the current Lean files already prove numerical agreement for
   `M_W`, `M_Z`, `m_H`, or the charged fermions.
@@ -166,7 +183,7 @@ These should **not** be described as derived from first principles yet:
 | Can we derive any masses from the light cone faithfully now? | **Yes, but mainly bosonic / neutrino closure witnesses and structural binding quantities.** |
 | Does the published universe-age ratio close the boson gap by itself? | **No.** At the current EW-scale lifted witnesses it **overshoots** PDG; it was only a useful comparison layer for the older small raw masses. |
 | Is there a formal horizon-localized layer on top of age compression? | **Yes, as bookkeeping** (`ageAndHorizonAdjustedMass`), but it is not claimed to improve PDG agreement at electroweak scale. |
-| Are charged leptons first-principles yet? | **Not fully.** τ lock-in is anchored, but μ/e are now selected by a derived first-threshold crossing on the detuned-surface ladder rather than by bare provisional shell numerals. The exact-shell interface may still only be a proxy for a broader support band. |
+| Are charged leptons first-principles yet? | **Closer, not closed.** τ now has an age/lapse heavy readout (`ageNormalizedTauMass`), while `m_tau_from_resonance` is a comparison witness. μ/e still inherit the detuned-surface representative-shell machinery, which may only be a proxy for broader support bands. |
 | Are hadrons first-principles yet? | **Not fully.** The binding form is HQIV-shaped, but the proton mass remains an explicit boundary condition. |
 | Is the repo already at “particle masses from the light cone” in the strongest sense? | **No.** It has a credible derivation spine plus isolated anchors, not a fully closed fermion-mass theory. |
 
@@ -181,8 +198,8 @@ Work in this order. Each step should remove a specific anchor, not just rename i
 | **M0 — Backbone lock** | Keep `referenceM`, `alpha`, `gamma`, `T`, and `phi_of_shell` as the only universal shell inputs. | Already in place via `OctonionicLightCone` + `AuxiliaryField`. |
 | **M1 — Outer closure first** | Treat bosonic and neutrino masses as the canonical first derivation layer. | Already in place structurally in `DerivedGaugeAndLeptonSector`; next step is to tie those witnesses more tightly to the algebra-first gauge / Maxwell package and to isolate exactly which comparison factors are local vs published. |
 | **M2 — Replace provisional exact shells with derived support** | Replace provisional μ/e shell integers with a theorem-level support rule, possibly upgrading `OuterHorizonLeptonShellSelection` to a shell-band / support-region interface. | Charged leptons are no longer represented primarily by fixed provisional numerals; the downstream resonance ladder reads from a derived support object, with exact shells used only as peaks/representatives if still needed. |
-| **M3 — Remove τ as an external scale witness** | Tie the absolute charged-lepton scale to outer-horizon closure rather than `m_tau_Pl` / `m_tau_from_resonance`. | τ mass scale is derived from `outerClosureScale` or an equivalent HQIV shell theorem. |
-| **M4 — Reduce quark anchor count** | Replace one of the heavy quark anchors and/or one shell table with a theorem from the same shell ladder. | At least one heavy quark scale is no longer a bare decimal definition. |
+| **M3 — Remove τ as an external scale witness** | Tie the absolute charged-lepton scale to HQIV age/lapse or outer-horizon closure rather than `m_tau_Pl` / `m_tau_from_resonance`. | Partially in place via `ageNormalizedTauMass`; remaining work is comparison/export migration and support-band sharpening. |
+| **M4 — Reduce quark anchor count** | Replace one of the heavy quark anchors and/or one shell table with a theorem from the same shell ladder. | Partially in place for the heavy up/top channel via `ageNormalizedTopMass`; bottom and shell-table witnesses remain. |
 | **M5 — Proton from constituent-plus-binding only** | Keep `referenceM = 4`, but stop feeding `938.272` in as an input. | `protonMassFromMetaHarmonics_MeV` is no longer definitionally forced by `protonAnchorMass_MeV`. |
 | **M6 — Unified outer/inner mass spine** | Make bosons, leptons, and hadrons all read as one shell program. | The paper and Lean exports can tell a single story without special pleading for any sector. |
 
@@ -283,12 +300,37 @@ The smallest nontrivial win is **not** “derive the exact electron mass.” It 
 That would already remove the explicit dependence on bare numerals from the
 interface layer, even if the first derived rule is still imperfect physically.
 
-Status: this has now been met in the minimal exact-shell form. The current Lean
-selector uses the existing detuned-surface `geometricResonanceStep` and picks
-the **first shell crossing** where the ratio of detuned horizon areas reaches one
-**octave**: `chargedLeptonDetunedSurfaceOctaveRatio = 2` (detuned surface
-supports ~2× the prior shell’s standing-wave capacity — not Koide integers such
-as `17` / `207`). The same octave target is used for τ→μ and μ→e. The support-band upgrade remains open.
+Status: this has now been met in the minimal exact-shell proxy form. The current
+Lean selector still uses the existing detuned-surface `geometricResonanceStep`
+and picks the **first shell crossing** where the ratio of detuned horizon areas
+reaches the required standing-wave lift. That should now be read as a **readout
+effect**, not the reason the particle exists. The stronger physics target is:
+particles occupy closed horizon-supported standing-wave surfaces; detuned ratios
+are what an observer reads when comparing representative closed surfaces. The
+same proxy target is used for τ→μ and μ→e. The support-band / closed-surface
+upgrade remains open.
+
+### Step B1a — Lapse-normalized shell readout
+
+[`Hqiv/Physics/LapseMassReadout.lean`](../Hqiv/Physics/LapseMassReadout.lean)
+now isolates the generic readout pattern:
+
+- `shellLapse m Φ t = HQVM_lapse Φ (phi_of_shell m) t`,
+- `lapseMassReadout raw m Φ t = raw m / shellLapse m Φ t`,
+- proton/neutron recovery theorems at `referenceM`,
+- `ShellSupportSelector` / `ShellSupportBand` for Furey- or Clifford-shaped
+  state-to-shell support rules,
+- `rawHadronMassFromNetwork` and `rawHadronMassFromCompositeTrace`, keeping
+  hadrons on the constituent-minus-8×8-network path,
+- `ShellSpectralTower`, a KK-style **shell tower** record with an explicit
+  `HQIVNative` guard so it is not read as a compactified extra dimension.
+
+This is not yet a particle-spectrum derivation. Its purpose is to make the
+three layers reusable and auditable: classification chooses the channel,
+HQIV shell/network dynamics supplies raw energy, and the lapse supplies the
+observer readout. The missing theorem remains state-to-support selection: why a
+given Furey/Clifford channel occupies a specific shell or shell band without
+importing mass tables.
 
 An equally acceptable next move is to introduce a **support-band** interface
 instead, where the exact shell is only a peak, center, or representative index.
@@ -300,14 +342,43 @@ That may be the better long-term home for:
 - and **looser outer generations**, whose physical support may naturally spread
   over multiple adjacent shells.
 
+`LeptonGenerationLockin.lean` now contains a naming guard for this direction:
+`OuterHorizonClosedSurfaceSupport` and
+`detunedRatioReadoutOfClosedSupport`. The current exact-shell selector is
+packaged only as `thresholdProxyClosedSurfaceSupport`, explicitly recording the
+roadblock that the support condition is still a threshold predicate rather than
+a genuine closed-surface theorem.
+
+Candidate-theorem pass:
+
+- **Accepted:** `modalQuarterClosedSurfaceSupport` packages modal quarter-period
+  closure at any representative shell. This gives a closed-surface support
+  condition without using detuned ratios as the cause.
+- **Accepted:** `leptonHeavyVertexShell_has_modal_closed_surface_support`,
+  `derivedLeptonMuonShell_has_modal_closed_surface_support`, and
+  `derivedLeptonElectronShell_has_modal_closed_surface_support` instantiate that
+  support for the current τ/μ/e representative shells.
+- **Accepted:** `resonance_k_tau_mu_eq_closed_support_readout` and
+  `resonance_k_mu_e_eq_closed_support_readout` in
+  `ChargedLeptonResonance.lean` rewrite the active detuned factors as readouts
+  between representative closed-support surfaces.
+- **Rejected as the wrong theorem:** equating the threshold proxy with modal
+  closed support. Their representative shell can be shared, but the propositions
+  are different: threshold crossing is still a selector/readout proxy, while
+  modal quarter-period closure is a support condition. Collapsing them would
+  recreate the “effect as reason” problem.
+
 ### Step B2 — Acceptable first proof shapes
 
 The first derived rule does **not** need to solve all charged-lepton physics in
 one shot. Any of the following would count as real progress:
 
-- a **monotone threshold rule** on shell quantities
+- a **closed-surface support rule** whose detuned-surface ratio is proved only
+  afterward as a readout effect,
+- a **monotone threshold proxy** on shell quantities
   (for example, the first shell where a detuned-surface ratio, rapidity signal,
-  or other shell observable crosses a generation threshold),
+  or other shell observable crosses a generation threshold), clearly marked as
+  a proxy rather than the physical cause,
 - a **two-stage outer-horizon rule**:
   one theorem selecting μ as the first shell after `referenceM` with a stated
   property, and a second theorem selecting e as the first shell after μ with the
@@ -350,9 +421,11 @@ mass file pair.
    `ChargedLeptonResonance.lean`, `FanoResonance.lean`, and
    `LeptonResonanceGlobalDetuning.lean` all rewrite the current resonance ratios
    through `detunedShellSurface`, `effectiveSurface`, `effCorrected`, and
-   `geometricResonanceStep`. This means the future selector/support rule should
-   ideally be expressed in the same language, so the resonance theorems survive
-   by inheritance rather than by re-derivation.
+   `geometricResonanceStep`. These ratios should be treated as readout effects
+   of closed/support surfaces, not as the reason the states exist. This means
+   the future selector/support rule should expose representative surfaces in the
+   same language, so the resonance theorems survive by inheritance rather than
+   by re-derivation.
 4. **Continuum / horizon package layer**
    `HorizonLimitedRenormLocality.lean` already injects the HQIV spin-statistics
    statement into the horizon-limited closure package. That does **not** force a
@@ -435,12 +508,24 @@ Current incremental progress:
 - Lean also proves that the μ/e descendants inherit the same relative-tolerance
   relation to the existing resonance witnesses, because they are obtained by
   dividing by the same detuning ratios.
+- `ChargedLeptonResonance.lean` now isolates the exact single remaining
+  normalization
+  `tauLockinToResonanceScale = m_tau_from_resonance / m_tau_from_lockin_surface_candidate`.
+  The theorem `chargedLepton_resonance_ladder_eq_scaled_lockin_candidate_ladder`
+  proves that this one factor maps the whole τ/μ/e lock-in candidate ladder to
+  the active resonance ladder. This is real progress: the ratios are no longer
+  the obstacle; only the absolute τ normalization is.
+- `AgeNormalizedHeavyMass.lean` now defines `ageNormalizedTauMass` from
+  `AgeLapseNowScale`, `intrinsicWaveComplexity`, and the same `effCorrected`
+  surface rule used by the heavy top readout. This gives a τ absolute-scale path
+  whose mass unit comes from the universe-age/lapse now-scale rather than the
+  `1776.86e-3` comparison literal.
 
-This does **not** finish Step C: the repo still exports `m_tau_from_resonance`
-as the active τ anchor. But it is now no longer true that there is zero
-outer-/lock-in-closure attempt on the τ side; there is a concrete candidate
-living in the same shell language as the resonance stack, and a full
-candidate τ→μ→e ladder descending from it.
+This still does **not** finish the full charged-lepton table: the repo keeps
+`m_tau_from_resonance` as a legacy GeV comparison/export witness, and the
+support-band story for μ/e is still only represented by exact representative
+shells. But it is now no longer true that the τ absolute scale has to start from
+the PDG-style literal.
 
 ### Step D — Remove the proton anchor without losing the shell spine
 
@@ -851,26 +936,34 @@ The current best HQIV working order is:
 
 - **Now theorem-backed:** the ν ladder is explicitly rewritten through `neutralClosureWitness`
   in `ConservedContentMassBridge.lean`, and ν is the `spinOnly` closure class in the
-  current closure taxonomy.
+  current closure taxonomy. The consolidated theorem
+  `neutrino_ladder_is_current_neutral_spin_first_rung` now packages the ν ladder,
+  `neutralClosureWitness`, and the minimal-rank statement over the current
+  `FermionContentClass` enumeration.
 - **Gap:** this is still only the **smallest enumerated closure class**, not a stronger
   uniqueness/minimality theorem over a wider fermionic closure space.
-- **Best next theorem target:** a consolidated statement in
-  `ConservedContentMassBridge.lean` or `DerivedGaugeAndLeptonSector.lean` that the
-  neutral witness is the canonical first fermionic closure rung, not just the first
-  named item in the current three-class bridge.
+- **Best next theorem target:** define the wider closure search space, or explicitly
+  decide that the next useful step is M4 packaging instead of trying to prove a
+  global uniqueness theorem too early.
 
 **M4 — Charge-decorated lepton rung**
 
 - **Now theorem-backed:** the τ/μ/e candidate ladder is packaged as a
   `chargeDecorated` closure in `ConservedContentMassBridge.lean`, and the active μ/e
   shell selector is now theorem-backed as the first `chargeDecorated` support
-  crossing in `LeptonGenerationLockin.lean`.
-- **Gap:** the charged-lepton story is still split across support selection,
-  resonance detuning, and lock-in normalization rather than being packaged as one
-  single closure functor from the neutral base.
-- **Best next theorem target:** one consolidated theorem tying the neutral witness,
-  charge decoration, support selector, and τ/μ/e relaxation ladder into a single
-  exported charged-lepton closure program.
+  crossing in `LeptonGenerationLockin.lean`. The theorem
+  `chargedLepton_ladder_is_chargeDecorated_rung_on_neutral_base` now packages
+  the charge-decorated rung above the neutral base, signed visible charges, and
+  the τ→μ→e candidate relaxation order.
+- **Gap:** the charged-lepton story still does **not** remove the active
+  `m_tau_from_resonance` GeV witness from every export; that remains comparison
+  migration work. `AgeNormalizedHeavyMass.lean` now supplies
+  `ageNormalizedTauMass`, an absolute age/lapse readout path for the heavy
+  charged-lepton scale.
+- **Best next theorem target:** either connect the support selector more directly
+  to the package theorem, or move to Step C and test whether the lock-in τ
+  candidate can replace the active τ resonance witness without breaking the
+  exported comparisons.
 
 **M5 — Colour-composite baryon rung**
 
@@ -884,8 +977,10 @@ The current best HQIV working order is:
   visible shell states are `neutral / positive / negative`, while the quark
   fractions `2/3` and `-1/3` are isolated as internal algebraic residual
   bookkeeping; the top and heavy charged-lepton sectors are aligned at the
-  shared lock-in index `referenceM`, and the public heavy color band is now
-  explicitly normalized from that top lock-in channel. The down-like heavy band
+  shared lock-in index `referenceM`. The heavy up/top channel now also has the
+  age/lapse readout `ageNormalizedTopMass`; the legacy `m_top_GeV` literal is a
+  comparison/export witness. The public heavy color band is still retained for
+  existing APIs, and the down-like heavy band
   is now theorem-backed through the heavy-shell cross-detuning and the `2 × 3`
   visible-state bookkeeping budget, so the active API no longer treats the full
   down branch as a naive `top / 2` copy.
@@ -943,14 +1038,15 @@ The first clean attack should be **M2.5 / M3**, not the graviton claim.
 
 Concretely:
 
-1. tighten `ConservedContentMassBridge.lean` so the current ν / charged-lepton /
-   quark comparison is explicitly phrased as a **spin / charge / colour**
-   hierarchy,
-2. rewrite the neutrino witness theorems so they point directly to the
-   **neutral closure** object (`neutralClosureWitness`) rather than only to
-   `M_Z_derived` by name,
-3. only then revisit charged leptons as the charge-decorated rung on top of that
-   neutral base,
+1. keep `ConservedContentMassBridge.lean` as the current spin / charge / colour
+   hierarchy package; M3 now has the consolidated theorem
+   `neutrino_ladder_is_current_neutral_spin_first_rung`,
+2. do **not** pretend this is a global uniqueness theorem over all possible
+   fermionic closure spaces; the proof is intentionally scoped to the current
+   three-class bridge,
+3. charged leptons now have the package theorem
+   `chargedLepton_ladder_is_chargeDecorated_rung_on_neutral_base`; do not
+   confuse that with Step C’s still-open absolute τ-scale problem,
 4. the **M6 interface milestone** is now in `HQIVGravityReadoutScalars`; a full
    “no fundamental spin-2 carrier” claim remains future work once the transport /
    patch formalism is richer.
@@ -987,13 +1083,14 @@ Use this checklist when explaining the mass story to a new reader—**narrative 
   **downstream given** those indices—not a proof that “4” is the unique shell from pure combinatorics
   inside this file.
 - **Charged leptons:** τ at lock-in matches quark narrative; μ/e shells use a **clean** detuned-surface
-  threshold (`octave = 2`) instead of legacy integer smuggling. **Absolute** τ scale in GeV still uses
-  `m_tau_from_resonance` (PDG central); ratios use the same geometric factors as quarks.
-  `m_tau_from_lockin_surface_candidate` is a **separate normalization**; the `≈` lemma is an alignment
-  check between languages.
+  threshold (`octave = 2`) instead of legacy integer smuggling. The heavy τ scale can now use
+  `ageNormalizedTauMass`; `m_tau_from_resonance` (PDG central) remains a legacy GeV comparison
+  witness. Ratios use the same geometric factors as quarks. `m_tau_from_lockin_surface_candidate`
+  is a **separate normalization**; the `≈` lemma is an alignment check between languages.
 - **Quarks / baryons:** resonance spine + composite-trace nucleon packaging reuse the **same**
-  `geometricResonanceStep` formalism; shell tables and `m_top_GeV` / `m_bottom_GeV` remain **explicit
-  witnesses**, not uniqueness theorems.
+  `geometricResonanceStep` formalism; the heavy top channel has the new `ageNormalizedTopMass`
+  route, while shell tables and `m_top_GeV` / `m_bottom_GeV` remain legacy comparison/export
+  witnesses, not uniqueness theorems.
 - **Spin / charge / colour bridge:** `ConservedContentMassBridge` delivers **proved ordering** and a
   clear taxonomy; read it as **classification + inequalities** anchored to the resonance modules, not
   as a replacement for those anchors.

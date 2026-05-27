@@ -178,6 +178,22 @@ noncomputable def m_nu_e_derived : ℝ := outerHorizonNeutrinoSuppression * M_Z_
 noncomputable def m_nu_mu_derived : ℝ := outerHorizonNeutrinoSuppression * m_nu_e_derived
 noncomputable def m_nu_tau_derived : ℝ := outerHorizonNeutrinoSuppression * m_nu_mu_derived
 
+/-- Closed form for the outer-horizon ν suppression factor at the current lock-in / surface stack. -/
+theorem outerHorizonNeutrinoSuppression_eq_inv_140 :
+    outerHorizonNeutrinoSuppression = (1 : ℝ) / 140 := by
+  unfold outerHorizonNeutrinoSuppression
+  simp [gammaDerived, referenceM, qcdShell, stepsFromQCDToLockin, latticeStepCount, outerHorizonSurface,
+    alpha]
+  norm_num
+
+theorem outerHorizonNeutrinoSuppression_pos : 0 < outerHorizonNeutrinoSuppression := by
+  rw [outerHorizonNeutrinoSuppression_eq_inv_140]
+  norm_num
+
+theorem outerHorizonNeutrinoSuppression_lt_one : outerHorizonNeutrinoSuppression < 1 := by
+  rw [outerHorizonNeutrinoSuppression_eq_inv_140]
+  norm_num
+
 /-!
 Neutrino layer split:
 - `*_derived` stays the horizon-closure **witness** ladder.
@@ -452,6 +468,12 @@ def M_Z_PDG : ℝ := 91.1876
 /-- PDG central value for the Higgs mass, in GeV. -/
 def m_H_PDG : ℝ := 125.11
 
+/-- PDG central pole mass for the muon, in GeV (same listing convention as other PDG centrals here). -/
+def m_mu_PDG : ℝ := 105.6583755e-3
+
+/-- PDG central pole mass for the electron, in GeV. -/
+def m_e_PDG : ℝ := 0.510998950e-3
+
 /-- Absolute gap between the raw W witness and the PDG central value. -/
 noncomputable def M_W_gap_to_PDG : ℝ := |M_W_PDG - M_W_derived|
 
@@ -540,6 +562,53 @@ theorem boson_witness_values :
       M_Z_derived = (2744 : ℝ) / 25 ∧
       m_H_derived = (588 : ℝ) / 5 :=
   ⟨boson_witness_M_W, boson_witness_M_Z, boson_witness_m_H⟩
+
+theorem M_W_derived_pos : 0 < M_W_derived := by
+  rw [boson_witness_M_W]
+  norm_num
+
+theorem M_Z_derived_pos : 0 < M_Z_derived := by
+  rw [boson_witness_M_Z]
+  norm_num
+
+theorem M_W_derived_lt_M_Z_derived : M_W_derived < M_Z_derived := by
+  rw [M_Z_derived_eq_W_times_one_plus_gamma]
+  have hγ : 0 < gammaDerived := by
+    unfold gammaDerived alpha
+    norm_num
+  have hone : 1 < 1 + gammaDerived := lt_add_of_pos_right 1 hγ
+  have hW : 0 < M_W_derived := M_W_derived_pos
+  have hmul : (1 : ℝ) * M_W_derived < (1 + gammaDerived) * M_W_derived :=
+    mul_lt_mul_of_pos_right hone hW
+  simpa using hmul
+
+theorem m_nu_e_derived_lt_M_Z_derived : m_nu_e_derived < M_Z_derived := by
+  rw [m_nu_e_derived_eq_suppression_times_M_Z, outerHorizonNeutrinoSuppression_eq_inv_140]
+  have hZ : 0 < M_Z_derived := M_Z_derived_pos
+  have hone : (1 : ℝ) / 140 < 1 := by norm_num
+  have hmul : (1 / 140 : ℝ) * M_Z_derived < 1 * M_Z_derived := mul_lt_mul_of_pos_right hone hZ
+  simpa using hmul
+
+theorem m_nu_mu_derived_lt_m_nu_e_derived : m_nu_mu_derived < m_nu_e_derived := by
+  unfold m_nu_mu_derived
+  have hν : 0 < m_nu_e_derived := by
+    rw [m_nu_e_derived_eq_suppression_times_M_Z]
+    exact mul_pos outerHorizonNeutrinoSuppression_pos M_Z_derived_pos
+  simpa [one_mul] using mul_lt_mul_of_pos_right outerHorizonNeutrinoSuppression_lt_one hν
+
+theorem m_nu_tau_derived_lt_m_nu_mu_derived : m_nu_tau_derived < m_nu_mu_derived := by
+  unfold m_nu_tau_derived
+  have hμ : 0 < m_nu_mu_derived := by
+    unfold m_nu_mu_derived
+    rw [m_nu_e_derived_eq_suppression_times_M_Z]
+    refine mul_pos outerHorizonNeutrinoSuppression_pos ?_
+    exact mul_pos outerHorizonNeutrinoSuppression_pos M_Z_derived_pos
+  simpa [one_mul] using mul_lt_mul_of_pos_right outerHorizonNeutrinoSuppression_lt_one hμ
+
+/-- Strict generation order on the **derived** ν ladder from repeated `outerHorizonNeutrinoSuppression`. -/
+theorem neutrino_derived_mass_ladder_strict :
+    m_nu_tau_derived < m_nu_mu_derived ∧ m_nu_mu_derived < m_nu_e_derived :=
+  ⟨m_nu_tau_derived_lt_m_nu_mu_derived, m_nu_mu_derived_lt_m_nu_e_derived⟩
 
 theorem M_Z_derived_lt_one_twenty : M_Z_derived < 120 := by
   rw [boson_witness_M_Z]

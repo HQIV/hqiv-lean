@@ -1,0 +1,116 @@
+{
+  "source": "scripts/compare_quantum_chem_witnesses.py",
+  "referenceM": 4,
+  "xi_referenceM": 5.0,
+  "closed_form": {
+    "xi_of_shell": "m+1",
+    "site_energy_xi": "4*(xi+1)*xi^2",
+    "h2_equal_shell_trace_xi": "8*(xi+1)*xi^2"
+  },
+  "rows": [
+    {
+      "m": 0,
+      "xi": 1.0,
+      "site_energy": 8.0,
+      "h2_equal_shell_trace": 16.0
+    },
+    {
+      "m": 1,
+      "xi": 2.0,
+      "site_energy": 48.0,
+      "h2_equal_shell_trace": 96.0
+    },
+    {
+      "m": 2,
+      "xi": 3.0,
+      "site_energy": 144.0,
+      "h2_equal_shell_trace": 288.0
+    },
+    {
+      "m": 3,
+      "xi": 4.0,
+      "site_energy": 320.0,
+      "h2_equal_shell_trace": 640.0
+    },
+    {
+      "m": 4,
+      "xi": 5.0,
+      "site_energy": 600.0,
+      "h2_equal_shell_trace": 1200.0
+    },
+    {
+      "m": 5,
+      "xi": 6.0,
+      "site_energy": 1008.0,
+      "h2_equal_shell_trace": 2016.0
+    },
+    {
+      "m": 6,
+      "xi": 7.0,
+      "site_energy": 1568.0,
+      "h2_equal_shell_trace": 3136.0
+    },
+    {
+      "m": 7,
+      "xi": 8.0,
+      "site_energy": 2304.0,
+      "h2_equal_shell_trace": 4608.0
+    },
+    {
+      "m": 8,
+      "xi": 9.0,
+      "site_energy": 3240.0,
+      "h2_equal_shell_trace": 6480.0
+    }
+  ],
+  "lih_valence_sites": {
+    "Li_s": {
+      "m": 4,
+      "xi": 5.0,
+      "E_site": 600.0,
+      "multiplicity": 1
+    },
+    "Li_p": {
+      "m": 3,
+      "xi": 4.0,
+      "E_site": 320.0,
+      "multiplicity": 3
+    },
+    "H_s": {
+      "m": 1,
+      "xi": 2.0,
+      "E_site": 48.0,
+      "multiplicity": 1
+    }
+  },
+  "lih_valence_trace_dimless": 1608.0,
+  "lean_lih_compton_bridge": {
+    "lean_module": "Hqiv.QuantumChemistry.LiH",
+    "derivation_module": "Hqiv.QuantumChemistry.LiHDerivation",
+    "compton_shells_m": [
+      4,
+      3,
+      1
+    ],
+    "compton_shells_xi": [
+      5.0,
+      4.0,
+      2.0
+    ],
+    "omega_k_bridge": {
+      "predicate": "lihLocalOmegaKIncrementBridge",
+      "payload": "LiHComptonOmegaKBridge",
+      "witnessed_in_lean": true,
+      "note": "Local \u03a9\u2096 increment bridge at m=4,3,1; imprint phases match on integer steps when payload is supplied (theorems lihCompton_*_imprintWeightedReadoutPhase_xi_matches)."
+    },
+    "imprint_phase_theorems": {
+      "lihCompton_LiS_imprintWeightedReadoutPhase_xi_matches": true,
+      "lihCompton_LiP_imprintWeightedReadoutPhase_xi_matches": true,
+      "lihCompton_HS_imprintWeightedReadoutPhase_xi_matches": true,
+      "lihCompton_imprintWeightedReadoutPhases_justified": true,
+      "lihCompton_LiP_seedPotential_omega_from_discrete_imprint": true,
+      "lihComptonDerivedDissociationIndicator_with_justified_readouts": true
+    },
+    "used_shells_lemma": "lihComptonUsedShells_eq_spec"
+  }
+}

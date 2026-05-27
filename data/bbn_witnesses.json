@@ -1,0 +1,133 @@
+{
+  "source": "HQIV BBN epoch network (cooling integration in T)",
+  "lean_modules": [
+    "Hqiv.Physics.BBNNetworkFromWeights",
+    "Hqiv.Physics.BBNEpochEvolution",
+    "Hqiv.Physics.BBNEpochNetwork"
+  ],
+  "python_script": "scripts/hqiv_bbn_abundances.py",
+  "hqiv_inputs": {
+    "eta_paper": 6.1e-10,
+    "derivedDeltaM_MeV": 1.293,
+    "Q_D_lockin_MeV": 2.343133076983804,
+    "Q_4He_lockin_MeV": 7.029399230951185,
+    "Q_3He_binding_MeV": 4.393374519344427,
+    "rate_scale": 0.01,
+    "weak_rate_mult": 400.0,
+    "dd_rate_mult": 8.0,
+    "he3_branch_scale": 0.0
+  },
+  "bbn_window_integrated": {
+    "Yp": 0.24691358024691362,
+    "D_over_H": 6.806268570945086e-07,
+    "He3_over_H": 0.00030447447657838114,
+    "Li7_over_H": 2.049990674939668e+221,
+    "T_window_low_MeV": 0.01,
+    "T_window_high_MeV": 1.0,
+    "n_steps": 40.0
+  },
+  "bbn_mid_epoch": {
+    "T_MeV": 0.1,
+    "shell_index": 1.2209e+23,
+    "Yp": 0.2469135802469136,
+    "D_over_H": 6.331486303112733e-24,
+    "He3_over_H": 2.0259760969460958e-13,
+    "Li7_over_H": 7.044242898103586e+16,
+    "xn": 0.14084507042253522,
+    "T_freeze_MeV": 0.7150406619827524
+  },
+  "epoch_comparison": [
+    {
+      "label": "lockin_shell_m4_QCD_scale",
+      "T_MeV": 2.4418e+21,
+      "shell_index": 4.0,
+      "Yp": 0.2469135802469136,
+      "D_over_H": 0.0014246263921707946,
+      "He3_over_H": 0.056851794983886025,
+      "Li7_over_H": 8.945705455445067e-07
+    },
+    {
+      "label": "bbn_T_1_MeV",
+      "T_MeV": 1.0,
+      "shell_index": 1.2209e+22,
+      "Yp": 0.2469135802469136,
+      "D_over_H": 1.3136553966220222e-05,
+      "He3_over_H": 0.004073176175152631,
+      "Li7_over_H": 0.0001742755922910472
+    },
+    {
+      "label": "bbn_mid_T_0.1_MeV",
+      "T_MeV": 0.1,
+      "shell_index": 1.2209e+23,
+      "Yp": 0.2469135802469136,
+      "D_over_H": 6.331486303112733e-24,
+      "He3_over_H": 2.0259760969460958e-13,
+      "Li7_over_H": 7.044242898103586e+16
+    },
+    {
+      "label": "bbn_T_0.01_MeV",
+      "T_MeV": 0.01,
+      "shell_index": 1.2209e+24,
+      "Yp": 0.2469135802469136,
+      "D_over_H": 4.282997746399088e-207,
+      "He3_over_H": 1.8777835928731922e-116,
+      "Li7_over_H": 8.199962699758673e+222
+    },
+    {
+      "label": "cmb_today",
+      "T_MeV": 2.31971e-10,
+      "shell_index": 5.263157894736842e+31,
+      "Yp": 0.2469135802469136,
+      "D_over_H": 0.0,
+      "He3_over_H": 0.0,
+      "Li7_over_H": 0.0
+    }
+  ],
+  "comparison_coc2015": {
+    "Yp": 0.24703,
+    "D_over_H": 2.579e-05,
+    "He3_over_H": 9.996e-06,
+    "Li7_over_H": 4.648e-10
+  },
+  "observed_comparison_layer": {
+    "Yp": "0.244 \u00b1 0.004",
+    "D_over_H": "(2.53 \u00b1 0.04)\u00d710\u207b\u2075",
+    "He3_over_H": "\u224810\u207b\u2075"
+  },
+  "python_scripts": [
+    "scripts/hqiv_bbn_abundances.py",
+    "scripts/hqiv_bbn_epoch_network.py"
+  ],
+  "epoch_network_integration": {
+    "Yp": 0.2490520165152789,
+    "D_over_H": 5.273085415896963e-10,
+    "He3_over_H": 0.0,
+    "Li7_over_H": 0.0,
+    "n_n_relic": 0.0,
+    "T_freeze_MeV": 0.7150406619827524,
+    "T_high_MeV": 1.0,
+    "T_low_MeV": 0.01,
+    "n_steps": 400,
+    "final_baryon_sum": 6.099999999999999e-10,
+    "eta": 6.1e-10
+  },
+  "partition_average_legacy": {
+    "Yp": 0.24691358024691362,
+    "D_over_H": 6.806268570945086e-07,
+    "He3_over_H": 0.00030447447657838114,
+    "Li7_over_H": 2.049990674939668e+221,
+    "T_window_low_MeV": 0.01,
+    "T_window_high_MeV": 1.0,
+    "n_steps": 40.0
+  },
+  "hqiv_weight_readout_at_T_0p1_MeV": {
+    "T_MeV": 0.1,
+    "shell_index": 1.2209e+23,
+    "Yp": 0.2469135802469136,
+    "D_over_H": 6.331486303112733e-24,
+    "He3_over_H": 2.0259760969460958e-13,
+    "Li7_over_H": 7.044242898103586e+16,
+    "xn": 0.14084507042253522,
+    "T_freeze_MeV": 0.7150406619827524
+  }
+}

@@ -45,7 +45,7 @@ flowchart TB
 
 | Wrapper | Canonical script | Lean touchpoints (typical) |
 |---------|------------------|----------------------------|
-| `Orbital-Mechanics-OMaxwell-Aligned.py` | `omaxwell_torus_ode.py` | O-Maxwell / torus potential scaffold (numeric prototype) |
+| `Orbital-Mechanics-OMaxwell-Aligned.py` | `hqiv_orbital_flyby_omaxwell.py` | Rotating-body flyby + O-Maxwell/φ chart probes (`GRFromMaxwell`, `HQIVFluidClosureScaffold`); legacy torus ODE: `omaxwell_torus_ode.py` |
 | `BondedHorizon-Casimir-Lean.py` | `bonded_horizon_casimir_float.py` | `Hqiv/Geometry/BondedHorizonCasimir.lean` |
 | `NuclearTorus-S7Casimir-Lean.py` | `nuclear_torus_casimir_float.py` | `NuclearTorusPerturbation`, `S7MetahorizonCasimir` |
 | `LiH-QuantumChemistry-Now-Lapse-LeanAligned-Working.py` | `lih_derivation_scan.py` | `LiH.lean`, `LiHDerivation.lean`, `Now.lean`, EL residual mirror of `Action.lean` |

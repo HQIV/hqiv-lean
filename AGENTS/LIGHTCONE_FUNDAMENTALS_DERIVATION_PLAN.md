@@ -104,7 +104,7 @@ This document is a **roadmap for agents**: how “standard” fundamental equati
 |-----------|------|-------------|--------|
 | **E0 — Finite-sector unitarity** | Prove **norm preservation** on stated finite spaces | Octonionic lightcone / discrete quantum modules | See preprint + Lean names in paper |
 | **E1 — Patch composition** | Consistent gluing of **accessible** regions (causal diamond budgets) | `LightConeMaxwellQFTBridge` | Partial |
-| **E2 — Continuum S-matrix** | Full QFT scattering — **standard open** in rigorous QFT | N/A | Not claimed |
+| **E2 — Continuum S-matrix (comparison layer)** | Full continuum QFT scattering is **not required** by HQIV (patch-closed; see [PATCH_ONTOLOGY.md](./PATCH_ONTOLOGY.md)); kept only as a **calculation-approximation** target for comparison with textbook S-matrix formulas | N/A | Not claimed; not an HQIV open problem |
 
 **Correction story:** **IR cutoff** = horizon; **UV cutoff** = shell/mode budget — unitarity holds **after** restricting to accessible sectors.
 
@@ -119,7 +119,7 @@ This document is a **roadmap for agents**: how “standard” fundamental equati
 | Milestone | Goal | Touchpoints | Status |
 |-----------|------|-------------|--------|
 | **F0 — Gauge covariant derivative** | Same algebraic embedding used for YM | `SMEmbedding`, `PhaseLiftDelta` | Proved fragments |
-| **F1 — Dirac equation as effective** | Statement on a chart with **HQIV** mass/phase **replacements** | New module or extension of `Action` | Open (L2) |
+| **F1 — Dirac equation as effective** | Statement on a chart with **HQIV** mass/phase **replacements** (continuum chart is a **calculation approximation**; see [PATCH_ONTOLOGY.md](./PATCH_ONTOLOGY.md)) | New module or extension of `Action` | Comparison-layer scaffold (L2) |
 | **F2 — Mass spectrum** | Lock to **ladder** masses (no PDG fits per user rules) | `ChargedLeptonResonance`, nucleon modules | See ASSUMPTIONS |
 
 **Correction story:** masses and phases from **shell resonance** conditions; not independent knobs.

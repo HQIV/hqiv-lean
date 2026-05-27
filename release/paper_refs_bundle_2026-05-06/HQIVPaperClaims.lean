@@ -1,16 +1,16 @@
 /-
-Machine-checked scope for `papers/hqiv_rapidity_manifold_so8_closure` (Appendix A,
-“Formal Verification Map”): discrete growth / curvature, SAT shared-manifold
-rapidity transport, packaged causal forcing theorems, and a symbolic
-\(G_2+\Delta\to\mathfrak{so}(8)\) closure interface.
+Machine-checked scope for `papers/closure.tex` (Zenodo companion): discrete
+null-lattice / curvature layer and the symbolic \(\mathfrak{so}(8)\) closure
+interface (axioms packaging the generator matrices).
 
 **Build:** `lake build HQIVPaperClaims`
 
-This root is intentionally narrower than `HQIVLEAN` (no SM/GR/lepton stack, quantum
-mechanics layers, etc.): it is the **recommended library target** when auditing only
-Appendix~A. Elaboration time can still be substantial because the transitive cone includes
-`OctonionicLightCone`, but it intentionally avoids the heavy Lie-closure matrix certificate cone.
+This root is intentionally narrow: no SM stack, no SAT / satisfiability formalism,
+and no heavy matrix Lie-closure certificate (`Hqiv.GeneratorsLieClosure` /
+`Hqiv.LieBracketCell.*`). For the optional packaged causal-forcing cone used by
+other HQIV manuscripts, import `Hqiv.Story.CausalRapidityForcing` from the full
+library (`HQIVLEAN`) instead.
 -/
 
-import Hqiv.Story.CausalRapidityForcing
+import Hqiv.Geometry.OctonionicLightCone
 import Hqiv.SO8ClosureSymbolic

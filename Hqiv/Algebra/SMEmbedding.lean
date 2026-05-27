@@ -236,6 +236,10 @@ def hyperchargeBlockCorrect : Prop :=
     hyperchargeEigenvalue 4 = -1/2 ∧ hyperchargeEigenvalue 5 = -1/2 ∧
     hyperchargeEigenvalue 6 = 1 ∧ hyperchargeEigenvalue 7 = 0
 
+/-- The witness-level hypercharge table is discharged by the explicit assignment theorem. -/
+theorem hyperchargeBlockCorrect_holds : hyperchargeBlockCorrect :=
+  hypercharge_assignments_correct
+
 /-!
 ## Gap 3: Full branching rules of 8s under G₂ ⊃ SM
 

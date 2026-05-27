@@ -1,59 +1,26 @@
-import Mathlib.Analysis.Calculus.ContDiff.Basic
 import Mathlib.Data.Fin.Basic
+import Mathlib.Tactic
 
-import Hqiv.Geometry.GeneralRiemannianRapidityOracle
+import Hqiv.Geometry.SharedManifoldRapidity
 import Hqiv.Geometry.SATWorstCaseCertified
 
 /-!
 # SAT rapidity manifold scaffold
 
-This file packages the user's proposed viewpoint more explicitly:
+This file continues the shared-manifold viewpoint after the minimal interface in
+`Hqiv.Geometry.SharedManifoldRapidity` (profiles, smooth bridge, and
+`shared_manifold_induces_common_rapidity`).
 
-- variables and clauses are treated as two coordinate systems / embeddings into a
-  shared ambient manifold;
-- a common rapidity observable is read on that manifold;
-- if the embeddings and readout are smooth, then the induced variable-side and
-  clause-side rapidity channels are smooth/analytic by composition.
+What remains here: successor-step bookkeeping, threshold certificates, and the
+polynomial residual-budget bridge into `SATWorstCaseCertified`.
 
-This is still a scaffold: it does **not** yet prove that the resulting rapidity
-threshold yields polynomial SAT search. It isolates the geometric interface that
-would be needed for such a proof.
+Publication bundles centered on `papers/closure.tex` include
+`SharedManifoldRapidity.lean` but **omit** this file.
 -/
 
 namespace Hqiv.Geometry
 
 noncomputable section
-
-/--
-Shared SAT manifold with variable and clause embeddings into one ambient smooth
-space.  We keep the ambient carrier abstract (`M`) and record only the data
-needed to express a common rapidity channel.
--/
-structure SATSharedManifold (M : Type*) where
-  varDim : ℕ
-  clauseDim : ℕ
-  embedVar : Fin varDim → M
-  embedClause : Fin clauseDim → M
-
-/--
-Scalar rapidity observable on the shared manifold.  This is the common channel
-through which variable-side and clause-side geometry are compared.
--/
-abbrev SharedRapidityObservable (M : Type*) := M → ℝ
-
-/-- Rapidity seen from the variable embedding. -/
-def variableRapidityProfile
-    {M : Type*}
-    (S : SATSharedManifold M)
-    (ρ : SharedRapidityObservable M) : Fin S.varDim → ℝ :=
-  fun i => ρ (S.embedVar i)
-
-/-- Rapidity seen from the clause embedding. -/
-def clauseRapidityProfile
-    {M : Type*}
-    (S : SATSharedManifold M)
-    (ρ : SharedRapidityObservable M) : Fin S.clauseDim → ℝ :=
-  fun j => ρ (S.embedClause j)
 
 /--
 Naive discrete rapidity increment on the variable side: the combinatorial
@@ -111,37 +78,6 @@ def SharesRapidityThreshold
     (τ : ℝ) : Prop :=
   (∀ i : Fin S.varDim, variableRapidityProfile S ρ i ≤ τ) ∧
   (∀ j : Fin S.clauseDim, clauseRapidityProfile S ρ j ≤ τ)
-
-/--
-Smooth manifold bridge: if the ambient readout is `ContDiff` and the embeddings
-are `ContDiff`, then the induced rapidity channels on both sides are smooth.
-
-We package this as a structure of assumptions rather than trying to force a
-specific manifold model prematurely.
--/
-structure SATSharedManifoldSmoothBridge (M : Type*) [TopologicalSpace M] where
-  shared : SATSharedManifold M
-  chartVar : (Fin shared.varDim → ℝ) → M
-  chartClause : (Fin shared.clauseDim → ℝ) → M
-  rapidity : SharedRapidityObservable M
-  hVarEmbed : ∀ i : Fin shared.varDim, ∃ x : Fin shared.varDim → ℝ, chartVar x = shared.embedVar i
-  hClauseEmbed : ∀ j : Fin shared.clauseDim, ∃ y : Fin shared.clauseDim → ℝ, chartClause y = shared.embedClause j
-
-/--
-Analytic-style placeholder contract: once the shared manifold bridge has a
-smooth rapidity observable, both variable and clause profiles inherit the same
-named common channel.
-
-This theorem is intentionally lightweight: it records the exact conceptual move
-“build one smooth manifold, then read one rapidity from both sides”.
--/
-theorem shared_manifold_induces_common_rapidity
-    {M : Type*} [TopologicalSpace M]
-    (B : SATSharedManifoldSmoothBridge M) :
-    ∃ ρ : SharedRapidityObservable M,
-      variableRapidityProfile B.shared ρ = variableRapidityProfile B.shared B.rapidity ∧
-      clauseRapidityProfile B.shared ρ = clauseRapidityProfile B.shared B.rapidity := by
-  refine ⟨B.rapidity, rfl, rfl⟩
 
 /--
 If a single threshold `τ` bounds the shared rapidity observable on all embedded

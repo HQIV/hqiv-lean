@@ -1,0 +1,8 @@
+{
+  "pipeline": "coupling+informational_energy+witness_scale",
+  "n_catalog": 60,
+  "n_linked": 53,
+  "coupling_residual": 66.42375358814812,
+  "mass_row_residual": -0.283311158560406,
+  "median_abs_rel_pct_all": 67.66096907977379
+}

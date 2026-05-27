@@ -6,6 +6,7 @@ There is **no** legacy `story.md` in this folder. Use this file as a **one-page 
 
 | Need | Doc |
 |------|-----|
+| **Patch = observable universe; continuum not required; “complete” vocabulary** | [PATCH_ONTOLOGY.md](./PATCH_ONTOLOGY.md) — **read before papers/sim/cosmology edits** |
 | What is actually proved (names + modules) | [THEOREMS.md](./THEOREMS.md) |
 | Trust boundary: axioms-as-narrative, scripts, `sorry`, QFT scope | [ASSUMPTIONS.md](./ASSUMPTIONS.md) |
 | Single cross-problem narrative at **probe** level (no extra claims) | [MILLENNIUM_UNIFIED_NARRATIVE.md](./MILLENNIUM_UNIFIED_NARRATIVE.md) |
@@ -18,7 +19,9 @@ There is **no** legacy `story.md` in this folder. Use this file as a **one-page 
 
 These are **design commitments** in Lean + docs, not oversights:
 
-1. **Discrete null lattice first.** Counting and curvature imprint are tied to `OctonionicLightCone` combinatorics and the octonionic lift (`6^7 * sqrt(3)` normalization). Continuum calculus is **IR / readout language** over that ladder, not a claim of fundamental sub-Planck smoothness (see `ASSUMPTIONS.md` §1, §15-style caveats).
+0. **Patch ontology first (full contract: [PATCH_ONTOLOGY.md](./PATCH_ONTOLOGY.md)).** Fields, actions, and readouts attach to **discrete patches** (shells, `Fin 4` charts, accessible mode budgets). The **accessible patch net** is the **observable universe** in theory terms—not a fundamental smooth manifold. “Complete theory” means **patch-closed** (no observables outside causal patch data + explicit readout), **not** “proved continuum QFT.” Do not describe HQIV as “discrete approximation to continuum” unless you are explicitly discussing a **comparison** limit.
+
+1. **Discrete null lattice first.** Counting and curvature imprint are tied to `OctonionicLightCone` combinatorics and the octonionic lift (`6^7 * sqrt(3)` normalization). Continuum calculus is **IR / readout language** over that ladder, not a claim of fundamental sub-Planck smoothness (see `ASSUMPTIONS.md` §1, §15-style caveats; expanded in `PATCH_ONTOLOGY.md`).
 
 2. **Single `(α, γ)` pair.** `Hqiv.alpha = 3/5`, `Hqiv.gamma_HQIV = 2/5` are the **only** curvature-imprint / monogamy identifiers in-repo; forced by lattice structure (`AlphaGammaForcedByLattice`). Not a “fit two exponents” QFT counterterm menu (`ASSUMPTIONS.md` §1b).
 
@@ -34,7 +37,7 @@ These are **design commitments** in Lean + docs, not oversights:
 
 ## “Audit the whole repo” — practical workflow
 
-1. Pick a **build target** (`lakefile.toml` header comments + [README.md § Building](./README.md#building)) so “everything compiles” matches what you mean (`HQIVLEAN` ≠ `HQIVSO8Closure` ≠ `HQIVStrongColorSu3Certificate`).
+1. Pick a **build target** (`lakefile.toml` header comments + [README.md § Building](./README.md#building)) so “everything compiles” matches what you mean (`HQIVLEAN` ≠ `HQIVSO8Closure` ≠ `HQIVStrongColorSu3Certificate`). The last target bundles the optional `f^{abc}` simp table **and** the proved `3×3` chart Lie law (`StrongColorSu3LieChartLaw`; see `THEOREMS.md`).
 2. Run a **mechanical sweep**: `sorry`, `admit`, `axiom` (excluding comment text), script-generated data paths — triage into `ASSUMPTIONS.md` §4–§5 style entries.
 3. For each **physics claim** in a module doc, ask: is there a **Lean name** in `THEOREMS.md` or a **named `Prop` bundle**? If not, label it narrative / roadmap in prose.
 4. When a chapter of the Story spine changes, update **`Hqiv/Story` chapter docs** + one line in `THEOREMS.md` if a new externally usable lemma landed.

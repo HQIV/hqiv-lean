@@ -27,7 +27,7 @@ carrier by `colorGellMannEmbed_lieBracket` (see `colorGellMannEmbed_halfGellMann
 Full eight-generator data (`colorHalfGellMannFull`, `colorSu3fStructure`, `colorTripletCovariantTermFull`)
 lives in `Hqiv.Physics.StrongColorSu3ChartClosure`. The generic lift
 `colorGellMannEmbed_chart_lieBracket_smul` packages any future chart identity
-`lieBracketMat₃ A B = I • R` into the same normalisation on the carrier.
+`lieBracketMat₃ A B = Complex.I • R` into the same normalisation on the carrier.
 -/
 
 open scoped BigOperators InnerProductSpace
@@ -103,27 +103,27 @@ theorem colorGellMannEmbed_smul (c : ℂ) (M : Matrix (Fin 3) (Fin 3) ℂ) :
     colorGellMannEmbed (c • M) = c • colorGellMannEmbed M := by
   simp [colorGellMannEmbed, Matrix.mul_smul, Matrix.smul_mul]
 
-/-- Lift a chart commutator `lieBracketMat₃ A B = I • R` to the carrier (`8 × 8`). -/
+/-- Lift a chart commutator `lieBracketMat₃ A B = Complex.I • R` to the carrier (`8 × 8`). -/
 theorem colorGellMannEmbed_chart_lieBracket_smul {A B R : Matrix (Fin 3) (Fin 3) ℂ}
-    (h : lieBracketMat₃ A B = I • R) :
-    lieBracketMat₈ (colorGellMannEmbed A) (colorGellMannEmbed B) = I • colorGellMannEmbed R := by
+    (h : lieBracketMat₃ A B = Complex.I • R) :
+    lieBracketMat₈ (colorGellMannEmbed A) (colorGellMannEmbed B) = Complex.I • colorGellMannEmbed R := by
   calc
     lieBracketMat₈ (colorGellMannEmbed A) (colorGellMannEmbed B)
         = colorGellMannEmbed (lieBracketMat₃ A B) := (colorGellMannEmbed_lieBracket A B).symm
-    _ = colorGellMannEmbed (I • R) := by rw [h]
-    _ = I • colorGellMannEmbed R := colorGellMannEmbed_smul I R
+    _ = colorGellMannEmbed (Complex.I • R) := by rw [h]
+    _ = Complex.I • colorGellMannEmbed R := colorGellMannEmbed_smul Complex.I R
 
 theorem colorGellMannEmbed_halfGellMann_comm_12 :
     lieBracketMat₈ (colorGellMannEmbed (colorHalfGellMann 0)) (colorGellMannEmbed (colorHalfGellMann 1)) =
-      I • colorGellMannEmbed (colorHalfGellMann 2) := by
-  have hlb : lieBracketMat₃ (colorHalfGellMann 0) (colorHalfGellMann 1) = I • colorHalfGellMann 2 := by
+      Complex.I • colorGellMannEmbed (colorHalfGellMann 2) := by
+  have hlb : lieBracketMat₃ (colorHalfGellMann 0) (colorHalfGellMann 1) = Complex.I • colorHalfGellMann 2 := by
     simpa [lieBracketMat₃] using colorHalfGellMann_comm_12
   calc
     lieBracketMat₈ (colorGellMannEmbed (colorHalfGellMann 0)) (colorGellMannEmbed (colorHalfGellMann 1))
         = colorGellMannEmbed (lieBracketMat₃ (colorHalfGellMann 0) (colorHalfGellMann 1)) :=
           (colorGellMannEmbed_lieBracket (colorHalfGellMann 0) (colorHalfGellMann 1)).symm
-    _ = colorGellMannEmbed (I • colorHalfGellMann 2) := by rw [hlb]
-    _ = I • colorGellMannEmbed (colorHalfGellMann 2) := colorGellMannEmbed_smul I _
+    _ = colorGellMannEmbed (Complex.I • colorHalfGellMann 2) := by rw [hlb]
+    _ = Complex.I • colorGellMannEmbed (colorHalfGellMann 2) := colorGellMannEmbed_smul Complex.I _
 
 end -- noncomputable section
 

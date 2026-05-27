@@ -48,6 +48,15 @@ import Hqiv.Physics.SchematicPlasmaCurrent
 import Hqiv.Physics.GRFromMaxwell
 import Hqiv.Physics.HQIVGravityReadoutScalars
 import Hqiv.Physics.FureyHQIVOntologyBridge
+import Hqiv.Physics.LapseMassReadout
+import Hqiv.Physics.InformationalEnergyMass
+import Hqiv.Physics.HadronMassReadout
+import Hqiv.Physics.MassSpectrumWitness
+import Hqiv.Physics.HopfShellBeltramiMassBridge
+import Hqiv.Physics.HalfStepBeltramiShellBridge
+import Hqiv.Physics.FanoActionToDetuningJet
+import Hqiv.Physics.LeptonResonanceChartComposite
+import Hqiv.Physics.FanoSectorSpectralMassEmergence
 import Hqiv.Physics.Forces
 import Hqiv.Physics.Action
 import Hqiv.Physics.ReadoutGaugeSeed
@@ -67,6 +76,9 @@ import Hqiv.Physics.QuarkLadderGlobalDetuning
 import Hqiv.Physics.HarmonicLadderGlobalDetuning
 import Hqiv.Physics.CovariantSolution
 import Hqiv.Physics.SM_GR_Unification
+import Hqiv.Physics.StandardModelLagrangianFromDiscreteAction
+import Hqiv.Physics.DoublePreferredAxis
+import Hqiv.Physics.DoublePreferredAxisAlpha
 import Hqiv.Physics.LeptonGenerationLockin
 import Hqiv.Physics.SurfaceWaveSelfClock
 import Hqiv.Physics.OctonionicZeta
@@ -76,6 +88,8 @@ import Hqiv.Physics.HodgeRapidityZetaBridge
 import Hqiv.Physics.DivisionAlgebraZetaScaffold
 import Hqiv.Physics.HQIVHeatFlowDeformation
 import Hqiv.Physics.HQIVFluidClosureScaffold
+import Hqiv.Physics.CoronalLongitudinalStress
+import Hqiv.Physics.HQIVTurbulenceSimulatorScaffold
 import Hqiv.Physics.ToyDiscreteHeat
 import Hqiv.Physics.HQIVDirichletModularScaffold
 import Hqiv.Physics.HQIVLSeriesAnalytic
@@ -120,6 +134,7 @@ import Hqiv.QuantumComputing.SparseSimulationDensityCrossover
 import Hqiv.QuantumComputing.EntanglementMeasures
 import Hqiv.QuantumComputing.OctonionicFT
 import Hqiv.QuantumComputing.OSHoracle
+import Hqiv.QuantumComputing.CarrierPeaking
 import Hqiv.QuantumComputing.ShoreOracle
 import Hqiv.QuantumComputing.ProteinFoldingHook
 import Hqiv.Algebra.OctonionBasics

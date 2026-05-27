@@ -1,6 +1,7 @@
 import Mathlib.Topology.Basic
-import Hqiv.Geometry.SATRapidityManifold
+import Hqiv.Geometry.SharedManifoldRapidity
 import Hqiv.Geometry.OctonionicLightCone
+import Hqiv.Generators
 
 /-!
 # Causal rapidity forcing package theorems

@@ -250,6 +250,102 @@ theorem age_precision_from_proton_mass :
     age_apparent_uncertainty_yr < 30 ∧ 0 < age_apparent_uncertainty_yr :=
   ⟨age_uncertainty_few_years, age_apparent_uncertainty_pos⟩
 
+/-!
+## Age-first now-scale interface
+
+The earlier local-witness paragraph records the historical direction used in the
+paper draft: a local mass witness fixes the present scale and hence the age
+pair.  The mass-derivation program also needs the reverse bookkeeping direction:
+one allowed age input, together with the HQVM lapse relation, fixes the present
+normalization used by downstream mass readouts.
+
+This section deliberately introduces no particle-mass literal.  It only packages
+the homogeneous age relation and the corresponding lapse value at the chosen
+now slice.
+-/
+
+/-- Homogeneous age pair: the apparent/coordinate age and wall-clock/proper age
+are related by the HQVM lapse integral. -/
+structure AgeLapsePair where
+  apparent : ℝ
+  wallClock : ℝ
+  φ : ℝ
+  wallClock_eq : wallClock = wallClockAgeHomogeneous φ apparent
+
+/-- Build the age pair from an apparent age input.  The wall-clock age is then
+the HQVM proper-time integral in the homogeneous chart. -/
+noncomputable def AgeLapsePair.fromApparent (φ apparent : ℝ) : AgeLapsePair :=
+  { apparent := apparent
+    wallClock := wallClockAgeHomogeneous φ apparent
+    φ := φ
+    wallClock_eq := rfl }
+
+/-- Build an age pair from a wall-clock age together with a witness that it is
+the HQVM companion of the supplied apparent age. -/
+def AgeLapsePair.fromWallClock
+    (φ apparent wallClock : ℝ)
+    (hwall : wallClock = wallClockAgeHomogeneous φ apparent) : AgeLapsePair :=
+  { apparent := apparent
+    wallClock := wallClock
+    φ := φ
+    wallClock_eq := hwall }
+
+/-- The ratio recorded by an age pair is the same homogeneous ratio already
+defined above. -/
+theorem AgeLapsePair.ratio_eq
+    (pair : AgeLapsePair) (happ : pair.apparent ≠ 0) :
+    pair.wallClock / pair.apparent =
+      ageRatioHomogeneous pair.φ pair.apparent happ := by
+  unfold ageRatioHomogeneous apparentAge
+  rw [pair.wallClock_eq]
+
+/-- The present mass-normalization slot determined by an age pair and the HQVM
+lapse.  `massUnit` is a dimensionless now-scale; downstream modules decide how
+to attach GeV/MeV conventions. -/
+structure AgeLapseNowScale where
+  pair : AgeLapsePair
+  Φ : ℝ
+  massUnit : ℝ
+  massUnit_eq_lapse : massUnit = HQVM_lapse Φ pair.φ pair.apparent
+
+/-- Construct the now-scale directly from the age pair and lapse. -/
+noncomputable def AgeLapseNowScale.fromPair (pair : AgeLapsePair) (Φ : ℝ) :
+    AgeLapseNowScale :=
+  { pair := pair
+    Φ := Φ
+    massUnit := HQVM_lapse Φ pair.φ pair.apparent
+    massUnit_eq_lapse := rfl }
+
+/-- The age-normalized mass unit is exactly the HQVM lapse at the now slice. -/
+theorem AgeLapseNowScale.massUnit_eq
+    (scale : AgeLapseNowScale) :
+    scale.massUnit = HQVM_lapse scale.Φ scale.pair.φ scale.pair.apparent :=
+  scale.massUnit_eq_lapse
+
+/-- Forward-time, weak-field positivity for the age-derived now-scale. -/
+theorem AgeLapseNowScale.massUnit_pos
+    (scale : AgeLapseNowScale)
+    (hΦ : 0 < 1 + scale.Φ)
+    (hφ : 0 ≤ scale.pair.φ)
+    (ht : 0 ≤ scale.pair.apparent) :
+    0 < scale.massUnit := by
+  rw [scale.massUnit_eq]
+  exact HQVM_lapse_pos scale.Φ scale.pair.φ scale.pair.apparent hΦ hφ ht
+
+/-- Paper-value apparent-age input as a normalized age pair.  This is an age
+normalization, not a particle-mass anchor. -/
+noncomputable def paperApparentAgePair : AgeLapsePair :=
+  AgeLapsePair.fromApparent 1 age_apparent_Gyr_paper
+
+/-- Default age-first now-scale used for comparison exports: apparent age input,
+homogeneous `φ = 1`, and weak-field `Φ = 0`. -/
+noncomputable def paperAgeNowScale : AgeLapseNowScale :=
+  AgeLapseNowScale.fromPair paperApparentAgePair 0
+
+/-- Closed form for the default age-first now-scale. -/
+theorem paperAgeNowScale_massUnit_eq :
+    paperAgeNowScale.massUnit = HQVM_lapse 0 1 age_apparent_Gyr_paper := rfl
+
 /-- **The timescale for one sigfig improvement (~30 yr) is much smaller than the
     apparent age (1.38×10¹⁰ yr), so the proton mass is a stable local witness.** -/
 theorem years_to_one_sigfig_lt_apparent_age :

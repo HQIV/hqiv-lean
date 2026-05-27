@@ -21,6 +21,13 @@ We define it as the ℝ-span of the 14 commutators [L(e_i), L(e_j)] for 1 ≤ i 
 
 **Reference:** HQIV preprint v2, Zenodo 10.5281/zenodo.18899939, Section 4.2–4.3.
 
+**`SU(3)` / branching (roadmap):** Classical sources describe a maximal `SU(3)` subgroup of `G₂`
+fixing the preferred imaginary unit `e₇`, with the octonions as an `8`-dimensional real representation
+whose restriction branches as `3 ⊕ 3̄ ⊕ 1 ⊕ 1`. HQIV separately certifies matrix `su(3)` chart closure on a
+triplet slot chart (`StrongColorSu3ChartClosure`, `StrongColorCarrierClosure`). A packaged Lie inclusion
+`𝔰𝔲(3) ⊂ 𝔤₂` together with **irrep-level** restriction of this `8` to that subgroup remains future formal
+work (see `AGENTS/FUREY_PROOF_ROADMAP.md` §B–C).
+
 **G₂ antisymmetry:** L(e_i)ᵀ = -L(e_i) and all 14 G₂ generators antisymmetric via
 octonion norm preservation: for any pure imaginary unit u, left multiplication by u
 is skew-adjoint w.r.t. the standard inner product on ℝ⁸, hence L(e_i)ᵀ = -L(e_i).
@@ -227,13 +234,5 @@ theorem g2Generator_antisymm (k : Fin 14) :
 /-- **G₂ is contained in so(8):** every G₂ generator is antisymmetric. -/
 theorem g2_in_so8 (k : Fin 14) :
     g2Generator k + (g2Generator k)ᵀ = 0 := g2Generator_antisymm k
-
-#check leftMul_1_antisymm
-#check leftMul_2_antisymm
-#check leftMul_3_antisymm
-#check leftMul_4_antisymm
-#check leftMul_5_antisymm
-#check leftMul_6_antisymm
-#check leftMul_7_antisymm
 
 end Hqiv.Algebra

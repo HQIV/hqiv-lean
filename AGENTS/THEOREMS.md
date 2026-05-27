@@ -86,9 +86,40 @@ Roadmap **M6 — No fundamental graviton target**: not a QG metaphysics theorem,
 | `Hqiv.Physics.colorTripletB` / `Hqiv.Physics.colorTripletB_conjTranspose_mul_self` | Orthonormal `8 × 3` embed `B` with `BᴴB = 1₃` and `B.mulVec ψ = colorTripletInclCoeff ψ`. |
 | `Hqiv.Physics.colorGellMannEmbed` / `colorGellMannEmbed_mul` / `colorGellMannEmbed_lieBracket` | Conjugate `3 × 3` operators to `8 × 8` on `WeakComplexOctonionCarrier`, mirroring the Pauli embed API. |
 | `Hqiv.Physics.lieBracketMat₃_neg_swap` | Antisymmetry of the matrix commutator bracket on `Matrix (Fin 3) (Fin 3) ℂ`. |
-| `Hqiv.Physics.colorGellMannEmbed_chart_lieBracket_smul` | **Scaffold:** packages any future chart identity `lieBracketMat₃ A B = I • R` into the same `I •` normalization on the carrier (see `StrongColorCarrierClosure` module docstring). |
-| (optional target) | `lake build HQIVStrongColorSu3Certificate`: generated `@[simp]` lemmas for **nonzero** `colorSu3fStructure` atoms (`Hqiv.Physics.StrongColorSu3fStructureSimp`, regen `scripts/gen_strong_color_su3_f_simp.py`). **Not** in the default `HQIVLEAN` glob. |
-| (still open) | Full chart Lie law `∀ a b, lieBracketMat₃ (colorHalfGellMannFull a) (colorHalfGellMannFull b) = I • ∑ c, (colorSu3fStructure a b c : ℂ) • colorHalfGellMannFull c` for all eight generators—layer on the certificate table + `Fin.sum_univ_eight` / `Finset.sum_eq_single` (see `StrongColorSu3ChartClosure` / `StrongColorSu3LieCertificate` docs). |
+| `Hqiv.Physics.colorGellMannEmbed_chart_lieBracket_smul` | **Scaffold:** packages any chart identity `lieBracketMat₃ A B = Complex.I • R` into the same `Complex.I •` normalization on the carrier (`StrongColorCarrierClosure`). |
+| `Hqiv.Physics.colorHalfGellMannFull_lieBracket_eq_I_smul_f_sum` | **Certificate (optional build):** global chart Lie law `∀ a b, lieBracketMat₃ (colorHalfGellMannFull a) (colorHalfGellMannFull b) = Complex.I • ∑ c, (colorSu3fStructure a b c : ℂ) • colorHalfGellMannFull c` (`StrongColorSu3LieChartLaw.lean`; 64 `colorLieChartBracket_*` lemmas + `fin_cases` combiner). Regenerate: `python3 scripts/gen_strong_color_su3_lie_chart_law.py`. Requires `lake build HQIVStrongColorSu3Certificate`; **not** in the default `HQIVLEAN` glob. |
+| (optional target) | Same certificate target: generated `@[simp]` lemmas for **nonzero** `colorSu3fStructure` atoms (`Hqiv.Physics.StrongColorSu3fStructureSimp`, regen `scripts/gen_strong_color_su3_f_simp.py`). |
+
+## EW/color carrier mirror bookkeeping (`Hqiv.Physics.ColorEWMirrorBridge`)
+
+| Name | Output / meaning |
+|------|------------------|
+| `Hqiv.Physics.colorEWMirrorAnalogyTable` | **Bookkeeping:** records the mirror table `Fin 2 → ℂ`/`weakDoubletB`/`weakPauliEmbed` ↔ `Fin 3 → ℂ`/`colorTripletB`/`colorGellMannEmbed`; no `su(3) ⊂ g₂` claim. |
+| `Hqiv.Physics.colorEWMirror_B_conjTranspose_mul_self` | Packages the already-proved EW and color `BᴴB = 1` certificates side by side. |
+| `Hqiv.Physics.colorTripletInclCoeff_zero_on_weak_slots` / `Hqiv.Physics.weakDoubletInclCoeff_zero_on_color_slots` / `Hqiv.Physics.colorEWMirror_coeff_inclusions_orthogonal` | Proved slot-disjointness and carrier orthogonality for the coordinate inclusions (`0,1` vs `2,3,4`). |
+| `Hqiv.Physics.colorEWMirror_mulVec_intertwine_pattern` / `Hqiv.Physics.colorEWMirror_lieBracket_lift_pattern` | Packages the EW and color intertwining/Lie-lift facts as the same `B M Bᴴ` carrier pattern. Honest next obstruction: prove a span-level bridge from `colorGellMannEmbed` generators into the octonion-derived `G₂` layer. |
+| `Hqiv.Physics.colorG2ProbeFunctional_g2Generator_zero` / `Hqiv.Physics.colorG2ProbeFunctional_I_colorGellMann_one` / `Hqiv.Physics.I_colorGellMannEmbed_one_not_mem_current_g2_span` | **Option-B probe:** a sparse linear functional annihilates every current complexified `g2Generator` but detects `Complex.I • colorGellMannEmbed (colorHalfGellMannFull 1)`, proving that this direct color chart is not already in the present 14-generator `G₂` span. This is an alignment obstruction, not a no-go theorem for `G₂ ⊃ SU(3)`. |
+
+## `G₂`-aligned triplet scaffold (`Hqiv.Physics.ColorG2AlignedTripletScaffold`)
+
+| Name | Output / meaning |
+|------|------------------|
+| `Hqiv.Physics.g2AlignedTripletB` / `Hqiv.Physics.g2AlignedInvSqrtTwo` | Archival `8 × 3` orthonormal embed: columns `(e₁ + i e₆)/√2`, `(e₂ + i e₅)/√2`, `(e₃ + i e₄)/√2` on `Fin 8` (classical `SU(3) ⊂ G₂` complex-line packaging; **no** Lie-span or branching claim). |
+| `Hqiv.Physics.g2AlignedTripletB_conjTranspose_mul_self` | `g2AlignedTripletBᴴ * g2AlignedTripletB = 1₃`. |
+| `Hqiv.Physics.g2AlignedGellMannEmbed` / `g2AlignedGellMannEmbed_mul` / `g2AlignedGellMannEmbed_lieBracket` / `g2AlignedGellMannEmbed_mulVec_intertwine` / `g2AlignedGellMannEmbed_chart_lieBracket_smul` | Same `B M Bᴴ` carrier API as `colorGellMannEmbed` on this aligned `B`. |
+| `Hqiv.Physics.colorG2ProbeFunctional_I_g2AlignedGellMannEmbed_halfGellMannFull_one` | The `colorG2ProbeFunctional` obstruction from `ColorEWMirrorBridge` **vanishes** on `Complex.I • g2AlignedGellMannEmbed (colorHalfGellMannFull 1)` — alignment removes that specific linear test against the current `g₂` basis; **not** a span-membership certificate. |
+
+## Brane–bulk integration scaffold (`Hqiv.Physics.BraneBulkFanoTruss`, `G2AutomorphismEnergyCost`, `DiscreteYMConfinement`)
+
+| Name | Output / meaning |
+|------|------------------|
+| `Hqiv.Physics.braneTrussModeArea` / `Hqiv.Physics.braneTrussModeArea_eq` | Mode-area readout \(4(m+1)(m+2)\) as alias to `available_modes`; closed form. |
+| `Hqiv.Physics.braneTrussModeArea_eq_four_mul_shellSurface` | Same readout equals `4 * shellSurface m` (resonance horizon-area driver). |
+| `Hqiv.Physics.automorphismEnergyCostAtShell` | Physics-facing name for `Hqiv.Algebra.phaseLiftCoeff` (`φ(m)/6`); **not** a Planck/YM gap identification. |
+| `Hqiv.Physics.automorphismEnergyCostAtShell_pos` / `Hqiv.Physics.automorphismEnergyCostAtShell_eq_phi_div_six` | Positivity and explicit `φ/6` split. |
+| `Hqiv.Physics.holonomyAreaDriver` | Alias to `shellSurface` for future Wilson/plaquette counting stories. |
+| `Hqiv.Physics.discrete_kinetic_two_sided_cyclic_wilson` | Repackages `L_O_kinetic_two_sided_cyclic_wilson_sq`: abelian cyclic Wilson defects sandwich `L_O_kinetic`. |
+| | Build cone: `lake build HQIVBraneBulkStrongSector` (see `AGENTS/BRANE_BULK_FANO_TRUSS_INTEGRATION.md`). |
 
 ## SM–GR unification (`Hqiv.Physics.SM_GR_Unification`, namespace `Hqiv`)
 
@@ -195,6 +226,8 @@ explicitly carry the full Furey Clifford claim).
 
 | Name | Output / meaning |
 |------|------------------|
+| `Hqiv.Algebra.hyperchargeBlockCorrect` / `Hqiv.Algebra.hyperchargeBlockCorrect_holds` | Witness-level SM hypercharge table on the eight slots. This is now proved as a table fact via `hypercharge_assignments_correct`, but it is not a spectral/block derivation or a Furey number-operator theorem. |
+| `Hqiv.Algebra.triality_label_count_and_order_three` | Conservative triality citation target: `So8RepIndex := Fin 3` has cardinality `3`, `trialityOrder = 3`, and `trialityCycle³ = id` on labels. This is bookkeeping, not a Mathlib construction of the full Spin(8) outer automorphism. |
 | `Hqiv.Physics.HQIVFoundationFirstAnchor` / `hqivFoundationFirstAnchor` | Lightweight record and canonical instance bundling the current HQIV-first anchors: spinor carrier dimension, one-generation SM quantum-number witness, triality count, and forced `α/γ`. |
 | `Hqiv.Physics.HQIVFureyGenerationIndex` / `HQIVFureyThreeGenerationCarrier` | HQIV-derived landing zone for Furey's three-generation embedding: `So8RepIndex` labels, with one `OctonionSpinorCarrier` per generation label. |
 | `Hqiv.Physics.hqivFurey_generation_count_eq_three` / `hqivFurey_generationSlot_count_eq_twenty_four` / `hqivFurey_chiralSlot_count_eq_forty_eight` | Concrete finite bookkeeping: three generation labels, 24 real 8s carrier slots, and 48 chiral Weyl generation slots from HQIV foundations. |
@@ -205,6 +238,19 @@ explicitly carry the full Furey Clifford claim).
 | `Hqiv.Physics.FureyMayRefineHQIV` | Predicate/certificate that all Furey bridge obligations are proved before the Furey layer may refine HQIV ontology. |
 | `Hqiv.Physics.hqivFoundationFirstAnchor_exists` | The HQIV foundation-first anchor exists without any Furey/Clifford assumptions. |
 | `Hqiv.Physics.furey_refinement_requires_{carrier,charge,generation,shell_support}_bridge` | Projection lemmas making the conflict rule explicit: Furey can refine carrier, charge, generation, or shell/support ontology only through proved bridge obligations. |
+
+### Furey Stage 1 — complexified `8s` carrier bookkeeping (`Hqiv.Algebra.ComplexOctonionSpinorCarrier`)
+
+| Name | Output / meaning |
+|------|------------------|
+| `Hqiv.Algebra.ComplexOctonionSpinorCarrier` | `Fin 8 → ℂ` with slotwise `Module ℂ` / `Module ℝ` (same coordinate pattern as `OctonionSpinorCarrier`; not the Hermitian `PiLp` electroweak carrier). |
+| `Hqiv.Algebra.complexOctonionSpinorCarrier_finrank_complex` | `Module.finrank ℂ (Fin 8 → ℂ) = 8`. |
+| `Hqiv.Algebra.complexOctonionSpinorCarrier_finrank_real` | `Module.finrank ℝ (Fin 8 → ℂ) = 16` via `finrank_real_of_complex`. |
+| `Hqiv.Algebra.octonionSpinorRealToComplex` / `octonionSpinorRealToComplex_injective` | Canonical `ℝ`-linear slotwise `ofReal` embedding `OctonionSpinorCarrier →ₗ[ℝ] ComplexOctonionSpinorCarrier` (injective; not surjective onto all of `ℂ⁸`). |
+| `Hqiv.Algebra.complexOctonionSpinorTensorEquiv` | `ℂ ⊗[ℝ] OctonionSpinorCarrier ≃ₗ[ℂ] ComplexOctonionSpinorCarrier` via `TensorProduct.piScalarRight` (extension of scalars / “tensor the real `8s` with `ℂ`”). |
+| `Hqiv.Algebra.complexOctonionSpinorTensorEquiv_apply_tmul_one` | `1 ⊗ₜ v` maps to `octonionSpinorRealToComplex v` under that equiv. |
+| `Hqiv.Algebra.complexOctonionSpinorCarrier_starModuleReal` / `complexOctonionSpinorCarrier_starModuleComplex` | `StarModule ℝ` / `StarModule ℂ` on `Fin 8 → ℂ` (pointwise conjugation; `inferInstance` certificates). |
+| `Hqiv.Algebra.complexOctonionSpinor_star_apply` / `complexOctonionSpinor_star_smul_{real,complex}` | Slotwise `star` and `star_smul` bookkeeping. |
 
 ### Partial Clifford / hypercharge slot refinement (Stage 2–3 slice; abstract `Cl(0,6)` dimension)
 
@@ -221,8 +267,11 @@ explicitly carry the full Furey Clifford claim).
 | `Hqiv.Algebra.imaginarySix_leftMul_matrix_mul_self` | On the six directions, `L(e_{j+1})² = -I₈` (specializes `octonionLeftMul_N_mul_self`). |
 | `Hqiv.Algebra.cliffordCl06Six_finrank` / `Hqiv.Algebra.finrank_extCl06` | **Furey claim supported — partial (abstract `Cl(0,6)` + concrete `8`-dim spinor `ρ`)**: `Module.finrank ℝ CliffordCl06Six = 64` via `CliffordAlgebra.equivExterior` and the `⋀^k ℝ⁶` grading (`Nat.sum_range_choose`). |
 | `Hqiv.Algebra.cl06StandardSpinorMatLift` / `Hqiv.Algebra.cl06StandardSpinorRho` / `Hqiv.Algebra.cl06StandardSpinorMatLift_ι` | Mathlib `CliffordAlgebra.lift` of `quadFormCl06Six` into `Matrix (Fin 8) (Fin 8) ℝ`, then `algEquivMatrix'` into `CliffordCl06Six →ₐ[ℝ] End(OctonionSpinorCarrier)`; six explicit `γ` Kronecker matrices (`cl06SpinorGammaMat`), **not** octonion left-mult on `e₁…e₆`. |
+| `Hqiv.Algebra.spinorMonomialGramColumns_det_ne_zero` / `spinorGammaMonomialMat_linearIndependent` | The spinor monomial LI chain is theorem-backed in Lean, with a declared trust boundary: Frobenius divisibility and the mod-`101` Gram determinant are axioms in `CliffordCl06SixSpinorMonomialMatrixData` backed by `scripts/verify_spinor_frob_sum_div8.py` and `scripts/spinor_monomial_gram_det_mod101.py`. |
 | `Hqiv.Algebra.cl06StandardSpinorRhoRange_finrank_le` | The `ℝ`-linear range of `ρ` sits in `End(ℝ⁸)` hence has `finrank ≤ 64` (ambient `8×8` real dimension). (A tight `8`-dimensional **minimal-ideal** image still needs further simple-module / surjectivity packaging.) |
 | `Hqiv.Algebra.cliffordCl06SixLeftIdealGenerated` / `cliffordCl06SixLeftIdealGenerated_one_eq_top` / `exists_nonzero_idempotent_cliffordCl06Six` | Abstract left-ideal packaging in `CliffordCl06Six`; `⟨1⟩_L = ⊤`; nontrivial idempotent `1`. |
+| `Hqiv.Algebra.cliffordCl06Six_leftIdeal_eq_top_of_one_mem` | Any left ideal containing `1` equals `⊤`. |
+| `Hqiv.Algebra.cliffordCl06Six_top_isMinimalLeftIdeal` | **Conditional:** if `IsSimpleModule CliffordCl06Six CliffordCl06Six`, then `⊤` is `IsMinimalLeftIdeal` (same pattern as `cliffordOneDim_top_isMinimalLeftIdeal` for `Cl(1) ≅ ℂ`). |
 | `Hqiv.Algebra.cliffordIdealToSpinorVec` | Representation-conditional bridge `I →ₗ[ℝ] OctonionSpinorCarrier` from any `ρ : CliffordCl06Six →ₐ[ℝ] End(ℝ⁸)` (instantiate with `cl06StandardSpinorRho`) and a seed vector (orthogonal to the naive left-mult matrix lift obstruction below). |
 | `Hqiv.Algebra.octonionLeftMul_1_mul_2_add_mul_swap_ne_zero` / `octonionLeftMul_add_sum_square_entry_33_ne` (`Hqiv.Algebra.OctonionLeftMulCliffordObstruction`) | **Matrix obstruction (kept explicit):** naive octonion **left** `L(e₁),L(e₂)` fail mixed Clifford relations, so they cannot be the six generators of a `Cl(0,6)` `CliffordAlgebra.lift` into `Mat₈(ℝ)` for the standard `Q` on `ℝ⁶`. |
 
@@ -273,6 +322,75 @@ explicitly carry the full Furey Clifford claim).
 | `Hqiv.Physics.intrinsicWaveComplexity_eq_sphericalHarmonicCumulativeCount_pred` | For each `FermionContentClass`, `l²` equals cumulative `S²` Laplace–Beltrami degeneracy `(L+1)²` at `L = l - 1` (`sphericalHarmonicCumulativeCount` in `SphericalHarmonicsBridge`). |
 | `Hqiv.Physics.neutrinoShellCandidate` | `Finset.Icc 4 6` (candidate small-`m` band for the ν narrative). |
 | `Hqiv.Physics.referenceNeutrinoShell_mem` | `5 ∈ neutrinoShellCandidate`. |
+
+## Single-scale witness (`Hqiv.Physics.ScaleWitness`)
+
+| Name | Output / meaning |
+|------|------------------|
+| `Hqiv.Physics.ScaleWitness` | Inductive active witness: `proton_lockin` \| `codata_alpha` \| `cmb_now`. |
+| `Hqiv.Physics.defaultScaleWitness` | Default = `proton_lockin`. |
+| `Hqiv.Physics.scaleWitnessToString` | JSON-safe witness labels for export. |
+| `Hqiv.Physics.proton_lockin_mass_is_derived` | Trivial reflexivity packaging: proton chart uses `derivedProtonMass`, not a second anchor def. |
+
+**Python / export:** `data/hqiv_witnesses.json` (`scale_witness_default`, derived masses, boson witnesses); `scripts/hqiv_scale_witness.py`; coupling `--scale-witness` in `scripts/hqiv_coupling_linear_system.py`. Under default mode, CODATA `1/α` and PDG masses are **comparison**, not simultaneous solve inputs.
+
+## Derived nucleon masses (`Hqiv.Physics.DerivedNucleonMass`)
+
+| Name | Output / meaning |
+|------|------------------|
+| `Hqiv.Physics.derivedProtonMass` / `derivedNeutronMass` / `derivedDeltaM` | Bottom-up nucleon masses from constituent energies minus shared binding at `referenceM`. |
+| `Hqiv.Physics.derivedProtonMass_eq_interactionAware` / `derivedNeutronMass_eq_interactionAware` | Same masses as interaction-aware split packaging. |
+| `Hqiv.Physics.interactionAware_split_preserves_nucleon_gap` | Any valid binding split preserves `derivedDeltaM`. |
+| `Hqiv.Physics.derivedProtonMass_lapseCorrected` / `derivedProtonMass_lapseCorrected_eq_raw_div_lapse` | Lapse-corrected proton readout via `LapseMassReadout`. |
+
+**Witness policy:** under `proton_lockin`, these exports are the **primary** mass chart in Python; `protonAnchorMass_MeV` in `QuarkMetaResonance` is a legacy reference for lapse lemmas only.
+
+## Informational energy and readout gauges (`Hqiv.Physics.InformationalEnergyMass`)
+
+| Name | Output / meaning |
+|------|------------------|
+| `Hqiv.Physics.informationalEnergyAtXi` / `informationalEnergyAtXi_eq` | `E_tot = m_rest + loc(ξ)` with `loc = 1/Θ_local(ξ)`. |
+| `Hqiv.Physics.localizationEnergy_eq_xi_over_T_Pl` | In natural units, `loc(ξ) = ξ` when `T_Pl = 1`. |
+| `Hqiv.Physics.massFromXi` / `hadronMassFromXi` / `hybridMassFromXi` | Sector readouts: additive (boson), multiplicative lapse (hadron), hybrid (additive then ÷ N). |
+| `Hqiv.Physics.gauge_transformation_localization_to_lapse` | Calibrates when additive and multiplicative gauges agree. |
+| `Hqiv.Physics.informationalEnergyAtXi_boson_eq_horizonLocalized` | Boson additive readout matches horizon-localized layer from outer closure. |
+| `Hqiv.Physics.hadronMassFromXi_eq_lapseMassReadout` | Hadron multiplicative readout matches `LapseMassReadout`. |
+| `Hqiv.Physics.informationalEnergy_satisfied_when_row_holds` | Row `c₀ = target` ⇒ `E_tot = 2π·Ω_k(ξ_G)`. |
+| `Hqiv.Physics.informationalEnergy_over_twoPi_eq_omegaK_when_row_holds` | Same hypothesis ⇒ `E_tot/(2π) = Ω_k(ξ_G)`. |
+
+## Continuous-ξ coupling and mass row (`Hqiv.Physics.ContinuousXiCoupling`)
+
+| Name | Output / meaning |
+|------|------------------|
+| `Hqiv.Physics.xiOfShell` / `sigmaXi` / `oneOverAlphaEffXi` / `continuousBraceInvAlpha` | Continuous horizon chart mirroring Python `hqiv_coupling_linear_system.py`. |
+| `Hqiv.Physics.omegaKContinuous` | `Ω_k(ξ) = I(ξ)/I(ξ_lock)` on the continuous primitive. |
+| `Hqiv.Physics.informationalEnergyMassRow` | **Default mass row:** target `c₀ = 2π·Ω_k(ξ_G) − loc(ξ_G)`. |
+| `Hqiv.Physics.informationalEnergyMassRow_budget` | Budget identity: `target + loc(ξ_G) = 2π·Ω_k(ξ_G)`. |
+| `Hqiv.Physics.informationalEnergyMassRowLegacy` | Legacy row: `c₀ = holonomyRowRhs(0)·Ω_k − loc` (regression). |
+| `Hqiv.Physics.omegaKMassRow` | Older holonomy-weighted Ω_k row (superseded for mass closure by informational row). |
+
+## Meta-horizon excited states (`Hqiv.Physics.MetaHorizonExcitedStates`)
+
+| Name | Output / meaning |
+|------|------------------|
+| `Hqiv.Physics.radialExcitationShell` / `orbitalExcitationShell` / `totalModeShell` | Shell indices for radial `n` and orbital `ℓ` above lock-in. |
+| `Hqiv.Physics.totalModeBinding` / `totalModeMass` | Composite-trace binding at `referenceM+n+ℓ`; mode mass = proton constituent − binding. |
+| `Hqiv.Physics.metaHorizonExcitationDeltaNaive` | Naive ΔM = `totalModeMass n ℓ − derivedProtonMass` (composite-trace binding law). |
+| `Hqiv.Physics.radialExcitationDeltaOperational` / `orbitalExcitationDeltaOperational` | Operational ΔM: internal surface step `m_p·(S(m+n)/S(m)−1)` and detuned `geometricResonanceStep` on lock-in drum. |
+| `Hqiv.Physics.metaHorizonExcitedMassReadout` | Catalog mass = `derivedProtonMass` + operational radial + orbital steps. |
+| `Hqiv.Physics.radialHarmonic` / `orbitalHarmonic` | Mode mass / `derivedProtonMass` (internal meta-horizon labels). |
+| `Hqiv.Physics.ground_mode_is_derived_proton` | `totalModeMass 0 0 = derivedProtonMass`. |
+| `Hqiv.Physics.first_radial_mode_uses_next_shell` | Radial `n=1` binding uses composite trace at `referenceM+1`. |
+| `Hqiv.Physics.E_bind_nucleon_trace_eq_triple_coupling` | Nucleon trace collapses to `3 · bindingCouplingAtShell m k`. |
+| `Hqiv.Physics.resonanceDropK_zero_gt_one` / `radialExcitationDeltaOperational_one_eq_resonanceDrop` | Operational radial step = `m_p·(resonanceDropK₀−1)` with `resonanceDropK₀ = 42/30` at lock-in. |
+| `Hqiv.Physics.radialExcitationDeltaOperational_one_pos` / `orbitalExcitationDeltaOperational_one_pos` | Operational radial/orbital steps at `n,ℓ=1` are **positive**. |
+| `Hqiv.Physics.MetaHorizonExcitationReadoutWitness` / `metaHorizonExcitationReadoutWitness_default` | Bundled witness: operational catalog readout **and** naive-vs-operational sign split at first radial (`n=1`). |
+| `Hqiv.Physics.shell_binding_log_cross_inequality` | Main log-ladder inequality at lock-in → first radial shell: `30·(1+α log 13) < 42·(1+α log 11)` (`φ(m)=2(m+1)`, `α=3/5`). |
+| `Hqiv.Physics.bindingCoupling_nucleon_referenceM_succ_gt` / `E_bind_nucleon_trace_referenceM_succ_gt` | Binding coupling and nucleon composite trace **increase** from shell `referenceM` to `referenceM+1`. |
+| `Hqiv.Physics.totalModeBinding_one_gt_base` / `metaHorizonExcitationDeltaNaive_one_lt_zero` | First radial naive ΔM is **negative** (binding deepens on the composite-trace ladder). |
+| `Hqiv.Physics.metaHorizonExcitationDeltaNaive_ne_radialOperational` / `_ne_orbitalOperational` | Naive radial ΔM ≠ operational surface-step / orbital-step readouts at `n,ℓ=1`. |
+
+**Log-ladder certificate:** `log11_gt_shell_binding`, `log13_sub_log11_lt_point_two` via `Mathlib.Analysis.Complex.ExponentialBounds` (`exp_one` / `log_two` / `exp_half`). **Script:** `scripts/hqiv_excited_states.py` confirms naive radial ΔM &lt; 0, operational ΔM &gt; 0. **Python / calculator:** `hadron_mass_from_stack()` uses operational ΔM for `decuplet` / `vector` tags; do not use naive `totalModeMass` deltas in the catalog.
 
 ## Octonionic lattice zeta (`Hqiv.Physics.OctonionicZeta`)
 
@@ -477,6 +595,14 @@ Narrative / open items (parked): [archive/OCTONION_SPHERE_PATCH.md](./archive/OC
 | `Hqiv.Physics.coherenceFromPlasmaAmp` / `coherenceFromPlasmaAmp_mem_unit` / `hqivEddyViscosity_HQIV_shell_debye_plasmaAmp` | Closure choice: `C = min 1 (κ * |schematicPlasmaScalar|)` in `[0,1]` (`κ ≥ 0`); eddy viscosity at shell+Debye with that `C`. **Not** derived from kinetics. |
 | `Hqiv.Physics.PlasmaFluidClosureAssumptions.mk_shell_debye_plasmaAmp` / `nuTotal_eq_nuMol_add_shell_debye_plasmaAmp` | F3 constructor + total viscosity when `C` comes from `coherenceFromPlasmaAmp`. |
 | `Hqiv.Physics.BalancePillarShellDebyePlasmaAmp` / `balance_nuTotal_eq_mol_plus_eddy_shell_debye_plasmaAmp` / `BalancePillarWithHQIVGamma.of_shell_debye_plasmaAmp` | Pillar B with plasma-amplitude coherence (`LightConeFundamentalsPillars`). |
+| `Hqiv.Physics.HQIVLESState` / `HQIVLESClosureInput` / `hqivLESSubgridViscosity` / `hqivLESSubgridViscosity_nonneg` / `HQIVLESContractProof` | LES certificate surface in the turbulence scaffold: filtered state, shell+Debye HQIV subgrid viscosity plus resolved-filter contribution, nonnegativity under `C ≥ 0`, and 2D/3D filtered contract proof bundles. **Not** DNS/LES convergence or a kinetic derivation. |
+| `Hqiv.Physics.HQIVLapseModifiedLESAxiom` / `hqivLapseModifiedLES2D_axiom` / `hqivLapseModifiedLES3D_axiom` / `HQIVLapseModifiedLESAxiom.momentum_component_on_domain` / `HQIVLESKineticEnergyCascadeCertificate.five_thirds_on_inertial_range` | Certified lapse-modified LES package: filtered residual callbacks match the HQIV LES momentum residual on a certified domain, subgrid-stress divergence is tied to point data, and the filtered energy channel reuses the inertial-range `k^(-5/3)` certificate (`HQIVTurbulenceSimulatorScaffold`). |
+| `Hqiv.Physics.HQIVDNSState` / `HQIVDNSPythonSimulatorContract` / `HQIVDNSContractProof` / `hqivDNS2D_contract_proof` / `hqivDNS3D_contract_proof` | DNS certificate surface in the turbulence scaffold: direct, unfiltered state/residual callbacks with canonical HQIV shell+Debye closure and 2D/3D contract proof bundles. **Not** RANS averaging, LES filtering, convergence, or global regularity. |
+| `Hqiv.Physics.HQIVDNSResolutionCertificate` / `HQIVDNSResolutionCertificate.gridSpacing_le_kolmogorovScale` / `HQIVLapseModifiedDNSAxiom` / `hqivLapseModifiedDNS2D_axiom` / `hqivLapseModifiedDNS3D_axiom` / `HQIVLapseModifiedDNSAxiom.momentum_component_on_domain` / `HQIVLapseModifiedDNSAxiom.resolves_dissipation_range` | Certified lapse-modified DNS package: positive grid/timestep, grid spacing below supplied dissipative scale, direct residual callbacks matching the HQIV DNS momentum residual on a certified domain, and zero-residual-to-component-equation extraction (`HQIVTurbulenceSimulatorScaffold`). |
+| `Hqiv.Physics.HQIVFirstPrinciplesMomentumData` / `ActionStationaryAtChart` / `HQIVContinuumBalanceClosure` / `OMaxwellToFluidBalanceHypothesis` / `HQIVFirstPrinciplesNSBridge` | First-principles NS-shaped bridge surface: O-Maxwell action/EL chart data, F2 chart identification, F3 scalar viscosity closure, and an explicit continuum/coarse-graining balance hypothesis are packaged as the route from HQIV action data to the DNS momentum equation. **Not** a derivation of molecular viscosity or PDE regularity. |
+| `Hqiv.Physics.hqivFirstPrinciplesActionForce_zero` / `HQIVFirstPrinciplesMomentumData.canonical_chartHypothesis` / `hqivFirstPrinciples_vacuumSource_eq_chart` / `HQIVContinuumBalanceClosure.nuTotal_eq` / `HQIVFirstPrinciplesNSBridge.to_dns_momentum_component` / `HQIVFirstPrinciplesNSBridge.to_dns_momentum_residual_zero` / `hqivLapseModifiedDNSAxiom_of_firstPrinciples` | Proved bridge chain: spatial O-Maxwell stationarity kills the action-force slot, shell/Debye F3 rewrites total viscosity, the first-principles bundle implies the HQIV lapse-modified DNS momentum component, and pointwise first-principles bridges can build a certified DNS axiom package (`HQIVTurbulenceSimulatorScaffold`). |
+| `Hqiv.Physics.HQIVCanonicalShellDebyeClosure` / `HQIVCanonicalShellDebyeClosure.to_continuumBalanceClosure` / `HQIVPlasmaAmplitudeCoherence` / `HQIVPlasmaAmplitudeCoherence.coherence_mem_unit` / `HQIVCanonicalShellDebyeClosure.of_plasmaAmplitude` | Discharged closure assumptions for the first-principles NS bridge: canonical shell/Debye eddy viscosity plus scalar split constructs `HQIVContinuumBalanceClosure`; plasma-amplitude coherence gives `C ∈ [0,1]` from `coherenceFromPlasmaAmp`. |
+| `Hqiv.Physics.HQIVFirstPrinciplesNSBridgeCanonical` / `HQIVFirstPrinciplesNSBridgeCanonical.to_bridge` / `HQIVFirstPrinciplesNSBridgeCanonical.to_dns_momentum_component` / `HQIVFirstPrinciplesNSBridgePlasmaAmp` / `HQIVFirstPrinciplesNSBridgePlasmaAmp.to_canonical` / `HQIVFirstPrinciplesNSBridgePlasmaAmp.to_dns_momentum_component` | Reduced first-principles bridge variants: F2 chart identification is definitional, F3 shell/Debye/plasma coherence is constructed, and the remaining explicit assumption is the continuum stress/balance decomposition (`OMaxwellToFluidBalanceHypothesis`). |
 | `Hqiv.Physics.uvRegulatorShellBudget` / `uvRegulatorShellBudget_pos` / `kineticSpatialBinCount` / `HorizonExchangeCollisionRate` / `meanFreePathProxy` / `BalancePillarWithHQIVGamma` / `balance_nuTotal_eq_mol_plus_eddy_hqiv` / `BalancePillarShellDebye` / `balance_nuTotal_eq_mol_plus_eddy_shell_debye` / `BalancePillarWithHQIVGamma.of_shell_debye` / `KuboHQIVSpectralWeight` / `pillarD_same_phi_O_Maxwell_HQVM` / `pillarD_same_alpha_lattice` / `EffectiveDiracHypothesis` / `combinatorialEntropyHook` | **Pillar scaffold** tying [LIGHTCONE_FUNDAMENTALS_DERIVATION_PLAN.md](./LIGHTCONE_FUNDAMENTALS_DERIVATION_PLAN.md) to defs/hypotheses: cumulative mode budget = `available_modes`, kinetic bins, collision-rate placeholder, mfp proxy, fluid closure at fixed `gamma_HQIV` (including shell+Debye bundle), Kubo weight record, `GRFromMaxwell` bridges, Dirac mass slot, `log` mode-count hook. **Not** Boltzmann collision physics, Kubo coefficients, or Dirac PDE. |
 | `Hqiv.Physics.kuboPhiSlopeAtShell` / `kuboPhiSlopeAtShell_eq` / `phi_of_T_increment_shell` / `linearizedLapse_from_shell` / `linearizedLapse_from_shell_kuboSlope` | Shell-indexed perturbations: Θ = `T m`, `deriv phi_of_T` slope, exact `phi_of_T` increment, Θ-channel lapse linearization = `t * kuboPhiSlopeAtShell * δΘ` (`HQIVPerturbationScaffold`; see [HQIV_PERTURBATION_THEORY_ROADMAP.md](./HQIV_PERTURBATION_THEORY_ROADMAP.md)). **Not** Bardeen/FLRW gauge pipeline. |
 | `Hqiv.linearizedHQVM_g_tt_from_lapse` / `HQVM_g_tt_increment_eq_linearized_remainder` / `HQVM_g_tt_increment_eq_of_lapse_increment` | First metric readout of observer skew: because `g_tt = -N^2`, the exact timelike metric-coefficient increment splits into the linearized lapse-driven term `-2 N δN` plus the quadratic remainder `-δN^2` (`HQVMPerturbations`). |
@@ -518,6 +644,18 @@ Narrative / open items (parked): [archive/OCTONION_SPHERE_PATCH.md](./archive/OC
 | `Hqiv.Algebra.span_G2_union_Delta_le_span_so8Generator` / `Hqiv.Algebra.finrank_span_G2_union_Delta_le_15` / `Hqiv.Algebra.exists_so8Generator_not_mem_span_G2_union_Delta` | Linear span of `G₂ ∪ {Δ}` is **≤15**-dimensional and lies in `span(so8)`; cannot exhaust 28-dim `𝔰𝔬(8)` (`SO8ClosureAbstract`). |
 | `Hqiv.QM.opCommutator_smearedOpIntervalMax_pair` | Bilinear (double) sum for `opCommutator` of two smeared interval–max Pauli operators (`PatchIntervalMaxSmeared`). |
 | `Hqiv.QM.continuum_interval_max_microcausality_operator_layer_notes` | Scalar interval-max microcausality + operator smearing vanishing packaged (`ContinuumManyBodyQFTClosureLink`). |
+
+## Neutron bonded vs free stability scaffold (`Hqiv.Physics.NeutronBindingStabilityScaffold`)
+
+| Name | Output / meaning |
+|------|------------------|
+| `Hqiv.Physics.NuclearNeutronEmbedding` | Well depth, Ωₖ readout, ξ readout, and `skewAligned` (Conjecture β slot). |
+| `Hqiv.Physics.wellDepthSufficient` / `curvatureLedgerClosed` / `bondedNeutronStable` | Bonded stability as depth + Ω ledger ≥ 1 + skew alignment. |
+| `Hqiv.Physics.freeNeutronOverlapEnergy` / `freeNeutronStrongDecayWidth` | Strong-resonance overlap (`nucleonIsospinGap_MeV` + curvature deficit); `Γ = ΔE/ħ`. |
+| `Hqiv.Physics.freeNeutronWeakDecayWidth` | Weak β slot via `beta_decay_rate` (not identified with overlap energy). |
+| `Hqiv.Physics.bondedNeutronReadoutCalibrated` | `omegaK_xi xiLockin = 1` when `xiReadout = xiLockin`. |
+| `Hqiv.Physics.bondedNeutronOmegaReadout_matches_continuous_at_lockin` | Discrete–continuous Ω agreement at `referenceM` when `readoutOmegaKIntegerBridge` holds. |
+| `Hqiv.Physics.bondedNeutron_imprint_matches_discrete_at_reference` | Imprint phase at `referenceM` matches discrete step under global Ω bridge. |
 
 ## Spin–statistics (`Hqiv.Physics.SpinStatistics`, namespace `Hqiv.Physics`)
 

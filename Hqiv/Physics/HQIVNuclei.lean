@@ -146,7 +146,7 @@ theorem nucleon_is_casimir (n : Nucleon) :
   rfl
 
 /-!
-### Proof obligation: Casimir data matches HQVM / light-cone vacuum counting
+### Casimir data ↔ HQVM / light-cone vacuum counting
 -/
 
 theorem casimir_surface_consistent_with_HQVM {m : ℕ} (S : CasimirSurface m) :
@@ -173,6 +173,16 @@ noncomputable def metaHorizonRadius (m : ℕ) (_h : MetaHorizon m) : ℝ :=
 /-- Vacuum-mode density at shell `m`: modes per unit `R_m` (HQIV bookkeeping). -/
 noncomputable def vacuumModeDensity {m : ℕ} (S : CasimirSurface m) : ℝ :=
   S.vacuumModes.count / R_m m
+
+/-- Full bundle: mode count, zero-point energy, and mode density agree with the null lattice. -/
+theorem casimir_surface_matches_HQVM_lightcone {m : ℕ} (S : CasimirSurface m) :
+    S.vacuumModes.count = Hqiv.available_modes m ∧
+      CasimirEnergySurface S = Hqiv.available_modes m * (Hqiv.phi_of_shell m / 2) ∧
+      vacuumModeDensity S = Hqiv.available_modes m / R_m m := by
+  refine ⟨S.vacuumModes.hcount, ?_, ?_⟩
+  · exact casimir_energy_full_mode_sum S
+  · unfold vacuumModeDensity
+    rw [S.vacuumModes.hcount, R_m_eq]
 
 /-- Spherical Fresnel envelope from angular bookkeeping: radius `R_m` and curvature
 `cumulativeCount / R_m` (S² mode density at cutoff `L = m`). -/

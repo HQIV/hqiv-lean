@@ -15,6 +15,10 @@ Usage:
   PYTHONPATH=~/Repos/HQIV python3 scripts/generate_symbolic_lie_closure_certificate.py
   PYTHONPATH=~/Repos/HQIV python3 scripts/generate_symbolic_lie_closure_certificate.py \
       --output artifacts/so8_symbolic_certificate.json
+
+By default the script prints the 14 concrete ``\\mathfrak{g}_2`` seed matrices and ``Delta``
+(8×8, exact integers after rounding floats from HQVM) to stdout for manuscript / appendix
+listings. Use ``--no-print-matrices`` to suppress.
 """
 
 from __future__ import annotations
@@ -65,12 +69,52 @@ def _rank_of_columns(cols: Iterable[sp.Matrix]) -> int:
     return sp.Matrix.hstack(*cols).rank()
 
 
-def build_exact_basis(max_iter: int = 80) -> list[sp.Matrix]:
-    """Build a rank-28 Lie-closure basis over Q from g2 union {Delta}."""
+def load_seed_g2_and_delta() -> tuple[list[sp.Matrix], sp.Matrix]:
+    """Return exact SymPy 8×8 matrices for the 14-element ``g2`` basis and ``Delta``."""
     from HQVM.matrices import OctonionHQIVAlgebra
 
     alg = OctonionHQIVAlgebra(verbose=False)
-    seed = [_to_sympy_matrix(g) for g in (alg.g2_basis + [alg.Delta])]
+    g2 = [_to_sympy_matrix(g) for g in alg.g2_basis]
+    delta = _to_sympy_matrix(alg.Delta)
+    return g2, delta
+
+
+def format_matrix_8x8(m: sp.Matrix, *, col_width: int = 4) -> str:
+    """Human-readable 8×8 block (entries as exact rationals / integers)."""
+    lines = []
+    for i in range(8):
+        cells = [str(sp.Rational(m[i, j])).rjust(col_width) for j in range(8)]
+        lines.append(" ".join(cells))
+    return "\n".join(lines)
+
+
+def print_proof_seed_matrices(
+    g2: list[sp.Matrix],
+    delta: sp.Matrix,
+    *,
+    stream=sys.stdout,
+) -> None:
+    """Print the concrete matrices cited in the Lie-closure proof (seed before bracket closure)."""
+    stream.write(
+        "\n# === Proof seed: 14 × \\mathfrak{g}_2 generators + \\Delta (8×8 each) ===\n"
+    )
+    for i, mat in enumerate(g2):
+        stream.write(f"\n## g2_basis[{i}]\n")
+        stream.write(format_matrix_8x8(mat))
+        stream.write("\n")
+    stream.write("\n## Delta (phase-lift generator on the chosen plane)\n")
+    stream.write(format_matrix_8x8(delta))
+    stream.write("\n")
+
+
+def build_exact_basis(max_iter: int = 80, seed: list[sp.Matrix] | None = None) -> list[sp.Matrix]:
+    """Build a rank-28 Lie-closure basis over Q from g2 union {Delta}.
+
+    If ``seed`` is omitted, matrices are loaded from ``OctonionHQIVAlgebra`` once.
+    """
+    if seed is None:
+        g2, delta = load_seed_g2_and_delta()
+        seed = g2 + [delta]
     basis: list[sp.Matrix] = []
     basis_cols: list[sp.Matrix] = []
 
@@ -151,12 +195,31 @@ def main() -> None:
         help="Output JSON path (default: artifacts/so8_symbolic_certificate.json)",
     )
     parser.add_argument("--max-iter", type=int, default=80, help="Max closure growth iterations.")
+    parser.add_argument(
+        "--print-matrices",
+        action=argparse.BooleanOptionalAction,
+        default=True,
+        help="Print 14 g2 + Delta 8×8 matrices to stdout (default: on).",
+    )
+    parser.add_argument(
+        "--print-full-basis",
+        action="store_true",
+        help="After closure, also print all 28 basis 8×8 matrices (large).",
+    )
     args = parser.parse_args()
 
     out_path = Path(args.output)
     out_path.parent.mkdir(parents=True, exist_ok=True)
 
-    basis = build_exact_basis(max_iter=args.max_iter)
+    g2, delta = load_seed_g2_and_delta()
+    if args.print_matrices:
+        print_proof_seed_matrices(g2, delta)
+
+    basis = build_exact_basis(max_iter=args.max_iter, seed=g2 + [delta])
+    if args.print_full_basis:
+        print("\n# === Full Lie-closure basis (28 matrices) ===\n", file=sys.stdout)
+        for k, mat in enumerate(basis):
+            print(f"\n## closure_basis[{k}]\n{format_matrix_8x8(mat)}\n", file=sys.stdout)
     coeff = coeff_tensor_exact(basis)
 
     denoms = [int(c.q) for i in range(28) for j in range(28) for c in coeff[i][j]]

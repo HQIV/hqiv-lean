@@ -27,7 +27,7 @@ Generated files:
 
 ## Publication iteration checklist
 
-1. Run Lean publication target audits (`lake build HQIVPaperClaims` for the rapidity/SO(8) manuscript cone; optionally `HQIVWitnesses`, `HQIVRhFourierLift`, `HQIVPlastic`, `HQIVSO8Closure`).
+1. Run Lean publication target audits (`lake build HQIVPaperClaims` for `papers/closure.tex`: discrete cone + symbolic SO(8) interface only; optionally `HQIVWitnesses`, `HQIVRhFourierLift`, `HQIVPlastic`, `HQIVSO8Closure` from a full clone).
 2. Rebuild manuscript/appendix PDFs.
 3. Regenerate symbolic certificates if code changed.
 4. Re-run `build_zenodo_bundle.py`.

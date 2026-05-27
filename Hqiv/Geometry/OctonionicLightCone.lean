@@ -18,6 +18,9 @@ open scoped Topology
 
 namespace Hqiv
 
+-- `simpa` is clearer than `simp`+`exact` for several ℚ↔ℝ casts below; silence style lint.
+set_option linter.unnecessarySimpa false
+
 /-!
 ## Horizon readouts and null-lattice bookkeeping (`m : ℕ`)
 
@@ -409,8 +412,14 @@ lemma curvatureDensity_le_one_div_succ_mul_log (m n : Nat) (hmn : m < n) :
     curvatureDensity (m + 1) ≤ (1 / (m + 1 : ℝ)) * (1 + alpha * Real.log (n + 1 : ℝ)) := by
   unfold curvatureDensity
   have hpos : (0 : ℝ) < (m + 1 : ℝ) := by exact_mod_cast Nat.succ_pos m
-  gcongr
-  first | unfold alpha; norm_num | exact Real.log_le_log (Nat.cast_pos.mpr (Nat.succ_pos m)) (Nat.cast_le.mpr (Nat.succ_le_succ (Nat.le_of_lt hmn)))
+  have hfrac : 0 ≤ (1 / (m + 1 : ℝ)) := le_of_lt (one_div_pos.mpr hpos)
+  refine mul_le_mul_of_nonneg_left ?_ hfrac
+  have hα : 0 ≤ alpha := by unfold alpha; norm_num
+  have hm : (m + 1 : ℝ) ≤ (n + 1 : ℝ) := by exact_mod_cast Nat.succ_le_succ (Nat.le_of_lt hmn)
+  have hlog : Real.log (m + 1) ≤ Real.log (n + 1) := Real.log_le_log hpos hm
+  have hαlog : alpha * Real.log (m + 1) ≤ alpha * Real.log (n + 1) :=
+    mul_le_mul_of_nonneg_left hlog hα
+  linarith
 
 /-- By definition, `shell_shape m` is the density sampled at m+1. -/
 theorem shell_shape_eq_density_succ (m : Nat) :
@@ -862,12 +871,12 @@ lemma harmonic_sum_le_one_add_log_succ (n : Nat) :
   -- Rewrite the real Finset sum as the real-cast harmonic number.
   have hsum : (∑ i ∈ range n, (1 : ℝ) / (i + 1 : ℝ)) = (harmonic n : ℝ) := by
     -- `harmonic` is a ℚ-valued sum; coercing to ℝ matches `1/(i+1)` after simp.
-    simp [harmonic, one_div, div_eq_mul_inv]
+    simp [harmonic, div_eq_mul_inv]
   -- Use the known bound on `harmonic (n + 1)` and monotonicity `harmonic n ≤ harmonic (n+1)`.
   have hmono : (harmonic n : ℝ) ≤ (harmonic (n + 1) : ℝ) := by
     -- `harmonic_succ` is in ℚ; after casting to ℝ it's `harmonic (n+1) = harmonic n + 1/(n+1)`.
     have hs : (harmonic (n + 1) : ℝ) = (harmonic n : ℝ) + ((n + 1 : ℝ)⁻¹) := by
-      simpa [harmonic_succ, one_div] using congrArg (fun q : ℚ => (q : ℝ)) (harmonic_succ n)
+      simpa [harmonic_succ] using congrArg (fun q : ℚ => (q : ℝ)) (harmonic_succ n)
     -- Rearrange.
     have hpos : 0 ≤ (n + 1 : ℝ)⁻¹ := by positivity
     linarith [hs, hpos]
@@ -898,7 +907,7 @@ theorem curvature_integral_asymptotic_upper (n : Nat) :
       -- Turn the RHS product into a sum and simplify termwise.
       rw [hH, Finset.mul_sum]
       exact le_of_eq (by
-        simp [div_eq_mul_inv, one_div, mul_assoc, mul_left_comm, mul_comm])
+        simp [div_eq_mul_inv])
   calc curvature_integral n
     _ = H + alpha * logWeightedSum n := curvature_integral_eq_harmonic_plus_alpha_log n
     _ ≤ H + alpha * (Real.log (n + 1 : ℝ) * H) := by
@@ -1041,7 +1050,7 @@ noncomputable def omega_k_at_horizon (n N : Nat) : ℝ :=
 theorem omega_k_at_horizon_eq (n N : Nat) (hN : 0 < curvature_integral N) :
   omega_k_at_horizon n N = curvature_integral n / curvature_integral N := by
   unfold omega_k_at_horizon
-  simp [ne_of_gt hN, not_le_of_gt hN]
+  simp [not_le_of_gt hN]
 
 /-- At the horizon itself (n = N), the curvature ratio equals 1 (unit in lattice units). -/
 theorem omega_k_at_horizon_self (N : Nat) (hN : 0 < curvature_integral N) :

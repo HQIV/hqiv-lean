@@ -28,6 +28,9 @@ papers/*.synctex.gz
 
 # Local Python virtual environments (not portable; keep out of git)
 .venv/
+
+# Qiskit mod-exp build cache (pickled circuits)
+scripts/.cache/
 .venv_*/
 
 # Exceeds GitHub's 100MB per-file limit; keep locally or use Git LFS

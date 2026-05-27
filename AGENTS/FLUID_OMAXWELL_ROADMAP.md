@@ -35,6 +35,7 @@ Lean names the same objects in `Hqiv.Physics.HQIVFluidClosureScaffold` (**defini
 - **F2 — Attachment map (done, hypotheses only):** the **F2** section below, plus the same content in `HQIVFluidClosureScaffold.lean` and `pyhqiv.fluid` module docs. **No** new proved equalities between sectors.
 - **F3 — Plasma-as-fluid closure (done):** `PlasmaFluidClosureAssumptions` + `nuTotal_eq_nuMol_add_hqivEddy` in Lean; `PlasmaFluidClosureHypothesis` + `holds()` in `pyhqiv.fluid`; §F3 below. **Not** kinetic derivation.
 - **F4 — Classical NS coefficients (done, algebraic only):** `CoefficientsTowardClassicalNS` + example lemma in Lean; §F4 below. **Not** classical 3D NS well-posedness.
+- **F4.5 — Action/O-Maxwell → HQIV DNS-shaped momentum bridge (done, reduced):** `HQIVFirstPrinciplesNSBridge` in `HQIVTurbulenceSimulatorScaffold.lean` proves that O-Maxwell action/EL chart data plus F2 chart identification, F3 scalar viscosity closure, and an explicit continuum balance hypothesis imply the HQIV lapse-modified DNS momentum component. `HQIVFirstPrinciplesNSBridgeCanonical` / `HQIVFirstPrinciplesNSBridgePlasmaAmp` discharge the F2 chart identification, shell/Debye closure, and plasma-coherence interval bookkeeping. **Not** molecular-viscosity derivation or PDE regularity.
 - **O-Maxwell / continuum / QFT bridge:** chart-level lemmas and budgets (e.g. emergent Maxwell RHS, accessible shells)—see `THEOREMS.md` entries for `ContinuumOmaxwellClosure`, `LightConeMaxwellQFTBridge`; unification narrative in `SM_GR_Unification.lean` (O-Maxwell φ-corrections are **effective** coupling story, not NS).
 - **Rapidity / slice scaffolding:** `SpatialSliceRapidityScaffold.lean` — lattice rapidity, shells, **probe** domains; **not** a 3D fluid theorem.
 - **RH-style analogue boundary packaging:** `tempLadder` / `lambdaHQIV` scaffolds — **template** for “hypothesis fields → proved consequence in a toy bundle,” **not** classical RH or classical NS global regularity.
@@ -42,7 +43,7 @@ Lean names the same objects in `Hqiv.Physics.HQIVFluidClosureScaffold` (**defini
 ### Not in place (do not attribute to the repo)
 
 - No **Lean** PDE for modified **or** classical **3D incompressible NS** global well-posedness.
-- No **proved** derivation from **O-Maxwell + kinetic plasma** to the **closed** fluid system in §0.
+- No **proved** derivation from **O-Maxwell + kinetic plasma** to molecular viscosity or the **closed** fluid system in §0. What is now proved is narrower but stronger than before: action/O-Maxwell chart data plus canonical HQIV closure/coherence constructions and one explicit continuum stress-balance hypothesis imply the HQIV DNS-shaped momentum equation.
 - No **automatic** identification of \(\nu_{\mathrm{eddy}}\) with a **measured** viscosity; **C**, \(\ell_{\mathrm{coh}}\), and \(\Theta_{\mathrm{local}}\) remain **closure parameters** until tied to definitions.
 
 ### Plasma-first next steps (recommended order)
@@ -71,6 +72,7 @@ Work **in order** when formalizing or implementing. Each step should produce **a
 | **F2 — O-Maxwell attachment points** | Map **currents / stress** and **φ-gradients** in existing O-Maxwell lemmas to **inputs** of \(\mathbf g_{\mathrm{vac}}\) and \(\nu_{\mathrm{eddy}}\) **as hypotheses** (not as proved equality). | **Done:** §F2 table + `HQIVFluidClosureScaffold.lean` + `pyhqiv.fluid` module docs; **typed bundle** `OMaxwellFluidChartHypothesis` + `chartSpatialPhiGradient` / `chartSpatialDotGradient` + `hqivVacuumMomentumSource3_of_OMaxwellFluidChartHypothesis` (chart point \(c\), fields \(\varphi_F,\dot F\), proxy \(E'\)). |
 | **F3 — Plasma-as-fluid closure** | State explicitly: **two-fluid / MHD-style** effective equations **imply** a stress form \(\tau = \tau_{\mathrm{mol}} + \tau_{\mathrm{eddy}}\) with \(\nu_{\mathrm{eddy}}\) from §0. | **Done:** `PlasmaFluidClosureAssumptions` / `nuTotal_eq_nuMol_add_hqivEddy` (Lean); `PlasmaFluidClosureHypothesis` (Python). |
 | **F4 — Classical NS limit** | Prove or assume **sufficient conditions** under which modified equations reduce to \(\partial_t \mathbf u + (\mathbf u\cdot\nabla)\mathbf u = -\nabla p + \nu\Delta\mathbf u\), \(\nabla\cdot\mathbf u=0\). | **Done (coefficients only):** `CoefficientsTowardClassicalNS` + sample lemma; full PDE limit still open — [NAVIER_STOKES_HQIV_NARRATIVE.md](./NAVIER_STOKES_HQIV_NARRATIVE.md). |
+| **F4.5 — First-principles bridge** | Package action/O-Maxwell stationarity, F2 chart data, F3 closure, and continuum balance into the HQIV DNS-shaped momentum equation. | **Done (reduced):** `HQIVFirstPrinciplesNSBridge.to_dns_momentum_component`, `HQIVFirstPrinciplesNSBridgeCanonical`, `HQIVFirstPrinciplesNSBridgePlasmaAmp`, and `hqivLapseModifiedDNSAxiom_of_firstPrinciples`; F2/F3/coherence bookkeeping is discharged for canonical choices. |
 | **F5 — PDE analysis (optional, hard)** | Weak solutions, energy estimates, **blow-up** or **regularity** in the **modified** system—**separate** from Milestones F0–F4. | Only after F0–F4 have **precise** PDE targets; otherwise **out of scope** for this repo’s current Lean mission. |
 
 ---
@@ -129,6 +131,7 @@ This table is **agent glue**: where to look in Lean/Python when wiring the **eff
 | Question | Answer |
 |----------|--------|
 | Does HQIV “solve” classical 3D NS? | **No** — see [NAVIER_STOKES_HQIV_NARRATIVE.md](./NAVIER_STOKES_HQIV_NARRATIVE.md). |
+| Did Lean derive an NS-shaped equation from HQIV action data? | **Conditionally, yes:** `HQIVFirstPrinciplesNSBridgeCanonical` / `HQIVFirstPrinciplesNSBridgePlasmaAmp` prove the HQIV DNS-shaped momentum component from O-Maxwell action stationarity plus canonical HQIV closure/coherence constructions and the remaining explicit continuum stress-balance hypothesis. |
 | Is \(\nu_{\mathrm{eddy}}\) derived from O-Maxwell in Lean? | **Not as a theorem** — F3 **packages** the HQIV eddy formula as explicit hypotheses; O-Maxwell → \(\nu_{\mathrm{eddy}}\) is still not proved. |
 | Is `fluid.py` authoritative? | **Yes:** `hqvmpy/src/pyhqiv/fluid.py` (package `pyhqiv`); `bak/` is legacy. |
 | Same logical shape as RH ladder? | **Yes:** hypothesis bundles + small proved consequences **where** definitions exist; **no** conflation with classical Millennium statements. |

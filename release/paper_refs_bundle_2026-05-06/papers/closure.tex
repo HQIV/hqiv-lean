@@ -1,0 +1,223 @@
+\documentclass[11pt]{amsart}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage[hidelinks]{hyperref}
+
+\input{include/release_archive_macros.tex}
+
+\title[Discrete Growth to so(8)]{From Discrete Null-Lattice Growth to so(8):\\
+Concrete Realization and Exact Lie Closure}
+
+\author{Steven Ettinger Jr}
+\address{Independent Researcher}
+\email{steven@disregardfiat.tech}
+\date{Preprint v8 --- \today}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{example}[theorem]{Example}
+
+\begin{document}
+\begin{abstract}
+\noindent\textbf{Background.}
+We ask whether a discrete quadratic growth law on \(\mathbb{N}\), motivated by null-shell counting on a discrete light-cone, can be chained through a divergent curvature channel and a normalized phase readout to an explicit exceptional Lie-algebra closure in eight dimensions.
+
+\noindent\textbf{Methods.}
+We use the increment law \(A(m+1)-A(m)=8(m+2)\), build a cumulative channel \(K(n)=\sum_{m=0}^{n-1}\rho(m+1)\) from a logarithmic curvature density \(\rho\), normalize to \(\Omega(n)=K(n)/K(m_\ast)\), and impose three axioms on a phase map \(\mathcal{F}\) to obtain a readout \(\mathcal{R}\). From \(\mathcal{R}\) we extract an antisymmetric phase-lift generator \(\Delta\) on a distinguished \(2\)-plane in \(\mathbb{R}^8\). Lie closure is studied in the concrete Fano-basis octonion matrix model tied to the discrete null-lattice. Certification uses an exact symbolic proof object over \(\mathbb{Q}\) (companion JSON) and Lean build targets summarized in Section~\ref{sec:methods-repro}.
+
+\noindent\textbf{Results.}
+The channel obeys \(K(n)\ge H_n\), hence diverges. In the stated realization, adjoining \(\Delta\) to the \(14\)-dimensional derivation algebra \(\mathfrak{g}_2\) of the octonions generates, via Lie brackets, the full \(28\)-dimensional algebra \(\mathfrak{so}(8)\). At the formal level the readout has rapidity-like monotonicity, normalization, and \(2\pi\)-periodic holonomy without assuming a Lorentzian metric. A pedagogical \(\mathfrak{so}(3)+\Delta_4\to\mathfrak{so}(4)\) model illustrates the same linear-versus-Lie mechanism with an archived exact \(\mathbb{Q}\) certificate.
+
+\noindent\textbf{Conclusions.}
+The \(\mathfrak{so}(8)\) closure is \emph{realization-specific}: it is not claimed for an arbitrary abstract embedding of \(\mathfrak{g}_2\). The rational certificate and Lean verification map provide auditable evidence for the closure claim in the chosen octonionic carrier compatible with triality and \(3{+}1\) null-lattice combinatorics.
+\end{abstract}
+\maketitle
+
+\noindent\textit{Article structure.}
+Following IMRaD conventions, Section~\ref{sec:intro} states the problem and scope, Section~\ref{sec:methods} specifies definitions and the reproducible formal pipeline, Section~\ref{sec:results} states and proves the main bounds and Lie-closure theorem, and Section~\ref{sec:discussion} gives a low-dimensional illustration, limitations, and outlook.
+
+\section{Introduction}\label{sec:intro}
+
+This paper presents a derivation chain on a discrete index space:
+\[
+\text{uniform growth} \;\Longrightarrow\; K \;\Longrightarrow\; \Omega \;\Longrightarrow\; \mathcal{R} \;\Longrightarrow\; \Delta \;\Longrightarrow\; \langle \mathfrak{g}_2 \cup \{\Delta\} \rangle_{\mathrm{Lie}} = \mathfrak{so}(8).
+\]
+The starting point is a discrete quadratic growth law motivated by null-shell counting on a light-cone. The endpoint is the full 28-dimensional exceptional Lie algebra \(\mathfrak{so}(8)\), obtained in a concrete matrix realization. The growth law and the choice of phase plane are inputs selected for physical interpretability (consistent with Furey-style octonion-based approaches to the Standard Model \cite{furey,baez,g2}), not outputs forced by the discrete data alone.
+
+\begin{remark}[Scope and Realization]
+This work concerns a \textbf{concrete matrix realization} derived from discrete null-lattice combinatorics together with the Fano-basis octonion multiplication table. In this specific realization:
+\begin{itemize}
+  \item the 14-dimensional derivation algebra \(\mathfrak{g}_2\) of the octonions is represented by explicit \(8\times 8\) skew-adjoint matrices,
+  \item the phase-lift generator \(\Delta\) (supported on the plane \(\operatorname{span}\{e_1,e_7\}\)) is derived from the normalized cumulative phase readout,
+  \item adjoining \(\Delta\) to these matrices generates the full 28-dimensional algebra \(\mathfrak{so}(8)\).
+\end{itemize}
+\begin{sloppypar}
+This closure is certified by the exact symbolic proof-object over \(\mathbb{Q}\) cited above. The \texttt{HQIVSO8Closure} Lean target additionally elaborates the matrix commutator identities for the same floating-point generator list (with the Gram-matrix axiom noted in Section~\ref{sec:methods-repro}); the \texttt{HQIVPaperClaims} target instead imports the same conclusions through lightweight interface axioms. We do \textbf{not} claim that an arbitrary abstract embedding of \(\mathfrak{g}_2\) together with a generic plane generator closes to \(\mathfrak{so}(8)\). The result is tied to the octonionic carrier chosen to be compatible with triality and the discrete light-cone data.
+\end{sloppypar}
+\end{remark}
+
+\section{Methods}\label{sec:methods}
+
+\subsection{Discrete growth, curvature channel, and normalization}
+
+Let \(m\in\mathbb{N}\) and define the quadratic increment law
+\[
+A(m):=4(m+2)(m+1),\qquad A(m+1)-A(m)=8(m+2).
+\]
+This law is motivated by null-shell counting on a discrete light-cone in 3+1 dimensions. The functional form is the simplest quadratic compatible with such combinatorics. The subsequent algebraic steps are robust under small deformations of the increment law; the Lie closure itself depends only on the existence of a positive divergent channel (for example, a constant increment yielding linear \(K\) still produces the same \(\Delta\) and identical closure).
+
+Define the curvature density (for fixed \(\alpha>0\))
+\[
+\rho(x):=\frac1x\bigl(1+\alpha\log x\bigr)\quad(x\ge1)
+\]
+and the cumulative channel
+\[
+K(n):=\sum_{m=0}^{n-1}\rho(m+1).
+\]
+Fix any reference index \(m_\ast\) with \(K(m_\ast)>0\) and define the normalized channel
+\[
+\Omega(n):=\frac{K(n)}{K(m_\ast)}.
+\]
+Growth properties of \(K\) and \(\Omega\) are recorded in Section~\ref{sec:results-channel}.
+
+\subsection{Phase readout axioms}
+
+Let \(\phi\) and \(t\) be parameters labeling a base phase, and let \(\mathcal{H}(\phi,t)\) be a base phase function (for example, the constant function \(\mathcal{H}(\phi,t)=1\)). Let \(\mathcal{F}\) be any phase map satisfying the three minimal axioms:
+\begin{itemize}
+  \item Normalization: \(\mathcal{F}(\phi,t,1)=\mathcal{H}(\phi,t)\),
+  \item Monotonicity: \(\Omega_1\le\Omega_2\implies\mathcal{F}(\phi,t,\Omega_1)\le\mathcal{F}(\phi,t,\Omega_2)\),
+  \item Embedding invariance: pullback commutes with evaluation.
+\end{itemize}
+
+Define the normalized cumulative phase readout by
+\[
+\mathcal{R}(\phi,t,n):=\mathcal{F}(\phi,t,\Omega(n)).
+\]
+A concrete admissible choice is \(\mathcal{F}(\phi,t,\Omega)=\Omega\cdot\mathcal{H}(\phi,t)\). For the constant base phase \(\mathcal{H}(\phi,t)=1\), this gives the explicit form
+\[
+\mathcal{R}(\phi,t,n)=\Omega(n).
+\]
+The object \(\mathcal{R}\) is discrete in \(n\in\mathbb{N}\) and exhibits rapidity-like formal properties without reference to a Lorentzian metric.
+
+\subsection{Phase-lift generator \texorpdfstring{$\Delta$}{Delta}}
+
+Fix a reference index \(m_\ast\) and define the phase increment
+\[
+\theta(n):=\mathcal{R}(\phi,t,n)-\mathcal{R}(\phi,t,m_\ast).
+\]
+On the distinguished phase plane \(P=\operatorname{span}\{e_1,e_7\}\subset\mathbb{R}^8\) (the minimal triality-compatible mixing of the electromagnetic direction \(e_1\) with the \(G_2\)-stabilized color axis \(e_7\)), let \(\Delta\) be the antisymmetric generator with
+\[
+\Delta_{1,7}=1,\qquad\Delta_{7,1}=-1,
+\]
+and all other entries zero. The one-parameter action is
+\[
+U(\varepsilon,n):=\exp\bigl(\varepsilon\theta(n)\Delta\bigr).
+\]
+This generator is the infinitesimal lift of the phase readout \(\mathcal{R}\).
+
+For illustration, one generator from the concrete \(\mathfrak{g}_2\) realization (in the Fano-basis convention) has non-zero entries only in positions dictated by the octonion multiplication table. Its explicit form, together with the full set of 14 generators and the precise \(\Delta\), is recorded in the reproducibility bundle. The first commutators \([\mathfrak{g}_2,\Delta]\) already generate directions outside the linear span of the seed.
+
+\subsection{Concrete octonion carrier}
+
+Let \(\mathfrak{g}_2\) denote the \(14\)-dimensional derivation algebra of the octonions in its concrete \(8\)-dimensional matrix representation arising from the discrete null-lattice and Fano-basis multiplication table, with \(\Delta\) as in the previous subsection. All matrix data used in the formal certificates refer to this fixed realization.
+
+\subsection{Reproducibility archive}\label{sec:methods-repro}
+\begin{sloppypar}
+The Zenodo record for this deposit includes \CompanionCodeZip{} alongside the manuscript PDF under the same DOI. Unpacking it yields a \path{release/} tree; inventory and checksums for publication-critical files appear under \path{release/zenodo/}. The Lean modules, scripts, JSON certificates, and PDF/\TeX{} sources for this manuscript are mirrored under \PaperReproBundleDir/ (see \PaperReproBundleManifest). After unpacking \CompanionCodeZip{}, filesystem paths cited below are relative to \PaperReproBundleDir/. The two primary Lean build targets are \texttt{HQIVPaperClaims} (imports \path{Hqiv/Geometry/OctonionicLightCone.lean} for the discrete curvature layer and \path{Hqiv/SO8ClosureSymbolic.lean} for the symbolic \(\mathfrak{so}(8)\) interface axioms over the concrete generator matrices; no satisfiability formalism is included in this deposit) and \texttt{HQIVSO8Closure} (dedicated Lake glob that elaborates the matrix Lie-bracket closure for the concrete generators in \path{Hqiv/Generators.lean} via \path{Hqiv/GeneratorsLieClosure.lean} and the \path{Hqiv/LieBracketCell.*} modules; linear independence is derived from a single documented Gram-matrix axiom \texttt{so8CoordMatrix\_transpose\_mul\_self} in \path{Hqiv/So8CoordMatrix.lean}, matching the numeric orthonormality check in the companion scripts). The \texttt{HQIVSO8Closure} job can take tens of minutes on a cold cache; failure there reflects toolchain or Mathlib API drift against this repository snapshot, not the standalone exact-\(\mathbb{Q}\) JSON certificate. The symbolic certificate pipeline and inlined generator listings appear in the companion appendix \cite{so8-appendix}.
+\end{sloppypar}
+
+\section{Results}\label{sec:results}
+
+\subsection{Growth of the cumulative channel}\label{sec:results-channel}
+
+\begin{lemma}
+For all \(x\ge1\), \(\rho(x)>0\).
+\end{lemma}
+
+\begin{theorem}[Uniform-growth curvature theorem]
+For all \(n\ge1\),
+\[
+K(n)\ge H_n:=\sum_{m=0}^{n-1}\frac1{m+1}.
+\]
+Hence \(K(n)\to+\infty\) as \(n\to\infty\).
+\end{theorem}
+
+\begin{proof}
+Since \(\log(m+1)\ge0\), we have \(\rho(m+1)\ge1/(m+1)\). Summing yields the harmonic lower bound; divergence of \(H_n\) implies divergence of \(K(n)\).
+\end{proof}
+
+With \(\Omega(n)=K(n)/K(m_\ast)\) as in Section~\ref{sec:methods}, it follows that \(\Omega(m_\ast)=1\) and \(\Omega(n)\to+\infty\) as \(n\to\infty\).
+
+\subsection{Lie closure \texorpdfstring{$\mathfrak{g}_2+\Delta\to\mathfrak{so}(8)$}{g2 + Delta to so8}}
+
+\begin{theorem}[Full Lie closure in the concrete Fano-basis octonion realization]
+In the concrete Fano-basis octonion realization described in Section~\ref{sec:methods}, the Lie algebra generated by \(\mathfrak{g}_2\cup\{\Delta\}\) is the full \(28\)-dimensional algebra \(\mathfrak{so}(8)\).
+\end{theorem}
+
+\begin{proof}
+The linear span of the raw seed has dimension at most 15. However, iterated commutators generate all 28 basis directions of the skew-adjoint matrices on \(\mathbb{R}^8\). Since the generated subalgebra is contained in \(\mathfrak{so}(8)\) and both have dimension 28, equality holds.
+
+To see why a single additional generator suffices, recall the branching rule under the embedding \(\mathfrak{g}_2\subset\mathfrak{so}(8)\):
+\[
+\mathfrak{so}(8)\downarrow_{\mathfrak{g}_2}\;=\;14\;\oplus\;7\;\oplus\;7.
+\]
+The 14 is the adjoint of \(\mathfrak{g}_2\) itself. The two 7-dimensional representations correspond to the imaginary octonions. The adjoint action of \(\mathfrak{g}_2\) on \(\Delta\) (which mixes a real direction with one imaginary unit) produces a 7-dimensional orbit. Further brackets then fill the remaining directions, yielding the full 28-dimensional algebra. This mechanism is certified by the exact symbolic proof-object \(\texttt{artifacts/so8\_symbolic\_certificate.json}\) (rank-28 basis over \(\mathbb{Q}\), all structure constants rational, obtained after three rounds of bracketing). The companion \texttt{HQIVSO8Closure} Lean elaboration checks the matching matrix Lie-bracket identities for the printed real generators modulo the Gram-matrix axiom in \path{Hqiv/So8CoordMatrix.lean} (Section~\ref{sec:methods-repro}).
+\end{proof}
+
+\section{Discussion}\label{sec:discussion}
+
+\subsection{Low-dimensional illustration}
+
+The same linear-versus-Lie mechanism appears in the smallest nontrivial setting. Let
+\[
+J_{12},J_{13},J_{23}\in\mathfrak{so}(4)
+\]
+be the standard \(\mathfrak{so}(3)\) seed acting on the first three coordinates, and let
+\[
+\Delta_4:=J_{14}
+\]
+be the phase-lift generator. Then the raw linear span of \(\{J_{12},J_{13},J_{23},\Delta_4\}\) has dimension \(4<6=\dim\mathfrak{so}(4)\), while iterated brackets generate the missing directions, e.g.\ \([J_{12},J_{14}]=J_{24}\) and \([J_{13},J_{14}]=J_{34}\), so \(\langle\mathfrak{so}(3),\Delta_4\rangle_{\mathrm{Lie}}=\mathfrak{so}(4)\). The companion \(\mathfrak{so}(4)\) certificate is archived as exact rational JSON alongside the \(\mathfrak{so}(8)\) artifact.
+
+\begin{sloppypar}
+The \texttt{HQIVPaperClaims} build target for this manuscript is limited to \path{Hqiv/Geometry/OctonionicLightCone.lean} and \path{Hqiv/SO8ClosureSymbolic.lean}; it does not re-prove the rank-\(28\) matrix Lie certificate (that is the separate \texttt{HQIVSO8Closure} target in a full repository checkout). Optional narrative modules elsewhere in the HQIV library (e.g.\ \path{Hqiv/Story/CausalRapidityForcing.lean}) are not part of the Zenodo paper-reference mirror for \path{papers/closure.tex}.
+\end{sloppypar}
+
+\subsection{Summary and outlook}
+
+We have constructed a concrete matrix realization in which a discrete quadratic growth law, motivated by null-shell counting on a light-cone, leads to a normalized phase readout and a phase-lift generator \(\Delta\) such that adjoining \(\Delta\) to the 14-dimensional derivation algebra \(\mathfrak{g}_2\) of the octonions yields the full 28-dimensional algebra \(\mathfrak{so}(8)\). The closure is certified by the exact symbolic proof-object over \(\mathbb{Q}\) in the companion archive, with the Lean build split and axiom footprint recorded in Section~\ref{sec:methods-repro}.
+
+The construction yields rapidity-like formal properties without assuming a background Lorentzian metric. The result is specific to the octonionic carrier chosen to be compatible with triality and 3+1-dimensional null-lattice combinatorics. Whether a deeper principle selects octonions from the discrete data remains an open question.
+
+\section*{Declarations}
+
+\paragraph{Use of artificial intelligence.}
+\begin{sloppypar}
+Generative artificial-intelligence tools (large language models) were used in an assistive capacity for drafting and copy-editing portions of the manuscript and companion \TeX{} files, for organizing citations and reproducibility text, and for suggesting edits to Lean modules and build scripts in the associated repository. The author reviewed all AI-assisted output, is solely responsible for the mathematical and scientific claims, and asserts that the final arguments, theorem statements, and interpretation are human-curated.
+\end{sloppypar}
+
+\paragraph{Conflicts of interest.}
+The author declares no financial or non-financial competing interests directly related to the subject matter of this manuscript. The work was carried out as independent research outside traditional institutional employment for this project.
+
+\paragraph{Data and code availability.}
+\begin{sloppypar}
+No proprietary or restricted datasets were used. All primary artifacts needed to reproduce the symbolic certificates and the Lean verification map cited in this manuscript are included in the Zenodo deposit: machine-readable exact-\(\mathbb{Q}\) JSON certificates (\path{artifacts/so8_symbolic_certificate.json}, \path{artifacts/so4_symbolic_certificate.json}), the certificate-generation scripts, the mirrored Lean sources and \path{lakefile.toml}/\path{lean-toolchain} under \PaperReproBundleDir/ (see \PaperReproBundleManifest{} inside \CompanionCodeZip{}), and the companion appendix source \cite{so8-appendix} (inlined listings and build-target documentation). Section~\ref{sec:methods-repro} summarizes the Lake targets (\texttt{HQIVPaperClaims}, \texttt{HQIVSO8Closure}) and known limitations of the frozen mirror versus the full git repository.
+\end{sloppypar}
+
+\paragraph{Funding.}
+This research was self-funded by the author; no grants, institutional block funding, or third-party sponsors supported this manuscript or the companion formalization bundle.
+
+\begin{thebibliography}{9}
+\bibitem{furey}
+C. Furey, ``Standard model physics from an algebra?'' Ph.D. thesis, University of Cambridge, 2015; ``Three generations, two unbroken gauge symmetries, and one eight-dimensional algebra,'' \textit{Phys. Lett. B} \textbf{785} (2018) 84--89.
+\bibitem{baez}
+J. C. Baez, ``The octonions,'' \textit{Bull. Amer. Math. Soc.} \textbf{39} (2002) 145--205.
+\bibitem{g2}
+A. Sudbery, ``Division algebras, (pseudo)orthogonal groups and spinors,'' \textit{J. Phys. A: Math. Gen.} \textbf{17} (1984) 939--955.
+\bibitem{so8-appendix}
+S. Ettinger Jr, ``Appendix: Full so(8) Closure Artifact Bundle,'' companion technical appendix, \path{papers/so8_closure_full_appendix.tex} (this deposit; sources also under \PaperReproBundleDir/ inside \CompanionCodeZip{}).
+\end{thebibliography}
+
+\end{document}

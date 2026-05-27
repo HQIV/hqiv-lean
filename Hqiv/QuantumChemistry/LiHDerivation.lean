@@ -18,6 +18,7 @@ Ingredients:
 namespace Hqiv.QuantumChemistry
 
 open Hqiv
+open Hqiv.Physics
 
 /-- LiH dissociation-style bonded surplus in dimensionless HQIV units (`4 -> 3 + 1`). -/
 noncomputable def lihBondedSurplusDimless
@@ -172,6 +173,83 @@ theorem lihBondedSurplusDimlessComptonWindow_eq
     lihBondedSurplusDimlessComptonWindow E ħ hħ t =
       Hqiv.Geometry.bondHorizonSurplusDimless 4 3 1
         (Hqiv.Geometry.comptonLinkedNuclearTorusConfig E ħ hħ t) := rfl
+
+/-! ## Compton valence + formally justified imprint readouts -/
+
+/-- LiH dissociation indicator at the canonical Compton shells `(4,3,1)`. -/
+noncomputable def lihComptonDerivedDissociationIndicatorDimless
+    (cfg : Hqiv.Geometry.NuclearTorusConfig := Hqiv.Geometry.defaultNuclearTorus) : ℝ :=
+  lihDerivedDissociationIndicatorDimless lihComptonLiSShell lihComptonLiPShell lihComptonHSShell cfg
+
+theorem lihComptonDerivedDissociationIndicator_eq_bond_plus_p
+    (cfg : Hqiv.Geometry.NuclearTorusConfig) :
+    lihComptonDerivedDissociationIndicatorDimless cfg =
+      lihBondedSurplusDimless cfg + lihPShellUpliftSiteEnergy lihComptonLiPShell := by
+  unfold lihComptonDerivedDissociationIndicatorDimless
+  exact lihDerivedDissociationIndicator_eq_bond_plus_p lihComptonLiSShell lihComptonLiPShell
+    lihComptonHSShell cfg
+
+/--
+At the Compton `(4,3,1)` sites, discrete and continuous-ξ imprint phases agree on each
+integer step once `LiHComptonOmegaKBridge` is supplied.
+-/
+theorem lihCompton_imprintWeightedReadoutPhases_justified
+    (hΩ : LiHComptonOmegaKBridge) :
+    Hqiv.imprintWeightedReadoutPhase_xi_alias (xiOfShell lihComptonLiSShell)
+        (xiOfShell (lihComptonLiSShell + 1)) =
+      Hqiv.imprintWeightedReadoutPhase lihComptonLiSShell ∧
+      Hqiv.imprintWeightedReadoutPhase_xi_alias (xiOfShell lihComptonLiPShell)
+        (xiOfShell (lihComptonLiPShell + 1)) =
+      Hqiv.imprintWeightedReadoutPhase lihComptonLiPShell ∧
+      Hqiv.imprintWeightedReadoutPhase_xi_alias (xiOfShell lihComptonHSShell)
+        (xiOfShell (lihComptonHSShell + 1)) =
+      Hqiv.imprintWeightedReadoutPhase lihComptonHSShell := by
+  refine ⟨?_, ?_, ?_⟩
+  · exact lihCompton_LiS_imprintWeightedReadoutPhase_xi_matches hΩ
+  · exact lihCompton_LiP_imprintWeightedReadoutPhase_xi_matches hΩ
+  · exact lihCompton_HS_imprintWeightedReadoutPhase_xi_matches hΩ
+
+/--
+Gauge-seed `ω` at the Li(p) Compton shell may be taken from either the discrete imprint
+phase or the continuous-ξ chart slot; the bridge identifies them.
+-/
+theorem lihCompton_LiP_seedPotential_omega_from_discrete_imprint
+    (hΩ : LiHComptonOmegaKBridge) (θ : ℝ) :
+    Hqiv.seedPotentialMinimalCycle (Hqiv.imprintWeightedReadoutPhase lihComptonLiPShell) θ =
+      Hqiv.seedPotentialMinimalCycle
+        (Hqiv.imprintWeightedReadoutPhase_xi_alias (xiOfShell lihComptonLiPShell)
+          (xiOfShell (lihComptonLiPShell + 1))) θ := by
+  have hphase := lihCompton_LiP_imprintWeightedReadoutPhase_xi_matches hΩ
+  rw [hphase]
+
+/--
+Compton dissociation indicator packaged with formally justified per-site imprint phases.
+The indicator formula is unchanged; the `have` block records that readout phases on the
+three Compton shells are licensed by `lihCompton_imprintWeightedReadoutPhases_justified`.
+-/
+theorem lihComptonDerivedDissociationIndicator_with_justified_readouts
+    (hΩ : LiHComptonOmegaKBridge)
+    (cfg : Hqiv.Geometry.NuclearTorusConfig) :
+    lihComptonDerivedDissociationIndicatorDimless cfg =
+      lihBondedSurplusDimless cfg + lihPShellUpliftSiteEnergy lihComptonLiPShell := by
+  have _hReadouts := lihCompton_imprintWeightedReadoutPhases_justified hΩ
+  exact lihComptonDerivedDissociationIndicator_eq_bond_plus_p cfg
+
+/--
+Participation-weighted Compton indicator at the canonical shells, with the same imprint
+phase justification on the Li `p` readout coordinate `m = 3`.
+-/
+theorem lihComptonDerivedDissociationIndicatorWithParticipation_phase_readout_justified
+    (hΩ : LiHComptonOmegaKBridge) (ηp : ℝ)
+    (cfg : Hqiv.Geometry.NuclearTorusConfig) :
+    lihDerivedDissociationIndicatorWithParticipationDimless ηp lihComptonLiPShell cfg =
+      lihBondedSurplusDimless cfg +
+        lihDerivedElectronicCorrectionWithParticipationDimless ηp lihComptonLiPShell := by
+  have _hLiP :=
+    lihCompton_LiP_imprintWeightedReadoutPhase_xi_matches hΩ
+  unfold lihDerivedDissociationIndicatorWithParticipationDimless
+  unfold lihDerivedElectronicCorrectionWithParticipationDimless
+  rfl
 
 end Hqiv.QuantumChemistry
 

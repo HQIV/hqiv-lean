@@ -45,7 +45,7 @@ HQIV-native peg**, not a proof of Furey equivalence.
 | Furey-style target | Best HQIV peg now | Status | Why this is or is not enough |
 |---|---|---|---|
 | Fermion state space / carrier | [`OctonionSpinorCarrier.lean`](../Hqiv/Algebra/OctonionSpinorCarrier.lean) | theorem-backed but weaker/different | We do have a concrete `8s` carrier as `Fin 8 -> R`, but not minimal left ideals, no Clifford action layer, and no theorem identifying HQIV's carrier with Furey's preferred state space. |
-| Quantum-number assignment and chirality bookkeeping | [`SMEmbedding.lean`](../Hqiv/Algebra/SMEmbedding.lean) | theorem-backed but mixed with placeholders | There are explicit `SU(2)_L` generators, hypercharge assignments, charge bookkeeping, chirality counts, and now explicit witness lemmas separating fractional quark-slot charges (`2/3`, `-1/3`) from the integer/neutral lepton-visible charges. But `G2_contains_SM_subgroup : True` and `hyperchargeBlockCorrect : Prop := True` show that some bridge claims are still placeholder-level rather than deep structural theorems. |
+| Quantum-number assignment and chirality bookkeeping | [`SMEmbedding.lean`](../Hqiv/Algebra/SMEmbedding.lean) | theorem-backed bookkeeping, with structural gaps | There are explicit `SU(2)_L` generators, hypercharge assignments, charge bookkeeping, chirality counts, and witness lemmas separating fractional quark-slot charges (`2/3`, `-1/3`) from integer/neutral visible shell charges. `hyperchargeBlockCorrect` is now a concrete witness proposition discharged by `hyperchargeBlockCorrect_holds`; it is still a table witness, not a spectral/block derivation or a full SM subalgebra theorem. |
 | Triality / generation structure | [`Triality.lean`](../Hqiv/Algebra/Triality.lean), [`SMEmbedding.lean`](../Hqiv/Algebra/SMEmbedding.lean) | theorem-backed but weaker/different | Triality is real in the repo as a 3-cycle on `So8RepIndex`, and generation count is theorem-backed as `Fin 3` arithmetic. But this is still a label/combinatorics layer more than a full "lightcone axioms force Furey-style generations" theorem. |
 | Gauge-subalgebra and hypercharge embedding | [`G2Embedding.lean`](../Hqiv/Algebra/G2Embedding.lean), [`SMEmbedding.lean`](../Hqiv/Algebra/SMEmbedding.lean), [`HQIVYangMillsPackage.lean`](../Hqiv/Physics/HQIVYangMillsPackage.lean) | theorem-backed with explicit gaps | This is currently the strongest bridgeable layer. The package records G2/Delta membership, `SU(2)_L`, hypercharge, triality count, and `alpha/gamma`. But the strongest claims still depend on some witness-level bookkeeping and do not yet amount to a Furey-style representation theorem. |
 | Spin/statistics and locality realization | [`SpinStatistics.lean`](../Hqiv/Physics/SpinStatistics.lean) | theorem-backed but still weaker/different | The concrete HQIV realization now uses shell-aware fermion/boson mode carriers, a nontrivial same-shell patch-Minkowski spacelike relation, and a bilinear that preserves patch support. But it is still not a full operator-level null-lattice realization of the desired structure. |
@@ -85,10 +85,10 @@ questions about:
 - chirality slots,
 - and generation-style representation bookkeeping.
 
-But this file also contains explicit signs that the bridge is incomplete:
+But this file is still a bookkeeping peg rather than a deep representation theorem:
 
-- `G2_contains_SM_subgroup : True := trivial`
-- `hyperchargeBlockCorrect : Prop := True`
+- `hyperchargeBlockCorrect_holds` discharges the explicit charge table, but the table is not yet derived from a number operator or spectral block theorem.
+- The full \(G_2\)/color/hypercharge subalgebra story should be cited through the dedicated gauge and color modules, not inferred from the witness table alone.
 
 So this is a real peg with visible unfinished joints.
 
@@ -100,6 +100,7 @@ So this is a real peg with visible unfinished joints.
 - `triality_cycle_order_3`
 - `triality_cycles_reps`
 - `card_so8_eight_dim_irreps`
+- `triality_label_count_and_order_three`
 - `exactly_three_fermion_generations_from_HQIV_axioms`
 
 This is enough to support the honest statement:

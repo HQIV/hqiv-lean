@@ -36,6 +36,35 @@ abbrev Octonion : Type := OctonionVec
 /-- Sparse nonzero support `(index, amplitude)` for a register at cutoff `L`. -/
 abbrev SparseRegister (_L : Nat) : Type := List (Nat × Octonion)
 
+/-- Sparse execution tags mirrored by Python fast paths. -/
+inductive SparseGateKind where
+  /-- Diagonal in the embedded computational basis. -/
+  | diagonal
+  /-- Basis-label permutation. -/
+  | permutation
+  /-- Local `2 × 2` mix on one embedded qubit line. -/
+  | local_mix
+  /-- Certified dense fallback when no sparse shortcut applies. -/
+  | dense_fallback
+  deriving DecidableEq, Repr
+
+/-- A gate plus its sparse-path tag; norm preservation remains the underlying `HQIVGate` theorem. -/
+structure SparseCertifiedGate (L : Nat) where
+  gate : HQIVGate L
+  kind : SparseGateKind
+
+theorem SparseCertifiedGate.preserves_discreteNormSq {L : Nat} (G : SparseCertifiedGate L)
+    (f : DiscreteState L) :
+    discreteNormSq (G.gate.toEquiv f) = discreteNormSq f :=
+  G.gate.preserves_normSq f
+
+/-- Certificate constructor for two-level local mixes from `DigitalGates.twoLevelUnitaryGate`. -/
+def localMixCertifiedGate {L : Nat} [DecidableEq (HarmonicIndex L)]
+    (ij₀ ij₁ : HarmonicIndex L) (hij : ij₀ ≠ ij₁) (U : TwoLevelOctonionUnitary) :
+    SparseCertifiedGate L where
+  gate := twoLevelUnitaryGate ij₀ ij₁ hij U
+  kind := SparseGateKind.local_mix
+
 /-- Digital basis size used for sparse index wrapping at cutoff `L`. -/
 def sparseBasisCard (L : Nat) : Nat :=
   (L + 1) ^ 2
@@ -161,6 +190,8 @@ theorem horizonCausal_support_o_twoPow_practice {L : Nat} (r : SparseRegister L)
 #print applyGateSparse
 #print detectFlippedKets
 #print pruneToFlipped
+#print SparseGateKind
+#print localMixCertifiedGate
 #print pruneToFlipped_preserves_discreteIp_norm
 #print detectFlippedKets_length_le_sum
 #print horizonCausal_support_o_twoPow_practice
@@ -170,6 +201,8 @@ theorem horizonCausal_support_o_twoPow_practice {L : Nat} (r : SparseRegister L)
 #check applyGateSparse
 #check detectFlippedKets
 #check pruneToFlipped
+#check SparseCertifiedGate.preserves_discreteNormSq
+#check localMixCertifiedGate
 #check pruneToFlipped_preserves_discreteIp_norm
 #check detectFlippedKets_length_le_sum
 #check horizonCausal_support_o_twoPow_practice

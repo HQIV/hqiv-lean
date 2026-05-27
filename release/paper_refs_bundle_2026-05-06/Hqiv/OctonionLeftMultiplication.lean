@@ -129,37 +129,37 @@ def octonionLeftMul_N (N : Fin 7) : Matrix (Fin 8) (Fin 8) ℝ :=
 
 /-! ## Selected full-column signatures (Fano / associator witness shortcuts)
 
-`norm_num` + `of_apply` rewrites, matching `G2Embedding.lean` style.
+`simp` with `Matrix.of_apply` and the defining `octonionLeftMul_*` matches — no extra `norm_num`.
 -/
 
 /-- Column 3 of `L(e_1)`: the product e₁e₃ in ℝ⁸. -/
 theorem octonionLeftMul_1_k_3 (k : Fin 8) :
     octonionLeftMul_1 k 3 = if k = 6 then (-1 : ℝ) else 0 := by
-  fin_cases k <;> (simp [octonionLeftMul_1, Matrix.of_apply, if_pos, if_neg] <;> norm_num)
+  fin_cases k <;> simp [octonionLeftMul_1, Matrix.of_apply]
 
 theorem octonionLeftMul_3_k_5 (k : Fin 8) :
     octonionLeftMul_3 k 5 = if k = 2 then (-1 : ℝ) else 0 := by
-  fin_cases k <;> (simp [octonionLeftMul_3, Matrix.of_apply, if_pos, if_neg] <;> norm_num)
+  fin_cases k <;> simp [octonionLeftMul_3, Matrix.of_apply]
 
 theorem octonionLeftMul_6_k_5 (k : Fin 8) :
     octonionLeftMul_6 k 5 = if k = 3 then (-1 : ℝ) else 0 := by
-  fin_cases k <;> (simp [octonionLeftMul_6, Matrix.of_apply, if_pos, if_neg] <;> norm_num)
+  fin_cases k <;> simp [octonionLeftMul_6, Matrix.of_apply]
 
 theorem octonionLeftMul_1_k_2 (k : Fin 8) :
     octonionLeftMul_1 k 2 = if k = 7 then (1 : ℝ) else 0 := by
-  fin_cases k <;> (simp [octonionLeftMul_1, Matrix.of_apply, if_pos, if_neg] <;> norm_num)
+  fin_cases k <;> simp [octonionLeftMul_1, Matrix.of_apply]
 
 theorem octonionLeftMul_1_k_6 (k : Fin 8) :
     octonionLeftMul_1 k 6 = if k = 3 then (1 : ℝ) else 0 := by
-  fin_cases k <;> (simp [octonionLeftMul_1, Matrix.of_apply, if_pos, if_neg] <;> norm_num)
+  fin_cases k <;> simp [octonionLeftMul_1, Matrix.of_apply]
 
 theorem octonionLeftMul_2_k_3 (k : Fin 8) :
     octonionLeftMul_2 k 3 = if k = 6 then (1 : ℝ) else 0 := by
-  fin_cases k <;> (simp [octonionLeftMul_2, Matrix.of_apply, if_pos, if_neg] <;> norm_num)
+  fin_cases k <;> simp [octonionLeftMul_2, Matrix.of_apply]
 
 theorem octonionLeftMul_7_k_3 (k : Fin 8) :
     octonionLeftMul_7 k 3 = if k = 4 then (1 : ℝ) else 0 := by
-  fin_cases k <;> (simp [octonionLeftMul_7, Matrix.of_apply, if_pos, if_neg] <;> norm_num)
+  fin_cases k <;> simp [octonionLeftMul_7, Matrix.of_apply]
 
 /-!
 ## Next steps (GeneratorsFromAxioms)
