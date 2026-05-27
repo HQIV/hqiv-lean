@@ -80,3 +80,8 @@ rev = "v4.28.0"
 ## documentation for HQIV_LEAN should live in a separate project that
 ## depends on this package, so we don't disturb this repo's toolchain
 ## and dependency set.
+
+[[lean_lib]]
+name = "paper_lightcone_to_oshoracle"
+# Lean modules cited by papers/lightcone_to_oshoracle/ (gold subset; broken/WIP excluded).
+globs = ["Hqiv.Algebra.OctonionBasics", "Hqiv.Geometry.AuxiliaryFieldSmeared", "Hqiv.Geometry.BondedHorizonCasimir", "Hqiv.Geometry.NuclearTorusPerturbation", "Hqiv.Geometry.S7MetahorizonCasimir", "Hqiv.OctonionLeftMultiplication", "Hqiv.Physics.CMBBirefringenceFirstPrinciples", "Hqiv.QuantumComputing.CarrierPeaking", "Hqiv.QuantumComputing.DiscreteSchrodinger", "Hqiv.QuantumMechanics.AuxFieldBellDelayedChoice"]
