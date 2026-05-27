@@ -100,3 +100,8 @@ globs = ["Hqiv.Algebra.CliffordCl06SixDimension", "Hqiv.Algebra.CliffordCl06SixI
 name = "paper_octonionic_action"
 # Lean modules cited by papers/octonionic_action/ (gold subset; broken/WIP excluded).
 globs = ["Hqiv.Geometry.AuxiliaryField", "Hqiv.Geometry.HQVMetric", "Hqiv.Geometry.ManifoldLagrangianScaffold", "Hqiv.Geometry.OctonionicLightCone", "Hqiv.Physics.DiscretePlaquetteHolonomy"]
+
+[[lean_lib]]
+name = "paper_rapidity_so8_closure"
+# Lean modules cited by papers/rapidity_so8_closure/ (gold subset; broken/WIP excluded).
+globs = ["Hqiv.Algebra.MinimalSoSeedClosure", "Hqiv.GeneratorsLieClosureData", "Hqiv.GeneratorsLieClosureData0", "Hqiv.GeneratorsLieClosureData27", "Hqiv.Geometry.ATSPWorstCaseCertified", "Hqiv.Geometry.OctonionicLightCone", "Hqiv.Geometry.SATRapidityManifold", "Hqiv.Geometry.SATWorstCaseCertified", "Hqiv.Geometry.SharedManifoldRapidity", "Hqiv.Story.CausalRapidityForcing"]
