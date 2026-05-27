@@ -105,3 +105,18 @@ globs = ["Hqiv.Geometry.AuxiliaryField", "Hqiv.Geometry.HQVMetric", "Hqiv.Geomet
 name = "paper_rapidity_so8_closure"
 # Lean modules cited by papers/rapidity_so8_closure/ (gold subset; broken/WIP excluded).
 globs = ["Hqiv.Algebra.MinimalSoSeedClosure", "Hqiv.GeneratorsLieClosureData", "Hqiv.GeneratorsLieClosureData0", "Hqiv.GeneratorsLieClosureData27", "Hqiv.Geometry.ATSPWorstCaseCertified", "Hqiv.Geometry.OctonionicLightCone", "Hqiv.Geometry.SATRapidityManifold", "Hqiv.Geometry.SATWorstCaseCertified", "Hqiv.Geometry.SharedManifoldRapidity", "Hqiv.Story.CausalRapidityForcing"]
+
+[[lean_lib]]
+name = "paper_coronal_heating"
+# Lean modules cited by papers/coronal_heating/ (gold subset; broken/WIP excluded).
+globs = ["Hqiv.Geometry.AuxiliaryField"]
+
+[[lean_lib]]
+name = "paper_3d_causal_growth"
+# Lean modules cited by papers/3d_causal_growth/ (gold subset; broken/WIP excluded).
+globs = ["Hqiv.Generators", "Hqiv.Geometry.AlphaGammaForcedByLattice", "Hqiv.Geometry.HQVMetric", "Hqiv.Geometry.OctonionicLightCone", "Hqiv.Geometry.SATRapidityManifold", "Hqiv.Geometry.SharedManifoldRapidity", "Hqiv.Story.CausalRapidityForcing"]
+
+[[lean_lib]]
+name = "paper_closure"
+# Lean modules cited by papers/closure/ (gold subset; broken/WIP excluded).
+globs = ["Hqiv.Generators", "Hqiv.Geometry.OctonionicLightCone", "Hqiv.So8CoordMatrix", "Hqiv.Story.CausalRapidityForcing"]
