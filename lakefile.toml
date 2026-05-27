@@ -90,3 +90,13 @@ globs = ["Hqiv.Algebra.OctonionBasics", "Hqiv.Geometry.AuxiliaryFieldSmeared", "
 name = "paper_finite_mode_kirchhoff"
 # Lean modules cited by papers/finite_mode_kirchhoff/ (gold subset; broken/WIP excluded).
 globs = ["Hqiv.Geometry.AuxiliaryField", "Hqiv.Geometry.OctonionicLightCone", "Hqiv.Physics.HorizonBlackbodyGreybody", "Hqiv.Physics.HorizonBlackbodyLadder", "Hqiv.Physics.HorizonBlackbodySpectrum", "Hqiv.Physics.HorizonBlackbodyStefan", "Hqiv.Physics.HorizonBlackbodyWienDisplacement"]
+
+[[lean_lib]]
+name = "paper_sm_lagrangian"
+# Lean modules cited by papers/sm_lagrangian/ (gold subset; broken/WIP excluded).
+globs = ["Hqiv.Algebra.CliffordCl06SixDimension", "Hqiv.Algebra.CliffordCl06SixIdeal", "Hqiv.Algebra.CliffordCl06SixStandardSpinorRho", "Hqiv.Algebra.CliffordMinimalIdeal", "Hqiv.Algebra.CliffordSixImaginaryScaffold", "Hqiv.Algebra.OctonionLeftMulSquare", "Hqiv.Physics.BaryogenesisCore", "Hqiv.Physics.DiscretePlaquetteHolonomy"]
+
+[[lean_lib]]
+name = "paper_octonionic_action"
+# Lean modules cited by papers/octonionic_action/ (gold subset; broken/WIP excluded).
+globs = ["Hqiv.Geometry.AuxiliaryField", "Hqiv.Geometry.HQVMetric", "Hqiv.Geometry.ManifoldLagrangianScaffold", "Hqiv.Geometry.OctonionicLightCone", "Hqiv.Physics.DiscretePlaquetteHolonomy"]
