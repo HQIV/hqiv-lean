@@ -85,3 +85,8 @@ rev = "v4.28.0"
 name = "paper_lightcone_to_oshoracle"
 # Lean modules cited by papers/lightcone_to_oshoracle/ (gold subset; broken/WIP excluded).
 globs = ["Hqiv.Algebra.OctonionBasics", "Hqiv.Geometry.AuxiliaryFieldSmeared", "Hqiv.Geometry.BondedHorizonCasimir", "Hqiv.Geometry.NuclearTorusPerturbation", "Hqiv.Geometry.S7MetahorizonCasimir", "Hqiv.OctonionLeftMultiplication", "Hqiv.Physics.CMBBirefringenceFirstPrinciples", "Hqiv.QuantumComputing.CarrierPeaking", "Hqiv.QuantumComputing.DiscreteSchrodinger", "Hqiv.QuantumMechanics.AuxFieldBellDelayedChoice"]
+
+[[lean_lib]]
+name = "paper_finite_mode_kirchhoff"
+# Lean modules cited by papers/finite_mode_kirchhoff/ (gold subset; broken/WIP excluded).
+globs = ["Hqiv.Geometry.AuxiliaryField", "Hqiv.Geometry.OctonionicLightCone", "Hqiv.Physics.HorizonBlackbodyGreybody", "Hqiv.Physics.HorizonBlackbodyLadder", "Hqiv.Physics.HorizonBlackbodySpectrum", "Hqiv.Physics.HorizonBlackbodyStefan", "Hqiv.Physics.HorizonBlackbodyWienDisplacement"]
