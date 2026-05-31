@@ -8,6 +8,16 @@ The list is conservative: as upstream stabilizes, individual files can be
 moved off this list (delete from `BLOCKLIST_SEED` in the migration tool and
 re-stage).
 
+**2026-05-31 update:** Added support for `paper_thermodynamics_arrow` (Tier-1
+thermodynamics + arrow of time paper) plus a large number of previously
+paper-cited modules (Topology/* opening/budget/phase, several Physics/ dynamic
+and bridge modules, RhFourierLift support). These were brought into the slim
+mirror with a dedicated lake target so that the Lean claims in
+`papers/thermodynamics_arrow/` (and overlapping claims in other papers) are
+verifiable in the public hqiv-lean checkout. Modules that remain in the seed
+or cascade lists still cause conflicts or build failures for the paper_*
+targets.
+
 ## Seed blocklist (10 modules)
 
 Known-broken or symbol-conflict propagators identified by failed `lake build`
