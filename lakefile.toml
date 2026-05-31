@@ -20,7 +20,7 @@ globs = ["HQIVLEAN","Hqiv.Geometry.OctonionicLightCone","Hqiv.Geometry.Spherical
 [[lean_lib]]
 name = "HQIVPhysics"
 # Geometry + Conservations + Physics only (no GeneratorsLieClosureData). Use when full build crashes with exit 134.
-globs = ["HQIVPhysics", "Hqiv.Geometry.OctonionicLightCone", "Hqiv.Geometry.SphericalHarmonicsBridge", "Hqiv.Geometry.AuxiliaryField", "Hqiv.Geometry.AuxiliaryFieldSmeared", "Hqiv.Geometry.AuxFieldRapidityNullBridge", "Hqiv.Geometry.HQVMMinkowskiSubstrate", "Hqiv.Geometry.ContinuumSpacetimeChart", "Hqiv.Geometry.ContinuumMetricGradient", "Hqiv.Geometry.SpacetimeMinkowski11Embed4", "Hqiv.Geometry.HQVMetric", "Hqiv.Geometry.HQVMetricAnalytic", "Hqiv.Geometry.HQVMPerturbations", "Hqiv.Geometry.HQVMCLASSBridge", "Hqiv.Geometry.HQVMDiscreteLaplacian", "Hqiv.Geometry.HQVMDiscretePoisson", "Hqiv.Geometry.HQVMGlobalLocalDictionary", "Hqiv.Geometry.HQVMConsistency", "Hqiv.Geometry.Now", "Hqiv.Geometry.UniverseAge", "Hqiv.Conservations", "Hqiv.Physics.Baryogenesis", "Hqiv.Physics.ModifiedMaxwell", "Hqiv.Physics.SchematicPlasmaCurrent", "Hqiv.Physics.GRFromMaxwell", "Hqiv.Physics.Forces", "Hqiv.Physics.Action", "Hqiv.Physics.ActionPlasmaBridge", "Hqiv.Physics.ContinuumOmaxwellClosure", "Hqiv.Physics.CovariantSolution", "Hqiv.Physics.SM_GR_Unification", "Hqiv.Physics.FanoResonance", "Hqiv.Physics.ChargedLeptonResonance", "Hqiv.Physics.ConservedContentMassBridge", "Hqiv.Physics.LeptonGenerationLockin", "Hqiv.Physics.SurfaceWaveSelfClock", "Hqiv.Physics.GlobalDetuning", "Hqiv.Physics.LeptonResonanceGlobalDetuning", "Hqiv.Physics.QuarkLadderGlobalDetuning", "Hqiv.Physics.HarmonicLadderGlobalDetuning", "Hqiv.Physics.DerivedGaugeAndLeptonSector", "Hqiv.Physics.DerivedNucleonMass", "Hqiv.Physics.QuarkMetaResonance", "Hqiv.Physics.MetaHorizonExcitedStates", "Hqiv.Physics.BoundStates", "Hqiv.Physics.NuclearAndAtomicSpectra", "Hqiv.Physics.SpinStatistics", "Hqiv.Physics.HQIVNuclei", "Hqiv.Physics.HQIVAtoms", "Hqiv.Physics.HQIVMolecules", "Hqiv.Physics.HQIVLongRange", "Hqiv.Physics.HQIVAssembly", "Hqiv.Physics.HQIVCollectiveModes", "Hqiv.QuantumMechanics.HydrogenicEnergies", "Hqiv.QuantumMechanics.Schrodinger", "Hqiv.QuantumMechanics.UncertaintyPrinciple", "Hqiv.QuantumMechanics.FiniteDimVonNeumann", "Hqiv.QuantumMechanics.MonogamyTangles", "Hqiv.QuantumMechanics.MonogamyTanglesStates", "Hqiv.QuantumMechanics.MonogamyTanglesPhiConditions", "Hqiv.QuantumMechanics.MonogamyGHZFamily", "Hqiv.QuantumMechanics.MonogamyWFamily", "Hqiv.QuantumMechanics.MonogamyGHZWInterpolation", "Hqiv.ProteinResearch.ProteinHKEMinimizer", "Hqiv.ProteinResearch.ProteinVariantSelection", "Hqiv.ProteinResearch.ProteinNaturalFolding", "Hqiv.ProteinResearch.ProteinQuantumExploration", "Hqiv.QuantumOptics.HorizonQED"]
+globs = ["HQIVPhysics", "Hqiv.Geometry.OctonionicLightCone", "Hqiv.Geometry.SphericalHarmonicsBridge", "Hqiv.Geometry.AuxiliaryField", "Hqiv.Geometry.AuxiliaryFieldSmeared", "Hqiv.Geometry.AuxFieldRapidityNullBridge", "Hqiv.Geometry.HQVMMinkowskiSubstrate", "Hqiv.Geometry.ContinuumSpacetimeChart", "Hqiv.Geometry.ContinuumMetricGradient", "Hqiv.Geometry.SpacetimeMinkowski11Embed4", "Hqiv.Geometry.HQVMetric", "Hqiv.Geometry.HQVMetricAnalytic", "Hqiv.Geometry.HQVMPerturbations", "Hqiv.Geometry.HQVMCLASSBridge", "Hqiv.Geometry.HQVMDiscreteLaplacian", "Hqiv.Geometry.HQVMDiscretePoisson", "Hqiv.Geometry.HQVMGlobalLocalDictionary", "Hqiv.Geometry.HQVMConsistency", "Hqiv.Geometry.Now", "Hqiv.Geometry.UniverseAge", "Hqiv.Conservations", "Hqiv.Physics.Baryogenesis", "Hqiv.Physics.ModifiedMaxwell", "Hqiv.Physics.SchematicPlasmaCurrent", "Hqiv.Physics.GRFromMaxwell", "Hqiv.Physics.Forces", "Hqiv.Physics.Action", "Hqiv.Physics.ActionPlasmaBridge", "Hqiv.Physics.ContinuumOmaxwellClosure", "Hqiv.Physics.CovariantSolution", "Hqiv.Physics.SM_GR_Unification", "Hqiv.Physics.FanoResonance", "Hqiv.Physics.ChargedLeptonResonance", "Hqiv.Physics.ConservedContentMassBridge", "Hqiv.Physics.LeptonGenerationLockin", "Hqiv.Physics.SurfaceWaveSelfClock", "Hqiv.Physics.GlobalDetuning", "Hqiv.Physics.LeptonResonanceGlobalDetuning", "Hqiv.Physics.QuarkLadderGlobalDetuning", "Hqiv.Physics.HarmonicLadderGlobalDetuning", "Hqiv.Physics.DerivedGaugeAndLeptonSector", "Hqiv.Physics.DerivedNucleonMass", "Hqiv.Physics.QuarkMetaResonance", "Hqiv.Physics.MetaHorizonExcitedStates", "Hqiv.Physics.BoundStates", "Hqiv.Physics.NuclearAndAtomicSpectra", "Hqiv.Physics.SpinStatistics", "Hqiv.Physics.HQIVNuclei", "Hqiv.Physics.BBNNetworkFromWeights", "Hqiv.Physics.HQIVAtoms", "Hqiv.Physics.HQIVMolecules", "Hqiv.Physics.HQIVLongRange", "Hqiv.Physics.HQIVAssembly", "Hqiv.Physics.HQIVCollectiveModes", "Hqiv.QuantumMechanics.HydrogenicEnergies", "Hqiv.QuantumMechanics.Schrodinger", "Hqiv.QuantumMechanics.UncertaintyPrinciple", "Hqiv.QuantumMechanics.FiniteDimVonNeumann", "Hqiv.QuantumMechanics.MonogamyTangles", "Hqiv.QuantumMechanics.MonogamyTanglesStates", "Hqiv.QuantumMechanics.MonogamyTanglesPhiConditions", "Hqiv.QuantumMechanics.MonogamyGHZFamily", "Hqiv.QuantumMechanics.MonogamyWFamily", "Hqiv.QuantumMechanics.MonogamyGHZWInterpolation", "Hqiv.ProteinResearch.ProteinHKEMinimizer", "Hqiv.ProteinResearch.ProteinVariantSelection", "Hqiv.ProteinResearch.ProteinNaturalFolding", "Hqiv.ProteinResearch.ProteinQuantumExploration", "Hqiv.QuantumOptics.HorizonQED"]
 
 [[lean_lib]]
 name = "HQIVWitnesses"
@@ -90,3 +90,59 @@ globs = ["Hqiv.Algebra.OctonionBasics", "Hqiv.Geometry.AuxiliaryFieldSmeared", "
 name = "paper_finite_mode_kirchhoff"
 # Lean modules cited by papers/finite_mode_kirchhoff/ (gold subset; broken/WIP excluded).
 globs = ["Hqiv.Geometry.AuxiliaryField", "Hqiv.Geometry.OctonionicLightCone", "Hqiv.Physics.HorizonBlackbodyGreybody", "Hqiv.Physics.HorizonBlackbodyLadder", "Hqiv.Physics.HorizonBlackbodySpectrum", "Hqiv.Physics.HorizonBlackbodyStefan", "Hqiv.Physics.HorizonBlackbodyWienDisplacement"]
+
+[[lean_lib]]
+name = "paper_sm_lagrangian"
+# Lean modules cited by papers/sm_lagrangian/ (gold subset; broken/WIP excluded).
+globs = ["Hqiv.Algebra.CliffordCl06SixDimension", "Hqiv.Algebra.CliffordCl06SixIdeal", "Hqiv.Algebra.CliffordCl06SixStandardSpinorRho", "Hqiv.Algebra.CliffordMinimalIdeal", "Hqiv.Algebra.CliffordSixImaginaryScaffold", "Hqiv.Algebra.OctonionLeftMulSquare", "Hqiv.Physics.BaryogenesisCore", "Hqiv.Physics.DiscretePlaquetteHolonomy"]
+
+[[lean_lib]]
+name = "paper_octonionic_action"
+# Lean modules cited by papers/octonionic_action/ (gold subset; broken/WIP excluded).
+globs = ["Hqiv.Geometry.AuxiliaryField", "Hqiv.Geometry.HQVMetric", "Hqiv.Geometry.ManifoldLagrangianScaffold", "Hqiv.Geometry.OctonionicLightCone", "Hqiv.Physics.DiscretePlaquetteHolonomy"]
+
+[[lean_lib]]
+name = "paper_rapidity_so8_closure"
+# Lean modules cited by papers/rapidity_so8_closure/ (gold subset; broken/WIP excluded).
+globs = ["Hqiv.Algebra.MinimalSoSeedClosure", "Hqiv.GeneratorsLieClosureData", "Hqiv.GeneratorsLieClosureData0", "Hqiv.GeneratorsLieClosureData27", "Hqiv.Geometry.ATSPWorstCaseCertified", "Hqiv.Geometry.OctonionicLightCone", "Hqiv.Geometry.SATRapidityManifold", "Hqiv.Geometry.SATWorstCaseCertified", "Hqiv.Geometry.SharedManifoldRapidity", "Hqiv.Story.CausalRapidityForcing"]
+
+[[lean_lib]]
+name = "paper_coronal_heating"
+# Lean modules cited by papers/coronal_heating/ (gold subset; broken/WIP excluded).
+globs = ["Hqiv.Geometry.AuxiliaryField"]
+
+[[lean_lib]]
+name = "paper_3d_causal_growth"
+# Lean modules cited by papers/3d_causal_growth/ (gold subset; broken/WIP excluded).
+globs = ["Hqiv.Generators", "Hqiv.Geometry.AlphaGammaForcedByLattice", "Hqiv.Geometry.HQVMetric", "Hqiv.Geometry.OctonionicLightCone", "Hqiv.Geometry.SATRapidityManifold", "Hqiv.Geometry.SharedManifoldRapidity", "Hqiv.Story.CausalRapidityForcing"]
+
+[[lean_lib]]
+name = "paper_closure"
+# Lean modules cited by papers/closure/ (gold subset; broken/WIP excluded).
+globs = ["Hqiv.Generators", "Hqiv.Geometry.OctonionicLightCone", "Hqiv.So8CoordMatrix", "Hqiv.Story.CausalRapidityForcing"]
+
+[[lean_lib]]
+name = "paper_thermodynamics_arrow"
+# Lean modules cited by papers/thermodynamics_arrow/ (gold subset for the Tier-1 thermo + arrow paper).
+# Includes the C3 toy heat, ladder laws, signed budget, shell opening, parallel Poincare bridge, etc.
+# Broken/WIP modules remain excluded per the EXCLUDED.md discipline.
+globs = [
+  "Hqiv.Physics.ThermodynamicLawsFromLadder",
+  "Hqiv.Physics.ToyDiscreteHeat",
+  "Hqiv.Physics.DivisionAlgebraZetaScaffold",
+  "Hqiv.Physics.ThermodynamicArrowFromShellOpening",
+  "Hqiv.Physics.HorizonBlackbodyLadder",
+  "Hqiv.Physics.HorizonBlackbodySpectrum",
+  "Hqiv.Topology.SignedShellBudget",
+  "Hqiv.Topology.ShellOpeningEvolution",
+  "Hqiv.Topology.DiscreteNullLatticeComplex",
+  "Hqiv.Topology.DiscretePhaseEvolution",
+  "Hqiv.Topology.ParallelPoincareScaffold",
+  "Hqiv.Topology.ParallelPoincareReferenceModel",
+  "Hqiv.Topology.HopfShellComplex",
+  "RhFourierLift.Setup",
+  "Hqiv.Geometry.AuxiliaryField",
+  "Hqiv.Geometry.AlphaGammaForcedByLattice",
+  "Hqiv.Geometry.HQVMetric",
+  "Hqiv.Physics.GRFromMaxwell"
+]
