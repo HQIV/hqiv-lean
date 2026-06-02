@@ -125,4 +125,53 @@ theorem temperatureAtNowDerived_holds : temperatureAtNowDerived := trivial
 theorem now_natural_then_T_CMB :
     (∃ φ, nowCondition φ) ∧ temperatureAtNowDerived := ⟨⟨1, (nowCondition_iff_phi_one 1).mpr rfl⟩, trivial⟩
 
+/-!
+## Explicit "now" lapse-ratio terms (for downstream resonance/binding wiring)
+
+These definitions package the exact algebraic terms used when applying the HQVM lapse
+as a controlled multiplicative correction to a mass/readout channel.
+-/
+
+/-- Auxiliary field value on the natural "now" slice (`H = H₀`), i.e. `φ_now = 1`. -/
+def nowPhi : ℝ := H0_ref
+
+theorem nowPhi_eq_one : nowPhi = 1 := H0_ref_eq
+
+/-- HQVM lapse evaluated on the natural "now" auxiliary field. -/
+def nowHQVMLapse (Φ t : ℝ) : ℝ := HQVM_lapse Φ nowPhi t
+
+/-- Normal form for the "now" lapse: `N_now = 1 + Φ + t`. -/
+theorem nowHQVMLapse_eq_one_add_Phi_add_t (Φ t : ℝ) :
+    nowHQVMLapse Φ t = 1 + Φ + t := by
+  unfold nowHQVMLapse nowPhi
+  rw [H0_ref_eq]
+  simp [HQVM_lapse]
+
+/-- "Anchor-ratio" lapse target: raw value divided by target anchor. -/
+noncomputable def nowLapseTargetRatio (raw anchor : ℝ) : ℝ := raw / anchor
+
+/-- Solved coordinate time for a prescribed "now" lapse target ratio:
+`1 + Φ + t = raw/anchor`. -/
+noncomputable def nowTimeForLapseTarget (Φ raw anchor : ℝ) : ℝ :=
+  nowLapseTargetRatio raw anchor - (1 + Φ)
+
+/-- Substituting `nowTimeForLapseTarget` realizes the target lapse ratio exactly. -/
+theorem nowHQVMLapse_at_nowTimeForLapseTarget
+    (Φ raw anchor : ℝ) :
+    nowHQVMLapse Φ (nowTimeForLapseTarget Φ raw anchor) = nowLapseTargetRatio raw anchor := by
+  unfold nowTimeForLapseTarget nowLapseTargetRatio
+  rw [nowHQVMLapse_eq_one_add_Phi_add_t]
+  ring
+
+/-- If a quantity is corrected by division through the "now" lapse and that lapse equals
+`raw/anchor`, then the corrected quantity equals `anchor` (nonzero `raw` case). -/
+theorem corrected_by_now_lapse_eq_anchor
+    (raw anchor Φ t : ℝ)
+    (hraw : raw ≠ 0)
+    (hlapse : nowHQVMLapse Φ t = nowLapseTargetRatio raw anchor) :
+    raw / nowHQVMLapse Φ t = anchor := by
+  unfold nowLapseTargetRatio at hlapse
+  rw [hlapse]
+  field_simp [hraw]
+
 end Hqiv

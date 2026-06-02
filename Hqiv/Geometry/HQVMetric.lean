@@ -1,3 +1,6 @@
+import Mathlib.Data.Fintype.BigOperators
+import Mathlib.Data.Fin.Basic
+import Mathlib.Tactic
 import Mathlib.Data.Real.Basic
 import Mathlib.Analysis.Real.Pi.Bounds
 
@@ -15,8 +18,20 @@ and the horizon-overlap coefficient γ (paper: N = 1 + Φ + φ t/c; natural unit
 The line element is ds² = -N² dt² + a(t)²(1 - 2Φ) δᵢⱼ dxⁱ dxʲ.
 
 This module provides:
-- **ADM lapse:** definition and proof that the HQVM metric has lapse N = 1 + Φ + φ t
-  (see `HQVM_lapse` and `HQVM_tt_coefficient`).
+- **ADM lapse package:** the scalar lapse expression `N = 1 + Φ + φ t`
+  (see `HQVM_lapse`).
+- **Synchronous diagonal `g_{μν}` and `g^{μν}` on `Fin 4`:** `HQVM_metric`,
+  `HQVM_inverseMetric` (with `HQVM_metric_contract_inverse`), and `sqrt_neg_g_HQVM`
+  for the same pointwise data as `Hqiv.Physics.CovariantSolution`.
+- **Frozen Levi–Civita Christoffels:** `Christoffel_levi_civita` from `g^{-1}` and metric partials `dg`.
+- **HQVM jet:** `HQVM_metric_partials` builds `∂_κ g_{μν}` from `∂_κ N`, `∂_κ a`, `∂_κ Φ`; `Christoffel_HQVM`
+  composes with `HQVM_inverseMetric`. **`Christoffel_HQVM_000_eq`** proves `Γ^0_{00} = (∂_0 N)/N`;
+  **`Christoffel_HQVM_succi_00_eq`** proves `Γ^i_{00} = N (∂_i N) / (a²(1-2Φ))` for spatial `i`;
+  **`Christoffel_HQVM_00_succi_eq`** proves `Γ^0_{0i} = (∂_i N)/N`; **`Christoffel_HQVM_succi_0_succj_eq`**
+  gives `Γ^i_{0j} = δ_{ij} (∂_0 s)/(2s)` with `s = a²(1-2Φ)`; **`Christoffel_HQVM_succi_succj_succk_eq`**
+  gives the purely spatial **`Γ^i_{jk} = (δ_{ki} ∂_j s + δ_{ji} ∂_k s - δ_{jk} ∂_i s)/(2s)`** via `HQVM_spatial_coeff_jet_space`.
+- **Lapse jet:** `HQVM_lapse_jet_d0` packages `∂_0(1+Φ+φ t)`; **`Christoffel_HQVM_000_HQVM_lapse_comoving`**
+  instantiates `Γ^0_{00}` when `N = HQVM_lapse` and `∂_0 t = 1`.
 - **Homogeneous limit:** γ, G_eff, and the declarative Friedmann equation
   (φ ≈ H, used for volume-averaged dynamics and CLASS). For the exact lapse increment
   `δN` around `Φ = 0` with background `φ = H`, see `HQVM_lapse_increment_homogeneous` in
@@ -44,9 +59,9 @@ We do not introduce free parameters. Each definition is **determined by** prior 
    The horizon term in N is φ t, which we call `timeAngle`; it is the only
    cumulative-in-time piece, so it is **determined** by the lapse decomposition.
 
-3. **Metric components:** With shift βⁱ = 0, the line element is ds² = -N² dt² + spatial.
-   So g_tt = -N² and the spatial coefficient is a²(1 - 2Φ) **from ADM** with
-   conformal factor (1 - 2Φ). No choice — just writing the metric in this gauge.
+3. **Scalar coefficient package:** With shift βⁱ = 0, the line element is written as
+   ds² = -N² dt² + spatial. So `HQVM_g_tt` and `HQVM_spatial_coeff` record the scalar
+   coefficients that would appear in that chart expression.
 
 4. **γ:** The **sole** HQIV monogamy coefficient, **γ := 1 − α**, proved **2/5** once α = 3/5
    (`gamma_eq_2_5`). Same external provenance as α (companion HQIV + Brodie 2026). Then
@@ -68,8 +83,9 @@ We do not introduce free parameters. Each definition is **determined by** prior 
    (`section CLASSBackgroundMethodology`).
 
 Thus the proven theory in this file **rests on** the light-cone (α, φ, curvature),
-monogamy (γ), natural units, and the informational-energy axiom; the defs are
-arrived at by fixing those, not by tuning.
+monogamy (γ), natural units, and the informational-energy axiom. Formally, this file
+packages scalar lapse / coefficient identities and sign lemmas; it does not by itself
+construct a full Lorentzian manifold API.
 -/
 
 /-!
@@ -108,6 +124,14 @@ with shift zero, the lapse function (the function N such that g_tt = -N²) is
 N = 1 + Φ + φ t = 1 + Φ + timeAngle φ t. -/
 theorem ADM_lapse_eq_HQVM_lapse (Φ φ t : ℝ) :
     HQVM_lapse Φ φ t = 1 + Φ + φ * t := rfl
+
+/-- **Time jet of the lapse** `N = 1 + Φ + φ t`: `∂_0 N = ∂_0 Φ + φ ∂_0 t + t ∂_0 φ` (product rule on `φ t`). -/
+def HQVM_lapse_jet_d0 (d0Phi d0phi d0t φ t : ℝ) : ℝ := d0Phi + φ * d0t + t * d0phi
+
+/-- **Synchronous chart** with `∂_0 t = 1`: `∂_0 N = ∂_0 Φ + φ + t ∂_0 φ`. -/
+theorem HQVM_lapse_jet_d0_comoving_dt (d0Phi d0phi φ t : ℝ) :
+    HQVM_lapse_jet_d0 d0Phi d0phi 1 φ t = d0Phi + φ + t * d0phi := by
+  unfold HQVM_lapse_jet_d0; ring
 
 /-- **Time angle is the horizon term in the lapse:** N = 1 + Φ + timeAngle φ t. -/
 theorem lapse_decompose (Φ φ t : ℝ) :
@@ -208,11 +232,23 @@ theorem HQVM_lapse_gt_one (Φ φ t : ℝ) (hΦ : 0 ≤ Φ) (hφ : 0 < φ) (ht : 
   nlinarith [mul_pos hφ ht]
 
 /-!
-## HQVM manifold geometry
+## HQVM scalar geometry package
 
 The line element is ds² = -N² dt² + a(t)²(1 - 2Φ) δᵢⱼ dxⁱ dxʲ. We formalise the
-metric components and prove Lorentzian signature and positive-definite spatial part
-under natural physical assumptions (N ≠ 0, a > 0, weak field Φ < 1/2).
+scalar coefficients appearing in that chart expression and prove the corresponding
+sign conditions under natural physical assumptions (N ≠ 0, a > 0, weak field Φ < 1/2).
+
+### Spatial slice (constructive Euclidean ℝ³)
+
+The **flat spatial chart** used for horizon shells and Lebesgue volume is in
+`Hqiv.Geometry.SpatialSliceManifold`: `SpatialSliceEuclidean3 = EuclideanSpace ℝ (Fin 3)` with the
+concentric `ShellFamily` `euclideanHorizonShell` (center ball + annuli). Embedding a slice into the same
+`Fin 4 → ℝ` indices as `ContinuumSpacetimeChart` is `spatialSliceToSpacetimeCoords` (component `0` = time).
+
+So, in narrative: **HQVM_spatial_coeff a Φ** scales the **Euclidean** spatial metric on that model;
+`ContinuumSpacetimeChart` keeps flat **ℝ⁴** calculus for fields; they are **different** formal layers until you
+state explicit identification hypotheses (same file’s module doc as `ContinuumSpacetimeChart`). Chart-level
+identities and `deltaE_geometricModel` volume bridges are in `SpatialSliceContinuumBridge`.
 -/
 
 /-- **Time-time component** g_tt = -N². Determined by the ADM decomposition with
@@ -240,10 +276,10 @@ theorem HQVM_spatial_coeff_pos (a Φ : ℝ) (ha : 0 < a) (hΦ : Φ < 1/2) :
   have h : 0 < 1 - 2 * Φ := by linarith
   exact mul_pos ha2 h
 
-/-- **ADM decomposition of the HQVM metric:** with lapse N = HQVM_lapse Φ φ t and
-shift zero, the line element has g_tt = -N² and spatial diagonal coefficient
-a²(1 - 2Φ). So the manifold is foliated by spatial hypersurfaces Σ_t with
-induced metric a(t)²(1 - 2Φ) δᵢⱼ. -/
+/-- **ADM-style coefficient decomposition of the HQVM chart expression:** with lapse
+`N = HQVM_lapse Φ φ t` and shift zero, the scalar coefficients are `g_tt = -N²` and
+spatial diagonal coefficient `a²(1 - 2Φ)`. This theorem packages those coefficients;
+it does not by itself construct the foliation as a manifold object. -/
 theorem HQVM_ADM_decomposition (Φ φ t a : ℝ) :
     HQVM_g_tt (HQVM_lapse Φ φ t) = -(HQVM_lapse Φ φ t) ^ 2 ∧
     HQVM_spatial_coeff a Φ = a ^ 2 * (1 - 2 * Φ) := by
@@ -259,11 +295,237 @@ theorem HQVM_geometry_Minkowski (t : ℝ) :
   · rw [HQVM_lapse_Minkowski]; unfold HQVM_g_tt; norm_num
   · unfold HQVM_spatial_coeff; norm_num
 
-/-- **Unit normal to constant-t hypersurfaces:** with shift zero, the future-pointing
-normal is n = (1/N) ∂_t; its squared norm is g_tt · (1/N)² = -1, so n is timelike and unit. -/
+/-- **Scalar normalization check for the constant-`t` normal coefficient:** with shift zero,
+the formal factor `(1 / N)` normalizes the `g_tt = -N²` coefficient to `-1`. This is the
+algebraic normalization identity used by the narrative unit-normal discussion. -/
 theorem HQVM_unit_normal_squared (N : ℝ) (hN : N ≠ 0) :
     HQVM_g_tt N * (1 / N) ^ 2 = -1 := by
   unfold HQVM_g_tt; field_simp [hN]
+
+/-!
+### Synchronous diagonal `g_{μν}` and `g^{μν}` on `Fin 4`
+
+These are the **same** pointwise tensors used in `Hqiv.Physics.CovariantSolution` for raising
+`F` and for `√(-g)`: one definition site keeps the metric, inverse, and volume element aligned
+with `HQVM_g_tt` / `HQVM_spatial_coeff`.
+-/
+
+/-- **Covariant synchronous HQVM metric** (diagonal, shift zero): `g₀₀ = -N²`, `gᵢᵢ = a²(1-2Φ)`, off-diagonal `0`. -/
+noncomputable def HQVM_metric (N a Φ : ℝ) (μ ν : Fin 4) : ℝ :=
+  if _ : μ = 0 ∧ ν = 0 then HQVM_g_tt N
+  else if _ : μ = ν ∧ μ ≠ 0 then HQVM_spatial_coeff a Φ
+  else 0
+
+/-- **Contravariant inverse metric** matching the diagonal line element. -/
+noncomputable def HQVM_inverseMetric (N a Φ : ℝ) (μ ν : Fin 4) : ℝ :=
+  if _ : μ = 0 ∧ ν = 0 then -(1 / N ^ 2)
+  else if _ : μ = ν ∧ μ ≠ 0 then 1 / HQVM_spatial_coeff a Φ
+  else 0
+
+/-- **Volume element** `√(-g)` in synchronous HQVM with diagonal spatial `a²(1-2Φ) δᵢⱼ`: `N a³ √(1-2Φ)`. -/
+noncomputable def sqrt_neg_g_HQVM (N a Φ : ℝ) : ℝ := N * (a ^ 3) * (1 - 2 * Φ).sqrt
+
+theorem HQVM_metric_tt (N a Φ : ℝ) : HQVM_metric N a Φ 0 0 = HQVM_g_tt N := by
+  simp [HQVM_metric]
+
+theorem HQVM_metric_space_diag (N a Φ : ℝ) (i : Fin 3) :
+    HQVM_metric N a Φ (Fin.succ i) (Fin.succ i) = HQVM_spatial_coeff a Φ := by
+  simp [HQVM_metric, Fin.succ_ne_zero]
+
+theorem HQVM_inverseMetric_tt (N a Φ : ℝ) : HQVM_inverseMetric N a Φ 0 0 = -(1 / N ^ 2) := by
+  simp [HQVM_inverseMetric]
+
+theorem HQVM_inverseMetric_space_diag (N a Φ : ℝ) (i : Fin 3) :
+    HQVM_inverseMetric N a Φ (Fin.succ i) (Fin.succ i) = 1 / HQVM_spatial_coeff a Φ := by
+  simp [HQVM_inverseMetric, Fin.succ_ne_zero]
+
+open BigOperators
+
+/-- **`g` times `g⁻¹` is identity** (matrix product on `Fin 4`). -/
+theorem HQVM_metric_contract_inverse (N a Φ : ℝ) (hN : N ≠ 0) (hs : HQVM_spatial_coeff a Φ ≠ 0)
+    (μ ν : Fin 4) :
+    (∑ ρ : Fin 4, HQVM_metric N a Φ μ ρ * HQVM_inverseMetric N a Φ ρ ν) =
+      if μ = ν then 1 else 0 := by
+  fin_cases μ <;> fin_cases ν <;>
+    simp [Fin.sum_univ_four, HQVM_metric, HQVM_inverseMetric, HQVM_g_tt] <;>
+    field_simp [hN, hs]
+
+/-- **`g⁻¹` times `g` is identity** (matrix product on `Fin 4`). -/
+theorem HQVM_inverse_contract_metric (N a Φ : ℝ) (hN : N ≠ 0) (hs : HQVM_spatial_coeff a Φ ≠ 0)
+    (μ ν : Fin 4) :
+    (∑ ρ : Fin 4, HQVM_inverseMetric N a Φ μ ρ * HQVM_metric N a Φ ρ ν) =
+      if μ = ν then 1 else 0 := by
+  fin_cases μ <;> fin_cases ν <;>
+    simp [Fin.sum_univ_four, HQVM_metric, HQVM_inverseMetric, HQVM_g_tt] <;>
+    field_simp [hN, hs]
+
+/-!
+### Levi–Civita Christoffels (frozen chart jet)
+
+`Christoffel_levi_civita` packages
+`Γ^ρ_{μν} = (1/2) g^{ρσ} (∂_μ g_{νσ} + ∂_ν g_{μσ} - ∂_σ g_{μν})` with `∂_λ g_{μν}` supplied as
+pointwise real data `dg λ μ ν`. This is the algebraic core for a covariant derivative at one
+chart point; it does not assume a `Manifold` instance.
+-/
+
+/-- **Christoffel symbols** `Γ^ρ_{μν}` from inverse metric `g^{ρσ}` and metric partials `dg λ μ ν` (= ∂_λ g_{μν}). -/
+noncomputable def Christoffel_levi_civita (gInv : Fin 4 → Fin 4 → ℝ)
+    (dg : Fin 4 → Fin 4 → Fin 4 → ℝ) (ρ μ ν : Fin 4) : ℝ :=
+  (1 / 2) * ∑ σ : Fin 4, gInv ρ σ * (dg μ ν σ + dg ν μ σ - dg σ μ ν)
+
+theorem Christoffel_levi_civita_zero_of_flat (dg : Fin 4 → Fin 4 → Fin 4 → ℝ) (gInv : Fin 4 → Fin 4 → ℝ)
+    (ρ μ ν : Fin 4) (h : ∀ l m n, dg l m n = 0) : Christoffel_levi_civita gInv dg ρ μ ν = 0 := by
+  simp [Christoffel_levi_civita, h]
+
+/-!
+### HQVM metric partials and Christoffels (scalar jet)
+
+At a chart point, suppose the synchronous HQVM scalars have frozen first jets `dN κ = ∂_κ N`,
+`da κ = ∂_κ a`, `dPhi κ = ∂_κ Φ`. The diagonal metric `HQVM_metric` then has
+`∂_κ g_{00} = ∂_κ(-N²) = -2N ∂_κ N` and, for each spatial diagonal entry,
+`∂_κ(a²(1-2Φ)) = 2a (∂_κ a)(1-2Φ) - 2a² ∂_κ Φ`. Off-diagonal components stay identically zero,
+so their partials vanish.
+-/
+
+/-- **Metric partials** `∂_κ g_{μν}` from scalar jets in the synchronous diagonal HQVM ansatz. -/
+noncomputable def HQVM_metric_partials (N a Φ : ℝ) (dN da dPhi : Fin 4 → ℝ) :
+    Fin 4 → Fin 4 → Fin 4 → ℝ := fun κ μ ν =>
+  if _ : μ = 0 ∧ ν = 0 then -2 * N * dN κ
+  else if _ : μ = ν ∧ μ ≠ 0 then 2 * a * da κ * (1 - 2 * Φ) - 2 * a ^ 2 * dPhi κ
+  else 0
+
+theorem HQVM_metric_partials_tt (N a Φ : ℝ) (dN da dPhi : Fin 4 → ℝ) (κ : Fin 4) :
+    HQVM_metric_partials N a Φ dN da dPhi κ 0 0 = -2 * N * dN κ := by
+  simp [HQVM_metric_partials]
+
+theorem HQVM_metric_partials_space_diag (N a Φ : ℝ) (dN da dPhi : Fin 4 → ℝ) (κ : Fin 4) (i : Fin 3) :
+    HQVM_metric_partials N a Φ dN da dPhi κ (Fin.succ i) (Fin.succ i) =
+      2 * a * da κ * (1 - 2 * Φ) - 2 * a ^ 2 * dPhi κ := by
+  simp [HQVM_metric_partials, Fin.succ_ne_zero]
+
+/-- **Spatial partial** `∂_j s` for `s = a²(1-2Φ)`, with `j : Fin 3` the spatial chart index (`x^j`). -/
+noncomputable def HQVM_spatial_coeff_jet_space (a Φ : ℝ) (da dPhi : Fin 4 → ℝ) (j : Fin 3) : ℝ :=
+  2 * a * da (Fin.succ j) * (1 - 2 * Φ) - 2 * a ^ 2 * dPhi (Fin.succ j)
+
+theorem HQVM_spatial_coeff_jet_space_eq_metric_partial (N a Φ : ℝ) (dN da dPhi : Fin 4 → ℝ) (j i : Fin 3) :
+    HQVM_spatial_coeff_jet_space a Φ da dPhi j =
+      HQVM_metric_partials N a Φ dN da dPhi (Fin.succ j) (Fin.succ i) (Fin.succ i) := by
+  simp [HQVM_spatial_coeff_jet_space, HQVM_metric_partials, Fin.succ_ne_zero]
+
+theorem HQVM_metric_partials_off_diag (N a Φ : ℝ) (dN da dPhi : Fin 4 → ℝ) (κ μ ν : Fin 4)
+    (h : μ ≠ ν) :
+    HQVM_metric_partials N a Φ dN da dPhi κ μ ν = 0 := by
+  unfold HQVM_metric_partials
+  split_ifs <;> simp_all
+
+theorem HQVM_metric_partials_vanish_if_jets (N a Φ : ℝ) (dN da dPhi : Fin 4 → ℝ) (κ μ ν : Fin 4)
+    (hN : dN κ = 0) (ha : da κ = 0) (hΦ : dPhi κ = 0) :
+    HQVM_metric_partials N a Φ dN da dPhi κ μ ν = 0 := by
+  unfold HQVM_metric_partials
+  split_ifs <;> simp [hN, ha, hΦ, mul_zero, zero_mul]
+
+/-- **Levi–Civita symbols** for the HQVM diagonal metric and a scalar jet. -/
+noncomputable def Christoffel_HQVM (N a Φ : ℝ) (dN da dPhi : Fin 4 → ℝ) (ρ μ ν : Fin 4) : ℝ :=
+  Christoffel_levi_civita (HQVM_inverseMetric N a Φ) (HQVM_metric_partials N a Φ dN da dPhi) ρ μ ν
+
+theorem HQVM_inverseMetric_0_off (N a Φ : ℝ) (σ : Fin 4) (hσ : σ ≠ 0) :
+    HQVM_inverseMetric N a Φ 0 σ = 0 := by
+  fin_cases σ
+  · exact False.elim (hσ rfl)
+  · simp [HQVM_inverseMetric]
+  · simp [HQVM_inverseMetric]
+  · simp [HQVM_inverseMetric]
+
+theorem HQVM_inverseMetric_off_diag (N a Φ : ℝ) {μ ν : Fin 4} (h : μ ≠ ν) :
+    HQVM_inverseMetric N a Φ μ ν = 0 := by
+  unfold HQVM_inverseMetric
+  split_ifs <;> simp_all
+
+theorem HQVM_inverseMetric_space_diag_val (N a Φ : ℝ) (i : Fin 3) :
+    HQVM_inverseMetric N a Φ (Fin.succ i) (Fin.succ i) = 1 / HQVM_spatial_coeff a Φ := by
+  simp [HQVM_inverseMetric, Fin.succ_ne_zero]
+
+/-- **Standard lapse connection:** for diagonal HQVM, `Γ^0_{00} = (∂_0 N) / N` (only `g^{00}` contributes). -/
+theorem Christoffel_HQVM_000_eq (N a Φ : ℝ) (dN da dPhi : Fin 4 → ℝ) (hN : N ≠ 0) :
+    Christoffel_HQVM N a Φ dN da dPhi 0 0 0 = dN 0 / N := by
+  unfold Christoffel_HQVM Christoffel_levi_civita
+  have g01 : HQVM_inverseMetric N a Φ 0 1 = 0 := by simp [HQVM_inverseMetric]
+  have g02 : HQVM_inverseMetric N a Φ 0 2 = 0 := by simp [HQVM_inverseMetric]
+  have g03 : HQVM_inverseMetric N a Φ 0 3 = 0 := by simp [HQVM_inverseMetric]
+  rw [Fin.sum_univ_four]
+  simp [g01, g02, g03, HQVM_inverseMetric, HQVM_metric_partials]
+  field_simp [hN]
+
+/-- **`Γ^i_{00}`** for spatial `i = 1,2,3`: only `g^{ii}` contributes; yields `N (∂_i N) / (a²(1-2Φ))`. -/
+theorem Christoffel_HQVM_succi_00_eq (N a Φ : ℝ) (dN da dPhi : Fin 4 → ℝ) (i : Fin 3)
+    (hs : HQVM_spatial_coeff a Φ ≠ 0) :
+    Christoffel_HQVM N a Φ dN da dPhi (Fin.succ i) 0 0 =
+      N * dN (Fin.succ i) / HQVM_spatial_coeff a Φ := by
+  unfold Christoffel_HQVM Christoffel_levi_civita
+  rw [Fin.sum_univ_four]
+  fin_cases i <;> (simp [HQVM_inverseMetric, HQVM_metric_partials]; field_simp [hs])
+
+/-- **`Γ^0_{0i}`** (spatial `i`): only `g^{00}` contributes; **`Γ^0_{0i} = (∂_i N)/N`**. -/
+theorem Christoffel_HQVM_00_succi_eq (N a Φ : ℝ) (dN da dPhi : Fin 4 → ℝ) (i : Fin 3)
+    (hN : N ≠ 0) :
+    Christoffel_HQVM N a Φ dN da dPhi 0 0 (Fin.succ i) = dN (Fin.succ i) / N := by
+  unfold Christoffel_HQVM Christoffel_levi_civita
+  have g01 : HQVM_inverseMetric N a Φ 0 1 = 0 := by simp [HQVM_inverseMetric]
+  have g02 : HQVM_inverseMetric N a Φ 0 2 = 0 := by simp [HQVM_inverseMetric]
+  have g03 : HQVM_inverseMetric N a Φ 0 3 = 0 := by simp [HQVM_inverseMetric]
+  rw [Fin.sum_univ_four]
+  fin_cases i <;> (simp [g01, g02, g03, HQVM_inverseMetric, HQVM_metric_partials]; field_simp [hN])
+
+/-- **`Γ^i_{0j}`**: diagonal spatial inverse kills `σ ≠ i`; off-diagonal `i ≠ j` gives **0**;
+    **`Γ^i_{0i} = (∂_0 s)/(2s)`** with `s = a²(1-2Φ)` = `(a ∂_0 a (1-2Φ) - a² ∂_0 Φ) / s`. -/
+theorem Christoffel_HQVM_succi_0_succj_eq (N a Φ : ℝ) (dN da dPhi : Fin 4 → ℝ) (i j : Fin 3)
+    (hs : HQVM_spatial_coeff a Φ ≠ 0) :
+    Christoffel_HQVM N a Φ dN da dPhi (Fin.succ i) 0 (Fin.succ j) =
+      if i = j then
+        (a * da 0 * (1 - 2 * Φ) - a ^ 2 * dPhi 0) / HQVM_spatial_coeff a Φ
+      else 0 := by
+  by_cases hij : i = j
+  · subst hij
+    unfold Christoffel_HQVM Christoffel_levi_civita
+    rw [Fin.sum_univ_four]
+    fin_cases i <;> (simp [HQVM_inverseMetric, HQVM_metric_partials]; field_simp [hs])
+  · unfold Christoffel_HQVM Christoffel_levi_civita
+    rw [Fin.sum_univ_four]
+    fin_cases i <;> fin_cases j <;> simp [HQVM_inverseMetric, HQVM_metric_partials] at hij ⊢
+
+/-- **Purely spatial** `Γ^i_{jk}`: `Γ^i_{jk} = (δ_{ki} ∂_j s + δ_{ji} ∂_k s - δ_{jk} ∂_i s) / (2s)`,
+    `s = a²(1-2Φ)`, `∂_j s` packaged as `HQVM_spatial_coeff_jet_space`. -/
+theorem Christoffel_HQVM_succi_succj_succk_eq (N a Φ : ℝ) (dN da dPhi : Fin 4 → ℝ) (i j k : Fin 3)
+    (hs : HQVM_spatial_coeff a Φ ≠ 0) :
+    Christoffel_HQVM N a Φ dN da dPhi (Fin.succ i) (Fin.succ j) (Fin.succ k) =
+      (1 / (2 * HQVM_spatial_coeff a Φ)) *
+        ((if k = i then (1 : ℝ) else 0) * HQVM_spatial_coeff_jet_space a Φ da dPhi j
+         + (if j = i then (1 : ℝ) else 0) * HQVM_spatial_coeff_jet_space a Φ da dPhi k
+         - (if j = k then (1 : ℝ) else 0) * HQVM_spatial_coeff_jet_space a Φ da dPhi i) := by
+  unfold Christoffel_HQVM Christoffel_levi_civita HQVM_spatial_coeff_jet_space
+  rw [Fin.sum_univ_four]
+  fin_cases i <;> fin_cases j <;> fin_cases k <;>
+    (simp [HQVM_inverseMetric, HQVM_metric_partials]; try field_simp [hs])
+
+/-- **`Γ^0_{00}`** when `N = HQVM_lapse Φ φ t`, comoving `∂_0 t = 1`, and `dN 0` matches the lapse time jet. -/
+theorem Christoffel_HQVM_000_HQVM_lapse_comoving (Φpot φaux t d0Phi d0phi : ℝ) (dN daJet dPhiJet : Fin 4 → ℝ)
+    (aScale Φm : ℝ) (hN : HQVM_lapse Φpot φaux t ≠ 0)
+    (hjet : dN 0 = HQVM_lapse_jet_d0 d0Phi d0phi 1 φaux t) :
+    Christoffel_HQVM (HQVM_lapse Φpot φaux t) aScale Φm dN daJet dPhiJet 0 0 0 =
+      HQVM_lapse_jet_d0 d0Phi d0phi 1 φaux t / HQVM_lapse Φpot φaux t := by
+  rw [← hjet, Christoffel_HQVM_000_eq (HQVM_lapse Φpot φaux t) aScale Φm dN daJet dPhiJet hN]
+
+theorem Christoffel_HQVM_zero_if_flat_jet (N a Φ : ℝ) (dN da dPhi : Fin 4 → ℝ) (ρ μ ν : Fin 4)
+    (h : ∀ κ μ' ν', HQVM_metric_partials N a Φ dN da dPhi κ μ' ν' = 0) :
+    Christoffel_HQVM N a Φ dN da dPhi ρ μ ν = 0 :=
+  Christoffel_levi_civita_zero_of_flat _ _ ρ μ ν (fun κ μ' ν' => h κ μ' ν')
+
+theorem Christoffel_HQVM_zero_of_vanishing_jets (N a Φ : ℝ) (dN da dPhi : Fin 4 → ℝ) (ρ μ ν : Fin 4)
+    (hN : ∀ κ, dN κ = 0) (ha : ∀ κ, da κ = 0) (hΦ : ∀ κ, dPhi κ = 0) :
+    Christoffel_HQVM N a Φ dN da dPhi ρ μ ν = 0 := by
+  refine Christoffel_HQVM_zero_if_flat_jet N a Φ dN da dPhi ρ μ ν ?_
+  intro κ μ' ν'
+  exact HQVM_metric_partials_vanish_if_jets N a Φ dN da dPhi κ μ' ν' (hN κ) (ha κ) (hΦ κ)
 
 /-- **Spatial coefficient expanded:** a²(1 - 2Φ) = a² - 2a²Φ. -/
 theorem HQVM_spatial_coeff_expand (a Φ : ℝ) :

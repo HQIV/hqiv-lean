@@ -227,9 +227,26 @@ def coulomb_term (E : ℝ) : ℝ := E ^ 2
 noncomputable def phase_fiber_curvature (config : OctonionConfig) : ℝ :=
   ∑ i : Fin 8, (config i) ^ 2
 
-/-- **Electric field scale at shell m** (placeholder: from modified Maxwell E at that shell).
-    In the full manifold version this is the EM component of the field strength at shell m. -/
-def E_at_shell (_m : ℕ) : ℝ := 0
+/-- **Electric field scale at shell m** from a discrete Maxwell shell readout.
+    The shell profile is taken as a φ-weighted horizon factor:
+    `E(m) = α * φ(m) / (m+2)`.
+    This keeps the EM contribution nontrivial across shells while remaining
+    purely lattice/aux-field driven (no extra fit parameter). -/
+noncomputable def E_at_shell (m : ℕ) : ℝ :=
+  alpha * phi_of_shell m / ((m + 2 : ℝ))
+
+theorem E_at_shell_nonneg (m : ℕ) : 0 ≤ E_at_shell m := by
+  unfold E_at_shell
+  have hα : 0 ≤ alpha := by
+    unfold alpha
+    norm_num
+  have hφ : 0 ≤ phi_of_shell m := (phi_of_shell_pos m).le
+  have hden : 0 ≤ ((m + 2 : ℝ)) := by positivity
+  exact div_nonneg (mul_nonneg hα hφ) hden
+
+theorem coulomb_term_nonneg_at_shell (m : ℕ) : 0 ≤ coulomb_term (E_at_shell m) := by
+  unfold coulomb_term
+  positivity
 
 /-- **Effective metastable well for nucleon quark configurations** at nuclear shell m.
     V_nuc = V_strong (linear term from octonionic projection of φ) + V_Coulomb (from
@@ -238,6 +255,13 @@ def E_at_shell (_m : ℕ) : ℝ := 0
     Reference: discrete light-cone combinatorics + informational-energy + monogamy. -/
 noncomputable def nuclear_effective_potential (m : ShellIndex) (config : OctonionConfig) : ℝ :=
   strong_linear_term (phi_of_shell m) + coulomb_term (E_at_shell m) + deltaE m * phase_fiber_curvature config
+
+theorem nuclear_effective_potential_eq_strong_plus_coulomb_plus_curvature
+    (m : ShellIndex) (config : OctonionConfig) :
+    nuclear_effective_potential m config =
+      strong_linear_term (phi_of_shell m) +
+        coulomb_term (E_at_shell m) +
+        deltaE m * phase_fiber_curvature config := rfl
 
 /-- **Phase-horizon tipping operator** driven purely by local electric energy E′.
     δθ′ = arctan(E′) · π/2 (ModifiedMaxwell.delta_theta_prime). When applied to a state
