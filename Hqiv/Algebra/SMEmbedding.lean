@@ -79,8 +79,6 @@ theorem so8ActOn8s_linear (M : Matrix (Fin 8) (Fin 8) ℝ) (a b : ℝ) (x y : Oc
   funext i
   simp [Pi.add_apply, Pi.smul_apply, smul_eq_mul]
 
-theorem G2_contains_SM_subgroup : True := trivial
-def hyperchargeBlockCorrect : Prop := True
 theorem one_generation_from_8s : octonionSpinorDim = 8 ∧ smChiralGenerationDim = 16 := by constructor <;> rfl
 
 /-- Spin(8) has three 8-dim irreps related by triality (`So8RepIndex` has cardinality 3).
@@ -92,6 +90,16 @@ theorem three_generations_from_triality_reps : Fintype.card So8RepIndex = 3 := c
 
 Three weak isospin generators as linear combinations inside the closed 28-dim algebra
 (G₂ ⊂ so(8)); they satisfy the su(2) relations and act as doublets on the 8s spinor.
+
+Separately, `Hqiv.Algebra.WeakFromLeftMulOctonion` packages exploratory **left-multiplication**
+combinations \(J\), \(W^\pm\), \(Z\) built directly from \(L(e_i)\); that module proves skewness
+identities only and explicitly **does not** claim \(\mathfrak{su}(2)\) closure for those
+\(GL(8,\mathbb{R})\) sums (see its module doc).
+
+`Hqiv.Algebra.WeakInComplexStructure` is the **complexified / projected-carrier** companion: the
+same frozen \(J\) is extended to \(\mathbb{C}^8\), the \(+i\) eigenspace is a \(\mathbb{C}\)-submodule,
+and standard Pauli matrices on the abstract doublet satisfy \(\mathfrak{su}(2)\) commutators by
+explicit \(2\times 2\) calculation (orthogonal to the \(\mathfrak{g}_2\) matrix closure proved here).
 -/
 
 /-- **SU(2)_L generator 1** (weak isospin): first G₂ generator. -/
@@ -102,6 +110,13 @@ def su2_L_gen_2 : Matrix (Fin 8) (Fin 8) ℝ := g2Generator 1
 
 /-- **SU(2)_L generator 3**: defined as -[T₁,T₂] so that [T₁,T₂] = -T₃ holds (su(2) relation). -/
 def su2_L_gen_3 : Matrix (Fin 8) (Fin 8) ℝ := -Hqiv.lieBracket su2_L_gen_1 su2_L_gen_2
+
+/-- `SU(2)ₗ` building blocks are explicit `G₂` Lie polynomials (not yet a full `𝔰𝔲(2) ⊆ 𝔤₂` subalgebra inclusion). -/
+theorem su2_L_generators_from_g2_building_blocks :
+    su2_L_gen_1 = g2Generator 0 ∧ su2_L_gen_2 = g2Generator 1 ∧
+      su2_L_gen_3 = -Hqiv.lieBracket (g2Generator 0) (g2Generator 1) := by
+  unfold su2_L_gen_1 su2_L_gen_2 su2_L_gen_3
+  exact And.intro rfl (And.intro rfl rfl)
 
 /-- **SU(2)_L generators are in so(8)** (antisymmetric). T₁,T₂ from G₂; T₃ = -[T₁,T₂] is bracket hence in so(8). -/
 theorem su2_generators_in_so8 :
@@ -161,6 +176,40 @@ def hyperchargeEigenvalue (i : Fin 8) : ℚ :=
 /-- **Electric charge Q = T₃ + Y/2:** component 0 (T₃=+1/2) → Q=2/3, component 1 (T₃=-1/2) → Q=-1/3, etc. -/
 def chargeFromY (i : Fin 8) (t3 : ℚ) : ℚ := t3 + hyperchargeEigenvalue i
 
+/-- Up-like quark component carries the familiar fractional residual `2/3` in the algebra layer. -/
+theorem up_component_charge_two_thirds : chargeFromY 0 (1/2) = 2/3 := by
+  unfold chargeFromY hyperchargeEigenvalue
+  norm_num
+
+/-- Down-like quark component carries the familiar fractional residual `-1/3` in the algebra layer. -/
+theorem down_component_charge_neg_one_third : chargeFromY 1 (-1/2) = -1/3 := by
+  unfold chargeFromY hyperchargeEigenvalue
+  norm_num
+
+/-- The neutral lepton doublet component is electrically neutral in the algebra table. -/
+theorem lepton_doublet_neutral_component_charge_zero : chargeFromY 4 (1/2) = 0 := by
+  unfold chargeFromY
+  have hY : hyperchargeEigenvalue 4 = -1 / 2 := by
+    simp [hyperchargeEigenvalue]
+  rw [hY]
+  norm_num
+
+/-- The charged lepton doublet component is `-1`, matching the visible integer shell charge. -/
+theorem lepton_doublet_charged_component_charge_neg_one : chargeFromY 5 (-1/2) = -1 := by
+  unfold chargeFromY
+  have hY : hyperchargeEigenvalue 5 = -1 / 2 := by
+    simp [hyperchargeEigenvalue]
+  rw [hY]
+  norm_num
+
+/-- The right-handed charged-lepton slot carries `+1` in the algebra table. -/
+theorem charged_lepton_singlet_charge_pos_one : chargeFromY 6 0 = 1 := by
+  unfold chargeFromY
+  have hY : hyperchargeEigenvalue 6 = 1 := by
+    simp [hyperchargeEigenvalue]
+  rw [hY]
+  norm_num
+
 /-- **ν_R has Y = 0** (singlet): component 7. -/
 theorem nu_R_hypercharge_zero : hyperchargeEigenvalue 7 = 0 := by
   unfold hyperchargeEigenvalue
@@ -179,6 +228,17 @@ theorem hypercharge_assignments_correct :
     hyperchargeEigenvalue 6 = 1 ∧ hyperchargeEigenvalue 7 = 0 := by
   refine ⟨?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_⟩
   all_goals simp [hyperchargeEigenvalue]
+
+/-- Witness-level hypercharge table (defeq with `hypercharge_assignments_correct`; not a spectral/block derivation). -/
+def hyperchargeBlockCorrect : Prop :=
+  hyperchargeEigenvalue 0 = 1/6 ∧ hyperchargeEigenvalue 1 = 1/6 ∧
+    hyperchargeEigenvalue 2 = -2/3 ∧ hyperchargeEigenvalue 3 = 1/3 ∧
+    hyperchargeEigenvalue 4 = -1/2 ∧ hyperchargeEigenvalue 5 = -1/2 ∧
+    hyperchargeEigenvalue 6 = 1 ∧ hyperchargeEigenvalue 7 = 0
+
+/-- The witness-level hypercharge table is discharged by the explicit assignment theorem. -/
+theorem hyperchargeBlockCorrect_holds : hyperchargeBlockCorrect :=
+  hypercharge_assignments_correct
 
 /-!
 ## Gap 3: Full branching rules of 8s under G₂ ⊃ SM

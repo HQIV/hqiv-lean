@@ -18,10 +18,8 @@ theory) strong/sector couplings. Composite mass/energy density can be fed into
 **Reference:** HQIV preprint; SM embedding and so(8) closure in `Hqiv.Algebra`.
 -/
 
-import Hqiv.Physics.SM_GR_Unification
 import Hqiv.Physics.Forces
 import Hqiv.Geometry.AuxiliaryField
-import Hqiv.QuantumMechanics.Schrodinger
 
 import Mathlib.Data.Real.Basic
 import Mathlib.Data.Fin.Basic
@@ -58,13 +56,22 @@ All couplings at shell `m` are determined by `phi_of_shell m`; same structure fo
 EM (atomic) and, in the full theory, for strong/nuclear sectors.
 -/
 
+/-- Bare inverse coupling used by the shell ladder. This is the same `1 / α_GUT = 42`
+normalization used elsewhere in the HQIV physics stack. -/
+def oneOverAlphaBare : ℝ := 42
+
+/-- Effective inverse coupling on the shell ladder, written directly in terms of
+`phi_of_shell`. This keeps the bound-state layer below the heavier unification modules. -/
+noncomputable def oneOverAlphaEffAtShell (m : ℕ) (c : ℝ := 1) : ℝ :=
+  oneOverAlphaBare * (1 + c * alpha * Real.log (phi_of_shell m + 1))
+
 /-- **Effective EM coupling at shell m** (re-export for use in binding formulas). -/
 noncomputable def alphaEffAtShell (m : ℕ) (c : ℝ := 1) : ℝ :=
-  Hqiv.alphaEffShell m c
+  (oneOverAlphaEffAtShell m c)⁻¹
 
 /-- **Coulomb strength at shell m** (re-export). -/
 noncomputable def coulombStrengthAtShell (m : ℕ) (c : ℝ := 1) : ℝ :=
-  Hqiv.coulombStrengthShell m c
+  alphaEffAtShell m c
 
 /-- **Shell-dependent ground-state energy** (same form as `Hqiv.expectedGroundEnergy`
 but with α_eff(m) so binding at different horizon shells is consistently parameterized). -/
@@ -81,17 +88,36 @@ noncomputable def E_bind_atomic_shell_magnitude (m : ℕ) (Z : ℕ) (μ : ℝ) (
 Binding is a sum over the 28 so(8) generators. We define the **structural form**:
 a contribution per generator index that depends on shell coupling φ(m), and a
 weight from the state/representation. In the full build, weights come from
-matrix elements ⟨ψ| T_k |ψ⟩ or traces over the 8×8 representation.
+matrix elements ⟨ψ| T_k |ψ⟩ or traces over the 8×8 representation. In this file
+we make that trace model explicit at the level of generator diagonals, so the
+same shell coupling is driven by both `alphaEffAtShell` and the lattice mode
+count `latticeSimplexCount`.
 -/
 
-/-- **Coupling factor at shell m for generator k.** Same φ(m)-driven scale for all k
-in this abstract layer; in a concrete 8×8 model the strength can depend on k (e.g. EM vs strong). -/
-noncomputable def bindingCouplingAtShell (m : ℕ) (_k : So8Index) (c : ℝ := 1) : ℝ :=
-  alphaEffAtShell m c
+/-- **8×8 diagonal data** for a generator family: one diagonal entry per generator
+and carrier index. This packages the diagonal part of an 8×8 composite trace. -/
+abbrev So8TraceDiagonal := So8Index → Fin 8 → ℝ
+
+/-- **Composite trace contribution** of generator `k` against an 8-component state.
+This is the diagonal trace proxy used by the mass modules. -/
+noncomputable def compositeTraceAtGenerator
+    (diag : So8TraceDiagonal) (ψ : OctonionState) (k : So8Index) : ℝ :=
+  ∑ i : Fin 8, diag k i * ψ i * ψ i
 
 /-- **Network weight** for the 8×8 method: one coefficient per so(8) generator,
 e.g. from state-dependent expectation values. -/
 abbrev NetworkWeight := So8Index → ℝ
+
+/-- **Network weight from 8×8 composite traces.** This is the concrete bridge from
+generator data and state amplitudes to the abstract `NetworkWeight`. -/
+noncomputable def networkWeightFromCompositeTrace
+    (diag : So8TraceDiagonal) (ψ : OctonionState) : NetworkWeight :=
+  fun k => compositeTraceAtGenerator diag ψ k
+
+/-- **Coupling factor at shell m for generator k.** The shell scale is the product
+of the effective coupling and the lattice simplex count at that shell. -/
+noncomputable def bindingCouplingAtShell (m : ℕ) (_k : So8Index) (c : ℝ := 1) : ℝ :=
+  (latticeSimplexCount m : ℝ) * alphaEffAtShell m c
 
 /-- **Binding energy as sum over the so(8) network** at shell m.
 
@@ -102,6 +128,12 @@ Here `w` encodes the representation/state (e.g. which generators contribute);
 equation for computational modeling: instantiate `w` from the 8×8 state. -/
 noncomputable def E_bind_from_network (m : ℕ) (w : NetworkWeight) (c : ℝ := 1) : ℝ :=
   ∑ k : So8Index, w k * bindingCouplingAtShell m k c
+
+/-- **Binding energy from explicit 8×8 composite traces.** This packages the
+generator diagonal data into the abstract network formula. -/
+noncomputable def E_bind_from_composite_trace
+    (m : ℕ) (diag : So8TraceDiagonal) (ψ : OctonionState) (c : ℝ := 1) : ℝ :=
+  E_bind_from_network m (networkWeightFromCompositeTrace diag ψ) c
 
 /-!
 ## Hierarchical binding levels
@@ -170,7 +202,9 @@ appropriate level (M_nucleon, M_nucleus, M_atom) from the 8×8 network formulas 
 /-- **Statement:** composite mass density at shell m is determined by the
 8×8 network (constituent masses and binding sums). Back-reaction: this ρ_m
 enters `S_HQVM_grav φ ρ_m ρ_r` and thus the Friedmann equation. -/
-def composite_mass_density_from_network (m : ℕ) (ρ_from_network : NetworkWeight → ℝ) : Prop :=
-  True
+def composite_mass_density_from_network
+    (m : ℕ) (ρ_from_network : NetworkWeight → ℝ)
+    (M_constituent : ℝ) (w : NetworkWeight) (c : ℝ := 1) : Prop :=
+  ρ_from_network w = M_nucleon_from_network m M_constituent w c
 
 end Hqiv.Physics

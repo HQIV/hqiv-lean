@@ -2,6 +2,7 @@ import Mathlib.Data.Complex.Basic
 import Mathlib.Analysis.SpecialFunctions.Log.Basic
 import Mathlib.Tactic.NormNum
 import Hqiv.Algebra.OctonionSpinorCarrier
+import Hqiv.QuantumMechanics.PatchQFTBridge
 
 /-!
 ## Spin–statistics from triality and null-lattice causality
@@ -174,7 +175,7 @@ def SpinStatistics_from_triality_and_causality_statement : Prop :=
   ∃ D : SpinStatisticsData,
     (∀ m : D.mode, D.spinClass m = SpinClass.integer ∨
                    D.spinClass m = SpinClass.halfInteger) ∧
-    (∃ A : SpinStatisticsAxioms D,
+    (∃ _ : SpinStatisticsAxioms D,
       (∀ m : D.mode, isFermionic D m →
           D.exchangePhase m m = (-1 : ℂ)) ∧
       (∀ m : D.mode, isBosonic D m →
@@ -211,18 +212,108 @@ theorem spin_statistics_from_axioms
     -- Combine.
     simpa [h₁] using h₂
 
-/-- **Concrete spin–statistics data** built from the HQIV octonion 8s carrier.
+/-- A fermionic one-particle horizon mode: shell index + local patch + octonion carrier. -/
+structure HQIVFermionMode where
+  shell : ℕ
+  patch : Fin 4
+  spinor : Hqiv.Algebra.OctonionSpinorCarrier
 
-Modes are either:
+/-- A bosonic observable remembers the shell and the two local support patches it couples. -/
+structure HQIVBosonMode where
+  shell : ℕ
+  leftPatch : Fin 4
+  rightPatch : Fin 4
 
-* a left-handed octonion spinor (`Sum.inl`), treated as **fermionic** (half-integer
-  spin), or
-* a bosonic composite (`Sum.inr`), treated as **integer** spin.
+/-- Concrete HQIV mode carrier used by the spin-statistics package. -/
+abbrev HQIVMode := Sum HQIVFermionMode HQIVBosonMode
 
-Spacelike separation is left abstract (always `True` in this minimal model),
-and exchange phases are assigned purely from the spin class. -/
+noncomputable instance : DecidableEq HQIVFermionMode := Classical.decEq _
+noncomputable instance : DecidableEq HQIVBosonMode := Classical.decEq _
+noncomputable instance : DecidableEq HQIVMode := Classical.decEq _
+
+/-- A simple reference spinor used for locality witnesses. -/
+noncomputable def zeroSpinor : Hqiv.Algebra.OctonionSpinorCarrier := fun _ => 0
+
+/-- Canonical fermionic mode at shell `m` and local patch `p`. -/
+noncomputable def sampleFermionMode (m : ℕ) (p : Fin 4) : HQIVMode :=
+  Sum.inl { shell := m, patch := p, spinor := zeroSpinor }
+
+/-- Extract the shell carried by a concrete HQIV mode. -/
+def hqivModeShell : HQIVMode → ℕ
+  | Sum.inl f => f.shell
+  | Sum.inr b => b.shell
+
+/-- Primary patch used when feeding a mode into the locality relation. -/
+def hqivModePrimaryPatch : HQIVMode → Fin 4
+  | Sum.inl f => f.patch
+  | Sum.inr b => b.leftPatch
+
+/--
+Concrete spacelike separation for HQIV modes:
+
+two modes are spacelike when they lie on the same shell and their primary local
+patches are Minkowski-spacelike in the patch chart from `PatchQFTBridge`.
+-/
+def hqivModeSpacelikeSep (m₁ m₂ : HQIVMode) : Prop :=
+  hqivModeShell m₁ = hqivModeShell m₂ ∧
+    Hqiv.QM.minkowskiSpacelikeSep
+      (Hqiv.QM.patchChartPoint (hqivModePrimaryPatch m₁))
+      (Hqiv.QM.patchChartPoint (hqivModePrimaryPatch m₂))
+
+/-- Triality-style bilinear witness carrying the shell and patch support of its inputs. -/
+def hqivTrialityObservable : HQIVMode → HQIVMode → HQIVMode
+  | Sum.inl f₁, Sum.inl f₂ =>
+      Sum.inr
+        { shell := Nat.min f₁.shell f₂.shell
+          leftPatch := f₁.patch
+          rightPatch := f₂.patch }
+  | m₁, m₂ =>
+      Sum.inr
+        { shell := Nat.min (hqivModeShell m₁) (hqivModeShell m₂)
+          leftPatch := hqivModePrimaryPatch m₁
+          rightPatch := hqivModePrimaryPatch m₂ }
+
+/-- Same-shell spatial patches furnish concrete spacelike fermionic modes. -/
+theorem hqivModeSpacelikeSep_same_shell_spatial {m : ℕ} {i j : Fin 4}
+    (hi : i ≠ 0) (hj : j ≠ 0) (hij : i ≠ j) :
+    hqivModeSpacelikeSep (sampleFermionMode m i) (sampleFermionMode m j) := by
+  constructor
+  · rfl
+  · simpa [hqivModeSpacelikeSep, sampleFermionMode, hqivModePrimaryPatch] using
+      Hqiv.QM.minkowski_spacelike_patchChartPoint_spatial hi hj hij
+
+/-- A patch is never spacelike separated from itself, so the HQIV relation is nontrivial. -/
+theorem not_hqivModeSpacelikeSep_same_patch (m : ℕ) (i : Fin 4) :
+    ¬ hqivModeSpacelikeSep (sampleFermionMode m i) (sampleFermionMode m i) := by
+  intro hsep
+  have hsp :
+      Hqiv.QM.minkowskiSpacelikeSep (Hqiv.QM.patchChartPoint i) (Hqiv.QM.patchChartPoint i) := by
+    simpa [hqivModeSpacelikeSep, sampleFermionMode, hqivModeShell, hqivModePrimaryPatch] using hsep.2
+  have hdiag :
+      Hqiv.QM.minkowskiIntervalSq
+          (Hqiv.QM.minkowskiSep (Hqiv.QM.patchChartPoint i) (Hqiv.QM.patchChartPoint i)) = 0 := by
+    fin_cases i <;>
+      simp [Hqiv.QM.patchChartPoint, Hqiv.QM.minkowskiIntervalSq, Hqiv.QM.minkowskiSep,
+        Matrix.cons_val_zero, Matrix.cons_val_one]
+  unfold Hqiv.QM.minkowskiSpacelikeSep at hsp
+  rw [hdiag] at hsp
+  have : ¬ (0 : ℝ) < 0 := by linarith
+  exact this hsp
+
+/-- The concrete HQIV locality relation has a genuine spacelike witness. -/
+theorem hqivModeSpacelikeSep_has_witness :
+    ∃ m₁ m₂ : HQIVMode, hqivModeSpacelikeSep m₁ m₂ := by
+  refine ⟨sampleFermionMode 4 1, sampleFermionMode 4 2, ?_⟩
+  exact hqivModeSpacelikeSep_same_shell_spatial (by decide) (by decide) (by decide)
+
+/-- The concrete HQIV locality relation is not the degenerate "all pairs spacelike" relation. -/
+theorem hqivModeSpacelikeSep_not_universal :
+    ∃ m₁ m₂ : HQIVMode, ¬ hqivModeSpacelikeSep m₁ m₂ := by
+  exact ⟨sampleFermionMode 4 1, sampleFermionMode 4 1, not_hqivModeSpacelikeSep_same_patch 4 1⟩
+
+/-- **Concrete spin–statistics data** built from shell-aware horizon modes and patch locality. -/
 noncomputable def D_HQIV : SpinStatisticsData :=
-  { mode := Sum Hqiv.Algebra.OctonionSpinorCarrier Unit
+  { mode := HQIVMode
     , spinClass := fun m =>
         match m with
         | Sum.inl _ => SpinClass.halfInteger
@@ -234,7 +325,7 @@ noncomputable def D_HQIV : SpinStatisticsData :=
           | Sum.inr _ => (1 : ℂ)
         else
           (1 : ℂ)
-    , spacelikeSep := fun _ _ => True }
+    , spacelikeSep := hqivModeSpacelikeSep }
 
 namespace D_HQIV
 
@@ -243,6 +334,16 @@ theorem spinClass_cases (m : D_HQIV.mode) :
     D_HQIV.spinClass m = SpinClass.integer ∨
     D_HQIV.spinClass m = SpinClass.halfInteger := by
   cases m <;> simp [D_HQIV]
+
+/-- Concrete witness: the HQIV locality relation sees same-shell spatially separated modes. -/
+theorem spacelikeSep_has_witness :
+    ∃ m₁ m₂ : D_HQIV.mode, D_HQIV.spacelikeSep m₁ m₂ := by
+  simpa [D_HQIV] using hqivModeSpacelikeSep_has_witness
+
+/-- Concrete witness: the HQIV locality relation is not universal. -/
+theorem spacelikeSep_not_universal :
+    ∃ m₁ m₂ : D_HQIV.mode, ¬ D_HQIV.spacelikeSep m₁ m₂ := by
+  simpa [D_HQIV] using hqivModeSpacelikeSep_not_universal
 
 end D_HQIV
 
@@ -280,36 +381,34 @@ by
         simp [D_HQIV, SpinStatisticsData.isBosonic] at hB
     | inr u =>
         simp [D_HQIV, SpinStatisticsData.isBosonic, *] at hB ⊢
-  · -- J: triality-style bilinear — two fermions map to a boson.
-    intro m₁ m₂
-    exact
-      match m₁, m₂ with
-      | Sum.inl _, Sum.inl _ => Sum.inr ()
-      | _, _ => Sum.inr ()
+  · -- J: triality-style bilinear — promote fermion pairs to a bosonic observable
+    -- while preserving shell/patch support data.
+    exact hqivTrialityObservable
   · -- J_bosonic: fermion–fermion bilinear is bosonic.
     intro m₁ m₂ hF₁ hF₂
     cases m₁ <;> cases m₂ <;>
-      simp [D_HQIV, SpinStatisticsData.isFermionic,
+      simp [D_HQIV, hqivTrialityObservable, SpinStatisticsData.isFermionic,
             SpinStatisticsData.isBosonic] at hF₁ hF₂ ⊢
   · -- locality_bosonic: bosonic bilinears commute (unit exchange phase).
     intro m₁ m₂ _hsep
-    -- J m₁ m₂ and J m₂ m₁ are always bosonic Sum.inr; exchange phase = 1.
-    cases m₁ <;> cases m₂ <;>
-      simp [D_HQIV]  -- both sides reduce to 1
+    -- J m₁ m₂ and J m₂ m₁ are always bosonic observables; exchange phase = 1.
+    cases m₁ <;> cases m₂
+    all_goals
+      simp [D_HQIV, hqivTrialityObservable]
   · -- exchangePhase_bilinear: in fermionic sector, phase is product of
     -- single-mode phases (−1)·(−1) = 1.
     intro m₁ m₂ hF₁ hF₂
-    cases m₁ <;> cases m₂ <;>
-      simp [D_HQIV, SpinStatisticsData.isFermionic] at hF₁ hF₂ ⊢
+    cases m₁ <;> cases m₂
+    · simp [D_HQIV, hqivTrialityObservable, SpinStatisticsData.isFermionic] at hF₁ hF₂ ⊢
+    all_goals
+      simp [D_HQIV, SpinStatisticsData.isFermionic] at hF₁ hF₂
   · -- exchange_eq_twoPiPhase: single-mode exchange phase equals 2π phase.
     intro m
     cases m with
     | inl v =>
-        simp [D_HQIV, SpinStatisticsData.isFermionic,
-              SpinStatisticsData.isBosonic]
+        simp [D_HQIV]
     | inr u =>
-        simp [D_HQIV, SpinStatisticsData.isFermionic,
-              SpinStatisticsData.isBosonic]
+        simp [D_HQIV]
 
 /-- **HQIV satisfies the spin–statistics statement** in the abstract sense:
 there exists a spin–statistics data bundle and corresponding axioms such

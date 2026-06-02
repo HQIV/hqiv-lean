@@ -3,6 +3,7 @@ import Mathlib.Data.Fin.VecNotation
 import Hqiv.QuantumMechanics.ContinuumManyBodyQFTScaffold
 import Hqiv.QuantumMechanics.HorizonFreeFieldScaffold
 import Hqiv.QuantumMechanics.LocalAlgebraNetScaffold
+import Hqiv.Geometry.HQVMCausalChart
 
 /-!
 # Patch QFT bridge (support-restricted net + spatial Minkowski chart)
@@ -26,6 +27,10 @@ this is the **operator + chart + microcausality** patch story at the scaffold le
 See also `Hqiv.Physics.LightConeMaxwellQFTBridge` for shell/mode budget and time-angle hooks.
 Smeared interval–max Pauli lifts on `Fin 4 × Fin 4` (`smearedOpIntervalMax`, spacelike support vanishing):
 `Hqiv.QuantumMechanics.PatchIntervalMaxSmeared`.
+
+**Metric scaling / HQVM:** `patchChartPointScaled` rescales corner coordinates by `ε` (cell size).
+`Hqiv.Geometry.HQVMCausalChart` supplies `minkowskiIntervalSq_smul` / `hqvmIntervalSq_smul` and
+`regions_disjoint_spatial_spacelike_hqvm` (same-time spatial corners, `s > 0`).
 -/
 
 namespace Hqiv.QM
@@ -85,6 +90,11 @@ theorem minkowski_spacelike_patchChartPoint_spatial {i j : Fin 4} (hi : i ≠ 0)
     <;> simp [patchChartPoint, minkowskiSpacelikeSep, minkowskiIntervalSq, minkowskiSep,
       cons_val_zero, cons_val_one] at hi hj hij ⊢
 
+/-- Spatial unit corners share `t = 0` in the patch chart. -/
+theorem patchChartPoint_time_eq_of_ne_zero {i j : Fin 4} (hi : i ≠ 0) (hj : j ≠ 0) :
+    patchChartPoint i 0 = patchChartPoint j 0 := by
+  fin_cases i <;> fin_cases j <;> first | contradiction | simp [patchChartPoint, cons_val_zero]
+
 /-- If regions lie in `Finset.erase univ 0` and are disjoint, corners are pairwise spacelike. -/
 theorem regions_disjoint_spatial_spacelike {R S : SpacetimeRegion}
     (hR : R ⊆ Finset.erase (Finset.univ : Finset (Fin 4)) 0)
@@ -100,6 +110,32 @@ theorem regions_disjoint_spatial_spacelike {R S : SpacetimeRegion}
     rw [hcap] at hiRS
     exact absurd hiRS (Finset.notMem_empty i)
   exact minkowski_spacelike_patchChartPoint_spatial hi0 hj0 hij
+
+/-- Rescale every chart coordinate by `ε` (uniform lattice spacing). -/
+noncomputable def patchChartPointScaled (ε : ℝ) (i : Fin 4) : SpacetimeChart :=
+  fun j => ε * patchChartPoint i j
+
+theorem minkowskiIntervalSq_patchChartPointScaled (ε : ℝ) (i : Fin 4) :
+    minkowskiIntervalSq (patchChartPointScaled ε i) = ε ^ 2 * minkowskiIntervalSq (patchChartPoint i) := by
+  simpa [patchChartPointScaled] using Hqiv.Geometry.minkowskiIntervalSq_smul ε (patchChartPoint i)
+
+theorem hqvmIntervalSq_patchChartPointScaled (N a Φ : ℝ) (ε : ℝ) (i : Fin 4) :
+    Hqiv.Geometry.hqvmIntervalSq N a Φ (patchChartPointScaled ε i) =
+      ε ^ 2 * Hqiv.Geometry.hqvmIntervalSq N a Φ (patchChartPoint i) := by
+  simpa [patchChartPointScaled] using Hqiv.Geometry.hqvmIntervalSq_smul N a Φ ε (patchChartPoint i)
+
+/-- Disjoint spatial regions ⇒ HQVM spacelike separation between corners when `s = a²(1-2Φ) > 0`. -/
+theorem regions_disjoint_spatial_spacelike_hqvm (N a Φ : ℝ) (hs : 0 < Hqiv.HQVM_spatial_coeff a Φ)
+    {R S : SpacetimeRegion} (hR : R ⊆ Finset.erase (Finset.univ : Finset (Fin 4)) 0)
+    (hS : S ⊆ Finset.erase (Finset.univ : Finset (Fin 4)) 0) (hdisj : Disjoint R S) {i j : Fin 4}
+    (hi : i ∈ R) (hj : j ∈ S) :
+    Hqiv.Geometry.hqvmSpacelikeSep N a Φ (patchChartPoint i) (patchChartPoint j) := by
+  have hi0 : i ≠ 0 := (Finset.mem_erase.mp (hR hi)).1
+  have hj0 : j ≠ 0 := (Finset.mem_erase.mp (hS hj)).1
+  refine
+    Hqiv.Geometry.hqvmSpacelike_of_minkowski_spacelike_same_time N a Φ ?_ hs
+      (regions_disjoint_spatial_spacelike hR hS hdisj hi hj)
+  exact patchChartPoint_time_eq_of_ne_zero hi0 hj0
 
 /-!
 ### `EventChart` wiring (`ℕ` labels) ↔ patch net regions

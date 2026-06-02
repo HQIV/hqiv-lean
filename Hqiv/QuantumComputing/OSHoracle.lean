@@ -2,6 +2,29 @@ import Mathlib.Data.List.Basic
 import Mathlib.Algebra.BigOperators.Ring.Finset
 import Hqiv.QuantumComputing.DigitalGates
 
+/-!
+# Sparse OSH oracle (digital sparse simulation)
+
+This module is the **proved combinatorial spine** behind sparse HQIV simulation: a `SparseRegister` is
+explicit superposition bookkeeping (wrapped index × octonion amplitude). One step **expands** support
+along the horizon-causal rule (`causalExpandSupport`), applies the digital gate on a materialized dense
+slice (`applyGateSparse`), then **difference detection** (`detectFlippedKets`) and **pruning**
+(`pruneToFlipped`) shrink the tracked list.
+
+That expand → evolve → flip-detect → prune pattern is the formal analogue of what we informally call
+**sparse Shor-style** bookkeeping: the “period” is not proved here as a Fourier peak, but **support
+and flip lists** are exactly what Lean counts (`applyGateSparse_length_eq_two_mul`,
+`pruneToFlipped_length_le`, `detectFlippedKets_length_le_sum`, `horizonCausal_support_o_twoPow_practice`).
+
+Rapidity / shell phase elsewhere in HQIV (`SpatialSliceRapidityScaffold`, phase channels in the
+integrated factor driver) supplies the **angular coordinate** story; **this** file pins down the
+**list algebra** on sparse kets. For dense vs sparse memory crossover (and the caveat that one formal
+step builds a full `DiscreteState`), see `SparseSimulationDensityCrossover`.
+
+`Hqiv.Geometry.HQIVOSHIntegratedFactorDriver` cites these lemmas for the integrated Python driver; divisor
+soundness for classical monolithic hits is in `Hqiv.Geometry.MonolithicGeometricFactorizer`.
+-/
+
 namespace Hqiv.QuantumComputing
 
 open scoped BigOperators
@@ -12,6 +35,35 @@ abbrev Octonion : Type := OctonionVec
 
 /-- Sparse nonzero support `(index, amplitude)` for a register at cutoff `L`. -/
 abbrev SparseRegister (_L : Nat) : Type := List (Nat × Octonion)
+
+/-- Sparse execution tags mirrored by Python fast paths. -/
+inductive SparseGateKind where
+  /-- Diagonal in the embedded computational basis. -/
+  | diagonal
+  /-- Basis-label permutation. -/
+  | permutation
+  /-- Local `2 × 2` mix on one embedded qubit line. -/
+  | local_mix
+  /-- Certified dense fallback when no sparse shortcut applies. -/
+  | dense_fallback
+  deriving DecidableEq, Repr
+
+/-- A gate plus its sparse-path tag; norm preservation remains the underlying `HQIVGate` theorem. -/
+structure SparseCertifiedGate (L : Nat) where
+  gate : HQIVGate L
+  kind : SparseGateKind
+
+theorem SparseCertifiedGate.preserves_discreteNormSq {L : Nat} (G : SparseCertifiedGate L)
+    (f : DiscreteState L) :
+    discreteNormSq (G.gate.toEquiv f) = discreteNormSq f :=
+  G.gate.preserves_normSq f
+
+/-- Certificate constructor for two-level local mixes from `DigitalGates.twoLevelUnitaryGate`. -/
+def localMixCertifiedGate {L : Nat} [DecidableEq (HarmonicIndex L)]
+    (ij₀ ij₁ : HarmonicIndex L) (hij : ij₀ ≠ ij₁) (U : TwoLevelOctonionUnitary) :
+    SparseCertifiedGate L where
+  gate := twoLevelUnitaryGate ij₀ ij₁ hij U
+  kind := SparseGateKind.local_mix
 
 /-- Digital basis size used for sparse index wrapping at cutoff `L`. -/
 def sparseBasisCard (L : Nat) : Nat :=
@@ -138,6 +190,8 @@ theorem horizonCausal_support_o_twoPow_practice {L : Nat} (r : SparseRegister L)
 #print applyGateSparse
 #print detectFlippedKets
 #print pruneToFlipped
+#print SparseGateKind
+#print localMixCertifiedGate
 #print pruneToFlipped_preserves_discreteIp_norm
 #print detectFlippedKets_length_le_sum
 #print horizonCausal_support_o_twoPow_practice
@@ -147,6 +201,8 @@ theorem horizonCausal_support_o_twoPow_practice {L : Nat} (r : SparseRegister L)
 #check applyGateSparse
 #check detectFlippedKets
 #check pruneToFlipped
+#check SparseCertifiedGate.preserves_discreteNormSq
+#check localMixCertifiedGate
 #check pruneToFlipped_preserves_discreteIp_norm
 #check detectFlippedKets_length_le_sum
 #check horizonCausal_support_o_twoPow_practice

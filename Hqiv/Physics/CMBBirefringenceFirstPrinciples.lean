@@ -5,21 +5,25 @@ import Hqiv.Geometry.OctonionicLightCone
 import Hqiv.QuantumMechanics.BornMeasurementFinite
 
 /-!
-# CMB birefringence angle from HQIV first principles (no experimental β input)
+# HQIV birefringence proton-anchor imprint (no experimental β input)
 
 The measurement/redshift layer uses `birefringenceRedshiftN betaRad kappaBeta` with independent
-real parameters. Here we **define** a distinguished angle `betaRad_HQIV_imprint` from the
+real parameters. Here we **define** a distinguished proton-anchor imprint
+`betaRad_HQIV_imprint` from the
 **already-derived** HQIV objects in this repository:
 
 * the **sole** HQIV curvature-imprint exponent `Hqiv.alpha` (proved `3/5` via `alpha_eq_3_5`;
   physical derivation in the companion HQIV manuscript and Brodie 2026—see `AGENTS/ASSUMPTIONS.md` §1b);
 * the reference horizon shell `Hqiv.referenceM` (lock-in shell from the 3D null lattice).
 
-No measured CMB polarization angle is imported: this is the formal “theory value” hook used to
-populate the birefringence channel in the same bookkeeping identity as `BornMeasurementFinite`.
+No measured CMB polarization angle is imported.  This is the formal proton-lock-in shell hook used
+to populate the birefringence channel in the same bookkeeping identity as `BornMeasurementFinite`.
+The observed CMB birefringence angle is a **relative** shell traversal,
+`α · log((m_obs+1)/(m_emit+1))`, formalized in `HorizonBlackbodyLadder`.
 
 The closed form `exp(betaRad/κ) = (referenceM+1)^α` (with `κ = 1`) links cosmic birefringence
-redshift directly to the discrete shell ladder and α.
+redshift directly to the discrete shell ladder and α at the proton-anchor shell; it is not a claim
+that last scattering sits at `referenceM`.
 -/
 
 namespace Hqiv.Physics
@@ -33,10 +37,12 @@ def kappaBeta_HQIV : ℝ := 1
 
 theorem kappaBeta_HQIV_pos : 0 < kappaBeta_HQIV := by unfold kappaBeta_HQIV; norm_num
 
-/-- **First-principles** birefringence angle (radians): α times log(reference shell + 1).
+/-- **First-principles proton-anchor** birefringence imprint (radians):
+α times log(reference shell + 1).
 
-Here `α` is the HQIV curvature imprint exponent and `referenceM` is the derived lock-in shell
-(`qcdShell + stepsFromQCDToLockin` in `OctonionicLightCone`). -/
+Here `α` is the HQIV curvature imprint exponent and `referenceM` is the **export pin**
+(`qcdShell + stepsFromQCDToLockin` in `OctonionicLightCone`, not a derived shell index).
+cosmological shells and therefore use the shell-ratio readout in `HorizonBlackbodyLadder`. -/
 noncomputable def betaRad_HQIV_imprint : ℝ :=
   Hqiv.alpha * Real.log ((Hqiv.referenceM + 1 : ℝ))
 

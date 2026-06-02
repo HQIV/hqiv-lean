@@ -15,7 +15,7 @@ import Hqiv.Physics.GRFromMaxwell
 import Hqiv.Physics.ModifiedMaxwell
 import Hqiv.Physics.ChargedLeptonResonance
 import Hqiv.Physics.DerivedNucleonMass
-import Hqiv.Physics.Baryogenesis
+import Hqiv.Physics.BaryogenesisCore
 
 namespace Hqiv
 
@@ -376,15 +376,16 @@ So `T_lockin` is the ladder temperature on that shell (`T_lockin = T m_top_at_lo
 The **electron mass** in Planck units is not a separate mass-table input: it is
 `m_tau_Pl` divided by the two **geometric** `ChargedLeptonResonance` factors
 (`resonance_k_*` are exact ratios of detuned `(m+1)(m+2)` surfaces at the lock-in lepton shells
-`m_tau`, `m_mu`, `m_e` from `LeptonGenerationLockin`). The Planck-scale witness `m_tau_Pl` is a
-fixed decimal anchor (same combination as in the archived Planck-volume τ-shell model). The
+`m_tau`, `m_mu`, `m_e` from `LeptonGenerationLockin`). Here `m_tau_Pl` means “τ mass in units
+where **Planck energy is `1`**”; there is no extra free Planck knob—`0` would trivialize the
+sector, and any other positive overall normalization is unit rescaling of that same `1`. The
 **observer-shell** anchor `electronTemperatureAnchor` uses `T_CMB_natural` only to
 place `φ(m)`–shape data at “now”; it is complementary to the lock-in identification
 above.
 
-**Outer-horizon neutrinos** (`m_nu_e_derived`, …) are explicit products of `T_lockin`
-with `outerHorizonSurface` at `referenceM + 1` and `referenceM + 2`; see
-`Hqiv.Physics.m_nu_e_derived_eq_T_lockin_outer_surfaces`.
+**Outer-horizon neutrinos** (`m_nu_e_derived`, …) use `outerHorizonNeutrinoSuppression` on
+`outerHorizonSurface (referenceM + 2)` times the neutral vector witness `M_Z_derived`; see
+`Hqiv.Physics.m_nu_e_derived_eq_suppression_times_M_Z`.
 -/
 
 /-- Lock-in shell index equals quark-top birth shell (`QuarkMetaResonance`). -/
@@ -418,7 +419,8 @@ def smSectorMultiplicity : SMMassLabel → ℝ
   | .up | .down | .strange | .charm | .bottom | .top => Fintype.card Hqiv.Algebra.ConjUR
   | .nu_e | .nu_mu | .nu_tau => Fintype.card Hqiv.Algebra.NuR
 
-/-- Hypercharge weight taken from the SM embedding table, using the existing component assignments. -/
+/-- Hypercharge weight taken from the SM embedding table, using the existing component assignments.
+This is retained as algebraic residual bookkeeping; the mass functional below does not depend on it. -/
 def smHyperchargeWeight : SMMassLabel → ℝ
   | .electron => Hqiv.Algebra.hyperchargeEigenvalue 6
   | .muon => Hqiv.Algebra.hyperchargeEigenvalue 6
@@ -584,13 +586,12 @@ theorem sm_masses_geometrically_derived :
     m_strange_quark_natural, m_charm_quark_natural, m_bottom_quark_natural, m_top_quark_natural,
     m_nu_e_natural, m_nu_mu_natural, m_nu_tau_natural, smChargedLeptonMassFromGeometry]
 
-/-- Positive geometric weights imply positivity for charged leptons and quarks. -/
+/-- Positive resonance weights imply positivity for the geometry-only mass functional.
+The old hypercharge-side hypothesis is no longer needed in the statement. -/
 theorem sm_mass_from_geometry_pos
-    (label : SMMassLabel)
-    (hsec : 0 < smSectorMultiplicity label + smHyperchargeWeight label) :
+    (label : SMMassLabel) :
     0 < smMassFromGeometryLabel label := by
   -- The resonance functional is positive because all factors are positive constants.
-  -- (The `hsec` hypothesis is now redundant but kept to preserve the file’s API.)
   -- We only need positivity of the resonance factors.
   have hm : 0 < m_tau_Pl := by
     norm_num [m_tau_Pl]
@@ -612,12 +613,8 @@ theorem charged_lepton_masses_pos :
   constructor
   · unfold m_muon_natural smChargedLeptonMassFromGeometry
     exact sm_mass_from_geometry_pos .muon
-      (by simp [smSectorMultiplicity, smHyperchargeWeight, Hqiv.Algebra.hyperchargeEigenvalue, Fintype.card_fin,
-        Hqiv.Algebra.ER])
   · unfold m_tau_natural smChargedLeptonMassFromGeometry
     exact sm_mass_from_geometry_pos .tau
-      (by simp [smSectorMultiplicity, smHyperchargeWeight, Hqiv.Algebra.hyperchargeEigenvalue, Fintype.card_fin,
-        Hqiv.Algebra.ER])
 
 /-- Quark masses are positive by geometric derivation. -/
 theorem quark_masses_pos :
@@ -625,49 +622,19 @@ theorem quark_masses_pos :
     0 < m_charm_quark_natural ∧ 0 < m_bottom_quark_natural ∧ 0 < m_top_quark_natural := by
   refine ⟨?_, ?_, ?_, ?_, ?_, ?_⟩
   · exact sm_mass_from_geometry_pos .up
-      (by
-        simp [smSectorMultiplicity, smHyperchargeWeight, Hqiv.Algebra.hyperchargeEigenvalue, Fintype.card_fin,
-          Hqiv.Algebra.ConjUR]
-        norm_num)
   · exact sm_mass_from_geometry_pos .down
-      (by
-        simp [smSectorMultiplicity, smHyperchargeWeight, Hqiv.Algebra.hyperchargeEigenvalue, Fintype.card_fin,
-          Hqiv.Algebra.ConjUR]
-        norm_num)
   · exact sm_mass_from_geometry_pos .strange
-      (by
-        simp [smSectorMultiplicity, smHyperchargeWeight, Hqiv.Algebra.hyperchargeEigenvalue, Fintype.card_fin,
-          Hqiv.Algebra.ConjUR]
-        norm_num)
   · exact sm_mass_from_geometry_pos .charm
-      (by
-        simp [smSectorMultiplicity, smHyperchargeWeight, Hqiv.Algebra.hyperchargeEigenvalue, Fintype.card_fin,
-          Hqiv.Algebra.ConjUR]
-        norm_num)
   · exact sm_mass_from_geometry_pos .bottom
-      (by
-        simp [smSectorMultiplicity, smHyperchargeWeight, Hqiv.Algebra.hyperchargeEigenvalue, Fintype.card_fin,
-          Hqiv.Algebra.ConjUR]
-        norm_num)
   · exact sm_mass_from_geometry_pos .top
-      (by
-        simp [smSectorMultiplicity, smHyperchargeWeight, Hqiv.Algebra.hyperchargeEigenvalue, Fintype.card_fin,
-          Hqiv.Algebra.ConjUR]
-        norm_num)
 
 /-- Neutrino masses are nonnegative from the neutral sector weight. -/
 theorem neutrino_masses_nonnegative :
     0 ≤ m_nu_e_natural ∧ 0 ≤ m_nu_mu_natural ∧ 0 ≤ m_nu_tau_natural := by
   refine ⟨?_, ?_, ?_⟩
-  · exact le_of_lt (sm_mass_from_geometry_pos .nu_e
-      (by simp [smSectorMultiplicity, smHyperchargeWeight, Hqiv.Algebra.hyperchargeEigenvalue, Fintype.card_fin,
-        Hqiv.Algebra.NuR]))
-  · exact le_of_lt (sm_mass_from_geometry_pos .nu_mu
-      (by simp [smSectorMultiplicity, smHyperchargeWeight, Hqiv.Algebra.hyperchargeEigenvalue, Fintype.card_fin,
-        Hqiv.Algebra.NuR]))
-  · exact le_of_lt (sm_mass_from_geometry_pos .nu_tau
-      (by simp [smSectorMultiplicity, smHyperchargeWeight, Hqiv.Algebra.hyperchargeEigenvalue, Fintype.card_fin,
-        Hqiv.Algebra.NuR]))
+  · exact le_of_lt (sm_mass_from_geometry_pos .nu_e)
+  · exact le_of_lt (sm_mass_from_geometry_pos .nu_mu)
+  · exact le_of_lt (sm_mass_from_geometry_pos .nu_tau)
 
 /-!
 ## Ladder: T_CMB → CMB birefringence → proton mass with error bars

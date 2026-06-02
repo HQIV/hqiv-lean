@@ -92,13 +92,13 @@ private theorem phiRat_eq_of_swap {ij₁ ij₂ : HarmonicIndex L} (hℓ : ij₁.
       simp [hk3]
 
 /-- Swap two modes with the same `ℓ` (identical `phiRat` weight). -/
-def swapGates (ij₁ ij₂ : HarmonicIndex L) (hℓ : ij₁.fst = ij₂.fst) : HQIVGate L where
+def swapGates (ij₁ ij₂ : HarmonicIndex L) (_hℓ : ij₁.fst = ij₂.fst) : HQIVGate L where
   toEquiv := (Equiv.swap ij₁ ij₂).arrowCongr (Equiv.refl (OctonionVec))
   preserves_ip f g := by
     let σ := Equiv.swap ij₁ ij₂
     -- With the unweighted `discreteIp`, any index permutation preserves the inner product.
     -- `arrowCongr` induces precomposition by `σ` on the basis-indexed amplitude function.
-    simp [discreteIp, Equiv.arrowCongr, Equiv.coe_refl, σ, octonionInner]
+    simp [discreteIp, Equiv.arrowCongr, Equiv.coe_refl, octonionInner]
     simpa using Equiv.sum_comp σ (fun k => octonionInner (f k) (g k))
 
 /-- Hadamard-style identity on a uniform `Fin 2` pair (no `√2`; doubling is explicit). -/
@@ -149,10 +149,189 @@ theorem octonionScalarUnit_preserves_euclidean (v : Fin 8 → ℝ) :
     funext i
     simp only [octonionMulVec, octonionScalarUnit, Matrix.one_apply]
     rw [Finset.sum_eq_single i]
-    · simp [mul_one]
+    · simp
     · intro j _ hne; simp only [hne.symm, ite_false, zero_mul]
     · intro h; exact absurd (Finset.mem_univ i) h
   simp [hmul]
+
+/-! ### Embedded two-level local mixes
+
+The Python `EmbeddedQubitSpace` represents a qubit line by pairs of computational-basis slots.
+The Lean state type is still real-valued (`OctonionVec` fibers), so the certified primitive below
+is deliberately phrased as a real two-slot witness. Complex OpenQASM gates such as `u3` are admitted
+by realifying their `2 × 2` unitary onto the active octonion components and supplying the same
+pair-inner-product proof.
+-/
+
+/-- A local two-level gate witness on two octonion amplitudes. -/
+structure TwoLevelOctonionUnitary where
+  toPairEquiv : (OctonionVec × OctonionVec) ≃ (OctonionVec × OctonionVec)
+  preserves_pair_ip (x y : OctonionVec × OctonionVec) :
+    octonionInner (toPairEquiv x).1 (toPairEquiv y).1 +
+      octonionInner (toPairEquiv x).2 (toPairEquiv y).2 =
+    octonionInner x.1 y.1 + octonionInner x.2 y.2
+
+/-- Apply a two-level unitary witness to two distinct harmonic slots, fixing all other slots. -/
+def twoLevelUnitaryGate (ij₀ ij₁ : HarmonicIndex L) (hij : ij₀ ≠ ij₁)
+    (U : TwoLevelOctonionUnitary) : HQIVGate L where
+  toEquiv := {
+    toFun := fun f k =>
+      if k = ij₀ then (U.toPairEquiv (f ij₀, f ij₁)).1
+      else if k = ij₁ then (U.toPairEquiv (f ij₀, f ij₁)).2
+      else f k
+    invFun := fun f k =>
+      if k = ij₀ then (U.toPairEquiv.symm (f ij₀, f ij₁)).1
+      else if k = ij₁ then (U.toPairEquiv.symm (f ij₀, f ij₁)).2
+      else f k
+    left_inv := by
+      intro f
+      funext k
+      by_cases hk0 : k = ij₀
+      · subst hk0
+        have h10 : ij₁ ≠ k := hij.symm
+        simp [h10]
+      · by_cases hk1 : k = ij₁
+        · subst hk1
+          simp [hij.symm]
+        · simp [hk0, hk1]
+    right_inv := by
+      intro f
+      funext k
+      by_cases hk0 : k = ij₀
+      · subst hk0
+        have h10 : ij₁ ≠ k := hij.symm
+        simp [h10]
+      · by_cases hk1 : k = ij₁
+        · subst hk1
+          simp [hij.symm]
+        · simp [hk0, hk1]
+  }
+  preserves_ip f g := by
+    classical
+    let F : DiscreteState L :=
+      fun k =>
+        if k = ij₀ then (U.toPairEquiv (f ij₀, f ij₁)).1
+        else if k = ij₁ then (U.toPairEquiv (f ij₀, f ij₁)).2
+        else f k
+    let G : DiscreteState L :=
+      fun k =>
+        if k = ij₀ then (U.toPairEquiv (g ij₀, g ij₁)).1
+        else if k = ij₁ then (U.toPairEquiv (g ij₀, g ij₁)).2
+        else g k
+    change discreteIp F G = discreteIp f g
+    unfold discreteIp
+    let rest : Finset (HarmonicIndex L) := (Finset.univ \ {ij₀}) \ {ij₁}
+    have hmem₁ : ij₁ ∈ (Finset.univ \ {ij₀} : Finset (HarmonicIndex L)) := by
+      simp [hij.symm]
+    have hF_rest : ∀ k ∈ rest, F k = f k := by
+      intro k hk
+      simp [rest] at hk
+      simp [F, hk.1, hk.2]
+    have hG_rest : ∀ k ∈ rest, G k = g k := by
+      intro k hk
+      simp [rest] at hk
+      simp [G, hk.1, hk.2]
+    calc
+      (∑ k : HarmonicIndex L, octonionInner (F k) (G k))
+          = octonionInner (F ij₀) (G ij₀) +
+              (octonionInner (F ij₁) (G ij₁) +
+                (Finset.sum rest fun k => octonionInner (F k) (G k))) := by
+            rw [Finset.sum_eq_add_sum_diff_singleton (Finset.mem_univ ij₀)]
+            rw [Finset.sum_eq_add_sum_diff_singleton hmem₁]
+      _ = (octonionInner (F ij₀) (G ij₀) + octonionInner (F ij₁) (G ij₁)) +
+              (Finset.sum rest fun k => octonionInner (f k) (g k)) := by
+            have hrest :
+                (Finset.sum rest fun k => octonionInner (F k) (G k)) =
+                  (Finset.sum rest fun k => octonionInner (f k) (g k)) := by
+              exact Finset.sum_congr rfl fun k hk => by simp [hF_rest k hk, hG_rest k hk]
+            rw [hrest]
+            ring
+      _ = (octonionInner (f ij₀) (g ij₀) + octonionInner (f ij₁) (g ij₁)) +
+              (Finset.sum rest fun k => octonionInner (f k) (g k)) := by
+            have hactive :
+                octonionInner (F ij₀) (G ij₀) + octonionInner (F ij₁) (G ij₁) =
+                  octonionInner (f ij₀) (g ij₀) + octonionInner (f ij₁) (g ij₁) := by
+              simpa [F, G, hij, hij.symm] using
+                U.preserves_pair_ip (f ij₀, f ij₁) (g ij₀, g ij₁)
+            rw [hactive]
+      _ = octonionInner (f ij₀) (g ij₀) +
+              (octonionInner (f ij₁) (g ij₁) +
+                (Finset.sum rest fun k => octonionInner (f k) (g k))) := by ring
+      _ = ∑ k : HarmonicIndex L, octonionInner (f k) (g k) := by
+            rw [Finset.sum_eq_add_sum_diff_singleton (Finset.mem_univ ij₀)]
+            rw [Finset.sum_eq_add_sum_diff_singleton hmem₁]
+
+/-- Componentwise two-vector linear combination. -/
+def octonionVecLin2 (a b : ℝ) (x y : OctonionVec) : OctonionVec :=
+  fun i => a * x i + b * y i
+
+/-- A real `SO(2)` local mix, the real shadow used for `rx`/`ry` slices and Hadamard checks. -/
+def realPlaneRotationUnitary (c s : ℝ) (hcs : c * c + s * s = 1) :
+    TwoLevelOctonionUnitary where
+  toPairEquiv := {
+    toFun := fun p =>
+      (octonionVecLin2 c (-s) p.1 p.2, octonionVecLin2 s c p.1 p.2)
+    invFun := fun p =>
+      (octonionVecLin2 c s p.1 p.2, octonionVecLin2 (-s) c p.1 p.2)
+    left_inv := by
+      intro p
+      have hcs' : c ^ 2 + s ^ 2 = 1 := by nlinarith [hcs]
+      have hmul_left (a : ℝ) : c ^ 2 * a + s ^ 2 * a = a := by
+        calc
+          c ^ 2 * a + s ^ 2 * a = (c ^ 2 + s ^ 2) * a := by ring
+          _ = a := by rw [hcs']; ring
+      have hmul_right (a : ℝ) : s ^ 2 * a + c ^ 2 * a = a := by
+        rw [add_comm]
+        exact hmul_left a
+      ext i
+      · simp [octonionVecLin2]
+        ring_nf
+        simpa [mul_comm, mul_left_comm, mul_assoc] using hmul_left (p.1 i)
+      · simp [octonionVecLin2]
+        ring_nf
+        exact hmul_right (p.2 i)
+    right_inv := by
+      intro p
+      have hcs' : c ^ 2 + s ^ 2 = 1 := by nlinarith [hcs]
+      have hmul_left (a : ℝ) : c ^ 2 * a + s ^ 2 * a = a := by
+        calc
+          c ^ 2 * a + s ^ 2 * a = (c ^ 2 + s ^ 2) * a := by ring
+          _ = a := by rw [hcs']; ring
+      have hmul_right (a : ℝ) : s ^ 2 * a + c ^ 2 * a = a := by
+        rw [add_comm]
+        exact hmul_left a
+      ext i
+      · simp [octonionVecLin2]
+        ring_nf
+        simpa [mul_comm, mul_left_comm, mul_assoc] using hmul_left (p.1 i)
+      · simp [octonionVecLin2]
+        ring_nf
+        exact hmul_right (p.2 i)
+  }
+  preserves_pair_ip x y := by
+    have hcs' : c ^ 2 + s ^ 2 = 1 := by nlinarith [hcs]
+    have hbilin (a b : ℝ) : c ^ 2 * a * b + a * s ^ 2 * b = a * b := by
+      calc
+        c ^ 2 * a * b + a * s ^ 2 * b = (c ^ 2 + s ^ 2) * (a * b) := by ring
+        _ = a * b := by rw [hcs']; ring
+    simp [octonionInner, octonionVecLin2]
+    rw [← Finset.sum_add_distrib]
+    calc
+      (∑ x_1,
+          ((c * x.1 x_1 + -(s * x.2 x_1)) * (c * y.1 x_1 + -(s * y.2 x_1)) +
+            (s * x.1 x_1 + c * x.2 x_1) * (s * y.1 x_1 + c * y.2 x_1))) =
+          ∑ i, (x.1 i * y.1 i + x.2 i * y.2 i) := by
+            refine Finset.sum_congr rfl ?_
+            intro i _
+            ring_nf
+            nlinarith [hbilin (x.1 i) (y.1 i), hbilin (x.2 i) (y.2 i)]
+      _ = (∑ i, x.1 i * y.1 i) + ∑ i, x.2 i * y.2 i := by
+            rw [Finset.sum_add_distrib]
+
+/-- Certified one-qubit-line real local mix between two embedded basis slots. -/
+def realPlaneRotationGate (ij₀ ij₁ : HarmonicIndex L) (hij : ij₀ ≠ ij₁)
+    (c s : ℝ) (hcs : c * c + s * s = 1) : HQIVGate L :=
+  twoLevelUnitaryGate ij₀ ij₁ hij (realPlaneRotationUnitary c s hcs)
 
 /-! ### `Fin 4` controlled–swap (CNOT analogue) on `ℚ⁴`, unweighted `ℓ²` -/
 
@@ -190,6 +369,9 @@ theorem digital_ckw_step (m : ℕ) {τAB τAC τA_BC : ℝ} (h : Hqiv.QM.ckwMono
 #check hadamardShell_two_mul
 #check octonionLeftMul_N_preserves_euclidean
 #check cnot_preserves_unweighted_four
+#check TwoLevelOctonionUnitary
+#check twoLevelUnitaryGate
+#check realPlaneRotationGate
 #check digital_ckw_step
 
 end Hqiv.QuantumComputing

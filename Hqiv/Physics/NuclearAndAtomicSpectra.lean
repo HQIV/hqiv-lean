@@ -22,7 +22,9 @@ standard-looking nuclear and atomic formulas:
 
 * nuclear effective potentials and binding energies (including a magnetic term),
 * excited nuclear and atomic states as higher variational minima,
-* beta–decay rates and half–lives from the HQIV weak vertex,
+* beta–decay rates and half–lives from the HQIV weak vertex (neutrino **oscillation**
+  packaging with the same schematic style—masses + explicit angle parameter—is in
+  `DerivedGaugeAndLeptonSector`),
 * gamma / spectral transition energies and frequencies.
 
 All constants and structural pieces are **re-used** from:

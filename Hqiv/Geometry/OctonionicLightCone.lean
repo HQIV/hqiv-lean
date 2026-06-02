@@ -18,6 +18,27 @@ open scoped Topology
 
 namespace Hqiv
 
+-- `simpa` is clearer than `simp`+`exact` for several ℚ↔ℝ casts below; silence style lint.
+set_option linter.unnecessarySimpa false
+
+/-!
+## Horizon readouts and null-lattice bookkeeping (`m : ℕ`)
+
+Natural indices `m` package **null-lattice combinatorics** (mode counts, temperature ladder samples) and
+the leading **horizon-area functional** `shellSurface m` used wherever downstream modules need a
+closed-form area driver. Think of `m` as a **calibration/readout coordinate** on the light-cone
+substrate, not as the claim that physical support is point-supported on one row.
+
+**Wave vs grid:** localized modes may peak between book-keeping rows; theorems are stated at chosen
+readout values of `m`. **`referenceM`** is the **lock-in / QCD-onset alignment pin** on that
+coordinate—not “all physics lives on this integer.”
+
+**Three generations:** triality / `So8RepIndex` (`Fin 3`) and anomaly bookkeeping force the
+threefold slot (`SMEmbedding`, `Triality`, `AnomalyCancellation`). The index `m` does **not** substitute
+for representation theory; it only supplies the **area law** (`shellSurface`, detuned variants) once a
+mode’s overlap with that bookkeeping is fixed.
+-/
+
 /-- **Discrete null-lattice mode counting (Nat version).**
 
 `latticeSimplexCount m` is the pure stars-and-bars count of integer
@@ -282,15 +303,26 @@ theorem tendsto_latticeAlphaRatio :
   rw [show (fun n : ℕ => latticeAlphaRatio n) = (fun _ => alpha) from funext latticeAlphaRatio_eq_alpha]
   exact tendsto_const_nhds
 
-/-- **Reference horizon** = minimal transition shell (derived); calibration (e.g. paper's Python runs).
-We take the minimal transition shell (N = 1 from exists_transition_shell); no arbitrary step.
-**QCD transition shell:** first shell with positive curvature (T ladder). -/
+/--
+**QCD onset readout index** (`ℕ`), lowest explicit **substrate pin** for the horizon ladder in this module.
+
+Everything “derived” about curvature imprint, `α = 3/5` as a limit of lattice ratios, lock-in
+temperatures, *etc.* is proved **after** that readout index is available—but **`qcdShell` itself is
+not obtained in Lean from a smaller definition block** (it is aligned with the paper narrative: QCD
+onset at the first nontrivial horizon row). Changing `qcdShell` propagates to `referenceM` and every
+lock-in witness that mentions that index.
+-/
 def qcdShell : Nat := 1
 
-/-- **Number of discrete lattice steps** from QCD to lockin (and after lockin). Set to 3 so that
-    it equals cubeAxes (one step per spatial axis of the 3D null lattice); see
-    latticeStepCount_eq_cubeAxes. So the "3" is not inserted — it is the same 3 as in the
-    lattice (cubeAxes). -/
+/--
+**Steps along the 3D null lattice** from QCD to lock-in (and the same count for post-lock-in
+baryogenesis steps).
+
+Set to `3` so that `latticeStepCount = cubeAxes` (`latticeStepCount_eq_cubeAxes`): one step per
+spatial axis of the null lattice. That ties the “3” to the **same** `cubeAxes` used elsewhere, but it
+remains a **named `Nat` pin** in this file—parallel in status to `qcdShell`, not a consequence of
+`latticeSimplexCount` alone.
+-/
 def latticeStepCount : Nat := 3
 
 /-- **latticeStepCount = 3.** -/
@@ -303,8 +335,39 @@ def stepsFromQCDToLockin : Nat := latticeStepCount
 /-- **Steps after lockin:** baryogenesis proceeds latticeStepCount discrete steps after T_lockin. -/
 def stepsAfterLockin : Nat := latticeStepCount
 
-/-- **Reference horizon** = lockin shell = qcdShell + stepsFromQCDToLockin. Calibration at lockin;
-    discrete steps through baryogenesis: QCD then lockin then stepsAfterLockin steps. No arbitrary 500. -/
+/--
+**Lock-in / reference shell index** = `qcdShell + stepsFromQCDToLockin` (currently `4`).
+
+Downstream code evaluates detuned areas, mode counts, and Fano-axis data **at this row** of the
+discrete ladder. That is a **calibration and export convention** on the null-lattice grid: the
+**physical** claim being encoded is that horizon **area functionals** (and the imprint ladder) are the
+resonant drivers, while **three generations** are carried by the Spin(8)/triality / `So8RepIndex`
+layer—not by the numeral `4` itself.
+
+It is **not** an output of a deeper numeric search inside this module: it is **fixed by the two pins
+above**. Changing `qcdShell` / `latticeStepCount` moves which grid row is named “reference,” not the
+algebraic fact that generation space is threefold.
+
+**Never treat `referenceM = 4` as derived from TUFT Hopf winding or from proton mass fitting.**
+The numeral `4` also appears as `tuftHeavyChartShell = n + 1` for heavy Hopf winding `n = 3`;
+Lean proves `referenceM = tuftHeavyChartShell` only as a **numeric coincidence** under the current
+pins (`HopfShellBeltramiMassBridge.referenceM_eq_tuftHeavyChartShell_numeric`), not as chart
+identification. See `AGENTS/TUFT_INNER_OUTER_CASIMIR_DYNAMICS.md` §0.
+
+**Tent-pole note (dynamic Casimir / T-ladder era):** `referenceM` is the **hadronic/proton calibration
+and export convention** on the discrete null-lattice grid. It is the row at which the nucleon network
+mass formulas (ConservedContentMassBridge, QuarkMetaResonance, CosmologicalShellLadder) lock the
+observed 938.272 MeV proton scale. It is **not** required to be the universal normalization point for
+leptonic, neutral, or gauge-sector readouts.
+
+The dynamic inner/outer Casimir machinery (`effective_casimir_scale_at_xi`, the T12 three-shell
+witness + T11 torsion + T13 outer 1/140 on the same octonion carrier, the continuous curvature
+primitive driving `omegaK_xi`, and the physical-T ↔ ξ ladder) now supplies a first-class,
+geometry-driven scale for those sectors at *any* temperature. The lepton-specific chart and the
+RHN neutral channel can (and should) be computed from that dynamic relationship rather than being
+forced through the m=4 proton shell. See `HopfShellBeltramiMassBridge` (MeV-anchored physical_T
+readouts) and the worldview synthesis in `AGENTS/TUFT_INNER_OUTER_CASIMIR_DYNAMICS.md`.
+-/
 def referenceM : Nat := qcdShell + stepsFromQCDToLockin
 
 /-- Continuous curvature-imprint density on ℝ⁺, matching `shell_shape` on integers. -/
@@ -369,8 +432,14 @@ lemma curvatureDensity_le_one_div_succ_mul_log (m n : Nat) (hmn : m < n) :
     curvatureDensity (m + 1) ≤ (1 / (m + 1 : ℝ)) * (1 + alpha * Real.log (n + 1 : ℝ)) := by
   unfold curvatureDensity
   have hpos : (0 : ℝ) < (m + 1 : ℝ) := by exact_mod_cast Nat.succ_pos m
-  gcongr
-  first | unfold alpha; norm_num | exact Real.log_le_log (Nat.cast_pos.mpr (Nat.succ_pos m)) (Nat.cast_le.mpr (Nat.succ_le_succ (Nat.le_of_lt hmn)))
+  have hfrac : 0 ≤ (1 / (m + 1 : ℝ)) := le_of_lt (one_div_pos.mpr hpos)
+  refine mul_le_mul_of_nonneg_left ?_ hfrac
+  have hα : 0 ≤ alpha := by unfold alpha; norm_num
+  have hm : (m + 1 : ℝ) ≤ (n + 1 : ℝ) := by exact_mod_cast Nat.succ_le_succ (Nat.le_of_lt hmn)
+  have hlog : Real.log (m + 1) ≤ Real.log (n + 1) := Real.log_le_log hpos hm
+  have hαlog : alpha * Real.log (m + 1) ≤ alpha * Real.log (n + 1) :=
+    mul_le_mul_of_nonneg_left hlog hα
+  linarith
 
 /-- By definition, `shell_shape m` is the density sampled at m+1. -/
 theorem shell_shape_eq_density_succ (m : Nat) :
@@ -415,6 +484,14 @@ theorem latticeStepCount_eq_cubeAxes : latticeStepCount = cubeAxes := by unfold 
 def octonionImaginaryDim : ℕ := 7
 
 theorem octonionImaginaryDim_eq : octonionImaginaryDim = 7 := rfl
+
+/-- **Quaternion imaginary dimension:** 3 imaginary units.
+
+This is the comparison carrier for the classical `H`-sector / quaternionic Maxwell
+reduction, not the canonical HQIV octonionic lift. -/
+def quaternionImaginaryDim : ℕ := 3
+
+theorem quaternionImaginaryDim_eq : quaternionImaginaryDim = 3 := rfl
 
 /-- **Half-diagonal of the unit cube** (cube with vertices at (±1,±1,±1)).
 Distance from center to vertex = √(1²+1²+1²) = √3. This is the "inscribed sphere"
@@ -476,6 +553,20 @@ theorem curvatureNormBase_eq_cubeDirections : curvatureNormBase = cubeDirections
 /-- The curvature norm exponent equals the octonion imaginary dimension (7). -/
 theorem curvatureNormExponent_eq_octonionDim : curvatureNormExponent = octonionImaginaryDim := by
   unfold curvatureNormExponent octonionImaginaryDim; rfl
+
+/-- Comparison candidate: replace the octonionic exponent `7` by the quaternionic exponent `3`. -/
+noncomputable def curvature_norm_quaternionicCandidate : ℝ :=
+  (cubeDirections : ℝ) ^ quaternionImaginaryDim * unitCubeHalfDiagonal
+
+theorem curvature_norm_quaternionicCandidate_eq :
+    curvature_norm_quaternionicCandidate = (cubeDirections : ℝ) ^ quaternionImaginaryDim * unitCubeHalfDiagonal :=
+  rfl
+
+theorem curvature_norm_quaternionicCandidate_exact :
+    curvature_norm_quaternionicCandidate = (216 : ℝ) * Real.sqrt (3 : ℝ) := by
+  rw [curvature_norm_quaternionicCandidate_eq, unitCubeHalfDiagonal_eq_sqrt3, cubeDirections_eq,
+    quaternionImaginaryDim_eq]
+  norm_num
 
 /-- **Arithmetic identity:** \(6^7 = 279\,936\) (so the curvature norm factor is an integer). -/
 theorem curvatureNormBase_pow_exponent :
@@ -589,6 +680,25 @@ theorem curvature_norm_combinatorial_exact :
   unfold curvature_norm_combinatorial curvatureNormBase curvatureNormExponent
   norm_num
 
+theorem curvature_norm_combinatorial_eq_1296_mul_quaternionicCandidate :
+    curvature_norm_combinatorial = (1296 : ℝ) * curvature_norm_quaternionicCandidate := by
+  rw [curvature_norm_combinatorial_exact, curvature_norm_quaternionicCandidate_exact]
+  ring
+
+theorem curvature_norm_quaternionicCandidate_eq_div_1296 :
+    curvature_norm_quaternionicCandidate = curvature_norm_combinatorial / (1296 : ℝ) := by
+  rw [curvature_norm_combinatorial_eq_1296_mul_quaternionicCandidate]
+  field_simp
+
+theorem curvature_norm_combinatorial_ne_quaternionicCandidate :
+    curvature_norm_combinatorial ≠ curvature_norm_quaternionicCandidate := by
+  rw [curvature_norm_combinatorial_eq_1296_mul_quaternionicCandidate]
+  intro h
+  have hqpos : 0 < curvature_norm_quaternionicCandidate := by
+    rw [curvature_norm_quaternionicCandidate_exact]
+    exact mul_pos (by norm_num) (Real.sqrt_pos.mpr (by norm_num))
+  nlinarith
+
 /-- **Combinatorial norm is positive** (base^exponent > 0 and √3 > 0). -/
 theorem curvature_norm_combinatorial_pos : 0 < curvature_norm_combinatorial := by
   unfold curvature_norm_combinatorial curvatureNormBase curvatureNormExponent
@@ -600,6 +710,10 @@ theorem curvature_norm_combinatorial_pos : 0 < curvature_norm_combinatorial := b
 noncomputable def deltaE (m : Nat) : ℝ :=
   curvature_norm_combinatorial * shell_shape m
 
+/-- Parallel comparison candidate: the same shell shape, but with quaternionic `6^3 * sqrt(3)` normalization. -/
+noncomputable def deltaE_quaternionicCandidate (m : Nat) : ℝ :=
+  curvature_norm_quaternionicCandidate * shell_shape m
+
 /-- Per-shell δE in terms of density only. -/
 theorem deltaE_eq (m : Nat) :
   deltaE m = curvature_norm_combinatorial * curvatureDensity (m + 1) := by
@@ -609,6 +723,35 @@ theorem deltaE_eq (m : Nat) :
 theorem deltaE_exact_norm (m : Nat) :
   deltaE m = (279_936 : ℝ) * Real.sqrt 3 * curvatureDensity (m + 1) := by
   rw [deltaE_eq, curvature_norm_combinatorial_exact]
+
+theorem deltaE_quaternionicCandidate_eq (m : Nat) :
+    deltaE_quaternionicCandidate m = curvature_norm_quaternionicCandidate * curvatureDensity (m + 1) := by
+  simp [deltaE_quaternionicCandidate, shell_shape_eq_density_succ]
+
+theorem deltaE_quaternionicCandidate_exact_norm (m : Nat) :
+    deltaE_quaternionicCandidate m = (216 : ℝ) * Real.sqrt 3 * curvatureDensity (m + 1) := by
+  rw [deltaE_quaternionicCandidate_eq, curvature_norm_quaternionicCandidate_exact]
+
+theorem deltaE_eq_1296_mul_deltaE_quaternionicCandidate (m : Nat) :
+    deltaE m = (1296 : ℝ) * deltaE_quaternionicCandidate m := by
+  unfold deltaE deltaE_quaternionicCandidate
+  rw [curvature_norm_combinatorial_eq_1296_mul_quaternionicCandidate]
+  ring
+
+theorem deltaE_quaternionicCandidate_eq_div_1296 (m : Nat) :
+    deltaE_quaternionicCandidate m = deltaE m / (1296 : ℝ) := by
+  rw [deltaE_eq_1296_mul_deltaE_quaternionicCandidate]
+  field_simp
+
+theorem deltaE_ne_deltaE_quaternionicCandidate_of_shell_shape_ne_zero
+    (m : Nat) (hshape : shell_shape m ≠ 0) :
+    deltaE m ≠ deltaE_quaternionicCandidate m := by
+  intro h
+  unfold deltaE deltaE_quaternionicCandidate at h
+  have hnorm :
+      curvature_norm_combinatorial = curvature_norm_quaternionicCandidate := by
+    exact mul_right_cancel₀ hshape h
+  exact curvature_norm_combinatorial_ne_quaternionicCandidate hnorm
 
 /-- Absolute value of the curvature-imprint shape: |shape(m)|, no separate helper def. -/
 noncomputable def shell_shape_abs (m : Nat) : ℝ :=
@@ -748,12 +891,12 @@ lemma harmonic_sum_le_one_add_log_succ (n : Nat) :
   -- Rewrite the real Finset sum as the real-cast harmonic number.
   have hsum : (∑ i ∈ range n, (1 : ℝ) / (i + 1 : ℝ)) = (harmonic n : ℝ) := by
     -- `harmonic` is a ℚ-valued sum; coercing to ℝ matches `1/(i+1)` after simp.
-    simp [harmonic, one_div, div_eq_mul_inv]
+    simp [harmonic, div_eq_mul_inv]
   -- Use the known bound on `harmonic (n + 1)` and monotonicity `harmonic n ≤ harmonic (n+1)`.
   have hmono : (harmonic n : ℝ) ≤ (harmonic (n + 1) : ℝ) := by
     -- `harmonic_succ` is in ℚ; after casting to ℝ it's `harmonic (n+1) = harmonic n + 1/(n+1)`.
     have hs : (harmonic (n + 1) : ℝ) = (harmonic n : ℝ) + ((n + 1 : ℝ)⁻¹) := by
-      simpa [harmonic_succ, one_div] using congrArg (fun q : ℚ => (q : ℝ)) (harmonic_succ n)
+      simpa [harmonic_succ] using congrArg (fun q : ℚ => (q : ℝ)) (harmonic_succ n)
     -- Rearrange.
     have hpos : 0 ≤ (n + 1 : ℝ)⁻¹ := by positivity
     linarith [hs, hpos]
@@ -784,7 +927,7 @@ theorem curvature_integral_asymptotic_upper (n : Nat) :
       -- Turn the RHS product into a sum and simplify termwise.
       rw [hH, Finset.mul_sum]
       exact le_of_eq (by
-        simp [div_eq_mul_inv, one_div, mul_assoc, mul_left_comm, mul_comm])
+        simp [div_eq_mul_inv])
   calc curvature_integral n
     _ = H + alpha * logWeightedSum n := curvature_integral_eq_harmonic_plus_alpha_log n
     _ ≤ H + alpha * (Real.log (n + 1 : ℝ) * H) := by
@@ -822,6 +965,24 @@ lemma curvature_integral_mono : Monotone curvature_integral := by
     conv_rhs at h2 => rw [add_comm]
     have hak : a ≤ a + k := (Nat.le_add_left a k).trans (le_of_eq (Nat.add_comm k a))
     exact le_trans (ih hak) h2
+
+/-- Each shell adds strictly positive weight: the integral strictly increases at each step. -/
+lemma curvature_integral_lt_succ (n : Nat) :
+    curvature_integral n < curvature_integral (n + 1) := by
+  rw [curvature_integral_succ]
+  exact lt_add_of_pos_right _ (shell_shape_abs_pos n)
+
+/-- Strict monotonicity of the cumulative curvature integral. -/
+lemma curvature_integral_strict_mono ⦃a b : Nat⦄ (h : a < b) :
+    curvature_integral a < curvature_integral b := by
+  obtain ⟨k, hk⟩ := Nat.exists_eq_add_of_lt h
+  rw [hk]; clear h hk b
+  induction k with
+  | zero =>
+    simpa [Nat.one_add] using curvature_integral_lt_succ a
+  | succ k ih =>
+    rw [Nat.add_succ]
+    exact lt_trans ih (curvature_integral_lt_succ (a + Nat.succ k))
 
 /-- Non-negativity of the curvature integral for all `n`. -/
 lemma curvature_integral_nonneg (n : Nat) :
@@ -882,15 +1043,15 @@ theorem exists_transition_shell :
 #check curvature_integral_eq_sum_density
 
 /-!
-## First-principles spatial curvature from the shell integral (dynamic, horizon-dependent Ω_k)
+## First-principles spatial curvature from the horizon integral (dynamic, horizon-dependent Ω_k)
 
 Spatial curvature **depends on the horizon**. Between any two horizons it is
 different — curvature between quarks (QCD horizon) and curvature at the CMB
 last-scattering surface are different even at the same time "now". There is no
 single "Ω_k at now" without specifying which horizon.
 
-Ω_k is the **curvature ratio** from the discrete shell integral: at horizon N,
-the curvature parameter at shell n is `curvature_integral n / curvature_integral N`
+Ω_k is the **curvature ratio** from the horizon integral: at horizon N,
+the curvature parameter at readout n is `curvature_integral n / curvature_integral N`
 (dimensionless). At the horizon itself (n = N) this ratio is 1. Different N
 (e.g. QCD lockin vs CMB LSS) give different curvature; the formalism is
 horizon-dependent by construction.
@@ -909,13 +1070,32 @@ noncomputable def omega_k_at_horizon (n N : Nat) : ℝ :=
 theorem omega_k_at_horizon_eq (n N : Nat) (hN : 0 < curvature_integral N) :
   omega_k_at_horizon n N = curvature_integral n / curvature_integral N := by
   unfold omega_k_at_horizon
-  simp [ne_of_gt hN, not_le_of_gt hN]
+  simp [not_le_of_gt hN]
 
 /-- At the horizon itself (n = N), the curvature ratio equals 1 (unit in lattice units). -/
 theorem omega_k_at_horizon_self (N : Nat) (hN : 0 < curvature_integral N) :
-  omega_k_at_horizon N N = 1 := by
+    omega_k_at_horizon N N = 1 := by
   rw [omega_k_at_horizon_eq N N hN]
   field_simp [ne_of_gt hN]
+
+/-- **Monotonicity in readout shell:** for fixed positive horizon `N`, larger `n` means larger
+partial integral, hence larger \(\Omega_k(n;N)\). -/
+theorem omega_k_at_horizon_mono (n1 n2 N : Nat) (hN : 0 < curvature_integral N) (h : n1 ≤ n2) :
+    omega_k_at_horizon n1 N ≤ omega_k_at_horizon n2 N := by
+  rw [omega_k_at_horizon_eq n1 N hN, omega_k_at_horizon_eq n2 N hN]
+  exact div_le_div_of_nonneg_right (curvature_integral_mono h) (le_of_lt hN)
+
+/-- **Strict increase** when `n1 < n2` (each shell contributes strictly positive `shell_shape_abs`). -/
+theorem omega_k_at_horizon_strict_mono (n1 n2 N : Nat) (hN : 0 < curvature_integral N) (h : n1 < n2) :
+    omega_k_at_horizon n1 N < omega_k_at_horizon n2 N := by
+  rw [omega_k_at_horizon_eq n1 N hN, omega_k_at_horizon_eq n2 N hN]
+  exact div_lt_div_of_pos_right (curvature_integral_strict_mono h) hN
+
+/-- **Readout inside the horizon:** if `n ≤ N` then \(I(n)\le I(N)\), hence \(\Omega_k(n;N)\le 1\). -/
+theorem omega_k_at_horizon_le_one_of_le (n N : Nat) (hN : 0 < curvature_integral N) (hn : n ≤ N) :
+    omega_k_at_horizon n N ≤ 1 := by
+  rw [omega_k_at_horizon_eq n N hN, div_le_one₀ hN]
+  exact curvature_integral_mono hn
 
 /-- **Ω_k partial** at reference horizon: curvature ratio relative to referenceM.
     omega_k_partial n = omega_k_at_horizon n referenceM. -/

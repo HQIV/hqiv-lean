@@ -5,13 +5,13 @@ import Mathlib.LinearAlgebra.Matrix.Defs
 import Hqiv.GeneratorsFromAxioms
 
 /-!
-# Triality automorphism of Spin(8)
+# Triality labels for the three Spin(8) 8-dimensional representation slots
 
-Spin(8) admits an outer automorphism of order 3 (triality) that permutes the three
-8-dimensional representations: the vector 8v and the two spinor representations 8s⁺, 8s⁻
-(D₄ Dynkin diagram: the three outer nodes are permuted by the cyclic symmetry).
-Applying triality to one fermion generation in 8s yields exactly three generations
-with identical G₂ quantum numbers.
+This module keeps the current HQIV triality layer deliberately lightweight:
+`So8RepIndex := Fin 3` is a finite label type for the three 8-dimensional
+representation slots (8v, 8s⁺, 8s⁻), and `trialityCycle` is the order-3 cycle on
+those labels. It does not construct the full Spin(8) outer automorphism as a
+Mathlib representation-theory object.
 
 **Reference:** HQIV preprint v2, Zenodo 10.5281/zenodo.18899939, Section 4.4.
 -/
@@ -96,6 +96,13 @@ theorem exactly_three_fermion_generations_from_HQIV_axioms :
     trialityOrder = 3 ∧
     (∀ r : So8RepIndex, trialityCycle (trialityCycle (trialityCycle r)) = r) := by
   refine ⟨card_so8_eight_dim_irreps, rfl, triality_cycle_order_3⟩
+
+/-- Conservative citation target: the current Lean layer proves three labels and an order-3 cycle. -/
+theorem triality_label_count_and_order_three :
+    Fintype.card So8RepIndex = 3 ∧
+    trialityOrder = 3 ∧
+    (∀ r : So8RepIndex, trialityCycle (trialityCycle (trialityCycle r)) = r) :=
+  exactly_three_fermion_generations_from_HQIV_axioms
 
 /-- **Three generations:** applying triality to one generation (8s) gives three
   copies with the same G₂ quantum numbers (one per 8-dim irrep). -/

@@ -283,7 +283,8 @@ abelian diagonal lattice scaffold, not full Minkowski microcausality), and disch
 the remaining three fields by **structured scaffold witnesses** from
 `ContinuumManyBodyQFTScaffold`:
 `renormalization_in_domain := RenormalizationInDomainStatement` (proof
-`renormalization_in_domain_trivial_holds` — placeholder until scale-flow lemmas),
+`renormalization_in_domain_discreteUV_holds` — closed-form `available_modes` from `OctonionicLightCone`;
+alias `renormalization_in_domain_trivial_holds`),
 `cluster_decomposition_in_domain := ClusterDecompositionStatement clusterCorrelationZero`
 (proof `cluster_decomposition_zero_kernel_holds` — vanishing NN correlation surrogate),
 `scattering_consistency_in_domain := ScatteringConsistencyStatement scatteringChannelZero`
@@ -307,6 +308,33 @@ the same way.
 pairs** (`commutatorKernelIntervalMax_nontrivial`). Still scalar-valued, not operator commutators.
 `continuum_many_body_closure_minkowskiIntervalWitness` proves the same closure statement.
 
+**Monogamy/redshift cluster upgrade:** `horizonContinuumAxiomsMinimal_minkowskiIntervalMonogamyClusterWitness`
+keeps the same Minkowski interval-max microcausality slot, but replaces the zero cluster kernel by
+`clusterCorrelationDirectionalMonogamyRedshift 1`: coherence is concentrated on the forward `n → n+1`
+channel, capped by `coherenceProxy`, and damped by the extra shell-redshift factor `1 / phi_of_shell n`.
+The proved theorem `cluster_decomposition_directional_monogamy_redshift_holds 1` gives a nontrivial
+cluster limit with a nonzero witness at `(0,1)`.
+
+**Photon-geodesic transport upgrade:** `horizonContinuumAxiomsMinimal_minkowskiIntervalPhotonGeodesicClusterWitness`
+keeps the same microcausality slot, but uses
+`clusterCorrelationDirectionalMonogamyPhotonGeodesic 1 1`: the forward `n → n+1` channel is weighted by
+the monogamy proxy `coherenceProxy` and transported by the finite measurement ledger's observed-energy
+factor `redshiftedEnergyN 1 (birefringenceRedshiftN ((n:ℝ)+1) 1) = exp (-(n+1))`.
+`continuum_many_body_closure_minkowskiIntervalPhotonGeodesicClusterWitness` packages the stronger closure.
+
+**Photon-budget transport upgrade:** `horizonContinuumAxiomsMinimal_minkowskiIntervalPhotonBudgetClusterWitness`
+keeps the same microcausality slot, but uses
+`clusterCorrelationDirectionalMonogamyPhotonBudget 1 1`: the forward `n → n+1` channel is weighted by
+the monogamy proxy and transported by the cumulative photon mode budget
+`photonModeBudgetScaleN n = available_modes n`, so the attenuation is
+`exp (-(available_modes n))` at the concrete witness scale `κ = 1`.
+`continuum_many_body_closure_minkowskiIntervalPhotonBudgetClusterWitness` packages this second concrete closure.
+
+**Photon-budget + associator scattering:** `horizonContinuumAxiomsMinimal_minkowskiIntervalPhotonBudgetAssociatorWitness`
+keeps the photon-budget cluster kernel, but sets `scattering_consistency_in_domain` to
+`scatteringChannelAssociatorVorticity` (proof `scattering_consistency_associatorVorticity_holds`).
+`continuum_many_body_closure_minkowskiIntervalPhotonBudgetAssociatorWitness` packages that closure.
+
 **Operator layer (same η witness):** `PatchIntervalMaxSmeared` lifts the interval functional to
 `smearedOpIntervalMax` / `opCommutator` on `LatticeHilbert 2` (Pauli carrier).  Spacelike bilinear
 support ⇒ vanishing smeared operators and vanishing integrated commutators — aligned with the scalar
@@ -315,7 +343,7 @@ microcausality slot above without changing the `HorizonContinuumAxiomsMinimal` r
 `continuum_interval_max_microcausality_operator_layer_notes` in `ContinuumManyBodyQFTClosureLink`.
 -/
 
-/-- Minimal axiom record: shell/harmonic + lattice microcausality + structured trivial renorm/cluster/scattering. -/
+/-- Minimal axiom record: shell/harmonic + lattice microcausality + discrete-UV renorm + cluster/scattering witnesses. -/
 def horizonContinuumAxiomsMinimal_ratioWitness : HorizonContinuumAxiomsMinimal where
   shell_to_harmonic_limit := ShellToHarmonicLimit
   renormalization_in_domain := RenormalizationInDomainStatement
@@ -339,6 +367,42 @@ def horizonContinuumAxiomsMinimal_minkowskiIntervalWitness : HorizonContinuumAxi
   cluster_decomposition_in_domain := ClusterDecompositionStatement clusterCorrelationZero
   scattering_consistency_in_domain := ScatteringConsistencyStatement scatteringChannelZero
 
+/-- Minkowski interval-max microcausality with a directional monogamy/redshift cluster witness. -/
+def horizonContinuumAxiomsMinimal_minkowskiIntervalMonogamyClusterWitness : HorizonContinuumAxiomsMinimal where
+  shell_to_harmonic_limit := ShellToHarmonicLimit
+  renormalization_in_domain := RenormalizationInDomainStatement
+  microcausality_in_domain := microcausality_in_domain_minkowski_interval_scaffold
+  cluster_decomposition_in_domain := ClusterDecompositionStatement (clusterCorrelationDirectionalMonogamyRedshift 1)
+  scattering_consistency_in_domain := ScatteringConsistencyStatement scatteringChannelZero
+
+/-- Minkowski interval-max microcausality with directional monogamy and photon-geodesic transport. -/
+def horizonContinuumAxiomsMinimal_minkowskiIntervalPhotonGeodesicClusterWitness : HorizonContinuumAxiomsMinimal where
+  shell_to_harmonic_limit := ShellToHarmonicLimit
+  renormalization_in_domain := RenormalizationInDomainStatement
+  microcausality_in_domain := microcausality_in_domain_minkowski_interval_scaffold
+  cluster_decomposition_in_domain := ClusterDecompositionStatement
+    (clusterCorrelationDirectionalMonogamyPhotonGeodesic 1 1)
+  scattering_consistency_in_domain := ScatteringConsistencyStatement scatteringChannelZero
+
+/-- Minkowski interval-max microcausality with directional monogamy and photon-budget transport. -/
+def horizonContinuumAxiomsMinimal_minkowskiIntervalPhotonBudgetClusterWitness : HorizonContinuumAxiomsMinimal where
+  shell_to_harmonic_limit := ShellToHarmonicLimit
+  renormalization_in_domain := RenormalizationInDomainStatement
+  microcausality_in_domain := microcausality_in_domain_minkowski_interval_scaffold
+  cluster_decomposition_in_domain := ClusterDecompositionStatement
+    (clusterCorrelationDirectionalMonogamyPhotonBudget 1 1)
+  scattering_consistency_in_domain := ScatteringConsistencyStatement scatteringChannelZero
+
+/-- Like `horizonContinuumAxiomsMinimal_minkowskiIntervalPhotonBudgetClusterWitness`, but scattering uses the
+octonionic associator/vorticity channel (`scatteringChannelAssociatorVorticity`). -/
+def horizonContinuumAxiomsMinimal_minkowskiIntervalPhotonBudgetAssociatorWitness : HorizonContinuumAxiomsMinimal where
+  shell_to_harmonic_limit := ShellToHarmonicLimit
+  renormalization_in_domain := RenormalizationInDomainStatement
+  microcausality_in_domain := microcausality_in_domain_minkowski_interval_scaffold
+  cluster_decomposition_in_domain := ClusterDecompositionStatement
+    (clusterCorrelationDirectionalMonogamyPhotonBudget 1 1)
+  scattering_consistency_in_domain := ScatteringConsistencyStatement scatteringChannelAssociatorVorticity
+
 /-- The shell/harmonic field is the concrete `Tendsto` bridge from the scaffold. -/
 theorem horizonContinuumAxiomsMinimal_ratioWitness_shell :
     horizonContinuumAxiomsMinimal_ratioWitness.shell_to_harmonic_limit :=
@@ -346,7 +410,7 @@ theorem horizonContinuumAxiomsMinimal_ratioWitness_shell :
 
 theorem horizonContinuumAxiomsMinimal_ratioWitness_renorm :
     horizonContinuumAxiomsMinimal_ratioWitness.renormalization_in_domain :=
-  renormalization_in_domain_trivial_holds
+  renormalization_in_domain_discreteUV_holds
 
 theorem horizonContinuumAxiomsMinimal_ratioWitness_cluster :
     horizonContinuumAxiomsMinimal_ratioWitness.cluster_decomposition_in_domain :=
@@ -364,6 +428,42 @@ theorem horizonContinuumAxiomsMinimal_minkowskiIntervalWitness_micro :
     horizonContinuumAxiomsMinimal_minkowskiIntervalWitness.microcausality_in_domain :=
   microcausality_in_domain_minkowski_interval_scaffold_holds
 
+theorem horizonContinuumAxiomsMinimal_minkowskiIntervalMonogamyClusterWitness_micro :
+    horizonContinuumAxiomsMinimal_minkowskiIntervalMonogamyClusterWitness.microcausality_in_domain :=
+  microcausality_in_domain_minkowski_interval_scaffold_holds
+
+theorem horizonContinuumAxiomsMinimal_minkowskiIntervalMonogamyClusterWitness_cluster :
+    horizonContinuumAxiomsMinimal_minkowskiIntervalMonogamyClusterWitness.cluster_decomposition_in_domain :=
+  cluster_decomposition_directional_monogamy_redshift_holds 1
+
+theorem horizonContinuumAxiomsMinimal_minkowskiIntervalPhotonGeodesicClusterWitness_micro :
+    horizonContinuumAxiomsMinimal_minkowskiIntervalPhotonGeodesicClusterWitness.microcausality_in_domain :=
+  microcausality_in_domain_minkowski_interval_scaffold_holds
+
+theorem horizonContinuumAxiomsMinimal_minkowskiIntervalPhotonGeodesicClusterWitness_cluster :
+    horizonContinuumAxiomsMinimal_minkowskiIntervalPhotonGeodesicClusterWitness.cluster_decomposition_in_domain :=
+  cluster_decomposition_directional_monogamy_photonGeodesic_holds 1 1 zero_lt_one
+
+theorem horizonContinuumAxiomsMinimal_minkowskiIntervalPhotonBudgetClusterWitness_micro :
+    horizonContinuumAxiomsMinimal_minkowskiIntervalPhotonBudgetClusterWitness.microcausality_in_domain :=
+  microcausality_in_domain_minkowski_interval_scaffold_holds
+
+theorem horizonContinuumAxiomsMinimal_minkowskiIntervalPhotonBudgetClusterWitness_cluster :
+    horizonContinuumAxiomsMinimal_minkowskiIntervalPhotonBudgetClusterWitness.cluster_decomposition_in_domain :=
+  cluster_decomposition_directional_monogamy_photonBudget_holds 1 1 zero_lt_one
+
+theorem horizonContinuumAxiomsMinimal_minkowskiIntervalPhotonBudgetAssociatorWitness_micro :
+    horizonContinuumAxiomsMinimal_minkowskiIntervalPhotonBudgetAssociatorWitness.microcausality_in_domain :=
+  microcausality_in_domain_minkowski_interval_scaffold_holds
+
+theorem horizonContinuumAxiomsMinimal_minkowskiIntervalPhotonBudgetAssociatorWitness_cluster :
+    horizonContinuumAxiomsMinimal_minkowskiIntervalPhotonBudgetAssociatorWitness.cluster_decomposition_in_domain :=
+  cluster_decomposition_directional_monogamy_photonBudget_holds 1 1 zero_lt_one
+
+theorem horizonContinuumAxiomsMinimal_minkowskiIntervalPhotonBudgetAssociatorWitness_scattering :
+    horizonContinuumAxiomsMinimal_minkowskiIntervalPhotonBudgetAssociatorWitness.scattering_consistency_in_domain :=
+  scattering_consistency_associatorVorticity_holds
+
 /-- All five `HorizonContinuumAxiomsMinimal` fields of `horizonContinuumAxiomsMinimal_ratioWitness`, packaged. -/
 theorem horizonContinuumAxiomsMinimal_ratioWitness_all_slots :
     horizonContinuumAxiomsMinimal_ratioWitness.shell_to_harmonic_limit ∧
@@ -371,7 +471,7 @@ theorem horizonContinuumAxiomsMinimal_ratioWitness_all_slots :
     horizonContinuumAxiomsMinimal_ratioWitness.microcausality_in_domain ∧
     horizonContinuumAxiomsMinimal_ratioWitness.cluster_decomposition_in_domain ∧
     horizonContinuumAxiomsMinimal_ratioWitness.scattering_consistency_in_domain :=
-  ⟨shell_to_harmonic_limit_holds, renormalization_in_domain_trivial_holds,
+  ⟨shell_to_harmonic_limit_holds, renormalization_in_domain_discreteUV_holds,
     microcausality_in_domain_free_lattice_holds, cluster_decomposition_zero_kernel_holds,
     scattering_consistency_zero_channel_holds⟩
 
@@ -383,11 +483,11 @@ theorem continuum_scattering_associatorVorticity_holds :
     ScatteringConsistencyStatement scatteringChannelAssociatorVorticity :=
   scattering_consistency_associatorVorticity_holds
 
-/-- Continuum closure: shell/harmonic + lattice microcausality + structured trivial renorm/cluster/scattering witnesses. -/
+/-- Continuum closure: shell/harmonic + lattice microcausality + discrete-UV renorm + cluster/scattering witnesses. -/
 theorem continuum_many_body_closure_ratioWitness_trivialRest :
     HorizonContinuumClosureStatementCoreHQIV :=
   horizon_continuum_closure_minimal_HQIV horizonContinuumAxiomsMinimal_ratioWitness
-    shell_to_harmonic_limit_holds renormalization_in_domain_trivial_holds
+    shell_to_harmonic_limit_holds renormalization_in_domain_discreteUV_holds
     microcausality_in_domain_free_lattice_holds cluster_decomposition_zero_kernel_holds
     scattering_consistency_zero_channel_holds
 
@@ -395,7 +495,7 @@ theorem continuum_many_body_closure_ratioWitness_trivialRest :
 theorem continuum_many_body_closure_minkowskiMicroWitness :
     HorizonContinuumClosureStatementCoreHQIV :=
   horizon_continuum_closure_minimal_HQIV horizonContinuumAxiomsMinimal_minkowskiMicroWitness
-    shell_to_harmonic_limit_holds renormalization_in_domain_trivial_holds
+    shell_to_harmonic_limit_holds renormalization_in_domain_discreteUV_holds
     microcausality_in_domain_minkowski_scaffold_holds cluster_decomposition_zero_kernel_holds
     scattering_consistency_zero_channel_holds
 
@@ -403,8 +503,44 @@ theorem continuum_many_body_closure_minkowskiMicroWitness :
 theorem continuum_many_body_closure_minkowskiIntervalWitness :
     HorizonContinuumClosureStatementCoreHQIV :=
   horizon_continuum_closure_minimal_HQIV horizonContinuumAxiomsMinimal_minkowskiIntervalWitness
-    shell_to_harmonic_limit_holds renormalization_in_domain_trivial_holds
+    shell_to_harmonic_limit_holds renormalization_in_domain_discreteUV_holds
     microcausality_in_domain_minkowski_interval_scaffold_holds cluster_decomposition_zero_kernel_holds
     scattering_consistency_zero_channel_holds
+
+/-- Continuum closure with interval-max microcausality and directional monogamy/redshift clustering. -/
+theorem continuum_many_body_closure_minkowskiIntervalMonogamyClusterWitness :
+    HorizonContinuumClosureStatementCoreHQIV :=
+  horizon_continuum_closure_minimal_HQIV horizonContinuumAxiomsMinimal_minkowskiIntervalMonogamyClusterWitness
+    shell_to_harmonic_limit_holds renormalization_in_domain_discreteUV_holds
+    microcausality_in_domain_minkowski_interval_scaffold_holds
+    (cluster_decomposition_directional_monogamy_redshift_holds 1)
+    scattering_consistency_zero_channel_holds
+
+/-- Continuum closure with interval-max microcausality and photon-geodesic monogamy transport. -/
+theorem continuum_many_body_closure_minkowskiIntervalPhotonGeodesicClusterWitness :
+    HorizonContinuumClosureStatementCoreHQIV :=
+  horizon_continuum_closure_minimal_HQIV horizonContinuumAxiomsMinimal_minkowskiIntervalPhotonGeodesicClusterWitness
+    shell_to_harmonic_limit_holds renormalization_in_domain_discreteUV_holds
+    microcausality_in_domain_minkowski_interval_scaffold_holds
+    (cluster_decomposition_directional_monogamy_photonGeodesic_holds 1 1 zero_lt_one)
+    scattering_consistency_zero_channel_holds
+
+/-- Continuum closure with interval-max microcausality and photon-budget monogamy transport. -/
+theorem continuum_many_body_closure_minkowskiIntervalPhotonBudgetClusterWitness :
+    HorizonContinuumClosureStatementCoreHQIV :=
+  horizon_continuum_closure_minimal_HQIV horizonContinuumAxiomsMinimal_minkowskiIntervalPhotonBudgetClusterWitness
+    shell_to_harmonic_limit_holds renormalization_in_domain_discreteUV_holds
+    microcausality_in_domain_minkowski_interval_scaffold_holds
+    (cluster_decomposition_directional_monogamy_photonBudget_holds 1 1 zero_lt_one)
+    scattering_consistency_zero_channel_holds
+
+/-- Continuum closure: photon-budget cluster kernel + associator/vorticity scattering channel. -/
+theorem continuum_many_body_closure_minkowskiIntervalPhotonBudgetAssociatorWitness :
+    HorizonContinuumClosureStatementCoreHQIV :=
+  horizon_continuum_closure_minimal_HQIV horizonContinuumAxiomsMinimal_minkowskiIntervalPhotonBudgetAssociatorWitness
+    shell_to_harmonic_limit_holds renormalization_in_domain_discreteUV_holds
+    microcausality_in_domain_minkowski_interval_scaffold_holds
+    (cluster_decomposition_directional_monogamy_photonBudget_holds 1 1 zero_lt_one)
+    scattering_consistency_associatorVorticity_holds
 
 end Hqiv.QM
