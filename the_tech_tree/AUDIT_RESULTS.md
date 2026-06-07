@@ -60,7 +60,6 @@
 - `scripts/rapidity_first_atsp_oracle.py` (0.121s)
 - `scripts/rapidity_polar_probe.py` (0.046s)
 - `scripts/rationalize_active_lie_closure_data.py` (0.08s)
-- `scripts/run_bulk_equivalent.py` (0.013s)
 - `scripts/run_tsplib_atsp_named.py` (0.046s)
 - `scripts/self_clock_rapidity_update.py` (0.012s)
 - `scripts/test_bonded_horizon_casimir_float.py` (0.089s)

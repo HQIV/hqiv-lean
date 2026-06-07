@@ -148,10 +148,12 @@ theorem promotedOMaxwellResidual_H_eq_classic_under_flat_limit (r : ℝ) (c : Fi
             simp [A_O, F_from_A]
     _ = emergentMaxwellInhomogeneous_O_general J_O 0 ν := by
           exact Hqiv.Physics.emergent_coordsField_const_eq_general J_O r c 0 ν
+            (grad_φ_zero_when_phi_of_T_constant h_phi_const)
     _ = emergentMaxwellInHomogeneous_H ν := by
           rfl
     _ = classicMaxwellInhomogeneous ν := by
-          exact O_reduces_to_classic_Maxwell_in_H ν g_rr_flat h_phi_const (fun ν => by simp [grad_φ])
+          exact O_reduces_to_classic_Maxwell_in_H ν g_rr_flat h_phi_const
+            (grad_φ_zero_when_phi_of_T_constant h_phi_const)
 
 end
 

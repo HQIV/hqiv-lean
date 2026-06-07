@@ -307,6 +307,118 @@ theorem S3NullReference_vertices_card_pos (n : ℕ) :
 def IsS3NullVertexTemplate (M : Discrete3Complex NullShellVertex) (n : ℕ) : Prop :=
   Nonempty (CombinatoriallyEquivalent M (S3NullReference n))
 
+/-- Alias: combinatorial match to `S3NullReference n` at horizon `n`. -/
+abbrev IsS3NullReference (M : Discrete3Complex NullShellVertex) (n : ℕ) :=
+  IsS3NullVertexTemplate M n
+
+theorem mem_nullShellVertsAt_iff {m t} :
+    (⟨m, t⟩ : NullShellVertex) ∈ nullShellVertsAt m ↔ True := by
+  dsimp [nullShellVertsAt]
+  simp
+
+theorem mem_vertices_filter_shell {M : Discrete3Complex NullShellVertex} {v m} :
+    v ∈ M.vertices.filter (fun w : NullShellVertex => w.shell = m) → v.shell = m :=
+  fun hv => (Finset.mem_filter.mp hv).2
+
+theorem mem_vertices_filter_tag {M : Discrete3Complex NullShellVertex} {m t}
+    (hv : (⟨m, t⟩ : NullShellVertex) ∈ M.vertices) :
+    (⟨m, t⟩ : NullShellVertex) ∈ M.vertices.filter (fun w : NullShellVertex => w.shell = m) :=
+  Finset.mem_filter.mpr ⟨hv, rfl⟩
+
+theorem tags_on_shell_mem_vertices_of_full_count
+    (M : Discrete3Complex NullShellVertex) (m : ℕ)
+    (h : Discrete3Complex.vertexCountAtShell M m = latticeSimplexCount m) :
+    ∀ t : Fin (latticeSimplexCount m), (⟨m, t⟩ : NullShellVertex) ∈ M.vertices := by
+  intro t
+  by_contra hnot
+  set S := M.vertices.filter fun v : NullShellVertex => v.shell = m
+  set T := (Finset.univ : Finset (Fin (latticeSimplexCount m))).image
+      (fun t => (⟨m, t⟩ : NullShellVertex))
+  have hinj : Function.Injective fun t : Fin (latticeSimplexCount m) => (⟨m, t⟩ : NullShellVertex) :=
+    fun t₁ t₂ hEq => by cases hEq; rfl
+  have hcard_S : S.card = latticeSimplexCount m := by
+    dsimp [S]
+    simpa [Discrete3Complex.vertexCountAtShell] using h
+  have hcard_T : T.card = latticeSimplexCount m := by
+    dsimp [T]
+    rw [Finset.card_image_of_injective _ hinj, Finset.card_univ, Fintype.card_fin]
+  have hsup : S ⊆ T := by
+    intro v hv
+    rcases Finset.mem_filter.mp hv with ⟨_, hshell⟩
+    rcases v with ⟨s, t'⟩
+    simp only at hshell ⊢
+    subst hshell
+    dsimp [T]
+    exact Finset.mem_image.mpr ⟨t', Finset.mem_univ _, rfl⟩
+  have hmem : (⟨m, t⟩ : NullShellVertex) ∈ T := by
+    dsimp [T]
+    exact Finset.mem_image.mpr ⟨t, Finset.mem_univ _, rfl⟩
+  have hnot' : (⟨m, t⟩ : NullShellVertex) ∉ S := fun hv => hnot (Finset.mem_filter.mp hv).1
+  have hEq : S = T := Finset.eq_of_subset_of_card_le hsup (by rw [hcard_S, hcard_T])
+  exact hnot' (hEq ▸ hmem)
+
+theorem vertexCountAtShell_eq_imp_filter_eq_nullShellVertsAt
+    (M : Discrete3Complex NullShellVertex) (m : ℕ)
+    (h : Discrete3Complex.vertexCountAtShell M m = latticeSimplexCount m) :
+    (M.vertices.filter fun v : NullShellVertex => v.shell = m) = nullShellVertsAt m := by
+  classical
+  ext v
+  constructor
+  · intro hv
+    rcases Finset.mem_filter.mp hv with ⟨_, hshell⟩
+    rcases v with ⟨s, t⟩
+    simp only at hshell ⊢
+    subst hshell
+    dsimp [nullShellVertsAt]
+    exact Finset.mem_map.mpr ⟨t, Finset.mem_univ _, rfl⟩
+  · intro hv
+    dsimp [nullShellVertsAt] at hv
+    rcases Finset.mem_map.mp hv with ⟨t, _, rfl⟩
+    exact Finset.mem_filter.mpr
+      ⟨tags_on_shell_mem_vertices_of_full_count M m h t, rfl⟩
+
+theorem vertex_shell_le_of_mem_vertices {M : Discrete3Complex NullShellVertex} {v : NullShellVertex}
+    (hv : v ∈ M.vertices) : v.shell ≤ maxVertexShell M :=
+  vertex_shell_le_maxVertexShell hv
+
+theorem quadraticOnHorizon_vertices_eq_S3NullReference
+    (M : Discrete3Complex NullShellVertex) (n : ℕ)
+    (hq : QuadraticNullShellGrowthOnHorizon M n) (hmax : maxVertexShell M ≤ n) :
+    M.vertices = (S3NullReference n).vertices := by
+  classical
+  ext v
+  constructor
+  · intro hv
+    have hshell : v.shell ≤ n := le_trans (vertex_shell_le_of_mem_vertices hv) hmax
+    have hfilter :
+        v ∈ M.vertices.filter (fun w : NullShellVertex => w.shell = v.shell) :=
+      Finset.mem_filter.mpr ⟨hv, rfl⟩
+    have hEq :
+        M.vertices.filter (fun w : NullShellVertex => w.shell = v.shell) =
+          nullShellVertsAt v.shell :=
+      vertexCountAtShell_eq_imp_filter_eq_nullShellVertsAt M v.shell
+        (hq.vertex_count_eq v.shell hshell)
+    have hv' : v ∈ nullShellVertsAt v.shell := hEq.symm ▸ hfilter
+    dsimp [S3NullReference]
+    exact Finset.mem_biUnion.mpr ⟨v.shell, Finset.mem_range.mpr (Nat.lt_succ_of_le hshell), hv'⟩
+  · intro hv
+    dsimp [S3NullReference] at hv
+    obtain ⟨m, hm, hv'⟩ := Finset.mem_biUnion.mp hv
+    have hmle : m ≤ n := Nat.le_of_lt_succ (Finset.mem_range.mp hm)
+    have hEq :
+        M.vertices.filter (fun w : NullShellVertex => w.shell = m) =
+          nullShellVertsAt m :=
+      vertexCountAtShell_eq_imp_filter_eq_nullShellVertsAt M m
+        (hq.vertex_count_eq m hmle)
+    exact (Finset.mem_filter.mp (hEq.symm ▸ hv')).1
+
+theorem quadraticOnHorizon_is_S3NullReference
+    (M : Discrete3Complex NullShellVertex) (n : ℕ)
+    (hq : QuadraticNullShellGrowthOnHorizon M n) (hmax : maxVertexShell M ≤ n) :
+    IsS3NullReference M n := by
+  let hEq := quadraticOnHorizon_vertices_eq_S3NullReference M n hq hmax
+  refine ⟨⟨hEq ▸ Equiv.refl (S3NullReference n).vertices⟩⟩
+
 /-!
 ## Tier-1 targets (local detection of handles / shell defects)
 -/

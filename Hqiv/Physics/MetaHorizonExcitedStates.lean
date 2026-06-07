@@ -20,6 +20,10 @@ open BigOperators
 Excited baryons are modeled as internal meta-horizon harmonics (radial/orbital)
 on the same drum-like surface that gives the nucleon ground state.
 
+**Shell ontology:** this module uses HQIV names (`referenceM`, `totalModeShell`).
+TUFT hadron readouts must use `TuftShellChart.tuftHadronModeShell`; see
+`HopfShellBeltramiMassBridge.totalModeShell_eq_tuftHadronModeShell` for the bridge.
+
 **Rindler detuning (MeV):** `rindlerDetuningMeV` is **`rindlerDetuningShared`** from `FanoResonance`
 with dimensionless argument `2·(massMeV/10000)`, so it expands to `1 + γ·(massMeV/10000)` with
 `γ = gamma_HQIV` — the same monogamy coefficient as elsewhere, not a separate numeric convention.

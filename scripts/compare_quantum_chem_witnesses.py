@@ -18,6 +18,7 @@ from typing import Any, Dict, List
 
 DATA_PATH = Path("data/quantum_chem_witnesses.json")
 XI_SCAN_PATH = Path("data/quantum_chem_site_energy_xi_scan.json")
+LIH_DYNAMIC_PATH = Path("data/lih_dynamic_binding.json")
 ABS_TOL = 1e-9
 
 
@@ -185,6 +186,26 @@ def main() -> None:
     lih_trace = lih_valence_trace_dimless()
     lean_bridge = lean_lih_bridge_witness_block()
 
+    # Dynamic binding chart + LiH dynamic binding
+    try:
+        import hqiv_dynamic_binding_chart as binding_chart  # noqa: WPS433
+
+        chart_payload = binding_chart.build_chart_payload()
+        CHART_PATH = Path("data/dynamic_binding_chart.json")
+        CHART_PATH.parent.mkdir(parents=True, exist_ok=True)
+        CHART_PATH.write_text(json.dumps(chart_payload, indent=2) + "\n")
+    except Exception as exc:  # pragma: no cover
+        chart_payload = {"error": str(exc)}
+
+    try:
+        import hqiv_lih_dynamic_binding as lih_dynamic  # noqa: WPS433
+
+        lih_dynamic_payload = lih_dynamic.build_payload()
+        LIH_DYNAMIC_PATH.parent.mkdir(parents=True, exist_ok=True)
+        LIH_DYNAMIC_PATH.write_text(json.dumps(lih_dynamic_payload, indent=2) + "\n")
+    except Exception as exc:  # pragma: no cover - optional path during partial installs
+        lih_dynamic_payload = {"error": str(exc)}
+
     xi_export = {
         "source": "scripts/compare_quantum_chem_witnesses.py",
         "referenceM": reference_m,
@@ -198,6 +219,8 @@ def main() -> None:
         "lih_valence_sites": lih_sites,
         "lih_valence_trace_dimless": lih_trace,
         "lean_lih_compton_bridge": lean_bridge,
+        "lih_dynamic_binding": lih_dynamic_payload,
+        "dynamic_binding_chart": chart_payload,
     }
     args.xi_out.parent.mkdir(parents=True, exist_ok=True)
     args.xi_out.write_text(json.dumps(xi_export, indent=2) + "\n")
@@ -207,6 +230,8 @@ def main() -> None:
         "lih_valence_sites": lih_sites,
         "lih_valence_trace_dimless": lih_trace,
         "lean_lih_compton_bridge": lean_bridge,
+        "lih_dynamic_binding": lih_dynamic_payload,
+        "dynamic_binding_chart": chart_payload,
     }
     DATA_PATH.write_text(json.dumps(witness_out, indent=2) + "\n")
 
@@ -219,6 +244,18 @@ def main() -> None:
     print(f"xi_scan_export = {args.xi_out}")
     print(f"witness_updated = {DATA_PATH}")
     print(f"lih_valence_trace_dimless = {lih_trace}")
+    if "primary_binding_ev" in lih_dynamic_payload:
+        print(
+            f"lih_dynamic_binding_ev = {lih_dynamic_payload['primary_binding_ev']:.6f} "
+            f"(err {lih_dynamic_payload['primary_error_pct']:+.2f}%)"
+        )
+        print(f"lih_dynamic_export = {LIH_DYNAMIC_PATH}")
+    if "summary" in chart_payload:
+        s = chart_payload["summary"]
+        print(
+            f"dynamic_binding_chart: n={s['count']} mean|err|={s['mean_abs_error_pct']:.2f}% "
+            f"≤5%={s['within_5pct']}/{s['count']}"
+        )
 
     if failures:
         print("\nFAIL")

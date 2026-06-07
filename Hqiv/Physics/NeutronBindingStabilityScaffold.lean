@@ -12,15 +12,17 @@ open Hqiv.Physics.ContinuousXiPath
 /-!
 # Neutron binding stability scaffold (bonded vs free)
 
-Paper: `papers/paper/nucleon_binding_beta_decay.tex`, Conjecture β (curvature ledger +
+Paper: `papers/nucleon_binding/hqiv_nucleon_binding_from_composite_trace.tex`, Conjecture β (curvature ledger +
 skew alignment in nuclear wells vs sub-lock-in free branch).
 
 **Proved here:** packaging of existing binding (`nucleonSharedBinding_MeV`), spin–statistics
 width identity (`Γ = ΔE/ħ`), continuous-ξ lock-in calibration (`omegaK_xi xiLockin = 1`),
-and conditional discrete–continuous Ωₖ readout at `referenceM` (via `readoutOmegaKIntegerBridge`).
+conditional discrete–continuous Ωₖ readout at `referenceM`, and ledger separation
+(`NeutronLifetimeMethod`: bottle/beam read weak Ledger III, not Ledger I).
 
-**Open slots (explicit `Prop`):** skew alignment, full β Q-value / 880 s lifetime, and
-identification of weak tipping matrix elements with `freeNeutronOverlapEnergy`.
+**Explicit open slots (`Prop` / quantitative dressing):** full skew realignment in nuclear
+wells (antisymmetry of `phaseLiftDelta` is proved); trap-embedding width dressing magnitudes
+(`TrapWeakBridgeDecoherenceSlot`).
 -/
 
 /-! ## Embedding and stability predicates -/

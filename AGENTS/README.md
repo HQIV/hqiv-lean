@@ -8,11 +8,13 @@ This folder is for **AI agents and new contributors** who need orientation witho
 
 **Canonical HQIV constants:** $\alpha=3/5$ (`Hqiv.alpha`) and $\gamma=2/5$ (`Hqiv.gamma_HQIV`) are the **only** curvature-imprint and monogamy parameters in this formalism; physical derivation is in the companion HQIV manuscript and Brodie (2026). See [ASSUMPTIONS.md](./ASSUMPTIONS.md) §1b.
 
-**Patch ontology (read first):** [PATCH_ONTOLOGY.md](./PATCH_ONTOLOGY.md) — continuum **not** fundamental; **accessible patch = observable universe**; **patch-closed completeness** vs textbook “complete GUT/QFT”; simulator aliasing as leaked patch modes. Stops agents from drifting to continuum-first or FLRW-as-ontology wording.
+**Patch ontology (read first):** [PATCH_ONTOLOGY.md](./PATCH_ONTOLOGY.md) — continuum **not** fundamental; **accessible patch = observable universe**; **patch-closed completeness** vs textbook “complete GUT/QFT”; **finite SM anomaly traces + patch topological discharge** (instanton/\(\theta\)/Chern/winding) vs continuum-only obligations; simulator aliasing as leaked patch modes. Stops agents from drifting to continuum-first or FLRW-as-ontology wording.
 
 | Doc | Contents |
 |-----|----------|
-| [PATCH_ONTOLOGY.md](./PATCH_ONTOLOGY.md) | **Agent contract:** patch QFT, no required continuum, observable-universe = accessible patch, completeness vocabulary, sim anti-patterns, `main.tex` alignment notes |
+| [PATCH_ONTOLOGY.md](./PATCH_ONTOLOGY.md) | **Agent contract:** patch QFT, no required continuum, observable-universe = accessible patch, completeness vocabulary, **gauge discharged vs continuum-only**, sim anti-patterns, `main.tex` alignment notes |
+| [CKM_PMNS_FANO_OVERLAP.md](./CKM_PMNS_FANO_OVERLAP.md) | **Open discharge programme:** Fano-cycle overlaps + holonomy phases → CKM/PMNS (scaffold vs proved; anti-patterns) |
+| [TUFT_SHELL_ONTOLOGY.md](./TUFT_SHELL_ONTOLOGY.md) | **TUFT vs HQIV shell language:** `tuftHadronModeShell` vs `referenceM`; hadron papers must not conflate chart names |
 | [STORY.md](./STORY.md) | **Router:** Story spine vs textbook defaults; where HQIV intentionally differs; links to audit sources (kept short — not a duplicate of `ASSUMPTIONS` / `THEOREMS`) |
 | [THEOREMS.md](./THEOREMS.md) | Curated **theorems and defs with usable outputs** (Lean names, modules, what you get) |
 | [ASSUMPTIONS.md](./ASSUMPTIONS.md) | **Honest accounting**: conceptual axioms, Mathlib trust, script data, `sorry`s, bridge assumptions |

@@ -8,6 +8,7 @@ import Hqiv.Algebra.Triality
 import Hqiv.SO8ClosureSymbolic
 import Hqiv.Topology.DiscreteCurvatureChannel
 import Hqiv.Topology.DiscreteNullLatticeComplex
+import Hqiv.Topology.SignedShellBudget
 
 /-!
 # Discrete phase evolution + Δ-suture slot
@@ -130,10 +131,14 @@ Requires a genuine `some` step off equilibrium (extinction `none` is handled onl
 termination certificate, not by strict ℝ descent). -/
 structure RealLyapunovDescent (evo : DiscreteCurvatureEvolution) extends NatLyapunovDescent evo where
   strict_some_off_equilibrium :
-    ∀ M, ¬ evo.IsEquilibrium M → ∃ M', evo.step M = some M' ∧ μ M' < μ M
-  functional_decreases :
+    ∀ M, IsVertexOnly M → ¬ evo.IsEquilibrium M → ∃ M', evo.step M = some M' ∧ μ M' < μ M
+  /-- With `linkDeficit ≡ 0`, `lyapunovFunctional` is shell-0 mismatch; opening on `m > 0` may leave it
+  unchanged while the encoded ℕ measure still strictly decreases. -/
+  functional_nonincreasing_on_mu_descent :
     ∀ M M', evo.step M = some M' →
-      μ M' < μ M → lyapunovFunctional M' < lyapunovFunctional M
+      μ M' < μ M → lyapunovFunctional M' ≤ lyapunovFunctional M
+  functional_strict_shell0 :
+    ∀ M M', evo.step M = some M' → negativeBudget M 0 → lyapunovFunctional M' < lyapunovFunctional M
 
 /-- Finite termination or equilibrium from a ℕ Lyapunov certificate. -/
 theorem discrete_flow_terminates_of_nat_measure
@@ -180,16 +185,24 @@ theorem discrete_flow_terminates_of_descent (evo : DiscreteCurvatureEvolution)
 
 theorem lyapunov_strict_descent_off_equilibrium_of_real_descent
     (evo : DiscreteCurvatureEvolution) (h : RealLyapunovDescent evo)
-    (M : Discrete3Complex NullShellVertex) (hne : ¬ evo.IsEquilibrium M) :
+    (M : Discrete3Complex NullShellVertex) (hV : IsVertexOnly M) (hne : ¬ evo.IsEquilibrium M)
+    (h0 : negativeBudget M 0) :
     ∃ M', evo.step M = some M' ∧ lyapunovFunctional M' < lyapunovFunctional M := by
-  rcases h.strict_some_off_equilibrium M hne with ⟨M', hstep, hμ⟩
-  exact ⟨M', hstep, h.functional_decreases M M' hstep hμ⟩
+  rcases h.strict_some_off_equilibrium M hV hne with ⟨M', hstep, _⟩
+  exact ⟨M', hstep, h.functional_strict_shell0 M M' hstep h0⟩
 
-theorem lyapunov_strict_descent_off_equilibrium_at_of_real_descent
+theorem lyapunov_nonincreasing_on_mu_descent_of_real_descent
     (evo : DiscreteCurvatureEvolution) (h : RealLyapunovDescent evo)
-    (M : Discrete3Complex NullShellVertex) :
+    (M M' : Discrete3Complex NullShellVertex) (hstep : evo.step M = some M')
+    (hμ : h.μ M' < h.μ M) :
+    lyapunovFunctional M' ≤ lyapunovFunctional M :=
+  h.functional_nonincreasing_on_mu_descent M M' hstep hμ
+
+theorem lyapunov_strict_descent_off_equilibrium_at_shell0_of_real_descent
+    (evo : DiscreteCurvatureEvolution) (h : RealLyapunovDescent evo)
+    (M : Discrete3Complex NullShellVertex) (hV : IsVertexOnly M) (h0 : negativeBudget M 0) :
     LyapunovStrictDescentOffEquilibrium evo M :=
-  fun hne => lyapunov_strict_descent_off_equilibrium_of_real_descent evo h M hne
+  fun hne => lyapunov_strict_descent_off_equilibrium_of_real_descent evo h M hV hne h0
 
 /-- Termination at `M` from a `RealLyapunovDescent` certificate (ℕ layer inside `h`). -/
 theorem flow_terminates_at_of_real_descent (evo : DiscreteCurvatureEvolution)

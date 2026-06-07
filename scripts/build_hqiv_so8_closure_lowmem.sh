@@ -5,4 +5,4 @@
 set -euo pipefail
 cd "$(dirname "$0")/.."
 export LEAN_NUM_THREADS="${LEAN_NUM_THREADS:-1}"
-exec lake build HQIVSO8Closure -j 1 "$@"
+exec lake build HQIVSO8Closure "$@"

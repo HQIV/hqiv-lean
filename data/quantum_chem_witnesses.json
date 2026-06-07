@@ -56,5 +56,669 @@
       "lihComptonDerivedDissociationIndicator_with_justified_readouts": true
     },
     "used_shells_lemma": "lihComptonUsedShells_eq_spec"
+  },
+  "lih_dynamic_binding": {
+    "source": "scripts/hqiv_lih_dynamic_binding.py",
+    "lean_modules": [
+      "Hqiv.QuantumChemistry.LiH",
+      "Hqiv.QuantumChemistry.LiHDerivation",
+      "Hqiv.Physics.HopfShellBeltramiMassBridge",
+      "Hqiv.Physics.DynamicBBNBaryogenesis",
+      "Hqiv.Physics.BaryogenesisWitness"
+    ],
+    "python_primitives": "hqiv_lean_physics_primitives",
+    "reference_binding_ev": 2.515,
+    "ev_per_lambda_unit": 1.9428571428571428,
+    "compton_shells_m": [
+      4,
+      3,
+      1
+    ],
+    "compton_context": {
+      "angles_rad": [
+        0.3783228147386552,
+        0.20177216786061608,
+        0.030265825179092414
+      ],
+      "mean_angle_rad": 0.20345360259278789,
+      "eta_p": 0.129522586169985,
+      "shared_time_s": 2.1361718156903492e-19,
+      "in_window": [
+        true,
+        true,
+        true
+      ],
+      "detuning_lapse_fraction": 0.24084778420038536
+    },
+    "kappa_bind": 0.05,
+    "binding_curvature_feedback_factor": 1.2642583726572174,
+    "binding_curvature_correction": 0.26425837265721747,
+    "vev_geometric_mean_compton": 0.9554405494725902,
+    "vev_geometric_mean_compton_bare": 0.9577913207792554,
+    "valence_trace_dimless": {
+      "static_full_p": 1608.0,
+      "dynamic_full_p": 1536.0182407580678,
+      "dynamic_eta_p": 760.8106140500678
+    },
+    "shell_dynamic_rows": [
+      {
+        "site": "Li_s",
+        "m": 4,
+        "xi": 5.0,
+        "E_site_static": 600.0,
+        "E_site_dynamic": 600.0,
+        "omega_k": 1.0,
+        "tuft_vev_factor": 1.0,
+        "effective_casimir": 189.37407985177802,
+        "t13_outer_suppression": 0.007142857142857143
+      },
+      {
+        "site": "Li_p",
+        "m": 3,
+        "xi": 4.0,
+        "E_site_static": 320.0,
+        "E_site_dynamic": 296.8515186385529,
+        "omega_k": 0.8224669561940788,
+        "tuft_vev_factor": 0.9276609957454777,
+        "effective_casimir": 219.59368435460496,
+        "t13_outer_suppression": 0.0058747639728148485
+      },
+      {
+        "site": "H_s",
+        "m": 1,
+        "xi": 2.0,
+        "E_site_static": 48.0,
+        "E_site_dynamic": 45.46368484240919,
+        "omega_k": 0.35083775530945077,
+        "tuft_vev_factor": 0.9471601008835248,
+        "effective_casimir": 448.4189314428368,
+        "t13_outer_suppression": 0.002505983966496077
+      }
+    ],
+    "binding_readouts": [
+      {
+        "mode": "dynamic_compton_participation",
+        "binding_ev": 2.5354986551874252,
+        "reference_ev": 2.515,
+        "error_pct": 0.8150558722634238,
+        "dimless_core": 1.3050360725229395,
+        "notes": "\u03b7_p \u00b7 bond \u00b7 vev_geom \u00b7 lihBindingCurvatureFeedbackFactor(\u03ba=0.05) \u00b7 EV_per_\u03bb \u2014 primary readout"
+      },
+      {
+        "mode": "bond_surplus_only_compton",
+        "binding_ev": 16.206094598447727,
+        "reference_ev": 2.515,
+        "error_pct": 544.3775188249592,
+        "dimless_core": 8.341372219789271,
+        "notes": "bond_horizon_surplus only (no \u03b7_p / vev / binding feedback)"
+      },
+      {
+        "mode": "legacy_full_indicator_static",
+        "binding_ev": -1881.3489517413047,
+        "reference_ev": 2.515,
+        "error_pct": -74905.1273058173,
+        "dimless_core": 968.3413722197893,
+        "notes": "\u2212(bond + 3\u00b7E_site(Li_p)) \u00b7 EV_per_\u03bb \u2014 pre-dynamic Lean scan convention"
+      },
+      {
+        "mode": "legacy_participation_indicator",
+        "binding_ev": -257.7842210320655,
+        "reference_ev": 2.515,
+        "error_pct": -10349.86962354137,
+        "dimless_core": 132.68305494297488,
+        "notes": "\u2212(bond + \u03b7_p\u00b73\u00b7E_site(Li_p)) \u00b7 EV_per_\u03bb \u2014 LiHDerivation participation branch"
+      }
+    ],
+    "primary_binding_ev": 2.5354986551874252,
+    "primary_error_pct": 0.8150558722634238,
+    "formula_primary": "E_bind = eta_p * bond_surplus(4,3,1) * EV_per_lambda * geomean(tuft_vev_factor_at_xi) * lihBindingCurvatureFeedbackFactor(\u03ba_bind=0.05)"
+  },
+  "dynamic_binding_chart": {
+    "source": "scripts/hqiv_dynamic_binding_chart.py",
+    "lean_modules": [
+      "Hqiv.QuantumChemistry.DynamicBindingChart",
+      "Hqiv.QuantumChemistry.LiHDynamicBinding",
+      "Hqiv.Physics.HopfShellBeltramiMassBridge",
+      "Hqiv.Physics.BaryogenesisCore"
+    ],
+    "parameter_policy": "no_fitted_coefficients",
+    "referenceM": 4,
+    "ev_per_lambda_unit": 1.9428571428571428,
+    "kappa_bind": 0.05,
+    "binding_curvature_feedback_factor": 1.2642583726572174,
+    "binding_curvature_correction": 0.26425837265721747,
+    "baryogenesis_binding_curvature_correction": 1.0570334906288699,
+    "formula": "E_bind = eta_p * surplus_dimless * geomean(tuftVevFactorNetworkedAtCluster) * lihBindingCurvatureFeedbackFactor(kappa_bind=0.05) * EV_per_lambda",
+    "vev_geometric_mean_policy": "cluster_mass_networked: xi_eff = xi_lock * (cluster_mass/A / m_proton); light-isotope valley geomean along A=1..A",
+    "compton_triplet_rules": {
+      "H2": "dynamicComptonTripletH2 \u2192 (1, 1, 1)",
+      "heavy_hydride": "dynamicComptonTripletHeavyHydride \u2192 (4, 3, 1)",
+      "homonuclear_period2": "dynamicComptonTripletHomonuclearPeriod2 \u2192 (4, 4, 4)"
+    },
+    "shell_assignment_rules": {
+      "nuclear_shell": "inside_ratio(m) \u2248 A^(1/3); H (A=1) at referenceM (diagnostics only)",
+      "compton_triplet": "Lean DynamicBindingChart electronic triplets (not nuclear drum)",
+      "eta_p": "Compton IR participation on chemistry Compton triplet",
+      "nuclear_binding": "cluster_binding(m_nuc, A) / A from composite-trace network"
+    },
+    "surplus_rules": {
+      "dissociation": "bond_horizon_surplus(N, N1, N2) at Compton angles",
+      "atomization": "perturbed_casimir(sum Ni) - sum perturbed_casimir(Ni) at Compton angles"
+    },
+    "molecules": [
+      {
+        "name": "H2",
+        "kind": "dissociation",
+        "binding_ev": 4.658299191970366,
+        "reference_ev": 4.478,
+        "error_pct": 4.026333005144406,
+        "dimless_core": 2.3976539958671004,
+        "surplus_dimless": 8.313513794678194,
+        "eta_p": 0.2408477842003854,
+        "vev_geometric_mean": 0.9471601008835248,
+        "vev_geometric_mean_bare": 0.9471601008835248,
+        "compton_triplet_m": [
+          1,
+          1,
+          1
+        ],
+        "binding_curvature_correction": 0.26425837265721747,
+        "nuclei": [
+          {
+            "Z": 1,
+            "A": 1,
+            "m_nuclear": 4,
+            "xi_nuclear": 5.0,
+            "per_nucleon_binding_mev": 0.0,
+            "per_nucleon_trace_mev": 0.8786749038688855,
+            "inside_ratio": 1.0,
+            "tuft_vev_factor": 1.0,
+            "valence_s_shell": 1,
+            "valence_p_shell": null
+          },
+          {
+            "Z": 1,
+            "A": 1,
+            "m_nuclear": 4,
+            "xi_nuclear": 5.0,
+            "per_nucleon_binding_mev": 0.0,
+            "per_nucleon_trace_mev": 0.8786749038688855,
+            "inside_ratio": 1.0,
+            "tuft_vev_factor": 1.0,
+            "valence_s_shell": 1,
+            "valence_p_shell": null
+          }
+        ],
+        "nuclear_binding_uniformity": {
+          "count": 2.0,
+          "trace_mean_mev": 0.8786749038688855,
+          "trace_min_mev": 0.8786749038688855,
+          "trace_max_mev": 0.8786749038688855,
+          "trace_spread_pct": 0.0,
+          "cluster_mean_mev_per_A": 0.0,
+          "cluster_spread_pct": 0.0
+        },
+        "notes": "dissociation: \u03b7_p\u00b7surplus\u00b7vev_geom\u00b7lihBindingCurvatureFeedbackFactor(\u03ba=0.05)\u00b7EV_per_\u03bb; Compton triplet (1, 1, 1) (Lean DynamicBindingChart); surplus at Compton angles"
+      },
+      {
+        "name": "LiH",
+        "kind": "dissociation",
+        "binding_ev": 2.6738858923937645,
+        "reference_ev": 2.515,
+        "error_pct": 6.317530512674528,
+        "dimless_core": 1.3762647975556141,
+        "surplus_dimless": 8.341372219789271,
+        "eta_p": 0.1365919146506815,
+        "vev_geometric_mean": 0.9554405494725902,
+        "vev_geometric_mean_bare": 0.9577913207792554,
+        "compton_triplet_m": [
+          4,
+          3,
+          1
+        ],
+        "binding_curvature_correction": 0.26425837265721747,
+        "nuclei": [
+          {
+            "Z": 3,
+            "A": 7,
+            "m_nuclear": 7,
+            "xi_nuclear": 8.0,
+            "per_nucleon_binding_mev": 10.318468645527696,
+            "per_nucleon_trace_mev": 1.9048126952282032,
+            "inside_ratio": 2.081453525070757,
+            "tuft_vev_factor": 1.2531545520216447,
+            "valence_s_shell": 7,
+            "valence_p_shell": 6
+          },
+          {
+            "Z": 1,
+            "A": 1,
+            "m_nuclear": 4,
+            "xi_nuclear": 5.0,
+            "per_nucleon_binding_mev": 0.0,
+            "per_nucleon_trace_mev": 0.8786749038688855,
+            "inside_ratio": 1.0,
+            "tuft_vev_factor": 1.0,
+            "valence_s_shell": 1,
+            "valence_p_shell": null
+          }
+        ],
+        "nuclear_binding_uniformity": {
+          "count": 2.0,
+          "trace_mean_mev": 1.3917437995485442,
+          "trace_min_mev": 0.8786749038688855,
+          "trace_max_mev": 1.9048126952282032,
+          "trace_spread_pct": 73.73036558109169,
+          "cluster_mean_mev_per_A": 5.159234322763848,
+          "cluster_spread_pct": 200.0
+        },
+        "notes": "dissociation: \u03b7_p\u00b7surplus\u00b7vev_geom\u00b7lihBindingCurvatureFeedbackFactor(\u03ba=0.05)\u00b7EV_per_\u03bb; Compton triplet (4, 3, 1) (Lean DynamicBindingChart); surplus at Compton angles"
+      },
+      {
+        "name": "HF",
+        "kind": "dissociation",
+        "binding_ev": 6.078059559030645,
+        "reference_ev": 5.87,
+        "error_pct": 3.544455860828711,
+        "dimless_core": 3.128413008324597,
+        "surplus_dimless": 18.682744439578542,
+        "eta_p": 0.1385618116510859,
+        "vev_geometric_mean": 0.9558814165223269,
+        "vev_geometric_mean_bare": 0.9577913207792554,
+        "compton_triplet_m": [
+          4,
+          3,
+          1
+        ],
+        "binding_curvature_correction": 0.26425837265721747,
+        "nuclei": [
+          {
+            "Z": 9,
+            "A": 19,
+            "m_nuclear": 8,
+            "xi_nuclear": 9.0,
+            "per_nucleon_binding_mev": 8.390084991867617,
+            "per_nucleon_trace_mev": 2.323582788429026,
+            "inside_ratio": 2.4906247817054834,
+            "tuft_vev_factor": 1.3404272184749788,
+            "valence_s_shell": 8,
+            "valence_p_shell": 7
+          },
+          {
+            "Z": 1,
+            "A": 1,
+            "m_nuclear": 4,
+            "xi_nuclear": 5.0,
+            "per_nucleon_binding_mev": 0.0,
+            "per_nucleon_trace_mev": 0.8786749038688855,
+            "inside_ratio": 1.0,
+            "tuft_vev_factor": 1.0,
+            "valence_s_shell": 1,
+            "valence_p_shell": null
+          }
+        ],
+        "nuclear_binding_uniformity": {
+          "count": 2.0,
+          "trace_mean_mev": 1.601128846148956,
+          "trace_min_mev": 0.8786749038688855,
+          "trace_max_mev": 2.323582788429026,
+          "trace_spread_pct": 90.24307369362816,
+          "cluster_mean_mev_per_A": 4.195042495933809,
+          "cluster_spread_pct": 200.0
+        },
+        "notes": "dissociation: \u03b7_p\u00b7surplus\u00b7vev_geom\u00b7lihBindingCurvatureFeedbackFactor(\u03ba=0.05)\u00b7EV_per_\u03bb; Compton triplet (4, 3, 1) (Lean DynamicBindingChart); surplus at Compton angles"
+      },
+      {
+        "name": "H2O",
+        "kind": "atomization",
+        "binding_ev": 8.790619218127388,
+        "reference_ev": 9.51,
+        "error_pct": -7.564466686357646,
+        "dimless_core": 4.524583421094979,
+        "surplus_dimless": 27.02411665936782,
+        "eta_p": 0.1385618116510859,
+        "vev_geometric_mean": 0.9557574707135476,
+        "vev_geometric_mean_bare": 0.9577913207792554,
+        "compton_triplet_m": [
+          4,
+          3,
+          1
+        ],
+        "binding_curvature_correction": 0.26425837265721747,
+        "nuclei": [
+          {
+            "Z": 8,
+            "A": 16,
+            "m_nuclear": 8,
+            "xi_nuclear": 9.0,
+            "per_nucleon_binding_mev": 8.932547383583197,
+            "per_nucleon_trace_mev": 2.323582788429026,
+            "inside_ratio": 2.4906247817054834,
+            "tuft_vev_factor": 1.3404272184749788,
+            "valence_s_shell": 8,
+            "valence_p_shell": 7
+          },
+          {
+            "Z": 1,
+            "A": 1,
+            "m_nuclear": 4,
+            "xi_nuclear": 5.0,
+            "per_nucleon_binding_mev": 0.0,
+            "per_nucleon_trace_mev": 0.8786749038688855,
+            "inside_ratio": 1.0,
+            "tuft_vev_factor": 1.0,
+            "valence_s_shell": 1,
+            "valence_p_shell": null
+          },
+          {
+            "Z": 1,
+            "A": 1,
+            "m_nuclear": 4,
+            "xi_nuclear": 5.0,
+            "per_nucleon_binding_mev": 0.0,
+            "per_nucleon_trace_mev": 0.8786749038688855,
+            "inside_ratio": 1.0,
+            "tuft_vev_factor": 1.0,
+            "valence_s_shell": 1,
+            "valence_p_shell": null
+          }
+        ],
+        "nuclear_binding_uniformity": {
+          "count": 3.0,
+          "trace_mean_mev": 1.3603108653889322,
+          "trace_min_mev": 0.8786749038688855,
+          "trace_max_mev": 2.323582788429026,
+          "trace_spread_pct": 106.21894754527459,
+          "cluster_mean_mev_per_A": 2.9775157945277324,
+          "cluster_spread_pct": 300.0
+        },
+        "notes": "atomization: \u03b7_p\u00b7surplus\u00b7vev_geom\u00b7lihBindingCurvatureFeedbackFactor(\u03ba=0.05)\u00b7EV_per_\u03bb; Compton triplet (4, 3, 1) (Lean DynamicBindingChart); surplus at Compton angles"
+      },
+      {
+        "name": "CH4",
+        "kind": "atomization",
+        "binding_ev": 14.213419669029074,
+        "reference_ev": 17.0,
+        "error_pct": -16.39164900571133,
+        "dimless_core": 7.315730712000259,
+        "surplus_dimless": 43.70686109894636,
+        "eta_p": 0.1385618116510859,
+        "vev_geometric_mean": 0.9554956224360736,
+        "vev_geometric_mean_bare": 0.9577913207792554,
+        "compton_triplet_m": [
+          4,
+          3,
+          1
+        ],
+        "binding_curvature_correction": 0.26425837265721747,
+        "nuclei": [
+          {
+            "Z": 6,
+            "A": 12,
+            "m_nuclear": 8,
+            "xi_nuclear": 9.0,
+            "per_nucleon_binding_mev": 10.077745766093862,
+            "per_nucleon_trace_mev": 2.323582788429026,
+            "inside_ratio": 2.4906247817054834,
+            "tuft_vev_factor": 1.3404272184749788,
+            "valence_s_shell": 8,
+            "valence_p_shell": 7
+          },
+          {
+            "Z": 1,
+            "A": 1,
+            "m_nuclear": 4,
+            "xi_nuclear": 5.0,
+            "per_nucleon_binding_mev": 0.0,
+            "per_nucleon_trace_mev": 0.8786749038688855,
+            "inside_ratio": 1.0,
+            "tuft_vev_factor": 1.0,
+            "valence_s_shell": 1,
+            "valence_p_shell": null
+          },
+          {
+            "Z": 1,
+            "A": 1,
+            "m_nuclear": 4,
+            "xi_nuclear": 5.0,
+            "per_nucleon_binding_mev": 0.0,
+            "per_nucleon_trace_mev": 0.8786749038688855,
+            "inside_ratio": 1.0,
+            "tuft_vev_factor": 1.0,
+            "valence_s_shell": 1,
+            "valence_p_shell": null
+          },
+          {
+            "Z": 1,
+            "A": 1,
+            "m_nuclear": 4,
+            "xi_nuclear": 5.0,
+            "per_nucleon_binding_mev": 0.0,
+            "per_nucleon_trace_mev": 0.8786749038688855,
+            "inside_ratio": 1.0,
+            "tuft_vev_factor": 1.0,
+            "valence_s_shell": 1,
+            "valence_p_shell": null
+          },
+          {
+            "Z": 1,
+            "A": 1,
+            "m_nuclear": 4,
+            "xi_nuclear": 5.0,
+            "per_nucleon_binding_mev": 0.0,
+            "per_nucleon_trace_mev": 0.8786749038688855,
+            "inside_ratio": 1.0,
+            "tuft_vev_factor": 1.0,
+            "valence_s_shell": 1,
+            "valence_p_shell": null
+          }
+        ],
+        "nuclear_binding_uniformity": {
+          "count": 5.0,
+          "trace_mean_mev": 1.1676564807809136,
+          "trace_min_mev": 0.8786749038688855,
+          "trace_max_mev": 2.323582788429026,
+          "trace_spread_pct": 123.74426111982908,
+          "cluster_mean_mev_per_A": 2.0155491532187724,
+          "cluster_spread_pct": 500.0
+        },
+        "notes": "atomization: \u03b7_p\u00b7surplus\u00b7vev_geom\u00b7lihBindingCurvatureFeedbackFactor(\u03ba=0.05)\u00b7EV_per_\u03bb; Compton triplet (4, 3, 1) (Lean DynamicBindingChart); surplus at Compton angles"
+      },
+      {
+        "name": "NH3",
+        "kind": "atomization",
+        "binding_ev": 11.502616624674399,
+        "reference_ev": 10.07,
+        "error_pct": 14.226580185445867,
+        "dimless_core": 5.9204644391706465,
+        "surplus_dimless": 35.36548887915709,
+        "eta_p": 0.1385618116510859,
+        "vev_geometric_mean": 0.9556452807708399,
+        "vev_geometric_mean_bare": 0.9577913207792554,
+        "compton_triplet_m": [
+          4,
+          3,
+          1
+        ],
+        "binding_curvature_correction": 0.26425837265721747,
+        "nuclei": [
+          {
+            "Z": 7,
+            "A": 14,
+            "m_nuclear": 8,
+            "xi_nuclear": 9.0,
+            "per_nucleon_binding_mev": 9.423346690373481,
+            "per_nucleon_trace_mev": 2.323582788429026,
+            "inside_ratio": 2.4906247817054834,
+            "tuft_vev_factor": 1.3404272184749788,
+            "valence_s_shell": 8,
+            "valence_p_shell": 7
+          },
+          {
+            "Z": 1,
+            "A": 1,
+            "m_nuclear": 4,
+            "xi_nuclear": 5.0,
+            "per_nucleon_binding_mev": 0.0,
+            "per_nucleon_trace_mev": 0.8786749038688855,
+            "inside_ratio": 1.0,
+            "tuft_vev_factor": 1.0,
+            "valence_s_shell": 1,
+            "valence_p_shell": null
+          },
+          {
+            "Z": 1,
+            "A": 1,
+            "m_nuclear": 4,
+            "xi_nuclear": 5.0,
+            "per_nucleon_binding_mev": 0.0,
+            "per_nucleon_trace_mev": 0.8786749038688855,
+            "inside_ratio": 1.0,
+            "tuft_vev_factor": 1.0,
+            "valence_s_shell": 1,
+            "valence_p_shell": null
+          },
+          {
+            "Z": 1,
+            "A": 1,
+            "m_nuclear": 4,
+            "xi_nuclear": 5.0,
+            "per_nucleon_binding_mev": 0.0,
+            "per_nucleon_trace_mev": 0.8786749038688855,
+            "inside_ratio": 1.0,
+            "tuft_vev_factor": 1.0,
+            "valence_s_shell": 1,
+            "valence_p_shell": null
+          }
+        ],
+        "nuclear_binding_uniformity": {
+          "count": 4.0,
+          "trace_mean_mev": 1.2399018750089206,
+          "trace_min_mev": 0.8786749038688855,
+          "trace_max_mev": 2.323582788429026,
+          "trace_spread_pct": 116.53405109575668,
+          "cluster_mean_mev_per_A": 2.3558366725933704,
+          "cluster_spread_pct": 400.0
+        },
+        "notes": "atomization: \u03b7_p\u00b7surplus\u00b7vev_geom\u00b7lihBindingCurvatureFeedbackFactor(\u03ba=0.05)\u00b7EV_per_\u03bb; Compton triplet (4, 3, 1) (Lean DynamicBindingChart); surplus at Compton angles"
+      }
+    ],
+    "diagnostic_molecules": [
+      {
+        "name": "CO",
+        "kind": "atomization",
+        "binding_ev": 31.907352855858914,
+        "reference_ev": 11.24,
+        "error_pct": 183.87324604856684,
+        "dimless_core": 16.4229022052215,
+        "surplus_dimless": 59.88108276806918,
+        "eta_p": 0.2176550346107186,
+        "vev_geometric_mean": 0.9966799146035409,
+        "vev_geometric_mean_bare": 1.0,
+        "compton_triplet_m": [
+          4,
+          4,
+          4
+        ],
+        "binding_curvature_correction": 0.26425837265721747,
+        "nuclei": [
+          {
+            "Z": 6,
+            "A": 12,
+            "m_nuclear": 8,
+            "xi_nuclear": 9.0,
+            "per_nucleon_binding_mev": 10.077745766093862,
+            "per_nucleon_trace_mev": 2.323582788429026,
+            "inside_ratio": 2.4906247817054834,
+            "tuft_vev_factor": 1.3404272184749788,
+            "valence_s_shell": 8,
+            "valence_p_shell": 7
+          },
+          {
+            "Z": 8,
+            "A": 16,
+            "m_nuclear": 8,
+            "xi_nuclear": 9.0,
+            "per_nucleon_binding_mev": 8.932547383583197,
+            "per_nucleon_trace_mev": 2.323582788429026,
+            "inside_ratio": 2.4906247817054834,
+            "tuft_vev_factor": 1.3404272184749788,
+            "valence_s_shell": 8,
+            "valence_p_shell": 7
+          }
+        ],
+        "nuclear_binding_uniformity": {
+          "count": 2.0,
+          "trace_mean_mev": 2.323582788429026,
+          "trace_min_mev": 2.323582788429026,
+          "trace_max_mev": 2.323582788429026,
+          "trace_spread_pct": 0.0,
+          "cluster_mean_mev_per_A": 9.50514657483853,
+          "cluster_spread_pct": 12.048192771084329
+        },
+        "notes": "atomization: \u03b7_p\u00b7surplus\u00b7vev_geom\u00b7lihBindingCurvatureFeedbackFactor(\u03ba=0.05)\u00b7EV_per_\u03bb; Compton triplet (4, 4, 4) (Lean DynamicBindingChart); surplus at Compton angles"
+      },
+      {
+        "name": "N2",
+        "kind": "dissociation",
+        "binding_ev": 31.904095404414985,
+        "reference_ev": 9.91,
+        "error_pct": 221.9383996409181,
+        "dimless_core": 16.42122557580183,
+        "surplus_dimless": 59.88108276806918,
+        "eta_p": 0.2176550346107186,
+        "vev_geometric_mean": 0.9965781626204909,
+        "vev_geometric_mean_bare": 1.0,
+        "compton_triplet_m": [
+          4,
+          4,
+          4
+        ],
+        "binding_curvature_correction": 0.26425837265721747,
+        "nuclei": [
+          {
+            "Z": 7,
+            "A": 14,
+            "m_nuclear": 8,
+            "xi_nuclear": 9.0,
+            "per_nucleon_binding_mev": 9.423346690373481,
+            "per_nucleon_trace_mev": 2.323582788429026,
+            "inside_ratio": 2.4906247817054834,
+            "tuft_vev_factor": 1.3404272184749788,
+            "valence_s_shell": 8,
+            "valence_p_shell": 7
+          },
+          {
+            "Z": 7,
+            "A": 14,
+            "m_nuclear": 8,
+            "xi_nuclear": 9.0,
+            "per_nucleon_binding_mev": 9.423346690373481,
+            "per_nucleon_trace_mev": 2.323582788429026,
+            "inside_ratio": 2.4906247817054834,
+            "tuft_vev_factor": 1.3404272184749788,
+            "valence_s_shell": 8,
+            "valence_p_shell": 7
+          }
+        ],
+        "nuclear_binding_uniformity": {
+          "count": 2.0,
+          "trace_mean_mev": 2.323582788429026,
+          "trace_min_mev": 2.323582788429026,
+          "trace_max_mev": 2.323582788429026,
+          "trace_spread_pct": 0.0,
+          "cluster_mean_mev_per_A": 9.423346690373481,
+          "cluster_spread_pct": 0.0
+        },
+        "notes": "dissociation: \u03b7_p\u00b7surplus\u00b7vev_geom\u00b7lihBindingCurvatureFeedbackFactor(\u03ba=0.05)\u00b7EV_per_\u03bb; Compton triplet (4, 4, 4) (Lean DynamicBindingChart); surplus at Compton angles"
+      }
+    ],
+    "summary": {
+      "count": 6,
+      "mean_abs_error_pct": 8.678502542693748,
+      "max_abs_error_pct": 16.39164900571133,
+      "within_5pct": 2,
+      "within_15pct": 5
+    }
   }
 }

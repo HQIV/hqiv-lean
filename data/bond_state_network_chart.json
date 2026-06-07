@@ -1,0 +1,968 @@
+{
+  "source": "scripts/hqiv_bond_state_network.py",
+  "lean_module": "Hqiv.QuantumChemistry.BondStateNetwork",
+  "parameter_policy": "no_fitted_coefficients",
+  "formula": "E_bind = \u2212(inside_joint \u2212 inside_separated) + \u03a3 G_eff(\u03b8) contact + hyperclosure projection",
+  "physics": {
+    "inside": "metaHorizonTrappedInsideRatio \u00d7 nucleon composite trace (hadron spine)",
+    "outside": "G_eff(\u03b8/\u03b8\u2080) = (\u03b8/\u03b8\u2080)^\u03b1 at bond contact points, \u03b1=3/5",
+    "theta_window": "Compton IR phaseTheta = \u03c0/2"
+  },
+  "cases": [
+    {
+      "name": "H2",
+      "observable": "dissociation",
+      "predicted_ev": 1.0448302002698773,
+      "reference_ev": 4.478,
+      "error_pct": -76.66748101228501,
+      "inside_surplus_ev": -0.0003766184500446396,
+      "outside_contact_ev": 1.0444535818198326,
+      "hyperclosure_ev": 0.0,
+      "separated_inside_ev": 0.00363890175392845,
+      "joint_inside_ev": 0.0032622833038838104,
+      "fragments": [
+        {
+          "index": 0,
+          "label": "H",
+          "z_nuclear": 1,
+          "electrons": 1,
+          "mass_number": 1,
+          "nuclear_shell": 4,
+          "valence_s_shell": 1,
+          "valence_p_shell": null,
+          "inside_binding_ev": 0.001819450876964225,
+          "inside_ratio": 1.0,
+          "trace": [
+            1.0866433975699932,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "index": 1,
+          "label": "H",
+          "z_nuclear": 1,
+          "electrons": 1,
+          "mass_number": 1,
+          "nuclear_shell": 4,
+          "valence_s_shell": 1,
+          "valence_p_shell": null,
+          "inside_binding_ev": 0.001819450876964225,
+          "inside_ratio": 1.0,
+          "trace": [
+            1.0866433975699932,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        }
+      ],
+      "bonds": [
+        {
+          "frag_i": 0,
+          "frag_j": 1,
+          "distance_angstrom": 0.7414,
+          "contact_theta_rad": 1.413716694115407,
+          "geff_theta_coupling": 0.9387403933595694,
+          "outside_contact_dimless": 0.5375864024072667,
+          "outside_contact_ev": 1.0444535818198326,
+          "geometry_weight": 0.5726678069997069,
+          "trace": [
+            0.5841647147992619,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        }
+      ],
+      "hyperclosure_trace_l1": 0.0,
+      "notes": "inside curvature surplus (hadron spine) + outside G_eff(\u03b8) contact bonding; joint shell m=5"
+    },
+    {
+      "name": "LiH",
+      "observable": "dissociation",
+      "predicted_ev": 0.038312511777225694,
+      "reference_ev": 2.515,
+      "error_pct": -98.47663969076636,
+      "inside_surplus_ev": -0.0018194508769642254,
+      "outside_contact_ev": 0.03649306090026147,
+      "hyperclosure_ev": 0.0,
+      "separated_inside_ev": 0.010029223088543279,
+      "joint_inside_ev": 0.008209772211579053,
+      "fragments": [
+        {
+          "index": 0,
+          "label": "Li",
+          "z_nuclear": 3,
+          "electrons": 3,
+          "mass_number": 7,
+          "nuclear_shell": 7,
+          "valence_s_shell": 7,
+          "valence_p_shell": 6,
+          "inside_binding_ev": 0.008209772211579053,
+          "inside_ratio": 2.081453525070757,
+          "trace": [
+            2.4421419356630953,
+            4.884283871326191,
+            7.326425806989287,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "index": 1,
+          "label": "H",
+          "z_nuclear": 1,
+          "electrons": 1,
+          "mass_number": 1,
+          "nuclear_shell": 4,
+          "valence_s_shell": 1,
+          "valence_p_shell": null,
+          "inside_binding_ev": 0.001819450876964225,
+          "inside_ratio": 1.0,
+          "trace": [
+            1.0866433975699932,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        }
+      ],
+      "bonds": [
+        {
+          "frag_i": 0,
+          "frag_j": 1,
+          "distance_angstrom": 1.5956,
+          "contact_theta_rad": 0.952295273119406,
+          "geff_theta_coupling": 0.7406125225145717,
+          "outside_contact_dimless": 0.018783193110428698,
+          "outside_contact_ev": 0.03649306090026147,
+          "geometry_weight": 0.025361700672647126,
+          "trace": [
+            0.03059837740167542,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        }
+      ],
+      "hyperclosure_trace_l1": 0.0,
+      "notes": "inside curvature surplus (hadron spine) + outside G_eff(\u03b8) contact bonding; joint shell m=7"
+    },
+    {
+      "name": "HF",
+      "observable": "dissociation",
+      "predicted_ev": 0.05518620161650757,
+      "reference_ev": 5.87,
+      "error_pct": -99.0598602791055,
+      "inside_surplus_ev": 0.0030060888533122235,
+      "outside_contact_ev": 0.058192290469819795,
+      "hyperclosure_ev": 0.0,
+      "separated_inside_ev": 0.013802809815035944,
+      "joint_inside_ev": 0.016808898668348168,
+      "fragments": [
+        {
+          "index": 0,
+          "label": "F",
+          "z_nuclear": 9,
+          "electrons": 9,
+          "mass_number": 19,
+          "nuclear_shell": 8,
+          "valence_s_shell": 8,
+          "valence_p_shell": 7,
+          "inside_binding_ev": 0.011983358938071719,
+          "inside_ratio": 2.4906247817054834,
+          "trace": [
+            32.07484218530058,
+            6.414968437060116,
+            9.622452655590175,
+            12.829936874120232,
+            16.03742109265029,
+            19.24490531118035,
+            22.452389529710405,
+            25.659873748240464
+          ]
+        },
+        {
+          "index": 1,
+          "label": "H",
+          "z_nuclear": 1,
+          "electrons": 1,
+          "mass_number": 1,
+          "nuclear_shell": 4,
+          "valence_s_shell": 1,
+          "valence_p_shell": null,
+          "inside_binding_ev": 0.001819450876964225,
+          "inside_ratio": 1.0,
+          "trace": [
+            1.0866433975699932,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        }
+      ],
+      "bonds": [
+        {
+          "frag_i": 0,
+          "frag_j": 1,
+          "distance_angstrom": 0.9168,
+          "contact_theta_rad": 0.9494591130849153,
+          "geff_theta_coupling": 0.7392883018071423,
+          "outside_contact_dimless": 0.029951914212407248,
+          "outside_contact_ev": 0.058192290469819795,
+          "geometry_weight": 0.040514524765496406,
+          "trace": [
+            0.17682772930732232,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        }
+      ],
+      "hyperclosure_trace_l1": 0.0,
+      "notes": "inside curvature surplus (hadron spine) + outside G_eff(\u03b8) contact bonding; joint shell m=9"
+    },
+    {
+      "name": "H2O",
+      "observable": "atomization",
+      "predicted_ev": 0.10584734706365441,
+      "reference_ev": 9.51,
+      "error_pct": -98.88698898986694,
+      "inside_surplus_ev": -0.003638901753928449,
+      "outside_contact_ev": 0.07694471484917419,
+      "hyperclosure_ev": 0.025263730460551772,
+      "separated_inside_ev": 0.015622260692000168,
+      "joint_inside_ev": 0.011983358938071719,
+      "fragments": [
+        {
+          "index": 0,
+          "label": "O",
+          "z_nuclear": 8,
+          "electrons": 8,
+          "mass_number": 16,
+          "nuclear_shell": 8,
+          "valence_s_shell": 8,
+          "valence_p_shell": 7,
+          "inside_binding_ev": 0.011983358938071719,
+          "inside_ratio": 2.4906247817054834,
+          "trace": [
+            3.1746825296162267,
+            6.349365059232453,
+            9.524047588848681,
+            12.698730118464907,
+            15.873412648081132,
+            19.048095177697363,
+            22.222777707313586,
+            25.397460236929813
+          ]
+        },
+        {
+          "index": 1,
+          "label": "H",
+          "z_nuclear": 1,
+          "electrons": 1,
+          "mass_number": 1,
+          "nuclear_shell": 4,
+          "valence_s_shell": 1,
+          "valence_p_shell": null,
+          "inside_binding_ev": 0.001819450876964225,
+          "inside_ratio": 1.0,
+          "trace": [
+            1.0866433975699932,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "index": 2,
+          "label": "H",
+          "z_nuclear": 1,
+          "electrons": 1,
+          "mass_number": 1,
+          "nuclear_shell": 4,
+          "valence_s_shell": 1,
+          "valence_p_shell": null,
+          "inside_binding_ev": 0.001819450876964225,
+          "inside_ratio": 1.0,
+          "trace": [
+            1.0866433975699932,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        }
+      ],
+      "bonds": [
+        {
+          "frag_i": 0,
+          "frag_j": 1,
+          "distance_angstrom": 0.9572,
+          "contact_theta_rad": 0.9494591130849153,
+          "geff_theta_coupling": 0.7392883018071423,
+          "outside_contact_dimless": 0.01980194867441983,
+          "outside_contact_ev": 0.03847235742458709,
+          "geometry_weight": 0.026785150834952007,
+          "trace": [
+            0.03677914290796385,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "frag_i": 0,
+          "frag_j": 2,
+          "distance_angstrom": 0.9572,
+          "contact_theta_rad": 0.9494591130849153,
+          "geff_theta_coupling": 0.7392883018071423,
+          "outside_contact_dimless": 0.01980194867441983,
+          "outside_contact_ev": 0.03847235742458709,
+          "geometry_weight": 0.026785150834952007,
+          "trace": [
+            0.03677914290796385,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        }
+      ],
+      "hyperclosure_trace_l1": 0.026006781356450355,
+      "notes": "inside curvature surplus (hadron spine) + outside G_eff(\u03b8) contact bonding; joint shell m=8"
+    },
+    {
+      "name": "CH4",
+      "observable": "atomization",
+      "predicted_ev": 0.16150334792755297,
+      "reference_ev": 17.0,
+      "error_pct": -99.04998030630851,
+      "inside_surplus_ev": -0.0072778035078569,
+      "outside_contact_ev": 0.14586424423917443,
+      "hyperclosure_ev": 0.008361300180521638,
+      "separated_inside_ev": 0.01926116244592862,
+      "joint_inside_ev": 0.011983358938071719,
+      "fragments": [
+        {
+          "index": 0,
+          "label": "C",
+          "z_nuclear": 6,
+          "electrons": 6,
+          "mass_number": 12,
+          "nuclear_shell": 8,
+          "valence_s_shell": 8,
+          "valence_p_shell": 7,
+          "inside_binding_ev": 0.011983358938071719,
+          "inside_ratio": 2.4906247817054834,
+          "trace": [
+            3.0964412867316553,
+            6.192882573463311,
+            9.289323860194965,
+            12.385765146926621,
+            15.482206433658275,
+            18.57864772038993,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "index": 1,
+          "label": "H",
+          "z_nuclear": 1,
+          "electrons": 1,
+          "mass_number": 1,
+          "nuclear_shell": 4,
+          "valence_s_shell": 1,
+          "valence_p_shell": null,
+          "inside_binding_ev": 0.001819450876964225,
+          "inside_ratio": 1.0,
+          "trace": [
+            1.0866433975699932,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "index": 2,
+          "label": "H",
+          "z_nuclear": 1,
+          "electrons": 1,
+          "mass_number": 1,
+          "nuclear_shell": 4,
+          "valence_s_shell": 1,
+          "valence_p_shell": null,
+          "inside_binding_ev": 0.001819450876964225,
+          "inside_ratio": 1.0,
+          "trace": [
+            1.0866433975699932,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "index": 3,
+          "label": "H",
+          "z_nuclear": 1,
+          "electrons": 1,
+          "mass_number": 1,
+          "nuclear_shell": 4,
+          "valence_s_shell": 1,
+          "valence_p_shell": null,
+          "inside_binding_ev": 0.001819450876964225,
+          "inside_ratio": 1.0,
+          "trace": [
+            1.0866433975699932,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "index": 4,
+          "label": "H",
+          "z_nuclear": 1,
+          "electrons": 1,
+          "mass_number": 1,
+          "nuclear_shell": 4,
+          "valence_s_shell": 1,
+          "valence_p_shell": null,
+          "inside_binding_ev": 0.001819450876964225,
+          "inside_ratio": 1.0,
+          "trace": [
+            1.0866433975699932,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        }
+      ],
+      "bonds": [
+        {
+          "frag_i": 0,
+          "frag_j": 1,
+          "distance_angstrom": 1.09,
+          "contact_theta_rad": 0.9494591130849153,
+          "geff_theta_coupling": 0.7392883018071423,
+          "outside_contact_dimless": 0.0187692961337173,
+          "outside_contact_ev": 0.03646606105979361,
+          "geometry_weight": 0.025388331031124083,
+          "trace": [
+            0.034428883096265565,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "frag_i": 0,
+          "frag_j": 2,
+          "distance_angstrom": 1.09,
+          "contact_theta_rad": 0.9494591130849153,
+          "geff_theta_coupling": 0.7392883018071423,
+          "outside_contact_dimless": 0.0187692961337173,
+          "outside_contact_ev": 0.03646606105979361,
+          "geometry_weight": 0.025388331031124083,
+          "trace": [
+            0.034428883096265565,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "frag_i": 0,
+          "frag_j": 3,
+          "distance_angstrom": 1.09,
+          "contact_theta_rad": 0.9494591130849153,
+          "geff_theta_coupling": 0.7392883018071423,
+          "outside_contact_dimless": 0.0187692961337173,
+          "outside_contact_ev": 0.03646606105979361,
+          "geometry_weight": 0.025388331031124083,
+          "trace": [
+            0.034428883096265565,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "frag_i": 0,
+          "frag_j": 4,
+          "distance_angstrom": 1.09,
+          "contact_theta_rad": 0.9494591130849153,
+          "geff_theta_coupling": 0.7392883018071423,
+          "outside_contact_dimless": 0.0187692961337173,
+          "outside_contact_ev": 0.03646606105979361,
+          "geometry_weight": 0.025388331031124083,
+          "trace": [
+            0.034428883096265565,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        }
+      ],
+      "hyperclosure_trace_l1": 0.017214441548132783,
+      "notes": "inside curvature surplus (hadron spine) + outside G_eff(\u03b8) contact bonding; joint shell m=8"
+    },
+    {
+      "name": "NH3",
+      "observable": "atomization",
+      "predicted_ev": 0.1316448320074142,
+      "reference_ev": 10.07,
+      "error_pct": -98.69270276060165,
+      "inside_surplus_ev": -0.005458352630892676,
+      "outside_contact_ev": 0.1128217378126745,
+      "hyperclosure_ev": 0.013364741563847022,
+      "separated_inside_ev": 0.017441711568964395,
+      "joint_inside_ev": 0.011983358938071719,
+      "fragments": [
+        {
+          "index": 0,
+          "label": "N",
+          "z_nuclear": 7,
+          "electrons": 7,
+          "mass_number": 14,
+          "nuclear_shell": 8,
+          "valence_s_shell": 8,
+          "valence_p_shell": 7,
+          "inside_binding_ev": 0.011983358938071719,
+          "inside_ratio": 2.4906247817054834,
+          "trace": [
+            3.1380133611824403,
+            6.276026722364881,
+            9.414040083547322,
+            12.552053444729761,
+            15.6900668059122,
+            18.828080167094644,
+            21.96609352827708,
+            0.0
+          ]
+        },
+        {
+          "index": 1,
+          "label": "H",
+          "z_nuclear": 1,
+          "electrons": 1,
+          "mass_number": 1,
+          "nuclear_shell": 4,
+          "valence_s_shell": 1,
+          "valence_p_shell": null,
+          "inside_binding_ev": 0.001819450876964225,
+          "inside_ratio": 1.0,
+          "trace": [
+            1.0866433975699932,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "index": 2,
+          "label": "H",
+          "z_nuclear": 1,
+          "electrons": 1,
+          "mass_number": 1,
+          "nuclear_shell": 4,
+          "valence_s_shell": 1,
+          "valence_p_shell": null,
+          "inside_binding_ev": 0.001819450876964225,
+          "inside_ratio": 1.0,
+          "trace": [
+            1.0866433975699932,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "index": 3,
+          "label": "H",
+          "z_nuclear": 1,
+          "electrons": 1,
+          "mass_number": 1,
+          "nuclear_shell": 4,
+          "valence_s_shell": 1,
+          "valence_p_shell": null,
+          "inside_binding_ev": 0.001819450876964225,
+          "inside_ratio": 1.0,
+          "trace": [
+            1.0866433975699932,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        }
+      ],
+      "bonds": [
+        {
+          "frag_i": 0,
+          "frag_j": 1,
+          "distance_angstrom": 1.012,
+          "contact_theta_rad": 0.9494591130849153,
+          "geff_theta_coupling": 0.7392883018071423,
+          "outside_contact_dimless": 0.01935667070315494,
+          "outside_contact_ev": 0.03760724593755817,
+          "geometry_weight": 0.02618284457611302,
+          "trace": [
+            0.03574387057285455,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "frag_i": 0,
+          "frag_j": 2,
+          "distance_angstrom": 1.012,
+          "contact_theta_rad": 0.9494591130849153,
+          "geff_theta_coupling": 0.7392883018071423,
+          "outside_contact_dimless": 0.01935667070315494,
+          "outside_contact_ev": 0.03760724593755817,
+          "geometry_weight": 0.02618284457611302,
+          "trace": [
+            0.03574387057285455,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "frag_i": 0,
+          "frag_j": 3,
+          "distance_angstrom": 1.012,
+          "contact_theta_rad": 0.9494591130849153,
+          "geff_theta_coupling": 0.7392883018071423,
+          "outside_contact_dimless": 0.01935667070315494,
+          "outside_contact_ev": 0.03760724593755817,
+          "geometry_weight": 0.02618284457611302,
+          "trace": [
+            0.03574387057285455,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        }
+      ],
+      "hyperclosure_trace_l1": 0.020636733297116724,
+      "notes": "inside curvature surplus (hadron spine) + outside G_eff(\u03b8) contact bonding; joint shell m=8"
+    },
+    {
+      "name": "T2",
+      "observable": "dissociation",
+      "predicted_ev": 1.0448302002698773,
+      "reference_ev": 4.478,
+      "error_pct": -76.66748101228501,
+      "inside_surplus_ev": -0.0003766184500446396,
+      "outside_contact_ev": 1.0444535818198326,
+      "hyperclosure_ev": 0.0,
+      "separated_inside_ev": 0.00363890175392845,
+      "joint_inside_ev": 0.0032622833038838104,
+      "fragments": [
+        {
+          "index": 0,
+          "label": "T",
+          "z_nuclear": 1,
+          "electrons": 3,
+          "mass_number": 1,
+          "nuclear_shell": 4,
+          "valence_s_shell": 1,
+          "valence_p_shell": null,
+          "inside_binding_ev": 0.001819450876964225,
+          "inside_ratio": 1.0,
+          "trace": [
+            1.0866433975699932,
+            2.1732867951399863,
+            3.2599301927099793,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "index": 1,
+          "label": "T",
+          "z_nuclear": 1,
+          "electrons": 3,
+          "mass_number": 1,
+          "nuclear_shell": 4,
+          "valence_s_shell": 1,
+          "valence_p_shell": null,
+          "inside_binding_ev": 0.001819450876964225,
+          "inside_ratio": 1.0,
+          "trace": [
+            1.0866433975699932,
+            2.1732867951399863,
+            3.2599301927099793,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        }
+      ],
+      "bonds": [
+        {
+          "frag_i": 0,
+          "frag_j": 1,
+          "distance_angstrom": 0.7414,
+          "contact_theta_rad": 1.413716694115407,
+          "geff_theta_coupling": 0.9387403933595694,
+          "outside_contact_dimless": 0.5375864024072667,
+          "outside_contact_ev": 1.0444535818198326,
+          "geometry_weight": 0.5726678069997069,
+          "trace": [
+            0.5841647147992619,
+            1.1683294295985238,
+            1.7524941443977855,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        }
+      ],
+      "hyperclosure_trace_l1": 0.0,
+      "notes": "inside curvature surplus (hadron spine) + outside G_eff(\u03b8) contact bonding; joint shell m=5"
+    },
+    {
+      "name": "T2O",
+      "observable": "atomization",
+      "predicted_ev": 0.27316245775807774,
+      "reference_ev": 9.51,
+      "error_pct": -97.12762925596132,
+      "inside_surplus_ev": -0.003638901753928449,
+      "outside_contact_ev": 0.0907481580019932,
+      "hyperclosure_ev": 0.17877539800215608,
+      "separated_inside_ev": 0.015622260692000168,
+      "joint_inside_ev": 0.011983358938071719,
+      "fragments": [
+        {
+          "index": 0,
+          "label": "O",
+          "z_nuclear": 8,
+          "electrons": 8,
+          "mass_number": 16,
+          "nuclear_shell": 8,
+          "valence_s_shell": 8,
+          "valence_p_shell": 7,
+          "inside_binding_ev": 0.011983358938071719,
+          "inside_ratio": 2.4906247817054834,
+          "trace": [
+            3.1746825296162267,
+            6.349365059232453,
+            9.524047588848681,
+            12.698730118464907,
+            15.873412648081132,
+            19.048095177697363,
+            22.222777707313586,
+            25.397460236929813
+          ]
+        },
+        {
+          "index": 1,
+          "label": "T",
+          "z_nuclear": 1,
+          "electrons": 3,
+          "mass_number": 1,
+          "nuclear_shell": 4,
+          "valence_s_shell": 1,
+          "valence_p_shell": null,
+          "inside_binding_ev": 0.001819450876964225,
+          "inside_ratio": 1.0,
+          "trace": [
+            1.0866433975699932,
+            2.1732867951399863,
+            3.2599301927099793,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "index": 2,
+          "label": "T",
+          "z_nuclear": 1,
+          "electrons": 3,
+          "mass_number": 1,
+          "nuclear_shell": 4,
+          "valence_s_shell": 1,
+          "valence_p_shell": null,
+          "inside_binding_ev": 0.001819450876964225,
+          "inside_ratio": 1.0,
+          "trace": [
+            1.0866433975699932,
+            2.1732867951399863,
+            3.2599301927099793,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        }
+      ],
+      "bonds": [
+        {
+          "frag_i": 0,
+          "frag_j": 1,
+          "distance_angstrom": 0.9572,
+          "contact_theta_rad": 0.9494591130849153,
+          "geff_theta_coupling": 0.7392883018071423,
+          "outside_contact_dimless": 0.023354305368160015,
+          "outside_contact_ev": 0.0453740790009966,
+          "geometry_weight": 0.03159025418239668,
+          "trace": [
+            0.04337711145375195,
+            0.0867542229075039,
+            0.13013133436125585,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "frag_i": 0,
+          "frag_j": 2,
+          "distance_angstrom": 0.9572,
+          "contact_theta_rad": 0.9494591130849153,
+          "geff_theta_coupling": 0.7392883018071423,
+          "outside_contact_dimless": 0.023354305368160015,
+          "outside_contact_ev": 0.0453740790009966,
+          "geometry_weight": 0.03159025418239668,
+          "trace": [
+            0.04337711145375195,
+            0.0867542229075039,
+            0.13013133436125585,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        }
+      ],
+      "hyperclosure_trace_l1": 0.18403349794339596,
+      "notes": "inside curvature surplus (hadron spine) + outside G_eff(\u03b8) contact bonding; joint shell m=8"
+    }
+  ],
+  "summary": {
+    "count": 8,
+    "mean_abs_error_pct": 93.07859541339754,
+    "max_abs_error_pct": 99.0598602791055
+  }
+}

@@ -519,17 +519,24 @@ theorem F_of_trivial_solution (a : Fin 8) (μ ν : Fin 4) :
   unfold F_of_solution F_from_A trivial_covariant_solution_data A_O
   simp only [sub_self]
 
-/-- **Trivial covariant solution:** A = 0, J = 0, grad φ = 0, N = 1 (flat). At t = 0, N = HQVM_lapse 0 1 0 = 1. -/
-theorem trivial_is_covariant_solution :
+/-- **Trivial covariant solution (flat-φ vacuum):** A = 0, J = 0, vanishing `grad_phi`, N = 1.
+    Requires `grad_phi = 0` (flat-φ / H-reduction regime; see `grad_φ_zero_when_phi_of_T_constant`). -/
+theorem trivial_is_covariant_solution (hgrad : ∀ ν, grad_phi ν = 0) :
     IsCovariantSolution trivial_covariant_solution_data 0 := by
+  have hφ : ∀ ν, grad_φ ν = 0 := fun ν => by rw [← grad_phi_eq_grad_φ, hgrad ν]
   unfold IsCovariantSolution covariant_O_Maxwell_residual covariant_O_Maxwell_residual_withMetric
     covariant_div_F_O raisedFieldStrength_O F_of_solution
   unfold trivial_covariant_solution_data F_from_A A_O J_O
-  simp only [sub_self, HQVM_lapse, grad_phi]
+  simp only [sub_self, HQVM_lapse, grad_phi, grad_phi_eq_grad_φ, hφ, mul_zero, sub_zero]
   constructor
   · intro a ν
-    simp [HQVM_inverseMetric, sqrt_neg_g_HQVM]
+    split_ifs <;> simp [HQVM_inverseMetric, sqrt_neg_g_HQVM]
   · norm_num
+
+/-- **Existence of a covariant solution** in the flat-φ gradient regime. -/
+theorem exists_covariant_solution (hgrad : ∀ ν, grad_phi ν = 0) :
+    Exists (fun (d : CovariantSolutionData) => Exists (fun (t : ℝ) => IsCovariantSolution d t)) :=
+  Exists.intro trivial_covariant_solution_data (Exists.intro 0 (trivial_is_covariant_solution hgrad))
 
 /-- **Metric-data residual ⟺ flat identity-metric residual.** -/
 theorem covariant_withMetric_eq_iff_emergent_flat
@@ -544,11 +551,6 @@ theorem covariant_withMetric_eq_iff_emergent_flat
 theorem HQVM_lapse_covariant_background (Φ φ t : ℝ) :
     HQVM_lapse Φ φ t = 1 + Φ + timeAngle φ t :=
   HQVM_lapse_eq_timeAngle Φ φ t
-
-/-- **Existence of a covariant solution.** -/
-theorem exists_covariant_solution :
-    Exists (fun (d : CovariantSolutionData) => Exists (fun (t : ℝ) => IsCovariantSolution d t)) :=
-  Exists.intro trivial_covariant_solution_data (Exists.intro 0 trivial_is_covariant_solution)
 
 /-!
 ### Covariant Maxwell kinetic (one chart cell)

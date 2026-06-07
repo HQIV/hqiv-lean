@@ -29,6 +29,11 @@ import Hqiv.Physics.GRFromMaxwell
 import Hqiv.Physics.HQIVGravityReadoutScalars
 import Hqiv.Physics.HQIVFluidClosureScaffold
 import Hqiv.Physics.OrbitalFlybyScaffold
+import Hqiv.Physics.OrbitalTrajectoryJ2Scaffold
+import Hqiv.Physics.SO8PlaquetteHolonomy
+import Hqiv.Physics.NonAbelianHolonomyMeasureScaffold
+import Hqiv.Physics.DiscreteActionPoincareScaffold
+import Hqiv.Physics.DiscreteActionStrongPoincareBridge
 import Hqiv.Physics.CoronalLongitudinalStress
 import Hqiv.Physics.HQIVTurbulenceSimulatorScaffold
 import Hqiv.Physics.ToyDiscreteHeat
@@ -46,6 +51,8 @@ import Hqiv.Physics.BoundStates
 import Hqiv.Physics.DerivedGaugeAndLeptonSector
 import Hqiv.Physics.InformationalEnergyMass
 import Hqiv.Physics.HadronMassReadout
+import Hqiv.Physics.HepDecayReadout
+import Hqiv.Physics.NaturalUnitMeVTheory
 import Hqiv.Physics.ScaleWitness
 import Hqiv.Physics.DiscretePlaquetteHolonomy
 import Hqiv.Physics.ActionHolonomyGlue

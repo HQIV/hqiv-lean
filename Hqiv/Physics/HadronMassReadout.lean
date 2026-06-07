@@ -176,4 +176,83 @@ theorem proton_hadronGround_eq_derived :
   rw [hadronGroundMassMeV_proton_chart, proton_mass_from_shared_harmonics, sharedBindingEnergy]
   rfl
 
+/-! ## TUFT global excitation content (closure weight on Beltrami drum)
+
+Derived from `hadronIntrinsicScale` × `valenceChannelFraction` (no per-particle menus).
+
+* Baryon / full `s s̄` closure: weight `1`.
+* Light isovector `q q̄`: `4/9 · 2/3 = 8/27`.
+* One valence strange: `√(8/27)` (halfway to full strong closure).
+* Light isoscalar (ω): isovector base × `(1 + γ/2)` — same 1-jet Fano detuning as channel twist.
+-/
+
+noncomputable def tuftMesonLightExcitationWeight : ℝ :=
+  hadronIntrinsicScale .meson * valenceChannelFraction 2
+
+theorem tuftMesonLightExcitationWeight_eq_eight_twenty_sevenths :
+    tuftMesonLightExcitationWeight = (8 : ℝ) / 27 := by
+  simp [tuftMesonLightExcitationWeight, hadronIntrinsicScale_meson_eq_four_ninths,
+    valenceChannelFraction_meson_pair]
+  norm_num
+
+noncomputable def tuftMesonFlavorExcitationWeight (nStrange : ℕ) : ℝ :=
+  match nStrange with
+  | 0 => tuftMesonLightExcitationWeight
+  | 2 => 1
+  | _ => Real.sqrt tuftMesonLightExcitationWeight
+
+theorem tuftMesonFlavorExcitationWeight_zero :
+    tuftMesonFlavorExcitationWeight 0 = tuftMesonLightExcitationWeight := rfl
+
+theorem tuftMesonFlavorExcitationWeight_two : tuftMesonFlavorExcitationWeight 2 = 1 := rfl
+
+noncomputable def tuftMesonIsoscalarExcitationWeight : ℝ :=
+  tuftMesonLightExcitationWeight * (1 + Hqiv.gamma_HQIV / 2)
+
+theorem tuftMesonIsoscalarExcitationWeight_eq :
+    tuftMesonIsoscalarExcitationWeight =
+      tuftMesonLightExcitationWeight * (1 + Hqiv.gamma_HQIV / 2) := rfl
+
+/-- Global Beltrami content weight from valence quantum numbers (not PDG labels). -/
+noncomputable def tuftContentExcitationWeight (valenceQuarks nStrange : ℕ) (isoscalar : Bool) : ℝ :=
+  if 3 ≤ valenceQuarks then
+    1
+  else if valenceQuarks ≤ nStrange then
+    1
+  else if nStrange = 1 then
+    Real.sqrt tuftMesonLightExcitationWeight
+  else if isoscalar ∧ nStrange = 0 then
+    tuftMesonIsoscalarExcitationWeight
+  else
+    tuftMesonLightExcitationWeight
+
+theorem tuftContentExcitationWeight_baryon :
+    tuftContentExcitationWeight 3 0 false = 1 := by
+  simp [tuftContentExcitationWeight]
+
+/-! ## Baryon excitation Beltrami coupling (global, not per PDG label)
+
+When radial and orbital quanta are both active, each borrows meson-scale closure
+(`2 · hadronIntrinsicScale .meson = 8/9`).  Pure higher orbital on negative-parity
+states carries 1-jet Fano suppression `1 − γ/(2(ℓ+1))`; positive-parity orbitals
+stay at full closure (`1`).
+-/
+
+noncomputable def tuftExcitationCouplingWeight (n ℓ : ℕ) (negativeParity : Bool) : ℝ :=
+  if 1 ≤ n ∧ 1 ≤ ℓ then
+    2 * hadronIntrinsicScale .meson
+  else if n = 0 ∧ 2 ≤ ℓ ∧ negativeParity then
+    1 - Hqiv.gamma_HQIV / (2 * (ℓ + 1 : ℝ))
+  else
+    1
+
+theorem tuftExcitationCouplingWeight_mixed_eq_eight_ninths :
+    tuftExcitationCouplingWeight 1 1 false = (8 : ℝ) / 9 := by
+  simp [tuftExcitationCouplingWeight, hadronIntrinsicScale_meson_eq_four_ninths]
+  norm_num
+
+#check tuftContentExcitationWeight
+#check tuftExcitationCouplingWeight
+#check tuftMesonLightExcitationWeight_eq_eight_twenty_sevenths
+
 end Hqiv.Physics

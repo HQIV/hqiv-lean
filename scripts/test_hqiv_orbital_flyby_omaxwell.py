@@ -7,8 +7,128 @@ import hqiv_orbital_flyby_omaxwell as orb
 
 
 class TestHQIVOrbitalFlyby(unittest.TestCase):
+    def test_phi_readout_is_geometric_only(self) -> None:
+        r = (orb.R_EARTH * 2.0, 0.0, 0.0)
+        self.assertAlmostEqual(orb.phi_readout(r, orb.EARTH), 1.0 / 3.0)
+        base = orb.phi_acceleration_homogeneous_si() * orb.phi_readout(r, orb.EARTH)
+        delta = orb.orbital_curvature_mass_delta_at(orb.EARTH, orb.R_EARTH * 2.0)
+        self.assertAlmostEqual(orb.phi_acceleration_si(r, orb.EARTH), base * (1.0 + delta))
+
+    def test_orbital_phase_geometry_at_two_radii(self) -> None:
+        rho = orb.orbital_curvature_density_at(orb.EARTH, 2.0 * orb.R_EARTH)
+        self.assertAlmostEqual(rho, 0.4, places=3)
+        rho_surf = orb.orbital_curvature_density_at(orb.EARTH, orb.R_EARTH)
+        self.assertAlmostEqual(rho_surf, 1.0, places=3)
+
+    def test_phase_geometry_kappa_not_legacy_shell(self) -> None:
+        gate = 1.0
+        r = 2.0 * orb.R_EARTH
+        kappa_phase = orb.flyby_dynamic_kappa_phi_from_phase(orb.EARTH, r, gate)
+        kappa_legacy = orb.flyby_dynamic_kappa_phi(4, gate)
+        self.assertNotAlmostEqual(kappa_phase, kappa_legacy, places=2)
+        self.assertLess(kappa_phase, kappa_legacy)
+
+    def test_propagation_shell_for_orbitals(self) -> None:
+        self.assertEqual(orb.propagation_shell_for_orbitals(), 0)
+
+    def test_chart_scales_inert_in_nominal_flyby(self) -> None:
+        case = orb.FLYBY_CATALOG["near_1998"]
+        settings = orb.propagation_settings_for(orb.EARTH, case)
+        nominal = orb.paper_nominal_coupling()
+        zero_chart = orb.replace(nominal, vacuum_scale=0.0, metric_phi_scale=0.0)
+        r_nom = orb.compare_classical_vs_hqiv(case, orb.EARTH, nominal, settings)
+        r_zero = orb.compare_classical_vs_hqiv(case, orb.EARTH, zero_chart, settings)
+        self.assertAlmostEqual(
+            float(r_nom["hqiv_minus_classical_mm_s"]),
+            float(r_zero["hqiv_minus_classical_mm_s"]),
+            places=3,
+        )
+
     def test_phi_of_shell_matches_lean(self) -> None:
         self.assertAlmostEqual(orb.phi_of_shell(4), 10.0)
+
+    def test_visible_source_quadrature_matches_solid_angle(self) -> None:
+        r = (orb.R_EARTH + 500_000.0, 0.0, 0.0)
+        v = (0.0, 7_800.0, 0.0)
+        q = orb.visible_source_quadrature(r, v, orb.EARTH, angular_step_deg=2.0)
+        self.assertGreater(q.angular_diameter_deg, 130.0)
+        self.assertLess(q.angular_diameter_deg, 140.0)
+        self.assertAlmostEqual(q.solid_angle_sr, q.analytic_solid_angle_sr, delta=0.03)
+        self.assertGreater(q.mean_signed_tangent_projection, 0.95)
+        self.assertGreater(q.mean_corotating_projection, 0.0)
+        self.assertLess(q.mean_counterrotating_projection, 0.02)
+        self.assertGreater(q.mean_signed_spin_lapse_shape, 0.95)
+        self.assertGreater(q.mean_spin_lapse_shape, 0.0)
+        self.assertLessEqual(q.mean_spin_lapse_shape, 1.0)
+
+    def test_visible_source_quadrature_distant_body_small_disk(self) -> None:
+        r = (orb.AU, 0.0, 0.0)
+        v = (0.0, 30_000.0, 0.0)
+        q = orb.visible_source_quadrature(r, v, orb.SUN, angular_step_deg=1.0)
+        self.assertLess(q.angular_diameter_deg, 1.0)
+        self.assertAlmostEqual(q.solid_angle_sr, q.analytic_solid_angle_sr, delta=2.0e-6)
+
+    def test_quaternion_rotates_unit_vectors(self) -> None:
+        q = orb.quat_from_unit_vectors((0.0, 0.0, 1.0), (1.0, 0.0, 0.0))
+        v = orb.quat_rotate(q, (0.0, 0.0, 1.0))
+        self.assertAlmostEqual(v[0], 1.0, places=12)
+        self.assertAlmostEqual(v[1], 0.0, places=12)
+        self.assertAlmostEqual(v[2], 0.0, places=12)
+
+    def test_covered_chord_quadrature_splits_near_and_far_surface(self) -> None:
+        r = (orb.R_EARTH + 500_000.0, 0.0, 0.0)
+        v = (0.0, 7_800.0, 0.0)
+        q = orb.covered_chord_quadrature(r, v, orb.EARTH, angular_step_deg=2.0, chord_samples=8)
+        self.assertGreater(q.mean_near_signed_projection, 0.55)
+        self.assertLess(q.mean_far_signed_projection, q.mean_near_signed_projection)
+        self.assertGreater(q.mean_volume_corotating_projection, q.mean_volume_counterrotating_projection)
+        self.assertGreater(q.mean_volume_counterrotating_projection, 0.05)
+        balance = (
+            4.0
+            * q.mean_volume_corotating_projection
+            * q.mean_volume_counterrotating_projection
+            / max(
+                (q.mean_volume_corotating_projection + q.mean_volume_counterrotating_projection)
+                ** 2,
+                1.0e-30,
+            )
+        )
+        self.assertGreater(balance, 0.2)
+        self.assertAlmostEqual(q.solid_angle_sr, q.analytic_solid_angle_sr, delta=0.03)
+
+    def test_flyby_dynamic_kappa_phi_matches_lean_anchor(self) -> None:
+        self.assertAlmostEqual(orb.flyby_dynamic_kappa_phi(4, 0.0), 1.0)
+        self.assertAlmostEqual(orb.flyby_dynamic_kappa_phi(4, 1.0), 5.0)
+        self.assertAlmostEqual(orb.flyby_dynamic_kappa_phi(4, 0.5), 3.0)
+
+    def test_chord_ray_grid_key_shrinks_with_distance(self) -> None:
+        low = orb.chord_ray_grid_key(orb.R_EARTH + 500_000.0, orb.EARTH, angular_step_deg=2.0)
+        high = orb.chord_ray_grid_key(orb.R_EARTH * 8.0, orb.EARTH, angular_step_deg=2.0)
+        self.assertLess(high[0], low[0])
+
+    def test_chord_flyby_track_uniform_samples_not_ca_only(self) -> None:
+        case = orb.FLYBY_CATALOG["near_1998"]
+        settings = orb.propagation_settings_for(orb.EARTH, case)
+        coup = orb.replace(
+            orb.paper_chord_source_coupling(),
+            chord_track_collect_stride=5,
+            chord_track_target_samples=32,
+        )
+        track = orb.prepare_chord_flyby_track(case, orb.EARTH, coup, settings)
+        self.assertTrue(track.active)
+        self.assertGreaterEqual(track.n_track_samples, 16)
+        self.assertLess(track.n_quadrature_calls, track.n_track_samples)
+        span = max(track.r_m) - min(track.r_m)
+        self.assertGreater(span, orb.R_EARTH * 4.0)
+        self.assertLess(min(track.r_m), track.r_ca_m * 1.02)
+
+    def test_chord_gate_opens_on_volume_cancellation(self) -> None:
+        r = (orb.R_EARTH + 500_000.0, 0.0, 0.0)
+        v = (0.0, 7_800.0, 0.0)
+        q = orb.covered_chord_quadrature(r, v, orb.EARTH, angular_step_deg=2.0, chord_samples=8)
+        gate = orb.source_shell_gate_from_chord(q)
+        self.assertGreater(gate, 0.25)
+        self.assertLess(gate, 0.85)
 
     def test_geff_ratio_unity_at_reference(self) -> None:
         body = orb.EARTH
@@ -285,9 +405,11 @@ class TestHQIVOrbitalFlyby(unittest.TestCase):
         self.assertAlmostEqual(orb.shell_equatorial_fraction_floor(0), 1.0)
 
     def test_polar_phi_boost_saturates_at_ladder(self) -> None:
-        """h_z=0, ρ=1 ⇒ boost (m+1)² for m=4 (25× on φ)."""
-        boost = orb.polar_fiber_phi_boost(0.0, 1.0, 1.0, 1.0, 4)
-        self.assertAlmostEqual(boost, 25.0)
+        """h_z=0, rho=1 at propagation shell m=0: no polar boost (near-pole band)."""
+        boost = orb.polar_fiber_phi_boost(0.0, 1.0, 1.0, 1.0, 0)
+        self.assertAlmostEqual(boost, 1.0)
+        boost_lockin = orb.polar_fiber_phi_boost(0.0, 1.0, 1.0, 1.0, 4)
+        self.assertAlmostEqual(boost_lockin, 25.0)
 
     def test_oumuamua_interstellar_propagates(self) -> None:
         case = orb.INTERSTELLAR_CATALOG["oumuamua_2017"]

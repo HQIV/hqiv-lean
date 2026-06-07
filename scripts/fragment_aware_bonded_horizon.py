@@ -36,6 +36,7 @@ class BondGeometry:
     frag_i: int
     frag_j: int
     distance_angstrom: float
+    bond_angle_rad: float | None = None
 
 
 @dataclass(frozen=True)

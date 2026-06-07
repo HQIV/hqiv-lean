@@ -124,6 +124,71 @@ theorem omega_k_partial_at_reference_via_xi
     omega_k_partial referenceM = omegaK_partial_xi xiLockin := by
   rw [omega_k_partial_at_reference hpos, omegaK_partial_xi_lockin]
 
+/-- `omegaK_xi ξ > 0` for ξ > 1 (supporting the dynamic T → vev mapping).
+
+Direct from the curvature primitive positivity (log + (α/2)log² > 0 for ξ > 1) and the
+normalization at lock-in. The executable dynamic scale and physical-T mass spectrum
+are the primary deliverables; this is the supporting analytic layer.
+-/
+theorem omegaK_xi_pos (ξ : ℝ) (h : 1 < ξ) : 0 < omegaK_xi ξ := by
+  unfold omegaK_xi omegaKContinuous
+  have hlock_gt_one : 1 < xiLockin := by
+    rw [xiLockin_eq_five]
+    norm_num
+  have hden_pos : 0 < continuousCurvaturePrimitive xiLockin :=
+    continuousCurvaturePrimitive_pos_for_gt_one xiLockin hlock_gt_one
+  have hden_ne : continuousCurvaturePrimitive xiLockin ≠ 0 := ne_of_gt hden_pos
+  simp [hden_ne, div_pos (continuousCurvaturePrimitive_pos_for_gt_one ξ h) hden_pos]
+
+/-- `omegaK_xi` is strictly increasing for ξ > 5 (supporting the dynamic T → vev story).
+
+Standard consequence of the curvature primitive being strictly increasing (its derivative
+(1/x)(1 + α log x) > 0 on (1,∞)). The denominator is the positive lock-in
+primitive at `xiLockin = 5`.
+-/
+theorem omegaK_xi_strictMono (ξ1 ξ2 : ℝ) (h1 : 5 ≤ ξ1) (h2 : ξ1 < ξ2) :
+    omegaK_xi ξ1 < omegaK_xi ξ2 := by
+  unfold omegaK_xi omegaKContinuous
+  have hlock_gt_one : 1 < xiLockin := by
+    rw [xiLockin_eq_five]
+    norm_num
+  have hden_pos : 0 < continuousCurvaturePrimitive xiLockin :=
+    continuousCurvaturePrimitive_pos_for_gt_one xiLockin hlock_gt_one
+  have hden_ne : continuousCurvaturePrimitive xiLockin ≠ 0 := ne_of_gt hden_pos
+  have hξ1_gt_one : 1 < ξ1 := by linarith
+  have hnum_lt : continuousCurvaturePrimitive ξ1 < continuousCurvaturePrimitive ξ2 :=
+    continuousCurvaturePrimitive_strict_mono_gt_one ξ1 ξ2 hξ1_gt_one h2
+  simp [hden_ne, div_lt_div_of_pos_right hnum_lt hden_pos]
+
+/-! ## VEV on the temperature ladder (TUFT "only vev as input")
+
+The vacuum expectation value / overall mass scale is **not independent of the
+temperature ladder** and is no longer a fixed constant.
+
+It emerges at every ξ from the inside/outside Casimir asymmetry on the carrier
+(the symmetry-breaking mechanism):
+- Inner contact surfaces (T12 witness shells + trapped Casimir) → binding, larger scale.
+- Outer neutral surface (T13 fluctuations on the right-handed singlet extension) → suppression.
+
+See `HopfShellBeltramiMassBridge.effective_casimir_scale_at_xi` (inner trapping(ωK_xi ξ) / outer suppression).
+
+The lock-in point (ξ = xiLockin = 5, m_lockin = referenceM = 4) remains special:
+this is where Ω_k = 1 and the legacy good ratios are recovered. But the scale
+itself is now fully dynamic with universe age. "Dynamics all the way down."
+
+In the TUFT claim ("mass spectrum on lock with only vev as input"), the vev at
+any epoch is the instantaneous geometric balance read from the ladder + the
+T12/T13 witnesses. The entire spectrum (absolute scale + ratios + T dependence)
+follows from that.
+-/
+
+theorem vev_read_at_ladder_lockin :
+    -- The vev that anchors the mass spectrum is the curvature calibration
+    -- exactly where the ladder's Ω_k reaches 1 (xiLockin).
+    omegaK_partial_xi xiLockin = 1 ∧
+    xiLockin = xiOfShell referenceM := by
+  exact ⟨omegaK_partial_xi_lockin, xiLockin_eq_xiOfShell_referenceM⟩
+
 /-! ## Discrete-continuous Ωₖ bridge -/
 
 /--

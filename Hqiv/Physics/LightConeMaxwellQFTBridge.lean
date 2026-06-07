@@ -388,12 +388,13 @@ theorem timeAngleBudgetTransport_and_HQVM_GR
 theorem lightCone_discreteModes_shellToHarmonicLimit : ShellToHarmonicLimit :=
   shell_to_harmonic_limit_holds
 
-/-- Constant scalar on `MaxwellQFTChart` ⇒ zero `coordsGradientComponents`; emergent O–Maxwell RHS matches `general`. -/
+/-- Constant scalar on `MaxwellQFTChart` ⇒ zero `coordsGradientComponents`; emergent O–Maxwell RHS matches
+    `general` when the lock-in `grad_φ` slot vanishes (e.g. constant `phi_of_T`). -/
 theorem lightCone_emergent_coordsField_constPhi_eq_general (J_src : Fin 8 → Fin 4 → ℝ) (r : ℝ)
-    (c : MaxwellQFTChart) (a : Fin 8) (ν : Fin 4) :
+    (c : MaxwellQFTChart) (a : Fin 8) (ν : Fin 4) (hgrad : ∀ κ, grad_φ κ = 0) :
     emergentMaxwellInhomogeneous_O_coordsField J_src (fun _ => r) c a ν =
       emergentMaxwellInhomogeneous_O_general J_src a ν :=
-  emergent_coordsField_const_eq_general J_src r c a ν
+  emergent_coordsField_const_eq_general J_src r c a ν hgrad
 
 /-- Minimal continuum axioms together with a proof witness for the shell/harmonic field. -/
 structure LightConeFunctionalBridge where

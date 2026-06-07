@@ -269,4 +269,16 @@ theorem cyclic_wilson_defect_sum_bounds_from_kinetic (A : Fin 8 → Fin 4 → �
   · nlinarith
   · nlinarith
 
+/-- Cyclic plaquette Wilson defects sandwich the global `L_O_kinetic` aggregate. -/
+structure WilsonKineticPlaquetteEquivalenceDischarged : Prop where
+  two_sided_cyclic_wilson :
+    ∀ (A : Fin 8 → Fin 4 → ℝ) (x : ℝ),
+      (-(2 : ℝ) * L_O_kinetic A ≤
+          ∑ a : Fin 8, ∑ i : Fin 4, ((linearEnd (F_from_A A a i (i + 1))) x - x) ^ 2) ∧
+        (∑ a : Fin 8, ∑ i : Fin 4, ((linearEnd (F_from_A A a i (i + 1))) x - x) ^ 2 ≤
+          -(4 : ℝ) * L_O_kinetic A)
+
+theorem wilsonKineticPlaquetteEquivalence_discharged : WilsonKineticPlaquetteEquivalenceDischarged where
+  two_sided_cyclic_wilson := fun A x => cyclic_wilson_defect_sum_bounds_from_kinetic A x
+
 end Hqiv.Physics

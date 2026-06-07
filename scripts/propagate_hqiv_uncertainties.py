@@ -71,41 +71,54 @@ def main() -> None:
 
     # User-requested starting point: first-principles leptons around ~1% error bars.
     rel_sigma = {
-        # Current exported lepton triplet in this pipeline.
-        "m_nu_e": 0.01,
-        "m_nu_mu": 0.01,
-        "m_nu_tau": 0.01,
-        # Keep nucleon witness bars small but nonzero for propagation continuity.
+        "nu_m1_MeV": 0.01,
+        "nu_m2_MeV": 0.01,
+        "nu_m3_MeV": 0.01,
         "derivedProtonMass_MeV": 0.002,
         "derivedNeutronMass_MeV": 0.002,
-        # H2/site witness bars (numerical channel); tune when sim calibration is ready.
         "site_energy_referenceM": 0.01,
         "h2_trace_referenceM": 0.01,
     }
 
-    central = {
-        "m_nu_e": float(hqiv["m_nu_e"]),
-        "m_nu_mu": float(hqiv["m_nu_mu"]),
-        "m_nu_tau": float(hqiv["m_nu_tau"]),
-        "derivedProtonMass_MeV": float(hqiv["derivedProtonMass_MeV"]),
-        "derivedNeutronMass_MeV": float(hqiv["derivedNeutronMass_MeV"]),
-        "site_energy_referenceM": float(qchem["site_energy_referenceM"]),
-        "h2_trace_referenceM": float(qchem["h2_trace_referenceM"]),
-    }
+    if "nu_m1_MeV" in hqiv:
+        central = {
+            "nu_m1_MeV": float(hqiv["nu_m1_MeV"]),
+            "nu_m2_MeV": float(hqiv["nu_m2_MeV"]),
+            "nu_m3_MeV": float(hqiv["nu_m3_MeV"]),
+            "derivedProtonMass_MeV": float(hqiv["derivedProtonMass_MeV"]),
+            "derivedNeutronMass_MeV": float(hqiv["derivedNeutronMass_MeV"]),
+            "site_energy_referenceM": float(qchem["site_energy_referenceM"]),
+            "h2_trace_referenceM": float(qchem["h2_trace_referenceM"]),
+        }
+    else:
+        rel_sigma.update({"m_nu_e": 0.01, "m_nu_mu": 0.01, "m_nu_tau": 0.01})
+        central = {
+            "m_nu_e": float(hqiv["m_nu_e"]),
+            "m_nu_mu": float(hqiv["m_nu_mu"]),
+            "m_nu_tau": float(hqiv["m_nu_tau"]),
+            "derivedProtonMass_MeV": float(hqiv["derivedProtonMass_MeV"]),
+            "derivedNeutronMass_MeV": float(hqiv["derivedNeutronMass_MeV"]),
+            "site_energy_referenceM": float(qchem["site_energy_referenceM"]),
+            "h2_trace_referenceM": float(qchem["h2_trace_referenceM"]),
+        }
 
     rng = random.Random(SEED)
 
     out_samples: Dict[str, List[float]] = {
-        "m_nu_mu_over_nu_e": [],
-        "m_nu_tau_over_nu_mu": [],
+        "nu_m2_over_m1": [],
+        "nu_m3_over_m2": [],
         "proton_minus_neutron_MeV": [],
         "h2_over_site_referenceM": [],
     }
 
     for _ in range(MC_SAMPLES):
         s = {k: sample_rel_gaussian(rng, v, rel_sigma[k]) for k, v in central.items()}
-        out_samples["m_nu_mu_over_nu_e"].append(s["m_nu_mu"] / s["m_nu_e"])
-        out_samples["m_nu_tau_over_nu_mu"].append(s["m_nu_tau"] / s["m_nu_mu"])
+        if "nu_m1_MeV" in s:
+            out_samples["nu_m2_over_m1"].append(s["nu_m2_MeV"] / s["nu_m1_MeV"])
+            out_samples["nu_m3_over_m2"].append(s["nu_m3_MeV"] / s["nu_m2_MeV"])
+        else:
+            out_samples["nu_m2_over_m1"].append(s["m_nu_mu"] / s["m_nu_e"])
+            out_samples["nu_m3_over_m2"].append(s["m_nu_tau"] / s["m_nu_mu"])
         out_samples["proton_minus_neutron_MeV"].append(
             s["derivedProtonMass_MeV"] - s["derivedNeutronMass_MeV"]
         )

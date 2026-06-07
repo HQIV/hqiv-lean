@@ -347,6 +347,26 @@ layer—not by the numeral `4` itself.
 It is **not** an output of a deeper numeric search inside this module: it is **fixed by the two pins
 above**. Changing `qcdShell` / `latticeStepCount` moves which grid row is named “reference,” not the
 algebraic fact that generation space is threefold.
+
+**Never treat `referenceM = 4` as derived from TUFT Hopf winding or from proton mass fitting.**
+The numeral `4` also appears as `tuftHeavyChartShell = n + 1` for heavy Hopf winding `n = 3`;
+Lean proves `referenceM = tuftHeavyChartShell` only as a **numeric coincidence** under the current
+pins (`HopfShellBeltramiMassBridge.referenceM_eq_tuftHeavyChartShell_numeric`), not as chart
+identification. See `AGENTS/TUFT_INNER_OUTER_CASIMIR_DYNAMICS.md` §0.
+
+**Tent-pole note (dynamic Casimir / T-ladder era):** `referenceM` is the **hadronic/proton calibration
+and export convention** on the discrete null-lattice grid. It is the row at which the nucleon network
+mass formulas (ConservedContentMassBridge, QuarkMetaResonance, CosmologicalShellLadder) lock the
+observed 938.272 MeV proton scale. It is **not** required to be the universal normalization point for
+leptonic, neutral, or gauge-sector readouts.
+
+The dynamic inner/outer Casimir machinery (`effective_casimir_scale_at_xi`, the T12 three-shell
+witness + T11 torsion + T13 outer 1/140 on the same octonion carrier, the continuous curvature
+primitive driving `omegaK_xi`, and the physical-T ↔ ξ ladder) now supplies a first-class,
+geometry-driven scale for those sectors at *any* temperature. The lepton-specific chart and the
+RHN neutral channel can (and should) be computed from that dynamic relationship rather than being
+forced through the m=4 proton shell. See `HopfShellBeltramiMassBridge` (MeV-anchored physical_T
+readouts) and the worldview synthesis in `AGENTS/TUFT_INNER_OUTER_CASIMIR_DYNAMICS.md`.
 -/
 def referenceM : Nat := qcdShell + stepsFromQCDToLockin
 

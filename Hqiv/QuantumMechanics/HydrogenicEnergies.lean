@@ -1,6 +1,6 @@
 /-
 Closed-form hydrogenic energy scales used by `Schrodinger.lean` and `QuantumComputing/DigitalQuantumSimulation`.
-Factored out so the digital simulation layer need not import the full continuum Schrödinger development
+Factored out so the digital simulation layer need not import the full patch Schrödinger development
 (operators, wavefunctions, calculus).
 -/
 

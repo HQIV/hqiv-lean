@@ -4,6 +4,7 @@ import Mathlib.Tactic
 
 import Hqiv.Physics.HQIVAtoms
 import Hqiv.Physics.HQIVNuclei
+import Hqiv.Physics.DynamicCentreGeometry
 
 /-!
 # HQIV molecules: TorqueTree, fold energy, superposed densities (v2)
@@ -512,19 +513,21 @@ noncomputable def tripeptide_density_map_example : ℝ :=
   rhoProtein [3, 3, 3]
 
 /-!
-## Numerical anchor: H₂O bond angle (degrees) + deuteron spectra scale witness
+## Dynamic H₂O centre angle (TUFT steric geometry; no tabulated degree anchor)
 -/
 
-/-- PAC / gas-phase H₂O H–O–H angle in degrees (numerical anchor; not derived from φ here). -/
-noncomputable def waterBondAngleDeg : ℝ :=
-  104.5
+/-- H–O–H angle in radians from dynamic steric geometry (period-2 O, two bonds). -/
+noncomputable def waterDynamicCentreAngleRad : ℝ := dynamicCentreAngleRad 8 2
 
-theorem water_bond_angle_from_minimization :
-    waterBondAngleDeg = 104.5 ∧ 0 < spectraDeuteronBinding_MeV := by
-  constructor
-  · rfl
-  · unfold spectraDeuteronBinding_MeV
-    norm_num
+/-- Legacy degree alias for witnesses (computed from radians, not a separate constant). -/
+noncomputable def waterBondAngleDeg : ℝ :=
+  waterDynamicCentreAngleRad * 180 / Real.pi
+
+theorem waterBondAngleDeg_from_dynamic_radians :
+    waterBondAngleDeg = waterDynamicCentreAngleRad * 180 / Real.pi := rfl
+
+theorem water_dynamic_angle_positive : 0 < waterDynamicCentreAngleRad :=
+  dynamicCentreAngleRad_water_pos
 
 /-!
 ## Examples

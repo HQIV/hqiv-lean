@@ -14,15 +14,17 @@ unsafe def showReal (x : ℝ) : String :=
   Format.pretty (repr x) 80
 
 /--
-Export *pure-derived* HQIV gauge/lepton witnesses.
-No external mass tables are used here; values come from the derived module.
+Export *pure-derived* HQIV gauge/lepton witnesses (bosons + nucleons).
+
+Neutrino masses and PMNS angles are **not** exported here (retired `m_nu_e_derived`
+ladder). Run `python3 scripts/sync_hqiv_witness_neutrinos.py` after this step to
+patch TUFT T10 neutrino fields into `data/hqiv_witnesses.json`.
 -/
 unsafe def main : IO Unit := do
   let dataDir := "data"
   IO.FS.createDirAll dataDir
   let outPath := dataDir ++ "/hqiv_witnesses.json"
 
-  -- We write only derived outputs requested by the pure-derivation pipeline.
   let json :=
     "{\n" ++
     "  \"scale_witness_default\": \"proton_lockin\",\n" ++
@@ -32,9 +34,8 @@ unsafe def main : IO Unit := do
     "  \"m_H\": " ++ showReal m_H_derived ++ ",\n" ++
     "  \"M_W\": " ++ showReal M_W_derived ++ ",\n" ++
     "  \"M_Z\": " ++ showReal M_Z_derived ++ ",\n" ++
-    "  \"m_nu_e\": " ++ showReal m_nu_e_derived ++ ",\n" ++
-    "  \"m_nu_mu\": " ++ showReal m_nu_mu_derived ++ ",\n" ++
-    "  \"m_nu_tau\": " ++ showReal m_nu_tau_derived ++ ",\n" ++
+    "  \"m_nu_e_derived_status\": \"retired\",\n" ++
+    "  \"neutrino_source\": \"tuft_outer_t8_t10\",\n" ++
     "  \"resonanceK_outer_0_1\": " ++ showReal (resonanceStepK referenceM (referenceM + 1)) ++ ",\n" ++
     "  \"resonanceK_outer_1_2\": " ++ showReal (resonanceStepK (referenceM + 1) (referenceM + 2)) ++ ",\n" ++
     "  \"derivedProtonMass_MeV\": " ++ showReal derivedProtonMass ++ ",\n" ++
@@ -44,5 +45,4 @@ unsafe def main : IO Unit := do
     "}\n"
 
   IO.FS.writeFile outPath json
-  IO.println s!"Wrote resonance witnesses to {outPath}"
-
+  IO.println s!"Wrote resonance witnesses to {outPath} (run sync_hqiv_witness_neutrinos.py for T10 neutrinos)"

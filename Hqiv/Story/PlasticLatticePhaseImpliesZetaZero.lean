@@ -2,6 +2,7 @@ import Hqiv.Story.PlasticCriticalLineBridge
 import Hqiv.Story.PlasticTwistedEulerCharacter
 import Hqiv.Story.PlasticPhaseBalanceImpliesReHalf
 import Hqiv.Story.HigherOrderArityDiagonalSymmetry
+import Hqiv.Story.S3EulerSO4PrimeAxisBridge
 import Hqiv.Geometry.LatticePointMaxAbsShells
 import Mathlib.Algebra.Order.Round
 import Mathlib.Data.Fin.VecNotation
@@ -28,9 +29,13 @@ namespace Hqiv.Story
 
 open Set
 
-/-- Admissible heights `t` for the survivor shell story: critical-line zeta zeros at `1/2 + it`. -/
+/--
+Admissible heights `t` for the survivor shell story: heights represented by a
+prime-axis S³ survivor candidate.  This is deliberately weaker than asserting a
+zeta zero at `1/2 + it`.
+-/
 abbrev IsAdmissibleHeight (t : ℝ) : Prop :=
-  OnCriticalLine t
+  ∃ P : ScaledS3Sample, PrimeAxisAtScale P ∧ survivorPhase P = t
 
 noncomputable section
 

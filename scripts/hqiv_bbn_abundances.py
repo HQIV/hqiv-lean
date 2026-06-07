@@ -36,6 +36,9 @@ REFERENCE_M = hes.REFERENCE_M
 GAMMA_HQIV = 2.0 / 5.0
 VALLEY_COUNT = {1: 0, 2: 2, 3: 4, 4: 6}
 VALLEY_HE4 = 6
+ALPHA_CORE_Z = 2
+PROTON_FACET_VERTEX_CONTACTS = 3
+STRONG_CHANNEL_FRACTION = 4.0 / 8.0
 
 BBN_T_LOW_MEV = 0.01
 BBN_T_HIGH_MEV = 1.0
@@ -69,25 +72,118 @@ def cmb_temperature_mev() -> float:
     return T_CMB_NATURAL * T_PL_MEV
 
 
-def valley_binding_factor(A: int) -> float:
-    return 1.0 + VALLEY_COUNT[A] / VALLEY_HE4
+def valley_count(A: int, Z: int = 0) -> int:
+    """Lean `postAlphaOutsideValleyCount` via sphere-touch facet chart when A > 4."""
+    if A <= 4:
+        return VALLEY_COUNT.get(A, 0)
+    from hqiv_post_alpha_sphere_touching import post_alpha_outside_valley_count
+
+    return post_alpha_outside_valley_count(A, Z)
 
 
-def cluster_binding_mev(m: int, A: int, c: float = 1.0) -> float:
-    return float(A) * hes.e_bind_from_nucleon_trace_mev(m, c) * valley_binding_factor(A)
+def spin_stability_participation(A: int, Z: int) -> float:
+    """Lean `spinStabilityParticipation`: feasible facet touches, not isospin inequality."""
+    if A <= 4:
+        return 1.0
+    from hqiv_post_alpha_sphere_touching import spin_stability_participation as _spin
+
+    return _spin(A, Z)
 
 
-def cluster_mass_mev(m: int, A: int, m_nucleon: float, c: float = 1.0) -> float:
-    return float(A) * m_nucleon - cluster_binding_mev(m, A, c)
+def valley_binding_factor(A: int, Z: int = 0) -> float:
+    if A <= 4:
+        return 1.0 + valley_count(A) / VALLEY_HE4
+    from hqiv_post_alpha_sphere_touching import (
+        CONSTRUCTIVE_VALLEY_CAP,
+        bbn_proton_facet_touches,
+        far_neutron_weighted_contact_sum,
+        proton_facet_touch_contact_sum,
+    )
+
+    cap = CONSTRUCTIVE_VALLEY_CAP / VALLEY_HE4
+    touch = (
+        proton_facet_touch_contact_sum(bbn_proton_facet_touches(A, Z))
+        / VALLEY_HE4
+        * spin_stability_participation(A, Z)
+    )
+    far = far_neutron_weighted_contact_sum(A, Z) / VALLEY_HE4
+    return 1.0 + cap + touch + far
 
 
-def lockin_binding_q(m_nucleon: float, m_shell: int | None = None, c: float = 1.0) -> tuple[float, float, float]:
-    """Q_D, Q_4, Q_3 at lock-in shell (nuclear-scale network witness)."""
+def cluster_binding_mev(m: int, A: int, c: float = 1.0, *, Z: int = 0) -> float:
+    return float(A) * hes.e_bind_from_nucleon_trace_mev(m, c) * valley_binding_factor(A, Z)
+
+
+def cluster_mass_mev(
+    m: int, A: int, m_nucleon: float, c: float = 1.0, *, Z: int = 0
+) -> float:
+    return float(A) * m_nucleon - cluster_binding_mev(m, A, c, Z=Z)
+
+
+def be7_binding_q(
+    Q_4: float,
+    *,
+    m_shell: int | None = None,
+    m_nucleon: float | None = None,
+    c: float = 1.0,
+) -> float:
+    """⁷Be (`Z=4`): α + 2×3 proton contacts — `bbnBe7BindingQ`."""
+    m_shell = m_shell if m_shell is not None else REFERENCE_M
+    if m_nucleon is not None:
+        return cluster_binding_mev(m_shell, 7, c, Z=4)
+    return (7.0 / 4.0) * Q_4
+
+
+def li7_cluster_binding_q(
+    m_shell: int | None = None,
+    m_nucleon: float | None = None,
+    c: float = 1.0,
+) -> float:
+    """⁷Li (`Z=3`): facet proton + far-neutron touches at (4/8) weight."""
+    m_shell = m_shell if m_shell is not None else REFERENCE_M
+    return cluster_binding_mev(m_shell, 7, c, Z=3)
+
+
+def be7_formation_q(Q_7: float, Q_3: float, Q_4: float) -> float:
+    """³He + ⁴He → ⁷Be: `Q_7 − Q_3 − Q_4` (same gap pattern as 2D → ⁴He)."""
+    return max(0.01, Q_7 - Q_3 - Q_4)
+
+
+def be7_electron_capture_q(Q_7: float, Q_np: float) -> float:
+    """Legacy weak-scale placeholder (prefer `be7_to_li7_capture_q` with both wells)."""
+    return GAMMA_HQIV * STRONG_CHANNEL_FRACTION * Q_np
+
+
+def be7_to_li7_capture_q(
+    Q_be: float,
+    Q_li: float,
+) -> float:
+    """⁷Be + e⁻ → ⁷Li: release from Be well minus weaker Li far-neutron well."""
+    from hqiv_post_alpha_sphere_touching import be7_to_li7_capture_q as _q
+
+    return _q(Q_be, Q_li)
+
+
+def lockin_binding_q(
+    m_nucleon: float, m_shell: int | None = None, c: float = 1.0
+) -> tuple[float, float, float, float]:
+    """Q_D, Q_4, Q_3, Q_7 at lock-in shell (nuclear-scale network witness)."""
     m_shell = m_shell if m_shell is not None else REFERENCE_M
     Q_D = 2.0 * m_nucleon - cluster_mass_mev(m_shell, 2, m_nucleon, c)
     Q_4 = 4.0 * m_nucleon - cluster_mass_mev(m_shell, 4, m_nucleon, c)
     Q_3 = cluster_binding_mev(m_shell, 3, c)
-    return Q_D, Q_4, Q_3
+    Q_7 = be7_binding_q(Q_4, m_shell=m_shell, m_nucleon=m_nucleon, c=c)
+    return Q_D, Q_4, Q_3, Q_7
+
+
+def lockin_li7_be7_q(
+    m_nucleon: float, m_shell: int | None = None, c: float = 1.0
+) -> tuple[float, float]:
+    """⁷Be and ⁷Li cluster binding Q at lock-in (distinct post-α valley geometry)."""
+    m_shell = m_shell if m_shell is not None else REFERENCE_M
+    Q_be = cluster_binding_mev(m_shell, 7, c, Z=4)
+    Q_li = li7_cluster_binding_q(m_shell, m_nucleon, c)
+    return Q_be, Q_li
 
 
 def neutron_proton_ratio(T_mev: float, Q_np: float) -> float:
@@ -270,7 +366,7 @@ def main() -> None:
     m_p = float(w["derivedProtonMass_MeV"])
     dm = float(w["derivedDeltaM_MeV"])
     eta = ETA_PAPER
-    Q_D, Q_4, Q_3 = lockin_binding_q(m_p, REFERENCE_M)
+    Q_D, Q_4, Q_3, _Q_7 = lockin_binding_q(m_p, REFERENCE_M)
 
     mid = abundances_at_epoch(eta, BBN_T_MID_MEV, m_p, dm, Q_D, Q_4, Q_3)
     integrated = integrate_bbn_window(eta, m_p, dm, Q_D, Q_4, Q_3)

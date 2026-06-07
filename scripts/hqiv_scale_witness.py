@@ -42,9 +42,15 @@ class WitnessBundle:
     m_H_gev: float
     M_W_gev: float
     M_Z_gev: float
-    m_nu_e_gev: float
-    m_nu_mu_gev: float
-    m_nu_tau_gev: float
+    neutrino_source: str
+    nu_m1_mev: float
+    nu_m2_mev: float
+    nu_m3_mev: float
+    nu_sum_mev: float
+    pmns_theta12_rad: float
+    pmns_theta23_rad: float
+    pmns_theta13_rad: float
+    pmns_delta_rad: float
     derived_proton_mass_mev: float
     derived_neutron_mass_mev: float
     derived_delta_m_mev: float
@@ -53,6 +59,19 @@ class WitnessBundle:
     codata_inv_alpha: float
     reference_m: int
     gev_per_mev: float
+
+    @property
+    def m_nu_e_gev(self) -> float:
+        """Lightest mass eigenstate (MeV → GeV); replaces retired `m_nu_e_derived`."""
+        return self.nu_m1_mev * self.gev_per_mev
+
+    @property
+    def m_nu_mu_gev(self) -> float:
+        return self.nu_m2_mev * self.gev_per_mev
+
+    @property
+    def m_nu_tau_gev(self) -> float:
+        return self.nu_m3_mev * self.gev_per_mev
 
     @property
     def derived_proton_mass_gev(self) -> float:
@@ -67,20 +86,56 @@ class WitnessBundle:
         return self.derived_delta_m_mev * self.gev_per_mev
 
 
+def _load_neutrino_fields(raw: dict[str, Any], gev_per_mev: float) -> dict[str, float | str]:
+    if "nu_m1_MeV" in raw:
+        return {
+            "neutrino_source": str(raw.get("neutrino_source", "tuft_outer_t8_t10")),
+            "nu_m1_mev": float(raw["nu_m1_MeV"]),
+            "nu_m2_mev": float(raw["nu_m2_MeV"]),
+            "nu_m3_mev": float(raw["nu_m3_MeV"]),
+            "nu_sum_mev": float(raw.get("nu_sum_MeV", 0.0)),
+            "pmns_theta12_rad": float(raw.get("pmns_theta12_rad", math.pi / 6)),
+            "pmns_theta23_rad": float(raw.get("pmns_theta23_rad", math.asin(math.sqrt(1 / 3)))),
+            "pmns_theta13_rad": float(raw.get("pmns_theta13_rad", 0.0)),
+            "pmns_delta_rad": float(raw.get("pmns_delta_rad", math.pi / 5)),
+        }
+    # Legacy retired ladder (GeV keys) — kept for stale JSON only.
+    return {
+        "neutrino_source": "retired_m_nu_e_derived",
+        "nu_m1_mev": float(raw["m_nu_e"]) / gev_per_mev,
+        "nu_m2_mev": float(raw["m_nu_mu"]) / gev_per_mev,
+        "nu_m3_mev": float(raw["m_nu_tau"]) / gev_per_mev,
+        "nu_sum_mev": (float(raw["m_nu_e"]) + float(raw["m_nu_mu"]) + float(raw["m_nu_tau"]))
+        / gev_per_mev,
+        "pmns_theta12_rad": math.pi / 4,
+        "pmns_theta23_rad": math.pi / 4,
+        "pmns_theta13_rad": 0.0,
+        "pmns_delta_rad": math.pi / 5,
+    }
+
+
 def load_witness_bundle(path: Path | None = None) -> WitnessBundle:
     p = path or DEFAULT_WITNESS_JSON
     raw: dict[str, Any] = json.loads(p.read_text(encoding="utf-8"))
     default = raw.get("scale_witness_default", DEFAULT_SCALE_WITNESS)
     if default not in ("proton_lockin", "codata_alpha", "cmb_now"):
         raise ValueError(f"unknown scale_witness_default: {default!r}")
+    gev_per_mev = float(raw.get("geV_per_MeV", GEV_PER_MEV))
+    nu = _load_neutrino_fields(raw, gev_per_mev)
     return WitnessBundle(
         scale_witness_default=default,
         m_H_gev=float(raw["m_H"]),
         M_W_gev=float(raw["M_W"]),
         M_Z_gev=float(raw["M_Z"]),
-        m_nu_e_gev=float(raw["m_nu_e"]),
-        m_nu_mu_gev=float(raw["m_nu_mu"]),
-        m_nu_tau_gev=float(raw["m_nu_tau"]),
+        neutrino_source=str(nu["neutrino_source"]),
+        nu_m1_mev=float(nu["nu_m1_mev"]),
+        nu_m2_mev=float(nu["nu_m2_mev"]),
+        nu_m3_mev=float(nu["nu_m3_mev"]),
+        nu_sum_mev=float(nu["nu_sum_mev"]),
+        pmns_theta12_rad=float(nu["pmns_theta12_rad"]),
+        pmns_theta23_rad=float(nu["pmns_theta23_rad"]),
+        pmns_theta13_rad=float(nu["pmns_theta13_rad"]),
+        pmns_delta_rad=float(nu["pmns_delta_rad"]),
         derived_proton_mass_mev=float(raw["derivedProtonMass_MeV"]),
         derived_neutron_mass_mev=float(raw["derivedNeutronMass_MeV"]),
         derived_delta_m_mev=float(raw["derivedDeltaM_MeV"]),
@@ -88,7 +143,7 @@ def load_witness_bundle(path: Path | None = None) -> WitnessBundle:
         resonance_k_outer_1_2=float(raw["resonanceK_outer_1_2"]),
         codata_inv_alpha=float(raw.get("CODATA_inv_alpha", CODATA_INV_ALPHA)),
         reference_m=int(raw.get("referenceM", REFERENCE_M)),
-        gev_per_mev=float(raw.get("geV_per_MeV", GEV_PER_MEV)),
+        gev_per_mev=gev_per_mev,
     )
 
 
@@ -104,9 +159,15 @@ def refresh_boson_from_closure(bundle: WitnessBundle) -> WitnessBundle:
         m_H_gev=sup.m_h_derived_gev,
         M_W_gev=sup.m_w_derived_gev,
         M_Z_gev=sup.m_z_derived_gev,
-        m_nu_e_gev=bundle.m_nu_e_gev,
-        m_nu_mu_gev=bundle.m_nu_mu_gev,
-        m_nu_tau_gev=bundle.m_nu_tau_gev,
+        neutrino_source=bundle.neutrino_source,
+        nu_m1_mev=bundle.nu_m1_mev,
+        nu_m2_mev=bundle.nu_m2_mev,
+        nu_m3_mev=bundle.nu_m3_mev,
+        nu_sum_mev=bundle.nu_sum_mev,
+        pmns_theta12_rad=bundle.pmns_theta12_rad,
+        pmns_theta23_rad=bundle.pmns_theta23_rad,
+        pmns_theta13_rad=bundle.pmns_theta13_rad,
+        pmns_delta_rad=bundle.pmns_delta_rad,
         derived_proton_mass_mev=bundle.derived_proton_mass_mev,
         derived_neutron_mass_mev=bundle.derived_neutron_mass_mev,
         derived_delta_m_mev=bundle.derived_delta_m_mev,

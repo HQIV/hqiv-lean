@@ -62,8 +62,11 @@ function (or section) on the spacetime modeled by the chart—not from `timeAngl
 data (phase, weight, lapse expression) and assert invariance or equivariance under the chosen
 `(χ, β, φ ↦ φ'_η)`.
 
-None of (A)–(D) is currently proved from the imports below; the following placeholders only **name**
-the shape of that future glue.
+Items (A)–(D) are discharged in `Hqiv.Geometry.RapidityLorentzClosure` (`rapidity_lorentz_closure_discharged`).
+Spatial rotations on `Fin 3` and directional readouts (flyby `‖r×v‖²`, CMB sky rotation, fluid
+gradient covariance) are discharged in `Hqiv.Geometry.SpatialRotationLorentzClosure`
+(`spatial_rotation_lorentz_closure_discharged`; combined certificate `full_lorentz_closure_discharged`).
+The placeholders below remain as the **named interface** that the closure modules instantiate.
 
 **Continuum chart (flat `l²` on four indices):** `Hqiv.Geometry.ContinuumSpacetimeChart` equips
 `Fin 4` with `EuclideanSpace ℝ (Fin 4)` and Mathlib `gradient` / coordinate divergence — the

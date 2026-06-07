@@ -246,8 +246,87 @@ def newtonian_acceleration_on_body(r_body: Vec3, r_other: Vec3, m_other: float) 
 
 def phi_readout_star(r_m: Vec3, star: StarComponent) -> float:
     r = vec_norm(r_m)
+    if star.phi_shell == 0:
+        return 1.0 / (1.0 + r / star.lapse_radius())
     base = phi_of_shell(star.phi_shell)
     return base / (1.0 + r / star.lapse_radius())
+
+
+def resolve_spin_axis(star: StarComponent, spin_axis: Vec3 | None) -> Vec3:
+    if spin_axis is not None:
+        return vec_unit(spin_axis)
+    if abs(star.omega_rad_s) <= 0.0:
+        return (0.0, 0.0, 1.0)
+    return (0.0, 0.0, 1.0 if star.omega_rad_s >= 0.0 else -1.0)
+
+
+def spin_axis_from_spherical(theta_rad: float, phi_rad: float) -> Vec3:
+    s = math.sin(theta_rad)
+    return (
+        s * math.cos(phi_rad),
+        s * math.sin(phi_rad),
+        math.cos(theta_rad),
+    )
+
+
+def spin_axis_unit_grid(step_deg: float = 15.0) -> list[tuple[float, float, Vec3]]:
+    """Unit spin directions on a sphere (colatitude, azimuth in degrees)."""
+    step = math.radians(step_deg)
+    out: list[tuple[float, float, Vec3]] = []
+    n_theta = max(1, int(round(math.pi / step)))
+    for i in range(n_theta + 1):
+        theta = min(i * step, math.pi)
+        if i == 0 or i == n_theta:
+            n_phi = 1
+        else:
+            n_phi = max(1, int(round(2.0 * math.pi * math.sin(theta) / step)))
+        for j in range(n_phi):
+            phi = 0.0 if n_phi == 1 else j * (2.0 * math.pi / n_phi)
+            out.append(
+                (
+                    math.degrees(theta),
+                    math.degrees(phi),
+                    spin_axis_from_spherical(theta, phi),
+                )
+            )
+    return out
+
+
+def breakup_omega_rad_s(mass_kg: float, radius_m: float) -> float:
+    """Keplerian angular velocity at the stellar surface."""
+    return math.sqrt(G_NEWTON * mass_kg / max(radius_m**3, 1.0))
+
+
+def spin_lapse_epsilon(
+    r_body: Vec3,
+    v_body: Vec3,
+    star: StarComponent,
+    spin_axis: Vec3 | None,
+    *,
+    use_rindler_denominator: bool,
+) -> tuple[float, float]:
+    """
+    Co-spin Doppler lapse ε and |v̂·t̂| projection for one body.
+
+    Returns (epsilon, projection).
+    """
+    if abs(star.omega_rad_s) <= 0.0:
+        return 0.0, 0.0
+    axis = resolve_spin_axis(star, spin_axis)
+    v_tan = abs(star.omega_rad_s) * star.radius_m
+    t_vec = vec_cross(axis, r_body)
+    t_norm = vec_norm(t_vec)
+    if t_norm <= 0.0:
+        projection = 0.0
+    else:
+        projection = abs(vec_dot(vec_unit(v_body), vec_scale(t_vec, 1.0 / t_norm)))
+    eps = mass_horizon_doppler_lapse(
+        v_tan,
+        projection=projection,
+        support_fraction=1.0,
+        use_rindler_denominator=use_rindler_denominator,
+    )
+    return eps, projection
 
 
 def hqiv_effective_acceleration_m_s2(
@@ -258,6 +337,7 @@ def hqiv_effective_acceleration_m_s2(
     *,
     use_spin_lapse: bool,
     use_rindler_denominator: bool,
+    spin_axis: Vec3 | None = None,
 ) -> tuple[float, float, float]:
     """
     Return (|a_hqiv|, f, one_minus_f) for one component.
@@ -271,13 +351,11 @@ def hqiv_effective_acceleration_m_s2(
     )
     eps = 0.0
     if use_spin_lapse and abs(star.omega_rad_s) > 0.0:
-        spin_axis = (0.0, 0.0, 1.0 if star.omega_rad_s >= 0.0 else -1.0)
-        v_tan = abs(star.omega_rad_s) * star.radius_m
-        projection = abs(vec_dot(vec_unit(v_body), vec_unit(vec_cross(spin_axis, r_body))))
-        eps = mass_horizon_doppler_lapse(
-            v_tan,
-            projection=projection,
-            support_fraction=1.0,
+        eps, _ = spin_lapse_epsilon(
+            r_body,
+            v_body,
+            star,
+            spin_axis,
             use_rindler_denominator=use_rindler_denominator,
         )
     phi_full = phi_part + 6.0 * a_n * eps
@@ -447,6 +525,8 @@ def instantaneous_hqiv_readout(
     *,
     use_spin_lapse: bool = True,
     use_rindler_denominator: bool = True,
+    spin_axis1: Vec3 | None = None,
+    spin_axis2: Vec3 | None = None,
 ) -> dict[str, object]:
     """HQIV screen on both components at the current state."""
     m2 = star2.mass_kg
@@ -457,11 +537,13 @@ def instantaneous_hqiv_readout(
         r1, v1, star1, a1_n,
         use_spin_lapse=use_spin_lapse,
         use_rindler_denominator=use_rindler_denominator,
+        spin_axis=spin_axis1,
     )
     a2_h, f2, omf2 = hqiv_effective_acceleration_m_s2(
         r2, v2, star2, a2_n,
         use_spin_lapse=use_spin_lapse,
         use_rindler_denominator=use_rindler_denominator,
+        spin_axis=spin_axis2,
     )
     a1_n_mag = vec_norm(a1_n)
     a2_n_mag = vec_norm(a2_n)
@@ -481,6 +563,295 @@ def instantaneous_hqiv_readout(
             "one_minus_f": omf2,
         },
     }
+
+
+def _star_with_omega(star: StarComponent, omega_rad_s: float) -> StarComponent:
+    return StarComponent(
+        mass_kg=star.mass_kg,
+        radius_m=star.radius_m,
+        omega_rad_s=omega_rad_s,
+        phi_shell=star.phi_shell,
+        lapse_radius_m=star.lapse_radius_m,
+    )
+
+
+def _mean_gamma_eff(readout: dict[str, object]) -> float:
+    return 0.5 * (
+        float(readout["star1"]["gamma_eff"])  # type: ignore[index]
+        + float(readout["star2"]["gamma_eff"])  # type: ignore[index]
+    )
+
+
+def _spin_coupling_score(
+    r1: Vec3,
+    v1: Vec3,
+    r2: Vec3,
+    v2: Vec3,
+    star1: StarComponent,
+    star2: StarComponent,
+    spin_axis1: Vec3,
+    spin_axis2: Vec3,
+    *,
+    use_rindler_denominator: bool,
+) -> dict[str, float]:
+    """Score orientational coupling via spin ε and resulting γ_eff."""
+    m2 = star2.mass_kg
+    m1 = star1.mass_kg
+    a1_n = newtonian_acceleration_on_body(r1, r2, m2)
+    a2_n = newtonian_acceleration_on_body(r2, r1, m1)
+    eps1, proj1 = spin_lapse_epsilon(
+        r1, v1, star1, spin_axis1, use_rindler_denominator=use_rindler_denominator
+    )
+    eps2, proj2 = spin_lapse_epsilon(
+        r2, v2, star2, spin_axis2, use_rindler_denominator=use_rindler_denominator
+    )
+    readout = instantaneous_hqiv_readout(
+        r1, v1, r2, v2, star1, star2,
+        use_spin_lapse=True,
+        use_rindler_denominator=use_rindler_denominator,
+        spin_axis1=spin_axis1,
+        spin_axis2=spin_axis2,
+    )
+    gamma_eff = _mean_gamma_eff(readout)
+    return {
+        "gamma_eff_mean": gamma_eff,
+        "gamma_eff_excess": gamma_eff - 1.0,
+        "one_minus_f_mean": 0.5 * (
+            float(readout["star1"]["one_minus_f"])  # type: ignore[index]
+            + float(readout["star2"]["one_minus_f"])  # type: ignore[index]
+        ),
+        "eps1": eps1,
+        "eps2": eps2,
+        "proj1": proj1,
+        "proj2": proj2,
+        "spin_phi_contrib1": 6.0 * vec_norm(a1_n) * eps1,
+        "spin_phi_contrib2": 6.0 * vec_norm(a2_n) * eps2,
+    }
+
+
+def dual_spin_axis_sweep(
+    r1: Vec3,
+    v1: Vec3,
+    r2: Vec3,
+    v2: Vec3,
+    star1: StarComponent,
+    star2: StarComponent,
+    *,
+    axis_step_deg: float = 15.0,
+    omega_breakup_fraction: float = 0.5,
+    omega_sweep_steps: int = 24,
+    use_rindler_denominator: bool = False,
+    independent_star_axes: bool = True,
+) -> dict[str, object]:
+    """
+    Two-phase spin sensitivity sweep.
+
+    Phase 1 — at high spin (``omega_breakup_fraction`` × surface breakup ω), scan
+    spin-axis directions on a ``axis_step_deg`` sphere grid and record the most
+    coupled orientation(s) by mean γ_eff.
+
+    Phase 2 — at the winning axis(es), sweep ω from 0 to the same high-spin cap
+    in ``omega_sweep_steps`` increments.
+    """
+    omega1_hi = omega_breakup_fraction * breakup_omega_rad_s(star1.mass_kg, star1.radius_m)
+    omega2_hi = omega_breakup_fraction * breakup_omega_rad_s(star2.mass_kg, star2.radius_m)
+    hi1 = _star_with_omega(star1, omega1_hi)
+    hi2 = _star_with_omega(star2, omega2_hi)
+    grid = spin_axis_unit_grid(axis_step_deg)
+
+    phase1_rows: list[dict[str, object]] = []
+    best_score = -1.0
+    best_row: dict[str, object] | None = None
+    best_axis1: Vec3
+    best_axis2: Vec3
+
+    if independent_star_axes:
+        z_axis = (0.0, 0.0, 1.0)
+
+        def best_axis_for_star(
+            which: int,
+            fixed_axis: Vec3,
+        ) -> tuple[Vec3, dict[str, object]]:
+            local_best = -1.0
+            local_axis = fixed_axis
+            local_row: dict[str, object] = {}
+            for theta_deg, phi_deg, axis in grid:
+                a1 = axis if which == 1 else fixed_axis
+                a2 = fixed_axis if which == 1 else axis
+                score = _spin_coupling_score(
+                    r1, v1, r2, v2, hi1, hi2, a1, a2,
+                    use_rindler_denominator=use_rindler_denominator,
+                )
+                if score["gamma_eff_mean"] > local_best:
+                    local_best = score["gamma_eff_mean"]
+                    local_axis = axis
+                    local_row = {
+                        "theta_deg": theta_deg,
+                        "phi_deg": phi_deg,
+                        "axis": list(axis),
+                        **score,
+                    }
+            return local_axis, local_row
+
+        best_axis2, _ = best_axis_for_star(2, z_axis)
+        best_axis1, row1 = best_axis_for_star(1, best_axis2)
+        best_axis2, row2 = best_axis_for_star(2, best_axis1)
+        best_axis1, row1 = best_axis_for_star(1, best_axis2)
+        best_score = _spin_coupling_score(
+            r1, v1, r2, v2, hi1, hi2, best_axis1, best_axis2,
+            use_rindler_denominator=use_rindler_denominator,
+        )["gamma_eff_mean"]
+        best_row = {
+            "star1_refined": row1,
+            "star2_refined": row2,
+            "gamma_eff_mean": best_score,
+        }
+        for theta_deg, phi_deg, axis in grid:
+            score = _spin_coupling_score(
+                r1, v1, r2, v2, hi1, hi2, axis, best_axis2,
+                use_rindler_denominator=use_rindler_denominator,
+            )
+            phase1_rows.append(
+                {
+                    "theta_deg": theta_deg,
+                    "phi_deg": phi_deg,
+                    "axis_star1": list(axis),
+                    "axis_star2_fixed": list(best_axis2),
+                    **score,
+                }
+            )
+    else:
+        for theta_deg, phi_deg, axis in grid:
+            score = _spin_coupling_score(
+                r1, v1, r2, v2, hi1, hi2, axis, axis,
+                use_rindler_denominator=use_rindler_denominator,
+            )
+            row = {
+                "theta_deg": theta_deg,
+                "phi_deg": phi_deg,
+                "axis": list(axis),
+                **score,
+            }
+            phase1_rows.append(row)
+            if score["gamma_eff_mean"] > best_score:
+                best_score = score["gamma_eff_mean"]
+                best_row = row
+                best_axis1 = axis
+                best_axis2 = axis
+
+    phase2_rows: list[dict[str, object]] = []
+    phase2_best = -1.0
+    phase2_best_row: dict[str, object] | None = None
+    for i in range(omega_sweep_steps + 1):
+        frac = i / max(omega_sweep_steps, 1)
+        w1 = frac * omega1_hi
+        w2 = frac * omega2_hi
+        s1 = _star_with_omega(star1, w1)
+        s2 = _star_with_omega(star2, w2)
+        score = _spin_coupling_score(
+            r1, v1, r2, v2, s1, s2, best_axis1, best_axis2,
+            use_rindler_denominator=use_rindler_denominator,
+        )
+        row = {
+            "omega_fraction_of_breakup": frac,
+            "omega1_rad_s": w1,
+            "omega2_rad_s": w2,
+            "v_spin1_km_s": w1 * star1.radius_m / 1000.0,
+            "v_spin2_km_s": w2 * star2.radius_m / 1000.0,
+            **score,
+        }
+        phase2_rows.append(row)
+        if score["gamma_eff_mean"] > phase2_best:
+            phase2_best = score["gamma_eff_mean"]
+            phase2_best_row = row
+
+    baseline = instantaneous_hqiv_readout(
+        r1, v1, r2, v2, star1, star2,
+        use_spin_lapse=False,
+        use_rindler_denominator=use_rindler_denominator,
+    )
+
+    return {
+        "method": "dual_spin_axis_sweep",
+        "axis_step_deg": axis_step_deg,
+        "omega_breakup_fraction": omega_breakup_fraction,
+        "omega_sweep_steps": omega_sweep_steps,
+        "use_rindler_denominator": use_rindler_denominator,
+        "independent_star_axes": independent_star_axes,
+        "breakup_omega_rad_s": {"star1": omega1_hi / omega_breakup_fraction, "star2": omega2_hi / omega_breakup_fraction},
+        "high_spin_omega_rad_s": {"star1": omega1_hi, "star2": omega2_hi},
+        "n_axis_directions": len(grid),
+        "baseline_no_spin": {
+            "gamma_eff_mean": _mean_gamma_eff(baseline),
+            "one_minus_f_mean": 0.5 * (
+                float(baseline["star1"]["one_minus_f"])  # type: ignore[index]
+                + float(baseline["star2"]["one_minus_f"])  # type: ignore[index]
+            ),
+        },
+        "phase1_axis_sweep_at_high_spin": {
+            "best": best_row,
+            "best_axis1": list(best_axis1),
+            "best_axis2": list(best_axis2),
+            "best_gamma_eff_mean": best_score,
+            "gamma_eff_excess_over_unity": best_score - 1.0,
+            "top_axis_rows_by_gamma": sorted(
+                phase1_rows,
+                key=lambda r: float(r["gamma_eff_mean"]),  # type: ignore[arg-type]
+                reverse=True,
+            )[:8],
+            "n_rows": len(phase1_rows),
+        },
+        "phase2_omega_sweep_at_best_axes": {
+            "best": phase2_best_row,
+            "best_gamma_eff_mean": phase2_best,
+            "gamma_eff_excess_over_unity": phase2_best - 1.0,
+            "rows": phase2_rows,
+        },
+    }
+
+
+def spin_sweep_from_preset(
+    preset_name: str,
+    **kwargs: object,
+) -> dict[str, object]:
+    preset = WIDE_BINARY_PRESETS[preset_name]
+    m1 = preset.star1.mass_kg
+    m2 = preset.star2.mass_kg
+    r1, v1, r2, v2 = elements_to_barycentric(preset.elements, m1, m2)
+    out = dual_spin_axis_sweep(
+        r1, v1, r2, v2, preset.star1, preset.star2,
+        **kwargs,  # type: ignore[arg-type]
+    )
+    out["preset"] = preset_name
+    return out
+
+
+def spin_sweep_from_chae(
+    catalog_key: str,
+    *,
+    velocity_mode: str = "chae_vovervesc",
+    **kwargs: object,
+) -> dict[str, object]:
+    from hqiv_wide_binary_catalog import (
+        entry_to_stars,
+        load_chae_catalog,
+        observed_relative_kinematics,
+    )
+
+    entry = load_chae_catalog()[catalog_key]
+    kin = observed_relative_kinematics(entry)
+    star1, star2 = entry_to_stars(entry)
+    v_rel = kin["v_rel_chae_m_s"] if velocity_mode == "chae_vovervesc" else kin["v_rel_m_s"]
+    r1, v1, r2, v2 = barycentric_from_observed(kin["r_rel_m"], v_rel, star1.mass_kg, star2.mass_kg)
+    out = dual_spin_axis_sweep(
+        r1, v1, r2, v2, star1, star2,
+        **kwargs,  # type: ignore[arg-type]
+    )
+    out["catalog_key"] = catalog_key
+    out["chae_id"] = entry.chae_id
+    out["separation_au"] = kin["separation_au"]
+    out["g_newton_m_s2"] = kin["g_newton_m_s2"]
+    return out
 
 
 def full_treatment_chae(
@@ -592,6 +963,68 @@ CHAE_REFERENCE_SYSTEM = "chae2026_58"
 ARTIFACTS_DIR = Path(__file__).resolve().parent / "artifacts"
 
 
+def chae_hqiv_gamma_envelope(
+    entry,
+    kin: dict[str, object],
+    star1: StarComponent,
+    star2: StarComponent,
+    *,
+    velocity_mode: str = "chae_vovervesc",
+    use_rindler_denominator: bool = True,
+    axis_step_deg: float = 30.0,
+    omega_breakup_fraction: float = 0.5,
+) -> dict[str, float]:
+    """Conservative HQIV γ_eff interval: baseline, velocity jitter, spin-axis envelope."""
+    m1, m2 = star1.mass_kg, star2.mass_kg
+    v_rel = kin["v_rel_chae_m_s"] if velocity_mode == "chae_vovervesc" else kin["v_rel_m_s"]
+    v_vec = v_rel  # type: ignore[assignment]
+    r_rel = kin["r_rel_m"]  # type: ignore[assignment]
+
+    def mean_gamma(v_rel_vec: Vec3, *, use_spin: bool) -> float:
+        r1, v1, r2, v2 = barycentric_from_observed(r_rel, v_rel_vec, m1, m2)
+        readout = instantaneous_hqiv_readout(
+            r1, v1, r2, v2, star1, star2,
+            use_spin_lapse=use_spin,
+            use_rindler_denominator=use_rindler_denominator,
+        )
+        return _mean_gamma_eff(readout)
+
+    gamma_base = mean_gamma(v_vec, use_spin=False)
+    gamma_nom = mean_gamma(v_vec, use_spin=True)
+    gammas = [gamma_base, gamma_nom]
+
+    v_err = float(entry.vobs_over_vesc_err or 0.0)
+    if v_err > 0.0:
+        v_norm = vec_norm(v_vec)
+        for scale in (max(0.0, 1.0 - v_err), 1.0 + v_err):
+            gammas.append(mean_gamma(vec_scale(v_vec, scale), use_spin=False))
+
+    r1, v1, r2, v2 = barycentric_from_observed(r_rel, v_vec, m1, m2)
+    sweep = dual_spin_axis_sweep(
+        r1, v1, r2, v2, star1, star2,
+        axis_step_deg=axis_step_deg,
+        omega_breakup_fraction=omega_breakup_fraction,
+        omega_sweep_steps=12,
+        use_rindler_denominator=False,
+        independent_star_axes=True,
+    )
+    gamma_spin_hi = float(
+        sweep["phase2_omega_sweep_at_best_axes"]["best_gamma_eff_mean"]  # type: ignore[index]
+    )
+    gammas.append(gamma_spin_hi)
+
+    lo = min(gammas)
+    hi = max(gammas)
+    return {
+        "gamma_hqiv_lo": lo,
+        "gamma_hqiv_nominal": gamma_nom,
+        "gamma_hqiv_hi": hi,
+        "gamma_hqiv_hi_spin_envelope": gamma_spin_hi,
+        "gamma_hqiv_ppm_lo": (lo - 1.0) * 1.0e6,
+        "gamma_hqiv_ppm_hi": (hi - 1.0) * 1.0e6,
+    }
+
+
 def chae_summary_row(
     catalog_key: str,
     *,
@@ -599,10 +1032,12 @@ def chae_summary_row(
     use_spin_lapse: bool = True,
     use_rindler_denominator: bool = True,
     eccentricity_guess: float = 0.3,
+    include_uncertainty_envelope: bool = True,
+    envelope_axis_step_deg: float = 30.0,
 ) -> dict[str, object]:
     """Compact HQIV readout for one Chae catalog entry (no long integration)."""
+    from hqiv_observational_errors import gamma_chae_interval, hqiv_falsifies_chae_gamma
     from hqiv_wide_binary_catalog import (
-        gamma_from_chae_gamma,
         load_chae_catalog,
         observed_relative_kinematics,
         entry_to_stars,
@@ -646,6 +1081,29 @@ def chae_summary_row(
             "gamma_eff_peri": pa["periastron"]["hqiv_over_newton"],
             "gamma_eff_apo": pa["apastron"]["hqiv_over_newton"],
         }
+    chae_interval = gamma_chae_interval(entry)
+    envelope = (
+        chae_hqiv_gamma_envelope(
+            entry,
+            kin,
+            star1,
+            star2,
+            velocity_mode=velocity_mode,
+            use_rindler_denominator=use_rindler_denominator,
+            axis_step_deg=envelope_axis_step_deg,
+        )
+        if include_uncertainty_envelope
+        else None
+    )
+    falsify = None
+    if envelope is not None:
+        falsify = hqiv_falsifies_chae_gamma(
+            gamma_hqiv_lo=float(envelope["gamma_hqiv_lo"]),
+            gamma_hqiv_hi=float(envelope["gamma_hqiv_hi"]),
+            gamma_chae=chae_interval["gamma"],
+            gamma_chae_lo=chae_interval["gamma_lo"],
+            gamma_chae_hi=chae_interval["gamma_hi"],
+        )
     return {
         "catalog_key": catalog_key,
         "chae_id": entry.chae_id,
@@ -654,9 +1112,15 @@ def chae_summary_row(
         "v_obs_chae_km_s": kin["v_obs_chae_m_s"] / 1000.0,
         "v_obs_gaia_km_s": kin["v_obs_m_s"] / 1000.0,
         "v_over_vesc_chae": entry.vobs_over_vesc,
+        "v_over_vesc_sigma": entry.vobs_over_vesc_err,
+        "vr_sigma_kms": entry.vr_sigma_kms,
         "Gamma_chae": entry.gamma_chae,
-        "gamma_chae": gamma_from_chae_gamma(entry.gamma_chae),
+        "gamma_chae": chae_interval["gamma"],
+        "gamma_chae_lo": chae_interval["gamma_lo"],
+        "gamma_chae_hi": chae_interval["gamma_hi"],
         "gamma_eff_hqiv_mean": gamma_eff,
+        "hqiv_envelope": envelope,
+        "chae_falsification": falsify,
         "one_minus_f_mean": 0.5 * (
             readout["star1"]["one_minus_f"] + readout["star2"]["one_minus_f"]
         ),
@@ -671,8 +1135,10 @@ def batch_all_chae_systems(
     use_spin_lapse: bool = True,
     use_rindler_denominator: bool = True,
     eccentricity_guess: float = 0.3,
+    include_uncertainty_envelope: bool = True,
 ) -> dict[str, object]:
     """Run compact HQIV summary on all 36 Chae (2026) clean-sample systems."""
+    from hqiv_observational_errors import distribution_summary
     from hqiv_wide_binary_catalog import load_chae_catalog
 
     catalog = load_chae_catalog()
@@ -683,25 +1149,50 @@ def batch_all_chae_systems(
             use_spin_lapse=use_spin_lapse,
             use_rindler_denominator=use_rindler_denominator,
             eccentricity_guess=eccentricity_guess,
+            include_uncertainty_envelope=include_uncertainty_envelope,
         )
         for key in sorted(catalog, key=lambda k: catalog[k].chae_id)
     ]
     gamma_hqiv = [r["gamma_eff_hqiv_mean"] for r in rows]
+    gamma_hqiv_hi = [
+        float(r["hqiv_envelope"]["gamma_hqiv_hi"])  # type: ignore[index]
+        for r in rows
+        if r.get("hqiv_envelope")
+    ]
     gamma_chae = [r["gamma_chae"] for r in rows if r["gamma_chae"] is not None]
+    n_falsified = sum(
+        1
+        for r in rows
+        if isinstance(r.get("chae_falsification"), dict)
+        and r["chae_falsification"].get("status") == "falsified"
+    )
+    n_high_boost_claims = sum(
+        1
+        for r in rows
+        if isinstance(r.get("chae_falsification"), dict)
+        and r["chae_falsification"].get("claims_high_boost")
+    )
     return {
         "n_systems": len(rows),
         "velocity_mode": velocity_mode,
         "literature": {
             "chae_2026": "arXiv:2601.21728",
             "saad_ting_2026": "arXiv:2603.11015",
-            "note": "HQIV gamma_eff is instantaneous screen; Chae gamma is per-system MCMC.",
+            "note": "HQIV γ_eff envelope includes baseline screen, v/v_esc jitter, and spin-axis sweep upper bound.",
         },
         "aggregate": {
             "gamma_eff_hqiv_mean_of_systems": sum(gamma_hqiv) / len(gamma_hqiv),
+            "gamma_eff_hqiv_distribution": distribution_summary(gamma_hqiv),
+            "gamma_eff_hqiv_hi_spin_envelope": distribution_summary(gamma_hqiv_hi),
             "gamma_eff_hqiv_min": min(gamma_hqiv),
             "gamma_eff_hqiv_max": max(gamma_hqiv),
             "gamma_chae_median": sorted(gamma_chae)[len(gamma_chae) // 2] if gamma_chae else None,
             "gamma_chae_mean": sum(gamma_chae) / len(gamma_chae) if gamma_chae else None,
+            "gamma_chae_distribution": distribution_summary([float(g) for g in gamma_chae]),
+            "n_chae_falsified_by_hqiv_envelope": n_falsified,
+            "n_chae_claiming_high_boost": n_high_boost_claims,
+            "fraction_chae_falsified": n_falsified / max(n_high_boost_claims, 1),
+            "fraction_chae_falsified_all_systems": n_falsified / max(len(rows), 1),
         },
         "rows": rows,
     }
@@ -857,7 +1348,61 @@ def main(argv: list[str] | None = None) -> int:
         default="chae_vovervesc",
         help="How to set initial relative speed for --full-treatment",
     )
+    parser.add_argument(
+        "--spin-sweep",
+        action="store_true",
+        help="Dual spin-axis (15 deg grid at high spin) then omega sweep at best coupling",
+    )
+    parser.add_argument("--axis-step-deg", type=float, default=15.0)
+    parser.add_argument(
+        "--omega-breakup-fraction",
+        type=float,
+        default=0.5,
+        help="High-spin cap as fraction of surface breakup omega (phase 1)",
+    )
+    parser.add_argument("--omega-sweep-steps", type=int, default=24)
+    parser.add_argument(
+        "--shared-spin-axis",
+        action="store_true",
+        help="Use the same spin axis for both stars (default: independent per star)",
+    )
     args = parser.parse_args(argv)
+    if args.spin_sweep:
+        sweep_kwargs = {
+            "axis_step_deg": args.axis_step_deg,
+            "omega_breakup_fraction": args.omega_breakup_fraction,
+            "omega_sweep_steps": args.omega_sweep_steps,
+            "use_rindler_denominator": not args.no_rindler_denominator,
+            "independent_star_axes": not args.shared_spin_axis,
+        }
+        if args.chae_id is not None:
+            key = f"chae2026_{args.chae_id:02d}"
+            payload = spin_sweep_from_chae(
+                key,
+                velocity_mode=args.velocity_mode,
+                **sweep_kwargs,
+            )
+        elif args.preset:
+            payload = spin_sweep_from_preset(args.preset, **sweep_kwargs)
+        else:
+            payload = spin_sweep_from_preset("literature_scale_10kau", **sweep_kwargs)
+        out_path = args.output or str(
+            ARTIFACTS_DIR / f"wide_binary_spin_sweep_{payload.get('preset') or payload.get('catalog_key', 'run')}.json"
+        )
+        Path(out_path).parent.mkdir(parents=True, exist_ok=True)
+        Path(out_path).write_text(json.dumps(payload, indent=2), encoding="utf-8")
+        summary = {
+            "target": payload.get("preset") or payload.get("catalog_key"),
+            "baseline_gamma_eff": payload["baseline_no_spin"]["gamma_eff_mean"],
+            "phase1_best_gamma_eff": payload["phase1_axis_sweep_at_high_spin"]["best_gamma_eff_mean"],
+            "phase2_best_gamma_eff": payload["phase2_omega_sweep_at_best_axes"]["best_gamma_eff_mean"],
+            "phase2_excess_ppm": payload["phase2_omega_sweep_at_best_axes"]["gamma_eff_excess_over_unity"]
+            * 1.0e6,
+            "output": out_path,
+        }
+        print(json.dumps(summary, indent=2))
+        print(f"\nWrote {out_path}", file=__import__("sys").stderr)
+        return 0
     if args.run_all_chae:
         payload = batch_all_chae_systems(
             velocity_mode=args.velocity_mode,

@@ -311,6 +311,372 @@ theorem helium4_valleyCount : valleyCount helium4 = 6 := by
   rfl
 
 /-!
+### Post-α geometry: sphere touching on the α compound surface
+
+Through **⁴He**, four nucleon Fresnel spheres close tetrahedrally (`tetrahedralClosureCausticScale`,
+`valleyCount helium4 = 6`). Above that, binding is **not** a linear `Z − 2` inequality:
+each exterior nucleon is another `fresnelCaustic` sphere that must **touch** the α compound
+surface on a **distinct facet** without overlap (`causticOverlap` / separation
+`R_α + R_n` at shell `m`).
+
+* **Proton on a triangular facet:** three vertex contacts (sphere–sphere touch points).
+* **Far neutron:** a single sphere–sphere touch to the exterior neutron shell; coupling
+  is only the strong-channel fraction `(4/8)` — binds, but **not nearly as much** as a facet proton.
+* **Spin / stability:** `spin_statistics_determines_half_life` (`DynamicBetaIsotope`).
+
+See `NuclearCausticBinding` for the caustic stack; this block is the **facet-touch chart**.
+-/
+
+/-- Fully constructive toroidal valley count (⁴He closure). -/
+def constructiveValleyCap : ℕ := valleyCount helium4
+
+theorem constructiveValleyCap_eq_six : constructiveValleyCap = 6 := helium4_valleyCount
+
+/-- Tetrahedral α has 6 edges (pairwise nucleon–nucleon overlaps). The constructive valley count
+of 6 for ⁴He matches the complete graph K₄ on four nucleons (each edge is one valley overlap). -/
+def tetrahedralEdgeCount : ℕ := 6
+
+theorem helium4_valleyCount_eq_tetrahedral_edges : valleyCount helium4 = tetrahedralEdgeCount := by
+  rfl
+
+theorem constructiveValleyCap_eq_tetrahedral_edges : constructiveValleyCap = tetrahedralEdgeCount := by
+  rw [constructiveValleyCap_eq_six, tetrahedralEdgeCount]
+
+/-- On the constructive isotope ladder, each bind step adds exactly two valleys (one toroidal
+pair overlap per added nucleon). Through ⁴He this produces the six edges of the tetrahedron. -/
+theorem valleyCount_additive_per_bind (n : IsotopeLadder A Z) :
+    valleyCount (IsotopeLadder.bindProton n) = valleyCount n + 2 ∧
+      valleyCount (IsotopeLadder.bindNeutron n) = valleyCount n + 2 :=
+  valleys_are_additive n
+
+/-- The six valleys of ⁴He equal the number of pairwise nucleon–nucleon contacts in a
+complete tetrahedral packing (K₄ has C(4,2) = 6 edges). -/
+theorem helium4_valleys_equal_pairwise_contacts :
+    valleyCount helium4 = 6 := by
+  exact helium4_valleyCount
+
+/-- α-core proton number `Z_α = 2`. -/
+def alphaCoreProtonNumber : ℕ := 2
+
+/-- α-core neutron number `N_α = 2`. -/
+def alphaCoreNeutronNumber : ℕ := 2
+
+/-- Tetrahedral α exposes four exterior facets on the compound sphere. -/
+def alphaTetrahedralFacetCount : ℕ := 4
+
+/-- Contacts at one proton–facet sphere touch (three vertices of the facet triangle). -/
+def protonFacetVertexContacts : ℕ := 3
+
+theorem protonFacetVertexContacts_eq_three : protonFacetVertexContacts = 3 := rfl
+
+/-- Compound α radius and nucleon radius at binding shell `m` (`fresnelCaustic`). -/
+noncomputable def alphaCompoundRadius (m : ℕ) : ℝ := R_m m
+
+noncomputable def nucleonCausticRadius (m : ℕ) : ℝ := R_m m
+
+/-- Centre separation for exterior nucleon sphere touching the α compound sphere. -/
+noncomputable def sphereTouchSeparation (m : ℕ) : ℝ :=
+  alphaCompoundRadius m + nucleonCausticRadius m
+
+/-- One exterior proton placed on facet `facetIdx` (sphere-touch chart). -/
+structure ProtonFacetTouch where
+  facetIdx : ℕ
+  contactCount : ℕ
+
+/-- Facet indices are distinct (non-overlapping sphere placements on the α surface). -/
+def protonFacetTouchesFeasible (ts : List ProtonFacetTouch) : Prop :=
+  ts.map (·.facetIdx) |>.Nodup
+
+/-- Sum contact points over a feasible proton facet-touch list. -/
+def protonFacetTouchContactSum (ts : List ProtonFacetTouch) : ℕ :=
+  (ts.map (·.contactCount)).sum
+
+/-- Contacts on facet touches that are not full triangles (staged / partial — "lighter"). -/
+def protonFacetPartialContactSum (ts : List ProtonFacetTouch) : ℕ :=
+  (ts.filter (fun t => t.contactCount < protonFacetVertexContacts)).map (·.contactCount) |>.sum
+
+/-- Full 3-vertex facet contacts only. -/
+def protonFacetFullContactSum (ts : List ProtonFacetTouch) : ℕ :=
+  (ts.filter (fun t => t.contactCount = protonFacetVertexContacts)).map (·.contactCount) |>.sum
+
+/-- Generalized post-α proton facet packing, refined from the ⁵Li/⁵Be 5-body analysis.
+
+Base shape: ⁴He is a regular tetrahedron (4 faces). Each face is a natural triangular site.
+
+When adding the 5th nucleon (⁵Li = α + p, ⁵Be = α + 2p):
+- The very first extra proton on a new face does **not** instantly receive the full 3 vertex contacts.
+- It starts with staged/partial occupation (1 contact for the absolute first addition to that face).
+- As more protons are placed on faces (higher A/Z), occupation per face ramps toward 3.
+- This produces a smooth, continuous generalization instead of a discontinuous jump at A=5.
+
+Far neutrons remain "far" (single-point, weighted by strongChannelFraction = 4/8).
+Non-touching nucleons in outer shells get fractional participation (see postAlphaOutsideValleyCountEffective).
+
+This staged rule (1 → 2 → 3 per face) is the proposed template for generalizing to arbitrary compound surfaces beyond the first α tetrahedron.
+
+Network / many-body (see `PostAlphaBindingGeometry`):
+- Extra nucleons **lower the energy** of α-core sites they touch (well deepening).
+- Deepened wells **interact** on the contact graph (`γ` network term).
+- Added nucleons are often **lighter** (partial facet + far `4/8`); the well **relaxes**
+  and the compound **loses a little `BE/A`** vs naive geometry/A.
+-/
+def bbnProtonFacetTouches (A Z : ℕ) : List ProtonFacetTouch :=
+  if A ≤ 4 then []
+  else
+    let extraProtons := max 0 (Z - alphaCoreProtonNumber)
+    let numFaces := min extraProtons alphaTetrahedralFacetCount
+    -- Staged contacts per newly occupied face (from 5-body microscope):
+    -- First proton on a face gets 1 contact; builds toward full triangle (3).
+    let contactsPerFace :=
+      if numFaces = 0 then 0
+      else min protonFacetVertexContacts (1 + max 0 ((extraProtons - 1) / numFaces))
+    List.map (fun i => { facetIdx := i, contactCount := contactsPerFace })
+      (List.range numFaces)
+
+theorem bbnProtonFacetTouches_be7 :
+    bbnProtonFacetTouches 7 4 =
+      [{ facetIdx := 0, contactCount := 1 }, { facetIdx := 1, contactCount := 1 }] := by
+  dsimp [bbnProtonFacetTouches, alphaCoreProtonNumber, alphaTetrahedralFacetCount,
+    protonFacetVertexContacts]
+  rfl
+
+theorem bbnProtonFacetTouches_li7 :
+    bbnProtonFacetTouches 7 3 = [{ facetIdx := 0, contactCount := 1 }] := by
+  dsimp [bbnProtonFacetTouches, alphaCoreProtonNumber, alphaTetrahedralFacetCount,
+    protonFacetVertexContacts]
+  rfl
+
+theorem bbnProtonFacetTouches_be7_feasible : protonFacetTouchesFeasible (bbnProtonFacetTouches 7 4) := by
+  rw [bbnProtonFacetTouches_be7]
+  simp [protonFacetTouchesFeasible, List.Nodup]
+
+theorem bbnProtonFacetTouches_li7_feasible : protonFacetTouchesFeasible (bbnProtonFacetTouches 7 3) := by
+  rw [bbnProtonFacetTouches_li7]
+  simp [protonFacetTouchesFeasible, List.Nodup]
+
+/-- One exterior neutron touching the far nucleon shell (single contact, not a facet triangle). -/
+structure FarNeutronTouch where
+  neutronIdx : ℕ
+  contactCount : ℕ
+
+/-- Strong-channel fraction of the octonion carrier (source of truth for BBN/nuclear weighting). -/
+noncomputable def strongChannelFraction : ℝ := (4 : ℝ) / 8
+
+/-- Relative weight of far-neutron touch vs full facet proton touch (`4/8` = strong channel). -/
+noncomputable def farNeutronTouchWeight : ℝ := strongChannelFraction
+
+theorem farNeutronTouchWeight_eq_strong_channel :
+    farNeutronTouchWeight = strongChannelFraction := rfl
+
+theorem strongChannelFraction_eq_four_eighths : strongChannelFraction = (4 : ℝ) / 8 := rfl
+
+/-- Far-neutron touches are suppressed by the strong-channel carrier fraction (binds, but not as strongly
+as a full facet proton contact set). -/
+theorem farNeutronTouchWeight_lt_one : farNeutronTouchWeight < 1 := by
+  unfold farNeutronTouchWeight strongChannelFraction; norm_num
+
+/-- Single contact at the far-nucleon sphere touch. -/
+def farNeutronPointContacts : ℕ := 1
+
+/-- Extra neutrons above the α core (`N − N_α`). -/
+def postAlphaExtraNeutrons (A Z : ℕ) : ℕ :=
+  let n := A - Z
+  if n ≤ alphaCoreNeutronNumber then 0 else n - alphaCoreNeutronNumber
+
+/-- Far-neutron touches for BBN witnesses (sphere touching the distant neutron shell). -/
+def bbnFarNeutronTouches (A Z : ℕ) : List FarNeutronTouch :=
+  if A ≤ 4 then []
+  else
+    List.map (fun i => { neutronIdx := i, contactCount := farNeutronPointContacts })
+      (List.range (postAlphaExtraNeutrons A Z))
+
+def farNeutronTouchContactSum (ts : List FarNeutronTouch) : ℕ :=
+  (ts.map (·.contactCount)).sum
+
+/-- Weighted far-neutron contacts (ℝ; not nearly as much as facet protons). -/
+noncomputable def farNeutronWeightedContactSum (A Z : ℕ) : ℝ :=
+  (farNeutronTouchContactSum (bbnFarNeutronTouches A Z) : ℝ) * farNeutronTouchWeight
+
+/-!
+### Sphere-touch contact energy (geometric binding units from valley potential)
+
+Each facet-vertex contact or far-neutron point contact contributes binding proportional to the
+base valley overlap scale (`valleyPotential` magnitude at the binding shell). Facet protons
+carry three vertex contacts; far neutrons are weighted by the strong-channel fraction.
+-/
+
+/-- Binding energy unit per single sphere–sphere contact at shell `m`, taken from the magnitude
+of the valley overlap proxy (`R_m²`). This is the geometric "currency" for post-α packing. -/
+noncomputable def sphereTouchContactEnergyUnit (m : ℕ) : ℝ :=
+  R_m m * R_m m
+
+theorem sphereTouchContactEnergyUnit_pos (m : ℕ) : 0 < sphereTouchContactEnergyUnit m := by
+  unfold sphereTouchContactEnergyUnit R_m
+  have hR : 0 < (m + 1 : ℝ) := by positivity
+  nlinarith
+
+/-- Binding contribution from `k` sphere–sphere contacts at shell `m`. -/
+noncomputable def sphereTouchContactEnergy (m k : ℕ) : ℝ :=
+  (k : ℝ) * sphereTouchContactEnergyUnit m
+
+/-- Facet proton contact set (three vertices) binding unit at shell `m`. -/
+noncomputable def facetProtonContactSetEnergy (m : ℕ) : ℝ :=
+  sphereTouchContactEnergy m protonFacetVertexContacts
+
+/-- Far-neutron single contact, suppressed by the strong-channel fraction. -/
+noncomputable def farNeutronContactEnergy (m : ℕ) : ℝ :=
+  farNeutronTouchWeight * sphereTouchContactEnergyUnit m
+
+/-- A full facet-proton contact set (3 vertices) binds strictly more than a single far-neutron
+touch (1 contact at 4/8 weight) at any shell `m`. -/
+theorem facet_proton_binds_stronger_than_far_neutron (m : ℕ) :
+    farNeutronContactEnergy m < facetProtonContactSetEnergy m := by
+  unfold farNeutronContactEnergy facetProtonContactSetEnergy sphereTouchContactEnergy
+    sphereTouchContactEnergyUnit protonFacetVertexContacts farNeutronTouchWeight strongChannelFraction
+  have hRpos : 0 < (m + 1 : ℝ) := by positivity
+  have hR2pos : 0 < R_m m * R_m m := by
+    simp [R_m]
+    nlinarith [hRpos]
+  -- 3 * unit > (4/8) * unit  ⇔  (3 - 4/8) * unit > 0
+  have hcoeff : (0 : ℝ) < 3 - (4 : ℝ) / 8 := by norm_num
+  have hscale : 0 < (3 - (4 : ℝ) / 8) * (R_m m * R_m m) := mul_pos hcoeff hR2pos
+  linarith [hscale]
+
+/-- Integer valley ledger (proton facet contacts only; far sector is weighted separately). -/
+def postAlphaOutsideValleyCount (A Z : ℕ) : ℕ :=
+  if A ≤ 4 then 0
+  else constructiveValleyCap + protonFacetTouchContactSum (bbnProtonFacetTouches A Z)
+
+/-- Effective outside contacts including weak far-neutron sphere touches. -/
+noncomputable def postAlphaOutsideValleyCountEffective (A Z : ℕ) : ℝ :=
+  if A ≤ 4 then 0
+  else
+    (constructiveValleyCap : ℝ) + (protonFacetTouchContactSum (bbnProtonFacetTouches A Z) : ℝ) +
+      farNeutronWeightedContactSum A Z
+
+theorem postAlphaOutsideValleyCount_be7 :
+    postAlphaOutsideValleyCount 7 4 = constructiveValleyCap + 2 := by
+  simp [postAlphaOutsideValleyCount, bbnProtonFacetTouches_be7, protonFacetTouchContactSum,
+    constructiveValleyCap_eq_six]
+
+theorem postAlphaOutsideValleyCount_li7 :
+    postAlphaOutsideValleyCount 7 3 = constructiveValleyCap + 1 := by
+  simp [postAlphaOutsideValleyCount, bbnProtonFacetTouches_li7, protonFacetTouchContactSum,
+    constructiveValleyCap_eq_six]
+
+theorem postAlphaExtraNeutrons_be7 : postAlphaExtraNeutrons 7 4 = 1 := by decide
+
+theorem postAlphaExtraNeutrons_li7 : postAlphaExtraNeutrons 7 3 = 2 := by decide
+
+theorem bbnFarNeutronTouches_be7 :
+    bbnFarNeutronTouches 7 4 =
+      [{ neutronIdx := 0, contactCount := farNeutronPointContacts }] := by
+  dsimp [bbnFarNeutronTouches, postAlphaExtraNeutrons_be7, List.range, List.map,
+    farNeutronPointContacts]
+  rfl
+
+theorem bbnFarNeutronTouches_li7 :
+    bbnFarNeutronTouches 7 3 =
+      [{ neutronIdx := 0, contactCount := farNeutronPointContacts },
+        { neutronIdx := 1, contactCount := farNeutronPointContacts }] := by
+  dsimp [bbnFarNeutronTouches, postAlphaExtraNeutrons_li7, List.range, List.map,
+    farNeutronPointContacts]
+  rfl
+
+theorem farNeutronTouchContactSum_be7 :
+    farNeutronTouchContactSum (bbnFarNeutronTouches 7 4) = 1 := by
+  rw [bbnFarNeutronTouches_be7]
+  simp [farNeutronTouchContactSum, farNeutronPointContacts]
+
+theorem farNeutronTouchContactSum_li7 :
+    farNeutronTouchContactSum (bbnFarNeutronTouches 7 3) = 2 := by
+  rw [bbnFarNeutronTouches_li7]
+  simp [farNeutronTouchContactSum, farNeutronPointContacts]
+
+theorem farNeutronWeightedContactSum_be7 :
+    farNeutronWeightedContactSum 7 4 = strongChannelFraction := by
+  simp [farNeutronWeightedContactSum, farNeutronTouchContactSum_be7, farNeutronTouchWeight]
+
+theorem farNeutronWeightedContactSum_be7_eq_half :
+    farNeutronWeightedContactSum 7 4 = (1 : ℝ) / 2 := by
+  rw [farNeutronWeightedContactSum_be7, strongChannelFraction_eq_four_eighths]
+  norm_num
+
+theorem farNeutronWeightedContactSum_li7 :
+    farNeutronWeightedContactSum 7 3 = 1 := by
+  simp [farNeutronWeightedContactSum, farNeutronTouchContactSum_li7, farNeutronTouchWeight]
+  rw [strongChannelFraction_eq_four_eighths]
+  norm_num
+
+theorem farNeutronWeightedContactSum_nonneg (A Z : ℕ) :
+    0 ≤ farNeutronWeightedContactSum A Z := by
+  unfold farNeutronWeightedContactSum farNeutronTouchContactSum bbnFarNeutronTouches
+    farNeutronTouchWeight strongChannelFraction
+  split_ifs with hA
+  · norm_num
+  · have hweight : 0 ≤ (4 : ℝ) / 8 := by norm_num
+    have hsum : 0 ≤ (farNeutronTouchContactSum (bbnFarNeutronTouches A Z) : ℝ) := by
+      norm_cast
+      exact Nat.zero_le _
+    nlinarith
+
+theorem postAlphaOutsideValleyCountEffective_be7 :
+    postAlphaOutsideValleyCountEffective 7 4 = (17 : ℝ) / 2 := by
+  have hfar := farNeutronWeightedContactSum_be7_eq_half
+  simp [postAlphaOutsideValleyCountEffective, bbnProtonFacetTouches_be7,
+    protonFacetTouchContactSum, constructiveValleyCap_eq_six, hfar]
+  norm_num
+
+theorem postAlphaOutsideValleyCountEffective_li7 :
+    postAlphaOutsideValleyCountEffective 7 3 = 8 := by
+  simp [postAlphaOutsideValleyCountEffective, bbnProtonFacetTouches_li7,
+    protonFacetTouchContactSum, constructiveValleyCap_eq_six, farNeutronWeightedContactSum_li7]
+  norm_num
+
+theorem postAlphaOutsideValleyCountEffective_li7_lt_be7 :
+    postAlphaOutsideValleyCountEffective 7 3 < postAlphaOutsideValleyCountEffective 7 4 := by
+  rw [postAlphaOutsideValleyCountEffective_li7, postAlphaOutsideValleyCountEffective_be7]
+  norm_num
+
+/-- Post-α effective valley count is nonnegative for all A, Z (far-neutron weights are nonnegative). -/
+theorem postAlphaOutsideValleyCountEffective_nonneg (A Z : ℕ) :
+    0 ≤ postAlphaOutsideValleyCountEffective A Z := by
+  unfold postAlphaOutsideValleyCountEffective
+  split_ifs with h
+  · norm_num
+  · have hcap : 0 ≤ (constructiveValleyCap : ℝ) := by norm_num
+    have htouch : 0 ≤ (protonFacetTouchContactSum (bbnProtonFacetTouches A Z) : ℝ) := by
+      norm_cast; exact Nat.zero_le _
+    have hfar := farNeutronWeightedContactSum_nonneg A Z
+    linarith
+
+/-- The post-α effective valley count for ⁷Be exceeds that for ⁷Li (two facet protons vs one
+facet proton + two weighted far neutrons). -/
+theorem be7_has_more_effective_valleys_than_li7 :
+    postAlphaOutsideValleyCountEffective 7 4 > postAlphaOutsideValleyCountEffective 7 3 := by
+  rw [postAlphaOutsideValleyCountEffective_be7, postAlphaOutsideValleyCountEffective_li7]
+  norm_num
+
+/-- Post-α participation: unity only when the facet-touch chart is feasible.
+
+Spin-statistics (`spin_statistics_determines_half_life`) selects the valley of stability
+among feasible touchings; not an isospin-ratio inequality.
+-/
+noncomputable def spinStabilityParticipation (A Z : ℕ) : ℝ :=
+  if A ≤ 4 then 1
+  else if (bbnProtonFacetTouches A Z).isEmpty then 0
+  else 1
+
+theorem spinStabilityParticipation_nonneg (A Z : ℕ) : 0 ≤ spinStabilityParticipation A Z := by
+  unfold spinStabilityParticipation
+  split_ifs <;> norm_num
+
+theorem spinStabilityParticipation_be7_li7 :
+    spinStabilityParticipation 7 4 = 1 ∧ spinStabilityParticipation 7 3 = 1 := by
+  constructor <;> simp [spinStabilityParticipation, bbnProtonFacetTouches_be7,
+    bbnProtonFacetTouches_li7, List.isEmpty]
+
+/-!
 ### Neutron excess (emergent bookkeeping)
 
 With `N = A - Z` neutrons and `Z` protons, `N ≥ Z` is `A ≥ 2Z`. Holding `Z` fixed,

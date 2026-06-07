@@ -40,8 +40,8 @@ theorem kappaBeta_HQIV_pos : 0 < kappaBeta_HQIV := by unfold kappaBeta_HQIV; nor
 /-- **First-principles proton-anchor** birefringence imprint (radians):
 α times log(reference shell + 1).
 
-Here `α` is the HQIV curvature imprint exponent and `referenceM` is the derived lock-in shell
-(`qcdShell + stepsFromQCDToLockin` in `OctonionicLightCone`).  CMB observations compare two
+Here `α` is the HQIV curvature imprint exponent and `referenceM` is the **export pin**
+(`qcdShell + stepsFromQCDToLockin` in `OctonionicLightCone`, not a derived shell index).
 cosmological shells and therefore use the shell-ratio readout in `HorizonBlackbodyLadder`. -/
 noncomputable def betaRad_HQIV_imprint : ℝ :=
   Hqiv.alpha * Real.log ((Hqiv.referenceM + 1 : ℝ))

@@ -25,11 +25,11 @@ Discrete shells **m_QCD**, **m_lockin**, the temperature ladder **T_QCD** / **T_
 - **Lock-in Ω_k:** `omega_k_at_horizon m_lockin m_lockin = 1` at positive curvature integral.
 -/
 
-/-- **QCD transition shell index** (lattice-derived). T_QCD = T(m_QCD). -/
+/-- **QCD transition shell index** (export pin on the discrete ladder). T_QCD = T(m_QCD). -/
 def m_QCD : Nat := qcdShell
 
-/-- **Lockin shell index** (lattice-derived). referenceM = qcdShell + stepsFromQCDToLockin;
-    T_lockin = T(m_lockin); the η witness (in `BaryogenesisWitness`) locks in at this shell. -/
+/-- **Lockin shell index** (export pin: `referenceM = qcdShell + stepsFromQCDToLockin`).
+    T_lockin = T(m_lockin); the η witness (in `BaryogenesisWitness`) uses this row. -/
 def m_lockin : Nat := referenceM
 
 /-- **Lockin is a few discrete steps after QCD.** -/
@@ -67,7 +67,7 @@ theorem T_lockin_pos : 0 < T_lockin := T_pos m_lockin
     normalization shared with Ω_k and (in the witness module) η. -/
 theorem deltaE_at_QCD_shell : deltaE m_QCD = curvature_norm_combinatorial * shell_shape m_QCD := rfl
 
-/-- **m_lockin equals referenceM** (paper-derived: lockin at the reference horizon). -/
+/-- **m_lockin equals referenceM** (same export pin; not a separate derivation). -/
 theorem m_lockin_eq_referenceM : m_lockin = referenceM := rfl
 
 /-- **Lockin shell has positive curvature integral.** -/

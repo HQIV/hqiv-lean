@@ -1,6 +1,6 @@
 # Patch ontology — agent contract (do not lose the plot)
 
-**Read this before** editing papers, simulators, cosmology pipelines, or QM/QFT bridge code. It is the **authoritative HQIV framing** for agents; companion prose also lives in `papers/include/patch_theory_messaging.tex` (Lean-aligned manuscripts only — **`paper/main.tex` in the HQIV repo does not include it yet**).
+**Read this before** editing papers, simulators, cosmology pipelines, or QM/QFT bridge code. It is the **authoritative HQIV framing** for agents; companion prose lives in `papers/include/patch_theory_messaging.tex` (included in Lean-aligned manuscripts such as `tuft_sm_lagrangian`; **`HQIV/paper/main.tex` in the HQIV repo does not include it yet**).
 
 **Maintainer rule:** if a PR or agent response implies “fundamental smooth spacetime,” “complete continuum QFT,” or “the universe is the FLRW background,” check against this file first.
 
@@ -17,13 +17,38 @@
 | Object | Lean / code locus | Role |
 |--------|-------------------|------|
 | Shell index \(m \in \mathbb{N}\) | `OctonionicLightCone`, `shell_shape`, `available_modes` | UV-complete counting on the null ladder |
+| TUFT Beltrami chart row | `TuftShellChart.tuftHeavyChartShell`, `tuftHadronModeShell` | Hadron / vev spectroscopy (distinct name from `referenceM`; see [`TUFT_SHELL_ONTOLOGY.md`](./TUFT_SHELL_ONTOLOGY.md)) |
 | Accessible mode budget | `accessibleModeBudgetUpToShell`, `LightConeMaxwellQFTBridge` | **Finite** causal bookkeeping up to shell \(M\) |
 | Finite chart / corners | `patchChartPoint`, `patchEventChartFour`, `PatchQFTBridge` | Local QFT bookkeeping on \(\mathrm{Fin}\,4\) (and extensions) |
+| SM anomaly traces | `AnomalyCancellation` | **Proved** cubic/mixed trace cancellation for explicit one-generation content \(\times 3\) |
+| Patch topological discharge | `PatchTopologicalObstruction` | **Proved** single-sector: instanton, Pontryagin, first-Chern, \(U(1)\) winding \(=0\); \(\theta\)-independent on patch data |
 | Patch support on modes | `HQIVFermionMode`, `HQIVBosonMode`, `hqivModeSpacelikeSep` | Observables carry **where** on the patch net they live |
 | Finite QM core | `HorizonLimitedQM_QFT_Closure`, `DiscreteQuantumState` | Born, ledgers, normalization — **proved finite layer** |
 | Continuum checklist | `HorizonContinuumClosureStatementCoreHQIV`, `HorizonLimitedRenormLocality` | **Named conjunction** discharged by witness bundles — **not** proved interacting continuum QFT |
 
 **“Patch QFT”** means: patching rules, finite measurement ledgers, variational identities on the discrete spine—not “QFT = recovery of ordinary continuum QFT through an ultraviolet limit.”
+
+---
+
+## Gauge consistency: discharged vs continuum-only
+
+| Obligation | Patch-level status | Lean anchor | Still open (continuum-only) |
+|------------|-------------------|-------------|------------------------------|
+| \(U(1)_Y^3\), grav–\(U(1)_Y\), \(SU(3)^2U(1)\), \(SU(2)^2U(1)\), \(SU(3)^3\) traces | **Proved** (explicit one-gen content \(\times 3\)) | `Hqiv/Algebra/AnomalyCancellation` | Path-integral / measure anomaly theorem |
+| \(SU(2)_L^3\) (pseudoreal) | **Proved** \(=0\) | `su2_cubic_trace_*_zero` | — |
+| Instanton / Pontryagin / first-Chern / \(U(1)\) winding on patch | **Discharged** (single sector, all \(=0\)) | `Hqiv/QuantumMechanics/PatchTopologicalObstruction` | BPST sectors, \(\theta\)-vacua on smooth bundles |
+| Rapidity-phase Lorentz closure (`1+1` boosts; `3+1` embed) | **Proved** | `RapidityLorentzClosure` (`rapidity_lorentz_closure_discharged`) | Continuum interacting QFT / Wightman |
+| Spatial-rotation Lorentz closure (`O(3)` on `Fin 3`; flyby/CMB/fluid axes) | **Proved** | `SpatialRotationLorentzClosure` (`spatial_rotation_lorentz_closure_discharged`, `full_lorentz_closure_discharged`) | Trajectory integration, J₂ numerics (Python) |
+| Abelian patch commutator / microcausality hooks | **Proved** | `PatchQFTBridge`, `Chapter07_PatchQFT` | Full non-abelian holonomy on smooth manifolds |
+| Exact CCR \([A,B]=I\) on fixed finite dim | **Obstruction proved** (cannot hold) | `CCRFiniteDimObstruction` | Global \(L^2\) CCR (not HQIV ontology) |
+| Spin–statistics from triality + causality | **Constructive satisfaction** | `HQIV_satisfies_SpinStatistics_from_triality_and_causality` | Full Wightman spin–statistics |
+| Strong-color chart Lie law \(f^{abc}\) | **Proved** (optional cert) | `StrongColorSu3LieChartLaw` | Continuum YM mass gap / Clay |
+| CKM/PMNS from Fano cycle overlaps | **Scaffold only** | `HopfShellBeltramiMassBridge`, `ContinuousXiCoupling` | TUFT \(H^*(CP^4)\) form; PDG matrix fit — [CKM_PMNS_FANO_OVERLAP.md](./CKM_PMNS_FANO_OVERLAP.md) |
+| Full Spin(8) outer automorphism triality | **Bookkeeping only** | `Triality.lean` (label cycle) | Mathlib-grade Spin(8) triality |
+
+**Agent rule:** say **“discharged at patch level”** or **“proved finite traces”** for the left column; never collapse into “HQIV proves all of QFT is anomaly-free and instanton-free in the continuum.”
+
+**Narrative (papers + agents):** At the finite patch level, HQIV proves SM cubic and mixed anomaly trace cancellation from explicit generation content, and discharges instanton, \(\theta\)-vacuum, first-Chern, and \(U(1)\)-winding obligations because the patch carrier has one topological sector and no continuum gauge measure. Continuum notation for SO(8), Hopf fibration, and Yang–Mills kinetics remains a comparison/translation layer; continuum instanton and measure-choice problems are **not load-bearing** on the proved discrete spine.
 
 ---
 
@@ -52,7 +77,8 @@ Agents writing or editing prose, code comments, or paper text **must** use the f
    - the curvature imprint \(\delta_E(m)\propto 1/(m+1)\) (taking \(m\to\infty\) sends \(\delta_E\to 0\) and erases the prediction);
    - the harmonic mass ladder \(m_\tau\to m_\mu\to m_e\) and Yukawa rules \(y_f=\sqrt{2}\,m_f/v\) built from `resonance_k_tau_mu`, `resonance_k_mu_e` (no integer ladder ⇒ no SM mass scaffold);
    - the lock-in vev \(v=\sqrt{\eta_{\rm paper}\,\Omega_k(m_{\rm lockin};m_{\rm lockin})}\) (which assumes a finite shell \(m_{\rm lockin}\));
-   - the reference shell \(m=\mathrm{referenceM}=4\) (proton anchor) — no integer shell ⇒ no proton mass;
+   - the reference shell \(m=\mathrm{referenceM}=4\) (HQIV lock-in / proton witness pin) — no integer shell ⇒ no proton mass;
+   - TUFT hadron excitations use **`tuftHadronModeShell`** on the heavy chart (`tuftHeavyChartShell + n + \ell\)); do not write “TUFT shell = referenceM” except as today's numeric bridge;
    - the rational coefficients \(\alpha=3/5\), \(\gamma=2/5\), \(\alpha_{\rm GUT}=1/(6\cdot 7)=1/42\) (these are stars-and-bars / cube-axis × octonion-imaginaries counts, not continuum limits).
 3. **Calculation-approximation cases:** where continuum is only used to compare with textbook formulas (e.g. one-loop \(\beta\)-running form, smooth-manifold Maxwell, FLRW homogeneous channel), say “continuum approximation used for literature comparison; the discrete statement is the proved object”.
 4. **Anti-patterns (rewrite on sight):**
@@ -128,7 +154,7 @@ The Python quantum simulator implements **patch-local digital evolution** on \((
 
 | Artifact | Patch messaging status |
 |----------|------------------------|
-| `papers/include/patch_theory_messaging.tex` | Canonical short **reader contract** (included in Lean-aligned `.tex` files) |
+| `papers/include/patch_theory_messaging.tex` | Canonical short **reader contract** (gauge consistency discharge + patch QFT; included in Lean-aligned `.tex` files) |
 | `papers/paper/octonion_lightcone_to_oshoracle.tex` | Includes patch contract; honest finite vs continuum checklist |
 | `HQIV/paper/main.tex` | **Often reads as continuum-first GUT**; abstract uses “complete grand-unified theory.” Agents editing there should apply [MAIN_PAPER_FLRW_LEAN_ALIGNMENT.md](./MAIN_PAPER_FLRW_LEAN_ALIGNMENT.md) **and** this file. |
 | `AGENTS/MAIN_PAPER_FLRW_LEAN_ALIGNMENT.md` | FLRW/HQVM **algebraic** anchors—not patch ontology (complementary) |
@@ -144,7 +170,8 @@ The Python quantum simulator implements **patch-local digital evolution** on \((
 3. [ASSUMPTIONS.md](./ASSUMPTIONS.md) — trust boundary, continuum checklist, scale witness  
 4. [THEOREMS.md](./THEOREMS.md) — what is actually proved (names)  
 5. [MAIN_PAPER_FLRW_LEAN_ALIGNMENT.md](./MAIN_PAPER_FLRW_LEAN_ALIGNMENT.md) — when touching cosmology wording in `main.tex`  
-6. `TrigSym/README.md` — simulator honesty (sparse vs dense, embed scope)
+6. [CKM_PMNS_FANO_OVERLAP.md](./CKM_PMNS_FANO_OVERLAP.md) — flavour mixing discharge programme (open scaffold)  
+7. `TrigSym/README.md` — simulator honesty (sparse vs dense, embed scope)
 
 **Interactive:** `sim/patch_qft_bridge.html` — mode budget, time-angle shell index, Minkowski intervals (aligns with `PatchQFTBridge` / `LightConeMaxwellQFTBridge`).
 

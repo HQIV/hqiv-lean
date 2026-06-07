@@ -87,7 +87,7 @@ Roadmap **M6 — No fundamental graviton target**: not a QG metaphysics theorem,
 | `Hqiv.Physics.colorGellMannEmbed` / `colorGellMannEmbed_mul` / `colorGellMannEmbed_lieBracket` | Conjugate `3 × 3` operators to `8 × 8` on `WeakComplexOctonionCarrier`, mirroring the Pauli embed API. |
 | `Hqiv.Physics.lieBracketMat₃_neg_swap` | Antisymmetry of the matrix commutator bracket on `Matrix (Fin 3) (Fin 3) ℂ`. |
 | `Hqiv.Physics.colorGellMannEmbed_chart_lieBracket_smul` | **Scaffold:** packages any chart identity `lieBracketMat₃ A B = Complex.I • R` into the same `Complex.I •` normalization on the carrier (`StrongColorCarrierClosure`). |
-| `Hqiv.Physics.colorHalfGellMannFull_lieBracket_eq_I_smul_f_sum` | **Certificate (optional build):** global chart Lie law `∀ a b, lieBracketMat₃ (colorHalfGellMannFull a) (colorHalfGellMannFull b) = Complex.I • ∑ c, (colorSu3fStructure a b c : ℂ) • colorHalfGellMannFull c` (`StrongColorSu3LieChartLaw.lean`; 64 `colorLieChartBracket_*` lemmas + `fin_cases` combiner). Regenerate: `python3 scripts/gen_strong_color_su3_lie_chart_law.py`. Requires `lake build HQIVStrongColorSu3Certificate`; **not** in the default `HQIVLEAN` glob. |
+| `Hqiv.Physics.colorHalfGellMannFull_lieBracket_eq_I_smul_f_sum` | **Proved (optional build):** global chart Lie law `∀ a b, lieBracketMat₃ (colorHalfGellMannFull a) (colorHalfGellMannFull b) = Complex.I • ∑ c, (colorSu3fStructure a b c : ℂ) • colorHalfGellMannFull c` (`StrongColorSu3LieChartLaw.lean`; 64 `colorLieChartBracket_*` lemmas + `fin_cases` combiner). Regenerate: `python3 scripts/gen_strong_color_su3_lie_chart_law.py`. Build: `lake build HQIVStrongColorSu3Certificate`. **Claim discipline:** standard row in TUFT claim tables; **not** dynamical QCD or confinement. Default `HQIVLEAN` glob does not import this cone. |
 | (optional target) | Same certificate target: generated `@[simp]` lemmas for **nonzero** `colorSu3fStructure` atoms (`Hqiv.Physics.StrongColorSu3fStructureSimp`, regen `scripts/gen_strong_color_su3_f_simp.py`). |
 
 ## EW/color carrier mirror bookkeeping (`Hqiv.Physics.ColorEWMirrorBridge`)
@@ -215,6 +215,63 @@ Roadmap **M6 — No fundamental graviton target**: not a QG metaphysics theorem,
 | `Hqiv.Physics.hqivYangMillsPackage_nonempty` | Existence of the canonical package. |
 | `Hqiv.Physics.hqivYangMillsPackage_basis_bracket` | Repackages `lieBracket_in_span` through the canonical package basis. |
 | `Hqiv.Physics.hqivYangMillsPackage_rapid_phase` | Repackages the rapidity/polar-angle phase alignment through the canonical package. |
+
+## Finite SM anomaly traces (`Hqiv.Algebra.AnomalyCancellation`)
+
+Explicit one-generation Weyl multiplet content (`smQL`, `smUc`, `smDc`, `smL`, `smEc`, `smNuC`) with quantum numbers from `SMEmbedding`; traces summed over three generations by label.
+
+| Name | Output / meaning |
+|------|------------------|
+| `Hqiv.Algebra.u1Y_cubic_trace_one_generation_zero` / `u1Y_cubic_trace_three_generations_zero` | \(U(1)_Y^3\) cubic trace vanishes for one generation and for \(\mathrm{Fin}\,3\) copies. |
+| `Hqiv.Algebra.gravitational_u1Y_trace_one_generation_zero` / `gravitational_u1Y_trace_three_generations_zero` | Mixed gravitational–\(U(1)_Y\) trace vanishes. |
+| `Hqiv.Algebra.su3_squared_u1Y_trace_one_generation_zero` / `su3_squared_u1Y_trace_three_generations_zero` | \(SU(3)_c^2 U(1)_Y\) trace vanishes. |
+| `Hqiv.Algebra.su2_squared_u1Y_trace_one_generation_zero` / `su2_squared_u1Y_trace_three_generations_zero` | \(SU(2)_L^2 U(1)_Y\) trace vanishes. |
+| `Hqiv.Algebra.su3_cubic_trace_one_generation_zero` / `su3_cubic_trace_three_generations_zero` | \(SU(3)_c^3\) cubic index vanishes. |
+| `Hqiv.Algebra.su2_cubic_trace_one_generation_zero` / `su2_cubic_trace_three_generations_zero` | \(SU(2)_L^3\) vanishes (pseudoreal slot). |
+| `Hqiv.Algebra.sm_anomaly_free_one_generation` / `sm_anomaly_free_three_generations` | Conjunction packaging all per-trace zeros. |
+| `Hqiv.Algebra.anomaly_free_explicit` | Main discharge statement for agents/papers. |
+
+**Scope:** finite trace polynomials on packaged SM quantum numbers—not a continuum path-integral anomaly cancellation proof.
+
+## Rapidity phase ↔ Lorentz closure (`Hqiv.Geometry.RapidityLorentzClosure`)
+
+| Name | Output / meaning |
+|------|------------------|
+| `Hqiv.Geometry.nullLatticeChart_rapidity_equivariant` | `NullLatticeEvent` chart `Λ(η)(1,1)` is rapidity-equivariant under `boostMatrix11`. |
+| `Hqiv.Geometry.nullLatticeEmbed_null` | Chart values lie on the forward null cone (`minkowskiSq11 = 0`). |
+| `Hqiv.Geometry.minkowskiSq4_boost_invariant_on_embedded11` | Partial `1+1` boost preserves `minkowskiSq4` on `lift11ToFin4` slice. |
+| `Hqiv.Geometry.polarAngleFromRapidity_invariant_under_phi_scalar_boost` | Polar-angle / rapidity phase unchanged when `φ` is a Lorentz scalar. |
+| `Hqiv.Geometry.rapidity_lorentz_closure_discharged` | Packaged discharge certificate (`RapidityLorentzClosure`). |
+| `Hqiv.Physics.zetaHQIVTerm_cexp_invariant_under_phi_scalar_boost_polar` | `zetaHQIVTerm` phase factor boost-invariant under scalar `φ` rule. |
+
+**Scope:** full `1+1` boost Lorentz invariance on the null chart + honest `3+1` embed on `(t,x¹,0,0)`; spatial rotations discharged separately below.
+
+## Spatial rotation ↔ Lorentz / applied-domain closure (`Hqiv.Geometry.SpatialRotationLorentzClosure`)
+
+| Witness | Role |
+|---------|------|
+| `Hqiv.Geometry.euclideanInner3_mulVec_orthogonal` | `RᵀR = 1` ⇒ dot products preserved under `R.mulVec`. |
+| `Hqiv.Geometry.minkowskiSq4_spatialRotation_invariant` | Block spatial rotation fixes time, preserves `minkowskiSq4`. |
+| `Hqiv.Geometry.cross3_normSq_orthogonal_invariant` | `‖a×b‖²` rotation invariant (Lagrange identity). |
+| `Hqiv.Physics.orbitalAngularMomentumSq_invariant` | Flyby `‖r×v‖²` frame independence. |
+| `Hqiv.Physics.equatorialFractionFromAxis_invariant` | Axis-projection fraction rotation invariant. |
+| `Hqiv.Physics.emissionEMode_plus_BMode_sky_rotated` | CMB Stokes completeness under sky rotation `ψ`. |
+| `Hqiv.Physics.hqivVacuumMomentumSource3_mulVec_orthogonal` | Fluid vacuum source covariant under joint vector rotation. |
+| `Hqiv.Geometry.spatial_rotation_lorentz_closure_discharged` / `full_lorentz_closure_discharged` | Packaged spatial + combined rapidity/spatial certificates. |
+
+**Scope:** `O(3)` on the flat spatial block; not continuum path-integral Lorentz or orbit numerics.
+
+## CKM/PMNS Fano overlap scaffold (`Hqiv.Physics.HopfShellBeltramiMassBridge`, T10)
+
+**Status:** scaffold / diagnostic only — full flavour unitaries **open**. Programme: [CKM_PMNS_FANO_OVERLAP.md](./CKM_PMNS_FANO_OVERLAP.md).
+
+| Name | Output / meaning |
+|------|------------------|
+| `Hqiv.Physics.assembleT10MixingPhaseMatrix` / `assembleT10MixingPhaseMatrix_heavyToMiddle_eq` / `assembleT10MixingPhaseMatrix_middleToLight_eq` | 3-slot phase matrix; proved ratios `heavyToMiddle = 2`, `middleToLight = 3`. |
+| `Hqiv.Physics.assembleT10MixingPhaseMatrix_*_eq_holonomy_torsion` | Phase ratios equal holonomy × torsion combinations on the TUFT chart. |
+| `Hqiv.Physics.generationVerticesFormAdmissibleCycle` | Combinatorial admissible-cycle predicate on generation Fano vertices (replaces universal `True`). |
+| `Hqiv.Physics.t10PMNSAngle12` / `t10PMNSUnitaryReal` | **Diagnostic** PMNS-angle scaffold from phase ratios—not PDG validation. |
+| `Hqiv.Physics.t10NeutrinoOverlapMatrix` / `assembleT10PMNSMixingReadout` | Overlap-matrix assembler for neutrino readout export. |
 
 ## Furey ↔ HQIV ontology bridge scaffold (`Hqiv.Physics.FureyHQIVOntologyBridge`)
 
@@ -711,6 +768,20 @@ Narrative / open items (parked): [archive/OCTONION_SPHERE_PATCH.md](./archive/OC
 | `Hqiv.QM.horizonContinuumAxiomsMinimal_minkowskiIntervalPhotonBudgetClusterWitness` / `continuum_many_body_closure_minkowskiIntervalPhotonBudgetClusterWitness` | Minimal continuum closure witness with interval-max microcausality and cumulative photon-budget monogamy transport (`κ = 1` concrete witness) (`HorizonLimitedRenormLocality`). |
 | `Hqiv.QM.continuum_many_body_closure_minkowskiIntervalWitness` | Same closure with interval-max surrogate (nonzero on some timelike pairs). |
 | `Hqiv.QM.microcausality_zero_comm_allSpacelike_holds` / `Hqiv.QM.scattering_consistency_unit_channel_holds` | Degenerate “all spacelike” schema + unit scattering channel in `[0,1]` (`ContinuumManyBodyQFTScaffold`). |
+
+## Patch topological discharge (`Hqiv.QuantumMechanics.PatchTopologicalObstruction`)
+
+Single-sector discharge on finite patch abelian gauge data: no load-bearing instanton/\(\theta\)/Chern/winding sector sum.
+
+| Name | Output / meaning |
+|------|------------------|
+| `Hqiv.QM.patchInstantonNumber_zero` / `patchPontryaginNumber_zero` / `patchFirstChernNumber_zero` / `patchU1WindingNumber_zero` | All packaged topological numbers are identically zero on patch data. |
+| `Hqiv.QM.patchThetaTerm_zero` / `patchThetaTerm_independent` | \(\theta\) term vanishes; vacuum is \(\theta\)-independent on the patch carrier. |
+| `Hqiv.QM.patchAbelianCommutatorObstruction_zero` | Abelian commutator obstruction vanishes (links `PatchQFTBridge`). |
+| `Hqiv.QM.patchTopologicalObstructionsDischarged` | Packaged conjunction for papers/agents. |
+| `Hqiv.Story.step07_patchTopologicalObstructions` / `step07_patchTopologicalObstructions_holds` | Story spine re-export (`Chapter07_PatchQFT`). |
+
+**Scope:** patch-level single sector—not BPST instanton classification or smooth-bundle \(\theta\)-vacua.
 
 ## Light cone ↔ Maxwell ↔ QM bridge (`Hqiv.Physics.LightConeMaxwellQFTBridge`)
 | `Hqiv.Physics.timeAngleBudgetScaleN` / `timeAngleBudgetScaleN_eq_accessibleModeBudgetUpToShell` / `timeAngleBudgetScaleN_tendsto_atTop` | Doubled observer-time budget scale: `accessibleModeBudgetUpToTimeAngle (4(n+1)) = accessibleModeBudgetUpToShell (2n+1)`, giving a theorem-backed cumulative time-angle transport scale. |

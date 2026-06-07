@@ -1,0 +1,605 @@
+{
+  "source": "data/hep_decay_observations.json",
+  "comparison_policy": "Laboratory / PDG reference values for benchmark only — never HQIV prediction inputs",
+  "citation": "Workman et al. (PDG), Phys. Rev. D 110, 030001 (2024); facility kinematics from published beam energies",
+  "mass_panel": [
+    "p",
+    "n",
+    "pi_plus",
+    "pi_minus",
+    "pi_zero",
+    "K_plus",
+    "K_minus",
+    "lambda",
+    "delta_p",
+    "rho_zero",
+    "phi",
+    "D_plus",
+    "Jpsi",
+    "lambda_c",
+    "B_plus",
+    "lambda_b",
+    "Upsilon"
+  ],
+  "mass_overrides_mev": {
+    "pi_zero": 134.9768,
+    "delta_p": 1232.0,
+    "delta_pp": 1232.0,
+    "delta_0": 1232.0,
+    "delta_m": 1232.0,
+    "omega_meson": 782.65
+  },
+  "mass_tolerances": {
+    "default_rel": 0.08,
+    "default_abs_mev": 15.0,
+    "tight": {
+      "species": ["p", "n"],
+      "rel": 1e-5,
+      "abs_mev": 0.01
+    }
+  },
+  "mass_sigma_policy": {
+    "enabled": true,
+    "n_sigma_band": 2.0,
+    "notes": "Pass if |pred-ref|/sqrt(sigma_pred^2+sigma_ref^2) <= band when rel/abs tol fails"
+  },
+  "mass_sigma_overrides_mev": {
+    "p": 2.0,
+    "n": 2.0
+  },
+  "branching_sigma_policy": {
+    "enabled": true,
+    "n_sigma_band": 2.0,
+    "mc_samples": 120,
+    "notes": "Monte Carlo on proton/quark/chiral witnesses; combined n_σ with PDG branching σ"
+  },
+  "branching_comparison_panel": [
+    {
+      "id": "delta_p_strong_p_pi",
+      "label": "Delta(1232) -> p pi+",
+      "latex_label": "$\\Delta(1232)\\to p\\pi^+$",
+      "parent_id": "delta_p",
+      "daughter_ids": ["p", "pi_plus"],
+      "channel": "strong",
+      "reference_branching": 1.0,
+      "reference_branching_sigma": 0.01,
+      "branching_abs_tol": 0.05,
+      "require_open": true
+    },
+    {
+      "id": "lambda_weak_p_pi",
+      "label": "Lambda -> p pi-",
+      "latex_label": "$\\Lambda\\to p\\pi^-$",
+      "parent_id": "lambda",
+      "daughter_ids": ["p", "pi_minus"],
+      "channel": "weak",
+      "reference_branching": 0.639,
+      "reference_branching_sigma": 0.005,
+      "branching_abs_tol": 0.15,
+      "require_open": true
+    },
+    {
+      "id": "K_plus_weak_pi",
+      "label": "K+ -> mu+ nu",
+      "latex_label": "$K^+\\to\\mu^+\\nu$",
+      "parent_id": "K_plus",
+      "daughter_ids": ["mu_plus"],
+      "channel": "weak",
+      "reference_branching": 0.633,
+      "reference_branching_sigma": 0.003,
+      "branching_abs_tol": 0.15,
+      "require_open": true
+    },
+    {
+      "id": "rho_zero_strong_pipi",
+      "label": "rho0 -> pi+ pi-",
+      "latex_label": "$\\rho^0\\to\\pi^+\\pi^-$",
+      "parent_id": "rho_zero",
+      "daughter_ids": ["pi_plus", "pi_minus"],
+      "channel": "strong",
+      "reference_branching": 1.0,
+      "reference_branching_sigma": 0.01,
+      "branching_abs_tol": 0.05,
+      "require_open": true
+    },
+    {
+      "id": "phi_strong_KK",
+      "label": "phi -> K+ K-",
+      "latex_label": "$\\phi\\to K^+K^-$",
+      "parent_id": "phi",
+      "daughter_ids": ["K_plus", "K_minus"],
+      "channel": "strong",
+      "reference_branching": 0.84,
+      "reference_branching_sigma": 0.04,
+      "branching_abs_tol": 0.2,
+      "require_open": true
+    },
+    {
+      "id": "D_plus_weak_Kpi",
+      "label": "D+ -> K- pi family",
+      "latex_label": "$D^+\\to K^-\\pi(+\\pi^0)$ family",
+      "parent_id": "D_plus",
+      "aggregate": "sum_daughter_sets",
+      "daughter_sets": [["K_minus", "pi_plus"], ["K_minus", "pi_zero"], ["K_minus", "pi_plus", "pi_zero"]],
+      "channel": "weak",
+      "reference_branching": 0.55,
+      "reference_branching_sigma": 0.05,
+      "branching_abs_tol": 0.25,
+      "require_open": true
+    },
+    {
+      "id": "D0_weak_Kpi",
+      "label": "D0 -> K+ pi family",
+      "latex_label": "$D^0\\to K^+\\pi(+\\pi^0)$ family",
+      "parent_id": "D0",
+      "aggregate": "sum_daughter_sets",
+      "daughter_sets": [["K_plus", "pi_minus"], ["K_plus", "pi_zero"], ["K_plus", "pi_minus", "pi_zero"]],
+      "channel": "weak",
+      "reference_branching": 0.55,
+      "reference_branching_sigma": 0.05,
+      "branching_abs_tol": 0.15,
+      "require_open": true
+    },
+    {
+      "id": "lambda_c_weak_pKpi",
+      "label": "Lambda_c -> p K- pi+",
+      "latex_label": "$\\Lambda_c\\to pK^-\\pi^+$",
+      "parent_id": "lambda_c",
+      "daughter_ids": ["p", "K_minus", "pi_plus"],
+      "channel": "weak",
+      "reference_branching": 0.27,
+      "reference_branching_sigma": 0.03,
+      "branching_abs_tol": 0.15,
+      "require_open": true
+    },
+    {
+      "id": "B_plus_weak_Dpi",
+      "label": "B+ -> D0 pi+",
+      "latex_label": "$B^+\\to D^0\\pi^+$",
+      "parent_id": "B_plus",
+      "daughter_ids": ["D0", "pi_plus"],
+      "channel": "weak",
+      "reference_branching": 0.45,
+      "reference_branching_sigma": 0.05,
+      "branching_abs_tol": 0.25,
+      "require_open": true
+    },
+    {
+      "id": "B0_weak_Dpi",
+      "label": "B0 -> D0 pi0",
+      "latex_label": "$B^0\\to D^0\\pi^0$",
+      "parent_id": "B0",
+      "daughter_ids": ["D0", "pi_zero"],
+      "channel": "weak",
+      "reference_branching": 0.16,
+      "reference_branching_sigma": 0.03,
+      "branching_abs_tol": 0.12,
+      "require_open": true
+    },
+    {
+      "id": "Jpsi_em_ee",
+      "label": "J/psi -> e+ e-",
+      "latex_label": "$J/\\psi\\to e^+e^-$",
+      "parent_id": "Jpsi",
+      "daughter_ids": ["e_plus", "e_minus"],
+      "channel": "electromagnetic",
+      "reference_branching": 0.059,
+      "reference_branching_sigma": 0.006,
+      "branching_abs_tol": 0.015,
+      "require_open": true
+    },
+    {
+      "id": "Upsilon_strong_Jpsi_inclusive_neutral",
+      "label": "Upsilon -> J/psi + X (neutral inclusive)",
+      "latex_label": "$\\Upsilon\\to J/\\psi+X$ (neutral incl.)",
+      "parent_id": "Upsilon",
+      "aggregate": "strong_neutral_inclusive_contains",
+      "contains_daughter": "Jpsi",
+      "channel": "strong",
+      "reference_branching": 0.006,
+      "reference_branching_sigma": 0.0006,
+      "branching_abs_tol": 0.005,
+      "require_open": true
+    },
+    {
+      "id": "Bs_weak_DsK",
+      "label": "Bs -> Ds+ K-",
+      "latex_label": "$B_s\\to D_s^+K^-$",
+      "parent_id": "Bs",
+      "daughter_ids": ["Ds_plus", "K_minus"],
+      "channel": "weak",
+      "reference_branching": 0.50,
+      "reference_branching_sigma": 0.05,
+      "branching_abs_tol": 0.30,
+      "require_open": true
+    }
+  ],
+  "kinematics": [
+    {
+      "id": "LHC_pp_13TeV",
+      "facility": "LHC_pp_13TeV",
+      "reference_sqrt_s_gev": 13000.0,
+      "rel_tol": 0.015
+    },
+    {
+      "id": "SPS_p_400GeV_fixed_target",
+      "beam_id": "p",
+      "beam_kinetic_gev": 400.0,
+      "target_id": "p",
+      "target_kinetic_gev": 0.0,
+      "reference_sqrt_s_gev": 27.458,
+      "rel_tol": 0.02
+    },
+    {
+      "id": "NA62_K_75GeV",
+      "facility": "NA62_K_75GeV",
+      "reference_sqrt_s_gev": 11.948,
+      "rel_tol": 0.02
+    }
+  ],
+  "decay_channels": [
+    {
+      "id": "delta_p_strong_p_pi",
+      "parent_id": "delta_p",
+      "daughter_ids": ["p", "pi_plus"],
+      "channel": "strong",
+      "reference_branching": 1.0,
+      "reference_q_from_masses": true,
+      "q_abs_tol_mev": 25.0,
+      "require_open": true,
+      "require_daughters": true
+    },
+    {
+      "id": "lambda_weak_p_pi",
+      "parent_id": "lambda",
+      "daughter_ids": ["p", "pi_minus"],
+      "channel": "weak",
+      "reference_branching": 0.639,
+      "branching_abs_tol": 0.15,
+      "reference_q_from_masses": true,
+      "q_abs_tol_mev": 20.0,
+      "require_open": true
+    },
+    {
+      "id": "lambda_weak_n_pi0",
+      "parent_id": "lambda",
+      "daughter_ids": ["n", "pi_zero"],
+      "channel": "weak",
+      "reference_branching": 0.358,
+      "branching_abs_tol": 0.15,
+      "require_open": true
+    },
+    {
+      "id": "K_plus_weak_mu",
+      "parent_id": "K_plus",
+      "daughter_ids": ["mu_plus"],
+      "channel": "weak",
+      "reference_branching": 0.633,
+      "branching_abs_tol": 0.15,
+      "reference_q_mev": 379.98,
+      "q_abs_tol_mev": 40.0,
+      "require_open": true
+    },
+    {
+      "id": "rho_zero_strong_pipi",
+      "parent_id": "rho_zero",
+      "daughter_ids": ["pi_plus", "pi_minus"],
+      "channel": "strong",
+      "reference_branching": 1.0,
+      "reference_q_from_masses": true,
+      "q_abs_tol_mev": 15.0,
+      "require_open": true
+    },
+    {
+      "id": "phi_strong_KK",
+      "parent_id": "phi",
+      "daughter_ids": ["K_plus", "K_minus"],
+      "channel": "strong",
+      "reference_branching": 0.84,
+      "branching_abs_tol": 0.2,
+      "reference_q_from_masses": true,
+      "q_abs_tol_mev": 35.0,
+      "require_open": true
+    },
+    {
+      "id": "pi_plus_weak_mu",
+      "parent_id": "pi_plus",
+      "daughter_ids": ["mu_plus"],
+      "channel": "weak",
+      "reference_branching": 1.0,
+      "reference_q_from_masses": true,
+      "q_abs_tol_mev": 5.0,
+      "require_open": true
+    },
+    {
+      "id": "D_plus_strong_Kpi",
+      "parent_id": "D_plus",
+      "daughter_ids": ["K_minus", "pi_plus"],
+      "channel": "weak",
+      "reference_branching": null,
+      "branching_abs_tol": 0.25,
+      "reference_q_from_masses": true,
+      "q_abs_tol_mev": 80.0,
+      "require_open": true
+    },
+    {
+      "id": "lambda_c_weak_pKpi",
+      "parent_id": "lambda_c",
+      "daughter_ids": ["p", "K_minus", "pi_plus"],
+      "channel": "weak",
+      "reference_branching": null,
+      "branching_abs_tol": 0.15,
+      "reference_q_from_masses": true,
+      "q_abs_tol_mev": 150.0,
+      "require_open": true,
+      "notes": "HQIV multi-channel Λ_c→pKπ among competing weak modes"
+    },
+    {
+      "id": "B_plus_weak_Dpi",
+      "parent_id": "B_plus",
+      "daughter_ids": ["D0", "pi_plus"],
+      "channel": "weak",
+      "reference_branching": 0.45,
+      "branching_abs_tol": 0.25,
+      "reference_q_from_masses": true,
+      "q_abs_tol_mev": 150.0,
+      "require_open": true
+    },
+    {
+      "id": "Jpsi_em_ee_decay",
+      "parent_id": "Jpsi",
+      "daughter_ids": ["e_plus", "e_minus"],
+      "channel": "electromagnetic",
+      "reference_branching": 0.059,
+      "branching_abs_tol": 0.015,
+      "reference_q_from_masses": true,
+      "q_abs_tol_mev": 200.0,
+      "require_open": true,
+      "notes": "Hidden-quarkonium EM contact slot, comparison-only PDG reference"
+    }
+  ],
+  "half_lives": [
+    {
+      "id": "K_plus",
+      "species_id": "K_plus",
+      "reference_half_life_s": 1.238e-8,
+      "log10_ratio_band": 2.0,
+      "notes": "PDG mean lifetime 12.384 ns → t1/2 = τ ln 2"
+    },
+    {
+      "id": "lambda",
+      "species_id": "lambda",
+      "reference_half_life_s": 2.632e-10,
+      "log10_ratio_band": 0.35,
+      "notes": "PDG Λ mean lifetime 263.2 ps"
+    },
+    {
+      "id": "mu_plus",
+      "species_id": "mu_plus",
+      "reference_half_life_s": 1.522844e-6,
+      "log10_ratio_band": 0.05,
+      "notes": "PDG μ+ mean lifetime 2.197 μs"
+    },
+    {
+      "id": "pi_plus",
+      "species_id": "pi_plus",
+      "reference_half_life_s": 1.803e-8,
+      "log10_ratio_band": 0.15,
+      "notes": "PDG charged pion mean lifetime 26.033 ns"
+    }
+  ],
+  "environment_checks": [
+    {
+      "id": "B_field_increases_weak_dressing",
+      "kind": "ordering",
+      "metric": "weak_width_factor",
+      "low": {"magnetic_field_tesla": 0.0},
+      "high": {"magnetic_field_tesla": 2.5},
+      "expect": "low_less_than_high"
+    },
+    {
+      "id": "trap_reduces_weak_dressing",
+      "kind": "ordering",
+      "metric": "weak_width_factor",
+      "low": {"magnetic_field_tesla": 2.5, "trap_embedding": true},
+      "high": {"magnetic_field_tesla": 0.0},
+      "expect": "low_less_than_high"
+    },
+    {
+      "id": "collider_field_increases_curvature_dressing",
+      "kind": "ordering",
+      "metric": "weak_width_factor",
+      "low": {"magnetic_field_tesla": 0.0, "collider_reference_tesla": 4.0},
+      "high": {"magnetic_field_tesla": 4.0, "collider_reference_tesla": 4.0},
+      "expect": "low_less_than_high"
+    },
+    {
+      "id": "comoving_stream_increases_curvature_dressing",
+      "kind": "ordering",
+      "metric": "weak_width_factor",
+      "low": {"comoving_stream_fraction": 0.0},
+      "high": {"comoving_stream_fraction": 1.0},
+      "expect": "low_less_than_high"
+    }
+  ],
+  "production_checks": [
+    {
+      "id": "LHC_accessible_delta",
+      "facility": "LHC_pp_13TeV",
+      "species_id": "delta_p",
+      "must_be_accessible": true
+    },
+    {
+      "id": "SPS_accessible_delta",
+      "facility": "SPS_p_beam_400GeV",
+      "species_id": "delta_p",
+      "must_be_accessible": true
+    },
+    {
+      "id": "PS_low_energy_no_lambda_b",
+      "beam_id": "p",
+      "beam_kinetic_gev": 24.0,
+      "target_id": "p",
+      "target_kinetic_gev": 0.0,
+      "species_id": "lambda_b",
+      "must_be_accessible": false
+    },
+    {
+      "id": "LHC_accessible_Jpsi",
+      "facility": "LHC_pp_13TeV",
+      "species_id": "Jpsi",
+      "must_be_accessible": true
+    },
+    {
+      "id": "LHC_accessible_lambda_c",
+      "facility": "LHC_pp_13TeV",
+      "species_id": "lambda_c",
+      "must_be_accessible": true
+    },
+    {
+      "id": "Belle2_accessible_Upsilon",
+      "facility": "Belle2_Upsilon4S",
+      "species_id": "Upsilon",
+      "must_be_accessible": true
+    },
+    {
+      "id": "Belle2_accessible_B_plus",
+      "facility": "Belle2_Upsilon4S",
+      "species_id": "B_plus",
+      "must_be_accessible": true
+    }
+  ],
+  "branching_new_states": [
+    {
+      "id": "D0_weak_Kpi",
+      "parent_id": "D0",
+      "daughter_ids": ["K_plus", "pi_minus"],
+      "channel": "weak",
+      "reference_branching": null,
+      "branching_abs_tol": 0.15,
+      "require_open": true,
+      "notes": "Cabibbo-allowed D0 → Kπ"
+    },
+    {
+      "id": "Ds_strong_phi",
+      "parent_id": "Ds_plus",
+      "daughter_ids": ["phi"],
+      "channel": "strong",
+      "reference_branching": 0.44,
+      "branching_abs_tol": 0.35,
+      "require_open": true
+    },
+    {
+      "id": "xi_c_weak_lambda_c_pi0",
+      "parent_id": "xi_c",
+      "daughter_ids": ["lambda_c", "pi_zero"],
+      "channel": "weak",
+      "reference_branching": 0.35,
+      "branching_abs_tol": 0.15,
+      "require_open": true
+    },
+    {
+      "id": "B0_weak_Dpi",
+      "parent_id": "B0",
+      "daughter_ids": ["D0", "pi_zero"],
+      "channel": "weak",
+      "reference_branching": 0.16,
+      "branching_abs_tol": 0.12,
+      "require_open": true
+    },
+    {
+      "id": "Bs_weak_DsK",
+      "parent_id": "Bs",
+      "daughter_ids": ["Ds_plus", "K_minus"],
+      "channel": "weak",
+      "reference_branching": null,
+      "branching_abs_tol": 0.30,
+      "require_open": true
+    },
+    {
+      "id": "Jpsi_em_ee",
+      "parent_id": "Jpsi",
+      "daughter_ids": ["e_plus", "e_minus"],
+      "channel": "electromagnetic",
+      "reference_branching": 0.059,
+      "branching_abs_tol": 0.015,
+      "require_open": true,
+      "notes": "Hidden-quarkonium EM contact slot, comparison-only PDG reference"
+    },
+    {
+      "id": "Upsilon_strong_Jpsi_inclusive_neutral",
+      "parent_id": "Upsilon",
+      "aggregate": "strong_neutral_inclusive_contains",
+      "contains_daughter": "Jpsi",
+      "channel": "strong",
+      "reference_branching": 0.006,
+      "branching_abs_tol": 0.005,
+      "require_open": true,
+      "notes": "Inclusive Υ → J/ψ + X comparison; HQIV aggregate sums charge/strangeness-neutral strong cascade rows"
+    }
+  ],
+  "production_rates": [
+    {
+      "id": "LHC_D_over_B_fraction",
+      "facility": "LHC_pp_13TeV",
+      "kind": "ordering",
+      "species_a": "D_plus",
+      "species_b": "B_plus",
+      "species_ids": ["D_plus", "B_plus", "lambda_c"],
+      "expect": "a_greater_than_b",
+      "notes": "Open charm more abundant than open bottom at LHC"
+    },
+    {
+      "id": "LHC_lambda_c_min_fraction",
+      "facility": "LHC_pp_13TeV",
+      "kind": "min_fraction",
+      "species_id": "lambda_c",
+      "species_ids": ["D_plus", "D0", "lambda_c", "Jpsi", "B_plus"],
+      "min_normalized_fraction": 0.05,
+      "notes": "Λ_c has non-negligible production share among new states"
+    },
+    {
+      "id": "Belle_Upsilon_dominates_bottom",
+      "facility": "Belle2_HQIV_Upsilon_on_shell",
+      "kind": "ordering",
+      "species_a": "Upsilon",
+      "species_b": "B_plus",
+      "species_ids": ["Upsilon", "B_plus", "Bs"],
+      "expect": "a_greater_than_b",
+      "notes": "HQIV-on-shell e+e- at √s ≈ M_Υ (witness ladder, not PDG Υ(4S))"
+    },
+    {
+      "id": "LHCb_charm_pair_fraction",
+      "facility": "LHCb_pp_13TeV",
+      "kind": "reference_fraction",
+      "species_id": "D_plus",
+      "species_ids": ["D_plus", "D0", "Jpsi", "lambda_c"],
+      "reference_fraction": 0.25,
+      "fraction_abs_tol": 0.20,
+      "notes": "Relative D+ share among open-charm set (proxy, not absolute σ)"
+    }
+  ],
+  "multichannel_counts": [
+    {
+      "id": "Jpsi_multichannel",
+      "species_id": "Jpsi",
+      "min_open_channels": 100,
+      "notes": "Full hadronic+EM expansion"
+    },
+    {
+      "id": "Upsilon_multichannel",
+      "species_id": "Upsilon",
+      "min_open_channels": 150
+    },
+    {
+      "id": "D_plus_multichannel",
+      "species_id": "D_plus",
+      "min_open_channels": 5
+    },
+    {
+      "id": "lambda_c_multichannel",
+      "species_id": "lambda_c",
+      "min_open_channels": 5
+    }
+  ]
+}

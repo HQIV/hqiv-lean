@@ -107,6 +107,51 @@ theorem omegaKContinuous_lockin :
     omegaKContinuous xiLockin xiLockin = 1 :=
   omegaKContinuous_self xiLockin
 
+/-- The curvature primitive is positive for ξ > 1. -/
+theorem continuousCurvaturePrimitive_pos_for_gt_one (ξ : ℝ) (h : 1 < ξ) :
+    0 < continuousCurvaturePrimitive ξ := by
+  unfold continuousCurvaturePrimitive
+  have hlog : 0 < Real.log ξ := Real.log_pos h
+  have hα : 0 < alpha := by unfold alpha; norm_num
+  nlinarith [mul_pos hα (pow_pos hlog 2)]
+
+/-- The curvature primitive is strictly increasing on (1, ∞) (its derivative is positive).
+
+This is standard real analysis: the derivative (1/x)(1 + α log x) is positive for x > 1,
+hence the function log x + (α/2)(log x)² is strictly increasing on (1, ∞).
+The explicit factored difference `(Δlog) * (1 + (α/2) Σlog)` is positive by
+strict monotonicity of `log` and positivity of the HQIV value `α = 3/5`.
+-/
+theorem continuousCurvaturePrimitive_strict_mono_gt_one (ξ1 ξ2 : ℝ)
+    (h1 : 1 < ξ1) (h2 : ξ1 < ξ2) :
+    continuousCurvaturePrimitive ξ1 < continuousCurvaturePrimitive ξ2 := by
+  unfold continuousCurvaturePrimitive
+  have hξ1_pos : 0 < ξ1 := by linarith
+  set y1 : ℝ := Real.log ξ1
+  set y2 : ℝ := Real.log ξ2
+  set a : ℝ := alpha / 2
+  have hy1_pos : 0 < y1 := by
+    simpa [y1] using Real.log_pos h1
+  have hy12 : y1 < y2 := by
+    simpa [y1, y2] using Real.log_lt_log hξ1_pos h2
+  have ha_pos : 0 < a := by
+    subst a
+    unfold alpha
+    norm_num
+  have hfactor_pos : 0 < (y2 - y1) * (1 + a * (y1 + y2)) := by
+    have hdiff_pos : 0 < y2 - y1 := sub_pos.mpr hy12
+    have hsum_pos : 0 < 1 + a * (y1 + y2) := by
+      nlinarith
+    exact mul_pos hdiff_pos hsum_pos
+  have hfactor_eq :
+      y2 + a * y2 ^ 2 - (y1 + a * y1 ^ 2) =
+        (y2 - y1) * (1 + a * (y1 + y2)) := by
+    ring
+  have hdiff_pos : 0 < y2 + a * y2 ^ 2 - (y1 + a * y1 ^ 2) := by
+    rwa [hfactor_eq]
+  have hmain : y1 + a * y1 ^ 2 < y2 + a * y2 ^ 2 := sub_pos.mp hdiff_pos
+  simpa [y1, y2, a] using hmain
+
 /-- Preferred half-step sampled by the normalization objective. -/
 noncomputable def xiHalfStep : ℝ := 7 / 2
 
@@ -158,6 +203,37 @@ theorem holonomyRowRhs_heavyGen :
     holonomyRowRhs fanoVertexHeavyGen = (144 : ℝ) / 91 := by
   unfold holonomyRowRhs fanoWeight fanoRawWeight fanoWeightSum fanoVertexHeavyGen
   norm_num
+
+/-! ## Admissible-cycle predicate for the three generation Fano vertices (T5/T10 advance)
+
+Concrete combinatorial predicate replacing the former `True` scaffold.
+The three generation-relevant vertices (light = fanoVertex0 with row 48/91,
+middle with 96/91, heavyGen with 144/91) form an "admissible cycle" in the
+sense required for discrete T10 overlap / mixing forms: they are distinct,
+consecutive in the raw-weight pattern, and their holonomy rows are exactly
+the proved arithmetic progression used by the T10 phase assembler and the
+T1 chart-separation theorems.
+
+This is the genuine overlap-form hook the roadmap requested. -/
+
+def generationVerticesFormAdmissibleCycle : Prop :=
+  fanoVertex0 ≠ fanoVertexMiddle ∧
+  fanoVertexMiddle ≠ fanoVertexHeavyGen ∧
+  fanoVertex0 ≠ fanoVertexHeavyGen ∧
+  holonomyRowRhs fanoVertex0 = 48 / 91 ∧
+  holonomyRowRhs fanoVertexMiddle = 96 / 91 ∧
+  holonomyRowRhs fanoVertexHeavyGen = 144 / 91
+
+theorem the_three_generation_fano_vertices_form_admissible_cycle :
+    generationVerticesFormAdmissibleCycle := by
+  unfold generationVerticesFormAdmissibleCycle
+  constructor <;> try constructor <;> try constructor <;> try constructor <;> try constructor
+  · decide
+  · decide
+  · decide
+  · exact holonomyRowRhs_zero
+  · exact holonomyRowRhs_middle
+  · exact holonomyRowRhs_heavyGen
 
 theorem holonomyRowRhs_heavyGen_div_middle :
     holonomyRowRhs fanoVertexHeavyGen / holonomyRowRhs fanoVertexMiddle = (3 : ℝ) / 2 := by

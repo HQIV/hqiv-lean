@@ -199,9 +199,10 @@ theorem vacuumMomentumSource_eq_EL_phi_slot_grad
   funext i
   simp [hqivVacuumMomentumSource3, hD, mul_assoc]
 
-theorem EL_O_zero_channel_eq_F_divergence (A : Fin 8 → Fin 4 → ℝ) (φ_val : ℝ) (ν : Fin 4) :
+theorem EL_O_zero_channel_eq_F_divergence (A : Fin 8 → Fin 4 → ℝ) (φ_val : ℝ) (ν : Fin 4)
+    (hgrad : grad_phi ν = 0) :
     EL_O A φ_val 0 ν = F_divergence_sum A 0 ν :=
-  EL_O_zero_eq_F_divergence_sum A φ_val ν
+  EL_O_zero_eq_F_divergence_sum A φ_val ν hgrad
 
 /-- With nonzero spatial `∇φ`, the channel-0 EL picks up the same α–log(φ) slot that feeds
 `hqivVacuumMomentumSource3` after coarse-graining. -/

@@ -1,7 +1,7 @@
 OK   papers/closure.tex
 OK   papers/hqiv_3d_causal_growth_octonionic_gauge.tex
 OK   papers/hqiv_baryogenesis_curvature_lockin.tex
-OK   papers/hqiv_factor_search_formalization.tex
+OK   papers/factor_search_formalization/hqiv_factor_search_formalization.tex
 OK   papers/hqiv_lean_from_combinatorics_to_mass_spectrum.tex
 OK   papers/hqiv_octonionic_action_and_uniqueness.tex
 OK   papers/hqiv_rapidity_manifold_so8_closure.tex

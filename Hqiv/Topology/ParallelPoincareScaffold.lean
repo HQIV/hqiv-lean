@@ -1,4 +1,5 @@
 import Hqiv.Topology.DiscretePhaseEvolution
+import Hqiv.Topology.ShellOpeningEvolution
 
 /-!
 # Parallel Poincaré programme (roadmap + template track)
@@ -50,7 +51,10 @@ structure ParallelPoincareTemplateCertificate
     extends HolonomyViaHorizonGrowth M n where
   extinction_excluded : ∀ k, evo.iterate k M ≠ none
   equilibrium_template :
-    ∀ Mₜ, evo.IsEquilibrium Mₜ → IsS3NullVertexTemplate Mₜ n
+    evo.IsEquilibrium M → IsS3NullVertexTemplate M n
+  /-- Opening / template-pinned flows reach equilibrium on the certified complex. -/
+  terminal_eq :
+    ∀ k M', evo.iterate k M = some M' → evo.IsEquilibrium M' → M' = M
 
 /-- χ-track certificate (future milestone; obstructed on vertex-only `S3NullReference`). -/
 structure ParallelPoincareChiCertificate
@@ -89,7 +93,8 @@ theorem discrete_parallel_poincare_from_template
   rcases FlowTerminatesAt.exists_equilibrium_of_no_extinction evo M h_term
       cert.extinction_excluded with
     ⟨k, M', hiter, heq⟩
-  exact ⟨k, M', hiter, cert.equilibrium_template M' heq⟩
+  have hM' := cert.terminal_eq k M' hiter heq
+  exact ⟨k, M', hiter, hM'.symm ▸ cert.equilibrium_template (hM' ▸ heq)⟩
 
 theorem discrete_parallel_poincare_from_template_of_real_descent
     (evo : DiscreteCurvatureEvolution)
@@ -129,6 +134,17 @@ structure DiscreteParallelPoincareHypothesis where
 
 namespace DiscreteParallelPoincareHypothesis
 
+/-- Placeholder holonomy certificate (same fields as `ParallelPoincareReferenceModel.referenceSO8Admissible`). -/
+def referenceSO8Admissible (_n : ℕ) (M : Discrete3Complex NullShellVertex) :
+    SO8AdmissibleHolonomy M where
+  fields_g2_delta_recoverable := True
+  uses_six_pack_middle_chart := True
+  two_e1_e4_rotations := True
+  triality_three_slots := True
+  diophantine_phase_readout := True
+  delta_resolves_pinched_links := True
+  bracket_closure_symbolic := so8_bracket_closure_symbolic
+
 theorem evolutionTerminates (H : DiscreteParallelPoincareHypothesis) :
     FlowTerminatesAt H.evo H.data.M :=
   H.flowTerminates
@@ -140,6 +156,73 @@ noncomputable def of_real_descent (evo : DiscreteCurvatureEvolution) (data : Dis
   { evo := evo, data := data, curvatureChannel := curvatureChannel,
     flowTerminates := flow_terminates_at_of_real_descent evo realDescent data.M,
     templateCertificate := templateCertificate }
+
+theorem shellOpening_equilibrium_is_S3NullReference (α : ℝ) (n : ℕ) (href : 0 < K n α)
+    (M : Discrete3Complex NullShellVertex) (hV : IsVertexOnly M) (hmax : maxVertexShell M = n)
+    (hdef : deficitOnlyOnHorizon M n) (hq : QuadraticNullShellGrowthOnHorizon M n)
+    (heq : (shellOpeningEvolution α n href).IsEquilibrium M) :
+    IsS3NullReference M n :=
+  quadraticOnHorizon_is_S3NullReference M n hq (by simpa [hmax] using le_rfl)
+
+/-- At a converged opening equilibrium (`totalNegativeBudget = 0` on a deficit-only horizon state). -/
+noncomputable def shellOpeningConvergedTemplateCertificate (α : ℝ) (n : ℕ) (href : 0 < K n α) (hα : 0 < α)
+    (M : Discrete3Complex NullShellVertex) (hV : IsVertexOnly M) (hmax : maxVertexShell M = n)
+    (hdef : deficitOnlyOnHorizon M n) (hq : QuadraticNullShellGrowthOnHorizon M n)
+    (heq : (shellOpeningEvolution α n href).IsEquilibrium M) :
+    ParallelPoincareTemplateCertificate (shellOpeningEvolution α n href) M n where
+  growth := hq
+  holonomy := referenceSO8Admissible n M
+  extinction_excluded := fun k => by
+    rcases k with _ | k
+    · intro h; cases h
+    · intro hnone
+      simpa [shellOpening_iterate_succ_eq_self_at_equilibrium α n href M hV heq k] using hnone
+  equilibrium_template heq' :=
+    shellOpening_equilibrium_is_S3NullReference α n href M hV hmax hdef hq heq'
+  terminal_eq k M' hiter _heqM' := by
+    have hm := shellOpening_iterate_eq_self_at_equilibrium α n href M hV heq k
+    exact Option.some.inj (hiter.symm.trans hm)
+
+/-- `of_real_descent` for opening flow at horizon `n`, at a converged equilibrium complex. -/
+noncomputable def of_shell_opening_real_descent (α : ℝ) (n : ℕ) (href : 0 < K n α) (hα : 0 < α)
+    (M : Discrete3Complex NullShellVertex) (hV : IsVertexOnly M) (hmax : maxVertexShell M = n)
+    (hdef : deficitOnlyOnHorizon M n) (hq : QuadraticNullShellGrowthOnHorizon M n)
+    (heq : (shellOpeningEvolution α n href).IsEquilibrium M) :
+    DiscreteParallelPoincareHypothesis :=
+  let evo := shellOpeningEvolution α n href
+  of_real_descent evo
+    { M := M
+      no_boundary := by
+        intro e he
+        rcases hV with ⟨hedges, _, _⟩
+        simpa [hedges] using he
+      maxShell := n
+      quadraticGrowthOnHorizon := hq
+      so8Admissible := referenceSO8Admissible n M }
+    (shellOpeningUsesCurvatureChannel α n href hα)
+    (shellOpeningRealLyapunovDescent α n href)
+    (shellOpeningConvergedTemplateCertificate α n href hα M hV hmax hdef hq heq)
+
+/-- From a deficit-only horizon initial state, opening reaches `S3NullReference` and yields a
+`DiscreteParallelPoincareHypothesis` at the converged equilibrium. -/
+theorem shell_opening_discrete_parallel_poincare_at_horizon (α : ℝ) (n : ℕ) (href : 0 < K n α) (hα : 0 < α)
+    (M₀ : Discrete3Complex NullShellVertex) (hV : IsVertexOnly M₀)
+    (hmax : maxVertexShell M₀ = n) (hdef : deficitOnlyOnHorizon M₀ n) :
+    ∃ k M', (shellOpeningEvolution α n href).iterate k M₀ = some M' ∧
+      IsS3NullReference M' n ∧
+      ∃ H : DiscreteParallelPoincareHypothesis,
+        H.evo = shellOpeningEvolution α n href ∧
+          H.data.M = M' ∧ IsS3NullReference H.data.M n := by
+  rcases shellOpening_reaches_zero_totalNegative α n href M₀ hV with ⟨k, M', hiter, hz⟩
+  have hV' := IsVertexOnly_of_shellOpening_iterate α n href k M₀ hV M' hiter
+  have hmax' := maxVertexShell_eq_of_shellOpening_iterate α n href n k M₀ hV hmax M' hiter
+  have hdef' := deficitOnlyOnHorizon_of_shellOpening_iterate α n href n k M₀ hV hmax hdef M' hiter
+  have heq := (shellOpening_equilibrium_iff_totalNegative_zero α n href M' hV').mpr hz
+  have hq := deficitOnly_no_negative_budget_imp_quadraticOnHorizon M' n hdef'
+    (by simpa [hmax'] using le_rfl) (shellOpening_not_negative_on_active_of_totalNeg_zero M' hz)
+  have htmpl := quadraticOnHorizon_is_S3NullReference M' n hq (by simpa [hmax'] using le_rfl)
+  refine ⟨k, M', hiter, htmpl, ?_⟩
+  refine ⟨of_shell_opening_real_descent α n href hα M' hV' hmax' hdef' hq heq, rfl, rfl, htmpl⟩
 
 end DiscreteParallelPoincareHypothesis
 

@@ -2,6 +2,7 @@ import Hqiv.Story.ArityFTADecomposition
 import Hqiv.Story.ArityMirrorCancellationBridge
 import Hqiv.Story.PlasticTwistedEulerCharacter
 import Hqiv.Story.PlasticSpiralInterceptCoverage
+import Hqiv.Story.S3EulerSO4PrimeAxisBridge
 import Mathlib.Analysis.Complex.Basic
 import Mathlib.Data.Nat.Prime.Basic
 import Mathlib.NumberTheory.LSeries.RiemannZeta
@@ -190,16 +191,26 @@ def OnCriticalLine (t : ℝ) : Prop :=
     riemannZeta s = 0
 
 /--
-Analytic bridge slot: the remaining complex-analysis step that links plastic phase
-to an actual critical-line zeta zero.
+Legacy over-strong bridge shape: every real height is a critical-line zeta zero.
+
+This is kept only as an explicit guardrail for older notes.  The live bridge is
+`PhaseForcesCriticalLine χ`, which realizes specific Euler/SO(4) cancellation
+slots rather than arbitrary heights.
 -/
-def PhaseForcesCriticalLine : Prop :=
+abbrev PhaseForcesCriticalLine_Legacy : Prop :=
   ∀ t : ℝ, OnCriticalLine t
+
+/--
+Corrected phase bridge: surviving Euler-prime/SO(4) cancellation slots are
+realized pointwise.  It does not assert zero existence at every height.
+-/
+def PhaseForcesCriticalLine (χ : PlasticTwiddleCharacter) : Prop :=
+  EulerPrimeSO4FirstCancellationRealizesStrip χ
 
 /--
 Bridge theorem form:
 FTA + mirror cancellation + `k=3` residue + 45° phase balance imply the
-critical-line correspondence conclusion.
+critical-line correspondence conclusion for the specific shell point.
 -/
 theorem plastic_phase_corresponds_to_critical_line_zero
     (P : PlasticLatticePoint)
@@ -207,13 +218,18 @@ theorem plastic_phase_corresponds_to_critical_line_zero
     (hMirror : HasArityMirrorCancellation P)
     (hK3 : HasK3Residue P)
     (h45 : HasPhaseBalance45 P)
-    (hAnalytic : PhaseForcesCriticalLine) :
+    (hAnalytic :
+      ∀ (P : PlasticRHBalancePoint),
+        HasFTADecomposition P →
+        HasArityMirrorCancellation P →
+        HasK3Residue P →
+          riemannZeta (⟨(1 / 2 : ℝ), plasticSpiralPhaseAtStep (criticalLineStep P)⟩ : ℂ) = 0) :
     OnCriticalLine (plasticSpiralPhaseAtStep (criticalLineStep P)) := by
-  have _ := hFTA
-  have _ := hMirror
-  have _ := hK3
   have _ := h45
-  exact hAnalytic (plasticSpiralPhaseAtStep (criticalLineStep P))
+  refine ⟨⟨(1 / 2 : ℝ), plasticSpiralPhaseAtStep (criticalLineStep P)⟩, ?_, ?_, ?_⟩
+  · rfl
+  · rfl
+  · exact hAnalytic P hFTA hMirror hK3
 
 /--
 Composite-shell instantiation helper:
@@ -228,7 +244,7 @@ theorem composite_point_has_fta_and_mirror
   exact (hasArityMirrorCancellation_iff_composite P).2 hComp
 
 /-!
-## PhaseForcesCriticalLine decomposition (analytic sub-goals)
+## Corrected phase bridge decomposition (analytic sub-goals)
 -/
 
 /-- Sub-goal 1: 45° phase balance forces `Re = Im` at the phase factor. -/
@@ -250,11 +266,12 @@ Decomposition wrapper: the remaining analytic work is represented as the conjunc
 of the two natural sub-goals.
 -/
 theorem PhaseForcesCriticalLine_iff_two_subgoals :
-    (PhaseForcesCriticalLine → (PhaseBalanceImpliesReHalf ∧ LatticePhaseImpliesZetaZero)) →
-    ((PhaseBalanceImpliesReHalf ∧ LatticePhaseImpliesZetaZero) → PhaseForcesCriticalLine) →
-    (PhaseForcesCriticalLine ↔
+    (χ : PlasticTwiddleCharacter) →
+    (PhaseForcesCriticalLine χ → (PhaseBalanceImpliesReHalf ∧ LatticePhaseImpliesZetaZero)) →
+    ((PhaseBalanceImpliesReHalf ∧ LatticePhaseImpliesZetaZero) → PhaseForcesCriticalLine χ) →
+    (PhaseForcesCriticalLine χ ↔
       PhaseBalanceImpliesReHalf ∧ LatticePhaseImpliesZetaZero) := by
-  intro hLeft hRight
+  intro χ hLeft hRight
   constructor
   · intro h
     exact hLeft h

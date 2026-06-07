@@ -1,0 +1,113 @@
+{
+  "source": "scripts/hqiv_decay_chain.py",
+  "lean_mapping": {
+    "referenceM": "OctonionicLightCone.referenceM = 4",
+    "xiLockin": "ContinuousXiCoupling.xiLockin = 5",
+    "nucleonMassAtXi": "DynamicNucleonPN.nucleonMassAtXi",
+    "derivedDeltaM": "DerivedNucleonMass.derivedDeltaM",
+    "betaMinusEndpointQAtXi": "DynamicBetaIsotope.betaMinusEndpointQAtXi = derivedDeltaM - m_e",
+    "betaMinusEndpointQFromBudgets": "DynamicBetaIsotope.betaMinusEndpointQFromBudgets",
+    "betaMinusResidualAtXi": "DynamicBetaIsotope.betaMinusResidualAtXi",
+    "betaWeakWidthFromResidual": "DynamicBetaIsotope.betaWeakWidthFromResidual",
+    "beta_decay_rate": "NuclearAndAtomicSpectra.beta_decay_rate = G_F^2 m_e^5 M^2",
+    "half_life_from_width": "NuclearAndAtomicSpectra.half_life_from_width = ln2/Gamma",
+    "G_F_from_beta": "Forces.G_F_from_beta",
+    "weakBridgeEnergyMeV": "WeakFanoHopfBridge.weakBridgeEnergyMeV",
+    "tuftExcitedMassGlobalAtXi_MeV": "TuftGlobalHadronReadout.tuftExcitedMassGlobalAtXi_MeV",
+    "weakBetaChannelOpen": "DynamicIsotopeStability.weakBetaChannelOpen"
+  },
+  "referenceM": 4,
+  "xi_lockin": 5.0,
+  "alpha": 0.6,
+  "gamma": 0.4,
+  "proton_anchor_mev": 938.272,
+  "q_policy_default": "nucleon_gap",
+  "nuclear_chains": [
+    {
+      "root": {
+        "kind": "nuclear",
+        "A": 1,
+        "Z": 0,
+        "N": 1,
+        "xi": 5.0,
+        "label": "n",
+        "mass_mev": 939.565
+      },
+      "q_policy": "nucleon_gap",
+      "max_depth": 2,
+      "min_branch": 1e-06,
+      "tree": {
+        "state": {
+          "kind": "nuclear",
+          "A": 1,
+          "Z": 0,
+          "N": 1,
+          "xi": 5.0,
+          "label": "n",
+          "mass_mev": 939.565
+        },
+        "depth": 0,
+        "cumulative_weight": 1.0,
+        "cumulative_time_s": 0.0,
+        "children": [
+          {
+            "state": {
+              "kind": "nuclear",
+              "A": 1,
+              "Z": 1,
+              "N": 0,
+              "xi": 5.0,
+              "label": "Z1A1",
+              "mass_mev": 938.272
+            },
+            "depth": 1,
+            "cumulative_weight": 1.0,
+            "cumulative_time_s": 945.1835831875709,
+            "children": [],
+            "via": {
+              "channel": {
+                "tag": "beta_minus",
+                "endpoint_q_mev": 0.7820010539000064,
+                "residual_mev": 0.29300000000000637,
+                "width_per_s": 0.0007333466142337671,
+                "half_life_s": 945.1835831875709,
+                "kinematic_open": true,
+                "residual_open": true,
+                "channel_open": true,
+                "emitted": [
+                  "e-",
+                  "nu_e_bar"
+                ],
+                "weak_bridge_mev": 2.2832622336721425e-11,
+                "geometry_factor": 1.0,
+                "q_policy": "nucleon_gap",
+                "lean_refs": [
+                  "DynamicBetaIsotope.betaWeakWidthFromResidual",
+                  "NuclearAndAtomicSpectra.half_life_from_width"
+                ]
+              },
+              "branching_ratio": 1.0,
+              "daughter": {
+                "kind": "nuclear",
+                "A": 1,
+                "Z": 1,
+                "N": 0,
+                "xi": 5.0,
+                "label": "Z1A1",
+                "mass_mev": 938.272
+              }
+            }
+          }
+        ]
+      },
+      "terminal_count": 1,
+      "lean_modules": [
+        "Hqiv.Physics.DynamicBetaIsotope",
+        "Hqiv.Physics.DynamicIsotopeStability",
+        "Hqiv.Physics.DynamicNucleonPN",
+        "Hqiv.Physics.TuftGlobalHadronReadout"
+      ]
+    }
+  ],
+  "hadron_chains": []
+}

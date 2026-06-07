@@ -9,10 +9,10 @@ Paper: papers/hqiv_orbital_flyby_anomaly.tex
 
 from __future__ import annotations
 
-# Paper table 1 nominal coupling (documented in hqiv_orbital_flyby_anomaly.tex §5)
+# Paper coupling: unity chart scales; φ_hom geometric readout (Kirchhoff solar-system band)
 PAPER_NOMINAL_COUPLING = {
-    "vacuum_scale": 50.0,
-    "metric_phi_scale": 5.0,
+    "vacuum_scale": 1.0,
+    "metric_phi_scale": 1.0,
     "geff_on_newton": True,
     "geff_as_time_factor": True,
     "paper_inertia_screen": True,
@@ -60,10 +60,17 @@ Asymptotic readout: $v_{\infty,{\rm shell}} = \sqrt{v^2 - 2GM/r}$; $\Delta v = v
   D_R = 1+\frac{\gamma}{2}\left(\frac{c}{v_c}\right)^2,\\
   \epsilon_{\rm gal}(t) &= \frac{2(v_c/c) f_{\rm disk}}{D_R}
     \frac{v_\oplus}{v_c}\,\hat{\mathbf v}_{\oplus}(t)\cdot\hat{\mathbf v}_{\rm gal},\\
+  K_\varphi(m_s,g_s) &= 1 + g_s\bigl((m_s+1)-1\bigr),\\
+  K_{\rm vac}(m_s,g_s) &= 1 + g_s\bigl(\varphi(m_s)(m_s+1)-1\bigr),\\
   \varphi_{\rm eff,full} &= \varphi_{\rm loc} + 6a_{\rm loc}\max(0,\epsilon_{\rm spin}
     + \epsilon_{\rm gal} + \lambda_{\rm yr}\epsilon_{\rm yr}),\\
   \varphi_{\rm eff,part} &= \varphi_{\rm loc}\quad\text{(particle geodesic / metric split)}.
 \end{align}
+The source-shell gate $g_s$ is the Lean-locked dynamic slot in
+`flybyDynamicKappaPhi` / `flybyDynamicKappaVac`: $g_s=0$ gives unity and
+$g_s=1$ at the baryonic anchor $m_s=\texttt{referenceM}=4$ gives
+$K_\varphi=5$, $K_{\rm vac}=50$.  The orbit-level construction of $g_s$ remains
+an experimental calculator choice, not a fitted scalar.
 Repartitioned runs: $f_{\rm part}=f(a,\varphi_{\rm eff,part})$, metric slot
 $\mathbf{a}_{\rm hor}=\mathbf{a}_{\rm GR}/f_{\rm part}\,(f_{\rm part}/f_{\rm full}-1)$ split into
 isotropic $(1-\lambda)$ and L-T $\lambda$ along $\hat{\boldsymbol\omega}\times\hat{\mathbf r}$, with
@@ -103,9 +110,11 @@ Screened coupling: $G_{\rm eff}/G_0 = 1 + \bigl((\varphi/\varphi_{\rm ref})^\alp
 \begin{align}
   \mathbf{g}_{\rm vac} &= -\frac{\gamma}{6}\bigl(\varphi\,\nabla\dot\theta' + \dot\theta'\,\nabla\varphi\bigr), \\
   \mathbf{a}_\varphi &= \frac{\alpha}{4\pi}\ln(\varphi+1)\,\nabla\varphi, \\
-  \mathbf{a}_{\rm HQIV} &= w_{\rm L}(1-\beta^2)\bigl(\kappa_{\rm vac}\mathbf{g}_{\rm vac}
-    + \kappa_\varphi\mathbf{a}_\varphi\bigr), \quad \beta=|\mathbf{v}|/c.
+  \mathbf{a}_{\rm HQIV} &= w_{\rm L}(1-\beta^2)\bigl(\mathbf{g}_{\rm vac}
+    +\mathbf{a}_\varphi\bigr), \quad \beta=|\mathbf{v}|/c.
 \end{align}
+No extra $\kappa$ scales: $\varphi$ is already SI via $\varphi_{\rm hom}\approx 2cH_0$ and the
+geometric lapse $1/(1+r/R)$. Chart coefficients $\gamma/6$ and $\alpha/(4\pi)$ are fixed by Lean.
 """
 
 EQUATION_SHEET_MARKDOWN = """
@@ -124,11 +133,16 @@ EQUATION_SHEET_MARKDOWN = """
 - f(a,φ) = a/(a+φ/6), w = 1−f
 - L-dependent blend (h_z, colatitude θ)
 - co-spinning mass-horizon Doppler shift ε_spin ∝ (2ΩR/c) sin²θ |v̂·φ̂|
+- dynamic baryonic source-shell factors:
+  K_phi(m_s,g_s)=1+g_s((m_s+1)-1) and
+  K_vac(m_s,g_s)=1+g_s(φ(m_s)(m_s+1)-1);
+  Lean proves K_phi(4,1)=5 and K_vac(4,1)=50
 - orbital angular Rindler scale a_ang = r|dω_orb/dt| in the local inertia scale
 - G_eff screened by w; O-Maxwell slots scaled by w(1−β²)
 
-## Nominal paper coupling
-- vacuum_scale=50, metric_phi_scale=5 (SI bridge; not fitted to PDG)
+## Chart slots (solar-system band)
+- φ readout: φ_hom × 1/(1+r/R); same propagation-shell band system-wide (Kirchhoff m_prop)
+- Chart scales unity; γ/6 and α/(4π) from Lean; spin vacuum suppressed in nominal flyby runs
 """
 
 
@@ -168,22 +182,32 @@ def paper_coupling_from_dict() -> object:
 def format_paper_table_latex(rows: list[dict[str, object]]) -> str:
     """LaTeX `tabular` rows for \\input in hqiv_orbital_flyby_anomaly.tex."""
     lines = [
-        r"\begin{tabular}{@{}lrrrrr@{}}",
+        r"\begin{tabular}{@{}lrrrrrr@{}}",
         r"\toprule",
-        r"Case & Lit.\ [mm/s] & $r_{\rm CA}$ [km] & $\langle 1{-}f\rangle_{\rm out}$ & "
+        r"Case & Lit.\ [mm/s] & $\sigma_{\rm lit}$ & $r_{\rm CA}$ [km] & $\langle 1{-}f\rangle_{\rm out}$ & "
         r"$\Delta v_{\rm cls}$ & HQIV$-$cls \\",
         r"\midrule",
     ]
     for row in rows:
         lit = row.get("reported_anomaly_mm_s")
         lit_s = f"{float(lit):.2f}" if lit is not None else "---"
+        sig = row.get("literature_sigma_mm_s")
+        sig_s = f"{float(sig):.2f}" if sig is not None and float(sig) == float(sig) else "---"
         sw = row.get("mean_one_minus_f_out", float("nan"))
         sw_s = f"{sw:.2e}" if sw == sw else "---"
+        hqiv = float(row["hqiv_minus_classical_mm_s"])
+        ci = row.get("hqiv_ci68_mm_s")
+        hqiv_s = f"{hqiv:.2f}"
+        if isinstance(ci, (list, tuple)) and len(ci) == 2:
+            try:
+                hqiv_s = f"{hqiv:.2f}\\,$[{float(ci[0]):.2f},{float(ci[1]):.2f}]"
+            except (TypeError, ValueError):
+                pass
         lines.append(
-            f"{row['case_id'].replace('_', r'\_')} & {lit_s} & "
+            f"{row['case_id'].replace('_', r'\_')} & {lit_s} & {sig_s} & "
             f"{float(row['r_ca_km']):.0f} & {sw_s} & "
             f"{float(row['classical_delta_v_mm_s']):.2f} & "
-            f"{float(row['hqiv_minus_classical_mm_s']):.2f} \\\\"
+            f"{hqiv_s} \\\\"
         )
     lines.extend([r"\bottomrule", r"\end{tabular}"])
     return "\n".join(lines)

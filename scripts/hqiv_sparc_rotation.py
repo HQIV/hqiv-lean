@@ -37,6 +37,9 @@ from pathlib import Path
 from typing import Iterable
 
 import hqiv_galaxy_rotation as _gal
+import hqiv_filament_environment as _fil
+import hqiv_spin_alignment as _spin
+import hqiv_whim_filament as _whim
 
 C_LIGHT = _gal.C_LIGHT
 KPC = _gal.KPC
@@ -51,9 +54,6 @@ HUBBLE_TYPE_LABELS = {
     0: "S0", 1: "Sa", 2: "Sab", 3: "Sb", 4: "Sbc", 5: "Sc",
     6: "Scd", 7: "Sd", 8: "Sdm", 9: "Sm", 10: "Im", 11: "BCD",
 }
-
-# Late-type / gas-rich SPARC rows used for diffuse-galaxy $R^2$ reporting.
-DIFFUSE_HUBBLE_TYPES = {8, 9, 10, 11}  # Sdm, Sm, Im, BCD
 
 
 # ---------------------------------------------------------------------------
@@ -255,6 +255,25 @@ class SparcOptions:
     support_fraction: float = 1.0
     projection: float = 1.0
     use_rindler_denominator: bool = True
+    whim_filament: bool = True
+    m_ism: int = _whim.M_ISM_DEFAULT
+    m_whim: int = _whim.M_WHIM_DEFAULT
+    tortuosity_gain: float = _whim.DEFAULT_TORTUOSITY_GAIN
+    filament_catalog_path: str | None = None
+
+    def whim_options(self) -> _whim.WhimFilamentOptions:
+        catalog = None
+        if self.filament_catalog_path:
+            catalog = _fil.load_filament_catalog(self.filament_catalog_path)
+        elif _fil.DEFAULT_CATALOG_PATH.exists():
+            catalog = _fil.load_filament_catalog(_fil.DEFAULT_CATALOG_PATH)
+        return _whim.WhimFilamentOptions(
+            enabled=self.whim_filament,
+            m_ism=self.m_ism,
+            m_whim=self.m_whim,
+            tortuosity_gain=self.tortuosity_gain,
+            filament_catalog=catalog if catalog else None,
+        )
 
 
 @dataclass(frozen=True)
@@ -273,6 +292,11 @@ class SparcRotationRow:
     one_minus_f_full: float
     epsilon_doppler: float
     phi_accel_si: float
+    phi_whim_m_s2: float
+    phase_coherence: float
+    activity_index: float
+    whim_seed_ratio: float
+    misalignment_sin: float
 
 
 def baryonic_v_squared_kms2(
@@ -328,7 +352,26 @@ def hqiv_rotation_point_sparc(
         use_rindler_denominator=options.use_rindler_denominator,
     )
     lapse_radius_m = max(master.rdisk_kpc, 0.05) * KPC  # disk scale length sets the shell width
-    phi_part = _phi_accel_si(r_m, lapse_radius_m, options.phi_shell)
+    whim_opts = options.whim_options()
+    if whim_opts.enabled:
+        whim_state = _whim.whim_phi_part(
+            master,
+            row.rad_kpc,
+            options=whim_opts,
+        )
+        phi_part = whim_state.phi_combined_m_s2
+        phi_whim = whim_state.phi_whim_m_s2
+        coherence = whim_state.phase_coherence
+        activity = whim_state.activity_index
+        seed_ratio = whim_state.whim_seed_ratio
+        misalign = whim_state.misalignment_sin
+    else:
+        phi_part = _phi_accel_si(r_m, lapse_radius_m, options.phi_shell)
+        phi_whim = 0.0
+        coherence = 0.0
+        activity = _whim.galaxy_activity_index(master)
+        seed_ratio = 0.0
+        misalign = 0.0
     phi_full = phi_part + 6.0 * a_b * eps
     f_full = _gal.hqiv_inertia_factor(a_b, phi_full)
     a_hqiv = a_b / max(f_full, 1.0e-30)
@@ -348,6 +391,11 @@ def hqiv_rotation_point_sparc(
         one_minus_f_full=max(0.0, 1.0 - f_full),
         epsilon_doppler=eps,
         phi_accel_si=phi_part,
+        phi_whim_m_s2=phi_whim,
+        phase_coherence=coherence,
+        activity_index=activity,
+        whim_seed_ratio=seed_ratio,
+        misalignment_sin=misalign,
     )
 
 
@@ -378,6 +426,12 @@ class GalaxySummary:
     v_hqiv_outer_kms: float
     v_obs_outer_kms: float
     outer_radius_kpc: float
+    seed_class: bool
+    activity_index: float
+    mean_phase_coherence: float
+    mean_phi_whim_m_s2: float
+    mean_whim_seed_ratio: float
+    mean_misalignment_sin: float
 
 
 def _safe_div(num: float, denom: float) -> float:
@@ -401,6 +455,10 @@ def evaluate_galaxy(
     sum_res_h = 0.0
     sum_res_b = 0.0
     sum_one_minus_f = 0.0
+    sum_coherence = 0.0
+    sum_phi_whim = 0.0
+    sum_seed_ratio = 0.0
+    sum_misalign = 0.0
     valid = 0
     for r in rows:
         if r.e_v_kms <= 0.0 or not math.isfinite(r.v_obs_kms):
@@ -414,9 +472,14 @@ def evaluate_galaxy(
         sum_res_h += res_h
         sum_res_b += res_b
         sum_one_minus_f += r.one_minus_f_full
+        sum_coherence += r.phase_coherence
+        sum_phi_whim += r.phi_whim_m_s2
+        sum_seed_ratio += r.whim_seed_ratio
+        sum_misalign += r.misalignment_sin
         valid += 1
     n = max(valid, 1)
     outer = rows[-1] if rows else None
+    whim_meta = _whim.galaxy_whim_metadata(galaxy.master, options=options.whim_options())
     summary = GalaxySummary(
         name=galaxy.master.name,
         quality=galaxy.master.quality,
@@ -438,11 +501,21 @@ def evaluate_galaxy(
         v_hqiv_outer_kms=outer.v_hqiv_kms if outer is not None else 0.0,
         v_obs_outer_kms=outer.v_obs_kms if outer is not None else 0.0,
         outer_radius_kpc=outer.radius_kpc if outer is not None else 0.0,
+        seed_class=bool(whim_meta["seed_class"]),
+        activity_index=float(whim_meta["activity_index"]),
+        mean_phase_coherence=sum_coherence / n,
+        mean_phi_whim_m_s2=sum_phi_whim / n,
+        mean_whim_seed_ratio=sum_seed_ratio / n,
+        mean_misalignment_sin=sum_misalign / n,
     )
     return {
         "summary": asdict(summary),
         "rows": [asdict(r) for r in rows],
         "options": asdict(options),
+        "whim_filament": whim_meta,
+        "spin_alignment": _spin.galaxy_spin_alignment_metadata(
+            galaxy.master, options=options.whim_options()
+        ),
     }
 
 
@@ -456,160 +529,10 @@ def _median(values: list[float]) -> float:
     return 0.5 * (s[mid - 1] + s[mid])
 
 
-def is_diffuse_galaxy(summary: dict[str, object]) -> bool:
-    """Gas-rich / late-type SPARC galaxies (Im, Sm, BCD, Sdm, DDO)."""
-    name = str(summary.get("name", ""))
-    if name.upper().startswith("DDO"):
-        return True
-    label = str(summary.get("hubble_label", ""))
-    return label in {"Sdm", "Sm", "Im", "BCD"}
+def _distribution_summary(values: list[float]) -> dict[str, float | None]:
+    from hqiv_observational_errors import distribution_summary
 
-
-def r_squared(observed: list[float], predicted: list[float]) -> float:
-    """Coefficient of determination $R^2$ for paired $(v_{\rm obs}, v_{\rm HQIV})$ samples."""
-    pairs = [
-        (o, p)
-        for o, p in zip(observed, predicted)
-        if math.isfinite(o) and math.isfinite(p) and o > 0.0
-    ]
-    if len(pairs) < 2:
-        return float("nan")
-    obs = [o for o, _ in pairs]
-    pred = [p for _, p in pairs]
-    mean_obs = sum(obs) / len(obs)
-    ss_tot = sum((o - mean_obs) ** 2 for o in obs)
-    if ss_tot <= 0.0:
-        return float("nan")
-    ss_res = sum((o - p) ** 2 for o, p in pairs)
-    return 1.0 - ss_res / ss_tot
-
-
-def collect_rotation_points(
-    per_galaxy: list[dict[str, object]],
-    *,
-    diffuse_only: bool = False,
-) -> tuple[list[float], list[float], list[float], list[float]]:
-    """Flatten catalog to (v_obs, v_hqiv, v_baryonic, weights 1/sigma)."""
-    v_obs: list[float] = []
-    v_hqiv: list[float] = []
-    v_bar: list[float] = []
-    for entry in per_galaxy:
-        summary = entry.get("summary")
-        if not isinstance(summary, dict):
-            continue
-        if diffuse_only and not is_diffuse_galaxy(summary):
-            continue
-        rows = entry.get("rows")
-        if not isinstance(rows, list):
-            continue
-        for raw in rows:
-            if not isinstance(raw, dict):
-                continue
-            vo = float(raw.get("v_obs_kms", 0.0))
-            vh = float(raw.get("v_hqiv_kms", 0.0))
-            vb = float(raw.get("v_baryonic_kms", 0.0))
-            ev = float(raw.get("e_v_kms", 0.0))
-            if ev <= 0.0 or not math.isfinite(vo):
-                continue
-            v_obs.append(vo)
-            v_hqiv.append(vh)
-            v_bar.append(vb)
-    return v_obs, v_hqiv, v_bar, []
-
-
-def r_squared_block(
-    per_galaxy: list[dict[str, object]],
-) -> dict[str, object]:
-    """$R^2$ for full catalog, diffuse subset, and baryonic baseline."""
-    vo_all, vh_all, vb_all, _ = collect_rotation_points(per_galaxy, diffuse_only=False)
-    vo_d, vh_d, vb_d, _ = collect_rotation_points(per_galaxy, diffuse_only=True)
-    n_diffuse = sum(
-        1
-        for e in per_galaxy
-        if isinstance(e.get("summary"), dict) and is_diffuse_galaxy(e["summary"])  # type: ignore[arg-type]
-    )
-    return {
-        "n_points_all": len(vo_all),
-        "n_points_diffuse": len(vo_d),
-        "n_galaxies_diffuse": n_diffuse,
-        "r2_hqiv_all": r_squared(vo_all, vh_all),
-        "r2_baryonic_all": r_squared(vo_all, vb_all),
-        "r2_hqiv_diffuse": r_squared(vo_d, vh_d),
-        "r2_baryonic_diffuse": r_squared(vo_d, vb_d),
-        "median_v_obs_diffuse_kms": _median(vo_d),
-        "median_v_hqiv_diffuse_kms": _median(vh_d),
-    }
-
-
-def plot_sparc_map(
-    per_galaxy: list[dict[str, object]],
-    output_path: str | os.PathLike[str],
-    *,
-    title: str = "SPARC: HQIV vs observed circular speed",
-) -> None:
-    """Scatter $v_{\rm obs}$ vs $v_{\rm HQIV}$ with 1:1 line; diffuse galaxies highlighted."""
-    try:
-        import matplotlib.pyplot as plt
-    except ImportError as exc:
-        raise SystemExit(
-            "matplotlib required for --plot-figure. Install with: python3 -m pip install matplotlib"
-        ) from exc
-
-    vo_all: list[float] = []
-    vh_all: list[float] = []
-    vo_d: list[float] = []
-    vh_d: list[float] = []
-    for entry in per_galaxy:
-        summary = entry.get("summary")
-        if not isinstance(summary, dict):
-            continue
-        diffuse = is_diffuse_galaxy(summary)
-        rows = entry.get("rows")
-        if not isinstance(rows, list):
-            continue
-        for raw in rows:
-            if not isinstance(raw, dict):
-                continue
-            vo = float(raw.get("v_obs_kms", 0.0))
-            vh = float(raw.get("v_hqiv_kms", 0.0))
-            ev = float(raw.get("e_v_kms", 0.0))
-            if ev <= 0.0 or not math.isfinite(vo) or vo <= 0.0:
-                continue
-            vo_all.append(vo)
-            vh_all.append(vh)
-            if diffuse:
-                vo_d.append(vo)
-                vh_d.append(vh)
-
-    fig, ax = plt.subplots(figsize=(6.5, 6.5), dpi=150)
-    ax.scatter(vo_all, vh_all, s=8, alpha=0.25, c="#4477aa", label="all SPARC points", rasterized=True)
-    if vo_d:
-        ax.scatter(vo_d, vh_d, s=14, alpha=0.75, c="#cc3311", label="diffuse (Im/Sm/BCD/DDO)", rasterized=True)
-    vmax = max(vo_all + vh_all + [1.0])
-    ax.plot([0.0, vmax], [0.0, vmax], "k--", lw=1.0, label="1:1")
-    r2_all = r_squared(vo_all, vh_all)
-    r2_d = r_squared(vo_d, vh_d) if vo_d else float("nan")
-    ax.set_xlabel(r"$v_{\rm obs}$ [km/s]")
-    ax.set_ylabel(r"$v_{\rm HQIV}$ [km/s]")
-    ax.set_title(title)
-    ax.set_aspect("equal", adjustable="box")
-    ax.legend(loc="upper left", fontsize=8)
-    ax.text(
-        0.04,
-        0.96,
-        rf"$R^2_{{\rm all}}$ = {r2_all:.3f}" + "\n"
-        + (rf"$R^2_{{\rm diffuse}}$ = {r2_d:.3f}" if math.isfinite(r2_d) else ""),
-        transform=ax.transAxes,
-        va="top",
-        ha="left",
-        fontsize=9,
-        bbox=dict(boxstyle="round", facecolor="white", alpha=0.85),
-    )
-    fig.tight_layout()
-    out = Path(output_path)
-    out.parent.mkdir(parents=True, exist_ok=True)
-    fig.savefig(out)
-    plt.close(fig)
+    return distribution_summary(values)
 
 
 def summarize_catalog(per_galaxy: list[dict[str, object]]) -> dict[str, object]:
@@ -699,9 +622,14 @@ def summarize_catalog(per_galaxy: list[dict[str, object]]) -> dict[str, object]:
         "ratio_sum_chi2_hqiv_over_baryonic": _safe_div(sum_chi2_h, sum_chi2_b),
         "median_chi2_red_hqiv": _median(chi2_red_h),
         "median_chi2_red_baryonic": _median(chi2_red_b),
+        "median_chi2_red_hqiv_distribution": _distribution_summary(chi2_red_h),
+        "median_chi2_red_baryonic_distribution": _distribution_summary(chi2_red_b),
         "median_rms_hqiv_kms": _median(rms_h),
         "median_rms_baryonic_kms": _median(rms_b),
+        "median_rms_hqiv_distribution": _distribution_summary(rms_h),
+        "median_rms_baryonic_distribution": _distribution_summary(rms_b),
         "median_mean_one_minus_f": _median(one_minus_f_means),
+        "median_mean_one_minus_f_distribution": _distribution_summary(one_minus_f_means),
         "per_quality": per_quality,
         "best_hqiv": best,
         "worst_hqiv": worst,
@@ -755,6 +683,7 @@ def list_galaxies(catalog: dict[str, SparcGalaxy]) -> list[dict[str, object]]:
                 "rdisk_kpc": m.rdisk_kpc,
                 "vflat_kms": m.vflat_kms,
                 "n_rotmod": len(gal.rotmod),
+                **_whim.galaxy_whim_metadata(m),
             }
         )
     return rows
@@ -774,6 +703,11 @@ def _make_options(args: argparse.Namespace) -> SparcOptions:
         support_fraction=args.support_fraction,
         projection=args.projection,
         use_rindler_denominator=not args.no_rindler_denominator,
+        whim_filament=not args.no_whim_filament,
+        m_ism=args.m_ism,
+        m_whim=args.m_whim,
+        tortuosity_gain=args.tortuosity_gain,
+        filament_catalog_path=args.filament_catalog,
     )
 
 
@@ -793,12 +727,20 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--support-fraction", type=float, default=1.0)
     parser.add_argument("--projection", type=float, default=1.0)
     parser.add_argument("--no-rindler-denominator", action="store_true")
-    parser.add_argument("--write", default=None, help="dump full JSON payload to this path")
     parser.add_argument(
-        "--plot-figure",
-        default=None,
-        help="write SPARC v_obs vs v_HQIV scatter PDF/PNG (requires matplotlib)",
+        "--no-whim-filament",
+        action="store_true",
+        help="disable WHIM filament seeding / tortuous-path decoherence",
     )
+    parser.add_argument("--m-ism", type=int, default=_whim.M_ISM_DEFAULT)
+    parser.add_argument("--m-whim", type=int, default=_whim.M_WHIM_DEFAULT)
+    parser.add_argument("--tortuosity-gain", type=float, default=_whim.DEFAULT_TORTUOSITY_GAIN)
+    parser.add_argument(
+        "--filament-catalog",
+        default=None,
+        help="JSON filament spine vectors (see data/sparc_filament/filament_vectors.json)",
+    )
+    parser.add_argument("--write", default=None, help="dump full JSON payload to this path")
     parser.add_argument("--summary-only", action="store_true", help="print only the catalog summary")
     parser.add_argument("--indent", type=int, default=2)
     args = parser.parse_args(argv)
@@ -828,7 +770,6 @@ def main(argv: list[str] | None = None) -> int:
         )
         per_galaxy = run_catalog(filtered, options=_make_options(args))
         summary = summarize_catalog(per_galaxy)
-        r2_block = r_squared_block(per_galaxy)
         payload: dict[str, object] = {
             "n_in_catalog": len(catalog),
             "n_evaluated": len(per_galaxy),
@@ -839,12 +780,7 @@ def main(argv: list[str] | None = None) -> int:
             },
             "options": asdict(_make_options(args)),
             "summary": summary,
-            "r_squared": r2_block,
-            "lapse_model": "phi_hom / (1 + R/R_d); single radial exponent, no halo fit",
         }
-        if args.plot_figure:
-            plot_sparc_map(per_galaxy, args.plot_figure)
-            payload["figure"] = str(args.plot_figure)
         if not args.summary_only:
             payload["per_galaxy"] = per_galaxy
         if args.write:

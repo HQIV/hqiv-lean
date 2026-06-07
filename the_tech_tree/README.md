@@ -49,7 +49,6 @@ flowchart TB
 | `BondedHorizon-Casimir-Lean.py` | `bonded_horizon_casimir_float.py` | `Hqiv/Geometry/BondedHorizonCasimir.lean` |
 | `NuclearTorus-S7Casimir-Lean.py` | `nuclear_torus_casimir_float.py` | `NuclearTorusPerturbation`, `S7MetahorizonCasimir` |
 | `LiH-QuantumChemistry-Now-Lapse-LeanAligned-Working.py` | `lih_derivation_scan.py` | `LiH.lean`, `LiHDerivation.lean`, `Now.lean`, EL residual mirror of `Action.lean` |
-| `BulkEquivalent-Baryogenesis-OctonionicLightCone-Lean.py` | `run_bulk_equivalent.py` | `OctonionicLightCone`, baryogenesis ladder |
 | `PhaseRelax-MassLadder-cubic_phase_relax_probe-Lean.py` | `cubic_phase_relax_probe.py` | Fano / quark / lepton / detuning stack (as documented in file header) |
 | `CurvatureOntology-HQVMetric-OctonionicLightCone-Lean.py` | `hqiv_curvature_information_ontology.py` | Curvature integral, `HQVM_lapse`, ontology readout |
 | `BoundStates-HydrogenicScales-Lean.py` | `hqiv_isotope_hydrogenic_scales.py` | `BoundStates.lean`, `AuxiliaryField.lean` |

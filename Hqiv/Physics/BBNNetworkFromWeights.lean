@@ -2,6 +2,7 @@ import Hqiv.Physics.BoundStates
 import Hqiv.Physics.QuarkMetaResonance
 import Hqiv.Physics.DerivedNucleonMass
 import Hqiv.Physics.HQIVNuclei
+import Hqiv.Physics.PostAlphaBindingGeometry
 import Hqiv.Physics.BaryogenesisWitness
 import Hqiv.Geometry.AuxiliaryField
 import Hqiv.Geometry.HQVMetric
@@ -37,6 +38,12 @@ def bbnTemperatureHighMeV : ℝ := 1.0
 noncomputable def bbnShellIndexFromMeV (T_MeV : ℝ) : ℝ :=
   T_Pl_MeV / T_MeV - 1
 
+/-- Strong-channel fraction of the octonion carrier (4/8). Re-exports the single source of truth
+from `HQIVNuclei.strongChannelFraction` for BBN weighting. -/
+def bbnStrongChannelFraction : ℝ := Hqiv.Physics.strongChannelFraction
+
+theorem bbnStrongChannelFraction_eq_strong_channel : bbnStrongChannelFraction = strongChannelFraction := rfl
+
 /-- HQIV damping of horizon overlap at shell `m` (→ 0 at BBN). -/
 noncomputable def gammaEffAtShell (m : ℕ) : ℝ :=
   gamma_HQIV * T m
@@ -64,17 +71,56 @@ def bbnBindingShell : ℕ := referenceM
 noncomputable def bbnNucleonTraceBinding (m : ℕ) (c : ℝ := 1) : ℝ :=
   E_bind_from_composite_trace m nucleonTraceDiagonal nucleonTraceState c
 
-/-- Toroidal-valley enhancement of cluster binding (He-4 closure = 6 valleys). -/
-noncomputable def bbnValleyBindingFactor (A : ℕ) : ℝ :=
-  1 + (bbnValleyCount A : ℝ) / (bbnValleyCount 4 : ℝ)
+/-- Toroidal-valley enhancement: constructive through ⁴He; post-α facet touches spin-gated. -/
+noncomputable def bbnValleyBindingFactor (A : ℕ) (Z : ℕ := 0) : ℝ :=
+  if A ≤ 4 then
+    1 + (bbnValleyCount A : ℝ) / (bbnValleyCount 4 : ℝ)
+  else
+    let cap := (constructiveValleyCap : ℝ) / (bbnValleyCount 4 : ℝ)
+    let touch :=
+      (protonFacetTouchContactSum (bbnProtonFacetTouches A Z) : ℝ) / (bbnValleyCount 4 : ℝ) *
+        spinStabilityParticipation A Z
+    let far := farNeutronWeightedContactSum A Z / (bbnValleyCount 4 : ℝ)
+    1 + cap + touch + far
 
-/-- Cluster binding from the 8×8 network at shell `m`. -/
-noncomputable def bbnClusterBinding (m A : ℕ) (c : ℝ := 1) : ℝ :=
-  (A : ℝ) * bbnNucleonTraceBinding m c * bbnValleyBindingFactor A
+/-- Cluster binding from the 8×8 network at shell `m` (specify `Z` when `A > 4`). -/
+noncomputable def bbnClusterBinding (m A : ℕ) (c : ℝ := 1) (Z : ℕ := 0) : ℝ :=
+  (A : ℝ) * bbnNucleonTraceBinding m c * bbnValleyBindingFactor A Z
+
+/-!
+### Geometric binding hook (future wiring point)
+
+`bbnValleyBindingFactor` is a **normalized contact-count proxy** derived from the isotope ladder
+and post-α sphere-touch geometry in `HQIVNuclei`. The underlying geometric currency is the
+`valleyPotential` (negative Fresnel-caustic overlap) and the sphere-touch contact energies
+(`sphereTouchContactEnergy`, `facetProtonContactSetEnergy`).
+
+The hook below is the intended future home for a direct sum of valley-potential contributions
+along a concrete packing of Fresnel caustics. Currently it delegates to the count-based factor
+so that all downstream BBN readouts remain unchanged while the geometric derivation is developed.
+-/
+
+/-- Cluster binding from sphere-touch geometry when `A > 4`; ladder valley factor when `A ≤ 4`. -/
+noncomputable def bbnClusterBindingFromCausticGeometry (m A : ℕ) (c : ℝ := 1) (Z : ℕ := 0) : ℝ :=
+  if A ≤ 4 then bbnClusterBinding m A c Z
+  else postAlphaClusterBindingWithNetwork m A Z c
+
+theorem bbnClusterBindingFromCausticGeometry_le_four (m A : ℕ) (c : ℝ := 1) (Z : ℕ := 0)
+    (hA : A ≤ 4) :
+    bbnClusterBindingFromCausticGeometry m A c Z = bbnClusterBinding m A c Z := by
+  unfold bbnClusterBindingFromCausticGeometry
+  simp [hA]
+
+theorem bbnClusterBindingFromCausticGeometry_gt_four (m A : ℕ) (c : ℝ := 1) (Z : ℕ := 0)
+    (hA : 4 < A) :
+    bbnClusterBindingFromCausticGeometry m A c Z =
+      postAlphaClusterBindingWithNetwork m A Z c := by
+  unfold bbnClusterBindingFromCausticGeometry
+  simp [hA]
 
 /-- Cluster mass from constituent nucleon mass minus network binding. -/
-noncomputable def bbnClusterMass (m A : ℕ) (m_nucleon : ℝ) (c : ℝ := 1) : ℝ :=
-  (A : ℝ) * m_nucleon - bbnClusterBinding m A c
+noncomputable def bbnClusterMass (m A : ℕ) (m_nucleon : ℝ) (c : ℝ := 1) (Z : ℕ := 0) : ℝ :=
+  (A : ℝ) * m_nucleon - bbnClusterBinding m A c Z
 
 /-- Deuteron mass from the network at the binding shell. -/
 noncomputable def bbnDeuteronMass (m_nucleon : ℝ) (c : ℝ := 1) : ℝ :=
@@ -126,9 +172,47 @@ noncomputable def bbnDH_etaExponent (m_nucleon : ℝ) (c : ℝ := 1) : ℝ :=
 noncomputable def bbnHe3_etaExponent (m_nucleon : ℝ) (c : ℝ := 1) : ℝ :=
   -((bbnClusterBinding bbnBindingShell 3 c - bbnDeuteronBindingQ m_nucleon c) / bbnNeutronProtonGap)
 
+/-- ⁷Be (`A = 7`, `Z = 4`): α core + two extra protons × three contacts each. -/
+noncomputable def bbnBe7BindingQ (m_nucleon : ℝ) (c : ℝ := 1) : ℝ :=
+  bbnClusterBinding bbnBindingShell 7 c (Z := 4)
+
+/-- ⁷Li (`A = 7`, `Z = 3`): one facet proton + far-neutron touches at `(4/8)` weight. -/
+noncomputable def bbnLi7ClusterBindingQ (m_nucleon : ℝ) (c : ℝ := 1) : ℝ :=
+  bbnClusterBinding bbnBindingShell 7 c (Z := 3)
+
+/-- ⁷Be → ⁷Li capture Q from cluster-well depth difference (daughter far-neutron well). -/
+noncomputable def bbnBe7ToLi7CaptureQ (m_nucleon : ℝ) (c : ℝ := 1) : ℝ :=
+  gamma_HQIV * bbnStrongChannelFraction *
+    max 0 (bbnBe7BindingQ m_nucleon c - bbnLi7ClusterBindingQ m_nucleon c)
+
+/-- ³He + ⁴He → ⁷Be reaction Q from network binding gaps. -/
+noncomputable def bbnBe7FormationQ (m_nucleon : ℝ) (c : ℝ := 1) : ℝ :=
+  bbnBe7BindingQ m_nucleon c - bbnClusterBinding bbnBindingShell 3 c - bbnHelium4BindingQ m_nucleon c
+
+/-- ⁷Be electron-capture scale: weak-channel fraction × n–p gap (no fitted ec Q). -/
+noncomputable def bbnBe7ElectronCaptureQ : ℝ :=
+  gamma_HQIV * bbnStrongChannelFraction * bbnNeutronProtonGap
+
 /-- ⁷Li/H η exponent (seventh-order valley proxy on α vs deuteron gap). -/
 noncomputable def bbnLi7_etaExponent (m_nucleon : ℝ) (c : ℝ := 1) : ℝ :=
   -(((7 / 4 : ℝ) * bbnHelium4BindingQ m_nucleon c - bbnDeuteronBindingQ m_nucleon c) / bbnNeutronProtonGap)
+
+/-!
+### Lithium-7 channel: explicit illustrative scaffold
+
+The current `bbnLi7*` formulas are **scaffold illustrations** that demonstrate how a valley-weighted
+network readout would propagate to A=7. At mid-epoch and in window-integrated witnesses the
+resulting ⁷Li/H can be astronomically large (Boltzmann exponents driven by the 7/4 proxy and
+the gap to ⁴He). This is **not claimed** to match observational bounds. The Li channels serve
+as a template for future nuclear-network upgrades (dynamic C₂ lapse suppression, full reaction
+graph, post-BBN depletion). See the BBN paper §"Honesty on lithium".
+-/
+
+/-- Marker proposition: the Li7 abundance formulas are illustrative scaffold readouts whose
+numeric magnitude at BBN-epoch temperatures is not asserted to lie near observational values. -/
+def bbnLi7_is_illustrative_scaffold : Prop := True
+
+theorem bbnLi7_is_illustrative_scaffold_holds : bbnLi7_is_illustrative_scaffold := trivial
 
 /-- Thermal factor exp((Q_light − Q_α)/T) at partition temperature. -/
 noncomputable def bbnThermalSinkFactor (Q_light Q_alpha T_MeV : ℝ) : ℝ :=
@@ -195,15 +279,59 @@ theorem bbnBoltzmannWeight_pos (Q T_MeV : ℝ) : 0 < bbnBoltzmannWeight Q T_MeV 
   unfold bbnBoltzmannWeight
   exact Real.exp_pos _
 
-theorem bbnValleyBindingFactor_pos (A : ℕ) : 0 < bbnValleyBindingFactor A := by
+theorem bbnValleyBindingFactor_pos (A : ℕ) (Z : ℕ := 0) : 0 < bbnValleyBindingFactor A Z := by
   unfold bbnValleyBindingFactor
-  have h4 : 0 < (bbnValleyCount 4 : ℝ) := by norm_num [bbnValleyCount_four]
-  positivity
+  split_ifs with hle
+  · have h4 : 0 < (bbnValleyCount 4 : ℝ) := by norm_num [bbnValleyCount_four]
+    positivity
+  · have hcapPos : 0 < (constructiveValleyCap : ℝ) / (bbnValleyCount 4 : ℝ) := by
+      rw [constructiveValleyCap_eq_six, bbnValleyCount_four]
+      norm_num
+    have hspin := spinStabilityParticipation_nonneg A Z
+    have hfar := farNeutronWeightedContactSum_nonneg A Z
+    have htouch : 0 ≤ (protonFacetTouchContactSum (bbnProtonFacetTouches A Z) : ℝ) := by
+      norm_cast
+      exact Nat.zero_le _
+    have hbase : (1 : ℝ) < 1 + (constructiveValleyCap : ℝ) / (bbnValleyCount 4 : ℝ) := by linarith
+    have hvalley : 0 < (bbnValleyCount 4 : ℝ) := by norm_num [bbnValleyCount_four]
+    have htouchDiv :
+        0 ≤ (protonFacetTouchContactSum (bbnProtonFacetTouches A Z) : ℝ) / (bbnValleyCount 4 : ℝ) *
+          spinStabilityParticipation A Z :=
+      mul_nonneg (div_nonneg htouch (le_of_lt hvalley)) hspin
+    have hfarDiv : 0 ≤ farNeutronWeightedContactSum A Z / (bbnValleyCount 4 : ℝ) :=
+      div_nonneg hfar (le_of_lt hvalley)
+    have hfull :
+        1 + (constructiveValleyCap : ℝ) / (bbnValleyCount 4 : ℝ) ≤
+          1 + (constructiveValleyCap : ℝ) / (bbnValleyCount 4 : ℝ) +
+            (protonFacetTouchContactSum (bbnProtonFacetTouches A Z) : ℝ) / (bbnValleyCount 4 : ℝ) *
+              spinStabilityParticipation A Z +
+            farNeutronWeightedContactSum A Z / (bbnValleyCount 4 : ℝ) := by
+      linarith
+    have hpos : (0 : ℝ) < 1 + (constructiveValleyCap : ℝ) / (bbnValleyCount 4 : ℝ) :=
+      lt_trans zero_lt_one hbase
+    exact lt_of_lt_of_le hpos hfull
 
 theorem bbnDeuteronBindingQ_eq_clusterBinding (m_nucleon : ℝ) (c : ℝ := 1) :
     bbnDeuteronBindingQ m_nucleon c = bbnClusterBinding bbnBindingShell 2 c := by
   unfold bbnDeuteronBindingQ bbnDeuteronMass bbnClusterMass
   ring
+
+/-- For A ≤ 4 the valley binding factor is exactly 1 + (valleyCount A) / 6, i.e. the normalized
+constructive ladder count. This matches the tetrahedral edge accounting in HQIVNuclei
+(`valleyCount helium4 = tetrahedralEdgeCount = 6`). -/
+theorem bbnValleyBindingFactor_eq_ladder_for_A_le_4 (A : ℕ) (hA : A ≤ 4) :
+    bbnValleyBindingFactor A 0 = 1 + (bbnValleyCount A : ℝ) / (bbnValleyCount 4 : ℝ) := by
+  unfold bbnValleyBindingFactor
+  simp [hA]
+
+theorem bbnValleyBindingFactor_A4_eq_2 : bbnValleyBindingFactor 4 0 = 2 := by
+  unfold bbnValleyBindingFactor bbnValleyCount
+  simp [helium4_valleyCount]
+  norm_num
+
+/-- The BBN strong-channel fraction is identical to the HQIVNuclei source of truth. -/
+theorem bbnStrongChannelFraction_is_HQIVNuclei_strong :
+    bbnStrongChannelFraction = Hqiv.Physics.strongChannelFraction := rfl
 
 theorem bbnHelium4BindingQ_eq_clusterBinding (m_nucleon : ℝ) (c : ℝ := 1) :
     bbnHelium4BindingQ m_nucleon c = bbnClusterBinding bbnBindingShell 4 c := by
@@ -276,6 +404,16 @@ theorem bbnDHNumberRatio_pos (η : ℝ) (hη : 0 < η) (hη10 : 1 < eta10 η) :
         (bbnNeutronProtonGap / Real.log (eta10 η))) :=
     Real.exp_pos _
   exact mul_pos hpow htherm
+
+/-- The Li7/H readout is positive under the illustrative scaffold formulas (positivity only;
+the concrete magnitude at BBN temperatures is not asserted to match observation). -/
+theorem bbnLi7HNumberRatio_pos (η : ℝ) (hη : 0 < η) (hη10 : 1 < eta10 η) :
+    0 < bbnLi7HNumberRatio η derivedProtonMass := by
+  unfold bbnLi7HNumberRatio bbnLi7_etaExponent bbnThermalSinkFactor bbnBoltzmannWeight
+      bbnInternalTemperatureMeV eta10 bbnNeutronProtonGap
+  have hpow : 0 < (eta10 η) ^ bbnLi7_etaExponent derivedProtonMass :=
+    Real.rpow_pos_of_pos (by linarith [hη10]) _
+  exact mul_pos hpow (Real.exp_pos _)
 
 def bbn_network_vital_readout : Prop :=
   eta_at_horizon m_lockin m_lockin = eta_paper ∧

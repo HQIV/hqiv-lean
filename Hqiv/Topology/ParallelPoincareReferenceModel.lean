@@ -86,8 +86,11 @@ noncomputable def referenceTemplateCertificate (n : ℕ) (href : 0 < K n (1 : �
     rw [templatePinned_iterate_some n (1 : ℝ) href k]
     intro hnone
     cases hnone
-  equilibrium_template := fun Mₜ heq =>
-    (templatePinned_equilibrium_iff n (1 : ℝ) href Mₜ).mp heq
+  equilibrium_template heq :=
+    (templatePinned_equilibrium_iff n (1 : ℝ) href (S3NullReference n)).mp heq
+  terminal_eq k M' hiter _heq := by
+    rw [templatePinned_iterate_some n (1 : ℝ) href k] at hiter
+    exact Option.some.inj hiter.symm
 
 theorem reference_chi_obstructed (n : ℕ) (href : 0 < K n (1 : ℝ)) :
     ¬ ∃ cert : ParallelPoincareChiCertificate (templatePinnedEvolution n (1 : ℝ) href)

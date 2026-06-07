@@ -54,6 +54,11 @@ def F_from_A (A : Fin 8 → Fin 4 → ℝ) (a : Fin 8) (μ ν : Fin 4) : ℝ := 
 def F_divergence_sum (A : Fin 8 → Fin 4 → ℝ) (a : Fin 8) (ν : Fin 4) : ℝ :=
   ∑ μ : Fin 4, F_from_A A a μ ν
 
+theorem F_divergence_sum_eq_emergentFlatDivergence_sum (A : Fin 8 → Fin 4 → ℝ) (a : Fin 8) (ν : Fin 4) :
+    F_divergence_sum A a ν = emergentFlatDivergence_sum A a ν := by
+  unfold F_divergence_sum emergentFlatDivergence_sum F_from_A
+  rfl
+
 /-- **F_from_A is antisymmetric.** -/
 theorem F_from_A_antisymm (A : Fin 8 → Fin 4 → ℝ) (a : Fin 8) (μ ν : Fin 4) :
     F_from_A A a μ ν = - F_from_A A a ν μ := by
@@ -71,8 +76,10 @@ def L_O_source_general (J_src : Fin 8 → Fin 4 → ℝ) (A : Fin 8 → Fin 4 �
 def L_O_source (A : Fin 8 → Fin 4 → ℝ) : ℝ :=
   L_O_source_general J_O A
 
-/-- **Gradient of φ** (placeholder for discrete ∂φ/∂x^ν). -/
-def grad_phi (_ν : Fin 4) : ℝ := 0
+/-- **Gradient of φ** at the lock-in chart readout (same slot as `grad_φ` in `ModifiedMaxwell`). -/
+noncomputable def grad_phi (ν : Fin 4) : ℝ := grad_φ ν
+
+theorem grad_phi_eq_grad_φ (ν : Fin 4) : grad_phi ν = grad_φ ν := rfl
 
 /-- **φ-coupling term** in the Lagrangian: α * log(φ) * (∇φ)·A (one component for simplicity). -/
 noncomputable def L_O_phi_coupling (A : Fin 8 → Fin 4 → ℝ) (φ_val : ℝ) : ℝ :=
@@ -112,6 +119,16 @@ theorem EL_O_general_eq_F_divergence_sub_sources (J_src : Fin 8 → Fin 4 → �
         (if a = 0 then alpha * Real.log (φ_val + 1) * grad_phi ν else 0) :=
   rfl
 
+theorem emergentMaxwellInhomogeneous_O_fromPotential_eq_EL_O_general
+    (J_src : Fin 8 → Fin 4 → ℝ) (A : Fin 8 → Fin 4 → ℝ) (φ_val : ℝ) (a : Fin 8) (ν : Fin 4)
+    (hgrad : grad_phi ν = 0) :
+    emergentMaxwellInhomogeneous_O_fromPotential J_src A a ν =
+      EL_O_general J_src A φ_val a ν := by
+  unfold emergentMaxwellInhomogeneous_O_fromPotential EL_O_general
+  rw [F_divergence_sum_eq_emergentFlatDivergence_sum]
+  have hφ : grad_φ ν = 0 := by rw [← grad_phi_eq_grad_φ, hgrad]
+  simp [grad_phi, hgrad, hφ, mul_zero, sub_zero, add_zero]
+
 /-- **Octonion channel `a = 0`:** EL splits into `F_divergence_sum` minus `4π J` and the φ–A gradient slot. -/
 theorem EL_O_general_zero_eq (J_src : Fin 8 → Fin 4 → ℝ) (A : Fin 8 → Fin 4 → ℝ) (φ_val : ℝ) (ν : Fin 4) :
     EL_O_general J_src A φ_val 0 ν =
@@ -119,10 +136,13 @@ theorem EL_O_general_zero_eq (J_src : Fin 8 → Fin 4 → ℝ) (A : Fin 8 → Fi
         alpha * Real.log (φ_val + 1) * grad_phi ν := by
   simp [EL_O_general, F_divergence_sum]
 
-/-- **Vacuum EL₀:** default `J_O = 0` and placeholder `grad_phi = 0` ⇒ **EL at channel `0` is exactly the `F` divergence sum** `∑_μ F_{0 μν}`. -/
-theorem EL_O_zero_eq_F_divergence_sum (A : Fin 8 → Fin 4 → ℝ) (φ_val : ℝ) (ν : Fin 4) :
+/-- **Vacuum EL₀:** default `J_O = 0` and vanishing φ-gradient at `ν` ⇒ channel `0` is the `F` divergence sum. -/
+theorem EL_O_zero_eq_F_divergence_sum (A : Fin 8 → Fin 4 → ℝ) (φ_val : ℝ) (ν : Fin 4)
+    (hgrad : grad_phi ν = 0) :
     EL_O A φ_val 0 ν = F_divergence_sum A 0 ν := by
-  simp [EL_O, EL_O_general, F_divergence_sum, J_O, grad_phi]
+  unfold EL_O
+  rw [EL_O_general_zero_eq]
+  simp [J_O, hgrad]
 
 /-- **Equations from action:** `EL_O_general J_src` is the discrete EL covector with source `J_src`. -/
 theorem action_O_Maxwell_EL_eq_emergent_general (J_src : Fin 8 → Fin 4 → ℝ) (a : Fin 8) (ν : Fin 4) (φ_val : ℝ)
@@ -199,8 +219,9 @@ noncomputable def action_total (A : Fin 8 → Fin 4 → ℝ) (φ_val rho_m rho_r
 theorem equations_from_action (φ rho_m rho_r : ℝ) (_hφ : 0 ≤ φ) :
     (S_HQVM_grav φ rho_m rho_r = 0 ↔ HQVM_Friedmann_eq φ rho_m rho_r) ∧
     (∀ a ν, EL_O A_O (φ + 1) a ν = (∑ μ : Fin 4, F_from_A A_O a μ ν) - 4 * Real.pi * J_O a ν -
-      (if a = 0 then alpha * Real.log (φ + 2) * grad_phi ν else 0)) := by
+      (if a = 0 then alpha * Real.log (φ + 1 + 1) * grad_phi ν else 0)) := by
   refine ⟨S_HQVM_grav_zero_iff_Friedmann φ rho_m rho_r, fun a ν => ?_⟩
-  simp [EL_O, EL_O_general, F_divergence_sum, F_from_A, A_O, J_O, grad_phi, add_assoc]
+  have hφ : (φ + 1) + 1 > 0 := by linarith
+  exact action_O_Maxwell_EL_eq_emergent a ν (φ + 1) hφ A_O
 
 end Hqiv

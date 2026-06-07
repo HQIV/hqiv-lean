@@ -1,0 +1,97 @@
+{
+  "source": "scripts/hqiv_spine_gap_closure_terms.py",
+  "policy": "Candidates are exact spine factors, not fitted priors. They are not applied to the benchmark until the corresponding finite-channel or spectator enumeration is implemented.",
+  "terms": {
+    "finite_channel_completion": {
+      "factor": 0.022222222222222223,
+      "lean": "finiteChannelCompletionAperture_eq_one_fortyfive",
+      "formula": "gamma_HQIV * weakBridgeShape defaultBetaWeakBridge = 1/45",
+      "use": "sigma/aperture for unenumerated finite weak-bridge channels"
+    },
+    "double_monogamy_exclusion": {
+      "factor": 0.84,
+      "lean": "doubleMonogamyExclusionFactor_eq_twentyone_twentyfive",
+      "formula": "1 - gamma_HQIV^2 = 21/25",
+      "use": "suppresses over-counted charm/baryon family outlets"
+    },
+    "spectator_half_monogamy_contact": {
+      "factor": 1.2,
+      "lean": "spectatorHalfMonogamyContact_eq_six_fifths",
+      "formula": "1 + gamma_HQIV/2 = 6/5",
+      "use": "charged open-bottom spectator completion"
+    },
+    "neutral_spectator_monogamy_complement": {
+      "factor": 1.6666666666666667,
+      "lean": "neutralSpectatorMonogamyComplement_eq_five_thirds",
+      "formula": "1/(1 - gamma_HQIV) = 5/3",
+      "use": "neutral/oscillating open-bottom spectator completion"
+    }
+  },
+  "candidate_rows": [
+    {
+      "case_id": "D_plus_weak_Kpi",
+      "reference": 0.55,
+      "current_predicted": 0.6373910735598175,
+      "candidate_term": "double_monogamy_exclusion",
+      "candidate_factor": 0.84,
+      "candidate_lean_certificate": "doubleMonogamyExclusionFactor_eq_twentyone_twentyfive",
+      "candidate_formula": "1 - gamma_HQIV^2 = 21/25",
+      "odds_reweighted_prediction": 0.5962117047608815,
+      "current_abs_error_pct": 15.889286101784993,
+      "candidate_abs_error_pct": 8.402128138342068,
+      "status": "postulate_from_spine_not_applied"
+    },
+    {
+      "case_id": "D0_weak_Kpi",
+      "reference": 0.55,
+      "current_predicted": 0.6373910735598175,
+      "candidate_term": "double_monogamy_exclusion",
+      "candidate_factor": 0.84,
+      "candidate_lean_certificate": "doubleMonogamyExclusionFactor_eq_twentyone_twentyfive",
+      "candidate_formula": "1 - gamma_HQIV^2 = 21/25",
+      "odds_reweighted_prediction": 0.5962117047608815,
+      "current_abs_error_pct": 15.889286101784993,
+      "candidate_abs_error_pct": 8.402128138342068,
+      "status": "postulate_from_spine_not_applied"
+    },
+    {
+      "case_id": "lambda_c_weak_pKpi",
+      "reference": 0.27,
+      "current_predicted": 0.30870583311787053,
+      "candidate_term": "double_monogamy_exclusion",
+      "candidate_factor": 0.84,
+      "candidate_lean_certificate": "doubleMonogamyExclusionFactor_eq_twentyone_twentyfive",
+      "candidate_formula": "1 - gamma_HQIV^2 = 21/25",
+      "odds_reweighted_prediction": 0.2727866317246051,
+      "current_abs_error_pct": 14.33549374735945,
+      "candidate_abs_error_pct": 1.0320858239277975,
+      "status": "postulate_from_spine_not_applied"
+    },
+    {
+      "case_id": "B_plus_weak_Dpi",
+      "reference": 0.45,
+      "current_predicted": 0.3532041534488497,
+      "candidate_term": "spectator_half_monogamy_contact",
+      "candidate_factor": 1.2,
+      "candidate_lean_certificate": "spectatorHalfMonogamyContact_eq_six_fifths",
+      "candidate_formula": "1 + gamma_HQIV/2 = 6/5",
+      "odds_reweighted_prediction": 0.39587971240136033,
+      "current_abs_error_pct": 21.510188122477846,
+      "candidate_abs_error_pct": 12.026730577475487,
+      "status": "postulate_from_spine_not_applied"
+    },
+    {
+      "case_id": "B0_weak_Dpi",
+      "reference": 0.16,
+      "current_predicted": 0.10091547241395704,
+      "candidate_term": "neutral_spectator_monogamy_complement",
+      "candidate_factor": 1.6666666666666667,
+      "candidate_lean_certificate": "neutralSpectatorMonogamyComplement_eq_five_thirds",
+      "candidate_formula": "1/(1 - gamma_HQIV) = 5/3",
+      "odds_reweighted_prediction": 0.15759025718858005,
+      "current_abs_error_pct": 36.92782974127685,
+      "candidate_abs_error_pct": 1.5060892571374662,
+      "status": "postulate_from_spine_not_applied"
+    }
+  ]
+}

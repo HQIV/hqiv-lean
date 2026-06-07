@@ -186,6 +186,12 @@ theorem outerHorizonNeutrinoSuppression_eq_inv_140 :
     alpha]
   norm_num
 
+/-- T13 coarse-graining on the canonical outer-shell witness agrees with the derived ν suppression. -/
+theorem outerHorizonNeutrinoSuppression_eq_T13_fluctuationCoarseGrained :
+    outerHorizonNeutrinoSuppression =
+      fluctuationCoarseGrainedSuppression outerShellNeutrinoFluctuationWitness :=
+  Eq.trans outerHorizonNeutrinoSuppression_eq_inv_140 canonical_T13_witness_recovers_exact_neutrino_suppression.symm
+
 theorem outerHorizonNeutrinoSuppression_pos : 0 < outerHorizonNeutrinoSuppression := by
   rw [outerHorizonNeutrinoSuppression_eq_inv_140]
   norm_num

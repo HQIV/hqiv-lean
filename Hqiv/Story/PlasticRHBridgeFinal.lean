@@ -10,7 +10,7 @@ This file provides the final glue theorem in an honest assumption-driven form:
 
 * geometric shell assumptions are explicit,
 * the two analytic sub-goals are bundled,
-* one final interface assumption maps the Story-level critical-line predicate to
+* one final interface assumption maps the corrected Euler/SO(4) slot predicate to
   Mathlib's `RiemannHypothesis`.
 
 **Fleshed-out story geometry (2026):** `survivorShell` and `survivorShellUpTo` in
@@ -39,9 +39,10 @@ Final Story-level glue:
 geometric package + two analytic sub-goals + one final interface map imply RH.
 
 `hStoryToMathlibRH` is the last external interface assumption converting the
-Story predicate `PhaseForcesCriticalLine` into `RiemannHypothesis`.
+corrected predicate `PhaseForcesCriticalLine χ` into `RiemannHypothesis`.
 -/
 theorem plastic_3d_lattice_implies_RH
+    (χ : PlasticTwiddleCharacter)
     (hFTA : ∀ P : PlasticRHBalancePoint, HasFTADecomposition P)
     (hMirror : ∀ P : PlasticRHBalancePoint, HasArityMirrorCancellation P)
     (hK3 : ∀ P : PlasticRHBalancePoint, HasK3Residue P)
@@ -49,15 +50,15 @@ theorem plastic_3d_lattice_implies_RH
     (hArityDiag : AllZetaZerosSatisfyArityDiagonalPreference)
     (hAnalytic : PlasticRHBridgeAnalyticAssumptions)
     (hSubgoalsToPhaseForces :
-      (PhaseBalanceImpliesReHalf ∧ LatticePhaseImpliesZetaZero) → PhaseForcesCriticalLine)
-    (hStoryToMathlibRH : PhaseForcesCriticalLine → RiemannHypothesis) :
+      (PhaseBalanceImpliesReHalf ∧ LatticePhaseImpliesZetaZero) → PhaseForcesCriticalLine χ)
+    (hStoryToMathlibRH : PhaseForcesCriticalLine χ → RiemannHypothesis) :
     RiemannHypothesis := by
   have _ := hFTA
   have _ := hMirror
   have _ := hK3
   have _ := h45
   have _ := hArityDiag
-  have hPhaseForces : PhaseForcesCriticalLine :=
+  have hPhaseForces : PhaseForcesCriticalLine χ :=
     hSubgoalsToPhaseForces ⟨hAnalytic.hSubgoal1, hAnalytic.hSubgoal2⟩
   exact hStoryToMathlibRH hPhaseForces
 

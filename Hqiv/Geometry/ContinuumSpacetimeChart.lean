@@ -132,6 +132,23 @@ theorem coordsDivergence_zero (c : Fin 4 → ℝ) :
     simp [spacetimeVectorFieldFromCoords, spacetimeOfCoords, map_zero]
   simp [coordsDivergence, hV, spacetimeCoordDivergence_zero]
 
+theorem coordsDivergence_const (f : Fin 4 → ℝ) (c : Fin 4 → ℝ) :
+    coordsDivergence (fun _ => f) c = 0 := by
+  have hV :
+      spacetimeVectorFieldFromCoords (fun _ : Fin 4 → ℝ => f) =
+        fun _ : SpacetimeEuclidean4 => spacetimeOfCoords f := by
+    funext x
+    simp [spacetimeVectorFieldFromCoords, spacetimeOfCoords]
+  rw [coordsDivergence, hV, spacetimeCoordDivergence]
+  refine Finset.sum_eq_zero ?_
+  intro μ _
+  have hf :
+      (fun y : SpacetimeEuclidean4 => (spacetimeOfCoords f) μ) = fun _ : SpacetimeEuclidean4 => f μ := by
+    funext y
+    simp [spacetimeOfCoords]
+  rw [hf, fderiv_const_apply (f μ)]
+  simp
+
 end
 
 end Hqiv.Geometry

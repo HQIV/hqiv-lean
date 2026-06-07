@@ -177,10 +177,12 @@ def meta_horizon_excited_mass_mev(
     *,
     derived_proton_mev: float,
     proton_constituent_mev: float | None = None,
-    readout: Literal["operational", "naive"] = "operational",
+    readout: Literal["operational", "naive", "trapped_planck"] = "operational",
     c: float = 1.0,
 ) -> float:
-    """Lean `metaHorizonExcitedMassReadout` (operational) or naive composite trace."""
+    """Lean readout: operational catalog, naive composite trace, or trapped Planck."""
+    if readout == "trapped_planck":
+        return meta_horizon_trapped_planck_mass_mev(n, ell, derived_proton_mev=derived_proton_mev)
     if readout == "operational":
         return (
             derived_proton_mev
@@ -195,6 +197,46 @@ def meta_horizon_excited_mass_mev(
         derived_proton_mev=derived_proton_mev,
         c=c,
     )
+
+
+def shell_shape(m: int) -> float:
+    """Lean `shell_shape m = curvatureDensity (m+1)`."""
+    x = float(m + 1)
+    return (1.0 / x) * (1.0 + ALPHA * math.log(x))
+
+
+def curvature_volume_through(m: int) -> float:
+    """Lean `metaHorizonCurvatureVolumeThrough m = curvature_integral (m+1)`."""
+    return sum(shell_shape(k) for k in range(m + 1))
+
+
+def trapped_planck_shell_slice(m: int) -> float:
+    """Single-shell Planck zero-point slice: `N_m · ω_m / 2`."""
+    nm = 8 if m == 0 else 8 * (m + 1)
+    return nm / (2.0 * (m + 1))
+
+
+def trapped_planck_cumulative_budget(m: int) -> float:
+    """Lean `trappedPlanckCumulativeBudget m = vacuumZeroPointEnergy 0 m`."""
+    return sum(trapped_planck_shell_slice(k) for k in range(m + 1))
+
+
+def meta_horizon_trapped_inside_ratio(m_exc: int, m_ref: int = REFERENCE_M) -> float:
+    """Lean `metaHorizonTrappedInsideRatio m_exc m_ref`."""
+    return (
+        curvature_volume_through(m_exc) / curvature_volume_through(m_ref)
+    ) * (trapped_planck_cumulative_budget(m_exc) / trapped_planck_cumulative_budget(m_ref))
+
+
+def meta_horizon_trapped_planck_mass_mev(
+    n: int,
+    ell: int,
+    *,
+    derived_proton_mev: float,
+) -> float:
+    """Lean `metaHorizonTrappedPlanckMassReadout n ℓ`."""
+    m_exc = total_mode_shell(n, ell)
+    return derived_proton_mev * meta_horizon_trapped_inside_ratio(m_exc, REFERENCE_M)
 
 
 def excitation_table_rows(
@@ -224,6 +266,9 @@ def excitation_table_rows(
                     ),
                     "operational_mass_mev": meta_horizon_excited_mass_mev(
                         n, ell, derived_proton_mev=derived_proton_mev, readout="operational"
+                    ),
+                    "trapped_planck_mass_mev": meta_horizon_trapped_planck_mass_mev(
+                        n, ell, derived_proton_mev=derived_proton_mev
                     ),
                 }
             )
@@ -283,13 +328,14 @@ def print_excitation_table(
     )
     print(
         f"  {'n':>2} {'ℓ':>2} {'shell':>5} {'naive ΔM':>10} {'rad op':>10} "
-        f"{'orb op':>10} {'M_op':>10}"
+        f"{'orb op':>10} {'M_op':>10} {'M_trap':>10}"
     )
     for r in rows:
         print(
             f"  {r['n']:2d} {r['ell']:2d} {r['shell']:5d} "
             f"{r['naive_delta_mev']:10.2f} {r['radial_op_mev']:10.2f} "
-            f"{r['orbital_op_mev']:10.2f} {r['operational_mass_mev']:10.2f}"
+            f"{r['orbital_op_mev']:10.2f} {r['operational_mass_mev']:10.2f} "
+            f"{r['trapped_planck_mass_mev']:10.2f}"
         )
     print("  (n=1,ℓ=0: naive ΔM < 0 certified in Lean; radial_op > 0.)")
 

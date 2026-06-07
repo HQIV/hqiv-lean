@@ -35,6 +35,7 @@ scripts/.cache/
 
 # Exceeds GitHub's 100MB per-file limit; keep locally or use Git LFS
 data/sat2026_bench/timed_unbounded/who_indeed.csv
+scripts/data/sparc_filament/raw/
 
 # Python bytecode from running repository scripts
 **/__pycache__/

@@ -26,6 +26,30 @@ class TestHQIVWideBinary(unittest.TestCase):
         self.assertEqual(payload["preset"], "demo_circular_1au")
         self.assertTrue(math.isfinite(payload["integration"]["final_separation_au"]))
 
+    def test_spin_axis_grid_covers_sphere(self) -> None:
+        grid = wb.spin_axis_unit_grid(step_deg=90.0)
+        self.assertGreaterEqual(len(grid), 3)
+        for _, _, axis in grid:
+            self.assertAlmostEqual(wb.vec_norm(axis), 1.0, places=6)
+
+    def test_dual_spin_sweep_increases_gamma_at_most_coupled(self) -> None:
+        preset = wb.WIDE_BINARY_PRESETS["literature_scale_10kau"]
+        m1 = preset.star1.mass_kg
+        m2 = preset.star2.mass_kg
+        r1, v1, r2, v2 = wb.elements_to_barycentric(preset.elements, m1, m2)
+        out = wb.dual_spin_axis_sweep(
+            r1, v1, r2, v2, preset.star1, preset.star2,
+            axis_step_deg=90.0,
+            omega_breakup_fraction=0.5,
+            omega_sweep_steps=8,
+            use_rindler_denominator=False,
+            independent_star_axes=True,
+        )
+        base = float(out["baseline_no_spin"]["gamma_eff_mean"])
+        best = float(out["phase2_omega_sweep_at_best_axes"]["best_gamma_eff_mean"])
+        self.assertGreaterEqual(best, base)
+        self.assertLess(best, 1.01)
+
 
 if __name__ == "__main__":
     unittest.main()

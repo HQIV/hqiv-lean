@@ -152,6 +152,17 @@ def baryonic_acceleration(radius_m: float, disk: GalaxyDisk) -> float:
 
 
 def phi_acceleration_si(radius_m: float, disk: GalaxyDisk) -> float:
+    """
+    Local φ acceleration scale (m/s²).
+
+    Default ``phi_shell=0`` gives the Kirchhoff/propagation-band readout
+    φ_hom / (1 + r/R) with no hadron lock-in index.  Non-zero ``phi_shell`` is
+    a sensitivity hook only.
+    """
+    if disk.phi_shell == 0:
+        return phi_acceleration_homogeneous_si() / (
+            1.0 + radius_m / max(disk.lapse_radius(), 1.0)
+        )
     shell_mod = phi_of_shell(disk.phi_shell) / (1.0 + radius_m / disk.lapse_radius())
     shell_mod /= max(disk.phi_reference(), 1.0e-30)
     return phi_acceleration_homogeneous_si() * shell_mod

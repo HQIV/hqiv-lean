@@ -1,5 +1,7 @@
 import Mathlib.Analysis.SpecialFunctions.Exp
 import Mathlib.Algebra.Order.Field.Basic
+import Hqiv.Geometry.AuxiliaryField
+import Hqiv.Geometry.OctonionicLightCone
 import Hqiv.Geometry.HQVMetric
 import Hqiv.Geometry.HQVMetricAnalytic
 import Hqiv.Physics.ModifiedMaxwell
@@ -9,8 +11,9 @@ namespace Hqiv
 /-!
 # Schematic plasma source for the emergent O-Maxwell slot
 
-We **do not** model a full vector current or a real `∇·J` here: `ModifiedMaxwell.div_μ` is still the
-placeholder that returns `0`, so `charge_conservation_O_general` is vacuous for every source.
+We **do not** model a full vector current or a variational `∇·J` identity here: `div_μ` is the
+Euclidean chart divergence at the lock-in readout point; for spatially constant components it
+vanishes (`div_μ_const_field_zero`), so `charge_conservation_O_general` holds for uniform sources.
 
 What this file adds is an **honest** bridge:
 
@@ -37,12 +40,14 @@ What we *can* prove here is (i) vanishing at `j₀ = 0`, (ii) repackaging as
 
 noncomputable section
 
-/-- Positive screening length (dimensionless placeholder; fix to physical units downstream). -/
-noncomputable def lambdaDebye : ℝ := 1
+/-- Debye screening length from the temperature ladder at `referenceM` (natural units). -/
+noncomputable def lambdaDebye : ℝ := T referenceM
+
+theorem lambdaDebye_eq_T_referenceM : lambdaDebye = T referenceM := rfl
 
 theorem lambdaDebye_pos : 0 < lambdaDebye := by
-  unfold lambdaDebye
-  norm_num
+  rw [lambdaDebye_eq_T_referenceM]
+  exact T_pos referenceM
 
 /-- Debye-style radial factor `exp(-r/λD)/(1 + max r 0 / λD)` is **positive** on `ℝ` and avoids a
     pole at negative `r` (denominator ≥ 1). -/

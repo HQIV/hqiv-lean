@@ -57,6 +57,7 @@ noncomputable def bbnIntegratedReadoutWitness : BBNIntegratedReadout where
   Yp := bbnIntegratedYpWitness
   DH := 0
   He3H := 0
+  Be7H := 0
   Li7H := 0
   T_freeze_MeV := bbnIntegratedFreezeWitness_MeV
   n_steps := 400

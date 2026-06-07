@@ -19,8 +19,11 @@ This module proves the **exponent** of `zetaHQIVTerm` is **exactly** `I *` the p
 so the discrete `(r, θ)` spiral scaffold and the zeta phase channel are the **same** mathematical
 object—not an analogy left implicit in comments.
 
-**Still not claimed:** Peano/Hilbert-style space-filling, or that shell order induces a canonical
-“next point” on a continuum curve without extra definitions.
+**Lorentz closure:** boost-equivariance of the null-lattice chart and scalar-`φ` phase invariance are
+proved in `Hqiv.Geometry.RapidityLorentzClosure` (`rapidity_lorentz_closure_discharged`).
+
+**Still not claimed:** Peano/Hilbert-style space-filling, spatial rotations on unused `3+1` components,
+or that shell order induces a canonical “next point” on a continuum curve without extra definitions.
 -/
 
 namespace Hqiv.Physics

@@ -44,16 +44,33 @@ from typing import Callable, Iterable, Sequence
 
 from fluid_f2_chart_alignment import vacuum_momentum_source3
 
+try:
+    import hqiv_phase_geometry_density as pgd
+except ImportError:
+    pgd = None  # type: ignore[assignment]
+
 Vec3 = tuple[float, float, float]
+Quat = tuple[float, float, float, float]
 
 # --- HQIV constants (Lean mirrors) -------------------------------------------------
 
 ALPHA_HQIV = 3.0 / 5.0
 GAMMA_HQIV = 2.0 / 5.0
 
+# Near-pole propagation-shell index for the solar-system band.  Kirchhoff
+# (finite_mode_kirchhoff paper, m_prop ~ 0.01 at the CMB observer) separates
+# lock-in shell referenceM=4 (hadron mass chart) from the observer propagation
+# coordinate shared by all solar-system Doppler / lapse readouts.
+SOLAR_SYSTEM_PROP_SHELL = 0
+
 
 def phi_of_shell(m: int) -> float:
     return 2.0 * (float(m) + 1.0)
+
+
+def propagation_shell_for_orbitals() -> int:
+    """Discrete propagation-shell index for solar-system orbital mechanics."""
+    return SOLAR_SYSTEM_PROP_SHELL
 
 
 def shell_equatorial_fraction_floor(m_shell: int) -> float:
@@ -170,6 +187,45 @@ def _unit(a: Vec3) -> Vec3:
     return _scale(a, 1.0 / n)
 
 
+def _quat_mul(a: Quat, b: Quat) -> Quat:
+    aw, ax, ay, az = a
+    bw, bx, by, bz = b
+    return (
+        aw * bw - ax * bx - ay * by - az * bz,
+        aw * bx + ax * bw + ay * bz - az * by,
+        aw * by - ax * bz + ay * bw + az * bx,
+        aw * bz + ax * by - ay * bx + az * bw,
+    )
+
+
+def _quat_conj(q: Quat) -> Quat:
+    return (q[0], -q[1], -q[2], -q[3])
+
+
+def quat_from_unit_vectors(a: Vec3, b: Vec3) -> Quat:
+    """Unit quaternion rotating unit vector `a` into unit vector `b`."""
+    au = _unit(a)
+    bu = _unit(b)
+    c = max(-1.0, min(1.0, _dot(au, bu)))
+    if c > 1.0 - 1.0e-14:
+        return (1.0, 0.0, 0.0, 0.0)
+    if c < -1.0 + 1.0e-14:
+        axis = _unit(_cross(au, (1.0, 0.0, 0.0)))
+        if _norm(axis) <= 1.0e-12:
+            axis = _unit(_cross(au, (0.0, 1.0, 0.0)))
+        return (0.0, axis[0], axis[1], axis[2])
+    axis = _cross(au, bu)
+    s = math.sqrt((1.0 + c) * 2.0)
+    inv_s = 1.0 / s
+    return (0.5 * s, axis[0] * inv_s, axis[1] * inv_s, axis[2] * inv_s)
+
+
+def quat_rotate(q: Quat, v: Vec3) -> Vec3:
+    """Rotate vector `v` by unit quaternion `q`."""
+    rotated = _quat_mul(_quat_mul(q, (0.0, v[0], v[1], v[2])), _quat_conj(q))
+    return (rotated[1], rotated[2], rotated[3])
+
+
 def unit_from_lat_lon(lat_deg: float, lon_deg: float) -> Vec3:
     """Geocentric unit vector (z = spin pole); lat/lon in degrees."""
     lat = math.radians(lat_deg)
@@ -203,6 +259,790 @@ def equatorial_phi_hat(r: Vec3) -> Vec3:
     if rho < 1e-14:
         return (0.0, 0.0, 0.0)
     return (-r[1] / rho, r[0] / rho, 0.0)
+
+
+def spin_axis_unit(body: "RotatingBody") -> Vec3:
+    """Unit spin axis in J2000 equatorial coordinates (+z if unset)."""
+    if body.spin_axis_hat is not None:
+        return _unit(body.spin_axis_hat)
+    return (0.0, 0.0, 1.0)
+
+
+def spin_colatitude_sin_sq(r: Vec3, body: "RotatingBody") -> float:
+    """sin²(colatitude) relative to the body spin axis."""
+    r_mag = _norm(r)
+    if r_mag <= 0.0:
+        return 0.0
+    cos_pol = abs(_dot(_scale(r, 1.0 / r_mag), spin_axis_unit(body)))
+    return max(0.0, 1.0 - min(1.0, cos_pol * cos_pol))
+
+
+def co_spin_tangent_hat(r: Vec3, body: "RotatingBody", spin_sign: float = 1.0) -> Vec3:
+    """Unit vector along ω×r̂ (frame-drag tangent direction)."""
+    r_mag = max(_norm(r), 1.0e-30)
+    r_hat = _scale(r, 1.0 / r_mag)
+    omega_vec = _scale(body.spin_vector(), spin_sign)
+    drag = _cross(omega_vec, r_hat)
+    mag = _norm(drag)
+    if mag <= 1.0e-30:
+        return (0.0, 0.0, 0.0)
+    return _scale(drag, 1.0 / mag)
+
+
+@dataclass(frozen=True)
+class VisibleSourceQuadrature:
+    """Solid-angle weighted readout over the visible face of an extended source."""
+
+    angular_step_deg: float
+    n_visible_samples: int
+    angular_radius_deg: float
+    angular_diameter_deg: float
+    solid_angle_sr: float
+    analytic_solid_angle_sr: float
+    covered_sky_fraction: float
+    visible_hemisphere_fraction: float
+    mean_signed_tangent_projection: float
+    mean_tangent_projection: float
+    mean_corotating_projection: float
+    mean_counterrotating_projection: float
+    mean_sin2_colatitude: float
+    mean_signed_spin_lapse_shape: float
+    mean_spin_lapse_shape: float
+    mean_counter_spin_lapse_shape: float
+    mean_lense_thirring_shape: float
+
+
+@dataclass(frozen=True)
+class CoveredChordQuadrature:
+    """Quaternion-projected ray integral through the covered source volume."""
+
+    angular_step_deg: float
+    chord_samples: int
+    n_rays: int
+    angular_radius_deg: float
+    angular_diameter_deg: float
+    solid_angle_sr: float
+    analytic_solid_angle_sr: float
+    covered_sky_fraction: float
+    mean_chord_length_m: float
+    total_volume_weight_m3: float
+    mean_near_signed_projection: float
+    mean_far_signed_projection: float
+    mean_endpoint_net_projection: float
+    mean_volume_signed_projection: float
+    mean_volume_corotating_projection: float
+    mean_volume_counterrotating_projection: float
+    mean_volume_signed_spin_shape: float
+    mean_volume_spin_shape: float
+    total_mass_weight_m3: float
+
+
+def chord_ray_grid_key(
+    r_mag: float,
+    body: RotatingBody,
+    *,
+    angular_step_deg: float,
+) -> tuple[int, int]:
+    """
+    Discrete ray-grid size for ``covered_chord_quadrature`` at this radius.
+
+    Quadrature is repeated only when this key changes (new chords enter the disk).
+    """
+    radius = max(body.radius, 1.0)
+    if r_mag <= radius:
+        return (0, 0)
+    step = max(float(angular_step_deg), 0.05)
+    alpha_deg = math.degrees(math.asin(min(1.0, radius / r_mag)))
+    n_rho = max(1, int(math.ceil(alpha_deg / step)))
+    n_psi = max(1, int(math.ceil(360.0 / step)))
+    return (n_rho, n_psi)
+
+
+def _surface_signed_tangent_projection(point: Vec3, v_hat: Vec3, omega_vec: Vec3) -> float:
+    tangent = _cross(omega_vec, point)
+    if _norm(tangent) <= 0.0:
+        return 0.0
+    return _dot(v_hat, _unit(tangent))
+
+
+def covered_chord_quadrature(
+    r_probe: Vec3,
+    v_probe: Vec3,
+    body: RotatingBody,
+    *,
+    angular_step_deg: float = 1.0,
+    chord_samples: int = 8,
+    spin_sign: float = 1.0,
+) -> CoveredChordQuadrature:
+    """
+    Project angular rays through an extended spherical source and mass-weight the chord.
+
+    Rays are sampled over the apparent angular disk using quaternion rotations from the
+    boresight.  Each segment carries uniform-density volume ``dV = s² ds dΩ`` and an
+  additional inverse-square weight ``(R_⊕/|r_probe - x|)²`` so the nearest baryonic
+    column dominates.  Endpoint moments expose near/far surface cancellation; volume
+    moments feed the source-shell gate.
+    """
+    r_obs = _norm(r_probe)
+    radius = max(body.radius, 1.0)
+    if r_obs <= radius:
+        raise ValueError("probe must be outside the source surface")
+
+    step = max(float(angular_step_deg), 0.05)
+    n_rho = max(1, int(math.ceil(math.degrees(math.asin(min(1.0, radius / r_obs))) / step)))
+    n_psi = max(1, int(math.ceil(360.0 / step)))
+    alpha = math.asin(min(1.0, radius / r_obs))
+    q_boresight = quat_from_unit_vectors((0.0, 0.0, 1.0), _scale(_unit(r_probe), -1.0))
+    v_hat = _unit(v_probe)
+    omega_vec = _scale(body.spin_vector(), spin_sign)
+    n_chord = max(1, int(chord_samples))
+    r_floor = radius
+
+    solid_angle = 0.0
+    chord_weight = 0.0
+    endpoint_mass_weight = 0.0
+    volume_mass_weight = 0.0
+    volume_geom = 0.0
+    near_signed = 0.0
+    far_signed = 0.0
+    endpoint_net = 0.0
+    volume_signed = 0.0
+    volume_co = 0.0
+    volume_counter = 0.0
+    volume_signed_shape = 0.0
+    volume_abs_shape = 0.0
+    n_rays = 0
+
+    for i in range(n_rho):
+        rho0 = i * alpha / n_rho
+        rho1 = (i + 1) * alpha / n_rho
+        rho = 0.5 * (rho0 + rho1)
+        d_rho = rho1 - rho0
+        sin_rho = math.sin(rho)
+        for j in range(n_psi):
+            psi = (j + 0.5) * 2.0 * math.pi / n_psi
+            local_ray = (sin_rho * math.cos(psi), sin_rho * math.sin(psi), math.cos(rho))
+            ray = _unit(quat_rotate(q_boresight, local_ray))
+            b = 2.0 * _dot(r_probe, ray)
+            c = _dot(r_probe, r_probe) - radius * radius
+            disc = b * b - 4.0 * c
+            if disc <= 0.0:
+                continue
+            root = math.sqrt(disc)
+            t_near = (-b - root) / 2.0
+            t_far = (-b + root) / 2.0
+            if t_far <= 0.0 or t_near < 0.0:
+                continue
+
+            d_omega = sin_rho * d_rho * (2.0 * math.pi / n_psi)
+            chord = t_far - t_near
+            near_point = _add(r_probe, ray, t_near)
+            far_point = _add(r_probe, ray, t_far)
+            near_proj = _surface_signed_tangent_projection(near_point, v_hat, omega_vec)
+            far_proj = _surface_signed_tangent_projection(far_point, v_hat, omega_vec)
+            near_grav = (radius / max(t_near, r_floor)) ** 2
+            far_grav = (radius / max(t_far, r_floor)) ** 2
+            d_mass_near = d_omega * chord * near_grav
+            d_mass_far = d_omega * chord * far_grav
+
+            solid_angle += d_omega
+            chord_weight += d_omega * chord
+            endpoint_mass_weight += d_mass_near + d_mass_far
+            near_signed += d_mass_near * near_proj
+            far_signed += d_mass_far * far_proj
+            endpoint_net += 0.5 * (d_mass_near * near_proj + d_mass_far * far_proj)
+            n_rays += 1
+
+            dt = chord / n_chord
+            for k in range(n_chord):
+                t = t_near + (k + 0.5) * dt
+                point = _add(r_probe, ray, t)
+                proj = _surface_signed_tangent_projection(point, v_hat, omega_vec)
+                sin2_colat = 1.0 - (_unit(point)[2] ** 2)
+                d_vol_seg = d_omega * t * t * dt
+                volume_geom += d_vol_seg
+                grav = (radius / max(t, r_floor)) ** 2
+                d_mass = d_vol_seg * grav
+                volume_mass_weight += d_mass
+                volume_signed += d_mass * proj
+                volume_co += d_mass * max(0.0, proj)
+                volume_counter += d_mass * max(0.0, -proj)
+                volume_signed_shape += d_mass * sin2_colat * proj
+                volume_abs_shape += d_mass * sin2_colat * abs(proj)
+
+    analytic_solid_angle = 2.0 * math.pi * (1.0 - math.cos(alpha))
+    vol_denom = max(volume_mass_weight, 1.0e-30)
+    end_denom = max(endpoint_mass_weight, 1.0e-30)
+    return CoveredChordQuadrature(
+        angular_step_deg=step,
+        chord_samples=n_chord,
+        n_rays=n_rays,
+        angular_radius_deg=math.degrees(alpha),
+        angular_diameter_deg=2.0 * math.degrees(alpha),
+        solid_angle_sr=solid_angle,
+        analytic_solid_angle_sr=analytic_solid_angle,
+        covered_sky_fraction=solid_angle / (4.0 * math.pi),
+        mean_chord_length_m=chord_weight / max(solid_angle, 1.0e-30),
+        total_volume_weight_m3=max(volume_geom, 1.0e-30),
+        mean_near_signed_projection=near_signed / end_denom,
+        mean_far_signed_projection=far_signed / end_denom,
+        mean_endpoint_net_projection=endpoint_net / end_denom,
+        mean_volume_signed_projection=volume_signed / vol_denom,
+        mean_volume_corotating_projection=volume_co / vol_denom,
+        mean_volume_counterrotating_projection=volume_counter / vol_denom,
+        mean_volume_signed_spin_shape=volume_signed_shape / vol_denom,
+        mean_volume_spin_shape=volume_abs_shape / vol_denom,
+        total_mass_weight_m3=volume_mass_weight + endpoint_mass_weight,
+    )
+
+
+def flyby_source_shell_step(m_shell: int) -> float:
+    """Lean ``flybySourceShellStep``: baryonic anchor strength ``m+1``."""
+    return float(m_shell + 1)
+
+
+def propagation_xi_for_orbitals() -> float:
+    """Continuous propagation coordinate ξ = m + 1 at the solar-system band."""
+    return float(propagation_shell_for_orbitals() + 1)
+
+
+def orbital_phase_witness(body: "RotatingBody", encounter_radius_m: float) -> object:
+    """Planetary phase-geometry witness at encounter radius."""
+    if pgd is None:
+        raise RuntimeError("hqiv_phase_geometry_density is required for orbital phase geometry")
+    return pgd.orbital_phase_witness_from_body(
+        label=body.name,
+        gm=body.gm,
+        radius_m=body.radius,
+        encounter_radius_m=encounter_radius_m,
+    )
+
+
+def orbital_curvature_density_at(body: "RotatingBody", encounter_radius_m: float) -> float:
+    """ρ_orb from inverse-square local curvature (Lean ``orbitalCurvatureDensityFraction``)."""
+    if pgd is None:
+        return 0.0
+    w = orbital_phase_witness(body, encounter_radius_m)
+    return pgd.orbital_curvature_density_fraction(w)
+
+
+def orbital_curvature_mass_delta_at(body: "RotatingBody", encounter_radius_m: float) -> float:
+    """Small dimensionless mass/φ delta: B_hom(ξ_prop, ρ_orb) − 1."""
+    if pgd is None:
+        return 0.0
+    w = orbital_phase_witness(body, encounter_radius_m)
+    return pgd.orbital_curvature_mass_delta_fraction(propagation_xi_for_orbitals(), w)
+
+
+def flyby_dynamic_kappa_phi_from_phase(
+    body: "RotatingBody",
+    encounter_radius_m: float,
+    gate: float,
+) -> float:
+    """Lean ``flybyDynamicKappaPhiFromPhase``: 1 + gate·(B_hom − 1), no shell-4 pin."""
+    if pgd is None:
+        return flyby_dynamic_kappa_phi(4, gate)
+    w = orbital_phase_witness(body, encounter_radius_m)
+    return pgd.flyby_dynamic_kappa_phi_from_phase(
+        w, gate, xi=propagation_xi_for_orbitals()
+    )
+
+
+def flyby_dynamic_kappa_phi(m_shell: int, gate: float) -> float:
+    """Lean ``flybyDynamicKappaPhi`` (legacy shell index). Prefer phase-geometry variant."""
+    g = max(0.0, min(1.0, float(gate)))
+    step = flyby_source_shell_step(m_shell)
+    return 1.0 + g * (step - 1.0)
+
+
+def source_shell_kappa(
+    body: "RotatingBody",
+    encounter_radius_m: float,
+    gate: float,
+    *,
+    use_phase_geometry: bool,
+    legacy_m_shell: int,
+) -> float:
+    """Dynamic κ_φ: phase geometry when enabled, else legacy shell index."""
+    if use_phase_geometry:
+        return flyby_dynamic_kappa_phi_from_phase(body, encounter_radius_m, gate)
+    return flyby_dynamic_kappa_phi(legacy_m_shell, gate)
+
+
+def source_shell_gate_from_chord(q: CoveredChordQuadrature) -> float:
+    """
+    Geometry gate for the m=4 source-shell slot.
+
+    With inverse-square mass weights the signed moment can be one-sided even when
+    co/counter columns balance; ``gate_cancel`` uses the co/counter mass split.
+    ``gate_asym`` tracks endpoint net tangent bias.
+    """
+    denom = max(q.mean_volume_spin_shape, 1.0e-30)
+    co = max(q.mean_volume_corotating_projection, 0.0)
+    counter = max(q.mean_volume_counterrotating_projection, 0.0)
+    total = co + counter
+    if total <= 1.0e-30:
+        gate_cancel = 0.0
+    else:
+        gate_cancel = max(0.0, min(1.0, 4.0 * co * counter / (total * total)))
+    gate_asym = max(0.0, min(1.0, abs(q.mean_endpoint_net_projection) / denom))
+    return gate_cancel * gate_asym
+
+
+@dataclass
+class FrozenChordGate:
+    active: bool = False
+    kappa_blend: float = 1.0
+    r_ca_m: float = float("inf")
+    gate: float = 0.0
+
+
+@dataclass(frozen=True)
+class SpinProjectionAudit:
+    """Compare +z spin model vs SPICE IAU pole at a chord quadrature node."""
+
+    t_s: float
+    r_mag_m: float
+    axis_tilt_deg: float
+    proj_z: float
+    proj_spice: float
+    sign_flip: bool
+    n_rays: int
+
+
+@dataclass
+class ChordFlybyTrack:
+    """Precomputed κ blend vs radius for smooth whole-flyby chord sourcing."""
+
+    active: bool = False
+    r_m: tuple[float, ...] = ()
+    kappa_blend: tuple[float, ...] = ()
+    r_ca_m: float = float("inf")
+    r_escape_m: float = float("inf")
+    gate_peak: float = 0.0
+    n_track_samples: int = 0
+    n_quadrature_calls: int = 0
+    spin_audits: tuple[SpinProjectionAudit, ...] = ()
+
+
+_FROZEN_CHORD_GATE = FrozenChordGate()
+_CHORD_FLYBY_TRACK = ChordFlybyTrack()
+
+
+def clear_chord_kappa_cache() -> None:
+    global _FROZEN_CHORD_GATE, _CHORD_FLYBY_TRACK
+    _FROZEN_CHORD_GATE = FrozenChordGate()
+    _CHORD_FLYBY_TRACK = ChordFlybyTrack()
+
+
+def _interp_linear(x: float, xs: Sequence[float], ys: Sequence[float]) -> float:
+    if not xs:
+        return 1.0
+    if x <= xs[0]:
+        return ys[0]
+    if x >= xs[-1]:
+        return ys[-1]
+    for i in range(len(xs) - 1):
+        if xs[i] <= x <= xs[i + 1]:
+            span = xs[i + 1] - xs[i]
+            if span <= 0.0:
+                return ys[i + 1]
+            t = (x - xs[i]) / span
+            return ys[i] * (1.0 - t) + ys[i + 1] * t
+    return ys[-1]
+
+
+def chord_flyby_envelope(
+    r_mag: float,
+    r_ca: float,
+    body_radius: float,
+    r_escape: float,
+) -> float:
+    """Unit weight through the encounter shell; smooth taper only toward ``r_escape``."""
+    del r_ca  # exit emphasis is in the track, not a periapsis spike
+    if r_mag > r_escape or r_mag < body_radius:
+        return 0.0
+    r_plateau = 12.0 * body_radius
+    if r_mag <= r_plateau:
+        return 1.0
+    span = max(r_escape - r_plateau, body_radius)
+    return math.exp(-0.5 * ((r_mag - r_plateau) / span) ** 2)
+
+
+def chord_encounter_window(
+    r_mag: float,
+    r_ca: float,
+    body_radius: float,
+    *,
+    width_radii: float = 2.0,
+) -> float:
+    """Legacy CA-localized window (used when ``chord_gate_freeze_at_ca``)."""
+    dr = (r_mag - r_ca) / max(body_radius, 1.0)
+    return math.exp(-0.5 * (dr / max(width_radii, 0.25)) ** 2)
+
+
+def prepare_frozen_chord_gate(
+    case: FlybyCase,
+    body: RotatingBody,
+    coupling: HQIVOrbitCoupling,
+    settings: PropagationSettings,
+    spin_sign: float = 1.0,
+) -> FrozenChordGate:
+    """Find CA with classical propagation, then freeze chord gate/kappa at that geometry."""
+    global _FROZEN_CHORD_GATE
+    _FROZEN_CHORD_GATE = FrozenChordGate()
+    if not coupling.chord_source_gate or not coupling.chord_gate_freeze_at_ca:
+        return _FROZEN_CHORD_GATE
+
+    ca_state, r_ca = find_closest_approach_state(case, body, settings, spin_sign)
+    try:
+        q = covered_chord_quadrature(
+            ca_state.r,
+            ca_state.v,
+            body,
+            angular_step_deg=coupling.chord_gate_step_deg,
+            chord_samples=coupling.chord_gate_samples,
+            spin_sign=spin_sign,
+        )
+        gate = source_shell_gate_from_chord(q)
+        kappa = source_shell_kappa(
+            body,
+            _norm(ca_state.r),
+            gate,
+            use_phase_geometry=coupling.phase_geometry_source,
+            legacy_m_shell=coupling.source_kappa_m_shell,
+        )
+        blend = 1.0 + coupling.chord_gate_strength * (kappa - 1.0)
+    except ValueError:
+        gate = 0.0
+        blend = 1.0
+    _FROZEN_CHORD_GATE = FrozenChordGate(True, blend, r_ca, gate)
+    return _FROZEN_CHORD_GATE
+
+
+def verify_spin_projection_at_node(
+    r: Vec3,
+    v: Vec3,
+    body: RotatingBody,
+    spice_axis_hat: Vec3,
+    *,
+    spin_sign: float = 1.0,
+    t_s: float = 0.0,
+    n_rays: int = 0,
+) -> SpinProjectionAudit:
+    """Signed ω×r̂·v̂ at a quadrature node: nominal +z vs SPICE pole."""
+    z_body = body
+    spice_body = replace(body, spin_axis_hat=_unit(spice_axis_hat))
+    v_hat = _unit(v)
+    proj_z = _surface_signed_tangent_projection(
+        r, v_hat, _scale(z_body.spin_vector(), spin_sign)
+    )
+    proj_spice = _surface_signed_tangent_projection(
+        r, v_hat, _scale(spice_body.spin_vector(), spin_sign)
+    )
+    axis_tilt = angle_between_deg((0.0, 0.0, 1.0), _unit(spice_axis_hat))
+    sign_flip = proj_z * proj_spice < 0.0 and abs(proj_z) > 1.0e-4 and abs(proj_spice) > 1.0e-4
+    return SpinProjectionAudit(
+        t_s=t_s,
+        r_mag_m=_norm(r),
+        axis_tilt_deg=axis_tilt,
+        proj_z=proj_z,
+        proj_spice=proj_spice,
+        sign_flip=sign_flip,
+        n_rays=n_rays,
+    )
+
+
+def prepare_chord_flyby_track(
+    case: FlybyCase,
+    body: RotatingBody,
+    coupling: HQIVOrbitCoupling,
+    settings: PropagationSettings,
+    spin_sign: float = 1.0,
+    *,
+    spice_spin_axis: Callable[[float], Vec3] | None = None,
+) -> ChordFlybyTrack:
+    """
+    Classical pass: uniform inbound/outbound samples; quadrature only on new chord count.
+
+    Collects states inside the encounter shell, subsamples evenly along the trajectory,
+    and reruns ``covered_chord_quadrature`` only when ``q.n_rays`` changes.  Between
+    topology plateaus the last κ blend is held while radius samples still advance.
+    """
+    global _CHORD_FLYBY_TRACK
+    _CHORD_FLYBY_TRACK = ChordFlybyTrack()
+    if not coupling.chord_source_gate or not coupling.chord_gate_use_track:
+        return _CHORD_FLYBY_TRACK
+
+    r_max = coupling.chord_gate_max_radius_factor * max(body.radius, 1.0)
+    r_escape = max(settings.r_escape, case.r_start * 0.85)
+    collect_stride = max(int(coupling.chord_track_collect_stride), 1)
+    n_target = max(int(coupling.chord_track_target_samples), 4)
+
+    state = flyby_initial_state(case, body)
+    r_ca = float("inf")
+    ca_step = 0
+    encounter: list[tuple[float, float, Vec3, Vec3]] = []
+    n_steps_max = int(settings.t_max / settings.dt)
+
+    for step in range(n_steps_max):
+        r_mag = _norm(state.r)
+        radial_motion = _dot(state.r, state.v) / max(r_mag, 1.0)
+        if r_mag < r_ca:
+            r_ca = r_mag
+            ca_step = step
+        if r_mag <= r_max and step % collect_stride == 0:
+            encounter.append((r_mag, state.t, state.r, state.v))
+        state = rk4_step(state, body, None, settings, spin_sign, case)
+        if (
+            step > ca_step + 20
+            and r_mag >= r_escape
+            and radial_motion > 0.0
+        ):
+            break
+
+    if not encounter:
+        return _CHORD_FLYBY_TRACK
+
+    n_enc = len(encounter)
+    if n_enc <= n_target:
+        picks = list(range(n_enc))
+    else:
+        picks = [
+            int(round(k * (n_enc - 1) / (n_target - 1))) for k in range(n_target)
+        ]
+    ca_enc_idx = min(range(n_enc), key=lambda i: encounter[i][0])
+    pick_set = set(picks)
+    pick_set.add(ca_enc_idx)
+    picks = sorted(pick_set)
+
+    samples_r: list[float] = []
+    samples_k: list[float] = []
+    audits: list[SpinProjectionAudit] = []
+    gate_peak = 0.0
+    last_n_rays = -1
+    last_grid_key: tuple[int, int] | None = None
+    last_blend = 1.0
+    n_quadrature_calls = 0
+    step_deg = coupling.chord_gate_step_deg
+
+    for idx in picks:
+        r_mag, t_s, r_vec, v_vec = encounter[idx]
+        grid_key = chord_ray_grid_key(r_mag, body, angular_step_deg=step_deg)
+        if grid_key == (0, 0):
+            continue
+        quad_body = body
+        if spice_spin_axis is not None:
+            quad_body = replace(body, spin_axis_hat=_unit(spice_spin_axis(t_s)))
+        try:
+            if last_grid_key is None or grid_key != last_grid_key:
+                q = covered_chord_quadrature(
+                    r_vec,
+                    v_vec,
+                    quad_body,
+                    angular_step_deg=step_deg,
+                    chord_samples=coupling.chord_gate_samples,
+                    spin_sign=spin_sign,
+                )
+                last_grid_key = grid_key
+                if q.n_rays != last_n_rays:
+                    gate = source_shell_gate_from_chord(q)
+                    gate_peak = max(gate_peak, gate)
+                    kappa = source_shell_kappa(
+                        body,
+                        r_mag,
+                        gate,
+                        use_phase_geometry=coupling.phase_geometry_source,
+                        legacy_m_shell=coupling.source_kappa_m_shell,
+                    )
+                    last_blend = 1.0 + coupling.chord_gate_strength * (kappa - 1.0)
+                    last_n_rays = q.n_rays
+                    n_quadrature_calls += 1
+                if spice_spin_axis is not None:
+                    audits.append(
+                        verify_spin_projection_at_node(
+                            r_vec,
+                            v_vec,
+                            body,
+                            spice_spin_axis(t_s),
+                            spin_sign=spin_sign,
+                            t_s=t_s,
+                            n_rays=q.n_rays,
+                        )
+                    )
+            samples_r.append(r_mag)
+            samples_k.append(last_blend)
+        except ValueError:
+            continue
+
+    if not samples_r:
+        return _CHORD_FLYBY_TRACK
+
+    paired = sorted(zip(samples_r, samples_k), key=lambda pair: pair[0])
+    r_m = tuple(r for r, _ in paired)
+    kappa_blend = tuple(k for _, k in paired)
+    _CHORD_FLYBY_TRACK = ChordFlybyTrack(
+        active=True,
+        r_m=r_m,
+        kappa_blend=kappa_blend,
+        r_ca_m=r_ca,
+        r_escape_m=r_escape,
+        gate_peak=gate_peak,
+        n_track_samples=len(r_m),
+        n_quadrature_calls=n_quadrature_calls,
+        spin_audits=tuple(audits),
+    )
+    return _CHORD_FLYBY_TRACK
+
+
+def chord_horizon_kappa_factor(
+    r: Vec3,
+    v: Vec3,
+    body: RotatingBody,
+    coupling: HQIVOrbitCoupling,
+    spin_sign: float = 1.0,
+    *,
+    settings: PropagationSettings | None = None,
+    case: FlybyCase | None = None,
+) -> float:
+    """Dynamic ``K_φ(m_s,g_s)`` from chord quadrature; unity when gate is off or far."""
+    if not coupling.chord_source_gate:
+        return 1.0
+    r_mag = _norm(r)
+    if r_mag > coupling.chord_gate_max_radius_factor * max(body.radius, 1.0):
+        return 1.0
+
+    if coupling.chord_gate_use_track and _CHORD_FLYBY_TRACK.active:
+        kappa_target = _interp_linear(
+            r_mag, _CHORD_FLYBY_TRACK.r_m, _CHORD_FLYBY_TRACK.kappa_blend
+        )
+        w = chord_flyby_envelope(
+            r_mag,
+            _CHORD_FLYBY_TRACK.r_ca_m,
+            body.radius,
+            _CHORD_FLYBY_TRACK.r_escape_m,
+        )
+        return 1.0 + w * (kappa_target - 1.0)
+
+    if coupling.chord_gate_freeze_at_ca:
+        if not _FROZEN_CHORD_GATE.active:
+            return 1.0
+        w = chord_encounter_window(r_mag, _FROZEN_CHORD_GATE.r_ca_m, body.radius)
+        return 1.0 + w * (_FROZEN_CHORD_GATE.kappa_blend - 1.0)
+
+    return 1.0
+
+
+def visible_source_quadrature(
+    r_probe: Vec3,
+    v_probe: Vec3,
+    body: RotatingBody,
+    *,
+    angular_step_deg: float = 1.0,
+    spin_sign: float = 1.0,
+) -> VisibleSourceQuadrature:
+    """
+    Integrate the angular coverage of an extended rotating source as seen by a probe.
+
+    The quadrature samples the body's surface in latitude/longitude cells and weights
+    each visible patch by its apparent solid angle, `dΩ = cos(emission) dA / distance²`.
+    This is a diagnostic bridge toward a distributed source-shell gate: Earth at low
+    altitude covers a large solid angle, while Sun/Moon-like distant bodies cover tiny
+    angular disks.
+    """
+    r_obs = _norm(r_probe)
+    radius = max(body.radius, 1.0)
+    if r_obs <= radius:
+        raise ValueError("probe must be outside the source surface")
+
+    step = max(float(angular_step_deg), 0.05)
+    dtheta = math.radians(step)
+    dphi = math.radians(step)
+    v_hat = _unit(v_probe)
+    omega_vec = _scale(body.spin_vector(), spin_sign)
+
+    solid_angle = 0.0
+    weighted_signed_projection = 0.0
+    weighted_projection = 0.0
+    weighted_corotating_projection = 0.0
+    weighted_counterrotating_projection = 0.0
+    weighted_sin2 = 0.0
+    weighted_signed_spin_shape = 0.0
+    weighted_spin_shape = 0.0
+    weighted_counter_spin_shape = 0.0
+    weighted_lt_shape = 0.0
+    n_visible = 0
+
+    n_theta = max(1, int(math.ceil(180.0 / step)))
+    n_phi = max(1, int(math.ceil(360.0 / step)))
+    for i in range(n_theta):
+        theta = (i + 0.5) * math.pi / n_theta  # colatitude
+        sin_theta = math.sin(theta)
+        cos_theta = math.cos(theta)
+        for j in range(n_phi):
+            phi = (j + 0.5) * 2.0 * math.pi / n_phi
+            normal = (
+                sin_theta * math.cos(phi),
+                sin_theta * math.sin(phi),
+                cos_theta,
+            )
+            patch = _scale(normal, radius)
+            to_probe = _add(r_probe, patch, -1.0)
+            distance = _norm(to_probe)
+            if distance <= 0.0:
+                continue
+            cos_emit = _dot(normal, to_probe) / distance
+            if cos_emit <= 0.0:
+                continue
+            d_area = radius * radius * sin_theta * (math.pi / n_theta) * (2.0 * math.pi / n_phi)
+            d_omega = cos_emit * d_area / (distance * distance)
+            if d_omega <= 0.0:
+                continue
+
+            tangent = _cross(omega_vec, patch)
+            tangent_hat = _unit(tangent) if _norm(tangent) > 0.0 else (0.0, 0.0, 0.0)
+            signed_projection = _dot(v_hat, tangent_hat)
+            tangent_projection = abs(signed_projection)
+            corotating_projection = max(0.0, signed_projection)
+            counterrotating_projection = max(0.0, -signed_projection)
+            sin2_colat = 1.0 - normal[2] * normal[2]
+
+            solid_angle += d_omega
+            weighted_signed_projection += d_omega * signed_projection
+            weighted_projection += d_omega * tangent_projection
+            weighted_corotating_projection += d_omega * corotating_projection
+            weighted_counterrotating_projection += d_omega * counterrotating_projection
+            weighted_sin2 += d_omega * sin2_colat
+            weighted_signed_spin_shape += d_omega * sin2_colat * signed_projection
+            weighted_spin_shape += d_omega * sin2_colat * tangent_projection
+            weighted_counter_spin_shape += d_omega * sin2_colat * counterrotating_projection
+            # L-T release keeps the source latitude gate separate from the spacecraft
+            # angular-momentum gate, which is handled by `rho_pol` in the trajectory layer.
+            weighted_lt_shape += d_omega * sin2_colat
+            n_visible += 1
+
+    angular_radius = math.asin(min(1.0, radius / r_obs))
+    analytic_solid_angle = 2.0 * math.pi * (1.0 - math.cos(angular_radius))
+    denom = max(solid_angle, 1.0e-30)
+    return VisibleSourceQuadrature(
+        angular_step_deg=step,
+        n_visible_samples=n_visible,
+        angular_radius_deg=math.degrees(angular_radius),
+        angular_diameter_deg=2.0 * math.degrees(angular_radius),
+        solid_angle_sr=solid_angle,
+        analytic_solid_angle_sr=analytic_solid_angle,
+        covered_sky_fraction=solid_angle / (4.0 * math.pi),
+        visible_hemisphere_fraction=solid_angle / (2.0 * math.pi),
+        mean_signed_tangent_projection=weighted_signed_projection / denom,
+        mean_tangent_projection=weighted_projection / denom,
+        mean_corotating_projection=weighted_corotating_projection / denom,
+        mean_counterrotating_projection=weighted_counterrotating_projection / denom,
+        mean_sin2_colatitude=weighted_sin2 / denom,
+        mean_signed_spin_lapse_shape=weighted_signed_spin_shape / denom,
+        mean_spin_lapse_shape=weighted_spin_shape / denom,
+        mean_counter_spin_lapse_shape=weighted_counter_spin_shape / denom,
+        mean_lense_thirring_shape=weighted_lt_shape / denom,
+    )
 
 
 def _rotate_ecliptic_to_equatorial(v: Vec3) -> Vec3:
@@ -382,15 +1222,19 @@ class RotatingBody:
     radius: float
     j2: float
     omega: float  # rad/s, spin vector = (0, 0, omega)
-    m_shell: int = 4  # referenceM proton anchor for φ readout (Earth); 0 for Sun horizon
-    phi_ref: float | None = None  # defaults to phi_of_shell(m_shell)
+    m_shell: int = 4  # legacy label; orbital φ uses propagation_shell_for_orbitals()
+    phi_ref: float | None = None  # defaults to 1 (homogeneous solar-system reference)
     readout_radius: float | None = None  # lapse scale R in φ/(1+r/R); default `radius`
+    #: Optional IAU pole in J2000 equatorial coords (from SPICE); default +z.
+    spin_axis_hat: Vec3 | None = None
 
     def spin_vector(self) -> Vec3:
-        return (0.0, 0.0, self.omega)
+        axis = spin_axis_unit(self)
+        return _scale(axis, self.omega)
 
     def phi_reference(self) -> float:
-        return self.phi_ref if self.phi_ref is not None else phi_of_shell(self.m_shell)
+        """Homogeneous reference for G_eff ratios (same band system-wide)."""
+        return self.phi_ref if self.phi_ref is not None else 1.0
 
     def lapse_radius(self) -> float:
         return self.readout_radius if self.readout_radius is not None else self.radius
@@ -398,10 +1242,10 @@ class RotatingBody:
 
 @dataclass
 class HQIVOrbitCoupling:
-    """Scales for chart-level O-Maxwell / fluid probes (dimensionless → m/s²)."""
+    """Scales for chart-level O-Maxwell / fluid probes."""
 
-    vacuum_scale: float = 1.0  # multiplies g_vac after chart formula
-    metric_phi_scale: float = 1.0  # multiplies (α/4π) log(φ+1) ∇φ
+    vacuum_scale: float = 1.0  # unity when φ is SI; spin channel off in nominal runs
+    metric_phi_scale: float = 1.0  # unity; α/(4π) already in chart formula
     geff_on_newton: bool = True
     #: Apply G_eff = lapse^α as a global time-rescaling on the total 3-vector acceleration
     #: (vectors built first, then scaled). When False, G_eff folds into Newton/J2 source GM.
@@ -436,6 +1280,8 @@ class HQIVOrbitCoupling:
     lapse_drag_lense_thirring: bool = True
     #: Override for L-T vs isotropic split; None ⇒ derived from γ and geometry (not 0.5).
     lapse_drag_vector_fraction: float | None = None
+    #: Require polar-fiber release above γ before opening the L-T vector channel.
+    lapse_drag_coherence_gate: bool = False
     #: Weight screen by |L_z|/|L| and colatitude (pole exits less screened than equator).
     angular_momentum_screen: bool = True
     #: Add changing orbital angular rate r|dω_orb/dt| to the local Rindler inertia scale.
@@ -444,6 +1290,27 @@ class HQIVOrbitCoupling:
     velocity_screen: bool = True
     kappa_l: float = 0.0  # optional longitudinal stress along velocity (0 = off)
     density_proxy: float = 1.0  # kg/m³ scale for κ_L channel only
+    #: Chord-quadrature gate for Lean ``flybyDynamicKappaPhiFromPhase`` on the horizon boost.
+    chord_source_gate: bool = False
+    #: Use orbital phase geometry (inverse-square ρ_orb) instead of legacy shell-4 κ.
+    phase_geometry_source: bool = True
+    source_kappa_m_shell: int = 4  # legacy fallback when ``phase_geometry_source`` is False
+    #: Blend toward full dynamic kappa: 1 ⇒ ``K_φ=5`` at gate=1 and m=4; 0 ⇒ point-like.
+    chord_gate_strength: float = 1.0
+    chord_gate_step_deg: float = 2.0
+    chord_gate_samples: int = 4
+    chord_gate_max_radius_factor: float = 15.0
+    #: Legacy: single CA snapshot (off by default; use track instead).
+    chord_gate_freeze_at_ca: bool = False
+    #: Coarse classical track + smooth interpolation over the encounter shell.
+    chord_gate_use_track: bool = True
+    #: States recorded every N steps while inside the encounter shell.
+    chord_track_collect_stride: int = 10
+    #: Uniform subsample count along the full inbound+outbound encounter.
+    chord_track_target_samples: int = 48
+    #: Deprecated (unused): kept for API compatibility.
+    chord_track_stride_steps: int = 80
+    chord_track_min_dr_m: float = 250_000.0
 
 
 @dataclass(frozen=True)
@@ -489,21 +1356,25 @@ class PropagationSettings:
 
 
 def phi_readout(r: Vec3, body: RotatingBody) -> float:
-    """Shell φ with radial lapse-like attenuation: φ(m) / (1 + |r|/R)."""
+    """Geometric lapse modulation; identical propagation-shell band across the solar system."""
     r_mag = _norm(r)
-    base = phi_of_shell(body.m_shell)
     r_lapse = body.lapse_radius()
-    return base / (1.0 + r_mag / r_lapse)
+    return 1.0 / (1.0 + r_mag / r_lapse)
 
 
 def phi_gradient(r: Vec3, body: RotatingBody) -> Vec3:
+    """∇ of the geometric φ readout (dimensionless)."""
     r_mag = max(_norm(r), body.lapse_radius() * 1e-6)
-    base = phi_of_shell(body.m_shell)
     r_lapse = body.lapse_radius()
     denom = (1.0 + r_mag / r_lapse) ** 2
-    dphi_dr = -base / r_lapse / denom
+    dphi_dr = -1.0 / r_lapse / denom
     r_hat = _scale(r, 1.0 / r_mag)
     return _scale(r_hat, dphi_dr)
+
+
+def phi_gradient_si(r: Vec3, body: RotatingBody) -> Vec3:
+    """SI gradient of φ_hom × geometric lapse."""
+    return _scale(phi_gradient(r, body), phi_acceleration_homogeneous_si())
 
 
 def dot_theta_prime(r: Vec3, body: RotatingBody, spin_sign: float = 1.0) -> float:
@@ -521,11 +1392,13 @@ def dot_theta_prime(r: Vec3, body: RotatingBody, spin_sign: float = 1.0) -> floa
     return _dot(tangential, e_phi) / denom
 
 
-def oblate_latitude_factor(r: Vec3) -> float:
+def oblate_latitude_factor(r: Vec3, body: RotatingBody | None = None) -> float:
     """
     J₂ weighting vs colatitude: peaks at equator (sin²θ = 1), vanishes on spin axis.
     Used to report how strongly a trajectory samples oblate coupling.
     """
+    if body is not None:
+        return spin_colatitude_sin_sq(r, body)
     r_mag = max(_norm(r), 1e-9)
     cos_colat = abs(r[2]) / r_mag
     return 1.0 - cos_colat * cos_colat
@@ -563,11 +1436,13 @@ def phi_acceleration_si(r: Vec3, body: RotatingBody) -> float:
     """
     Local φ as an acceleration scale (m/s²) for the inertia screen.
 
-    Uses φ_hom = 2cH modulated by the shell readout φ(m)/(1+|r|/R) relative to the anchor shell.
+    Uses φ_hom = 2cH modulated by radial geometry.  Solar-system propagation uses
+    ξ = 1 (not shell 4).  Earth's local curvature supplies a small multiplicative
+    delta from orbital phase geometry when available.
     """
-    phi_hom = phi_acceleration_homogeneous_si()
-    shell_mod = phi_readout(r, body) / max(body.phi_reference(), 1e-30)
-    return phi_hom * shell_mod
+    base = phi_acceleration_homogeneous_si() * phi_readout(r, body)
+    delta = orbital_curvature_mass_delta_at(body, _norm(r))
+    return base * (1.0 + delta)
 
 
 def orbital_angular_velocity(r: Vec3, v: Vec3) -> Vec3:
@@ -670,17 +1545,15 @@ def co_spin_lapse_fraction(
     if body.omega == 0.0 or body.radius <= 0.0:
         return 0.0
     r_mag = max(_norm(r), body.radius)
-    e_phi = equatorial_phi_hat(r)
-    if _norm(e_phi) <= 0.0:
-        return 0.0
-    sin_colat = math.hypot(r[0], r[1]) / r_mag if use_colatitude else 1.0
+    sin_colat = math.sqrt(spin_colatitude_sin_sq(r, body)) if use_colatitude else 1.0
     v_tangent = abs(body.omega) * body.radius * sin_colat
     if v is None:
         projection = sin_colat if use_colatitude else 1.0
     else:
-        v_hat = _unit(v)
-        tangent_hat = _scale(e_phi, 1.0 if spin_sign >= 0.0 else -1.0)
-        projection = abs(_dot(v_hat, tangent_hat))
+        tangent_hat = co_spin_tangent_hat(r, body, spin_sign)
+        if _norm(tangent_hat) <= 0.0:
+            return 0.0
+        projection = abs(_dot(_unit(v), tangent_hat))
     eps = 2.0 * (v_tangent / C_LIGHT) * projection * (body.radius / r_mag) ** radial_power
     if use_colatitude:
         eps *= sin_colat
@@ -724,18 +1597,25 @@ def phi_horizon_boost_acceleration_si(
     body: RotatingBody,
     coupling: HQIVOrbitCoupling | None,
     case: FlybyCase | None,
+    spin_sign: float = 1.0,
+    settings: PropagationSettings | None = None,
 ) -> float:
     """Horizon-only φ boost `6 a_loc ε` (metric channel; not in particle φ_eff when repartitioned)."""
     if coupling is None or not coupling.lapse_drag_phi:
         return 0.0
     if not coupling.horizon_repartition:
         return 0.0
-    return 6.0 * local_acceleration_scale(
+    eps = horizon_lapse_fraction(r, v, body, coupling, case, spin_sign=spin_sign)
+    boost = 6.0 * local_acceleration_scale(
         r,
         v,
         a_grav,
         include_orbital_angular_rindler=coupling.orbital_angular_rindler,
-    ) * horizon_lapse_fraction(r, v, body, coupling, case)
+    ) * eps
+    boost *= chord_horizon_kappa_factor(
+        r, v, body, coupling, spin_sign, settings=settings, case=case
+    )
+    return boost
 
 
 def inertia_factor_blend_at_point(
@@ -782,6 +1662,13 @@ def polar_fiber_release_fraction(r: Vec3, v: Vec3, h_ref: float) -> float:
     return max(0.0, 1.0 - L_z_ref_frac * L_z_ref_frac)
 
 
+def horizon_vector_coherence_gate(rho_pol: float, threshold: float = GAMMA_HQIV) -> float:
+    """Open L-T only when polar-fiber release exceeds the HQIV overlap γ."""
+    if threshold >= 1.0:
+        return 0.0
+    return max(0.0, min(1.0, (rho_pol - threshold) / (1.0 - threshold)))
+
+
 def derived_horizon_vector_fraction(
     r: Vec3,
     v: Vec3,
@@ -796,9 +1683,11 @@ def derived_horizon_vector_fraction(
     Lean monogamy ledger: α=3/5 imprint/time (G_eff), γ=2/5 horizon overlap/tangent.
     The vector channel fraction is therefore γ on the unit split, modulated by geometry:
 
-      λ = γ × sin²θ × ρ_pol × 𝟙_{ω×r̂≠0}
+      λ = γ × sin²θ × ρ_pol × g_coh × 𝟙_{ω×r̂≠0}
 
     where ρ_pol = 1 − (h_z/h_ref)² is the polar-fiber release (low |L_z| ⇒ more 3-vector).
+    Optional `g_coh` is zero until ρ_pol exceeds γ, so modest release stays in the
+    isotropic trace channel instead of over-rotating asymmetric trajectories.
     Isotropic g_μν trace carries the complement 1 − λ (α-dominated when λ→0).
     """
     if coupling.lapse_drag_vector_fraction is not None:
@@ -811,10 +1700,11 @@ def derived_horizon_vector_fraction(
         specific_angular_momentum(r, v), 1.0
     )
 
-    sin2 = oblate_latitude_factor(r) if coupling.lapse_drag_colatitude else 1.0
+    sin2 = oblate_latitude_factor(r, body) if coupling.lapse_drag_colatitude else 1.0
     rho_pol = polar_fiber_release_fraction(r, v, h_ref)
+    coherence = horizon_vector_coherence_gate(rho_pol) if coupling.lapse_drag_coherence_gate else 1.0
 
-    return max(0.0, min(1.0, GAMMA_HQIV * sin2 * rho_pol))
+    return max(0.0, min(1.0, GAMMA_HQIV * sin2 * rho_pol * coherence))
 
 
 def lense_thirring_direction(r: Vec3, body: RotatingBody, spin_sign: float = 1.0) -> Vec3:
@@ -860,7 +1750,9 @@ def horizon_metric_accel(
     ):
         return (0.0, 0.0, 0.0)
     phi_part = phi_acceleration_si(r, body)
-    phi_full = phi_part + phi_horizon_boost_acceleration_si(r, v, a_grav, body, coupling, case)
+    phi_full = phi_part + phi_horizon_boost_acceleration_si(
+        r, v, a_grav, body, coupling, case, spin_sign, settings
+    )
     if phi_full <= phi_part:
         return (0.0, 0.0, 0.0)
     f_part = inertia_factor_blend_at_point(r, v, a_grav, body, coupling, settings, phi_part)
@@ -966,7 +1858,9 @@ def angular_momentum_inertia_screen_weight(
 
     # Polar fiber: ρ_pol from asymptotic |L_z|; φ boost from h_ref / h_z,eff (ladder floor)
     polar_release = max(0.0, 1.0 - L_z_ref_frac * L_z_ref_frac)
-    phi_polar = phi_a * polar_fiber_phi_boost(h_z, h, h_ref, polar_release, body.m_shell)
+    phi_polar = phi_a * polar_fiber_phi_boost(
+        h_z, h, h_ref, polar_release, propagation_shell_for_orbitals()
+    )
     f_pol = hqiv_inertia_factor(a_rad, phi_polar)
 
     sin2_colat = oblate_latitude_factor(r)
@@ -1109,18 +2003,18 @@ def hqiv_perturbation_accel(
     screen_weight: float = 1.0,
     v_screen: float = 1.0,
 ) -> Vec3:
-    phi = phi_readout(r, body)
-    gp = phi_gradient(r, body)
+    phi_si = phi_acceleration_si(r, body)
+    gp = phi_gradient_si(r, body)
     dot = dot_theta_prime(r, body, spin_sign)
     gd = grad_dot_theta_prime(r, body, spin_sign)
     if coupling.horizon_repartition and coupling.suppress_vacuum_spin_coupling:
         dot = 0.0
         gd = (0.0, 0.0, 0.0)
 
-    g_vac = vacuum_momentum_source3(GAMMA_HQIV, phi, dot, gp, gd)
+    g_vac = vacuum_momentum_source3(GAMMA_HQIV, phi_si, dot, gp, gd)
     a_vac = _scale(g_vac, coupling.vacuum_scale)
 
-    lam = coupling_log(phi)
+    lam = coupling_log(max(phi_si / max(phi_acceleration_homogeneous_si(), 1e-30), 0.0))
     a_metric = _scale(gp, coupling.metric_phi_scale * (ALPHA_HQIV / (4.0 * math.pi)) * lam)
 
     a_long = (0.0, 0.0, 0.0)
@@ -1172,7 +2066,7 @@ def total_accel(
     ):
         phi_part = phi_acceleration_si(r, body)
         phi_full = phi_part + phi_horizon_boost_acceleration_si(
-            r, v, a_grav_probe, body, coupling, case
+            r, v, a_grav_probe, body, coupling, case, spin_sign, settings
         )
         if phi_full > phi_part:
             f_hor = inertia_factor_blend_at_point(
@@ -1308,6 +2202,32 @@ def rk4_step(
     return OrbitState(r=r_new, v=v_new, t=state.t + dt)
 
 
+def find_closest_approach_state(
+    case: FlybyCase,
+    body: RotatingBody,
+    settings: PropagationSettings,
+    spin_sign: float = 1.0,
+) -> tuple[OrbitState, float]:
+    """Lightweight classical pass to locate periapsis for chord-gate freezing."""
+    state = flyby_initial_state(case, body)
+    r_ca = float("inf")
+    state_ca = state
+    ca_step = 0
+    n_steps_max = int(settings.t_max / settings.dt)
+    escape_r_stop = max(settings.r_escape, case.r_start * 0.85)
+    for step in range(n_steps_max):
+        r_mag = _norm(state.r)
+        radial_motion = _dot(state.r, state.v) / max(r_mag, 1.0)
+        if r_mag < r_ca:
+            r_ca = r_mag
+            state_ca = state
+            ca_step = step
+        state = rk4_step(state, body, None, settings, spin_sign, case)
+        if step > ca_step + 20 and r_mag >= escape_r_stop and radial_motion > 0.0:
+            break
+    return state_ca, r_ca
+
+
 def propagate_flyby(
     case: FlybyCase,
     body: RotatingBody,
@@ -1321,6 +2241,18 @@ def propagate_flyby(
     )
     spin_sign = case.spin_sign
     state = flyby_initial_state(case, body)
+    frozen_gate: FrozenChordGate | None = None
+    chord_track: ChordFlybyTrack | None = None
+    if coupling is not None and coupling.chord_source_gate:
+        clear_chord_kappa_cache()
+        if coupling.chord_gate_use_track and not coupling.chord_gate_freeze_at_ca:
+            chord_track = prepare_chord_flyby_track(
+                case, body, coupling, settings, spin_sign
+            )
+        elif coupling.chord_gate_freeze_at_ca:
+            frozen_gate = prepare_frozen_chord_gate(
+                case, body, coupling, settings, spin_sign
+            )
 
     r_ca = float("inf")
     t_ca = 0.0
@@ -1467,6 +2399,26 @@ def propagate_flyby(
         )
         if r_ca < float("inf")
         else float("nan"),
+        "chord_source_gate": (
+            float(chord_track.gate_peak)
+            if chord_track and chord_track.active
+            else float(frozen_gate.gate)
+            if frozen_gate and frozen_gate.active
+            else float("nan")
+        ),
+        "chord_kappa_blend": (
+            max(chord_track.kappa_blend)
+            if chord_track and chord_track.active and chord_track.kappa_blend
+            else float(frozen_gate.kappa_blend)
+            if frozen_gate and frozen_gate.active
+            else float("nan")
+        ),
+        "chord_track_samples": float(chord_track.n_track_samples)
+        if chord_track and chord_track.active
+        else 0.0,
+        "chord_quadrature_calls": float(chord_track.n_quadrature_calls)
+        if chord_track and chord_track.active
+        else 0.0,
         "reported_anomaly_mm_s": case.reported_anomaly_mm_s,
         "n_steps": float(steps_taken),
         "n_steps_max": float(n_steps_max),
@@ -1827,10 +2779,10 @@ def run_all_flybys(
 
 
 def paper_nominal_coupling() -> HQIVOrbitCoupling:
-    """Coupling documented in papers/hqiv_orbital_flyby_anomaly.tex §5 (repartitioned horizon)."""
+    """Coupling documented in papers/orbital_flyby (repartitioned horizon)."""
     return HQIVOrbitCoupling(
-        vacuum_scale=50.0,
-        metric_phi_scale=5.0,
+        vacuum_scale=1.0,
+        metric_phi_scale=1.0,
         geff_on_newton=True,
         paper_inertia_screen=True,
         modified_inertia_geodesic=True,
@@ -1843,6 +2795,24 @@ def paper_nominal_coupling() -> HQIVOrbitCoupling:
         angular_momentum_screen=True,
         orbital_angular_rindler=True,
         velocity_screen=True,
+    )
+
+
+def paper_chord_source_coupling() -> HQIVOrbitCoupling:
+    """Nominal repartitioned horizon plus chord-gated phase-geometry source boost."""
+    return replace(
+        paper_nominal_coupling(),
+        chord_source_gate=True,
+        phase_geometry_source=True,
+        source_kappa_m_shell=4,
+        chord_gate_strength=1.0,
+        chord_gate_step_deg=2.0,
+        chord_gate_samples=4,
+        chord_gate_use_track=True,
+        chord_gate_freeze_at_ca=False,
+        chord_track_collect_stride=10,
+        chord_track_target_samples=48,
+        lapse_drag_coherence_gate=True,
     )
 
 
@@ -2021,7 +2991,7 @@ def main(argv: Sequence[str] | None = None) -> int:
     parser.add_argument(
         "--paper-nominal",
         action="store_true",
-        help="use vacuum_scale=50, metric_phi_scale=5 (paper §5 defaults)",
+        help="use nominal coupling (κ=1, φ_hom geometric readout, spin vacuum off)",
     )
     args = parser.parse_args(argv)
 
@@ -2189,7 +3159,7 @@ def main(argv: Sequence[str] | None = None) -> int:
     if args.scan_scale:
         print(f"\nScale scan for {case.label} (target {case.reported_anomaly_mm_s} mm/s):")
         for scale in (0.0, 1.0, 10.0, 50.0, 100.0, 500.0, 1000.0, 5000.0, 10000.0):
-            c = HQIVOrbitCoupling(vacuum_scale=scale, metric_phi_scale=max(scale / 10.0, 1.0))
+            c = HQIVOrbitCoupling(vacuum_scale=scale, metric_phi_scale=scale)
             row = compare_classical_vs_hqiv(case, body, c, settings)
             excess = float(row["hqiv_minus_classical_mm_s"])
             print(f"  vacuum_scale={scale:8.0f}  HQIV−classical={excess:12.4f} mm/s")

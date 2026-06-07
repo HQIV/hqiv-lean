@@ -1030,8 +1030,8 @@ status clear.
 
 The pattern is built from two HQIV-fundamental integers:
 
-* `referenceM = 4` — proton-anchor mode count on the discrete null
-  lattice (independently locks `m_proton = 938.272 MeV` exactly).
+* `referenceM = 4` — hadronic **export pin** on the discrete null lattice (calibrates
+  `m_proton = 938.272 MeV` on the nucleon network chart; not derived from first principles).
 * `q = 5` — denominator of `α = p/q = 3/5` in the informational
   monogamy relation `α = (n+1)(n+2)(n+3) / (q · cumLatticeSimplexCount(n))`.
 

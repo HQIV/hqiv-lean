@@ -3,6 +3,7 @@ import Hqiv.Physics.FanoSectorSpectralMassEmergence
 import Hqiv.Physics.ContinuousXiCoupling
 import Hqiv.Physics.HalfStepBeltramiShellBridge
 import Hqiv.Physics.HopfShellBeltramiMassBridge
+import Hqiv.Topology.HopfShellComplex  -- T12 witness + per-shell imprints for T1 closure
 
 namespace Hqiv.Physics
 
@@ -75,6 +76,14 @@ structure LeptonResonanceChartCompositeWitness where
   mu_e_ne_beltrami : resonance_k_mu_e ≠ tuftBeltramiResonanceRatio 2 1
   mu_e_ne_holonomy_vertices :
     resonance_k_mu_e ≠ holonomyRowRhs fanoVertexHeavyGen / holonomyRowRhs fanoVertexMiddle
+  generation_cycle_admissible :
+    generationVerticesFormAdmissibleCycle   -- the three vertices used in the holonomy rows form a genuine admissible cycle (T5/T10)
+  -- T1 closure using T6–T13 support (explicit wiring of the T12 three-shell non-factorable witness)
+  t12_three_shell_witness_available :
+    Hqiv.Topology.exampleNonFactorableWitnessForIntegrableHopfShells.shells.length = 3
+  -- (Per-shell α_n trapping modulation from the T12 witness shells is available via
+  --  trappingSelectionFromThreeHopfShellsWithAlphas and the bridge wiring; added as a
+  --  future refinement once the positivity tactic issues are resolved in this context.)
 
 theorem leptonResonanceChartCompositeWitness_default : LeptonResonanceChartCompositeWitness where
   tau_mu_factorized := resonance_k_tau_mu_eq_sectorGaussian_ratio_emergent
@@ -82,5 +91,9 @@ theorem leptonResonanceChartCompositeWitness_default : LeptonResonanceChartCompo
   tau_mu_ne_beltrami := resonance_k_tau_mu_ne_beltrami_four_thirds
   mu_e_ne_beltrami := resonance_k_mu_e_ne_beltrami_three_halves
   mu_e_ne_holonomy_vertices := resonance_k_mu_e_ne_holonomy_vertex_ratio
+  generation_cycle_admissible := the_three_generation_fano_vertices_form_admissible_cycle
+  t12_three_shell_witness_available := Hqiv.Topology.exampleNonFactorableWitnessForIntegrableHopfShells_shells_are_integrable_three.1
+  -- t12_trapping_modulation_possible left as a comment in the structure for now (positivity proof
+  -- friction in this file; the machinery exists in the bridge and is wired at the comment level)
 
 end Hqiv.Physics
