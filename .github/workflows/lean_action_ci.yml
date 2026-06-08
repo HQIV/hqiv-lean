@@ -11,7 +11,7 @@ on:
         default: false
         type: boolean
       extra_docs_facets:
-        description: Extra doc facets to append (for example: HQIVYangMills:docs)
+        description: "Extra doc facets to append (for example HQIVYangMills docs facet)"
         required: false
         default: ""
         type: string
@@ -38,7 +38,7 @@ jobs:
           build: true
           test: false
 
-      - name: Physics-only target (excludes bulk HQIVLEAN: TSP, SAT, factor, CNF, RH-θ scaffolds)
+      - name: Physics-only target (excludes bulk HQIVLEAN TSP SAT factor CNF RH scaffolds)
         run: lake build HQIVMeaningfulPhysics
 
       - name: Story spine (patch QFT, Dojo YM interface, promotion obligations)
