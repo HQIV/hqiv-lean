@@ -41,6 +41,9 @@ jobs:
       - name: Physics-only target (excludes bulk HQIVLEAN TSP SAT factor CNF RH scaffolds)
         run: lake build HQIVMeaningfulPhysics
 
+      - name: LeanDojo Millennium vendored Problems namespace
+        run: lake build LeanDojoMillenniumIndex
+
       - name: Story spine (patch QFT, Dojo YM interface, promotion obligations)
         run: lake build HQIVStory
 
