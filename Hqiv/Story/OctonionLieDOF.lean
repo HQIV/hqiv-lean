@@ -1,5 +1,5 @@
 import Hqiv.GeneratorsFromAxioms
-import Hqiv.SO8ClosureInterface
+import Hqiv.SO8ClosureSymbolic
 
 /-!
 # Octonion SO(8) Lie DOF — Story anchor
@@ -10,11 +10,10 @@ The YM / Millennium **Story** line (`CompactSimpleGaugeGroup G`, `QuantumYangMil
 under the matrix Lie bracket** in their span, and **linearly independent** — a concrete realisation of
 `so(8)`-sized **algebraic** degrees of freedom (28 real parameters).
 
-**Sources of truth (proven in the closure pack):** `Hqiv.GeneratorsLieClosure` and re-exports
-`Hqiv.SO8Closure` / `Hqiv.SO8ClosureInterface` (`so8_closure_theorem_interface`). This file restates
-the same conjunction in Story with `transpose` notation and discharges it by re-export. Building
-`Hqiv.Story.OctonionLieDOF` therefore composes the closure import graph once (use
-`lake build HQIVSO8Closure` to warm the heavy shards).
+**Story / CI default:** this module re-exports the **symbolic** SO(8) closure interface
+(`Hqiv.SO8ClosureSymbolic`) so `lake build HQIVStory` does not compose the heavy matrix certificate
+(`Hqiv.GeneratorsLieClosure` + `Hqiv.LieBracketCell.*`). For the certified closure build use
+`Hqiv.SO8ClosureInterface` / `lake build HQIVSO8Closure`.
 
 **QFT-facing lightweight feed (no closure import):** `Hqiv.Story.HQIVQFTLieAlgebraFeed` (imported by
 `QuantumYangMillsFromPatchHQIV`) packages skew-adjointness of `so8Generator` / `phaseLiftDelta` and
@@ -48,7 +47,7 @@ theorem octonion_so8_lie_backbone :
     (∀ i j : Fin 28, ∃ f : Fin 28 → ℝ,
       lieBracket (so8Generator i) (so8Generator j) = ∑ k, f k • so8Generator k) ∧
     LinearIndependent ℝ (fun k : Fin 28 => so8Generator k) := by
-  have ⟨hanti, hbracket, hli⟩ := Hqiv.so8_closure_theorem_interface
+  have ⟨hanti, hbracket, hli⟩ := Hqiv.so8_closure_theorem_symbolic
   exact And.intro
     (fun k => by simpa [Matrix.transpose] using hanti k) (And.intro hbracket hli)
 

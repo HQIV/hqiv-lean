@@ -197,7 +197,7 @@ def hqiv_maxwell_action_covariance_spine : Prop :=
       ∀ (a : Fin 8) (ν : Fin 4),
         Hqiv.EL_O Hqiv.A_O (φ + 1) a ν =
           (∑ μ : Fin 4, Hqiv.F_from_A Hqiv.A_O a μ ν) - 4 * Real.pi * Hqiv.J_O a ν -
-            (if a = 0 then Hqiv.alpha * Real.log (φ + 2) * Hqiv.grad_phi ν else 0)) ∧
+            (if a = 0 then Hqiv.alpha * Real.log (φ + 1 + 1) * Hqiv.grad_phi ν else 0)) ∧
   (∀ (g : PatchMillenniumPoincareGroup) (f : PatchSchwartzSpace),
       patchDerivOVD (patchMillenniumPoincareTrivialTestAction g f) =
         conjugateOperator (patchMillenniumPoincareTrivialUnitaryRep g) (patchDerivOVD f)) ∧
