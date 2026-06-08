@@ -1,0 +1,96 @@
+{
+  "inputs": {
+    "L": 7,
+    "shells": [
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8
+    ],
+    "reference_m": 4,
+    "n_points": 22,
+    "peak_min_frac": 0.35
+  },
+  "gate_pipeline": {
+    "sparse_basis_card": 64,
+    "seed_len": 22,
+    "evolved_len": 44,
+    "flipped_count": 1,
+    "pruned_len": 1,
+    "hqiv_pivot_flat": 49,
+    "hqiv_pivot_harmonic": {
+      "ell": 7,
+      "m": 0
+    }
+  },
+  "alias_recovery": {
+    "hist16": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      1.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "hist32": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      1.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "peaks16": [
+      5
+    ],
+    "peaks32": [
+      11
+    ],
+    "predicted32_from_16": [
+      10,
+      11
+    ],
+    "recovered_secondary32": [],
+    "period4_peaks16": [],
+    "interpretation": "Secondary aliases are bins that appear in 32-sector peaks but are not explained by simple 16->32 splitting; period-4 mask highlights QFT-style harmonics."
+  }
+}

@@ -1,0 +1,899 @@
+{
+  "source": "scripts/hqiv_curvature_contact_network.py",
+  "lean_module": "Hqiv.QuantumChemistry.CurvatureContactNetwork",
+  "contact_kinds": [
+    "cluster_deficit",
+    "covalent_bond",
+    "steric_repulsion",
+    "hyperclosure",
+    "periodic_image"
+  ],
+  "matter_phases": [
+    "isolated",
+    "molecular",
+    "liquid",
+    "solid"
+  ],
+  "networks": [
+    {
+      "name": "H2",
+      "phase": "molecular",
+      "compton_triplet_m": [
+        1,
+        1,
+        1
+      ],
+      "liquid_fraction": 0.65,
+      "lattice_repeats": [
+        1,
+        1,
+        1
+      ],
+      "networked_vev_geometric_mean": 0.9471601008835248,
+      "bare_vev_geometric_mean": 0.9471601008835248,
+      "nodes": [
+        {
+          "index": 0,
+          "label": "H",
+          "z_nuclear": 1,
+          "electrons": 1,
+          "mass_number": 1,
+          "nuclear_shell": 4,
+          "valence_s_shell": 1,
+          "valence_p_shell": null,
+          "compton_shell": 1,
+          "cluster_mass_mev": 938.27208816,
+          "mass_ratio_per_nucleon": 1.0,
+          "node_vev_factor": 1.0
+        },
+        {
+          "index": 1,
+          "label": "H",
+          "z_nuclear": 1,
+          "electrons": 1,
+          "mass_number": 1,
+          "nuclear_shell": 4,
+          "valence_s_shell": 1,
+          "valence_p_shell": null,
+          "compton_shell": 1,
+          "cluster_mass_mev": 938.27208816,
+          "mass_ratio_per_nucleon": 1.0,
+          "node_vev_factor": 1.0
+        }
+      ],
+      "contacts": [
+        {
+          "kind": "covalent_bond",
+          "i": 0,
+          "j": 1,
+          "contacts_at_i": 1,
+          "contacts_at_j": 1,
+          "undirected_points": 1,
+          "distance_angstrom": 0.7414,
+          "geff_theta": 1.413716694115407,
+          "weight": 0.41648567781796864,
+          "increment_factor": 0.9387403933595694
+        }
+      ],
+      "coordination": {
+        "0": 1,
+        "1": 1
+      },
+      "rules": {
+        "cluster_deficit": "node: tuftVevFactorNetworkedAtCluster from cluster_mass/(A*m_p)",
+        "covalent_bond": "edge: G_eff(theta) at Compton contact, geometry weight 1/(1+d/a0)",
+        "steric_repulsion": "peripheral H: n_H*contacts_per_H/2 points; CH4 full, NH3/H2O reduced",
+        "hyperclosure": ">=2 bonds: graph factor 1/sqrt(n_bonds)",
+        "periodic_image": "solid: (Rx-1+Ry-1+Rz-1)*n_bonds images",
+        "liquid": "coordination * liquid_fraction (0.65)"
+      }
+    },
+    {
+      "name": "LiH",
+      "phase": "molecular",
+      "compton_triplet_m": [
+        4,
+        3,
+        1
+      ],
+      "liquid_fraction": 0.65,
+      "lattice_repeats": [
+        1,
+        1,
+        1
+      ],
+      "networked_vev_geometric_mean": 0.9554405494725902,
+      "bare_vev_geometric_mean": 0.9577913207792554,
+      "nodes": [
+        {
+          "index": 0,
+          "label": "Li",
+          "z_nuclear": 3,
+          "electrons": 3,
+          "mass_number": 7,
+          "nuclear_shell": 7,
+          "valence_s_shell": 7,
+          "valence_p_shell": 6,
+          "compton_shell": 7,
+          "cluster_mass_mev": 6495.675336601306,
+          "mass_ratio_per_nucleon": 0.9890026903968094,
+          "node_vev_factor": 0.995711831066899
+        },
+        {
+          "index": 1,
+          "label": "H",
+          "z_nuclear": 1,
+          "electrons": 1,
+          "mass_number": 1,
+          "nuclear_shell": 4,
+          "valence_s_shell": 1,
+          "valence_p_shell": null,
+          "compton_shell": 1,
+          "cluster_mass_mev": 938.27208816,
+          "mass_ratio_per_nucleon": 1.0,
+          "node_vev_factor": 1.0
+        }
+      ],
+      "contacts": [
+        {
+          "kind": "cluster_deficit",
+          "i": 0,
+          "j": null,
+          "contacts_at_i": 1,
+          "contacts_at_j": 0,
+          "undirected_points": 1,
+          "distance_angstrom": null,
+          "geff_theta": null,
+          "weight": 1.0,
+          "increment_factor": 0.995711831066899
+        },
+        {
+          "kind": "covalent_bond",
+          "i": 0,
+          "j": 1,
+          "contacts_at_i": 1,
+          "contacts_at_j": 1,
+          "undirected_points": 1,
+          "distance_angstrom": 1.5956,
+          "geff_theta": 0.952295273119406,
+          "weight": 0.2490506807902496,
+          "increment_factor": 0.7406125225145717
+        }
+      ],
+      "coordination": {
+        "0": 1,
+        "1": 1
+      },
+      "rules": {
+        "cluster_deficit": "node: tuftVevFactorNetworkedAtCluster from cluster_mass/(A*m_p)",
+        "covalent_bond": "edge: G_eff(theta) at Compton contact, geometry weight 1/(1+d/a0)",
+        "steric_repulsion": "peripheral H: n_H*contacts_per_H/2 points; CH4 full, NH3/H2O reduced",
+        "hyperclosure": ">=2 bonds: graph factor 1/sqrt(n_bonds)",
+        "periodic_image": "solid: (Rx-1+Ry-1+Rz-1)*n_bonds images",
+        "liquid": "coordination * liquid_fraction (0.65)"
+      }
+    },
+    {
+      "name": "HF",
+      "phase": "molecular",
+      "compton_triplet_m": [
+        4,
+        3,
+        1
+      ],
+      "liquid_fraction": 0.65,
+      "lattice_repeats": [
+        1,
+        1,
+        1
+      ],
+      "networked_vev_geometric_mean": 0.9558814165223269,
+      "bare_vev_geometric_mean": 0.9577913207792554,
+      "nodes": [
+        {
+          "index": 0,
+          "label": "F",
+          "z_nuclear": 9,
+          "electrons": 9,
+          "mass_number": 19,
+          "nuclear_shell": 8,
+          "valence_s_shell": 8,
+          "valence_p_shell": 7,
+          "compton_shell": 8,
+          "cluster_mass_mev": 17667.758060194516,
+          "mass_ratio_per_nucleon": 0.9910579403376253,
+          "node_vev_factor": 0.9965112592545731
+        },
+        {
+          "index": 1,
+          "label": "H",
+          "z_nuclear": 1,
+          "electrons": 1,
+          "mass_number": 1,
+          "nuclear_shell": 4,
+          "valence_s_shell": 1,
+          "valence_p_shell": null,
+          "compton_shell": 1,
+          "cluster_mass_mev": 938.27208816,
+          "mass_ratio_per_nucleon": 1.0,
+          "node_vev_factor": 1.0
+        }
+      ],
+      "contacts": [
+        {
+          "kind": "cluster_deficit",
+          "i": 0,
+          "j": null,
+          "contacts_at_i": 1,
+          "contacts_at_j": 0,
+          "undirected_points": 1,
+          "distance_angstrom": null,
+          "geff_theta": null,
+          "weight": 1.0,
+          "increment_factor": 0.9965112592545731
+        },
+        {
+          "kind": "covalent_bond",
+          "i": 0,
+          "j": 1,
+          "contacts_at_i": 1,
+          "contacts_at_j": 1,
+          "undirected_points": 1,
+          "distance_angstrom": 0.9168,
+          "geff_theta": 0.9494591130849153,
+          "weight": 0.3659651112845226,
+          "increment_factor": 0.7392883018071423
+        }
+      ],
+      "coordination": {
+        "0": 1,
+        "1": 1
+      },
+      "rules": {
+        "cluster_deficit": "node: tuftVevFactorNetworkedAtCluster from cluster_mass/(A*m_p)",
+        "covalent_bond": "edge: G_eff(theta) at Compton contact, geometry weight 1/(1+d/a0)",
+        "steric_repulsion": "peripheral H: n_H*contacts_per_H/2 points; CH4 full, NH3/H2O reduced",
+        "hyperclosure": ">=2 bonds: graph factor 1/sqrt(n_bonds)",
+        "periodic_image": "solid: (Rx-1+Ry-1+Rz-1)*n_bonds images",
+        "liquid": "coordination * liquid_fraction (0.65)"
+      }
+    },
+    {
+      "name": "H2O",
+      "phase": "molecular",
+      "compton_triplet_m": [
+        4,
+        3,
+        1
+      ],
+      "liquid_fraction": 0.65,
+      "lattice_repeats": [
+        1,
+        1,
+        1
+      ],
+      "networked_vev_geometric_mean": 0.9624865317936523,
+      "bare_vev_geometric_mean": 0.9577913207792554,
+      "nodes": [
+        {
+          "index": 0,
+          "label": "O",
+          "z_nuclear": 8,
+          "electrons": 8,
+          "mass_number": 16,
+          "nuclear_shell": 8,
+          "valence_s_shell": 8,
+          "valence_p_shell": 7,
+          "compton_shell": 8,
+          "cluster_mass_mev": 14869.432652422669,
+          "mass_ratio_per_nucleon": 0.9904797899284201,
+          "node_vev_factor": 0.9962862837316042
+        },
+        {
+          "index": 1,
+          "label": "H",
+          "z_nuclear": 1,
+          "electrons": 1,
+          "mass_number": 1,
+          "nuclear_shell": 4,
+          "valence_s_shell": 1,
+          "valence_p_shell": null,
+          "compton_shell": 1,
+          "cluster_mass_mev": 938.27208816,
+          "mass_ratio_per_nucleon": 1.0,
+          "node_vev_factor": 1.0
+        },
+        {
+          "index": 2,
+          "label": "H",
+          "z_nuclear": 1,
+          "electrons": 1,
+          "mass_number": 1,
+          "nuclear_shell": 4,
+          "valence_s_shell": 1,
+          "valence_p_shell": null,
+          "compton_shell": 1,
+          "cluster_mass_mev": 938.27208816,
+          "mass_ratio_per_nucleon": 1.0,
+          "node_vev_factor": 1.0
+        }
+      ],
+      "contacts": [
+        {
+          "kind": "cluster_deficit",
+          "i": 0,
+          "j": null,
+          "contacts_at_i": 1,
+          "contacts_at_j": 0,
+          "undirected_points": 1,
+          "distance_angstrom": null,
+          "geff_theta": null,
+          "weight": 1.0,
+          "increment_factor": 0.9962862837316042
+        },
+        {
+          "kind": "covalent_bond",
+          "i": 0,
+          "j": 1,
+          "contacts_at_i": 1,
+          "contacts_at_j": 1,
+          "undirected_points": 1,
+          "distance_angstrom": 0.9572,
+          "geff_theta": 0.9494591130849153,
+          "weight": 0.3560181137206184,
+          "increment_factor": 0.7392883018071423
+        },
+        {
+          "kind": "covalent_bond",
+          "i": 0,
+          "j": 2,
+          "contacts_at_i": 1,
+          "contacts_at_j": 1,
+          "undirected_points": 1,
+          "distance_angstrom": 0.9572,
+          "geff_theta": 0.9494591130849153,
+          "weight": 0.3560181137206184,
+          "increment_factor": 0.7392883018071423
+        },
+        {
+          "kind": "steric_repulsion",
+          "i": 1,
+          "j": 2,
+          "contacts_at_i": 1,
+          "contacts_at_j": 1,
+          "undirected_points": 1,
+          "distance_angstrom": null,
+          "geff_theta": 1.413716694115407,
+          "weight": 1.0,
+          "increment_factor": 1.0070405529501967
+        },
+        {
+          "kind": "hyperclosure",
+          "i": 0,
+          "j": null,
+          "contacts_at_i": 2,
+          "contacts_at_j": 0,
+          "undirected_points": 2,
+          "distance_angstrom": null,
+          "geff_theta": null,
+          "weight": 0.7071067811865475,
+          "increment_factor": 1.0
+        }
+      ],
+      "coordination": {
+        "0": 2,
+        "1": 2,
+        "2": 1
+      },
+      "rules": {
+        "cluster_deficit": "node: tuftVevFactorNetworkedAtCluster from cluster_mass/(A*m_p)",
+        "covalent_bond": "edge: G_eff(theta) at Compton contact, geometry weight 1/(1+d/a0)",
+        "steric_repulsion": "peripheral H: n_H*contacts_per_H/2 points; CH4 full, NH3/H2O reduced",
+        "hyperclosure": ">=2 bonds: graph factor 1/sqrt(n_bonds)",
+        "periodic_image": "solid: (Rx-1+Ry-1+Rz-1)*n_bonds images",
+        "liquid": "coordination * liquid_fraction (0.65)"
+      }
+    },
+    {
+      "name": "CH4",
+      "phase": "molecular",
+      "compton_triplet_m": [
+        4,
+        3,
+        1
+      ],
+      "liquid_fraction": 0.65,
+      "lattice_repeats": [
+        1,
+        1,
+        1
+      ],
+      "networked_vev_geometric_mean": 1.1946855788251365,
+      "bare_vev_geometric_mean": 0.9577913207792554,
+      "nodes": [
+        {
+          "index": 0,
+          "label": "C",
+          "z_nuclear": 6,
+          "electrons": 6,
+          "mass_number": 12,
+          "nuclear_shell": 8,
+          "valence_s_shell": 8,
+          "valence_p_shell": 7,
+          "compton_shell": 8,
+          "cluster_mass_mev": 11138.332108726874,
+          "mass_ratio_per_nucleon": 0.9892592501756534,
+          "node_vev_factor": 0.9958115744625388
+        },
+        {
+          "index": 1,
+          "label": "H",
+          "z_nuclear": 1,
+          "electrons": 1,
+          "mass_number": 1,
+          "nuclear_shell": 4,
+          "valence_s_shell": 1,
+          "valence_p_shell": null,
+          "compton_shell": 1,
+          "cluster_mass_mev": 938.27208816,
+          "mass_ratio_per_nucleon": 1.0,
+          "node_vev_factor": 1.0
+        },
+        {
+          "index": 2,
+          "label": "H",
+          "z_nuclear": 1,
+          "electrons": 1,
+          "mass_number": 1,
+          "nuclear_shell": 4,
+          "valence_s_shell": 1,
+          "valence_p_shell": null,
+          "compton_shell": 1,
+          "cluster_mass_mev": 938.27208816,
+          "mass_ratio_per_nucleon": 1.0,
+          "node_vev_factor": 1.0
+        },
+        {
+          "index": 3,
+          "label": "H",
+          "z_nuclear": 1,
+          "electrons": 1,
+          "mass_number": 1,
+          "nuclear_shell": 4,
+          "valence_s_shell": 1,
+          "valence_p_shell": null,
+          "compton_shell": 1,
+          "cluster_mass_mev": 938.27208816,
+          "mass_ratio_per_nucleon": 1.0,
+          "node_vev_factor": 1.0
+        },
+        {
+          "index": 4,
+          "label": "H",
+          "z_nuclear": 1,
+          "electrons": 1,
+          "mass_number": 1,
+          "nuclear_shell": 4,
+          "valence_s_shell": 1,
+          "valence_p_shell": null,
+          "compton_shell": 1,
+          "cluster_mass_mev": 938.27208816,
+          "mass_ratio_per_nucleon": 1.0,
+          "node_vev_factor": 1.0
+        }
+      ],
+      "contacts": [
+        {
+          "kind": "cluster_deficit",
+          "i": 0,
+          "j": null,
+          "contacts_at_i": 1,
+          "contacts_at_j": 0,
+          "undirected_points": 1,
+          "distance_angstrom": null,
+          "geff_theta": null,
+          "weight": 1.0,
+          "increment_factor": 0.9958115744625388
+        },
+        {
+          "kind": "covalent_bond",
+          "i": 0,
+          "j": 1,
+          "contacts_at_i": 1,
+          "contacts_at_j": 1,
+          "undirected_points": 1,
+          "distance_angstrom": 1.09,
+          "geff_theta": 0.9494591130849153,
+          "weight": 0.32681858868794406,
+          "increment_factor": 0.7392883018071423
+        },
+        {
+          "kind": "covalent_bond",
+          "i": 0,
+          "j": 2,
+          "contacts_at_i": 1,
+          "contacts_at_j": 1,
+          "undirected_points": 1,
+          "distance_angstrom": 1.09,
+          "geff_theta": 0.9494591130849153,
+          "weight": 0.32681858868794406,
+          "increment_factor": 0.7392883018071423
+        },
+        {
+          "kind": "covalent_bond",
+          "i": 0,
+          "j": 3,
+          "contacts_at_i": 1,
+          "contacts_at_j": 1,
+          "undirected_points": 1,
+          "distance_angstrom": 1.09,
+          "geff_theta": 0.9494591130849153,
+          "weight": 0.32681858868794406,
+          "increment_factor": 0.7392883018071423
+        },
+        {
+          "kind": "covalent_bond",
+          "i": 0,
+          "j": 4,
+          "contacts_at_i": 1,
+          "contacts_at_j": 1,
+          "undirected_points": 1,
+          "distance_angstrom": 1.09,
+          "geff_theta": 0.9494591130849153,
+          "weight": 0.32681858868794406,
+          "increment_factor": 0.7392883018071423
+        },
+        {
+          "kind": "steric_repulsion",
+          "i": 1,
+          "j": 2,
+          "contacts_at_i": 2,
+          "contacts_at_j": 2,
+          "undirected_points": 4,
+          "distance_angstrom": null,
+          "geff_theta": 1.413716694115407,
+          "weight": 1.0,
+          "increment_factor": 1.2503307715625518
+        },
+        {
+          "kind": "hyperclosure",
+          "i": 0,
+          "j": null,
+          "contacts_at_i": 4,
+          "contacts_at_j": 0,
+          "undirected_points": 4,
+          "distance_angstrom": null,
+          "geff_theta": null,
+          "weight": 0.5,
+          "increment_factor": 1.0
+        }
+      ],
+      "coordination": {
+        "0": 4,
+        "1": 3,
+        "2": 1,
+        "3": 1,
+        "4": 1
+      },
+      "rules": {
+        "cluster_deficit": "node: tuftVevFactorNetworkedAtCluster from cluster_mass/(A*m_p)",
+        "covalent_bond": "edge: G_eff(theta) at Compton contact, geometry weight 1/(1+d/a0)",
+        "steric_repulsion": "peripheral H: n_H*contacts_per_H/2 points; CH4 full, NH3/H2O reduced",
+        "hyperclosure": ">=2 bonds: graph factor 1/sqrt(n_bonds)",
+        "periodic_image": "solid: (Rx-1+Ry-1+Rz-1)*n_bonds images",
+        "liquid": "coordination * liquid_fraction (0.65)"
+      }
+    },
+    {
+      "name": "NH3",
+      "phase": "molecular",
+      "compton_triplet_m": [
+        4,
+        3,
+        1
+      ],
+      "liquid_fraction": 0.65,
+      "lattice_repeats": [
+        1,
+        1,
+        1
+      ],
+      "networked_vev_geometric_mean": 1.0027431791769492,
+      "bare_vev_geometric_mean": 0.9577913207792554,
+      "nodes": [
+        {
+          "index": 0,
+          "label": "N",
+          "z_nuclear": 7,
+          "electrons": 7,
+          "mass_number": 14,
+          "nuclear_shell": 8,
+          "valence_s_shell": 8,
+          "valence_p_shell": 7,
+          "compton_shell": 8,
+          "cluster_mass_mev": 13003.88238057477,
+          "mass_ratio_per_nucleon": 0.9899567014629486,
+          "node_vev_factor": 0.9960827971082288
+        },
+        {
+          "index": 1,
+          "label": "H",
+          "z_nuclear": 1,
+          "electrons": 1,
+          "mass_number": 1,
+          "nuclear_shell": 4,
+          "valence_s_shell": 1,
+          "valence_p_shell": null,
+          "compton_shell": 1,
+          "cluster_mass_mev": 938.27208816,
+          "mass_ratio_per_nucleon": 1.0,
+          "node_vev_factor": 1.0
+        },
+        {
+          "index": 2,
+          "label": "H",
+          "z_nuclear": 1,
+          "electrons": 1,
+          "mass_number": 1,
+          "nuclear_shell": 4,
+          "valence_s_shell": 1,
+          "valence_p_shell": null,
+          "compton_shell": 1,
+          "cluster_mass_mev": 938.27208816,
+          "mass_ratio_per_nucleon": 1.0,
+          "node_vev_factor": 1.0
+        },
+        {
+          "index": 3,
+          "label": "H",
+          "z_nuclear": 1,
+          "electrons": 1,
+          "mass_number": 1,
+          "nuclear_shell": 4,
+          "valence_s_shell": 1,
+          "valence_p_shell": null,
+          "compton_shell": 1,
+          "cluster_mass_mev": 938.27208816,
+          "mass_ratio_per_nucleon": 1.0,
+          "node_vev_factor": 1.0
+        }
+      ],
+      "contacts": [
+        {
+          "kind": "cluster_deficit",
+          "i": 0,
+          "j": null,
+          "contacts_at_i": 1,
+          "contacts_at_j": 0,
+          "undirected_points": 1,
+          "distance_angstrom": null,
+          "geff_theta": null,
+          "weight": 1.0,
+          "increment_factor": 0.9960827971082288
+        },
+        {
+          "kind": "covalent_bond",
+          "i": 0,
+          "j": 1,
+          "contacts_at_i": 1,
+          "contacts_at_j": 1,
+          "undirected_points": 1,
+          "distance_angstrom": 1.012,
+          "geff_theta": 0.9494591130849153,
+          "weight": 0.34335909404794973,
+          "increment_factor": 0.7392883018071423
+        },
+        {
+          "kind": "covalent_bond",
+          "i": 0,
+          "j": 2,
+          "contacts_at_i": 1,
+          "contacts_at_j": 1,
+          "undirected_points": 1,
+          "distance_angstrom": 1.012,
+          "geff_theta": 0.9494591130849153,
+          "weight": 0.34335909404794973,
+          "increment_factor": 0.7392883018071423
+        },
+        {
+          "kind": "covalent_bond",
+          "i": 0,
+          "j": 3,
+          "contacts_at_i": 1,
+          "contacts_at_j": 1,
+          "undirected_points": 1,
+          "distance_angstrom": 1.012,
+          "geff_theta": 0.9494591130849153,
+          "weight": 0.34335909404794973,
+          "increment_factor": 0.7392883018071423
+        },
+        {
+          "kind": "steric_repulsion",
+          "i": 1,
+          "j": 2,
+          "contacts_at_i": 2,
+          "contacts_at_j": 2,
+          "undirected_points": 3,
+          "distance_angstrom": null,
+          "geff_theta": 1.413716694115407,
+          "weight": 1.0,
+          "increment_factor": 1.0492838706513774
+        },
+        {
+          "kind": "hyperclosure",
+          "i": 0,
+          "j": null,
+          "contacts_at_i": 3,
+          "contacts_at_j": 0,
+          "undirected_points": 3,
+          "distance_angstrom": null,
+          "geff_theta": null,
+          "weight": 0.5773502691896258,
+          "increment_factor": 1.0
+        }
+      ],
+      "coordination": {
+        "0": 3,
+        "1": 3,
+        "2": 1,
+        "3": 1
+      },
+      "rules": {
+        "cluster_deficit": "node: tuftVevFactorNetworkedAtCluster from cluster_mass/(A*m_p)",
+        "covalent_bond": "edge: G_eff(theta) at Compton contact, geometry weight 1/(1+d/a0)",
+        "steric_repulsion": "peripheral H: n_H*contacts_per_H/2 points; CH4 full, NH3/H2O reduced",
+        "hyperclosure": ">=2 bonds: graph factor 1/sqrt(n_bonds)",
+        "periodic_image": "solid: (Rx-1+Ry-1+Rz-1)*n_bonds images",
+        "liquid": "coordination * liquid_fraction (0.65)"
+      }
+    },
+    {
+      "name": "ice_Ih_scaffold",
+      "phase": "solid",
+      "compton_triplet_m": [
+        4,
+        3,
+        1
+      ],
+      "liquid_fraction": 1.0,
+      "lattice_repeats": [
+        2,
+        2,
+        2
+      ],
+      "networked_vev_geometric_mean": 0.993103886498404,
+      "bare_vev_geometric_mean": 0.9577913207792554,
+      "nodes": [
+        {
+          "index": 0,
+          "label": "O",
+          "z_nuclear": 8,
+          "electrons": 8,
+          "mass_number": 16,
+          "nuclear_shell": 8,
+          "valence_s_shell": 8,
+          "valence_p_shell": 7,
+          "compton_shell": 8,
+          "cluster_mass_mev": 14869.432652422669,
+          "mass_ratio_per_nucleon": 0.9904797899284201,
+          "node_vev_factor": 0.9962862837316042
+        },
+        {
+          "index": 1,
+          "label": "H",
+          "z_nuclear": 1,
+          "electrons": 1,
+          "mass_number": 1,
+          "nuclear_shell": 4,
+          "valence_s_shell": 1,
+          "valence_p_shell": null,
+          "compton_shell": 1,
+          "cluster_mass_mev": 938.27208816,
+          "mass_ratio_per_nucleon": 1.0,
+          "node_vev_factor": 1.0
+        },
+        {
+          "index": 2,
+          "label": "H",
+          "z_nuclear": 1,
+          "electrons": 1,
+          "mass_number": 1,
+          "nuclear_shell": 4,
+          "valence_s_shell": 1,
+          "valence_p_shell": null,
+          "compton_shell": 1,
+          "cluster_mass_mev": 938.27208816,
+          "mass_ratio_per_nucleon": 1.0,
+          "node_vev_factor": 1.0
+        }
+      ],
+      "contacts": [
+        {
+          "kind": "cluster_deficit",
+          "i": 0,
+          "j": null,
+          "contacts_at_i": 1,
+          "contacts_at_j": 0,
+          "undirected_points": 1,
+          "distance_angstrom": null,
+          "geff_theta": null,
+          "weight": 1.0,
+          "increment_factor": 0.9962862837316042
+        },
+        {
+          "kind": "covalent_bond",
+          "i": 0,
+          "j": 1,
+          "contacts_at_i": 1,
+          "contacts_at_j": 1,
+          "undirected_points": 1,
+          "distance_angstrom": 0.9572,
+          "geff_theta": 0.9494591130849153,
+          "weight": 0.3560181137206184,
+          "increment_factor": 0.7392883018071423
+        },
+        {
+          "kind": "covalent_bond",
+          "i": 0,
+          "j": 2,
+          "contacts_at_i": 1,
+          "contacts_at_j": 1,
+          "undirected_points": 1,
+          "distance_angstrom": 0.9572,
+          "geff_theta": 0.9494591130849153,
+          "weight": 0.3560181137206184,
+          "increment_factor": 0.7392883018071423
+        },
+        {
+          "kind": "steric_repulsion",
+          "i": 1,
+          "j": 2,
+          "contacts_at_i": 1,
+          "contacts_at_j": 1,
+          "undirected_points": 1,
+          "distance_angstrom": null,
+          "geff_theta": 1.413716694115407,
+          "weight": 1.0,
+          "increment_factor": 1.0070405529501967
+        },
+        {
+          "kind": "hyperclosure",
+          "i": 0,
+          "j": null,
+          "contacts_at_i": 2,
+          "contacts_at_j": 0,
+          "undirected_points": 2,
+          "distance_angstrom": null,
+          "geff_theta": null,
+          "weight": 0.7071067811865475,
+          "increment_factor": 1.0
+        },
+        {
+          "kind": "periodic_image",
+          "i": 0,
+          "j": null,
+          "contacts_at_i": 6,
+          "contacts_at_j": 0,
+          "undirected_points": 3,
+          "distance_angstrom": null,
+          "geff_theta": null,
+          "weight": 1.0,
+          "increment_factor": 1.3
+        }
+      ],
+      "coordination": {
+        "0": 2,
+        "1": 2,
+        "2": 1
+      },
+      "rules": {
+        "cluster_deficit": "node: tuftVevFactorNetworkedAtCluster from cluster_mass/(A*m_p)",
+        "covalent_bond": "edge: G_eff(theta) at Compton contact, geometry weight 1/(1+d/a0)",
+        "steric_repulsion": "peripheral H: n_H*contacts_per_H/2 points; CH4 full, NH3/H2O reduced",
+        "hyperclosure": ">=2 bonds: graph factor 1/sqrt(n_bonds)",
+        "periodic_image": "solid: (Rx-1+Ry-1+Rz-1)*n_bonds images",
+        "liquid": "coordination * liquid_fraction (1.0)"
+      }
+    }
+  ]
+}

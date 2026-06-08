@@ -1,0 +1,12 @@
+import Hqiv.Story.Chapter06_Fluid
+import Hqiv.QuantumMechanics.PatchQFTBridge
+
+/-!
+# Story — Chapter 7: patch QFT (support-restricted net, Minkowski chart)
+
+Scaffold-level local algebra on `Fin 4` patches; abelian `smearedField` building blocks; pairing with
+spacelike Minkowski geometry for microcausality-style *hooks*. This is **not** the non-abelian
+`QuantumYangMillsTheory` package in Lean Dojo’s YM file — it is a discrete/locality layer.
+
+Downstream: `Chapter08_ClayMillennium` (formal YM/NS problem statements + witness theorems).
+-/

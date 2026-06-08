@@ -1,0 +1,49 @@
+{
+  "referenceM": 4,
+  "phi_formula": "2*(m+1)",
+  "lambda_ratio_formula": "(m+1)/5",
+  "rows": [
+{
+      "m": 2,
+      "phi_of_shell": 6.000000,
+      "lambda_ratio_num": 3,
+      "lambda_ratio_den": 5
+    },
+{
+      "m": 3,
+      "phi_of_shell": 8.000000,
+      "lambda_ratio_num": 4,
+      "lambda_ratio_den": 5
+    },
+{
+      "m": 4,
+      "phi_of_shell": 10.000000,
+      "lambda_ratio_num": 5,
+      "lambda_ratio_den": 5
+    },
+{
+      "m": 5,
+      "phi_of_shell": 12.000000,
+      "lambda_ratio_num": 6,
+      "lambda_ratio_den": 5
+    },
+{
+      "m": 6,
+      "phi_of_shell": 14.000000,
+      "lambda_ratio_num": 7,
+      "lambda_ratio_den": 5
+    },
+{
+      "m": 7,
+      "phi_of_shell": 16.000000,
+      "lambda_ratio_num": 8,
+      "lambda_ratio_den": 5
+    },
+{
+      "m": 8,
+      "phi_of_shell": 18.000000,
+      "lambda_ratio_num": 9,
+      "lambda_ratio_den": 5
+    }
+  ]
+}

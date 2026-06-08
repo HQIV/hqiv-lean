@@ -1,0 +1,183 @@
+{
+  "source": "HQIV integrator \u2194 Lean witness audit",
+  "python_script": "scripts/hqiv_integrator_lean_audit.py",
+  "policy": "Comparison targets (Coc et al. band) are not integrator inputs. B_curv sets eta/Omega_b; dynamic C2 sets D/H in the MeV bottleneck.",
+  "lean_alignment": [
+    "Hqiv.Physics.HopfShellBeltramiMassBridge.tuftHopfKappa6AtXi",
+    "Hqiv.Physics.HopfShellBeltramiMassBridge.tuftLapseConcentrationAtXi",
+    "Hqiv.Physics.DynamicBBNBaryogenesis.bbnDynamicC2OpportunitySuppression",
+    "Hqiv.Physics.DynamicBBNBaryogenesis.bbnShellReactionOpportunity_dynamic_integrator"
+  ],
+  "constants": {
+    "alpha": 0.6,
+    "gamma": 0.4,
+    "eta_paper": 6.1e-10,
+    "xi_lockin": 5.0,
+    "referenceM": 4,
+    "C2_at_xi_lockin": 1.2444444444444442,
+    "C2_at_xi_lockin_expected": 1.2444444444444445,
+    "C2_lockin_match": true
+  },
+  "bbn_dynamic_C2_at_eta10_6p2": {
+    "eta": 6.2e-10,
+    "T_freeze_MeV": 0.7086681656851753,
+    "T_bottleneck_MeV": 0.14173363313703508,
+    "lapse_exponent_at_0p1_MeV": 0.3039693187342923,
+    "lapse_exponent_at_freeze": 0.304193066053293
+  },
+  "bbn_dynamic_C2_ladder": [
+    {
+      "T_MeV": 10.0,
+      "eta": 6.2e-10,
+      "xi": 1.2209e+21,
+      "T_freeze_MeV": 0.7086681656851753,
+      "T_bottleneck_MeV": 0.14173363313703508,
+      "Q_D_eff_MeV": 1.9687118912123123,
+      "lapse_exponent": 0.30451846731822313,
+      "B_curv": 0.8402048993933485,
+      "C2": 1.3294244444444441e+20,
+      "C2_over_C2_ref": 0.07086681656851752,
+      "kappa6": 27254529930.93026,
+      "kappa6_over_kappa6_ref": 0.07094262418652854,
+      "c2_opportunity_suppression": 1.0
+    },
+    {
+      "T_MeV": 1.0,
+      "eta": 6.2e-10,
+      "xi": 1.2209e+22,
+      "T_freeze_MeV": 0.7086681656851753,
+      "T_bottleneck_MeV": 0.14173363313703508,
+      "Q_D_eff_MeV": 1.966871857172307,
+      "lapse_exponent": 0.3042338526175263,
+      "B_curv": 0.8394196114990844,
+      "C2": 1.3294244444444445e+21,
+      "C2_over_C2_ref": 0.7086681656851753,
+      "kappa6": 272290567964.19778,
+      "kappa6_over_kappa6_ref": 0.7087631847467036,
+      "c2_opportunity_suppression": 1.0
+    },
+    {
+      "T_MeV": 0.15,
+      "eta": 6.2e-10,
+      "xi": 8.139333333333333e+22,
+      "T_freeze_MeV": 0.7086681656851753,
+      "T_bottleneck_MeV": 0.14173363313703508,
+      "Q_D_eff_MeV": 1.9654539911018019,
+      "lapse_exponent": 0.30401453845348836,
+      "B_curv": 0.8388144960302137,
+      "C2": 8.862829629629628e+21,
+      "C2_over_C2_ref": 4.724454437901168,
+      "kappa6": 1813961872479.779,
+      "kappa6_over_kappa6_ref": 4.721681707009803,
+      "c2_opportunity_suppression": 1.0
+    },
+    {
+      "T_MeV": 0.1,
+      "eta": 6.2e-10,
+      "xi": 1.2209e+23,
+      "T_freeze_MeV": 0.7086681656851753,
+      "T_bottleneck_MeV": 0.14173363313703508,
+      "Q_D_eff_MeV": 1.9651616456171994,
+      "lapse_exponent": 0.3039693187342923,
+      "B_curv": 0.8386897291155755,
+      "C2": 1.3294244444444442e+22,
+      "C2_over_C2_ref": 7.086681656851752,
+      "kappa6": 2720538090345.3945,
+      "kappa6_over_kappa6_ref": 7.0814690922068575,
+      "c2_opportunity_suppression": 0.5515546879240701
+    },
+    {
+      "T_MeV": 0.01,
+      "eta": 6.2e-10,
+      "xi": 1.2209e+24,
+      "T_freeze_MeV": 0.7086681656851753,
+      "T_bottleneck_MeV": 0.14173363313703508,
+      "Q_D_eff_MeV": 1.9635679859799362,
+      "lapse_exponent": 0.30372281298993603,
+      "B_curv": 0.8380095886434368,
+      "C2": 1.3294244444444443e+23,
+      "C2_over_C2_ref": 70.86681656851752,
+      "kappa6": 27183318536442.605,
+      "kappa6_over_kappa6_ref": 70.75726332322473,
+      "c2_opportunity_suppression": 0.27427254738864354
+    }
+  ],
+  "dynamic_bulk_bbn": {
+    "integrator": "hqiv_dynamic_bulk_bbn.py",
+    "payload_path": "data/dynamic_bulk_bbn_v2.json",
+    "eta10": 6.197824246382018,
+    "Omega_b": 0.04989944552562245,
+    "Yp": 0.24614011152727566,
+    "D_over_H": 1.8496499978707592e-05,
+    "opportunity_mode": "shell_curvature_casimir_dynamic_C2",
+    "observation_comparison": {
+      "comparison_policy": "observation targets are not inputs to the integrator",
+      "eta10": {
+        "observed": 6.1,
+        "sigma": 0.06,
+        "model": 6.197824246382018,
+        "z_score": 1.6304041063669672,
+        "relative_error": 0.016036761701970104
+      },
+      "Omega_b": {
+        "observed": 0.049,
+        "model": 0.04989944552562245,
+        "relative_error": 0.01835603113515205
+      },
+      "Y_p": {
+        "observed": 0.244,
+        "sigma": 0.004,
+        "model": 0.24614011152727566,
+        "z_score": 0.5350278818189169
+      },
+      "D_over_H": {
+        "observed": 2.53e-05,
+        "sigma": 4e-07,
+        "model": 1.8496499978707592e-05,
+        "z_score": -17.008750053231015
+      },
+      "Be7_over_H": {
+        "model": 6.153564323825132e-07,
+        "notes": "relic \u2077Be after capture (should be \u226a Li7/H in standard BBN)"
+      },
+      "Li7_over_H": {
+        "observed": 4.65e-10,
+        "sigma": 1.5e-10,
+        "model": 7.648785509876494e-05,
+        "z_score": 509915.93399176624,
+        "notes": "spite plateau / post-BBN depletion band; integrator is pre-destruction"
+      },
+      "nuclear_binding_paper": "papers/nucleon_binding/hqiv_nucleon_binding_from_composite_trace.tex",
+      "baryogenesis_paper": "papers/baryogenesis_lockin/hqiv_baryogenesis_curvature_lockin.tex"
+    },
+    "z_scores": {
+      "eta10": 1.6304041063669672,
+      "Yp": 0.5350278818189169,
+      "D_over_H": -17.008750053231015
+    },
+    "lockin": {
+      "proton_mass_MeV": 938.272,
+      "delta_m_MeV": 1.293,
+      "Q_D_MeV": 2.343133076983804,
+      "Q_4He_MeV": 7.029399230951185,
+      "Q_3He_MeV": 4.393374519344427
+    }
+  },
+  "paper_record": {
+    "recommended_citation_row": {
+      "eta10": 6.197824246382018,
+      "Omega_b": 0.04989944552562245,
+      "Yp": 0.24614011152727566,
+      "D_over_H": 1.8496499978707592e-05,
+      "driver": "bbnShellReactionOpportunity_dynamic_integrator (Python mirror)"
+    },
+    "formulas": {
+      "kappa6": "eta_paper * B_curv(xi) * gamma * C2(xi)",
+      "T_bottleneck": "gamma * (4/8) * T_freeze(eta)",
+      "T_ref": "T_freeze(eta)",
+      "w(T)": "gamma * (4/8) * Q_D_eff(T) / Q_np",
+      "c2_suppression": "(kappa6_ref/kappa6)^w for T <= T_bottleneck(eta)",
+      "integrator_opportunity": "base_shell * (1 + delta_bind/4) * c2_suppression"
+    }
+  }
+}

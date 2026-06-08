@@ -1,0 +1,10 @@
+import Hqiv.Story.Chapter02_Metric
+import Hqiv.Conservations
+
+/-!
+# Story — Chapter 3: conservations in the “structure from O”
+
+Metric-forced conservations in the object determined by light-cone counting (not an SM input).
+
+Downstream: `Chapter04_MassLadder` (shell-resolved couplings and binding).
+-/

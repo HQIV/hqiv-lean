@@ -1,0 +1,492 @@
+% HQIV_LEAN: factor-search drivers — algorithm description and formalized proofs
+% Build: pdflatex (twice for references) or latexmk
+\documentclass[11pt,a4paper]{article}
+
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{microtype}
+\usepackage[hidelinks]{hyperref}
+\usepackage[margin=1in]{geometry}
+\usepackage{enumitem}
+\usepackage{url}
+
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\dist}{\operatorname{dist}}
+\newcommand{\bitlen}{\operatorname{bitlen}}
+
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\title{Factor Search in HQIV\textunderscore LEAN:\\
+Algorithms, Combinatorial Certificates, and Formalized Proofs}
+\author{HQIV\_LEAN repository (machine-checked fragments)}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+This note records the \emph{algorithmic} structure of two HQIV factor-search drivers
+(``integrated'' sparse OSH and ``monolithic'' geometric factorizer) and summarizes
+what is actually proved in the Lean~4 library \texttt{HQIV\_LEAN}: sound divisibility
+certificates, gcd/remainder equivalence, sparse-register list algebra, explicit
+per-step charging schemes, and a polynomial \emph{template} bound for a combined
+integrated cost model. We explicitly separate these results from open claims:
+no theorem here establishes that either driver finds a nontrivial factor on every
+composite input, nor that wall-clock time scales as a particular function of $\log n$
+without additional machine hypotheses.
+\end{abstract}
+
+\input{../include/patch_theory_messaging.tex}
+
+\tableofcontents
+
+\section{Introduction}
+
+The repository implements classical search loops paired with Lean mirrors. The
+mathematical content that is \emph{proved} falls into three classes:
+\begin{enumerate}[label=(\roman*)]
+\item \textbf{Sound certificates:} once an integer passes a modular test, the
+      factorization identities recorded in Lean follow from standard arithmetic.
+\item \textbf{Combinatorial bookkeeping:} sparse simulation steps expand and prune
+      lists; Lean bounds list lengths and sums of lengths.
+\item \textbf{Cost scaffolding:} under explicit definitions of ``fuel'' and per-step
+      charges, Lean proves inequalities such as a degree-$6$ polynomial bound in
+      $\lfloor \log_2(n+1)\rfloor + 1$.
+\end{enumerate}
+
+What is \emph{not} proved (unless explicitly stated as a conjecture or roadmap item)
+includes completeness of search, correctness of floating-point angle rounding, and
+primality of factors returned by probabilistic engines.
+
+\section{Algorithms (informal)}
+
+\subsection{Integrated driver (\texttt{hqiv\_osh\_integrated\_driver.py})}
+
+At a high level the script:
+\begin{itemize}
+\item Peels factors of two from the input, working on an odd core.
+\item Builds a sparse harmonic register (cutoff $L$, basis size $(L{+}1)^2$).
+\item Runs sparse gate steps: expand support, apply a digital gate, detect flipped
+      indices, prune to flipped support (the ``sparse Shor-style'' spine).
+\item Maintains phase / angle channels that map indices to integer candidates; on a
+      hit, checks classical divisibility.
+\end{itemize}
+
+The Lean module \texttt{HQIVOSHIntegratedFactorDriver} names the discrete maps
+(\texttt{rootCap}, \texttt{idxAngleCandidate}, \texttt{wrapIdx}, ket fallback) and
+packages divisor witnesses after peeling.
+
+\subsection{Monolithic geometric factorizer (\texttt{monolithic\_geometric\_factorizer.py})}
+
+The monolithic script:
+\begin{itemize}
+\item Uses dynamic decimal precision tied to the bit length of the odd core.
+\item Maps rational turns $a/n$ to integer candidates via a root cap
+      $\max(2,\lfloor\sqrt{n}\rfloor)$.
+\item Applies multiplication gates with inverse strength keyed off register bit sizes
+      (``lowest register'' variant in Lean).
+\item Prunes candidate lines by an age threshold derived from
+      $\bitlen(|c-n|)+1$.
+\item Caps the number of parallel registers at cube-root scale
+      $\min(128,\lfloor n^{1/3}\rfloor)$ (after peeling twos).
+\item Accepts a factor only on a purely integer test: $1<d<\text{odd}$ and
+      $\text{odd}\bmod d = 0$.
+\end{itemize}
+
+The Lean file \texttt{MonolithicGeometricFactorizer} mirrors these discrete parameters
+and isolates real-number drift resources (\texttt{MonolithicFracResources}) as a
+\emph{template} for aligning floating-point $\theta/(2\pi)$ with floor slots.
+
+\section{Divisibility certificates and GCD}
+
+\subsection{Odd-core witness}
+
+\begin{definition}[Odd-core factor witness]
+Given odd $n\in\N$, an \emph{odd-core factor witness} consists of $d\in\N$ with
+$1<d<n$ and $d\mid n$.
+\end{definition}
+
+Lean encodes this as \texttt{OddCoreFactorWitness} (\texttt{HQIVOSHIntegratedFactorDriver}).
+Reconstruction $n = d\cdot (n/d)$ is \texttt{OddCoreFactorWitness.reconstructs}.
+
+\subsection{Peeling powers of two}
+
+If $\mathrm{orig} = 2^k \cdot \mathrm{odd}$ and $d\mid \mathrm{odd}$, then
+$2^k d \mid \mathrm{orig}$ (\texttt{two\_pow\_mul\_dvd\_of\_dvd\_odd}).
+
+\subsection{GCD and division (\texttt{FactorDivisibilityBridge})}
+
+\begin{proposition}[Division and quotient]
+For all $d,n\in\N$, $d\mid n$ if and only if $n = d\cdot (n/d)$.
+\end{proposition}
+
+\begin{proposition}[GCD as the same certificate class]
+If $1 < \gcd(x,\mathrm{odd}) < \mathrm{odd}$, then $\gcd(x,\mathrm{odd})$ yields an
+odd-core witness. If already $d\mid \mathrm{odd}$, then $\gcd(d,\mathrm{odd})=d$.
+\end{proposition}
+
+\begin{remark}
+These statements are pure arithmetic; they do \emph{not} guarantee that a particular
+random $x$ produces a nontrivial gcd. A concrete counterexample is
+$\gcd(2,15)=1$ while $3\mid 15$ (\texttt{gcd\_probe\_can\_miss\_nontrivial\_factor}).
+\end{remark}
+
+\subsection{Monolithic acceptance}
+
+\begin{definition}
+\texttt{monolithicAcceptsDivisor}$(n,d)$ $\equiv$ $1<d<n$ and $n\bmod d = 0$.
+\end{definition}
+
+\begin{proposition}
+\texttt{monolithicAcceptsDivisor}$(n,d)$ $\Leftrightarrow$ $1<d<n$ and $d\mid n$
+(\texttt{monolithicAcceptsDivisor\_iff\_dvd\_and\_bounds}).
+\end{proposition}
+
+\begin{proposition}[Compositeness]
+If $1<n$ and \texttt{monolithicAcceptsDivisor}$(n,d)$, then $n$ is not prime
+(\texttt{not\_prime\_of\_monolithicAccepts}).
+\end{proposition}
+
+\section{Sparse OSH oracle: list algebra}
+
+Let a \texttt{SparseRegister} be a finite list of indexed amplitudes. One step:
+\begin{enumerate}
+\item \texttt{causalExpandSupport} doubles support in length (horizon-causal expansion).
+\item \texttt{applyGateSparse} maps to length $2|r|$ (\texttt{applyGateSparse\_length\_eq\_two\_mul}).
+\item \texttt{detectFlippedKets} lists indices that changed between ``before'' and ``after''.
+\item \texttt{pruneToFlipped} filters to a flipped index set; length never increases
+      (\texttt{pruneToFlipped\_length\_le}).
+\end{enumerate}
+
+\begin{proposition}[Integrated step length]
+After evolve then prune,
+$|\mathrm{prune}| \le 2 \cdot |r|$ (\texttt{integrated\_pruned\_sparse\_step\_length\_le}).
+\end{proposition}
+
+\begin{proposition}[Triple sum bound]
+With $e=\texttt{applyGateSparse}(g,r)$ and $f=\texttt{detectFlippedKets}(r,e)$,
+\[
+|r| + |e| + |f| \le 6|r|
+\]
+(\texttt{sparse\_step\_list\_sum\_le\_six\_mul} in \texttt{FactorSearchCostModel}).
+\end{proposition}
+
+\section{Integrated driver maps and bounds}
+
+\subsection{Root cap and angle candidate}
+
+$\texttt{rootCap}(n) = \max(2,\lfloor\sqrt{n}\rfloor)$, always $\ge 2$.
+
+The discrete angle candidate (for basis $b$ and index $\texttt{idx}$) satisfies
+\[
+\texttt{idxAngleCandidate}(n,b,\texttt{idx}) \le 2 + \texttt{idx}\cdot \texttt{rootCap}(n)
+\]
+(\texttt{idxAngleCandidate\_le\_two\_add\_idx\_mul\_rootCap}).
+
+\subsection{Wrapped indices}
+
+$\texttt{wrapIdx}(L,\texttt{idx}) < (L+1)^2 = \texttt{sparseBasisCard}(L)$.
+
+\subsection{Ket fallback alignment}
+
+The integrated ket fallback agrees with the gate-frontier cofactor map on wrapped
+indices (\texttt{ketLinearFallback\_eq\_cofactorCandidate}), and when
+$2 \le \texttt{qSpan}(n)$, candidates stay inside the $Q$-shell bound
+(\texttt{ketLinearFallbackCandidate\_le\_qSpan}).
+
+\section{Cost model and polynomial template}
+
+\subsection{Bit-scale parameter}
+
+$\texttt{inputLog2}(n) := \lfloor \log_2(n+1)\rfloor$ and
+$d := \texttt{inputLogDim}(n) = \texttt{inputLog2}(n)+1$.
+
+\subsection{Default harmonic cutoff}
+
+$\texttt{defaultHarmonicCutoff}(n) = \max(4,\lfloor\sqrt{n}\rfloor)$, hence
+$L+1 \le 5+\lfloor\sqrt{n}\rfloor$ and basis cardinality $(L+1)^2 \le (5+\lfloor\sqrt{n}\rfloor)^2$
+for this default.
+
+\subsection{Combined per-step cap}
+
+The file \texttt{FactorSearchCostModel} defines a conservative combined cap
+\texttt{integratedCombinedPerStepCap} that sums:
+\begin{itemize}
+\item a sparse list charge modeled as $6\cdot d^3$ in terms of $d=\texttt{inputLogDim}(n)$;
+\item a phase-channel charge with history length bounded by fuel and extract cost $f^2$.
+\end{itemize}
+
+\begin{theorem}[Per-step domination]
+$\texttt{integratedCombinedPerStepCap}(n) \le 12 \cdot d^4$
+(\texttt{integratedCombinedPerStepCap\_le\_twelve\_mul\_inputLogDim\_pow\_four}).
+\end{theorem}
+
+\subsection{Total work under polylog fuel}
+
+Let $\texttt{fuelPolyLogSq}(n) = d^2$. If $\texttt{fuel} \le \texttt{fuelPolyLogSq}(n)$,
+then naive total work charged at \texttt{integratedCombinedPerStepCap} satisfies
+\[
+\texttt{fuelTotalWork}(\texttt{fuel},\texttt{integratedCombinedPerStepCap}(n))
+\;\le\; 12 \cdot d^6
+\]
+(\texttt{total\_integrated\_work\_le\_twelve\_mul\_inputLogDim\_pow\_six}).
+
+\begin{remark}
+This is a \emph{rigorous inequality in the cost model} once fuel and charges are
+instantiated as above. It is not, by itself, a wall-clock theorem: real implementations
+allocate dense intermediates, use floating-point, and may terminate earlier or later
+than the fuel model.
+\end{remark}
+
+\section{Monolithic discrete policy (selected lemmas)}
+
+\subsection{Cube-root floor}
+
+$\texttt{floorCbrt}(n)$ is the greatest $r$ with $r^3 \le n$; it satisfies the
+standard maximality properties (\texttt{floorCbrt\_cube\_le}, \texttt{floorCbrt\_lt\_succ\_cube}).
+
+\subsection{Dynamic precision}
+
+$\texttt{dynamicPrecisionDigits}(n) \le 2\cdot \texttt{inputLog2}(n) + 11$
+(\texttt{dynamicPrecisionDigits\_le\_two\_mul\_inputLog\_add\_eleven}).
+
+\subsection{Prune age threshold}
+
+For candidate $c$ and target $n$, write $d=\dist(c,n)$ and define bit-length of $d$ as
+$0$ if $d=0$ else $\lfloor\log_2 d\rfloor+1$. Then
+$\texttt{pruneAgeThreshold}(n,c)$ is this bit-length plus $1$.
+
+For $c\le n$, $\texttt{pruneAgeThreshold}(n,c) \le \texttt{inputLog2}(n)+3$
+(\texttt{pruneAgeThreshold\_le\_inputLog\_add\_three}).
+
+\subsection{Mod-periodicity certificate}
+
+If $f(t+p)\equiv f(t) \pmod m$ for all $t$, then residues at ages reduce to
+$f(\mathrm{age}\bmod p)$ (\texttt{mod\_residue\_eq\_mod\_age}) and equal ages with the
+same remainder mod $p$ yield equal residues (\texttt{age\_redundant\_mod\_obs\_of\_global\_period}).
+
+\section{Counterexamples (boundary effects)}
+
+Concrete arithmetic facts proved with \texttt{native\_decide}:
+\begin{itemize}
+\item Distances $\dist(993,1000)=7$ and $\dist(992,1000)=8$ but different
+      $\texttt{pruneAgeThreshold}$ values $4$ vs.\ $5$
+      (\texttt{pruneAgeThreshold\_jumps\_across\_dist\_boundary}).
+\item Register bit-size proxies differ across $7$ vs.\ $8$
+      (\texttt{registerBitSize\_jumps\_at\_eight}).
+\item Inverse lowest-register strength differs for pairs $(7,100)$ vs.\ $(8,100)$
+      (\texttt{strengthInvLowestRegister\_jumps\_when\_low\_coordinate\_crosses\_eight}).
+\end{itemize}
+
+\section{$G_2$-cubic factor readout for Legendre-anomalous primes}
+\label{sec:g2-cubic-factor-readout}
+
+This section records a closed-form identity discovered while probing the
+\texttt{so8\_factor.py} prototype. It is \emph{not yet} formalized in Lean but is
+fully verified numerically (see \texttt{tests/test\_factorization.py::test\_g2\_cubic\_invariant\_*}).
+
+\paragraph{Setup.}
+Let $N = p \cdot q$ with $p < q$ both odd primes. Choose Lagrange four-square
+representations
+\[
+p = a_0^2 + a_1^2 + a_2^2 + a_3^2,\qquad
+q = b_0^2 + b_1^2 + b_2^2 + b_3^2,
+\]
+and form octonions
+\[
+\alpha = a_0 + a_1 e_1 + a_2 e_2 + a_3 e_3 \in \mathbb{H},\qquad
+\gamma = (b_0 + b_1 e_1 + b_2 e_2 + b_3 e_3) \cdot e_4 \in \mathbb{H}\!\cdot\!e_4,
+\]
+so that $\mathcal{N}(\alpha) = p,\ \mathcal{N}(\gamma) = q,\ \mathcal{N}(\alpha\!\cdot\!\gamma) = N$.
+Let $\Phi(x,y,z) = \langle x,\, \mathrm{Im}(y\!\cdot\!z)\rangle$ denote the
+$G_2$-invariant trilinear cubic form on $\operatorname{Im}(\mathbb{O})$.
+
+\begin{theorem}[$G_2$-cubic factor readout]\label{thm:g2-cubic}
+With notation as above, the Cayley--Dickson identity $\gamma\!\cdot\!\alpha = (\beta\!\cdot\!\bar\alpha)\cdot e_4$
+implies the closed-form identities
+\begin{align}
+\Phi(\gamma,\gamma,\alpha) &= q \cdot a_0, \label{eq:g2-cubic}\\
+\|[\alpha,\gamma]\|^2 &= 4\,q\,(p - a_0^2). \label{eq:comm-norm}
+\end{align}
+In particular $\Phi(\alpha,\alpha,\gamma) = 0$ because both $\alpha\!\cdot\!\gamma$ and
+$\gamma\!\cdot\!\alpha$ land in the coassociative block $\operatorname{span}(e_4,\ldots,e_7)$,
+orthogonal to $\alpha \in \mathbb{H}$.
+\end{theorem}
+
+\begin{proof}[Sketch]
+The Cayley--Dickson rule on $\mathbb{O} = \mathbb{H} \oplus \mathbb{H}\!\cdot\!e_4$ gives
+$\gamma\!\cdot\!\alpha = (\beta\!\cdot\!\bar\alpha)\!\cdot\!e_4$.
+Right-multiplication by $e_4$ is an isometry of the coassociative block, so
+$\langle \beta\!\cdot\!e_4,\, (\beta\!\cdot\!\bar\alpha)\!\cdot\!e_4\rangle
+ = \langle \beta,\, \beta\!\cdot\!\bar\alpha\rangle = \mathrm{Re}(\bar\beta\!\cdot\!\beta\!\cdot\!\bar\alpha)
+ = \mathcal{N}(\beta) \cdot \mathrm{Re}(\bar\alpha) = q\, a_0$, proving \eqref{eq:g2-cubic}.
+Equation \eqref{eq:comm-norm} follows from direct expansion of
+$\alpha\!\cdot\!\gamma - \gamma\!\cdot\!\alpha$ in the coassociative block.
+\end{proof}
+
+\paragraph{Legendre's three-square obstruction.}
+By Legendre's three-square theorem, $p$ is a sum of three squares iff
+$p \not\equiv 7 \pmod 8$. Thus, for primes $p \equiv 7 \pmod 8$ every
+four-square representation has $a_0 \ge 1$, and the readout \eqref{eq:g2-cubic}
+is \emph{forced} nontrivial:
+\[
+p \equiv 7 \pmod 8 \implies a_0 \neq 0 \implies q = \Phi(\gamma,\gamma,\alpha)/a_0.
+\]
+This recovers the cofactor $q$ without classical division, given $p$.
+
+\paragraph{Forbidden cubic addition mod 7.}
+The cubes modulo $7$ are $\{0,1,6\}$, hence sums of two cubes modulo $7$ lie in
+$\{0,1,2,5,6\}$; the values $\{3,4\}$ are \emph{forbidden}. Substituting
+$\Phi(\gamma,\gamma,\alpha) = q\,a_0$ shows that, when $a_0 = 1$,
+\[
+\Phi(\gamma,\gamma,\alpha) \bmod 7 \in \{3, 4\}\iff q \bmod 7 \in \{3, 4\}.
+\]
+This is a sieve criterion: among the semiprimes for which Legendre triggers,
+the cofactor's mod-7 class is read off from the $G_2$-cubic invariant directly.
+
+\paragraph{Empirically verified cases ($p < q$, $p \equiv 7 \pmod 8$ or
+$p$ chosen with $a_0 = 1$).}
+\begin{center}
+\begin{tabular}{rrrrr}
+\hline
+$N$ & $p$ & $q$ & $\Phi(\gamma,\gamma,\alpha)$ & $q \bmod 7$ \\ \hline
+$77$ & $7$ & $11$ & $11$ & $4$ (forbidden) \\
+$91$ & $7$ & $13$ & $13$ & $6$ \\
+$221$ & $13$ & $17$ & $17$ & $3$ (forbidden) \\
+$247$ & $13$ & $19$ & $19$ & $5$ \\
+$667$ & $23$ & $29$ & $29$ & $1$ \\ \hline
+\end{tabular}
+\end{center}
+
+\paragraph{Scope.}
+Theorem~\ref{thm:g2-cubic} does \emph{not} produce a polynomial-time factoring
+algorithm: computing $\Phi(\gamma,\gamma,\alpha)$ requires constructing $\alpha,
+\gamma$, which presupposes the four-square representations of $p$ and $q$. The
+result is structural: it pins the cofactor of a Legendre-anomalous semiprime
+to a single closed-form readout off the $G_2$-invariant cubic, and ties the
+mod-7 ``forbidden cubic addition'' classification to the residue class of $q$.
+This is the analytic underpinning we use to justify the $\mathrm{so}(8)+\Delta$
+factor layer in \texttt{factorization.py}; a Lean formalization of
+\eqref{eq:g2-cubic} and \eqref{eq:comm-norm} is a natural target for the next
+formalization pass.
+
+\subsection{Three-layer structural picture: $\mathrm{so}(7) \subset \mathrm{so}(8)$ and the
+harmonic factor basis}
+\label{sec:harmonic-factor-basis}
+
+The cubic readout admits an additional layer of geometric symmetry that exposes
+all four Lagrange coefficients of $\alpha$ via three harmonic amplitudes.
+
+\paragraph{Layer 1 ($\mathrm{so}(7)$-stabilizer of $\Phi$).}
+\emph{Empirically verified} (see \texttt{harmonic\_g2\_factor.py} stabilizer
+probe): every antisymmetric generator $U(e_i, e_j) = E_{ij} - E_{ji}$ with
+$i, j \in \{1, \ldots, 7\}$ — \emph{all 21 directions inside $\mathrm{so}(7)$} —
+preserves $\Phi(\gamma, \gamma, \alpha)$ exactly when $(\alpha, \gamma)$ is in
+the standard embedding. In particular $\Delta = E_{17} - E_{71} \in \mathrm{so}(7)$
+acts as a $U(1)$ symmetry of the cubic, and the cubic readout
+$\Phi = q \cdot a_0$ is a conserved Noether charge of this $U(1)_\Delta$
+harmonic flow. This is the geometric content of ``constrain to $g_2$ in
+basis~$7$'' from the design notes.
+
+\paragraph{Layer 2 ($\mathrm{so}(8)/\mathrm{so}(7)$ as the harmonic basis).}
+The seven generators $U(e_0, e_j)$ for $j = 1, \ldots, 7$ — i.e.\ the
+$\mathrm{so}(8)$ rotations that mix the triality-fixed real axis $e_0$ with the
+imaginary axes — \emph{break} the $\mathrm{so}(7)$ stabilizer. For
+$j \in \{1, 2, 3\}$ (the associative-block boosts), the breaking takes a
+closed sinusoidal form:
+
+\begin{theorem}[Harmonic factor extraction]\label{thm:harmonic-extract}
+With $\alpha = (a_0, a_1, a_2, a_3, 0, 0, 0, 0)$ in the standard embedding, let
+$R_{0j}(\theta) = \exp(\theta\, U(e_0, e_j))$. Then for $j \in \{1, 2, 3\}$
+\begin{equation}\label{eq:sinusoid}
+\Phi\bigl(R_{0j}(\theta)\gamma,\, R_{0j}(\theta)\gamma,\, R_{0j}(\theta)\alpha\bigr)
+ \;=\; q \cdot \bigl(a_0 \cos\theta - a_j \sin\theta\bigr),
+\end{equation}
+a pure sinusoid with amplitude $A_j := q \cdot \sqrt{a_0^2 + a_j^2}$ and
+phase $\arctan(a_j / a_0)$. Consequently
+\begin{equation}\label{eq:harmonic-extract}
+q \cdot N \;=\; A_1^2 + A_2^2 + A_3^2 \;-\; 2\,\mathrm{DC}^2,
+\qquad \mathrm{DC} := \Phi(\gamma, \gamma, \alpha) = q \cdot a_0,
+\end{equation}
+so $q$ is recovered exactly from four cubic readouts.
+\end{theorem}
+
+\begin{proof}[Sketch]
+For $j \in \{1, 2, 3\}$, $\gamma$ has no component on $e_0$ or $e_j$, so
+$R_{0j}(\theta)\gamma = \gamma$. The rotation acts only on $\alpha$:
+$\alpha'_0 = a_0 \cos\theta - a_j \sin\theta$ and $\alpha'_j = a_0 \sin\theta + a_j \cos\theta$;
+the other components are fixed. By Theorem~\ref{thm:g2-cubic} (applied with
+the rotated $\alpha'$ still in $\mathbb{H}$),
+\[
+\Phi(\gamma, \gamma, \alpha') = q \cdot \alpha'_0 = q \cdot (a_0 \cos\theta - a_j \sin\theta).
+\]
+Summing the squared amplitudes:
+$A_1^2 + A_2^2 + A_3^2 = q^2(3 a_0^2 + a_1^2 + a_2^2 + a_3^2) = q^2(a_0^2 + a_1^2 + a_2^2 + a_3^2) + 2 q^2 a_0^2 = q^2 p + 2\,\mathrm{DC}^2$, giving \eqref{eq:harmonic-extract}.
+\end{proof}
+
+\paragraph{Verification.} The closed-form predictions for $A_j$ match numerical
+amplitudes (sweeping $\theta$ over $[0, 2\pi)$) to machine precision; the
+extraction \eqref{eq:harmonic-extract} returns the correct $q$ on every
+semiprime in our test corpus, including the $a_0 = 0$ cases (where $\mathrm{DC} = 0$
+and the extraction reduces to $q \cdot N = \sum_j A_j^2$). See
+\texttt{tests/test\_factorization.py::test\_harmonic\_factor\_extract\_closed\_form}.
+
+\paragraph{Scope.}
+Like Theorem~\ref{thm:g2-cubic}, this is a structural identity, not a polynomial
+factoring algorithm: the readouts $A_j$ and $\mathrm{DC}$ require constructing
+$\alpha, \gamma$. The result \emph{is} the precise sense in which the user
+description ``harmonic series as $U(1)/\Delta$'' refers to a real geometric
+basis: the seven $U(e_0, e_j)$ rotations are the Shor analog of the QFT basis,
+and the cubic readout decomposes into sinusoidal harmonics whose amplitudes
+encode the Lagrange decomposition of $p$.
+
+\section{What remains outside the formal proof}
+
+\begin{enumerate}[label=\textbf{G\arabic*.}]
+\item \textbf{Search completeness:} no Lean theorem shows that either driver
+      encounters a divisor for every composite $n$ under stated caps.
+\item \textbf{Period $\to$ divisor:} the Shor-style bridge from Fourier/period peaks
+      to $\gcd$ factors is not closed inside these files.
+\item \textbf{Floating-point:} adequacy of real drift budgets (\texttt{FracDriftAdequateResources})
+      is a template; exact Python \texttt{mpmath} semantics are not embedded.
+\item \textbf{Primality output:} probable-prime tests in scripts are not theorems.
+\item \textbf{$G_2$-cubic readout (Theorem~\ref{thm:g2-cubic}):} the Cayley--Dickson
+      identity and the closed forms~\eqref{eq:g2-cubic}--\eqref{eq:comm-norm} are
+      verified numerically in \texttt{test\_factorization.py} but not yet expressed
+      in Lean. The natural module hosting this would be
+      \texttt{Hqiv.Geometry.G2CubicFactorReadout}, parallel to the existing
+      \texttt{MonolithicGeometricFactorizer}.
+\item \textbf{Harmonic extraction (Theorem~\ref{thm:harmonic-extract}):} the
+      sinusoidal closed form~\eqref{eq:sinusoid} and the four-readout
+      extraction \eqref{eq:harmonic-extract} are verified numerically against
+      direct $\theta$-sweeps but not yet formalized. The
+      $\mathrm{so}(7)$-stabilizer claim and the $\mathrm{so}(8)/\mathrm{so}(7)$
+      harmonic basis identification are likewise empirical at present.
+\end{enumerate}
+
+\section*{Acknowledgments}
+
+Formalization standards and API conventions follow Mathlib~4 \cite{mathlib}.
+Statements in this note are intended to track the Lean modules
+\texttt{Hqiv.Geometry.FactorDivisibilityBridge},
+\texttt{Hqiv.Geometry.HQIVOSHIntegratedFactorDriver},
+\texttt{Hqiv.Geometry.MonolithicGeometricFactorizer},
+\texttt{Hqiv.Geometry.FactorSearchCostModel}, and
+\texttt{Hqiv.QuantumComputing.OSHoracle}. When in doubt, the Lean source is authoritative.
+
+\begin{thebibliography}{9}
+\bibitem{mathlib}
+The Mathlib community, \emph{Mathlib4}, \url{https://github.com/leanprover-community/mathlib4}.
+\end{thebibliography}
+
+\end{document}

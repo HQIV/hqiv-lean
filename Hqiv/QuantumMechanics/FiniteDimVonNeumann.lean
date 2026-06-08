@@ -1,5 +1,6 @@
 import Mathlib.Analysis.InnerProductSpace.PiL2
 import Mathlib.Analysis.Complex.Basic
+import Mathlib.Analysis.Complex.Norm
 import Mathlib.LinearAlgebra.Matrix.Hermitian
 import Mathlib.LinearAlgebra.Matrix.Notation
 import Mathlib.LinearAlgebra.Matrix.Trace
@@ -91,18 +92,17 @@ def DensityMatrix.fromPure {n : ℕ} (ψ : HilbertFin n) (hψ : ‖ψ‖ = 1) : 
     -- `trace (rankOne ψ) = ∑ ψᵢ conj ψᵢ = ‖ψ‖²` as complex number `1`.
     have htr := trace_rankOne ψ
     have hsq : (∑ k : Fin n, ‖ψ k‖ ^ 2 : ℝ) = 1 := by
-      -- `‖ψ‖²` in `PiLp` `L2` is sum of squared component norms.
-      have hn := congrArg (fun x : ℝ => x ^ 2) hψ
-      simp only at hn ⊢; rw [← hn]
-      clear hn hψ
-      simp [PiLp.norm_sq_eq_of_L2, Fin.sum_univ_succ]
-      rfl
+      -- `‖ψ‖²` on `EuclideanSpace` is the sum of squared component norms.
+      rw [← EuclideanSpace.norm_sq_eq ψ, hψ, one_pow]
     have hsum :
         (∑ k : Fin n, ψ k * star (ψ k) : ℂ) = 1 := by
-      have hcomp : ∀ k : Fin n, ψ k * star (ψ k) = (‖ψ k‖ ^ 2 : ℂ) := by
-        intro k
-        rw [star_def, Complex.mul_conj']
-      simp_rw [hcomp, ← Complex.ofReal_sum, hsq, Complex.ofReal_one]
+      have hterm (k : Fin n) : ψ k * star (ψ k) = Complex.ofReal (‖ψ k‖ ^ 2) := by
+        rw [star_def, mul_conj, Complex.normSq_eq_norm_sq]
+      calc
+        (∑ k : Fin n, ψ k * star (ψ k) : ℂ) = ∑ k : Fin n, Complex.ofReal (‖ψ k‖ ^ 2) :=
+          Finset.sum_congr rfl fun k _ => hterm k
+        _ = Complex.ofReal (∑ k : Fin n, ‖ψ k‖ ^ 2) := (Complex.ofReal_sum ..).symm
+        _ = 1 := by rw [hsq, Complex.ofReal_one]
     rw [hsum] at htr
     simpa [htr]
 

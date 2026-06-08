@@ -1,0 +1,39 @@
+{
+  "meta": {
+    "n_min": 8,
+    "n_max": 8,
+    "trials": 2,
+    "seed_base": 1234,
+    "rounds": 1,
+    "max_steps": 120,
+    "top_k": 6,
+    "ratio_tol": 1e-12,
+    "formula": "ratio <= 1 + n^(1/n)"
+  },
+  "summary": {
+    "total": 2,
+    "passed": 2,
+    "pass_rate": 1.0,
+    "all_valid": true
+  },
+  "certificates": [
+    {
+      "n": 8,
+      "seed": 81290,
+      "oracleCost": 5.391806900284328,
+      "optimalCost": 5.391806900284328,
+      "ratio": 1.0,
+      "bound": 2.29683955465101,
+      "valid": true
+    },
+    {
+      "n": 8,
+      "seed": 81291,
+      "oracleCost": 5.0168915668426095,
+      "optimalCost": 4.994481258844394,
+      "ratio": 1.004487014133556,
+      "bound": 2.29683955465101,
+      "valid": true
+    }
+  ]
+}

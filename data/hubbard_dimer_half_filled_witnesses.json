@@ -1,0 +1,50 @@
+{
+  "referenceM": 4,
+  "phi_formula": "2*(m+1)",
+  "u_shell_ratio_formula": "(m+1)/5",
+  "canonical_gap_formula": "(sqrt(U^2 + 16*t^2) - U)/2",
+  "rows": [
+{
+      "m": 2,
+      "phi_of_shell": 6.000000,
+      "u_ratio_num": 3,
+      "u_ratio_den": 5
+    },
+{
+      "m": 3,
+      "phi_of_shell": 8.000000,
+      "u_ratio_num": 4,
+      "u_ratio_den": 5
+    },
+{
+      "m": 4,
+      "phi_of_shell": 10.000000,
+      "u_ratio_num": 5,
+      "u_ratio_den": 5
+    },
+{
+      "m": 5,
+      "phi_of_shell": 12.000000,
+      "u_ratio_num": 6,
+      "u_ratio_den": 5
+    },
+{
+      "m": 6,
+      "phi_of_shell": 14.000000,
+      "u_ratio_num": 7,
+      "u_ratio_den": 5
+    },
+{
+      "m": 7,
+      "phi_of_shell": 16.000000,
+      "u_ratio_num": 8,
+      "u_ratio_den": 5
+    },
+{
+      "m": 8,
+      "phi_of_shell": 18.000000,
+      "u_ratio_num": 9,
+      "u_ratio_den": 5
+    }
+  ]
+}

@@ -21,6 +21,6 @@ theorem so8_closure_theorem :
     (∀ i j : Fin 28, ∃ f : Fin 28 → ℝ,
       lieBracket (so8Generator i) (so8Generator j) = ∑ k, f k • so8Generator k) ∧
     LinearIndependent ℝ (fun k : Fin 28 => so8Generator k) :=
-  generators_from_octonion_closure
+  generators_from_octonion_closure_theorem
 
 end Hqiv

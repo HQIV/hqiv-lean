@@ -3,14 +3,14 @@ import Mathlib.Data.List.Basic
 import Mathlib.Data.Real.Basic
 import Mathlib.Tactic
 
-import Hqiv.Physics.HQIVLongRange
 import Hqiv.Physics.HQIVMolecules
 
 /-!
 # HQIV collective modes: global EM snap for helices / macroscopic kinks
 
-Adds a **scalar collective multipole torque** tied to the same vacuum ladder as long-range
-contact (`phi_of_shell / availableModesNat`). The full 3-vector `Q · ∇Φ` along a pole-aligned
+Adds a **scalar collective multipole torque** tied to the vacuum ladder stiffness `φ/ν`
+(`phi_of_shell / availableModesNat`, same scale as the archived H-bond proxy in
+`Hqiv.Archive.Physics.HQIVLongRange`). The full 3-vector `Q · ∇Φ` along a pole-aligned
 axis is packaged as real parameters here; lattice / CLASS EM data supplies the numbers
 downstream.
 
@@ -52,15 +52,18 @@ noncomputable def helixAxis (m : ℕ) (_h : HelixSites m) : ℝ :=
 noncomputable def computeQuadrupole {m : ℕ} (helix : HelixSites m) : ℝ :=
   (helix.sites.length : ℝ)
 
-/-- Same vacuum-mode stiffness as long-range contact (`HQIVLongRange.K_hbond`). -/
+/-- Vacuum-mode stiffness proxy `φ(m) / ν(m)` (auxiliary-field scale per available light-cone mode). -/
 noncomputable def K_multipole (m : ℕ) : ℝ :=
-  K_hbond m
+  Hqiv.phi_of_shell m / (availableModesNat m : ℝ)
 
-theorem K_multipole_eq_K_hbond (m : ℕ) : K_multipole m = K_hbond m :=
-  rfl
-
-theorem K_multipole_pos (m : ℕ) : 0 < K_multipole m :=
-  K_hbond_pos m
+theorem K_multipole_pos (m : ℕ) : 0 < K_multipole m := by
+  unfold K_multipole
+  have hφ : 0 < Hqiv.phi_of_shell m := Hqiv.phi_of_shell_pos m
+  have hnat : 0 < availableModesNat m := by
+    unfold availableModesNat
+    exact Nat.mul_pos (by norm_num : 0 < 4) (Hqiv.latticeSimplexCount_pos m)
+  have hν : 0 < (availableModesNat m : ℝ) := Nat.cast_pos.mpr hnat
+  exact div_pos hφ hν
 
 /-!
 ## 2. Collective multipole torque (user-facing sign)
@@ -106,7 +109,7 @@ theorem macroscopic_snap_global_minimum_straight {m : ℕ} (δ : ℝ) (hδ : 0 �
   unfold helixMultipoleKinkBudget helixKinkMeasure
   simp only [max_self]
   rw [max_eq_left hδ]
-  exact mul_nonneg (le_of_lt (K_multipole_pos m)) hδ
+  exact mul_le_mul_of_nonneg_left hδ (le_of_lt (K_multipole_pos m))
 
 /-- On nonnegative misalignments the budget is **affine** in `δ`, hence convex and globally minimized at `δ = 0`
 (`macroscopic_snap_global_minimum_straight`). -/
@@ -131,7 +134,8 @@ theorem helix_kinkBudget_eq_discrete_ca_L1 (m : ℕ) (θ_ref : ℝ) (θs : List 
   have h0 : 0 ≤ listSumR (θs.map fun θ => |θ - θ_ref|) := by
     induction θs with
     | nil => simp [listSumR]
-    | cons x xs ih => simp [List.map, listSumR_cons, abs_nonneg, add_nonneg ih]
+    | cons x xs ih =>
+      simpa [List.map_cons, listSumR_cons] using add_nonneg (abs_nonneg (x - θ_ref)) ih
   rw [max_eq_left h0]
 
 /-- Same budget as summing `K_multipole * |θᵢ - θ_ref|` over interior bends (Python-style local kink sum). -/
@@ -140,14 +144,12 @@ theorem helixMultipoleKinkBudget_eq_sum_angle_terms (m : ℕ) (θ_ref : ℝ) (θ
       listSumR (θs.map fun θ => K_multipole m * |θ - θ_ref|) := by
   rw [helix_kinkBudget_eq_discrete_ca_L1]
   unfold discrete_ca_kink_L1
-  have hmap :
-      (θs.map fun θ => |θ - θ_ref|).map (fun x => K_multipole m * x) =
-        θs.map fun θ => K_multipole m * |θ - θ_ref| := by
-    rw [List.map_map]
-    congr 1
-    funext θ
-    rfl
-  rw [hmap, listSumR_map_mul_left]
+  rw [← listSumR_map_mul_left (K_multipole m) (θs.map fun θ => |θ - θ_ref|)]
+  apply congr_arg listSumR
+  induction θs with
+  | nil => rfl
+  | cons x xs ih =>
+      simpa [List.map, List.map_cons, Function.comp_apply, ih]
 
 /-- Relates the abstract `helixKinkMeasure` to the discrete L¹ aggregate (equality when `δ` is chosen as that sum). -/
 theorem helixKinkMeasure_eq_discrete_L1 (θ_ref : ℝ) (θs : List ℝ) :
@@ -156,7 +158,8 @@ theorem helixKinkMeasure_eq_discrete_L1 (θ_ref : ℝ) (θs : List ℝ) :
   have h0 : 0 ≤ listSumR (θs.map fun θ => |θ - θ_ref|) := by
     induction θs with
     | nil => simp [listSumR]
-    | cons x xs ih => simp [List.map, listSumR_cons, abs_nonneg, add_nonneg ih]
+    | cons x xs ih =>
+      simpa [List.map_cons, listSumR_cons] using add_nonneg (abs_nonneg (x - θ_ref)) ih
   rw [max_eq_left h0]
 
 /-- If the projected coupling drops under a kink (`cₖ < cₛ`), the torque term becomes **less negative**
@@ -168,8 +171,7 @@ theorem helixMultipoleTorque_kink_raises_EM_budget {m : ℕ} (a : AtomicSurfaceA
         helixMultipoleTorque { sites := [a] } { quadrupoleGradientCoupling := fun _ => cₛ } >
       0 := by
   simp [helixMultipoleTorque, quadrupoleDotGradient, computeQuadrupole, helixAxis, HelixSites]
-  rw [← mul_sub]
-  exact mul_pos hK (sub_pos.mpr h)
+  exact mul_lt_mul_of_pos_left h hK
 
 /-!
 ## 4. Collective relaxation: O(|helix|) batch, `TorqueTree` topology preserved
@@ -198,8 +200,7 @@ theorem collectiveRelaxStep_wellFormed {m : ℕ} (tree : TorqueTree m) (hw : Tor
 theorem collectiveRelaxHelixList_length {m : ℕ} (helices : List (HelixSites m)) (Φ : GlobalEMField)
     (dt : ℝ) :
     (collectiveRelaxHelixList helices Φ dt).length = helices.length := by
-  unfold collectiveRelaxHelixList
-  exact List.length_map _ _
+  simp [collectiveRelaxHelixList, List.length_map]
 
 /-!
 ## 5. Annealing anchor (310 K) + PDB symbolic bounds (numeric equalities only)
@@ -238,8 +239,8 @@ theorem «9ggo_a_collective_improvement» :
 ## 6. Runtime: one map pass per helix batch (linear list length)
 -/
 
-theorem runtime_impact {α β : Type*} (l : List α) (f : α → β) : (l.map f).length = l.length :=
-  List.length_map f l
+theorem runtime_impact {α β : Type*} (l : List α) (f : α → β) : (l.map f).length = l.length := by
+  simp [List.length_map]
 
 theorem runtime_impact_collective_batch {m : ℕ} (helices : List (HelixSites m)) (Φ : GlobalEMField)
     (dt : ℝ) :

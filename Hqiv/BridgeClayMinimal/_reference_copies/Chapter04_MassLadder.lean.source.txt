@@ -1,0 +1,11 @@
+import Hqiv.Story.Chapter03_ConservedShell
+import Hqiv.Physics.HarmonicLadderMass
+
+/-!
+# Story — Chapter 4: harmonic ladder and mass couplings
+
+Shell index `m` → temperature → `φ` → `shell_shape` → effective `α` and hydrogenic-style binding
+**without** triality (triality is later algebra chapters in the full repo graph).
+
+Downstream: `Chapter05_Baryogenesis` (QCD/lock-in shell geometry and Ω_k).
+-/

@@ -1,6 +1,9 @@
 import Hqiv.Physics.DerivedGaugeAndLeptonSector
 import Hqiv.Physics.DerivedNucleonMass
+import Hqiv.Physics.ScaleWitness
+import Hqiv.Physics.OMaxwellRationalMassLadder
 import Hqiv.Physics.QuarkMetaResonance
+import Hqiv.Physics.QuarkOMaxwellBridge
 
 /-!
 Light-weight witness-only build entrypoint.

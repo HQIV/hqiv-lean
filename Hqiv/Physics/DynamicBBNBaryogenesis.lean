@@ -162,6 +162,34 @@ theorem bbnBindingReleaseFactor_pos (T_MeV : ℝ) :
   unfold bbnBindingReleaseFactor
   exact Real.exp_pos _
 
+theorem T_Pl_MeV_pos : 0 < T_Pl_MeV := by
+  unfold T_Pl_MeV
+  norm_num
+
+theorem bbnXiFromT_at_T_MeV_from_xi (ξ : ℝ) (hξ : 0 < ξ) :
+    bbnXiFromT_MeV (T_Pl_MeV / ξ) = ξ := by
+  unfold bbnXiFromT_MeV
+  field_simp [ne_of_gt T_Pl_MeV_pos, hξ]
+
+theorem bbnCurvatureTemperatureSlope_at_xiLockin :
+    bbnCurvatureTemperatureSlope (T_Pl_MeV / xiLockin) = 0 := by
+  have hξ : 0 < xiLockin := by
+    rw [xiLockin_eq_five]
+    norm_num
+  have hxi : bbnXiFromT_MeV (T_Pl_MeV / xiLockin) = xiLockin :=
+    bbnXiFromT_at_T_MeV_from_xi xiLockin hξ
+  simp [bbnCurvatureTemperatureSlope, hxi, sub_self, Real.log_div, div_self (ne_of_gt hξ), zero_div]
+
+theorem bbnBoundedCurvatureTemperatureSlope_at_xiLockin :
+    bbnBoundedCurvatureTemperatureSlope (T_Pl_MeV / xiLockin) = 0 := by
+  unfold bbnBoundedCurvatureTemperatureSlope
+  rw [bbnCurvatureTemperatureSlope_at_xiLockin, zero_div]
+
+theorem bbnBindingReleaseFactor_at_xiLockin :
+    bbnBindingReleaseFactor (T_Pl_MeV / xiLockin) = 1 := by
+  unfold bbnBindingReleaseFactor
+  rw [bbnBoundedCurvatureTemperatureSlope_at_xiLockin, mul_zero, neg_zero, Real.exp_zero]
+
 /-- Dynamic BBN shell reaction opportunity for one cooling step.
 
 This mirrors `BBNEpochNetwork.bbnShellReactionOpportunity` and is kept local

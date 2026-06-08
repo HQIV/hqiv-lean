@@ -1,0 +1,45 @@
+:root {
+  --bg: #0c0f12;
+  --panel: #141a22;
+  --panel2: #1a222c;
+  --text: #e8edf4;
+  --muted: #8b97a8;
+  --accent: #5eead4;
+  --accent-dim: #2dd4bf88;
+  --warn: #fbbf24;
+  --border: #2a3441;
+  --tent: #f472b6;
+  --nav-h: 52px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  height: 100%;
+  font-family: "DM Sans", system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.5;
+}
+
+#app {
+  height: 100%;
+}
+
+a {
+  color: var(--accent);
+  text-decoration: none;
+}
+a:hover {
+  text-decoration: underline;
+}
+
+code,
+.mono {
+  font-family: "IBM Plex Mono", ui-monospace, monospace;
+  font-size: 0.88em;
+}

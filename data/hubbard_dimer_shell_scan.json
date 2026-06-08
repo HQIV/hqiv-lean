@@ -1,0 +1,89 @@
+{
+  "coherence": 1.0,
+  "lambda0": 0.8,
+  "m_end": 8,
+  "m_start": 2,
+  "model": "hubbard_dimer_reduced_spin_sector",
+  "rows": [
+    {
+      "double_occupancy_proxy": 0.19165676188116898,
+      "double_occupancy_proxy_t": 1.2384367343578433e-32,
+      "gap": 1.5767936211491906,
+      "ground_energy": -2.0567936211491906,
+      "lambda_shell": 0.48,
+      "m": 2,
+      "phi_of_shell": 6.0,
+      "spin_correlation": 0.24999999999999992,
+      "spin_correlation_t": -0.7499999999999996
+    },
+    {
+      "double_occupancy_proxy": 0.17380606822405412,
+      "double_occupancy_proxy_t": 2.7606604204198566e-32,
+      "gap": 1.4599047597450698,
+      "ground_energy": -2.09990475974507,
+      "lambda_shell": 0.6400000000000001,
+      "m": 3,
+      "phi_of_shell": 8.0,
+      "spin_correlation": 0.25,
+      "spin_correlation_t": -0.7499999999999993
+    },
+    {
+      "double_occupancy_proxy": 0.1571523309114741,
+      "double_occupancy_proxy_t": 7.017585891202072e-32,
+      "gap": 1.354065922853801,
+      "ground_energy": -2.154065922853801,
+      "lambda_shell": 0.8,
+      "m": 4,
+      "phi_of_shell": 10.0,
+      "spin_correlation": 0.24999999999999986,
+      "spin_correlation_t": -0.7499999999999991
+    },
+    {
+      "double_occupancy_proxy": 0.14181723310380717,
+      "double_occupancy_proxy_t": 4.12883917097888e-32,
+      "gap": 1.2584679398179275,
+      "ground_energy": -2.2184679398179274,
+      "lambda_shell": 0.96,
+      "m": 5,
+      "phi_of_shell": 12.0,
+      "spin_correlation": 0.2499999999999999,
+      "spin_correlation_t": -0.7499999999999993
+    },
+    {
+      "double_occupancy_proxy": 0.12784915776703923,
+      "double_occupancy_proxy_t": 2.664826069585051e-32,
+      "gap": 1.1722478051031044,
+      "ground_energy": -2.2922478051031043,
+      "lambda_shell": 1.1199999999999999,
+      "m": 6,
+      "phi_of_shell": 14.0,
+      "spin_correlation": 0.25,
+      "spin_correlation_t": -0.7499999999999993
+    },
+    {
+      "double_occupancy_proxy": 0.11523657589415823,
+      "double_occupancy_proxy_t": 2.515685695734925e-32,
+      "gap": 1.0945315327449312,
+      "ground_energy": -2.3745315327449315,
+      "lambda_shell": 1.2800000000000002,
+      "m": 7,
+      "phi_of_shell": 16.0,
+      "spin_correlation": 0.24999999999999986,
+      "spin_correlation_t": -0.7499999999999993
+    },
+    {
+      "double_occupancy_proxy": 0.10392381853873107,
+      "double_occupancy_proxy_t": 2.1419915190839825e-32,
+      "gap": 1.0244674881198972,
+      "ground_energy": -2.4644674881198974,
+      "lambda_shell": 1.4400000000000002,
+      "m": 8,
+      "phi_of_shell": 18.0,
+      "spin_correlation": 0.25000000000000006,
+      "spin_correlation_t": -0.7499999999999994
+    }
+  ],
+  "scan_kind": "shell_index_sweep",
+  "t_hop": 1.0,
+  "time": 0.6283185307179586
+}

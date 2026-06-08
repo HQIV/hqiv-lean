@@ -1,0 +1,95 @@
+{
+  "summary": {
+    "total_samples": 1200,
+    "slices_total": 7,
+    "slices_retained": 3,
+    "max_decay_slope": -0.02,
+    "min_points": 8
+  },
+  "slices": [
+    {
+      "slice_index": 0,
+      "fano_angle_rad": 0.0,
+      "points": 240,
+      "decay_slope_log_abs": -0.01593461342417262,
+      "kept_for_fft": true,
+      "dominant_frequency": {
+        "k": 13.0,
+        "amplitude": 1.8909619196766099,
+        "period_shells": 9.23076923076923
+      }
+    },
+    {
+      "slice_index": 1,
+      "fano_angle_rad": 0.8975979010256552,
+      "points": 240,
+      "decay_slope_log_abs": -0.027824399897331566,
+      "kept_for_fft": false,
+      "dominant_frequency": {
+        "k": 0.0,
+        "amplitude": 0.0,
+        "period_shells": Infinity
+      }
+    },
+    {
+      "slice_index": 2,
+      "fano_angle_rad": 1.7951958020513104,
+      "points": 240,
+      "decay_slope_log_abs": -0.028040691927002932,
+      "kept_for_fft": false,
+      "dominant_frequency": {
+        "k": 0.0,
+        "amplitude": 0.0,
+        "period_shells": Infinity
+      }
+    },
+    {
+      "slice_index": 3,
+      "fano_angle_rad": 2.6927937030769655,
+      "points": 120,
+      "decay_slope_log_abs": -0.0036019500783414917,
+      "kept_for_fft": true,
+      "dominant_frequency": {
+        "k": 7.0,
+        "amplitude": 44.8939216018607,
+        "period_shells": 17.142857142857142
+      }
+    },
+    {
+      "slice_index": 4,
+      "fano_angle_rad": 3.5903916041026207,
+      "points": 120,
+      "decay_slope_log_abs": -0.027227992488856118,
+      "kept_for_fft": false,
+      "dominant_frequency": {
+        "k": 0.0,
+        "amplitude": 0.0,
+        "period_shells": Infinity
+      }
+    },
+    {
+      "slice_index": 5,
+      "fano_angle_rad": 4.487989505128276,
+      "points": 120,
+      "decay_slope_log_abs": -0.0019261187589284922,
+      "kept_for_fft": true,
+      "dominant_frequency": {
+        "k": 7.0,
+        "amplitude": 44.75440743864364,
+        "period_shells": 17.142857142857142
+      }
+    },
+    {
+      "slice_index": 6,
+      "fano_angle_rad": 5.385587406153931,
+      "points": 120,
+      "decay_slope_log_abs": -0.027831779040888686,
+      "kept_for_fft": false,
+      "dominant_frequency": {
+        "k": 0.0,
+        "amplitude": 0.0,
+        "period_shells": Infinity
+      }
+    }
+  ]
+}

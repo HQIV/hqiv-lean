@@ -1,0 +1,9 @@
+{
+  "name": "hqiv-zk-factor-steps",
+  "private": true,
+  "description": "Groth16 (snarkjs) witness for first-divisor step count (disclosure build)",
+  "devDependencies": {
+    "circomlib": "^2.0.5",
+    "snarkjs": "^0.7.5"
+  }
+}

@@ -1,0 +1,11 @@
+import Hqiv.Story.Chapter01_Foundation
+import Hqiv.Geometry.HQVMetric
+
+/-!
+# Story — Chapter 2: HQVM metric
+
+Lapse `N = 1 + Φ + φ·t`, monogamy coefficient `γ`, and the effective Friedmann interface on the same
+horizon substrate as Chapter 1.
+
+Downstream: `Chapter03_ConservedShell` (conservations forced by the metric structure).
+-/

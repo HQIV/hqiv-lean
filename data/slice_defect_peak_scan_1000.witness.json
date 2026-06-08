@@ -1,0 +1,6018 @@
+{
+  "meta": {
+    "mode": "direct_defect_profile"
+  },
+  "N": 1001,
+  "candidate_m": 1000,
+  "candidate_abs_defect": 864130.0195103739,
+  "all_holds": true,
+  "checks": [
+    {
+      "n": 0,
+      "abs_defect_n": 5.858407346410207,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 1,
+      "abs_defect_n": 12.433629385640828,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 2,
+      "abs_defect_n": 20.725666117691862,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 3,
+      "abs_defect_n": 30.73451754256331,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 4,
+      "abs_defect_n": 42.46018366025517,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 5,
+      "abs_defect_n": 55.90266447076745,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 6,
+      "abs_defect_n": 71.06195997410015,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 7,
+      "abs_defect_n": 87.93807017025324,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 8,
+      "abs_defect_n": 106.53099505922677,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 9,
+      "abs_defect_n": 126.84073464102067,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 10,
+      "abs_defect_n": 148.86728891563502,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 11,
+      "abs_defect_n": 172.6106578830698,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 12,
+      "abs_defect_n": 198.07084154332495,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 13,
+      "abs_defect_n": 225.2478398964006,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 14,
+      "abs_defect_n": 254.14165294229656,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 15,
+      "abs_defect_n": 284.75228068101296,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 16,
+      "abs_defect_n": 317.0797231125498,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 17,
+      "abs_defect_n": 351.1239802369071,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 18,
+      "abs_defect_n": 386.8850520540848,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 19,
+      "abs_defect_n": 424.3629385640827,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 20,
+      "abs_defect_n": 463.5576397669013,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 21,
+      "abs_defect_n": 504.46915566254006,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 22,
+      "abs_defect_n": 547.0974862509995,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 23,
+      "abs_defect_n": 591.4426315322792,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 24,
+      "abs_defect_n": 637.5045915063793,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 25,
+      "abs_defect_n": 685.2833661732998,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 26,
+      "abs_defect_n": 734.778955533041,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 27,
+      "abs_defect_n": 785.9913595856024,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 28,
+      "abs_defect_n": 838.920578330984,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 29,
+      "abs_defect_n": 893.5666117691862,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 30,
+      "abs_defect_n": 949.9294599002087,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 31,
+      "abs_defect_n": 1008.0091227240518,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 32,
+      "abs_defect_n": 1067.8056002407152,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 33,
+      "abs_defect_n": 1129.3188924501992,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 34,
+      "abs_defect_n": 1192.5489993525034,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 35,
+      "abs_defect_n": 1257.4959209476283,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 36,
+      "abs_defect_n": 1324.159657235573,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 37,
+      "abs_defect_n": 1392.5402082163391,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 38,
+      "abs_defect_n": 1462.637573889925,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 39,
+      "abs_defect_n": 1534.4517542563308,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 40,
+      "abs_defect_n": 1607.982749315558,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 41,
+      "abs_defect_n": 1683.230559067605,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 42,
+      "abs_defect_n": 1760.1951835124728,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 43,
+      "abs_defect_n": 1838.8766226501602,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 44,
+      "abs_defect_n": 1919.2748764806693,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 45,
+      "abs_defect_n": 2001.389945003998,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 46,
+      "abs_defect_n": 2085.2218282201466,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 47,
+      "abs_defect_n": 2170.7705261291167,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 48,
+      "abs_defect_n": 2258.0360387309065,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 49,
+      "abs_defect_n": 2347.018366025517,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 50,
+      "abs_defect_n": 2437.717508012948,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 51,
+      "abs_defect_n": 2530.133464693199,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 52,
+      "abs_defect_n": 2624.2662360662707,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 53,
+      "abs_defect_n": 2720.115822132164,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 54,
+      "abs_defect_n": 2817.682222890875,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 55,
+      "abs_defect_n": 2916.9654383424095,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 56,
+      "abs_defect_n": 3017.965468486762,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 57,
+      "abs_defect_n": 3120.682313323936,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 58,
+      "abs_defect_n": 3225.1159728539296,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 59,
+      "abs_defect_n": 3331.266447076745,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 60,
+      "abs_defect_n": 3439.13373599238,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 61,
+      "abs_defect_n": 3548.717839600835,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 62,
+      "abs_defect_n": 3660.0187579021112,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 63,
+      "abs_defect_n": 3773.0364908962074,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 64,
+      "abs_defect_n": 3887.7710385831233,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 65,
+      "abs_defect_n": 4004.222400962861,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 66,
+      "abs_defect_n": 4122.390578035418,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 67,
+      "abs_defect_n": 4242.275569800797,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 68,
+      "abs_defect_n": 4363.877376258995,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 69,
+      "abs_defect_n": 4487.195997410014,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 70,
+      "abs_defect_n": 4612.2314332538535,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 71,
+      "abs_defect_n": 4738.983683790513,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 72,
+      "abs_defect_n": 4867.452749019991,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 73,
+      "abs_defect_n": 4997.638628942292,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 74,
+      "abs_defect_n": 5129.541323557412,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 75,
+      "abs_defect_n": 5263.1608328653565,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 76,
+      "abs_defect_n": 5398.497156866117,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 77,
+      "abs_defect_n": 5535.5502955597,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 78,
+      "abs_defect_n": 5674.3202489461,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 79,
+      "abs_defect_n": 5814.807017025323,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 80,
+      "abs_defect_n": 5957.010599797366,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 81,
+      "abs_defect_n": 6100.930997262232,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 82,
+      "abs_defect_n": 6246.568209419915,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 83,
+      "abs_defect_n": 6393.92223627042,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 84,
+      "abs_defect_n": 6542.993077813746,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 85,
+      "abs_defect_n": 6693.780734049891,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 86,
+      "abs_defect_n": 6846.285204978856,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 87,
+      "abs_defect_n": 7000.506490600641,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 88,
+      "abs_defect_n": 7156.444590915249,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 89,
+      "abs_defect_n": 7314.099505922677,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 90,
+      "abs_defect_n": 7473.471235622925,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 91,
+      "abs_defect_n": 7634.559780015992,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 92,
+      "abs_defect_n": 7797.365139101879,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 93,
+      "abs_defect_n": 7961.887312880586,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 94,
+      "abs_defect_n": 8128.126301352117,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 95,
+      "abs_defect_n": 8296.082104516467,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 96,
+      "abs_defect_n": 8465.754722373636,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 97,
+      "abs_defect_n": 8637.144154923626,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 98,
+      "abs_defect_n": 8810.250402166439,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 99,
+      "abs_defect_n": 8985.073464102068,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 100,
+      "abs_defect_n": 9161.61334073052,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 101,
+      "abs_defect_n": 9339.870032051793,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 102,
+      "abs_defect_n": 9519.843538065885,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 103,
+      "abs_defect_n": 9701.533858772797,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 104,
+      "abs_defect_n": 9884.940994172532,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 105,
+      "abs_defect_n": 10070.064944265083,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 106,
+      "abs_defect_n": 10256.905709050458,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 107,
+      "abs_defect_n": 10445.463288528656,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 108,
+      "abs_defect_n": 10635.73768269967,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 109,
+      "abs_defect_n": 10827.7288915635,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 110,
+      "abs_defect_n": 11021.43691512016,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 111,
+      "abs_defect_n": 11216.861753369638,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 112,
+      "abs_defect_n": 11414.003406311931,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 113,
+      "abs_defect_n": 11612.861873947048,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 114,
+      "abs_defect_n": 11813.437156274988,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 115,
+      "abs_defect_n": 12015.729253295744,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 116,
+      "abs_defect_n": 12219.738165009323,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 117,
+      "abs_defect_n": 12425.463891415719,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 118,
+      "abs_defect_n": 12632.906432514937,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 119,
+      "abs_defect_n": 12842.06578830698,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 120,
+      "abs_defect_n": 13052.941958791838,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 121,
+      "abs_defect_n": 13265.53494396952,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 122,
+      "abs_defect_n": 13479.844743840018,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 123,
+      "abs_defect_n": 13695.87135840334,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 124,
+      "abs_defect_n": 13913.614787659484,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 125,
+      "abs_defect_n": 14133.075031608445,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 126,
+      "abs_defect_n": 14354.25209025023,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 127,
+      "abs_defect_n": 14577.14596358483,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 128,
+      "abs_defect_n": 14801.756651612253,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 129,
+      "abs_defect_n": 15028.084154332493,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 130,
+      "abs_defect_n": 15256.128471745564,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 131,
+      "abs_defect_n": 15485.889603851443,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 132,
+      "abs_defect_n": 15717.367550650153,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 133,
+      "abs_defect_n": 15950.562312141672,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 134,
+      "abs_defect_n": 16185.473888326022,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 135,
+      "abs_defect_n": 16422.102279203187,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 136,
+      "abs_defect_n": 16660.447484773176,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 137,
+      "abs_defect_n": 16900.50950503598,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 138,
+      "abs_defect_n": 17142.28833999161,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 139,
+      "abs_defect_n": 17385.783989640055,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 140,
+      "abs_defect_n": 17630.996453981323,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 141,
+      "abs_defect_n": 17877.925733015414,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 142,
+      "abs_defect_n": 18126.57182674232,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 143,
+      "abs_defect_n": 18376.934735162053,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 144,
+      "abs_defect_n": 18629.0144582746,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 145,
+      "abs_defect_n": 18882.810996079963,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 146,
+      "abs_defect_n": 19138.324348578157,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 147,
+      "abs_defect_n": 19395.554515769167,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 148,
+      "abs_defect_n": 19654.501497653007,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 149,
+      "abs_defect_n": 19915.16529422965,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 150,
+      "abs_defect_n": 20177.545905499122,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 151,
+      "abs_defect_n": 20441.643331461426,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 152,
+      "abs_defect_n": 20707.45757211653,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 153,
+      "abs_defect_n": 20974.988627464467,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 154,
+      "abs_defect_n": 21244.23649750522,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 155,
+      "abs_defect_n": 21515.2011822388,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 156,
+      "abs_defect_n": 21787.882681665185,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 157,
+      "abs_defect_n": 22062.2809957844,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 158,
+      "abs_defect_n": 22338.396124596446,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 159,
+      "abs_defect_n": 22616.228068101293,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 160,
+      "abs_defect_n": 22895.77682629897,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 161,
+      "abs_defect_n": 23177.042399189464,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 162,
+      "abs_defect_n": 23460.02478677279,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 163,
+      "abs_defect_n": 23744.72398904893,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 164,
+      "abs_defect_n": 24031.140006017886,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 165,
+      "abs_defect_n": 24319.27283767966,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 166,
+      "abs_defect_n": 24609.122484034262,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 167,
+      "abs_defect_n": 24900.68894508168,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 168,
+      "abs_defect_n": 25193.972220821917,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 169,
+      "abs_defect_n": 25488.972311254984,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 170,
+      "abs_defect_n": 25785.689216380866,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 171,
+      "abs_defect_n": 26084.122936199565,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 172,
+      "abs_defect_n": 26384.27347071108,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 173,
+      "abs_defect_n": 26686.140819915425,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 174,
+      "abs_defect_n": 26989.724983812586,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 175,
+      "abs_defect_n": 27295.025962402564,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 176,
+      "abs_defect_n": 27602.043755685372,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 177,
+      "abs_defect_n": 27910.778363660997,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 178,
+      "abs_defect_n": 28221.229786329437,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 179,
+      "abs_defect_n": 28533.39802369071,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 180,
+      "abs_defect_n": 28847.28307574478,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 181,
+      "abs_defect_n": 29162.8849424917,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 182,
+      "abs_defect_n": 29480.20362393142,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 183,
+      "abs_defect_n": 29799.23912006397,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 184,
+      "abs_defect_n": 30119.991430889335,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 185,
+      "abs_defect_n": 30442.460556407517,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 186,
+      "abs_defect_n": 30766.64649661853,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 187,
+      "abs_defect_n": 31092.549251522345,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 188,
+      "abs_defect_n": 31420.168821119005,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 189,
+      "abs_defect_n": 31749.505205408466,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 190,
+      "abs_defect_n": 32080.55840439076,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 191,
+      "abs_defect_n": 32413.328418065867,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 192,
+      "abs_defect_n": 32747.81524643379,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 193,
+      "abs_defect_n": 33084.018889494546,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 194,
+      "abs_defect_n": 33421.93934724812,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 195,
+      "abs_defect_n": 33761.576619694504,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 196,
+      "abs_defect_n": 34102.93070683372,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 197,
+      "abs_defect_n": 34446.001608665756,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 198,
+      "abs_defect_n": 34790.789325190606,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 199,
+      "abs_defect_n": 35137.29385640827,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 200,
+      "abs_defect_n": 35485.51520231877,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 201,
+      "abs_defect_n": 35835.45336292208,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 202,
+      "abs_defect_n": 36187.10833821821,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 203,
+      "abs_defect_n": 36540.48012820717,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 204,
+      "abs_defect_n": 36895.56873288893,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 205,
+      "abs_defect_n": 37252.37415226354,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 206,
+      "abs_defect_n": 37610.89638633095,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 207,
+      "abs_defect_n": 37971.135435091186,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 208,
+      "abs_defect_n": 38333.091298544256,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 209,
+      "abs_defect_n": 38696.76397669013,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 210,
+      "abs_defect_n": 39062.15346952883,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 211,
+      "abs_defect_n": 39429.25977706033,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 212,
+      "abs_defect_n": 39798.082899284665,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 213,
+      "abs_defect_n": 40168.62283620183,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 214,
+      "abs_defect_n": 40540.879587811825,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 215,
+      "abs_defect_n": 40914.85315411462,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 216,
+      "abs_defect_n": 41290.54353511022,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 217,
+      "abs_defect_n": 41667.95073079868,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 218,
+      "abs_defect_n": 42047.07474117994,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 219,
+      "abs_defect_n": 42427.915566254,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 220,
+      "abs_defect_n": 42810.47320602092,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 221,
+      "abs_defect_n": 43194.74766048064,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 222,
+      "abs_defect_n": 43580.73892963317,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 223,
+      "abs_defect_n": 43968.44701347855,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 224,
+      "abs_defect_n": 44357.87191201674,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 225,
+      "abs_defect_n": 44749.013625247724,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 226,
+      "abs_defect_n": 45141.87215317154,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 227,
+      "abs_defect_n": 45536.44749578819,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 228,
+      "abs_defect_n": 45932.73965309767,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 229,
+      "abs_defect_n": 46330.74862509995,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 230,
+      "abs_defect_n": 46730.47441179506,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 231,
+      "abs_defect_n": 47131.917013182974,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 232,
+      "abs_defect_n": 47535.07642926372,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 233,
+      "abs_defect_n": 47939.95266003729,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 234,
+      "abs_defect_n": 48346.54570550367,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 235,
+      "abs_defect_n": 48754.855565662874,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 236,
+      "abs_defect_n": 49164.88224051491,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 237,
+      "abs_defect_n": 49576.62573005975,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 238,
+      "abs_defect_n": 49990.08603429742,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 239,
+      "abs_defect_n": 50405.26315322792,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 240,
+      "abs_defect_n": 50822.15708685122,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 241,
+      "abs_defect_n": 51240.76783516735,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 242,
+      "abs_defect_n": 51661.095398176316,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 243,
+      "abs_defect_n": 52083.13977587808,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 244,
+      "abs_defect_n": 52506.900968272676,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 245,
+      "abs_defect_n": 52932.37897536007,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 246,
+      "abs_defect_n": 53359.5737971403,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 247,
+      "abs_defect_n": 53788.48543361336,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 248,
+      "abs_defect_n": 54219.113884779246,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 249,
+      "abs_defect_n": 54651.45915063794,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 250,
+      "abs_defect_n": 55085.52123118946,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 251,
+      "abs_defect_n": 55521.30012643378,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 252,
+      "abs_defect_n": 55958.79583637093,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 253,
+      "abs_defect_n": 56398.00836100092,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 254,
+      "abs_defect_n": 56838.9377003237,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 255,
+      "abs_defect_n": 57281.58385433932,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 256,
+      "abs_defect_n": 57725.946823047765,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 257,
+      "abs_defect_n": 58172.02660644901,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 258,
+      "abs_defect_n": 58619.82320454309,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 259,
+      "abs_defect_n": 59069.33661732997,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 260,
+      "abs_defect_n": 59520.56684480971,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 261,
+      "abs_defect_n": 59973.513886982255,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 262,
+      "abs_defect_n": 60428.1777438476,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 263,
+      "abs_defect_n": 60884.55841540577,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 264,
+      "abs_defect_n": 61342.65590165678,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 265,
+      "abs_defect_n": 61802.47020260061,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 266,
+      "abs_defect_n": 62264.00131823725,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 267,
+      "abs_defect_n": 62727.24924856669,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 268,
+      "abs_defect_n": 63192.213993588986,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 269,
+      "abs_defect_n": 63658.895553304086,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 270,
+      "abs_defect_n": 64127.29392771202,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 271,
+      "abs_defect_n": 64597.40911681275,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 272,
+      "abs_defect_n": 65069.24112060631,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 273,
+      "abs_defect_n": 65542.7899390927,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 274,
+      "abs_defect_n": 66018.0555722719,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 275,
+      "abs_defect_n": 66495.03802014393,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 276,
+      "abs_defect_n": 66973.73728270875,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 277,
+      "abs_defect_n": 67454.15335996644,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 278,
+      "abs_defect_n": 67936.28625191693,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 279,
+      "abs_defect_n": 68420.13595856022,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 280,
+      "abs_defect_n": 68905.70247989634,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 281,
+      "abs_defect_n": 69392.98581592529,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 282,
+      "abs_defect_n": 69881.98596664707,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 283,
+      "abs_defect_n": 70372.70293206166,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 284,
+      "abs_defect_n": 70865.13671216904,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 285,
+      "abs_defect_n": 71359.28730696929,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 286,
+      "abs_defect_n": 71855.15471646233,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 287,
+      "abs_defect_n": 72352.73894064821,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 288,
+      "abs_defect_n": 72852.03997952689,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 289,
+      "abs_defect_n": 73353.0578330984,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 290,
+      "abs_defect_n": 73855.79250136274,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 291,
+      "abs_defect_n": 74360.24398431985,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 292,
+      "abs_defect_n": 74866.41228196985,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 293,
+      "abs_defect_n": 75374.29739431263,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 294,
+      "abs_defect_n": 75883.89932134823,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 295,
+      "abs_defect_n": 76395.21806307667,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 296,
+      "abs_defect_n": 76908.25361949793,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 297,
+      "abs_defect_n": 77423.00599061203,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 298,
+      "abs_defect_n": 77939.4751764189,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 299,
+      "abs_defect_n": 78457.6611769186,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 300,
+      "abs_defect_n": 78977.56399211113,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 301,
+      "abs_defect_n": 79499.18362199649,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 302,
+      "abs_defect_n": 80022.52006657468,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 303,
+      "abs_defect_n": 80547.5733258457,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 304,
+      "abs_defect_n": 81074.3433998095,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 305,
+      "abs_defect_n": 81602.83028846612,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 306,
+      "abs_defect_n": 82133.03399181558,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 307,
+      "abs_defect_n": 82664.95450985787,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 308,
+      "abs_defect_n": 83198.59184259298,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 309,
+      "abs_defect_n": 83733.94599002087,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 310,
+      "abs_defect_n": 84271.0169521416,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 311,
+      "abs_defect_n": 84809.8047289552,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 312,
+      "abs_defect_n": 85350.30932046159,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 313,
+      "abs_defect_n": 85892.53072666074,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 314,
+      "abs_defect_n": 86436.46894755278,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 315,
+      "abs_defect_n": 86982.1239831376,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 316,
+      "abs_defect_n": 87529.4958334153,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 317,
+      "abs_defect_n": 88078.58449838578,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 318,
+      "abs_defect_n": 88629.38997804909,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 319,
+      "abs_defect_n": 89181.91227240517,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 320,
+      "abs_defect_n": 89736.15138145414,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 321,
+      "abs_defect_n": 90292.10730519588,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 322,
+      "abs_defect_n": 90849.78004363045,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 323,
+      "abs_defect_n": 91409.16959675786,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 324,
+      "abs_defect_n": 91970.27596457809,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 325,
+      "abs_defect_n": 92533.09914709115,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 326,
+      "abs_defect_n": 93097.63914429699,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 327,
+      "abs_defect_n": 93663.89595619572,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 328,
+      "abs_defect_n": 94231.86958278721,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 329,
+      "abs_defect_n": 94801.56002407154,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 330,
+      "abs_defect_n": 95372.9672800487,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 331,
+      "abs_defect_n": 95946.09135071863,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 332,
+      "abs_defect_n": 96520.93223608145,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 333,
+      "abs_defect_n": 97097.48993613705,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 334,
+      "abs_defect_n": 97675.76445088547,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 335,
+      "abs_defect_n": 98255.75578032673,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 336,
+      "abs_defect_n": 98837.46392446081,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 337,
+      "abs_defect_n": 99420.88888328767,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 338,
+      "abs_defect_n": 100006.03065680736,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 339,
+      "abs_defect_n": 100592.88924501993,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 340,
+      "abs_defect_n": 101181.46464792528,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 341,
+      "abs_defect_n": 101771.75686552346,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 342,
+      "abs_defect_n": 102363.76589781442,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 343,
+      "abs_defect_n": 102957.49174479826,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 344,
+      "abs_defect_n": 103552.93440647487,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 345,
+      "abs_defect_n": 104150.09388284432,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 346,
+      "abs_defect_n": 104748.9701739066,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 347,
+      "abs_defect_n": 105349.5632796617,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 348,
+      "abs_defect_n": 105951.87320010964,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 349,
+      "abs_defect_n": 106555.89993525035,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 350,
+      "abs_defect_n": 107161.64348508389,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 351,
+      "abs_defect_n": 107769.10384961026,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 352,
+      "abs_defect_n": 108378.28102882946,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 353,
+      "abs_defect_n": 108989.17502274149,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 354,
+      "abs_defect_n": 109601.78583134635,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 355,
+      "abs_defect_n": 110216.11345464399,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 356,
+      "abs_defect_n": 110832.15789263445,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 357,
+      "abs_defect_n": 111449.91914531775,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 358,
+      "abs_defect_n": 112069.39721269388,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 359,
+      "abs_defect_n": 112690.59209476283,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 360,
+      "abs_defect_n": 113313.50379152456,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 361,
+      "abs_defect_n": 113938.13230297912,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 362,
+      "abs_defect_n": 114564.47762912657,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 363,
+      "abs_defect_n": 115192.5397699668,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 364,
+      "abs_defect_n": 115822.31872549979,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 365,
+      "abs_defect_n": 116453.81449572567,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 366,
+      "abs_defect_n": 117087.02708064433,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 367,
+      "abs_defect_n": 117721.95648025587,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 368,
+      "abs_defect_n": 118358.60269456019,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 369,
+      "abs_defect_n": 118996.96572355734,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 370,
+      "abs_defect_n": 119637.04556724726,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 371,
+      "abs_defect_n": 120278.84222563007,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 372,
+      "abs_defect_n": 120922.35569870565,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 373,
+      "abs_defect_n": 121567.58598647412,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 374,
+      "abs_defect_n": 122214.53308893536,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 375,
+      "abs_defect_n": 122863.19700608938,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 376,
+      "abs_defect_n": 123513.57773793628,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 377,
+      "abs_defect_n": 124165.67528447602,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 378,
+      "abs_defect_n": 124819.48964570853,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 379,
+      "abs_defect_n": 125475.02082163387,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 380,
+      "abs_defect_n": 126132.26881225203,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 381,
+      "abs_defect_n": 126791.23361756303,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 382,
+      "abs_defect_n": 127451.91523756686,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 383,
+      "abs_defect_n": 128114.31367226347,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 384,
+      "abs_defect_n": 128778.4289216529,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 385,
+      "abs_defect_n": 129444.26098573516,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 386,
+      "abs_defect_n": 130111.80986451026,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 387,
+      "abs_defect_n": 130781.07555797818,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 388,
+      "abs_defect_n": 131452.05806613894,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 389,
+      "abs_defect_n": 132124.75738899247,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 390,
+      "abs_defect_n": 132799.17352653883,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 391,
+      "abs_defect_n": 133475.30647877802,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 392,
+      "abs_defect_n": 134153.15624571004,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 393,
+      "abs_defect_n": 134832.7228273349,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 394,
+      "abs_defect_n": 135514.0062236525,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 395,
+      "abs_defect_n": 136197.00643466302,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 396,
+      "abs_defect_n": 136881.7234603663,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 397,
+      "abs_defect_n": 137568.15730076242,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 398,
+      "abs_defect_n": 138256.30795585137,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 399,
+      "abs_defect_n": 138946.1754256331,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 400,
+      "abs_defect_n": 139637.7597101077,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 401,
+      "abs_defect_n": 140331.06080927508,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 402,
+      "abs_defect_n": 141026.0787231353,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 403,
+      "abs_defect_n": 141722.81345168833,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 404,
+      "abs_defect_n": 142421.2649949342,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 405,
+      "abs_defect_n": 143121.43335287285,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 406,
+      "abs_defect_n": 143823.31852550438,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 407,
+      "abs_defect_n": 144526.92051282868,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 408,
+      "abs_defect_n": 145232.23931484576,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 409,
+      "abs_defect_n": 145939.27493155573,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 410,
+      "abs_defect_n": 146648.02736295853,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 411,
+      "abs_defect_n": 147358.49660905416,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 412,
+      "abs_defect_n": 148070.68266984262,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 413,
+      "abs_defect_n": 148784.5855453238,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 414,
+      "abs_defect_n": 149500.2052354979,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 415,
+      "abs_defect_n": 150217.54174036474,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 416,
+      "abs_defect_n": 150936.5950599244,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 417,
+      "abs_defect_n": 151657.36519417702,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 418,
+      "abs_defect_n": 152379.85214312235,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 419,
+      "abs_defect_n": 153104.0559067605,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 420,
+      "abs_defect_n": 153829.9764850915,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 421,
+      "abs_defect_n": 154557.6138781153,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 422,
+      "abs_defect_n": 155286.96808583196,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 423,
+      "abs_defect_n": 156018.03910824133,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 424,
+      "abs_defect_n": 156750.82694534364,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 425,
+      "abs_defect_n": 157485.33159713866,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 426,
+      "abs_defect_n": 158221.55306362663,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 427,
+      "abs_defect_n": 158959.49134480732,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 428,
+      "abs_defect_n": 159699.14644068084,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 429,
+      "abs_defect_n": 160440.5183512473,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 430,
+      "abs_defect_n": 161183.60707650648,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 431,
+      "abs_defect_n": 161928.4126164585,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 432,
+      "abs_defect_n": 162674.93497110333,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 433,
+      "abs_defect_n": 163423.17414044088,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 434,
+      "abs_defect_n": 164173.13012447138,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 435,
+      "abs_defect_n": 164924.80292319471,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 436,
+      "abs_defect_n": 165678.19253661076,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 437,
+      "abs_defect_n": 166433.29896471975,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 438,
+      "abs_defect_n": 167190.12220752146,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 439,
+      "abs_defect_n": 167948.662265016,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 440,
+      "abs_defect_n": 168708.91913720348,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 441,
+      "abs_defect_n": 169470.89282408368,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 442,
+      "abs_defect_n": 170234.5833256567,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 443,
+      "abs_defect_n": 170999.99064192257,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 444,
+      "abs_defect_n": 171767.11477288126,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 445,
+      "abs_defect_n": 172535.95571853267,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 446,
+      "abs_defect_n": 173306.51347887702,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 447,
+      "abs_defect_n": 174078.7880539142,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 448,
+      "abs_defect_n": 174852.7794436441,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 449,
+      "abs_defect_n": 175628.48764806695,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 450,
+      "abs_defect_n": 176405.9126671825,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 451,
+      "abs_defect_n": 177185.0545009909,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 452,
+      "abs_defect_n": 177965.91314949212,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 453,
+      "abs_defect_n": 178748.48861268617,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 454,
+      "abs_defect_n": 179532.78089057305,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 455,
+      "abs_defect_n": 180318.78998315276,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 456,
+      "abs_defect_n": 181106.5158904253,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 457,
+      "abs_defect_n": 181895.95861239068,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 458,
+      "abs_defect_n": 182687.11814904877,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 459,
+      "abs_defect_n": 183479.9945003998,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 460,
+      "abs_defect_n": 184274.58766644355,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 461,
+      "abs_defect_n": 185070.89764718025,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 462,
+      "abs_defect_n": 185868.92444260966,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 463,
+      "abs_defect_n": 186668.6680527319,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 464,
+      "abs_defect_n": 187470.12847754697,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 465,
+      "abs_defect_n": 188273.30571705487,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 466,
+      "abs_defect_n": 189078.1997712556,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 467,
+      "abs_defect_n": 189884.81064014917,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 468,
+      "abs_defect_n": 190693.13832373556,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 469,
+      "abs_defect_n": 191503.18282201467,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 470,
+      "abs_defect_n": 192314.94413498673,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 471,
+      "abs_defect_n": 193128.4222626515,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 472,
+      "abs_defect_n": 193943.6172050092,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 473,
+      "abs_defect_n": 194760.52896205964,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 474,
+      "abs_defect_n": 195579.1575338029,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 475,
+      "abs_defect_n": 196399.502920239,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 476,
+      "abs_defect_n": 197221.56512136792,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 477,
+      "abs_defect_n": 198045.34413718968,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 478,
+      "abs_defect_n": 198870.83996770426,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 479,
+      "abs_defect_n": 199698.05261291168,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 480,
+      "abs_defect_n": 200526.98207281192,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 481,
+      "abs_defect_n": 201357.62834740488,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 482,
+      "abs_defect_n": 202189.9914366908,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 483,
+      "abs_defect_n": 203024.0713406694,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 484,
+      "abs_defect_n": 203859.86805934086,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 485,
+      "abs_defect_n": 204697.38159270526,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 486,
+      "abs_defect_n": 205536.61194076238,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 487,
+      "abs_defect_n": 206377.55910351232,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 488,
+      "abs_defect_n": 207220.2230809551,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 489,
+      "abs_defect_n": 208064.6038730907,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 490,
+      "abs_defect_n": 208910.70147991914,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 491,
+      "abs_defect_n": 209758.5159014403,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 492,
+      "abs_defect_n": 210608.0471376544,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 493,
+      "abs_defect_n": 211459.2951885612,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 494,
+      "abs_defect_n": 212312.26005416096,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 495,
+      "abs_defect_n": 213166.94173445343,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 496,
+      "abs_defect_n": 214023.34022943873,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 497,
+      "abs_defect_n": 214881.45553911699,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 498,
+      "abs_defect_n": 215741.28766348795,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 499,
+      "abs_defect_n": 216602.83660255175,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 500,
+      "abs_defect_n": 217466.10235630837,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 501,
+      "abs_defect_n": 218331.08492475783,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 502,
+      "abs_defect_n": 219197.7843079,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 503,
+      "abs_defect_n": 220066.20050573512,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 504,
+      "abs_defect_n": 220936.33351826295,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 505,
+      "abs_defect_n": 221808.18334548373,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 506,
+      "abs_defect_n": 222681.74998739723,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 507,
+      "abs_defect_n": 223557.03344400367,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 508,
+      "abs_defect_n": 224434.03371530282,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 509,
+      "abs_defect_n": 225312.7508012948,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 510,
+      "abs_defect_n": 226193.18470197963,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 511,
+      "abs_defect_n": 227075.33541735727,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 512,
+      "abs_defect_n": 227959.20294742775,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 513,
+      "abs_defect_n": 228844.78729219106,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 514,
+      "abs_defect_n": 229732.08845164708,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 515,
+      "abs_defect_n": 230621.10642579605,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 516,
+      "abs_defect_n": 231511.84121463774,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 517,
+      "abs_defect_n": 232404.29281817237,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 518,
+      "abs_defect_n": 233298.46123639971,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 519,
+      "abs_defect_n": 234194.3464693199,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 520,
+      "abs_defect_n": 235091.94851693301,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 521,
+      "abs_defect_n": 235991.26737923885,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 522,
+      "abs_defect_n": 236892.30305623752,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 523,
+      "abs_defect_n": 237795.05554792902,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 524,
+      "abs_defect_n": 238699.52485431323,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 525,
+      "abs_defect_n": 239605.7109753904,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 526,
+      "abs_defect_n": 240513.61391116038,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 527,
+      "abs_defect_n": 241423.2336616231,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 528,
+      "abs_defect_n": 242334.57022677874,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 529,
+      "abs_defect_n": 243247.6236066271,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 530,
+      "abs_defect_n": 244162.3938011683,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 531,
+      "abs_defect_n": 245078.88081040245,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 532,
+      "abs_defect_n": 245997.0846343293,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 533,
+      "abs_defect_n": 246917.005272949,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 534,
+      "abs_defect_n": 247838.64272626152,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 535,
+      "abs_defect_n": 248761.99699426675,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 536,
+      "abs_defect_n": 249687.06807696493,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 537,
+      "abs_defect_n": 250613.85597435595,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 538,
+      "abs_defect_n": 251542.36068643967,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 539,
+      "abs_defect_n": 252472.58221321634,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 540,
+      "abs_defect_n": 253404.52055468573,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 541,
+      "abs_defect_n": 254338.17571084807,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 542,
+      "abs_defect_n": 255273.54768170312,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 543,
+      "abs_defect_n": 256210.636467251,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 544,
+      "abs_defect_n": 257149.4420674917,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 545,
+      "abs_defect_n": 258089.96448242525,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 546,
+      "abs_defect_n": 259032.20371205162,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 547,
+      "abs_defect_n": 259976.15975637082,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 548,
+      "abs_defect_n": 260921.83261538274,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 549,
+      "abs_defect_n": 261869.2222890876,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 550,
+      "abs_defect_n": 262818.3287774852,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 551,
+      "abs_defect_n": 263769.1520805757,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 552,
+      "abs_defect_n": 264721.69219835894,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 553,
+      "abs_defect_n": 265675.949130835,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 554,
+      "abs_defect_n": 266631.922878004,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 555,
+      "abs_defect_n": 267589.61343986576,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 556,
+      "abs_defect_n": 268549.0208164203,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 557,
+      "abs_defect_n": 269510.1450076677,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 558,
+      "abs_defect_n": 270472.9860136078,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 559,
+      "abs_defect_n": 271437.5438342409,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 560,
+      "abs_defect_n": 272403.81846956676,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 561,
+      "abs_defect_n": 273371.80991958536,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 562,
+      "abs_defect_n": 274341.5181842969,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 563,
+      "abs_defect_n": 275312.94326370116,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 564,
+      "abs_defect_n": 276286.08515779825,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 565,
+      "abs_defect_n": 277260.9438665883,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 566,
+      "abs_defect_n": 278237.51939007104,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 567,
+      "abs_defect_n": 279215.8117282466,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 568,
+      "abs_defect_n": 280195.82088111504,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 569,
+      "abs_defect_n": 281177.54684867617,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 570,
+      "abs_defect_n": 282160.98963093024,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 571,
+      "abs_defect_n": 283146.14922787715,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 572,
+      "abs_defect_n": 284133.02563951677,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 573,
+      "abs_defect_n": 285121.61886584933,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 574,
+      "abs_defect_n": 286111.9289068746,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 575,
+      "abs_defect_n": 287103.95576259284,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 576,
+      "abs_defect_n": 288097.6994330038,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 577,
+      "abs_defect_n": 289093.15991810756,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 578,
+      "abs_defect_n": 290090.33721790416,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 579,
+      "abs_defect_n": 291089.2313323936,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 580,
+      "abs_defect_n": 292089.84226157586,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 581,
+      "abs_defect_n": 293092.17000545096,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 582,
+      "abs_defect_n": 294096.2145640189,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 583,
+      "abs_defect_n": 295101.9759372794,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 584,
+      "abs_defect_n": 296109.454125233,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 585,
+      "abs_defect_n": 297118.6491278794,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 586,
+      "abs_defect_n": 298129.56094521866,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 587,
+      "abs_defect_n": 299142.1895772505,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 588,
+      "abs_defect_n": 300156.5350239754,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 589,
+      "abs_defect_n": 301172.5972853929,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 590,
+      "abs_defect_n": 302190.3763615035,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 591,
+      "abs_defect_n": 303209.87225230667,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 592,
+      "abs_defect_n": 304231.0849578029,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 593,
+      "abs_defect_n": 305254.01447799173,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 594,
+      "abs_defect_n": 306278.6608128734,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 595,
+      "abs_defect_n": 307305.0239624481,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 596,
+      "abs_defect_n": 308333.10392671544,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 597,
+      "abs_defect_n": 309362.9007056756,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 598,
+      "abs_defect_n": 310394.4142993286,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 599,
+      "abs_defect_n": 311427.6447076744,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 600,
+      "abs_defect_n": 312462.59193071304,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 601,
+      "abs_defect_n": 313499.2559684445,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 602,
+      "abs_defect_n": 314537.6368208688,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 603,
+      "abs_defect_n": 315577.73448798596,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 604,
+      "abs_defect_n": 316619.5489697959,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 605,
+      "abs_defect_n": 317663.0802662987,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 606,
+      "abs_defect_n": 318708.32837749436,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 607,
+      "abs_defect_n": 319755.2933033828,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 608,
+      "abs_defect_n": 320803.9750439639,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 609,
+      "abs_defect_n": 321854.373599238,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 610,
+      "abs_defect_n": 322906.48896920495,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 611,
+      "abs_defect_n": 323960.3211538645,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 612,
+      "abs_defect_n": 325015.8701532171,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 613,
+      "abs_defect_n": 326073.1359672623,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 614,
+      "abs_defect_n": 327132.1185960006,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 615,
+      "abs_defect_n": 328192.81803943147,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 616,
+      "abs_defect_n": 329255.2342975552,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 617,
+      "abs_defect_n": 330319.36737037194,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 618,
+      "abs_defect_n": 331385.2172578813,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 619,
+      "abs_defect_n": 332452.7839600835,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 620,
+      "abs_defect_n": 333522.0674769785,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 621,
+      "abs_defect_n": 334593.0678085664,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 622,
+      "abs_defect_n": 335665.7849548473,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 623,
+      "abs_defect_n": 336740.2189158208,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 624,
+      "abs_defect_n": 337816.36969148717,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 625,
+      "abs_defect_n": 338894.23728184635,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 626,
+      "abs_defect_n": 339973.8216868981,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 627,
+      "abs_defect_n": 341055.12290664297,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 628,
+      "abs_defect_n": 342138.14094108064,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 629,
+      "abs_defect_n": 343222.87579021114,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 630,
+      "abs_defect_n": 344309.3274540345,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 631,
+      "abs_defect_n": 345397.4959325504,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 632,
+      "abs_defect_n": 346487.3812257594,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 633,
+      "abs_defect_n": 347578.9833336612,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 634,
+      "abs_defect_n": 348672.30225625564,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 635,
+      "abs_defect_n": 349767.33799354313,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 636,
+      "abs_defect_n": 350864.0905455232,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 637,
+      "abs_defect_n": 351962.55991219636,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 638,
+      "abs_defect_n": 353062.7460935621,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 639,
+      "abs_defect_n": 354164.6490896207,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 640,
+      "abs_defect_n": 355268.2689003723,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 641,
+      "abs_defect_n": 356373.60552581656,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 642,
+      "abs_defect_n": 357480.6589659536,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 643,
+      "abs_defect_n": 358589.4292207835,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 644,
+      "abs_defect_n": 359699.91629030625,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 645,
+      "abs_defect_n": 360812.1201745218,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 646,
+      "abs_defect_n": 361926.0408734302,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 647,
+      "abs_defect_n": 363041.6783870314,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 648,
+      "abs_defect_n": 364159.0327153255,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 649,
+      "abs_defect_n": 365278.10385831236,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 650,
+      "abs_defect_n": 366398.8918159921,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 651,
+      "abs_defect_n": 367521.3965883646,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 652,
+      "abs_defect_n": 368645.61817543,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 653,
+      "abs_defect_n": 369771.55657718796,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 654,
+      "abs_defect_n": 370899.211793639,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 655,
+      "abs_defect_n": 372028.58382478287,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 656,
+      "abs_defect_n": 373159.67267061933,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 657,
+      "abs_defect_n": 374292.47833114886,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 658,
+      "abs_defect_n": 375427.000806371,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 659,
+      "abs_defect_n": 376563.2400962862,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 660,
+      "abs_defect_n": 377701.19620089396,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 661,
+      "abs_defect_n": 378840.8691201948,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 662,
+      "abs_defect_n": 379982.25885418826,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 663,
+      "abs_defect_n": 381125.36540287454,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 664,
+      "abs_defect_n": 382270.18876625365,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 665,
+      "abs_defect_n": 383416.7289443258,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 666,
+      "abs_defect_n": 384564.9859370906,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 667,
+      "abs_defect_n": 385714.9597445482,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 668,
+      "abs_defect_n": 386866.6503666986,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 669,
+      "abs_defect_n": 388020.0578035419,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 670,
+      "abs_defect_n": 389175.182055078,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 671,
+      "abs_defect_n": 390332.0231213069,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 672,
+      "abs_defect_n": 391490.58100222866,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 673,
+      "abs_defect_n": 392650.85569784325,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 674,
+      "abs_defect_n": 393812.84720815043,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 675,
+      "abs_defect_n": 394976.5555331507,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 676,
+      "abs_defect_n": 396141.98067284375,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 677,
+      "abs_defect_n": 397309.12262722943,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 678,
+      "abs_defect_n": 398477.98139630817,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 679,
+      "abs_defect_n": 399648.55698007974,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 680,
+      "abs_defect_n": 400820.8493785439,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 681,
+      "abs_defect_n": 401994.85859170114,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 682,
+      "abs_defect_n": 403170.58461955097,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 683,
+      "abs_defect_n": 404348.02746209386,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 684,
+      "abs_defect_n": 405527.18711932935,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 685,
+      "abs_defect_n": 406708.06359125767,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 686,
+      "abs_defect_n": 407890.6568778788,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 687,
+      "abs_defect_n": 409074.96697919304,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 688,
+      "abs_defect_n": 410260.99389519985,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 689,
+      "abs_defect_n": 411448.7376258995,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 690,
+      "abs_defect_n": 412638.19817129197,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 691,
+      "abs_defect_n": 413829.37553137727,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 692,
+      "abs_defect_n": 415022.2697061554,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 693,
+      "abs_defect_n": 416216.8806956264,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 694,
+      "abs_defect_n": 417413.20849979017,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 695,
+      "abs_defect_n": 418611.2531186468,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 696,
+      "abs_defect_n": 419811.01455219625,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 697,
+      "abs_defect_n": 421012.49280043854,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 698,
+      "abs_defect_n": 422215.68786337343,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 699,
+      "abs_defect_n": 423420.5997410014,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 700,
+      "abs_defect_n": 424627.22843332216,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 701,
+      "abs_defect_n": 425835.57394033554,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 702,
+      "abs_defect_n": 427045.636262042,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 703,
+      "abs_defect_n": 428257.415398441,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 704,
+      "abs_defect_n": 429470.9113495331,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 705,
+      "abs_defect_n": 430686.1241153178,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 706,
+      "abs_defect_n": 431903.0536957956,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 707,
+      "abs_defect_n": 433121.70009096595,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 708,
+      "abs_defect_n": 434342.06330082915,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 709,
+      "abs_defect_n": 435564.1433253854,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 710,
+      "abs_defect_n": 436787.94016463426,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 711,
+      "abs_defect_n": 438013.45381857594,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 712,
+      "abs_defect_n": 439240.68428721046,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 713,
+      "abs_defect_n": 440469.6315705378,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 714,
+      "abs_defect_n": 441700.295668558,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 715,
+      "abs_defect_n": 442932.676581271,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 716,
+      "abs_defect_n": 444166.77430867683,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 717,
+      "abs_defect_n": 445402.5888507755,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 718,
+      "abs_defect_n": 446640.120207567,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 719,
+      "abs_defect_n": 447879.36837905133,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 720,
+      "abs_defect_n": 449120.33336522826,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 721,
+      "abs_defect_n": 450363.01516609825,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 722,
+      "abs_defect_n": 451607.4137816611,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 723,
+      "abs_defect_n": 452853.5292119165,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 724,
+      "abs_defect_n": 454101.361456865,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 725,
+      "abs_defect_n": 455350.9105165063,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 726,
+      "abs_defect_n": 456602.1763908402,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 727,
+      "abs_defect_n": 457855.1590798672,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 728,
+      "abs_defect_n": 459109.85858358676,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 729,
+      "abs_defect_n": 460366.27490199916,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 730,
+      "abs_defect_n": 461624.4080351046,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 731,
+      "abs_defect_n": 462884.2579829027,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 732,
+      "abs_defect_n": 464145.8247453936,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 733,
+      "abs_defect_n": 465409.1083225773,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 734,
+      "abs_defect_n": 466674.1087144541,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 735,
+      "abs_defect_n": 467940.8259210235,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 736,
+      "abs_defect_n": 469209.2599422857,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 737,
+      "abs_defect_n": 470479.41077824077,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 738,
+      "abs_defect_n": 471751.27842888865,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 739,
+      "abs_defect_n": 473024.86289422936,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 740,
+      "abs_defect_n": 474300.1641742629,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 741,
+      "abs_defect_n": 475577.18226898904,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 742,
+      "abs_defect_n": 476855.91717840824,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 743,
+      "abs_defect_n": 478136.3689025203,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 744,
+      "abs_defect_n": 479418.53744132514,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 745,
+      "abs_defect_n": 480702.4227948226,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 746,
+      "abs_defect_n": 481988.02496301313,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 747,
+      "abs_defect_n": 483275.3439458965,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 748,
+      "abs_defect_n": 484564.37974347244,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 749,
+      "abs_defect_n": 485855.13235574146,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 750,
+      "abs_defect_n": 487147.6017827031,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 751,
+      "abs_defect_n": 488441.7880243575,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 752,
+      "abs_defect_n": 489737.69108070503,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 753,
+      "abs_defect_n": 491035.31095174514,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 754,
+      "abs_defect_n": 492334.6476374781,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 755,
+      "abs_defect_n": 493635.7011379041,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 756,
+      "abs_defect_n": 494938.4714530227,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 757,
+      "abs_defect_n": 496242.9585828341,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 758,
+      "abs_defect_n": 497549.16252733837,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 759,
+      "abs_defect_n": 498857.08328653546,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 760,
+      "abs_defect_n": 500166.7208604254,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 761,
+      "abs_defect_n": 501478.07524900814,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 762,
+      "abs_defect_n": 502791.1464522837,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 763,
+      "abs_defect_n": 504105.93447025213,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 764,
+      "abs_defect_n": 505422.4393029134,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 765,
+      "abs_defect_n": 506740.66095026745,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 766,
+      "abs_defect_n": 508060.5994123141,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 767,
+      "abs_defect_n": 509382.25468905387,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 768,
+      "abs_defect_n": 510705.62678048643,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 769,
+      "abs_defect_n": 512030.7156866116,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 770,
+      "abs_defect_n": 513357.5214074298,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 771,
+      "abs_defect_n": 514686.04394294065,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 772,
+      "abs_defect_n": 516016.28329314454,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 773,
+      "abs_defect_n": 517348.23945804103,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 774,
+      "abs_defect_n": 518681.9124376306,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 775,
+      "abs_defect_n": 520017.30223191273,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 776,
+      "abs_defect_n": 521354.4088408877,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 777,
+      "abs_defect_n": 522693.23226455576,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 778,
+      "abs_defect_n": 524033.7725029164,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 779,
+      "abs_defect_n": 525376.0295559699,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 780,
+      "abs_defect_n": 526720.0034237162,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 781,
+      "abs_defect_n": 528065.6941061553,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 782,
+      "abs_defect_n": 529413.1016032873,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 783,
+      "abs_defect_n": 530762.2259151121,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 784,
+      "abs_defect_n": 532113.0670416297,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 785,
+      "abs_defect_n": 533465.6249828401,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 786,
+      "abs_defect_n": 534819.8997387434,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 787,
+      "abs_defect_n": 536175.8913093396,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 788,
+      "abs_defect_n": 537533.5996946285,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 789,
+      "abs_defect_n": 538893.02489461,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 790,
+      "abs_defect_n": 540254.1669092847,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 791,
+      "abs_defect_n": 541617.0257386521,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 792,
+      "abs_defect_n": 542981.6013827121,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 793,
+      "abs_defect_n": 544347.8938414652,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 794,
+      "abs_defect_n": 545715.9031149109,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 795,
+      "abs_defect_n": 547085.6292030497,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 796,
+      "abs_defect_n": 548457.0721058811,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 797,
+      "abs_defect_n": 549830.2318234055,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 798,
+      "abs_defect_n": 551205.1083556225,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 799,
+      "abs_defect_n": 552581.7017025324,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 800,
+      "abs_defect_n": 553960.011864135,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 801,
+      "abs_defect_n": 555340.0388404308,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 802,
+      "abs_defect_n": 556721.7826314191,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 803,
+      "abs_defect_n": 558105.2432371003,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 804,
+      "abs_defect_n": 559490.4206574743,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 805,
+      "abs_defect_n": 560877.3148925412,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 806,
+      "abs_defect_n": 562265.9259423008,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 807,
+      "abs_defect_n": 563656.2538067533,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 808,
+      "abs_defect_n": 565048.2984858986,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 809,
+      "abs_defect_n": 566442.0599797368,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 810,
+      "abs_defect_n": 567837.5382882678,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 811,
+      "abs_defect_n": 569234.7334114914,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 812,
+      "abs_defect_n": 570633.645349408,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 813,
+      "abs_defect_n": 572034.2741020175,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 814,
+      "abs_defect_n": 573436.6196693196,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 815,
+      "abs_defect_n": 574840.6820513147,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 816,
+      "abs_defect_n": 576246.4612480025,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 817,
+      "abs_defect_n": 577653.957259383,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 818,
+      "abs_defect_n": 579063.1700854567,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 819,
+      "abs_defect_n": 580474.0997262229,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 820,
+      "abs_defect_n": 581886.7461816822,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 821,
+      "abs_defect_n": 583301.1094518341,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 822,
+      "abs_defect_n": 584717.1895366791,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 823,
+      "abs_defect_n": 586134.9864362166,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 824,
+      "abs_defect_n": 587554.5001504472,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 825,
+      "abs_defect_n": 588975.7306793705,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 826,
+      "abs_defect_n": 590398.6780229863,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 827,
+      "abs_defect_n": 591823.3421812952,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 828,
+      "abs_defect_n": 593249.7231542971,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 829,
+      "abs_defect_n": 594677.8209419916,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 830,
+      "abs_defect_n": 596107.6355443788,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 831,
+      "abs_defect_n": 597539.166961459,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 832,
+      "abs_defect_n": 598972.4151932322,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 833,
+      "abs_defect_n": 600407.3802396976,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 834,
+      "abs_defect_n": 601844.0621008566,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 835,
+      "abs_defect_n": 603282.4607767081,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 836,
+      "abs_defect_n": 604722.5762672522,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 837,
+      "abs_defect_n": 606164.4085724894,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 838,
+      "abs_defect_n": 607607.9576924192,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 839,
+      "abs_defect_n": 609053.223627042,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 840,
+      "abs_defect_n": 610500.2063763575,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 841,
+      "abs_defect_n": 611948.905940366,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 842,
+      "abs_defect_n": 613399.3223190671,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 843,
+      "abs_defect_n": 614851.4555124613,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 844,
+      "abs_defect_n": 616305.305520548,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 845,
+      "abs_defect_n": 617760.8723433279,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 846,
+      "abs_defect_n": 619218.1559808003,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 847,
+      "abs_defect_n": 620677.1564329653,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 848,
+      "abs_defect_n": 622137.8736998234,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 849,
+      "abs_defect_n": 623600.3077813745,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 850,
+      "abs_defect_n": 625064.4586776183,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 851,
+      "abs_defect_n": 626530.3263885546,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 852,
+      "abs_defect_n": 627997.9109141841,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 853,
+      "abs_defect_n": 629467.2122545065,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 854,
+      "abs_defect_n": 630938.2304095216,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 855,
+      "abs_defect_n": 632410.9653792293,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 856,
+      "abs_defect_n": 633885.41716363,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 857,
+      "abs_defect_n": 635361.5857627233,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 858,
+      "abs_defect_n": 636839.4711765097,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 859,
+      "abs_defect_n": 638319.0734049892,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 860,
+      "abs_defect_n": 639800.3924481608,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 861,
+      "abs_defect_n": 641283.4283060259,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 862,
+      "abs_defect_n": 642768.1809785832,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 863,
+      "abs_defect_n": 644254.650465834,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 864,
+      "abs_defect_n": 645742.8367677769,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 865,
+      "abs_defect_n": 647232.7398844133,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 866,
+      "abs_defect_n": 648724.3598157419,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 867,
+      "abs_defect_n": 650217.6965617635,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 868,
+      "abs_defect_n": 651712.7501224782,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 869,
+      "abs_defect_n": 653209.5204978855,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 870,
+      "abs_defect_n": 654708.0076879859,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 871,
+      "abs_defect_n": 656208.2116927789,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 872,
+      "abs_defect_n": 657710.1325122644,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 873,
+      "abs_defect_n": 659213.770146443,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 874,
+      "abs_defect_n": 660719.1245953147,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 875,
+      "abs_defect_n": 662226.195858879,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 876,
+      "abs_defect_n": 663734.9839371359,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 877,
+      "abs_defect_n": 665245.4888300858,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 878,
+      "abs_defect_n": 666757.7105377289,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 879,
+      "abs_defect_n": 668271.649060064,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 880,
+      "abs_defect_n": 669787.3043970927,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 881,
+      "abs_defect_n": 671304.6765488139,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 882,
+      "abs_defect_n": 672823.7655152278,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 883,
+      "abs_defect_n": 674344.5712963347,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 884,
+      "abs_defect_n": 675867.0938921343,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 885,
+      "abs_defect_n": 677391.3333026269,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 886,
+      "abs_defect_n": 678917.289527812,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 887,
+      "abs_defect_n": 680444.9625676903,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 888,
+      "abs_defect_n": 681974.3524222611,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 889,
+      "abs_defect_n": 683505.4590915251,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 890,
+      "abs_defect_n": 685038.2825754816,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 891,
+      "abs_defect_n": 686572.8228741307,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 892,
+      "abs_defect_n": 688109.0799874729,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 893,
+      "abs_defect_n": 689647.0539155081,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 894,
+      "abs_defect_n": 691186.7446582359,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 895,
+      "abs_defect_n": 692728.1522156568,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 896,
+      "abs_defect_n": 694271.2765877703,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 897,
+      "abs_defect_n": 695816.1177745764,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 898,
+      "abs_defect_n": 697362.6757760756,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 899,
+      "abs_defect_n": 698910.9505922678,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 900,
+      "abs_defect_n": 700460.9422231521,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 901,
+      "abs_defect_n": 702012.65066873,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 902,
+      "abs_defect_n": 703566.0759290005,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 903,
+      "abs_defect_n": 705121.2180039636,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 904,
+      "abs_defect_n": 706678.0768936197,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 905,
+      "abs_defect_n": 708236.6525979685,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 906,
+      "abs_defect_n": 709796.9451170103,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 907,
+      "abs_defect_n": 711358.9544507447,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 908,
+      "abs_defect_n": 712922.6805991721,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 909,
+      "abs_defect_n": 714488.1235622922,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 910,
+      "abs_defect_n": 716055.2833401053,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 911,
+      "abs_defect_n": 717624.159932611,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 912,
+      "abs_defect_n": 719194.7533398098,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 913,
+      "abs_defect_n": 720767.0635617012,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 914,
+      "abs_defect_n": 722341.0905982857,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 915,
+      "abs_defect_n": 723916.8344495627,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 916,
+      "abs_defect_n": 725494.2951155324,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 917,
+      "abs_defect_n": 727073.4725961951,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 918,
+      "abs_defect_n": 728654.3668915508,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 919,
+      "abs_defect_n": 730236.9780015992,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 920,
+      "abs_defect_n": 731821.3059263402,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 921,
+      "abs_defect_n": 733407.3506657742,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 922,
+      "abs_defect_n": 734995.1122199013,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 923,
+      "abs_defect_n": 736584.590588721,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 924,
+      "abs_defect_n": 738175.7857722333,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 925,
+      "abs_defect_n": 739768.6977704386,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 926,
+      "abs_defect_n": 741363.3265833366,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 927,
+      "abs_defect_n": 742959.6722109276,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 928,
+      "abs_defect_n": 744557.7346532112,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 929,
+      "abs_defect_n": 746157.5139101879,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 930,
+      "abs_defect_n": 747759.0099818571,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 931,
+      "abs_defect_n": 749362.2228682195,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 932,
+      "abs_defect_n": 750967.1525692744,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 933,
+      "abs_defect_n": 752573.7990850224,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 934,
+      "abs_defect_n": 754182.162415463,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 935,
+      "abs_defect_n": 755792.2425605967,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 936,
+      "abs_defect_n": 757404.0395204229,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 937,
+      "abs_defect_n": 759017.5532949422,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 938,
+      "abs_defect_n": 760632.7838841542,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 939,
+      "abs_defect_n": 762249.7312880587,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 940,
+      "abs_defect_n": 763868.3955066563,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 941,
+      "abs_defect_n": 765488.7765399469,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 942,
+      "abs_defect_n": 767110.8743879301,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 943,
+      "abs_defect_n": 768734.689050606,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 944,
+      "abs_defect_n": 770360.2205279749,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 945,
+      "abs_defect_n": 771987.4688200369,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 946,
+      "abs_defect_n": 773616.4339267914,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 947,
+      "abs_defect_n": 775247.1158482386,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 948,
+      "abs_defect_n": 776879.5145843788,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 949,
+      "abs_defect_n": 778513.6301352116,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 950,
+      "abs_defect_n": 780149.4625007375,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 951,
+      "abs_defect_n": 781787.011680956,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 952,
+      "abs_defect_n": 783426.2776758675,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 953,
+      "abs_defect_n": 785067.2604854717,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 954,
+      "abs_defect_n": 786709.9601097689,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 955,
+      "abs_defect_n": 788354.3765487587,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 956,
+      "abs_defect_n": 790000.5098024416,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 957,
+      "abs_defect_n": 791648.359870817,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 958,
+      "abs_defect_n": 793297.9267538856,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 959,
+      "abs_defect_n": 794949.2104516467,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 960,
+      "abs_defect_n": 796602.2109641009,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 961,
+      "abs_defect_n": 798256.9282912477,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 962,
+      "abs_defect_n": 799913.3624330871,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 963,
+      "abs_defect_n": 801571.5133896195,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 964,
+      "abs_defect_n": 803231.381160845,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 965,
+      "abs_defect_n": 804892.9657467632,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 966,
+      "abs_defect_n": 806556.2671473739,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 967,
+      "abs_defect_n": 808221.2853626776,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 968,
+      "abs_defect_n": 809888.0203926745,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 969,
+      "abs_defect_n": 811556.4722373635,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 970,
+      "abs_defect_n": 813226.640896746,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 971,
+      "abs_defect_n": 814898.526370821,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 972,
+      "abs_defect_n": 816572.1286595888,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 973,
+      "abs_defect_n": 818247.4477630495,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 974,
+      "abs_defect_n": 819924.4836812029,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 975,
+      "abs_defect_n": 821603.2364140493,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 976,
+      "abs_defect_n": 823283.7059615883,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 977,
+      "abs_defect_n": 824965.8923238204,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 978,
+      "abs_defect_n": 826649.7955007451,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 979,
+      "abs_defect_n": 828335.4154923628,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 980,
+      "abs_defect_n": 830022.7522986731,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 981,
+      "abs_defect_n": 831711.8059196766,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 982,
+      "abs_defect_n": 833402.5763553726,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 983,
+      "abs_defect_n": 835095.0636057612,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 984,
+      "abs_defect_n": 836789.2676708428,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 985,
+      "abs_defect_n": 838485.1885506175,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 986,
+      "abs_defect_n": 840182.8262450849,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 987,
+      "abs_defect_n": 841882.1807542448,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 988,
+      "abs_defect_n": 843583.2520780978,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 989,
+      "abs_defect_n": 845286.0402166438,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 990,
+      "abs_defect_n": 846990.5451698825,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 991,
+      "abs_defect_n": 848696.7669378137,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 992,
+      "abs_defect_n": 850404.705520438,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 993,
+      "abs_defect_n": 852114.3609177549,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 994,
+      "abs_defect_n": 853825.7331297649,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 995,
+      "abs_defect_n": 855538.8221564679,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 996,
+      "abs_defect_n": 857253.6279978631,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 997,
+      "abs_defect_n": 858970.1506539518,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 998,
+      "abs_defect_n": 860688.3901247331,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 999,
+      "abs_defect_n": 862408.346410207,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    },
+    {
+      "n": 1000,
+      "abs_defect_n": 864130.0195103739,
+      "abs_defect_candidate": 864130.0195103739,
+      "holds": true
+    }
+  ],
+  "lean_target_shape": "IsWindowAbsPeak (sliceDefectProfileAtZ r observedArea z) N candidate_m (equivalently: forall n in Finset.range N, |defect n| <= |defect candidate_m|)"
+}

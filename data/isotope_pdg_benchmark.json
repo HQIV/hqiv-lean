@@ -1,0 +1,384 @@
+{
+  "source": "scripts/hqiv_isotope_pdg_benchmark.py",
+  "comparison_policy": "reference isotope data used only for benchmark, not for HQIV fit",
+  "em_tipping_qualified": false,
+  "xi": 5.0,
+  "lab_temperature_K": 2.725,
+  "neutrino_mass_mev": 4.1098720206098567e-10,
+  "rows": [
+    {
+      "label": "p",
+      "A": 1,
+      "Z": 1,
+      "reference_mass_mev": 938.27208816,
+      "predicted_mass_mev": 938.272,
+      "mass_error_mev": -8.815999990474666e-05,
+      "mass_error_pct": -9.39599515079181e-06,
+      "reference_stability": "stable_or_lower_bound",
+      "predicted_structurally_shielded": false,
+      "predicted_stable_qualified": false,
+      "predicted_channel": "unqualified",
+      "reference_half_life_seconds": null,
+      "predicted_half_life_seconds": null,
+      "half_life_ratio_pred_over_ref": null,
+      "notes": "endpoint Q + valley geometry; outside support = temperature + gravity stack (full); local \u03bd opacity width \u00d7 1.073074 (1.067661\u20131.078920)"
+    },
+    {
+      "label": "n",
+      "A": 1,
+      "Z": 0,
+      "reference_mass_mev": 939.56542052,
+      "predicted_mass_mev": 939.565,
+      "mass_error_mev": -0.00042051999992054334,
+      "mass_error_pct": -4.4756862133964835e-05,
+      "reference_stability": "beta_minus",
+      "predicted_structurally_shielded": false,
+      "predicted_stable_qualified": false,
+      "predicted_channel": "unqualified",
+      "reference_half_life_seconds": 879.4,
+      "predicted_half_life_seconds": null,
+      "half_life_ratio_pred_over_ref": null,
+      "notes": "endpoint Q + valley geometry; outside support = temperature + gravity stack (full); local \u03bd opacity width \u00d7 1.073074 (1.067661\u20131.078920)"
+    },
+    {
+      "label": "D",
+      "A": 2,
+      "Z": 1,
+      "reference_mass_mev": 1875.61294257,
+      "predicted_mass_mev": 1869.6416966936526,
+      "mass_error_mev": -5.971245876347439,
+      "mass_error_pct": -0.31836237321787325,
+      "reference_stability": "stable",
+      "predicted_structurally_shielded": true,
+      "predicted_stable_qualified": false,
+      "predicted_channel": "unqualified",
+      "reference_half_life_seconds": null,
+      "predicted_half_life_seconds": null,
+      "half_life_ratio_pred_over_ref": null,
+      "notes": "endpoint Q + valley geometry; outside support = temperature + gravity stack (full); local \u03bd opacity width \u00d7 1.000000 (1.000000\u20131.000000)"
+    },
+    {
+      "label": "T",
+      "A": 3,
+      "Z": 1,
+      "reference_mass_mev": 2808.92113298,
+      "predicted_mass_mev": 2807.011415508924,
+      "mass_error_mev": -1.9097174710759646,
+      "mass_error_pct": -0.06798757888406552,
+      "reference_stability": "beta_minus",
+      "predicted_structurally_shielded": true,
+      "predicted_stable_qualified": false,
+      "predicted_channel": "unqualified",
+      "reference_half_life_seconds": 388789632.0,
+      "predicted_half_life_seconds": null,
+      "half_life_ratio_pred_over_ref": null,
+      "notes": "endpoint Q + valley geometry; outside support = temperature + gravity stack (full); local \u03bd opacity width \u00d7 1.000000 (1.000000\u20131.000000)"
+    },
+    {
+      "label": "He3",
+      "A": 3,
+      "Z": 2,
+      "reference_mass_mev": 2808.39160743,
+      "predicted_mass_mev": 2805.718415508924,
+      "mass_error_mev": -2.673191921076068,
+      "mass_error_pct": -0.09518586774023102,
+      "reference_stability": "stable",
+      "predicted_structurally_shielded": true,
+      "predicted_stable_qualified": false,
+      "predicted_channel": "unqualified",
+      "reference_half_life_seconds": null,
+      "predicted_half_life_seconds": null,
+      "half_life_ratio_pred_over_ref": null,
+      "notes": "endpoint Q + valley geometry; outside support = temperature + gravity stack (full); local \u03bd opacity width \u00d7 1.000000 (1.000000\u20131.000000)"
+    },
+    {
+      "label": "He4",
+      "A": 4,
+      "Z": 2,
+      "reference_mass_mev": 3727.3794066,
+      "predicted_mass_mev": 3735.220053983775,
+      "mass_error_mev": 7.840647383774922,
+      "mass_error_pct": 0.2103528116802823,
+      "reference_stability": "stable",
+      "predicted_structurally_shielded": true,
+      "predicted_stable_qualified": false,
+      "predicted_channel": "unqualified",
+      "reference_half_life_seconds": null,
+      "predicted_half_life_seconds": null,
+      "half_life_ratio_pred_over_ref": null,
+      "notes": "endpoint Q + valley geometry; outside support = temperature + gravity stack (full); local \u03bd opacity width \u00d7 1.000000 (1.000000\u20131.000000)"
+    }
+  ],
+  "neutron_lifetime_temperature_sweep": [
+    {
+      "lab_temperature_K": 2.725,
+      "lab_gravity_phi_epsilon": 6.14612566152857e-07,
+      "outside_gravity_factor": 1.0000001475069977,
+      "outside_support_factor": 0.999999852493024,
+      "predicted_half_life_seconds": null
+    },
+    {
+      "lab_temperature_K": 4.0,
+      "lab_gravity_phi_epsilon": 6.14612566152857e-07,
+      "outside_gravity_factor": 1.0000001475069977,
+      "outside_support_factor": 0.9998870900073189,
+      "predicted_half_life_seconds": null
+    },
+    {
+      "lab_temperature_K": 77.0,
+      "lab_gravity_phi_epsilon": 6.14612566152857e-07,
+      "outside_gravity_factor": 1.0000001475069977,
+      "outside_support_factor": 0.9989834644306719,
+      "predicted_half_life_seconds": null
+    },
+    {
+      "lab_temperature_K": 300.0,
+      "lab_gravity_phi_epsilon": 6.14612566152857e-07,
+      "outside_gravity_factor": 1.0000001475069977,
+      "outside_support_factor": 0.9985461128319355,
+      "predicted_half_life_seconds": null
+    }
+  ],
+  "neutron_lifetime_reference_comparison": [
+    {
+      "method": "bottle",
+      "reference_half_life_seconds": 877.75,
+      "lab_temperature_K": 4.0,
+      "lab_gravity_phi_epsilon": 6.14612566152857e-07,
+      "outside_gravity_factor": 1.0000001475069977,
+      "outside_support_factor": 0.9998870900073189,
+      "predicted_half_life_seconds": null,
+      "pred_over_ref": null,
+      "source": "representative UCN magnetic-bottle average (superconducting trap class)"
+    },
+    {
+      "method": "beam",
+      "reference_half_life_seconds": 888.0,
+      "lab_temperature_K": 300.0,
+      "lab_gravity_phi_epsilon": 6.14612566152857e-07,
+      "outside_gravity_factor": 1.0000001475069977,
+      "outside_support_factor": 0.9985461128319355,
+      "predicted_half_life_seconds": null,
+      "pred_over_ref": null,
+      "source": "representative beam average (decay-in-flight, negligible trap B)"
+    }
+  ],
+  "neutron_method_environment_ledger": [
+    {
+      "method": "bottle",
+      "reference_half_life_seconds": 877.75,
+      "lab_temperature_K": 4.0,
+      "trap_magnetic_field_tesla": 2.5,
+      "trap_magnetic_curvature_fraction": 1.0,
+      "trap_weak_width_factor_from_magnetic": 1.0222222222222221,
+      "predicted_half_life_seconds": NaN,
+      "pred_over_ref": NaN,
+      "outside_support_factor": 0.9998870900073189,
+      "lab_gravity_binding_stack": {
+        "earth": 6.953485068002883e-10,
+        "sun": 9.870628715107786e-09,
+        "galaxy": 6.040465889309489e-07,
+        "molecular": 0.0,
+        "total": 6.14612566152857e-07,
+        "total_gravity": 6.14612566152857e-07
+      },
+      "bottle_beam_split_ppm": 11677.584733694068,
+      "partner_ppm_vs_other_method": 11677.584733694068,
+      "interpretive_slots": "UCN magnetic trap embedding: superconducting bottle field B books \u03c1_mag(B) curvature on the weak Fano/Hopf bridge (not the neV Zeeman slot). Material boundary contacts + trap-induced decoherence on the weak bridge. Dilute fermionic gas \u2014 Pauli forbids strong-width composite coupling. Cryogenic storage (often 4 K) is metadata; B is the determining curvature lever.",
+      "source": "representative UCN magnetic-bottle average (superconducting trap class)"
+    },
+    {
+      "method": "beam",
+      "reference_half_life_seconds": 888.0,
+      "lab_temperature_K": 300.0,
+      "trap_magnetic_field_tesla": 0.0,
+      "trap_magnetic_curvature_fraction": 0.0,
+      "trap_weak_width_factor_from_magnetic": 1.0,
+      "predicted_half_life_seconds": NaN,
+      "pred_over_ref": NaN,
+      "outside_support_factor": 0.9985461128319355,
+      "lab_gravity_binding_stack": {
+        "earth": 6.953485068002883e-10,
+        "sun": 9.870628715107786e-09,
+        "galaxy": 6.040465889309489e-07,
+        "molecular": 0.0,
+        "total": 6.14612566152857e-07,
+        "total_gravity": 6.14612566152857e-07
+      },
+      "bottle_beam_split_ppm": 11677.584733694068,
+      "partner_ppm_vs_other_method": -11677.584733694068,
+      "interpretive_slots": "Free-branch decay-in-flight with directed transport coherence along the beam pipe; room-temperature beam line; effectively single-particle weak beta- (no trap ensemble / wall-exchange ledger). Co-spin horizon Doppler from beam velocity (v/c ~ few ppm) is an additive lapse slot (flyby readout). Measures protons from beta- in a kinematic endpoint window.",
+      "source": "representative beam average (decay-in-flight, negligible trap B)"
+    },
+    {
+      "comparison": "temperature_only_bottle_T_vs_beam_T",
+      "bottle_T_K": 4.0,
+      "beam_T_K": 300.0,
+      "ppm_delta_tau": -1000000.0,
+      "note": "Sub-leading control only (~10\u00b3 ppm from 4 K vs 300 K outside support); not the primary bottle/beam split driver."
+    },
+    {
+      "comparison": "magnetic_trap_bottle_B_vs_beam_B",
+      "bottle_B_tesla": 2.5,
+      "beam_B_tesla": 0.0,
+      "bottle_rho_mag": 1.0,
+      "beam_rho_mag": 0.0,
+      "bottle_width_factor": 1.0222222222222221,
+      "beam_width_factor": 1.0,
+      "predicted_tau_bottle_over_beam": 0.9782608695652175,
+      "predicted_tau_beam_over_bottle": 1.0222222222222221,
+      "predicted_beam_over_bottle_split_ppm": 22222.222222222143,
+      "observed_beam_over_bottle_split_ppm": 11677.584733694068,
+      "observed_fraction_of_saturated_envelope": 0.525491313016235,
+      "note": "Primary structural lever: UCN trap B \u2192 \u03c1_mag(B) on weak Fano/Hopf bridge (Lean trapWeakWidthFactorFromMagnetic). Beam sees f\u22481; bottle at B\u22651 T books f\u22481+\u03b3/18; observed beam/bottle split lies below this saturated method envelope."
+    },
+    {
+      "comparison": "spin_statistics_ensemble_policy",
+      "note": "Half-integer neutrons cannot couple into a shared strong-width composite (Pauli exchange phase -1). If coupling were allowed, Ledger-I overlap would give t1/2 ~ 1e-22 s, not ~880 s. Bottle and beam both measure Ledger-III weak width; the split is trap magnetic curvature + embedding, not temperature alone and not instantaneous beta from fermion coupling."
+    }
+  ],
+  "neutron_width_ledger_comparison": {
+    "policy": "compare width ledger via Q_phase; tau is integrated clock-time display",
+    "lab_temperature_K": 300.0,
+    "local_curvature_neutrino_opacity_barn": 320745189.0471357,
+    "local_curvature_weak_width_factor": 1.0730742857142856,
+    "local_curvature_weak_width_factor_band": {
+      "low": 1.0676613756613755,
+      "central": 1.0730742857142856,
+      "high": 1.0789202285714286
+    },
+    "predicted_half_life_seconds": NaN,
+    "predicted_half_life_seconds_band": {
+      "low": NaN,
+      "central": NaN,
+      "high": NaN
+    },
+    "predicted_gamma_per_s": NaN,
+    "q_phase_mev": NaN,
+    "pdg_codata": {
+      "reference_half_life_seconds": 879.4,
+      "tau_pred_over_ref": NaN,
+      "gamma_ref_over_pred": NaN,
+      "delta_q_phase_keV": NaN,
+      "delta_q_phase_fraction": NaN
+    },
+    "method_references": [
+      {
+        "method": "bottle",
+        "reference_half_life_seconds": 877.75,
+        "tau_pred_over_ref": NaN,
+        "gamma_ref_over_pred": NaN,
+        "delta_q_phase_keV": NaN,
+        "delta_q_phase_fraction": NaN
+      },
+      {
+        "method": "beam",
+        "reference_half_life_seconds": 888.0,
+        "tau_pred_over_ref": NaN,
+        "gamma_ref_over_pred": NaN,
+        "delta_q_phase_keV": NaN,
+        "delta_q_phase_fraction": NaN
+      }
+    ]
+  },
+  "isotope_method_tension_panel": [
+    {
+      "isotope": "28Al",
+      "environment": "neutral_lab",
+      "central_half_life_seconds": 134.432,
+      "local_width_factor": 1.0,
+      "predicted_apparent_half_life_seconds": 134.432,
+      "method_shift_ppm": 0.0,
+      "method_shift_percent": 0.0,
+      "tension_note": "TwinSol-style modern value; historical high-precision outlier is a method/systematics target.",
+      "interpretation": "No trap/collider curvature width dressing."
+    },
+    {
+      "isotope": "28Al",
+      "environment": "ucn_trap_saturated",
+      "central_half_life_seconds": 134.432,
+      "local_width_factor": 1.0222222222222221,
+      "predicted_apparent_half_life_seconds": 131.5095652173913,
+      "method_shift_ppm": -21739.130434782484,
+      "method_shift_percent": -2.1739130434782594,
+      "tension_note": "TwinSol-style modern value; historical high-precision outlier is a method/systematics target.",
+      "interpretation": "Saturated magnetic trap envelope; neutron-bottle scale, not assumed for ordinary samples."
+    },
+    {
+      "isotope": "28Al",
+      "environment": "collider_4T",
+      "central_half_life_seconds": 134.432,
+      "local_width_factor": 1.0222222222222221,
+      "predicted_apparent_half_life_seconds": 131.5095652173913,
+      "method_shift_ppm": -21739.130434782484,
+      "method_shift_percent": -2.1739130434782594,
+      "tension_note": "TwinSol-style modern value; historical high-precision outlier is a method/systematics target.",
+      "interpretation": "4 T collider/reference field with no comoving-stream occupancy."
+    },
+    {
+      "isotope": "28Al",
+      "environment": "collider_4T_stream1",
+      "central_half_life_seconds": 134.432,
+      "local_width_factor": 1.0444444444444445,
+      "predicted_apparent_half_life_seconds": 128.71148936170212,
+      "method_shift_ppm": -42553.191489361765,
+      "method_shift_percent": -4.255319148936165,
+      "tension_note": "TwinSol-style modern value; historical high-precision outlier is a method/systematics target.",
+      "interpretation": "4 T field plus full comoving stream occupancy."
+    },
+    {
+      "isotope": "71Ge",
+      "environment": "neutral_lab",
+      "central_half_life_seconds": 990835.2,
+      "local_width_factor": 1.0,
+      "predicted_apparent_half_life_seconds": 990835.2,
+      "method_shift_ppm": 0.0,
+      "method_shift_percent": 0.0,
+      "tension_note": "HPGe remeasurement class; half-life shift cannot explain the Gallium anomaly if method factors are small.",
+      "interpretation": "No trap/collider curvature width dressing."
+    },
+    {
+      "isotope": "71Ge",
+      "environment": "ucn_trap_saturated",
+      "central_half_life_seconds": 990835.2,
+      "local_width_factor": 1.0222222222222221,
+      "predicted_apparent_half_life_seconds": 969295.3043478262,
+      "method_shift_ppm": -21739.130434782484,
+      "method_shift_percent": -2.1739130434782483,
+      "tension_note": "HPGe remeasurement class; half-life shift cannot explain the Gallium anomaly if method factors are small.",
+      "interpretation": "Saturated magnetic trap envelope; neutron-bottle scale, not assumed for ordinary samples."
+    },
+    {
+      "isotope": "71Ge",
+      "environment": "collider_4T",
+      "central_half_life_seconds": 990835.2,
+      "local_width_factor": 1.0222222222222221,
+      "predicted_apparent_half_life_seconds": 969295.3043478262,
+      "method_shift_ppm": -21739.130434782484,
+      "method_shift_percent": -2.1739130434782483,
+      "tension_note": "HPGe remeasurement class; half-life shift cannot explain the Gallium anomaly if method factors are small.",
+      "interpretation": "4 T collider/reference field with no comoving-stream occupancy."
+    },
+    {
+      "isotope": "71Ge",
+      "environment": "collider_4T_stream1",
+      "central_half_life_seconds": 990835.2,
+      "local_width_factor": 1.0444444444444445,
+      "predicted_apparent_half_life_seconds": 948671.9999999999,
+      "method_shift_ppm": -42553.191489361765,
+      "method_shift_percent": -4.255319148936176,
+      "tension_note": "HPGe remeasurement class; half-life shift cannot explain the Gallium anomaly if method factors are small.",
+      "interpretation": "4 T field plus full comoving stream occupancy."
+    },
+    {
+      "comparison": "isotope_tension_policy",
+      "note": "HQIV method curvature predicts percent-level shifts only in strong trap/collider environments. If an isotope discrepancy exceeds this envelope without such a method environment, it remains an experimental systematic or a missing isotope-structure ledger, not a fitted lifetime correction."
+    }
+  ],
+  "curvature_imprint_control": [],
+  "summary": {
+    "count": 6,
+    "mean_abs_mass_error_pct": 0.11532379739662281,
+    "max_abs_mass_error_pct": 0.31836237321787325
+  }
+}

@@ -61,14 +61,14 @@ theorem emergent_coordsField_eq_general_of_grad (J_src : Fin 8 → Fin 4 → ℝ
   simp_rw [h]
   norm_num
 
-/-- Constant scalar field ⇒ zero gradient ⇒ same RHS as `emergentMaxwellInhomogeneous_O_general` with
-    placeholder `grad_φ = 0`. -/
+/-- Constant scalar field ⇒ zero gradient; emergent O–Maxwell RHS matches `general` when the
+    default lock-in `grad_φ` slot also vanishes. -/
 theorem emergent_coordsField_const_eq_general (J_src : Fin 8 → Fin 4 → ℝ) (r : ℝ) (c : Fin 4 → ℝ)
-    (a : Fin 8) (ν : Fin 4) :
+    (a : Fin 8) (ν : Fin 4) (hgrad : ∀ κ, grad_φ κ = 0) :
     emergentMaxwellInhomogeneous_O_coordsField J_src (fun _ : Fin 4 → ℝ => r) c a ν =
       emergentMaxwellInhomogeneous_O_general J_src a ν := by
-  refine emergent_coordsField_eq_general_of_grad J_src (fun _ => r) c a ν ?_
-  simp [coordsGradientComponents_const, grad_φ]
+  apply emergent_coordsField_eq_general_of_grad J_src (fun _ => r) c a ν
+  simp [coordsGradientComponents_const, hgrad ν]
 
 /-- Emergent RHS with `g^{νμ} ∂_μ φ` from `contravariantGradientComponentsAt gInvAt` at `c`. -/
 noncomputable def emergentMaxwellInhomogeneous_O_coordsField_metric (J_src : Fin 8 → Fin 4 → ℝ)
@@ -113,13 +113,14 @@ noncomputable def L_O_phi_coupling_coords (A : Fin 8 → Fin 4 → ℝ) (φ_val 
   alpha * Real.log (φ_val + 1) * ∑ ν : Fin 4, coordsGradientComponents φF c ν * A 0 ν
 
 @[simp]
-theorem L_O_phi_coupling_coords_const (A : Fin 8 → Fin 4 → ℝ) (φ_val : ℝ) (r : ℝ) (c : Fin 4 → ℝ) :
+theorem L_O_phi_coupling_coords_const (A : Fin 8 → Fin 4 → ℝ) (φ_val : ℝ) (r : ℝ) (c : Fin 4 → ℝ)
+    (hgrad : ∀ ν, grad_φ ν = 0) :
     L_O_phi_coupling_coords A φ_val (fun _ : Fin 4 → ℝ => r) c = L_O_phi_coupling A φ_val := by
   unfold L_O_phi_coupling_coords L_O_phi_coupling
   congr 1
   refine Finset.sum_congr rfl ?_
   intro ν _
-  simp [coordsGradientComponents_const, grad_phi]
+  simp [coordsGradientComponents_const, grad_phi, grad_phi_eq_grad_φ, hgrad ν]
 
 noncomputable def L_O_phi_coupling_coords_metric (A : Fin 8 → Fin 4 → ℝ) (φ_val : ℝ)
     (φF : (Fin 4 → ℝ) → ℝ) (gInvAt : (Fin 4 → ℝ) → Fin 4 → Fin 4 → ℝ) (c : Fin 4 → ℝ) : ℝ :=
@@ -147,13 +148,14 @@ theorem L_O_phi_coupling_coords_hqvmConst_eq_metric (A : Fin 8 → Fin 4 → ℝ
       L_O_phi_coupling_coords_metric A φ_val φF (hqvmInverseMetricConst N a Φ) c :=
   rfl
 
-theorem L_O_phi_coupling_coords_metric_const (A : Fin 8 → Fin 4 → ℝ) (φ_val : ℝ) (r : ℝ) (c : Fin 4 → ℝ) :
+theorem L_O_phi_coupling_coords_metric_const (A : Fin 8 → Fin 4 → ℝ) (φ_val : ℝ) (r : ℝ) (c : Fin 4 → ℝ)
+    (hgrad : ∀ ν, grad_φ ν = 0) :
     L_O_phi_coupling_coords_metric A φ_val (fun _ : Fin 4 → ℝ => r) (fun _ => euclideanInv) c =
       L_O_phi_coupling A φ_val := by
   refine
     (L_O_phi_coupling_coords_metric_eq_coords_of_euclidean A φ_val (fun _ => r) (fun _ => euclideanInv) c
           ?_ rfl).trans
-      (L_O_phi_coupling_coords_const A φ_val r c)
+      (L_O_phi_coupling_coords_const A φ_val r c hgrad)
   have hφ :
       DifferentiableAt ℝ (fun x : SpacetimeEuclidean4 => (fun _ : Fin 4 → ℝ => r) (spacetimeCoordsEquiv x))
         (spacetimeOfCoords c) := by
@@ -185,12 +187,12 @@ theorem L_O_Maxwell_general_coordsField_hqvmConst_eq_metric (J_src : Fin 8 → F
   rfl
 
 theorem L_O_Maxwell_general_coordsField_const (J_src : Fin 8 → Fin 4 → ℝ) (A : Fin 8 → Fin 4 → ℝ)
-    (φ_val : ℝ) (r : ℝ) (c : Fin 4 → ℝ) :
+    (φ_val : ℝ) (r : ℝ) (c : Fin 4 → ℝ) (hgrad : ∀ ν, grad_φ ν = 0) :
     L_O_Maxwell_general_coordsField J_src A φ_val (fun _ : Fin 4 → ℝ => r) c =
       L_O_Maxwell_general J_src A φ_val := by
   unfold L_O_Maxwell_general_coordsField L_O_Maxwell_general
   congr 1
-  exact L_O_phi_coupling_coords_const A φ_val r c
+  exact L_O_phi_coupling_coords_const A φ_val r c hgrad
 
 theorem L_O_Maxwell_general_coordsField_metric_eq_coordsField_of_euclidean (J_src : Fin 8 → Fin 4 → ℝ)
     (A : Fin 8 → Fin 4 → ℝ) (φ_val : ℝ) (φF : (Fin 4 → ℝ) → ℝ) (gInvAt : (Fin 4 → ℝ) → Fin 4 → Fin 4 → ℝ)
@@ -204,23 +206,23 @@ theorem L_O_Maxwell_general_coordsField_metric_eq_coordsField_of_euclidean (J_sr
   exact L_O_phi_coupling_coords_metric_eq_coords_of_euclidean A φ_val φF gInvAt c hφ hg
 
 theorem L_O_Maxwell_general_coordsField_metric_const (J_src : Fin 8 → Fin 4 → ℝ) (A : Fin 8 → Fin 4 → ℝ)
-    (φ_val : ℝ) (r : ℝ) (c : Fin 4 → ℝ) :
+    (φ_val : ℝ) (r : ℝ) (c : Fin 4 → ℝ) (hgrad : ∀ ν, grad_φ ν = 0) :
     L_O_Maxwell_general_coordsField_metric J_src A φ_val (fun _ => r) (fun _ => euclideanInv) c =
       L_O_Maxwell_general J_src A φ_val := by
   unfold L_O_Maxwell_general_coordsField_metric L_O_Maxwell_general
   congr 1
-  exact L_O_phi_coupling_coords_metric_const A φ_val r c
+  exact L_O_phi_coupling_coords_metric_const A φ_val r c hgrad
 
 noncomputable def action_O_Maxwell_general_coordsField (J_src : Fin 8 → Fin 4 → ℝ)
     (A : Fin 8 → Fin 4 → ℝ) (φ_val : ℝ) (φF : (Fin 4 → ℝ) → ℝ) (c : Fin 4 → ℝ) : ℝ :=
   L_O_Maxwell_general_coordsField J_src A φ_val φF c
 
 theorem action_O_Maxwell_general_coordsField_const (J_src : Fin 8 → Fin 4 → ℝ) (A : Fin 8 → Fin 4 → ℝ)
-    (φ_val : ℝ) (r : ℝ) (c : Fin 4 → ℝ) :
+    (φ_val : ℝ) (r : ℝ) (c : Fin 4 → ℝ) (hgrad : ∀ ν, grad_φ ν = 0) :
     action_O_Maxwell_general_coordsField J_src A φ_val (fun _ => r) c =
       action_O_Maxwell_general J_src A φ_val := by
   unfold action_O_Maxwell_general_coordsField action_O_Maxwell_general
-  exact L_O_Maxwell_general_coordsField_const J_src A φ_val r c
+  exact L_O_Maxwell_general_coordsField_const J_src A φ_val r c hgrad
 
 noncomputable def action_O_Maxwell_general_coordsField_metric (J_src : Fin 8 → Fin 4 → ℝ)
     (A : Fin 8 → Fin 4 → ℝ) (φ_val : ℝ) (φF : (Fin 4 → ℝ) → ℝ) (gInvAt : (Fin 4 → ℝ) → Fin 4 → Fin 4 → ℝ)
@@ -249,11 +251,11 @@ theorem action_O_Maxwell_general_coordsField_metric_eq_coordsField_of_euclidean 
   exact L_O_Maxwell_general_coordsField_metric_eq_coordsField_of_euclidean J_src A φ_val φF gInvAt c hφ hg
 
 theorem action_O_Maxwell_general_coordsField_metric_const (J_src : Fin 8 → Fin 4 → ℝ) (A : Fin 8 → Fin 4 → ℝ)
-    (φ_val : ℝ) (r : ℝ) (c : Fin 4 → ℝ) :
+    (φ_val : ℝ) (r : ℝ) (c : Fin 4 → ℝ) (hgrad : ∀ ν, grad_φ ν = 0) :
     action_O_Maxwell_general_coordsField_metric J_src A φ_val (fun _ => r) (fun _ => euclideanInv) c =
       action_O_Maxwell_general J_src A φ_val := by
   unfold action_O_Maxwell_general_coordsField_metric action_O_Maxwell_general
-  exact L_O_Maxwell_general_coordsField_metric_const J_src A φ_val r c
+  exact L_O_Maxwell_general_coordsField_metric_const J_src A φ_val r c hgrad
 
 /-- Euler–Lagrange with continuum gradient in the `a = 0` channel. -/
 noncomputable def EL_O_general_coordsField (J_src : Fin 8 → Fin 4 → ℝ) (A : Fin 8 → Fin 4 → ℝ)
@@ -276,11 +278,11 @@ theorem EL_O_general_coordsField_eq_EL_of_grad (J_src : Fin 8 → Fin 4 → ℝ)
   simp [F_divergence_sum, h]
 
 theorem EL_O_general_coordsField_const (J_src : Fin 8 → Fin 4 → ℝ) (A : Fin 8 → Fin 4 → ℝ)
-    (φ_val : ℝ) (r : ℝ) (c : Fin 4 → ℝ) (a : Fin 8) (ν : Fin 4) :
+    (φ_val : ℝ) (r : ℝ) (c : Fin 4 → ℝ) (a : Fin 8) (ν : Fin 4) (hgrad : ∀ κ, grad_φ κ = 0) :
     EL_O_general_coordsField J_src A φ_val (fun _ : Fin 4 → ℝ => r) c a ν =
       EL_O_general J_src A φ_val a ν := by
   refine EL_O_general_coordsField_eq_EL_of_grad J_src A φ_val (fun _ => r) c a ν ?_
-  simp [coordsGradientComponents_const, grad_phi]
+  simp [coordsGradientComponents_const, grad_phi, grad_phi_eq_grad_φ, hgrad ν]
 
 /-- Euler–Lagrange with metric-raised `∇φ` in the `a = 0` channel. -/
 noncomputable def EL_O_general_coordsField_metric (J_src : Fin 8 → Fin 4 → ℝ) (A : Fin 8 → Fin 4 → ℝ)
@@ -319,7 +321,7 @@ theorem EL_O_general_coordsField_metric_eq_coordsField_of_euclidean (J_src : Fin
   simp_rw [contravariantGradientComponentsAt_euclideanInv_eq_coordsGradientComponents gInvAt φF c hφ hg]
 
 theorem EL_O_general_coordsField_metric_const (J_src : Fin 8 → Fin 4 → ℝ) (A : Fin 8 → Fin 4 → ℝ)
-    (φ_val : ℝ) (r : ℝ) (c : Fin 4 → ℝ) (a : Fin 8) (ν : Fin 4) :
+    (φ_val : ℝ) (r : ℝ) (c : Fin 4 → ℝ) (a : Fin 8) (ν : Fin 4) (hgrad : ∀ κ, grad_φ κ = 0) :
     EL_O_general_coordsField_metric J_src A φ_val (fun _ => r) (fun _ => euclideanInv) c a ν =
       EL_O_general J_src A φ_val a ν := by
   refine (EL_O_general_coordsField_metric_eq_coordsField_of_euclidean J_src A φ_val (fun _ => r)
@@ -327,19 +329,19 @@ theorem EL_O_general_coordsField_metric_const (J_src : Fin 8 → Fin 4 → ℝ) 
   · rw [show (fun x : SpacetimeEuclidean4 => (fun _ : Fin 4 → ℝ => r) (spacetimeCoordsEquiv x)) = fun _ => r by
       funext x; rfl]
     exact differentiableAt_const r
-  · exact EL_O_general_coordsField_const J_src A φ_val r c a ν
+  · exact EL_O_general_coordsField_const J_src A φ_val r c a ν hgrad
 
 noncomputable def action_total_general_coordsField (J_src : Fin 8 → Fin 4 → ℝ) (A : Fin 8 → Fin 4 → ℝ)
     (φ_val : ℝ) (φF : (Fin 4 → ℝ) → ℝ) (c : Fin 4 → ℝ) (rho_m rho_r : ℝ) : ℝ :=
   action_O_Maxwell_general_coordsField J_src A φ_val φF c + S_HQVM_grav φ_val rho_m rho_r
 
 theorem action_total_general_coordsField_const (J_src : Fin 8 → Fin 4 → ℝ) (A : Fin 8 → Fin 4 → ℝ)
-    (φ_val : ℝ) (r : ℝ) (c : Fin 4 → ℝ) (rho_m rho_r : ℝ) :
+    (φ_val : ℝ) (r : ℝ) (c : Fin 4 → ℝ) (rho_m rho_r : ℝ) (hgrad : ∀ ν, grad_φ ν = 0) :
     action_total_general_coordsField J_src A φ_val (fun _ => r) c rho_m rho_r =
       action_total_general J_src A φ_val rho_m rho_r := by
   unfold action_total_general_coordsField action_total_general
   congr 1
-  exact action_O_Maxwell_general_coordsField_const J_src A φ_val r c
+  exact action_O_Maxwell_general_coordsField_const J_src A φ_val r c hgrad
 
 noncomputable def action_total_general_coordsField_metric (J_src : Fin 8 → Fin 4 → ℝ) (A : Fin 8 → Fin 4 → ℝ)
     (φ_val : ℝ) (φF : (Fin 4 → ℝ) → ℝ) (gInvAt : (Fin 4 → ℝ) → Fin 4 → Fin 4 → ℝ) (c : Fin 4 → ℝ)
@@ -358,12 +360,12 @@ theorem action_total_general_coordsField_metric_eq_coordsField_of_euclidean (J_s
   exact action_O_Maxwell_general_coordsField_metric_eq_coordsField_of_euclidean J_src A φ_val φF gInvAt c hφ hg
 
 theorem action_total_general_coordsField_metric_const (J_src : Fin 8 → Fin 4 → ℝ) (A : Fin 8 → Fin 4 → ℝ)
-    (φ_val : ℝ) (r : ℝ) (c : Fin 4 → ℝ) (rho_m rho_r : ℝ) :
+    (φ_val : ℝ) (r : ℝ) (c : Fin 4 → ℝ) (rho_m rho_r : ℝ) (hgrad : ∀ ν, grad_φ ν = 0) :
     action_total_general_coordsField_metric J_src A φ_val (fun _ => r) (fun _ => euclideanInv) c rho_m rho_r =
       action_total_general J_src A φ_val rho_m rho_r := by
   unfold action_total_general_coordsField_metric action_total_general
   congr 1
-  exact action_O_Maxwell_general_coordsField_metric_const J_src A φ_val r c
+  exact action_O_Maxwell_general_coordsField_metric_const J_src A φ_val r c hgrad
 
 noncomputable def action_total_general_coordsField_hqvmConst (J_src : Fin 8 → Fin 4 → ℝ)
     (A : Fin 8 → Fin 4 → ℝ) (φ_val : ℝ) (φF : (Fin 4 → ℝ) → ℝ) (N a Φ : ℝ) (c : Fin 4 → ℝ)

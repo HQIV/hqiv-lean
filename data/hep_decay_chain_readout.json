@@ -1,0 +1,881 @@
+{
+  "source": "scripts/hqiv_hep_decay_chain.py",
+  "lean_modules": [
+    "Hqiv.Physics.TuftGlobalHadronReadout",
+    "Hqiv.Physics.HadronMassReadout",
+    "Hqiv.Physics.WeakFanoHopfBridge",
+    "Hqiv.Physics.NuclearAndAtomicSpectra"
+  ],
+  "collision": {
+    "beam_id": "p",
+    "beam_kinetic_gev": 6500.0,
+    "target_id": "p",
+    "target_kinetic_gev": 6500.0,
+    "beam_fraction": 1.0,
+    "collision_mode": "head_on",
+    "sqrt_s_gev": 13001.87654417632,
+    "xi_collision": 1878036598566003.2,
+    "accessible_mass_gev": 6370.919506646397
+  },
+  "environment": {
+    "magnetic_field_tesla": 0.0,
+    "lab_temperature_K": 293.15,
+    "gravity_tier": "earth",
+    "trap_embedding": false,
+    "weak_width_factor": 1.0,
+    "outside_support_factor": 0.9985538088039646
+  },
+  "produced_count": 60,
+  "produced_sample": [
+    {
+      "species_id": "B0",
+      "label": "B\u2070 (d b\u0304)",
+      "mass_mev": 25.33248910543665,
+      "xi": 5.0,
+      "structure": "baryon",
+      "pdg_name": "B0",
+      "cern_accessible": true
+    },
+    {
+      "species_id": "B_plus",
+      "label": "B\u207a (u b\u0304)",
+      "mass_mev": 456.03041799534736,
+      "xi": 5.0,
+      "structure": "baryon",
+      "pdg_name": "B+",
+      "cern_accessible": true
+    },
+    {
+      "species_id": "Bs",
+      "label": "B\u2070_s (s b\u0304)",
+      "mass_mev": 365.6776791053548,
+      "xi": 5.0,
+      "structure": "baryon",
+      "pdg_name": "Bs0",
+      "cern_accessible": true
+    },
+    {
+      "species_id": "D0",
+      "label": "D\u2070 (c \u016b)",
+      "mass_mev": 6516.71865099455,
+      "xi": 5.0,
+      "structure": "baryon",
+      "pdg_name": "D0",
+      "cern_accessible": true
+    },
+    {
+      "species_id": "D_plus",
+      "label": "D\u207a (c d\u0304)",
+      "mass_mev": 6516.71865099455,
+      "xi": 5.0,
+      "structure": "baryon",
+      "pdg_name": "D+",
+      "cern_accessible": true
+    },
+    {
+      "species_id": "Ds_plus",
+      "label": "D\u207a_s (c s\u0304)",
+      "mass_mev": 6516.71865099455,
+      "xi": 5.0,
+      "structure": "baryon",
+      "pdg_name": "Ds+",
+      "cern_accessible": true
+    },
+    {
+      "species_id": "Jpsi",
+      "label": "J/\u03c8 (c c\u0304)",
+      "mass_mev": 6516.617682066882,
+      "xi": 5.0,
+      "structure": "baryon",
+      "pdg_name": "J/psi",
+      "cern_accessible": true
+    },
+    {
+      "species_id": "K0",
+      "label": "K\u2070 (d s\u0304)",
+      "mass_mev": 469.13604408,
+      "xi": 5.0,
+      "structure": "baryon",
+      "pdg_name": "K0",
+      "cern_accessible": true
+    },
+    {
+      "species_id": "K_minus",
+      "label": "K\u207b (s \u016b)",
+      "mass_mev": 469.13604408,
+      "xi": 5.0,
+      "structure": "baryon",
+      "pdg_name": "K-",
+      "cern_accessible": true
+    },
+    {
+      "species_id": "K_plus",
+      "label": "K\u207a (u s\u0304)",
+      "mass_mev": 469.13604408,
+      "xi": 5.0,
+      "structure": "baryon",
+      "pdg_name": "K+",
+      "cern_accessible": true
+    },
+    {
+      "species_id": "P_s",
+      "label": "P_s (u u d d s)",
+      "mass_mev": 1328.4034933069229,
+      "xi": 5.0,
+      "structure": "baryon",
+      "pdg_name": "pentaquark-strange",
+      "cern_accessible": true
+    },
+    {
+      "species_id": "Pc4312",
+      "label": "P_c(4312)\u207a (u u d s c)",
+      "mass_mev": 7819.789655196037,
+      "xi": 5.0,
+      "structure": "baryon",
+      "pdg_name": "Pc(4312)+",
+      "cern_accessible": true
+    },
+    {
+      "species_id": "Pc4440",
+      "label": "P_c(4440)\u207a (u u d s c)*",
+      "mass_mev": 7819.789655196037,
+      "xi": 5.0,
+      "structure": "baryon",
+      "pdg_name": "Pc(4440)+",
+      "cern_accessible": true
+    },
+    {
+      "species_id": "Pc4457",
+      "label": "P_c(4457)\u207a (u u d c c)",
+      "mass_mev": 13970.83062708523,
+      "xi": 5.0,
+      "structure": "baryon",
+      "pdg_name": "Pc(4457)+",
+      "cern_accessible": true
+    },
+    {
+      "species_id": "Tcc",
+      "label": "T_cc (c c u\u0304 d\u0304)",
+      "mass_mev": 13033.4373019891,
+      "xi": 5.0,
+      "structure": "baryon",
+      "pdg_name": "Tcc",
+      "cern_accessible": true
+    },
+    {
+      "species_id": "Upsilon",
+      "label": "\u03d2 (b b\u0304)",
+      "mass_mev": 9328.195240416027,
+      "xi": 5.0,
+      "structure": "baryon",
+      "pdg_name": "Upsilon",
+      "cern_accessible": true
+    },
+    {
+      "species_id": "X3872",
+      "label": "X(3872) (c c\u0304 q q\u0304)",
+      "mass_mev": 6972.749068989896,
+      "xi": 5.0,
+      "structure": "baryon",
+      "pdg_name": "X(3872)",
+      "cern_accessible": true
+    },
+    {
+      "species_id": "Zc3900",
+      "label": "Z_c(3900) (c c\u0304 u \u016b)",
+      "mass_mev": 6972.749068989896,
+      "xi": 5.0,
+      "structure": "baryon",
+      "pdg_name": "Zc(3900)",
+      "cern_accessible": true
+    },
+    {
+      "species_id": "bbqq",
+      "label": "(bb)(q\u0304q\u0304)",
+      "mass_mev": 18656.592418687393,
+      "xi": 5.0,
+      "structure": "baryon",
+      "pdg_name": "hidden-bottom",
+      "cern_accessible": true
+    },
+    {
+      "species_id": "bcqq",
+      "label": "(bc)(q\u0304q\u0304)",
+      "mass_mev": 15845.014860338244,
+      "xi": 5.0,
+      "structure": "baryon",
+      "pdg_name": "hidden-mixed",
+      "cern_accessible": true
+    },
+    {
+      "species_id": "ccd",
+      "label": "ccd (ccd)",
+      "mass_mev": 13058.769791094537,
+      "xi": 5.0,
+      "structure": "baryon",
+      "pdg_name": "ccd",
+      "cern_accessible": true
+    },
+    {
+      "species_id": "ccqq",
+      "label": "(cc)(q\u0304q\u0304)",
+      "mass_mev": 13033.4373019891,
+      "xi": 5.0,
+      "structure": "baryon",
+      "pdg_name": "hidden-charm",
+      "cern_accessible": true
+    },
+    {
+      "species_id": "delta_0",
+      "label": "\u0394\u2070 (udd)",
+      "mass_mev": 1238.0174210022624,
+      "xi": 5.0,
+      "structure": "baryon",
+      "pdg_name": "Delta0",
+      "cern_accessible": true
+    },
+    {
+      "species_id": "delta_m",
+      "label": "\u0394\u207b (ddd)",
+      "mass_mev": 1238.0174210022624,
+      "xi": 5.0,
+      "structure": "baryon",
+      "pdg_name": "Delta-",
+      "cern_accessible": true
+    },
+    {
+      "species_id": "delta_p",
+      "label": "\u0394\u207a (uud)",
+      "mass_mev": 1238.0174210022624,
+      "xi": 5.0,
+      "structure": "baryon",
+      "pdg_name": "Delta+",
+      "cern_accessible": true
+    },
+    {
+      "species_id": "delta_pp",
+      "label": "\u0394\u207a\u207a (uuu)",
+      "mass_mev": 1238.0174210022624,
+      "xi": 5.0,
+      "structure": "baryon",
+      "pdg_name": "Delta++",
+      "cern_accessible": true
+    },
+    {
+      "species_id": "dsds",
+      "label": "(ds)(d\u0304s\u0304)",
+      "mass_mev": 391.0101682107914,
+      "xi": 5.0,
+      "structure": "baryon",
+      "pdg_name": "tetraquark-light",
+      "cern_accessible": true
+    },
+    {
+      "species_id": "eta",
+      "label": "\u03b7 (u\u016b+d\u0111 mix)",
+      "mass_mev": 390.9467034,
+      "xi": 5.0,
+      "structure": "baryon",
+      "pdg_name": "eta",
+      "cern_accessible": true
+    },
+    {
+      "species_id": "lambda",
+      "label": "\u039b (uds)",
+      "mass_mev": 1103.33838588,
+      "xi": 5.0,
+      "structure": "baryon",
+      "pdg_name": "Lambda",
+      "cern_accessible": true
+    },
+    {
+      "species_id": "lambda_b",
+      "label": "\u039b\u2070_b (udb)",
+      "mass_mev": 9809.659116444478,
+      "xi": 5.0,
+      "structure": "baryon",
+      "pdg_name": "Lambda_b0",
+      "cern_accessible": true
+    },
+    {
+      "species_id": "lambda_c",
+      "label": "\u039b\u207a_c (udc)",
+      "mass_mev": 6998.081558095333,
+      "xi": 5.0,
+      "structure": "baryon",
+      "pdg_name": "Lambda_c+",
+      "cern_accessible": true
+    },
+    {
+      "species_id": "n",
+      "label": "n (udd)",
+      "mass_mev": 939.565,
+      "xi": 5.0,
+      "structure": "baryon",
+      "pdg_name": "neutron",
+      "cern_accessible": true
+    },
+    {
+      "species_id": "omega",
+      "label": "\u03a9\u207b (sss)",
+      "mass_mev": 1565.524266344,
+      "xi": 5.0,
+      "structure": "baryon",
+      "pdg_name": "Omega-",
+      "cern_accessible": true
+    },
+    {
+      "species_id": "omega_c",
+      "label": "\u03a9\u2070_c (ssc)",
+      "mass_mev": 7248.074009205258,
+      "xi": 5.0,
+      "structure": "baryon",
+      "pdg_name": "Omega_c0",
+      "cern_accessible": true
+    },
+    {
+      "species_id": "omega_cc",
+      "label": "\u03a9_cc (scc)",
+      "mass_mev": 13399.114981094457,
+      "xi": 5.0,
+      "structure": "baryon",
+      "pdg_name": "Omega_cc",
+      "cern_accessible": true
+    },
+    {
+      "species_id": "omega_star",
+      "label": "\u03a9*\u207b (sss)",
+      "mass_mev": 1472.3418373160644,
+      "xi": 5.0,
+      "structure": "baryon",
+      "pdg_name": "Omega*-",
+      "cern_accessible": true
+    },
+    {
+      "species_id": "p",
+      "label": "p (uud)",
+      "mass_mev": 938.2720881599998,
+      "xi": 5.0,
+      "structure": "baryon",
+      "pdg_name": "proton",
+      "cern_accessible": true
+    },
+    {
+      "species_id": "phi",
+      "label": "\u03c6 (s s\u0304)",
+      "mass_mev": 1006.815932876959,
+      "xi": 5.0,
+      "structure": "baryon",
+      "pdg_name": "phi",
+      "cern_accessible": true
+    },
+    {
+      "species_id": "pi_minus",
+      "label": "\u03c0\u207b (d \u016b)",
+      "mass_mev": 139.00327231999998,
+      "xi": 5.0,
+      "structure": "baryon",
+      "pdg_name": "pi-",
+      "cern_accessible": true
+    },
+    {
+      "species_id": "pi_plus",
+      "label": "\u03c0\u207a (u d\u0304)",
+      "mass_mev": 139.00327231999998,
+      "xi": 5.0,
+      "structure": "baryon",
+      "pdg_name": "pi+",
+      "cern_accessible": true
+    }
+  ],
+  "decay_chains": [
+    {
+      "particle": {
+        "species_id": "K_plus",
+        "label": "K\u207a (u s\u0304)",
+        "mass_mev": 469.13604408,
+        "xi": 5.0,
+        "structure": "baryon",
+        "pdg_name": "K+",
+        "cern_accessible": true
+      },
+      "depth": 0,
+      "cumulative_weight": 1.0,
+      "cumulative_time_s": 0.0,
+      "children": [
+        {
+          "particle": {
+            "species_id": "pi_plus",
+            "label": "\u03c0\u207a (u d\u0304)",
+            "mass_mev": 139.00327231999998,
+            "xi": 5.0,
+            "structure": "baryon",
+            "pdg_name": "pi+",
+            "cern_accessible": true
+          },
+          "depth": 1,
+          "cumulative_weight": 0.7549647924458487,
+          "cumulative_time_s": 5.856033746080104e-10,
+          "children": [],
+          "via": {
+            "parent": "K_plus",
+            "daughters": [
+              "pi_plus"
+            ],
+            "channel": "weak",
+            "q_mev": 330.1327717599771,
+            "width_per_s": 1183646151.3288276,
+            "half_life_s": 5.856033746080104e-10,
+            "branching_ratio": 0.7549647924458487,
+            "emitted": [
+              "pi_plus",
+              "nu_e"
+            ]
+          }
+        },
+        {
+          "particle": {
+            "species_id": "pi_zero",
+            "label": "pi_zero",
+            "mass_mev": 139.00327231999998,
+            "xi": 5.0,
+            "structure": "special",
+            "pdg_name": "pi_zero",
+            "cern_accessible": true
+          },
+          "depth": 1,
+          "cumulative_weight": 0.2449177121950312,
+          "cumulative_time_s": 5.856033746080104e-10,
+          "children": [],
+          "via": {
+            "parent": "K_plus",
+            "daughters": [
+              "pi_zero"
+            ],
+            "channel": "weak",
+            "q_mev": 330.1327717599771,
+            "width_per_s": 1183646151.3288276,
+            "half_life_s": 5.856033746080104e-10,
+            "branching_ratio": 0.2449177121950312,
+            "emitted": [
+              "pi_zero",
+              "nu_e"
+            ]
+          }
+        },
+        {
+          "particle": {
+            "species_id": "pi_plus",
+            "label": "\u03c0\u207a (u d\u0304)",
+            "mass_mev": 139.00327231999998,
+            "xi": 5.0,
+            "structure": "baryon",
+            "pdg_name": "pi+",
+            "cern_accessible": true
+          },
+          "depth": 1,
+          "cumulative_weight": 0.00011749535912016346,
+          "cumulative_time_s": 9.42177992375346e-07,
+          "children": [],
+          "via": {
+            "parent": "K_plus",
+            "daughters": [
+              "pi_plus",
+              "pi_zero",
+              "pi_zero"
+            ],
+            "channel": "weak",
+            "q_mev": 52.12622711997718,
+            "width_per_s": 735686.023415211,
+            "half_life_s": 9.42177992375346e-07,
+            "branching_ratio": 0.00011749535912016346,
+            "emitted": [
+              "pi_plus",
+              "pi_zero",
+              "pi_zero",
+              "nu_e"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "particle": {
+        "species_id": "delta_p",
+        "label": "\u0394\u207a (uud)",
+        "mass_mev": 1238.0174210022624,
+        "xi": 5.0,
+        "structure": "baryon",
+        "pdg_name": "Delta+",
+        "cern_accessible": true
+      },
+      "depth": 0,
+      "cumulative_weight": 1.0,
+      "cumulative_time_s": 0.0,
+      "children": [
+        {
+          "particle": {
+            "species_id": "p",
+            "label": "p (uud)",
+            "mass_mev": 938.2720881599998,
+            "xi": 5.0,
+            "structure": "baryon",
+            "pdg_name": "proton",
+            "cern_accessible": true
+          },
+          "depth": 1,
+          "cumulative_weight": 1.0,
+          "cumulative_time_s": 2.8383222204177905e-24,
+          "children": [],
+          "via": {
+            "parent": "delta_p",
+            "daughters": [
+              "p",
+              "pi_plus"
+            ],
+            "channel": "strong",
+            "q_mev": 160.7420605222626,
+            "width_per_s": 2.4421018007529695e+23,
+            "half_life_s": 2.8383222204177905e-24,
+            "branching_ratio": 1.0,
+            "emitted": [
+              "hadron_p",
+              "hadron_pi_plus"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "particle": {
+        "species_id": "lambda",
+        "label": "\u039b (uds)",
+        "mass_mev": 1103.33838588,
+        "xi": 5.0,
+        "structure": "baryon",
+        "pdg_name": "Lambda",
+        "cern_accessible": true
+      },
+      "depth": 0,
+      "cumulative_weight": 1.0,
+      "cumulative_time_s": 0.0,
+      "children": [
+        {
+          "particle": {
+            "species_id": "p",
+            "label": "p (uud)",
+            "mass_mev": 938.2720881599998,
+            "xi": 5.0,
+            "structure": "baryon",
+            "pdg_name": "proton",
+            "cern_accessible": true
+          },
+          "depth": 1,
+          "cumulative_weight": 0.6854394256355275,
+          "cumulative_time_s": 1.5075051845960936e-05,
+          "children": [],
+          "via": {
+            "parent": "lambda",
+            "daughters": [
+              "p",
+              "pi_minus"
+            ],
+            "channel": "weak",
+            "q_mev": 26.06302539997741,
+            "width_per_s": 45979.754341319924,
+            "half_life_s": 1.5075051845960936e-05,
+            "branching_ratio": 0.6854394256355275,
+            "emitted": [
+              "p",
+              "pi_minus",
+              "nu_e"
+            ]
+          }
+        },
+        {
+          "particle": {
+            "species_id": "n",
+            "label": "n (udd)",
+            "mass_mev": 939.565,
+            "xi": 5.0,
+            "structure": "baryon",
+            "pdg_name": "neutron",
+            "cern_accessible": true
+          },
+          "depth": 1,
+          "cumulative_weight": 0.31456057436447243,
+          "cumulative_time_s": 1.847762432092372e-05,
+          "children": [],
+          "via": {
+            "parent": "lambda",
+            "daughters": [
+              "n",
+              "pi_zero"
+            ],
+            "channel": "weak",
+            "q_mev": 24.770113559977194,
+            "width_per_s": 37512.78673714771,
+            "half_life_s": 1.847762432092372e-05,
+            "branching_ratio": 0.31456057436447243,
+            "emitted": [
+              "n",
+              "pi_zero",
+              "nu_e"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "particle": {
+        "species_id": "phi",
+        "label": "\u03c6 (s s\u0304)",
+        "mass_mev": 1006.815932876959,
+        "xi": 5.0,
+        "structure": "baryon",
+        "pdg_name": "phi",
+        "cern_accessible": true
+      },
+      "depth": 0,
+      "cumulative_weight": 1.0,
+      "cumulative_time_s": 0.0,
+      "children": [
+        {
+          "particle": {
+            "species_id": "K_plus",
+            "label": "K\u207a (u s\u0304)",
+            "mass_mev": 469.13604408,
+            "xi": 5.0,
+            "structure": "baryon",
+            "pdg_name": "K+",
+            "cern_accessible": true
+          },
+          "depth": 1,
+          "cumulative_weight": 0.84,
+          "cumulative_time_s": 6.656144895578019e-24,
+          "children": [
+            {
+              "particle": {
+                "species_id": "pi_plus",
+                "label": "\u03c0\u207a (u d\u0304)",
+                "mass_mev": 139.00327231999998,
+                "xi": 5.0,
+                "structure": "baryon",
+                "pdg_name": "pi+",
+                "cern_accessible": true
+              },
+              "depth": 2,
+              "cumulative_weight": 0.6341704256545129,
+              "cumulative_time_s": 5.856033746080171e-10,
+              "children": [],
+              "via": {
+                "parent": "K_plus",
+                "daughters": [
+                  "pi_plus"
+                ],
+                "channel": "weak",
+                "q_mev": 330.1327717599771,
+                "width_per_s": 1183646151.3288276,
+                "half_life_s": 5.856033746080104e-10,
+                "branching_ratio": 0.7549647924458487,
+                "emitted": [
+                  "pi_plus",
+                  "nu_e"
+                ]
+              }
+            },
+            {
+              "particle": {
+                "species_id": "pi_zero",
+                "label": "pi_zero",
+                "mass_mev": 139.00327231999998,
+                "xi": 5.0,
+                "structure": "special",
+                "pdg_name": "pi_zero",
+                "cern_accessible": true
+              },
+              "depth": 2,
+              "cumulative_weight": 0.2057308782438262,
+              "cumulative_time_s": 5.856033746080171e-10,
+              "children": [],
+              "via": {
+                "parent": "K_plus",
+                "daughters": [
+                  "pi_zero"
+                ],
+                "channel": "weak",
+                "q_mev": 330.1327717599771,
+                "width_per_s": 1183646151.3288276,
+                "half_life_s": 5.856033746080104e-10,
+                "branching_ratio": 0.2449177121950312,
+                "emitted": [
+                  "pi_zero",
+                  "nu_e"
+                ]
+              }
+            },
+            {
+              "particle": {
+                "species_id": "pi_plus",
+                "label": "\u03c0\u207a (u d\u0304)",
+                "mass_mev": 139.00327231999998,
+                "xi": 5.0,
+                "structure": "baryon",
+                "pdg_name": "pi+",
+                "cern_accessible": true
+              },
+              "depth": 2,
+              "cumulative_weight": 9.86961016609373e-05,
+              "cumulative_time_s": 9.42177992375346e-07,
+              "children": [],
+              "via": {
+                "parent": "K_plus",
+                "daughters": [
+                  "pi_plus",
+                  "pi_zero",
+                  "pi_zero"
+                ],
+                "channel": "weak",
+                "q_mev": 52.12622711997718,
+                "width_per_s": 735686.023415211,
+                "half_life_s": 9.42177992375346e-07,
+                "branching_ratio": 0.00011749535912016346,
+                "emitted": [
+                  "pi_plus",
+                  "pi_zero",
+                  "pi_zero",
+                  "nu_e"
+                ]
+              }
+            }
+          ],
+          "via": {
+            "parent": "phi",
+            "daughters": [
+              "K_plus",
+              "K_minus"
+            ],
+            "channel": "strong",
+            "q_mev": 68.54384471695903,
+            "width_per_s": 1.041364320389772e+23,
+            "half_life_s": 6.656144895578019e-24,
+            "branching_ratio": 0.84,
+            "emitted": [
+              "hadron_K_plus",
+              "hadron_K_minus"
+            ]
+          }
+        },
+        {
+          "particle": {
+            "species_id": "K0",
+            "label": "K\u2070 (d s\u0304)",
+            "mass_mev": 469.13604408,
+            "xi": 5.0,
+            "structure": "baryon",
+            "pdg_name": "K0",
+            "cern_accessible": true
+          },
+          "depth": 1,
+          "cumulative_weight": 0.16,
+          "cumulative_time_s": 6.656144895578019e-24,
+          "children": [
+            {
+              "particle": {
+                "species_id": "pi_zero",
+                "label": "pi_zero",
+                "mass_mev": 139.00327231999998,
+                "xi": 5.0,
+                "structure": "special",
+                "pdg_name": "pi_zero",
+                "cern_accessible": true
+              },
+              "depth": 2,
+              "cumulative_weight": 0.16,
+              "cumulative_time_s": 5.856033746080171e-10,
+              "children": [],
+              "via": {
+                "parent": "K0",
+                "daughters": [
+                  "pi_zero"
+                ],
+                "channel": "weak",
+                "q_mev": 330.1327717599771,
+                "width_per_s": 1183646151.3288276,
+                "half_life_s": 5.856033746080104e-10,
+                "branching_ratio": 1.0,
+                "emitted": [
+                  "pi_zero",
+                  "nu_e"
+                ]
+              }
+            }
+          ],
+          "via": {
+            "parent": "phi",
+            "daughters": [
+              "K0",
+              "K0"
+            ],
+            "channel": "strong",
+            "q_mev": 68.54384471695903,
+            "width_per_s": 1.041364320389772e+23,
+            "half_life_s": 6.656144895578019e-24,
+            "branching_ratio": 0.16,
+            "emitted": [
+              "hadron_K0",
+              "hadron_K0"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "particle": {
+        "species_id": "rho_zero",
+        "label": "\u03c1\u2070 (\u016bd mix)",
+        "mass_mev": 773.2057022799999,
+        "xi": 5.0,
+        "structure": "baryon",
+        "pdg_name": "rho0",
+        "cern_accessible": true
+      },
+      "depth": 0,
+      "cumulative_weight": 1.0,
+      "cumulative_time_s": 0.0,
+      "children": [
+        {
+          "particle": {
+            "species_id": "pi_plus",
+            "label": "\u03c0\u207a (u d\u0304)",
+            "mass_mev": 139.00327231999998,
+            "xi": 5.0,
+            "structure": "baryon",
+            "pdg_name": "pi+",
+            "cern_accessible": true
+          },
+          "depth": 1,
+          "cumulative_weight": 1.0,
+          "cumulative_time_s": 9.213217653890985e-25,
+          "children": [],
+          "via": {
+            "parent": "rho_zero",
+            "daughters": [
+              "pi_plus",
+              "pi_minus"
+            ],
+            "channel": "strong",
+            "q_mev": 495.1991576399999,
+            "width_per_s": 7.523399604775547e+23,
+            "half_life_s": 9.213217653890985e-25,
+            "branching_ratio": 1.0,
+            "emitted": [
+              "hadron_pi_plus",
+              "hadron_pi_minus"
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

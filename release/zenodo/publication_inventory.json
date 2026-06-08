@@ -1,0 +1,119 @@
+{
+  "generated_at_utc": "2026-05-15T03:49:34.706914+00:00",
+  "repo_root": "/home/jr/Repos/HQIV_LEAN",
+  "missing_required": [],
+  "category_counts": {
+    "manuscript": 4,
+    "appendix": 2,
+    "lean-proof": 1,
+    "build-config": 2,
+    "certificate-tool": 2,
+    "certificate": 2
+  },
+  "files": [
+    {
+      "path": "papers/closure.tex",
+      "category": "manuscript",
+      "required": true,
+      "exists": true,
+      "size_bytes": 18436,
+      "sha256": "ede08b3bc9ad8941addd4557c5842d0f461a793f5fd5e38ff58c9d30204a0e54"
+    },
+    {
+      "path": "papers/closure.pdf",
+      "category": "manuscript",
+      "required": false,
+      "exists": true,
+      "size_bytes": 325717,
+      "sha256": "62b9085654336a3f4d0574f4c75af372ec761e523b72d7f41c2038455382801a"
+    },
+    {
+      "path": "papers/so8_closure_full_appendix.tex",
+      "category": "appendix",
+      "required": true,
+      "exists": true,
+      "size_bytes": 8459,
+      "sha256": "0c4c532164fe9ecd3dd4f35eeace7497e6da42e4661d37765dd8896b6bfd3225"
+    },
+    {
+      "path": "papers/so8_closure_full_appendix.pdf",
+      "category": "appendix",
+      "required": false,
+      "exists": true,
+      "size_bytes": 411865,
+      "sha256": "09b8050c1b77af6ef198a173ca400e16c2a1ff8d444eb2aa2c415b613eaaa58d"
+    },
+    {
+      "path": "papers/include/patch_theory_messaging.tex",
+      "category": "manuscript",
+      "required": true,
+      "exists": true,
+      "size_bytes": 1506,
+      "sha256": "e13cc2930c5a414f8532e0c20d74a3a5e55ab9ca79a8d050b89b9c95f1657ec0"
+    },
+    {
+      "path": "papers/include/release_archive_macros.tex",
+      "category": "manuscript",
+      "required": true,
+      "exists": true,
+      "size_bytes": 641,
+      "sha256": "b9c47789fece8f2e17acac22e433c0270dd29cf0e7aabda4186c2f4233f4cba4"
+    },
+    {
+      "path": "HQIVPaperClaims.lean",
+      "category": "lean-proof",
+      "required": true,
+      "exists": true,
+      "size_bytes": 675,
+      "sha256": "c2d6c57298b55392bb933a50026c3b77b4e2c7fb990e725c7d658759b891ebb5"
+    },
+    {
+      "path": "lakefile.toml",
+      "category": "build-config",
+      "required": true,
+      "exists": true,
+      "size_bytes": 45711,
+      "sha256": "db4228a37b0fdd4a08dc100739c29c4d7174cd4895114b0b82da1513e5a16f45"
+    },
+    {
+      "path": "lean-toolchain",
+      "category": "build-config",
+      "required": true,
+      "exists": true,
+      "size_bytes": 24,
+      "sha256": "26df5f74b79af0cd9e298b6583993699a54938d047ba1919428da80d3ae80c6e"
+    },
+    {
+      "path": "scripts/generate_symbolic_lie_closure_certificate.py",
+      "category": "certificate-tool",
+      "required": true,
+      "exists": true,
+      "size_bytes": 8536,
+      "sha256": "571ee5de32155e5286d344ab226d4f21fef1d1af36512db7be71b7a4f16bfa46"
+    },
+    {
+      "path": "scripts/generate_symbolic_so4_certificate.py",
+      "category": "certificate-tool",
+      "required": true,
+      "exists": true,
+      "size_bytes": 2103,
+      "sha256": "1e4e31695e8ed02434ba0c05c780404e8940459221a1fea7fcbd2b7c49070e0c"
+    },
+    {
+      "path": "artifacts/so8_symbolic_certificate.json",
+      "category": "certificate",
+      "required": true,
+      "exists": true,
+      "size_bytes": 1079922,
+      "sha256": "d8f280def76654e96affa2f6863430e86462b420e1fdbcb2374d39666fa53848"
+    },
+    {
+      "path": "artifacts/so4_symbolic_certificate.json",
+      "category": "certificate",
+      "required": true,
+      "exists": true,
+      "size_bytes": 10989,
+      "sha256": "4be8628847019a69faec659aa9d85fe3f11dad358f68e98751996ac0e2322762"
+    }
+  ]
+}

@@ -1,0 +1,143 @@
+{
+  "inputs": {
+    "phi": 0.6,
+    "t": 1.25,
+    "m_min": 187,
+    "m_max": 187,
+    "dim_p": 2,
+    "curvature_model": "intrinsic_sphere",
+    "sphere_dim": 3
+  },
+  "constants": {
+    "horizon_quarter_period": 1.5707963267948966,
+    "pi_over_2": 1.5707963267948966,
+    "alpha": 0.6,
+    "curvature_norm_combinatorial": 484863.3748676012,
+    "curvature_norm_selected": 6.0,
+    "dim_weight_normalizer": 35344.0
+  },
+  "checks": {
+    "angle_zero_at_m0": true,
+    "horizon_quarter_period_equals_pi_over_2": true,
+    "unit_phase_magnitude_deviation_max": 0.0,
+    "unit_phase_magnitude_near_one": true
+  },
+  "aliasing_summary": {
+    "octant_counts": [
+      0,
+      0,
+      1,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "octant_weighted_counts": [
+      0.0,
+      0.0,
+      24.851191066187816,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "octant_peak_index": 2,
+    "octant_peak_fraction": 1.0,
+    "octant_peak_weighted_index": 2,
+    "octant_peak_weighted_fraction": 1.0,
+    "octant_lock_eps_deg": 5.0,
+    "octant_lock_hits": 0,
+    "octant_lock_fraction": 0.0,
+    "octant_lock_weighted_fraction": 0.0,
+    "peak_bin_by_sector_count": {
+      "8": 2,
+      "16": 4,
+      "24": 7,
+      "32": 9
+    },
+    "recovery_hint": "Recover aliased secondary peaks by increasing sector count (8->16->24->32), then tracking stable peak bins under weighting."
+  },
+  "points": [
+    {
+      "m": 187.0,
+      "delta_theta_prime_m": 2.4590011999845065,
+      "angle": 1.84425089998838,
+      "triplet_rule_valid_original": true,
+      "adjacent_shell_mod3": 188.0,
+      "angle_adjacent": 1.8442844095951376,
+      "shell_even_anchor": 188.0,
+      "shell_odd_multiple3_anchor": 189.0,
+      "angle_even_anchor": 1.8442844095951376,
+      "angle_odd_multiple3_anchor": 1.8443175646128616,
+      "spiral_step_base_to_even": 3.3509606757853305e-05,
+      "spiral_step_even_to_odd_multiple3": 3.3155017724162406e-05,
+      "spiral_step_base_to_odd_multiple3": 6.666462448157162e-05,
+      "local_spiral_theta": 0.7800792151168269,
+      "ray8_scores": [
+        0.7108578254204782,
+        0.9999858544279437,
+        0.7033357320927673,
+        -0.005318923200742415,
+        -0.7108578254204782,
+        -0.9999858544279437,
+        -0.7033357320927675,
+        0.005318923200741848
+      ],
+      "best_ray8_index": 1.0,
+      "best_ray8_angle": 0.7853981633974483,
+      "factor_pair_ranking_top8": [
+        {
+          "a": 11,
+          "b": 17,
+          "pair_theta": 0.9964914966201949,
+          "ray_error_rad": 0.2110933332227467
+        },
+        {
+          "a": 1,
+          "b": 187,
+          "pair_theta": 1.5654487841857458,
+          "ray_error_rad": 0.7800506207882973
+        }
+      ],
+      "factor_pair_contains_11_17_any": true,
+      "factor_pair_contains_11_17_top8": true,
+      "sparse_pruned_candidates_checked": 3.0,
+      "sparse_factor_pair_ranking_top8": [
+        {
+          "a": 11,
+          "b": 17,
+          "pair_theta": 0.9964914966201949,
+          "ray_error_rad": 0.2110933332227467
+        }
+      ],
+      "sparse_factor_pair_contains_11_17_any": true,
+      "sparse_factor_pair_contains_11_17_top8": true,
+      "radius_shell_succ": 188.0,
+      "radius_reciprocal": 0.005319148936170213,
+      "phase_argument_match": 1.84425089998838,
+      "exp_i_angle_re": -0.2700592555747985,
+      "exp_i_angle_im": 0.9628437040757891,
+      "theta_mod_two_pi": 1.84425089998838,
+      "inferred_divisor_from_angle": 3,
+      "reconstructed_theta_from_divisor": 2.0943951023931953,
+      "angle_to_divisor_error_rad": 0.2501442024048153,
+      "inferred_divisor_from_angle_adjacent": 3,
+      "reconstructed_theta_from_divisor_adjacent": 2.0943951023931953,
+      "angle_to_divisor_error_rad_adjacent": 0.25011069279805764,
+      "divisor_count_tau_m": 4,
+      "curvature_density": 0.0220311977537126,
+      "shell_shape": 0.0220311977537126,
+      "deltaE_combinatorial": 10682.120895240607,
+      "deltaE_selected": 0.13218718652227562,
+      "dim_shell_weight": 188.0,
+      "ramanujan_dim_imprint": 24.851191066187816,
+      "phase_curvature_imprint": 0.09914038989170672,
+      "spiral_succ_x": -50.771140048062115,
+      "spiral_succ_y": 181.01461636624836,
+      "spiral_rec_x": -0.001436485401993609,
+      "spiral_rec_y": 0.005121509064232921
+    }
+  ]
+}

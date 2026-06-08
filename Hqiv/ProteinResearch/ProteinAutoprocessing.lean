@@ -7,8 +7,6 @@ import Hqiv.Geometry.HQVMetric
 import Hqiv.Geometry.AuxiliaryField
 import Hqiv.Physics.SM_GR_Unification
 import Hqiv.Physics.GRFromMaxwell
-import Hqiv.Physics.Baryogenesis
-
 /-!
 # HQIV Protein Autoprocessing
 

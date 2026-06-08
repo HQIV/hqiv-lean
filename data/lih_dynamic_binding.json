@@ -1,0 +1,117 @@
+{
+  "source": "scripts/hqiv_lih_dynamic_binding.py",
+  "lean_modules": [
+    "Hqiv.QuantumChemistry.LiH",
+    "Hqiv.QuantumChemistry.LiHDerivation",
+    "Hqiv.Physics.HopfShellBeltramiMassBridge",
+    "Hqiv.Physics.DynamicBBNBaryogenesis",
+    "Hqiv.Physics.BaryogenesisWitness"
+  ],
+  "python_primitives": "hqiv_lean_physics_primitives",
+  "reference_binding_ev": 2.515,
+  "ev_per_lambda_unit": 1.9428571428571428,
+  "compton_shells_m": [
+    4,
+    3,
+    1
+  ],
+  "compton_context": {
+    "angles_rad": [
+      0.3783228147386552,
+      0.20177216786061608,
+      0.030265825179092414
+    ],
+    "mean_angle_rad": 0.20345360259278789,
+    "eta_p": 0.129522586169985,
+    "shared_time_s": 2.1361718156903492e-19,
+    "in_window": [
+      true,
+      true,
+      true
+    ],
+    "detuning_lapse_fraction": 0.24084778420038536
+  },
+  "contact_xi": 3.6666666666666665,
+  "dynamic_binding_curvature_coupling": 0.19761896274869428,
+  "dynamic_binding_curvature_feedback_factor": 1.1485830119656228,
+  "dynamic_binding_curvature_correction": 0.1485830119656228,
+  "vev_geometric_mean_compton": 0.9554405494725902,
+  "vev_geometric_mean_compton_bare": 0.9577913207792554,
+  "valence_trace_dimless": {
+    "static_full_p": 1608.0,
+    "dynamic_full_p": 1536.0182407580678,
+    "dynamic_eta_p": 760.8106140500678
+  },
+  "shell_dynamic_rows": [
+    {
+      "site": "Li_s",
+      "m": 4,
+      "xi": 5.0,
+      "E_site_static": 600.0,
+      "E_site_dynamic": 600.0,
+      "omega_k": 1.0,
+      "tuft_vev_factor": 1.0,
+      "effective_casimir": 189.37407985177802,
+      "t13_outer_suppression": 0.007142857142857143
+    },
+    {
+      "site": "Li_p",
+      "m": 3,
+      "xi": 4.0,
+      "E_site_static": 320.0,
+      "E_site_dynamic": 296.8515186385529,
+      "omega_k": 0.8224669561940788,
+      "tuft_vev_factor": 0.9276609957454777,
+      "effective_casimir": 219.59368435460496,
+      "t13_outer_suppression": 0.0058747639728148485
+    },
+    {
+      "site": "H_s",
+      "m": 1,
+      "xi": 2.0,
+      "E_site_static": 48.0,
+      "E_site_dynamic": 45.46368484240919,
+      "omega_k": 0.35083775530945077,
+      "tuft_vev_factor": 0.9471601008835248,
+      "effective_casimir": 448.4189314428368,
+      "t13_outer_suppression": 0.002505983966496077
+    }
+  ],
+  "binding_readouts": [
+    {
+      "mode": "dynamic_compton_participation",
+      "binding_ev": 2.3035091126895484,
+      "reference_ev": 2.515,
+      "error_pct": -8.409180409958319,
+      "dimless_core": 1.1856296903549146,
+      "notes": "\u03b7_p \u00b7 bond \u00b7 vev_geom \u00b7 dynamicBindingFeedbackAtXi(3.667) \u00b7 EV_per_\u03bb \u2014 primary readout"
+    },
+    {
+      "mode": "bond_surplus_only_compton",
+      "binding_ev": 16.206094598447727,
+      "reference_ev": 2.515,
+      "error_pct": 544.3775188249592,
+      "dimless_core": 8.341372219789271,
+      "notes": "bond_horizon_surplus only (no \u03b7_p / vev / binding feedback)"
+    },
+    {
+      "mode": "legacy_full_indicator_static",
+      "binding_ev": -1881.3489517413047,
+      "reference_ev": 2.515,
+      "error_pct": -74905.1273058173,
+      "dimless_core": 968.3413722197893,
+      "notes": "\u2212(bond + 3\u00b7E_site(Li_p)) \u00b7 EV_per_\u03bb \u2014 pre-dynamic Lean scan convention"
+    },
+    {
+      "mode": "legacy_participation_indicator",
+      "binding_ev": -257.7842210320655,
+      "reference_ev": 2.515,
+      "error_pct": -10349.86962354137,
+      "dimless_core": 132.68305494297488,
+      "notes": "\u2212(bond + \u03b7_p\u00b73\u00b7E_site(Li_p)) \u00b7 EV_per_\u03bb \u2014 LiHDerivation participation branch"
+    }
+  ],
+  "primary_binding_ev": 2.3035091126895484,
+  "primary_error_pct": -8.409180409958319,
+  "formula_primary": "E_bind = eta_p * bond_surplus(4,3,1) * EV_per_lambda * geomean(tuft_vev_factor_at_xi) * dynamicBindingCurvatureFeedbackAtXi(xi_contact)"
+}

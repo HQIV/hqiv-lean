@@ -13,26 +13,26 @@ triality. The logical order for phenomenology is:
 2. **Auxiliary field** `φ(m) = phiTemperatureCoeff / T(m) = phiTemperatureCoeff * (m+1)` (`phi_of_shell_closed_form`).
 3. **Curvature imprint** `shell_shape m` expressed from the same ladder (`shell_shape_T_formula`,
    `shell_shape_in_terms_of_phi`).
-4. **O–Maxwell effective inverse α** at φ: `one_over_alpha_eff (phi_of_shell m) c` (`SM_GR_Unification`),
-   hence `alphaEffShell m c` (`Schrodinger`).
+4. **O–Maxwell effective inverse α** at φ: `oneOverAlphaEffAtShell m c`,
+   hence `alphaEffAtShell m c` (`BoundStates`).
 5. **Hydrogenic binding** at shell `m`: `expectedGroundEnergyAtShell` / `E_bind_atomic_shell_magnitude`
    scale as `(α_eff(m))²` (`BoundStates`).
 
 Triality (`SMEmbedding`, `Triality`) is a **separate** representation-layer fact; it does not
 replace this ladder for mass/coupling structure — see `SMEmbedding` module doc.
 
-**Reference:** same ladder as `phi_of_shell`, `shell_shape`, and `Hqiv.alphaEffShell` in
-`Schrodinger` / `BoundStates`.
+**Reference:** same ladder as `phi_of_shell`, `shell_shape`, and `alphaEffAtShell`
+in `BoundStates`.
 -/
 
 namespace Hqiv.Physics
 
 open Hqiv
 
-/-- Effective α at shell `m` is the inverse of `one_over_alpha_eff` evaluated at **φ(m)**. -/
-theorem alphaEffAtShell_eq_inverse_one_over_alpha_eff (m : ℕ) (c : ℝ) :
-    alphaEffAtShell m c = (one_over_alpha_eff (phi_of_shell m) c)⁻¹ := by
-  unfold alphaEffAtShell Hqiv.alphaEffShell Hqiv.oneOverAlphaEffShell
+/-- Effective α at shell `m` is the inverse of the shell-resolved effective inverse coupling. -/
+theorem alphaEffAtShell_eq_inverse_oneOverAlphaEffAtShell (m : ℕ) (c : ℝ) :
+    alphaEffAtShell m c = (oneOverAlphaEffAtShell m c)⁻¹ := by
+  unfold alphaEffAtShell
   rfl
 
 /-- φ(m) on the discrete ladder: explicit linear growth in shell index (`AuxiliaryField`). -/
@@ -68,11 +68,11 @@ shell `m` comes from φ(m) and binding scales with its square.
 
 /-- Couplings at shell `m` factor through `phi_of_shell m`; binding energy uses `alphaEffAtShell`. -/
 theorem harmonic_ladder_mass_coupling_chain (m : ℕ) (Z : ℕ) (μ : ℝ) (c : ℝ) :
-    alphaEffAtShell m c = (one_over_alpha_eff (phi_of_shell m) c)⁻¹
+    alphaEffAtShell m c = (oneOverAlphaEffAtShell m c)⁻¹
       ∧ E_bind_atomic_shell_magnitude m Z μ c
-          = μ * (Z : ℝ) ^ 2 * (one_over_alpha_eff (phi_of_shell m) c)⁻¹ ^ 2 / 2 := by
+          = μ * (Z : ℝ) ^ 2 * (oneOverAlphaEffAtShell m c)⁻¹ ^ 2 / 2 := by
   constructor
-  · exact alphaEffAtShell_eq_inverse_one_over_alpha_eff m c
-  · rw [E_bind_atomic_magnitude_eq, alphaEffAtShell_eq_inverse_one_over_alpha_eff m c]
+  · exact alphaEffAtShell_eq_inverse_oneOverAlphaEffAtShell m c
+  · rw [E_bind_atomic_magnitude_eq, alphaEffAtShell_eq_inverse_oneOverAlphaEffAtShell m c]
 
 end Hqiv.Physics

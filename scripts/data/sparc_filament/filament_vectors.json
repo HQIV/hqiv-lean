@@ -1,0 +1,1957 @@
+{
+  "D512-2": {
+    "carron_sep_deg": 0.5886,
+    "carron_z_high": 0.361,
+    "carron_z_low": 0.355,
+    "dec_deg": 26.99804,
+    "distance_to_spine_mpc": 0.1561,
+    "inflow_speed_kms": 25.0,
+    "position_angle_deg": 34.116936049916994,
+    "ra_deg": 218.33465,
+    "source": "carron2022_block1",
+    "spine_angle_deg": 201.43,
+    "unit": [
+      0.1690266883671294,
+      0.8603023990773745,
+      -0.4809467338088027
+    ]
+  },
+  "D564-8": {
+    "carron_sep_deg": 0.0943,
+    "carron_z_high": 0.111,
+    "carron_z_low": 0.106,
+    "dec_deg": 20.07561,
+    "distance_to_spine_mpc": 0.0145,
+    "inflow_speed_kms": 25.0,
+    "position_angle_deg": 137.7395753790018,
+    "ra_deg": 135.72232,
+    "source": "carron2022_block1",
+    "spine_angle_deg": 255.94,
+    "unit": [
+      -0.9303290053996562,
+      0.1367798235525285,
+      -0.3402634590740321
+    ]
+  },
+  "D631-7": {
+    "carron_sep_deg": 0.0952,
+    "carron_z_high": 0.087,
+    "carron_z_low": 0.083,
+    "dec_deg": 14.39657,
+    "distance_to_spine_mpc": 0.0128,
+    "inflow_speed_kms": 20.2,
+    "position_angle_deg": 161.86883438422086,
+    "ra_deg": 119.25428,
+    "source": "carron2022_block1",
+    "spine_angle_deg": 188.27,
+    "unit": [
+      -0.279897672490887,
+      0.5737149979167807,
+      -0.769745668451296
+    ]
+  },
+  "DDO064": {
+    "carron_sep_deg": 0.0482,
+    "carron_z_high": 0.239,
+    "carron_z_low": 0.234,
+    "dec_deg": 31.48828,
+    "distance_to_spine_mpc": 0.0057,
+    "inflow_speed_kms": 16.13,
+    "position_angle_deg": 58.90356999330772,
+    "ra_deg": 147.59487,
+    "source": "carron2022_block1",
+    "spine_angle_deg": 98.92,
+    "unit": [
+      0.3472732869322698,
+      -0.785318157613701,
+      0.5125199074235843
+    ]
+  },
+  "DDO154": {
+    "carron_sep_deg": 0.1036,
+    "carron_z_high": 0.344,
+    "carron_z_low": 0.339,
+    "dec_deg": 27.14963,
+    "distance_to_spine_mpc": 0.0073,
+    "inflow_speed_kms": 16.45,
+    "position_angle_deg": 119.81774494513351,
+    "ra_deg": 193.52187,
+    "source": "carron2022_block1",
+    "spine_angle_deg": 249.99,
+    "unit": [
+      -0.6897760110023214,
+      0.7225728849676228,
+      0.04579825930416754
+    ]
+  },
+  "DDO168": {
+    "carron_sep_deg": 0.1357,
+    "carron_z_high": 0.361,
+    "carron_z_low": 0.355,
+    "dec_deg": 45.91976,
+    "distance_to_spine_mpc": 0.0101,
+    "inflow_speed_kms": 18.69,
+    "position_angle_deg": 176.02683821134895,
+    "ra_deg": 198.61666,
+    "source": "carron2022_block1",
+    "spine_angle_deg": 188.57,
+    "unit": [
+      -0.8963649447471781,
+      -0.24624803092457137,
+      0.36863504051318785
+    ]
+  },
+  "DDO170": {
+    "carron_sep_deg": 0.0497,
+    "carron_z_high": 0.35,
+    "carron_z_low": 0.344,
+    "dec_deg": 25.43615,
+    "distance_to_spine_mpc": 0.0134,
+    "inflow_speed_kms": 21.0,
+    "position_angle_deg": 178.20923492736398,
+    "ra_deg": 198.97408,
+    "source": "carron2022_block1",
+    "spine_angle_deg": 351.0,
+    "unit": [
+      0.948383474786159,
+      -0.0355349998018075,
+      -0.31512862221895444
+    ]
+  },
+  "F561-1": {
+    "carron_sep_deg": 0.037,
+    "carron_z_high": 0.275,
+    "carron_z_low": 0.27,
+    "dec_deg": 22.55944,
+    "distance_to_spine_mpc": 0.0429,
+    "inflow_speed_kms": 17.5,
+    "position_angle_deg": 57.2660171001372,
+    "ra_deg": 122.38583,
+    "source": "carron2022_block1",
+    "spine_angle_deg": 255.56,
+    "unit": [
+      0.28508209264958184,
+      0.5974005518858945,
+      -0.7495603918677693
+    ]
+  },
+  "F563-1": {
+    "carron_sep_deg": 0.1444,
+    "carron_z_high": 0.255,
+    "carron_z_low": 0.249,
+    "dec_deg": 19.75167,
+    "distance_to_spine_mpc": 0.1232,
+    "inflow_speed_kms": 38.46,
+    "position_angle_deg": 64.02824493218871,
+    "ra_deg": 133.75583,
+    "source": "carron2022_block1",
+    "spine_angle_deg": 170.83,
+    "unit": [
+      0.863859926413389,
+      0.1817821529884855,
+      0.46978854433875344
+    ]
+  },
+  "F563-V1": {
+    "carron_sep_deg": 0.1751,
+    "carron_z_high": 0.106,
+    "carron_z_low": 0.102,
+    "dec_deg": 18.89028,
+    "distance_to_spine_mpc": 0.165,
+    "inflow_speed_kms": 25.0,
+    "position_angle_deg": 137.0983969180608,
+    "ra_deg": 131.6575,
+    "source": "carron2022_block1",
+    "spine_angle_deg": 0.13,
+    "unit": [
+      -0.021027024617344004,
+      -0.9963368055945262,
+      0.08289049434909349
+    ]
+  },
+  "F563-V2": {
+    "carron_sep_deg": 0.092,
+    "carron_z_high": 0.291,
+    "carron_z_low": 0.286,
+    "dec_deg": 18.43833,
+    "distance_to_spine_mpc": 0.0959,
+    "inflow_speed_kms": 40.81,
+    "position_angle_deg": 161.23739037225894,
+    "ra_deg": 133.25833,
+    "source": "carron2022_block1",
+    "spine_angle_deg": 280.99,
+    "unit": [
+      -0.21623730249811846,
+      -0.6966755202687511,
+      -0.6840209415409751
+    ]
+  },
+  "F565-V2": {
+    "carron_sep_deg": 0.1131,
+    "carron_z_high": 0.422,
+    "carron_z_low": 0.416,
+    "dec_deg": 21.77083,
+    "distance_to_spine_mpc": 0.1022,
+    "inflow_speed_kms": 25.0,
+    "position_angle_deg": 17.428873441514764,
+    "ra_deg": 144.4025,
+    "source": "carron2022_block1",
+    "spine_angle_deg": 228.75,
+    "unit": [
+      0.7988829367650138,
+      -0.5999699380058248,
+      -0.042686377627923315
+    ]
+  },
+  "F567-2": {
+    "carron_sep_deg": 0.0672,
+    "carron_z_high": 0.422,
+    "carron_z_low": 0.416,
+    "dec_deg": 21.06139,
+    "distance_to_spine_mpc": 0.0927,
+    "inflow_speed_kms": 25.0,
+    "position_angle_deg": 145.2972371050383,
+    "ra_deg": 154.48458,
+    "source": "carron2022_block1",
+    "spine_angle_deg": 279.05,
+    "unit": [
+      -0.25702943654671295,
+      -0.4768285495363248,
+      -0.8405774224279189
+    ]
+  },
+  "F568-1": {
+    "carron_sep_deg": 0.1158,
+    "carron_z_high": 0.255,
+    "carron_z_low": 0.249,
+    "dec_deg": 22.42444,
+    "distance_to_spine_mpc": 0.1833,
+    "inflow_speed_kms": 25.0,
+    "position_angle_deg": 111.1913709508235,
+    "ra_deg": 156.42542,
+    "source": "carron2022_block1",
+    "spine_angle_deg": 66.29,
+    "unit": [
+      0.3596452134128301,
+      -0.7359102944730285,
+      0.5736648489822784
+    ]
+  },
+  "F568-3": {
+    "carron_sep_deg": 0.0232,
+    "carron_z_high": 0.111,
+    "carron_z_low": 0.106,
+    "dec_deg": 22.22667,
+    "distance_to_spine_mpc": 0.0333,
+    "inflow_speed_kms": 25.0,
+    "position_angle_deg": 139.51321773219695,
+    "ra_deg": 156.74583,
+    "source": "carron2022_block1",
+    "spine_angle_deg": 229.49,
+    "unit": [
+      -0.7844843866934623,
+      0.5166232695810491,
+      -0.3430519557757525
+    ]
+  },
+  "F568-V1": {
+    "carron_sep_deg": 0.0237,
+    "carron_z_high": 0.234,
+    "carron_z_low": 0.229,
+    "dec_deg": 22.05432,
+    "distance_to_spine_mpc": 0.0334,
+    "inflow_speed_kms": 39.3,
+    "position_angle_deg": 135.11790189312723,
+    "ra_deg": 161.2586,
+    "source": "carron2022_block1",
+    "spine_angle_deg": 18.3,
+    "unit": [
+      0.5478332791711753,
+      -0.8281706933040266,
+      -0.11837229821577767
+    ]
+  },
+  "F571-8": {
+    "carron_sep_deg": 0.0404,
+    "carron_z_high": 0.194,
+    "carron_z_low": 0.189,
+    "dec_deg": 19.355,
+    "distance_to_spine_mpc": 0.0376,
+    "inflow_speed_kms": 48.89,
+    "position_angle_deg": 135.04717443023046,
+    "ra_deg": 173.47625,
+    "source": "carron2022_block1",
+    "spine_angle_deg": 326.62,
+    "unit": [
+      0.39328968414550697,
+      -0.8086045127737368,
+      -0.43758652432024797
+    ]
+  },
+  "F571-V1": {
+    "carron_sep_deg": 0.1465,
+    "carron_z_high": 0.355,
+    "carron_z_low": 0.35,
+    "dec_deg": 18.83167,
+    "distance_to_spine_mpc": 0.2047,
+    "inflow_speed_kms": 29.26,
+    "position_angle_deg": 116.12003290469758,
+    "ra_deg": 171.575,
+    "source": "carron2022_block1",
+    "spine_angle_deg": 271.98,
+    "unit": [
+      -0.35836290733301296,
+      0.23369191055344252,
+      -0.9038606737709701
+    ]
+  },
+  "F574-1": {
+    "carron_sep_deg": 0.0793,
+    "carron_z_high": 0.214,
+    "carron_z_low": 0.209,
+    "dec_deg": 22.29972,
+    "distance_to_spine_mpc": 0.134,
+    "inflow_speed_kms": 34.23,
+    "position_angle_deg": 27.242994882921458,
+    "ra_deg": 189.55542,
+    "source": "carron2022_block1",
+    "spine_angle_deg": 67.71,
+    "unit": [
+      -0.14143755946690353,
+      0.5245140194977027,
+      0.8395715932083515
+    ]
+  },
+  "F574-2": {
+    "carron_sep_deg": 0.135,
+    "carron_z_high": 0.194,
+    "carron_z_low": 0.189,
+    "dec_deg": 21.80333,
+    "distance_to_spine_mpc": 0.21,
+    "inflow_speed_kms": 25.0,
+    "position_angle_deg": 146.18375257267238,
+    "ra_deg": 191.69708,
+    "source": "carron2022_block1",
+    "spine_angle_deg": 47.26,
+    "unit": [
+      0.9295892327064005,
+      0.1821865489126668,
+      0.32042459305056176
+    ]
+  },
+  "F579-V1": {
+    "carron_sep_deg": 0.1407,
+    "carron_z_high": 0.102,
+    "carron_z_low": 0.097,
+    "dec_deg": 22.76611,
+    "distance_to_spine_mpc": 0.2198,
+    "inflow_speed_kms": 39.23,
+    "position_angle_deg": 19.870627615570704,
+    "ra_deg": 218.20042,
+    "source": "carron2022_block1",
+    "spine_angle_deg": 113.69,
+    "unit": [
+      0.4715198371145811,
+      0.40659437111261165,
+      0.7825279934845644
+    ]
+  },
+  "IC2574": {
+    "carron_sep_deg": 4.172,
+    "carron_z_high": 0.388,
+    "carron_z_low": 0.383,
+    "dec_deg": 68.41207,
+    "distance_to_spine_mpc": 0.2847,
+    "inflow_speed_kms": 23.24,
+    "position_angle_deg": 28.87321579010999,
+    "ra_deg": 157.09842,
+    "source": "carron2022_block1_local",
+    "spine_angle_deg": 357.73,
+    "unit": [
+      -0.7985860447077642,
+      -0.062084562982821355,
+      -0.5986700562390282
+    ]
+  },
+  "IC4202": {
+    "carron_sep_deg": 0.0461,
+    "carron_z_high": 0.154,
+    "carron_z_low": 0.15,
+    "dec_deg": 24.70083,
+    "distance_to_spine_mpc": 0.0808,
+    "inflow_speed_kms": 84.91,
+    "position_angle_deg": 161.96831340947384,
+    "ra_deg": 197.13159,
+    "source": "carron2022_block1",
+    "spine_angle_deg": 130.85,
+    "unit": [
+      -0.6814051561292973,
+      0.721197761340439,
+      0.12474294464195987
+    ]
+  },
+  "NGC0100": {
+    "carron_sep_deg": 0.0822,
+    "carron_z_high": 0.344,
+    "carron_z_low": 0.339,
+    "dec_deg": 16.48639,
+    "distance_to_spine_mpc": 0.0194,
+    "inflow_speed_kms": 30.83,
+    "position_angle_deg": 58.01585964346674,
+    "ra_deg": 6.01182,
+    "source": "carron2022_block1",
+    "spine_angle_deg": 260.67,
+    "unit": [
+      0.19109872321019475,
+      0.9810992560214952,
+      0.030422488746028795
+    ]
+  },
+  "NGC1090": {
+    "carron_sep_deg": 0.0774,
+    "carron_z_high": 0.184,
+    "carron_z_low": 0.179,
+    "dec_deg": -0.24704,
+    "distance_to_spine_mpc": 0.05,
+    "inflow_speed_kms": 57.54,
+    "position_angle_deg": 40.28514473240011,
+    "ra_deg": 41.64132,
+    "source": "carron2022_block1",
+    "spine_angle_deg": 258.83,
+    "unit": [
+      -0.04753764546504958,
+      -0.7535884806532115,
+      -0.6556253305741195
+    ]
+  },
+  "NGC2683": {
+    "carron_sep_deg": 0.0028,
+    "carron_z_high": 0.194,
+    "carron_z_low": 0.189,
+    "dec_deg": 33.4218,
+    "distance_to_spine_mpc": 0.0005,
+    "inflow_speed_kms": 53.9,
+    "position_angle_deg": 115.13407659137948,
+    "ra_deg": 133.17227,
+    "source": "carron2022_block1",
+    "spine_angle_deg": 66.38,
+    "unit": [
+      0.30569810134415465,
+      -0.8442320663099514,
+      -0.44025093872541476
+    ]
+  },
+  "NGC2841": {
+    "carron_sep_deg": 0.1028,
+    "carron_z_high": 0.291,
+    "carron_z_low": 0.286,
+    "dec_deg": 50.97648,
+    "distance_to_spine_mpc": 0.0253,
+    "inflow_speed_kms": 99.68,
+    "position_angle_deg": 139.95660595129166,
+    "ra_deg": 140.51106,
+    "source": "carron2022_block1",
+    "spine_angle_deg": 187.63,
+    "unit": [
+      -0.3515773442916769,
+      0.9297074747614895,
+      0.10971500514253338
+    ]
+  },
+  "NGC2903": {
+    "carron_sep_deg": 0.1054,
+    "carron_z_high": 0.244,
+    "carron_z_low": 0.239,
+    "dec_deg": 21.50083,
+    "distance_to_spine_mpc": 0.0121,
+    "inflow_speed_kms": 64.61,
+    "position_angle_deg": 34.72810587257336,
+    "ra_deg": 143.04213,
+    "source": "carron2022_block1",
+    "spine_angle_deg": 301.29,
+    "unit": [
+      -0.49321887335357734,
+      -0.2228686821284259,
+      -0.8408713893897013
+    ]
+  },
+  "NGC2955": {
+    "carron_sep_deg": 0.0323,
+    "carron_z_high": 0.451,
+    "carron_z_low": 0.445,
+    "dec_deg": 35.88227,
+    "distance_to_spine_mpc": 0.0552,
+    "inflow_speed_kms": 25.0,
+    "position_angle_deg": 34.15981572916727,
+    "ra_deg": 145.31924,
+    "source": "carron2022_block1",
+    "spine_angle_deg": 113.0,
+    "unit": [
+      0.39840104115278363,
+      -0.12126184261232537,
+      0.9091601486727416
+    ]
+  },
+  "NGC2998": {
+    "carron_sep_deg": 0.1032,
+    "carron_z_high": 0.428,
+    "carron_z_low": 0.422,
+    "dec_deg": 44.08143,
+    "distance_to_spine_mpc": 0.1227,
+    "inflow_speed_kms": 73.47,
+    "position_angle_deg": 79.05120400224142,
+    "ra_deg": 147.18183,
+    "source": "carron2022_block1",
+    "spine_angle_deg": 10.25,
+    "unit": [
+      -0.5378671464111985,
+      -0.5009593897925881,
+      -0.678040280949526
+    ]
+  },
+  "NGC3198": {
+    "carron_sep_deg": 0.0485,
+    "carron_z_high": 0.339,
+    "carron_z_low": 0.334,
+    "dec_deg": 45.54969,
+    "distance_to_spine_mpc": 0.0117,
+    "inflow_speed_kms": 52.53,
+    "position_angle_deg": 49.99936734093339,
+    "ra_deg": 154.97912,
+    "source": "carron2022_block1",
+    "spine_angle_deg": 203.3,
+    "unit": [
+      0.5857839721232933,
+      0.573044114925652,
+      0.5731296366028655
+    ]
+  },
+  "NGC3726": {
+    "carron_sep_deg": 0.0585,
+    "carron_z_high": 0.209,
+    "carron_z_low": 0.204,
+    "dec_deg": 47.02924,
+    "distance_to_spine_mpc": 0.0184,
+    "inflow_speed_kms": 58.8,
+    "position_angle_deg": 101.54346725939388,
+    "ra_deg": 173.33807,
+    "source": "carron2022_block1",
+    "spine_angle_deg": 190.92,
+    "unit": [
+      -0.2174708112152779,
+      0.6951299113155711,
+      0.6852013227247706
+    ]
+  },
+  "NGC3741": {
+    "carron_sep_deg": 0.0356,
+    "carron_z_high": 0.394,
+    "carron_z_low": 0.388,
+    "dec_deg": 45.28415,
+    "distance_to_spine_mpc": 0.002,
+    "inflow_speed_kms": 17.54,
+    "position_angle_deg": 58.542383350092535,
+    "ra_deg": 174.02397,
+    "source": "carron2022_block1",
+    "spine_angle_deg": 99.12,
+    "unit": [
+      0.5540672435226526,
+      -0.619765608805563,
+      0.5557878010509762
+    ]
+  },
+  "NGC3769": {
+    "carron_sep_deg": 0.0345,
+    "carron_z_high": 0.265,
+    "carron_z_low": 0.26,
+    "dec_deg": 47.89299,
+    "distance_to_spine_mpc": 0.0109,
+    "inflow_speed_kms": 41.51,
+    "position_angle_deg": 7.581479239180097,
+    "ra_deg": 174.43363,
+    "source": "carron2022_block1",
+    "spine_angle_deg": 196.55,
+    "unit": [
+      0.9937309521208993,
+      -0.09617525338121716,
+      -0.057001012569509964
+    ]
+  },
+  "NGC3877": {
+    "carron_sep_deg": 0.063,
+    "carron_z_high": 0.209,
+    "carron_z_low": 0.204,
+    "dec_deg": 47.4945,
+    "distance_to_spine_mpc": 0.0198,
+    "inflow_speed_kms": 58.94,
+    "position_angle_deg": 114.06873334526753,
+    "ra_deg": 176.53242,
+    "source": "carron2022_block1",
+    "spine_angle_deg": 187.68,
+    "unit": [
+      -0.4170394213360528,
+      0.37553421989304603,
+      0.8276787847595295
+    ]
+  },
+  "NGC3893": {
+    "carron_sep_deg": 0.0547,
+    "carron_z_high": 0.121,
+    "carron_z_low": 0.116,
+    "dec_deg": 48.71079,
+    "distance_to_spine_mpc": 0.0172,
+    "inflow_speed_kms": 60.9,
+    "position_angle_deg": 95.6406830241067,
+    "ra_deg": 177.1592,
+    "source": "carron2022_block1",
+    "spine_angle_deg": 202.33,
+    "unit": [
+      -0.3216839913321095,
+      0.7739545491323727,
+      0.5454482244887672
+    ]
+  },
+  "NGC3917": {
+    "carron_sep_deg": 0.1087,
+    "carron_z_high": 0.255,
+    "carron_z_low": 0.249,
+    "dec_deg": 51.82421,
+    "distance_to_spine_mpc": 0.0342,
+    "inflow_speed_kms": 47.56,
+    "position_angle_deg": 172.2833053656582,
+    "ra_deg": 177.68953,
+    "source": "carron2022_block1",
+    "spine_angle_deg": 67.23,
+    "unit": [
+      0.47849480312899234,
+      0.6446076815046009,
+      -0.5962580484352475
+    ]
+  },
+  "NGC3949": {
+    "carron_sep_deg": 0.0687,
+    "carron_z_high": 0.209,
+    "carron_z_low": 0.204,
+    "dec_deg": 47.85873,
+    "distance_to_spine_mpc": 0.0216,
+    "inflow_speed_kms": 57.05,
+    "position_angle_deg": 0.11390184986263091,
+    "ra_deg": 178.42389,
+    "source": "carron2022_block1",
+    "spine_angle_deg": 8.25,
+    "unit": [
+      -0.9925252041826762,
+      0.03319025899511536,
+      0.11743988151379445
+    ]
+  },
+  "NGC3953": {
+    "carron_sep_deg": 0.0614,
+    "carron_z_high": 0.111,
+    "carron_z_low": 0.106,
+    "dec_deg": 52.3268,
+    "distance_to_spine_mpc": 0.0193,
+    "inflow_speed_kms": 77.28,
+    "position_angle_deg": 27.58341263690577,
+    "ra_deg": 178.4542,
+    "source": "carron2022_block1",
+    "spine_angle_deg": 31.69,
+    "unit": [
+      -0.8918868324967071,
+      -0.4213419865803411,
+      0.16434356806252653
+    ]
+  },
+  "NGC3972": {
+    "carron_sep_deg": 0.0344,
+    "carron_z_high": 0.199,
+    "carron_z_low": 0.194,
+    "dec_deg": 55.32067,
+    "distance_to_spine_mpc": 0.0108,
+    "inflow_speed_kms": 46.44,
+    "position_angle_deg": 59.16408243569641,
+    "ra_deg": 178.93799,
+    "source": "carron2022_block1",
+    "spine_angle_deg": 331.68,
+    "unit": [
+      -0.6252514667122026,
+      0.004833518673968607,
+      -0.780408380574855
+    ]
+  },
+  "NGC3992": {
+    "carron_sep_deg": 0.0274,
+    "carron_z_high": 0.069,
+    "carron_z_low": 0.064,
+    "dec_deg": 53.37452,
+    "distance_to_spine_mpc": 0.0113,
+    "inflow_speed_kms": 84.35,
+    "position_angle_deg": 2.3146930714870555,
+    "ra_deg": 179.39993,
+    "source": "carron2022_block1",
+    "spine_angle_deg": 114.0,
+    "unit": [
+      0.41784204013523435,
+      0.04619215600881481,
+      0.9073446501847479
+    ]
+  },
+  "NGC4010": {
+    "carron_sep_deg": 0.1072,
+    "carron_z_high": 0.255,
+    "carron_z_low": 0.249,
+    "dec_deg": 47.26131,
+    "distance_to_spine_mpc": 0.0337,
+    "inflow_speed_kms": 44.03,
+    "position_angle_deg": 109.94973465566284,
+    "ra_deg": 179.6583,
+    "source": "carron2022_block1",
+    "spine_angle_deg": 178.11,
+    "unit": [
+      -0.3196563081342787,
+      -0.0006973127193482704,
+      0.947533302013673
+    ]
+  },
+  "NGC4013": {
+    "carron_sep_deg": 0.0572,
+    "carron_z_high": 0.355,
+    "carron_z_low": 0.35,
+    "dec_deg": 43.94702,
+    "distance_to_spine_mpc": 0.018,
+    "inflow_speed_kms": 60.52,
+    "position_angle_deg": 33.45955801044114,
+    "ra_deg": 179.6309,
+    "source": "carron2022_block1",
+    "spine_angle_deg": 213.11,
+    "unit": [
+      0.7884386363050955,
+      -0.5699136736858988,
+      0.2314366464655163
+    ]
+  },
+  "NGC4051": {
+    "carron_sep_deg": 0.12,
+    "carron_z_high": 0.116,
+    "carron_z_low": 0.111,
+    "dec_deg": 44.5313,
+    "distance_to_spine_mpc": 0.0377,
+    "inflow_speed_kms": 54.95,
+    "position_angle_deg": 21.51002176141134,
+    "ra_deg": 180.79004,
+    "source": "carron2022_block1",
+    "spine_angle_deg": 18.57,
+    "unit": [
+      -0.9374556907894234,
+      -0.34188077723294164,
+      0.06553138152919429
+    ]
+  },
+  "NGC4068": {
+    "carron_sep_deg": 0.0629,
+    "carron_z_high": 0.302,
+    "carron_z_low": 0.296,
+    "dec_deg": 52.59057,
+    "distance_to_spine_mpc": 0.0048,
+    "inflow_speed_kms": 25.0,
+    "position_angle_deg": 137.06857599249776,
+    "ra_deg": 181.0136,
+    "source": "carron2022_block1",
+    "spine_angle_deg": 319.97,
+    "unit": [
+      0.22393764665643986,
+      -0.8950462073700056,
+      -0.3856737184234159
+    ]
+  },
+  "NGC4085": {
+    "carron_sep_deg": 0.1426,
+    "carron_z_high": 0.296,
+    "carron_z_low": 0.291,
+    "dec_deg": 50.35275,
+    "distance_to_spine_mpc": 0.0448,
+    "inflow_speed_kms": 46.02,
+    "position_angle_deg": 115.06653986756376,
+    "ra_deg": 181.3446,
+    "source": "carron2022_block1",
+    "spine_angle_deg": 150.6,
+    "unit": [
+      -0.06835218153644008,
+      -0.14988224917306037,
+      0.9863383246442542
+    ]
+  },
+  "NGC4088": {
+    "carron_sep_deg": 0.1196,
+    "carron_z_high": 0.388,
+    "carron_z_low": 0.383,
+    "dec_deg": 50.53918,
+    "distance_to_spine_mpc": 0.0376,
+    "inflow_speed_kms": 60.09,
+    "position_angle_deg": 54.29689688009603,
+    "ra_deg": 181.39258,
+    "source": "carron2022_block1",
+    "spine_angle_deg": 47.53,
+    "unit": [
+      0.08859169485378693,
+      -0.9959235167623846,
+      -0.016966448142668088
+    ]
+  },
+  "NGC4100": {
+    "carron_sep_deg": 0.1019,
+    "carron_z_high": 0.439,
+    "carron_z_low": 0.433,
+    "dec_deg": 49.58231,
+    "distance_to_spine_mpc": 0.032,
+    "inflow_speed_kms": 55.37,
+    "position_angle_deg": 57.39644860788166,
+    "ra_deg": 181.53584,
+    "source": "carron2022_block1",
+    "spine_angle_deg": 192.91,
+    "unit": [
+      0.3643487004891627,
+      0.6689282865122026,
+      0.6479081508637679
+    ]
+  },
+  "NGC4138": {
+    "carron_sep_deg": 0.0142,
+    "carron_z_high": 0.073,
+    "carron_z_low": 0.069,
+    "dec_deg": 43.68532,
+    "distance_to_spine_mpc": 0.0045,
+    "inflow_speed_kms": 51.55,
+    "position_angle_deg": 14.555254446937528,
+    "ra_deg": 182.37412,
+    "source": "carron2022_block1",
+    "spine_angle_deg": 174.62,
+    "unit": [
+      0.9475948056127289,
+      0.19518745721422753,
+      0.25291488869186535
+    ]
+  },
+  "NGC4157": {
+    "carron_sep_deg": 0.0709,
+    "carron_z_high": 0.344,
+    "carron_z_low": 0.339,
+    "dec_deg": 50.48468,
+    "distance_to_spine_mpc": 0.0223,
+    "inflow_speed_kms": 64.64,
+    "position_angle_deg": 120.775950956339,
+    "ra_deg": 182.76819,
+    "source": "carron2022_block1",
+    "spine_angle_deg": 207.99,
+    "unit": [
+      -0.6197958488510045,
+      0.3440683606715828,
+      0.7053155810924869
+    ]
+  },
+  "NGC4183": {
+    "carron_sep_deg": 0.0681,
+    "carron_z_high": 0.307,
+    "carron_z_low": 0.302,
+    "dec_deg": 43.69827,
+    "distance_to_spine_mpc": 0.0214,
+    "inflow_speed_kms": 38.71,
+    "position_angle_deg": 93.74988986965033,
+    "ra_deg": 183.32025,
+    "source": "carron2022_block1",
+    "spine_angle_deg": 241.03,
+    "unit": [
+      -0.640824292035981,
+      0.6645546989074843,
+      0.3843322506589404
+    ]
+  },
+  "NGC4214": {
+    "carron_sep_deg": 0.9086,
+    "carron_z_high": 0.372,
+    "carron_z_low": 0.366,
+    "dec_deg": 36.32689,
+    "distance_to_spine_mpc": 0.0455,
+    "inflow_speed_kms": 28.03,
+    "position_angle_deg": 143.83424581117794,
+    "ra_deg": 183.91322,
+    "source": "carron2022_block1",
+    "spine_angle_deg": 38.3,
+    "unit": [
+      0.9445734850812126,
+      -0.09284069954603676,
+      0.3148992470447251
+    ]
+  },
+  "NGC4217": {
+    "carron_sep_deg": 0.0611,
+    "carron_z_high": 0.255,
+    "carron_z_low": 0.249,
+    "dec_deg": 47.09179,
+    "distance_to_spine_mpc": 0.0192,
+    "inflow_speed_kms": 63.45,
+    "position_angle_deg": 102.73545494366797,
+    "ra_deg": 183.96208,
+    "source": "carron2022_block1",
+    "spine_angle_deg": 178.2,
+    "unit": [
+      -0.26120997276026003,
+      0.05198602426815947,
+      0.9638811147705793
+    ]
+  },
+  "NGC4389": {
+    "carron_sep_deg": 0.117,
+    "carron_z_high": 0.399,
+    "carron_z_low": 0.394,
+    "dec_deg": 45.68467,
+    "distance_to_spine_mpc": 0.0367,
+    "inflow_speed_kms": 25.0,
+    "position_angle_deg": 159.08829147906235,
+    "ra_deg": 186.39624,
+    "source": "carron2022_block1",
+    "spine_angle_deg": 149.73,
+    "unit": [
+      -0.7223130478659618,
+      0.6341165509779009,
+      0.27597112287062886
+    ]
+  },
+  "NGC4559": {
+    "carron_sep_deg": 0.125,
+    "carron_z_high": 0.234,
+    "carron_z_low": 0.229,
+    "dec_deg": 27.95996,
+    "distance_to_spine_mpc": 0.0196,
+    "inflow_speed_kms": 42.42,
+    "position_angle_deg": 168.58533126501956,
+    "ra_deg": 188.99017,
+    "source": "carron2022_block1",
+    "spine_angle_deg": 38.04,
+    "unit": [
+      0.7667039301680301,
+      0.5780272399154762,
+      -0.27937357316072836
+    ]
+  },
+  "NGC5055": {
+    "carron_sep_deg": 1.2289,
+    "carron_z_high": 0.106,
+    "carron_z_low": 0.102,
+    "dec_deg": 42.02937,
+    "distance_to_spine_mpc": 0.2123,
+    "inflow_speed_kms": 62.65,
+    "position_angle_deg": 143.26579662115915,
+    "ra_deg": 198.95531,
+    "source": "carron2022_block1",
+    "spine_angle_deg": 335.23,
+    "unit": [
+      0.6448611423112752,
+      -0.5370806442219804,
+      -0.5437816553903779
+    ]
+  },
+  "NGC5371": {
+    "carron_sep_deg": 0.932,
+    "carron_z_high": 0.199,
+    "carron_z_low": 0.194,
+    "dec_deg": 40.46177,
+    "distance_to_spine_mpc": 0.6458,
+    "inflow_speed_kms": 73.32,
+    "position_angle_deg": 141.86349575451192,
+    "ra_deg": 208.91676,
+    "source": "carron2022_block1",
+    "spine_angle_deg": 276.01,
+    "unit": [
+      0.004208495545085804,
+      -0.9346673734235114,
+      -0.3554985086084628
+    ]
+  },
+  "NGC5585": {
+    "carron_sep_deg": 0.1332,
+    "carron_z_high": 0.111,
+    "carron_z_low": 0.106,
+    "dec_deg": 56.72905,
+    "distance_to_spine_mpc": 0.0164,
+    "inflow_speed_kms": 31.6,
+    "position_angle_deg": 171.60044072465982,
+    "ra_deg": 214.95085,
+    "source": "carron2022_block1",
+    "spine_angle_deg": 181.39,
+    "unit": [
+      -0.8210760748478922,
+      -0.28527469826116253,
+      0.49442130399526796
+    ]
+  },
+  "NGC5907": {
+    "carron_sep_deg": 0.0414,
+    "carron_z_high": 0.069,
+    "carron_z_low": 0.064,
+    "dec_deg": 56.32885,
+    "distance_to_spine_mpc": 0.0125,
+    "inflow_speed_kms": 75.25,
+    "position_angle_deg": 147.61277272543236,
+    "ra_deg": 228.9737,
+    "source": "carron2022_block1",
+    "spine_angle_deg": 6.9,
+    "unit": [
+      0.6788354163498495,
+      0.07166461025260527,
+      -0.7307849623155013
+    ]
+  },
+  "NGC5985": {
+    "carron_sep_deg": 0.0819,
+    "carron_z_high": 0.312,
+    "carron_z_low": 0.307,
+    "dec_deg": 59.33201,
+    "distance_to_spine_mpc": 0.0567,
+    "inflow_speed_kms": 102.76,
+    "position_angle_deg": 163.9872207688138,
+    "ra_deg": 234.90442,
+    "source": "carron2022_block1",
+    "spine_angle_deg": 191.63,
+    "unit": [
+      -0.5670907858115072,
+      -0.4416943506812944,
+      0.695207984148569
+    ]
+  },
+  "NGC6015": {
+    "carron_sep_deg": 3.0972,
+    "carron_z_high": 0.334,
+    "carron_z_low": 0.328,
+    "dec_deg": 62.31006,
+    "distance_to_spine_mpc": 0.9189,
+    "inflow_speed_kms": 53.93,
+    "position_angle_deg": 113.36960835693628,
+    "ra_deg": 237.85516,
+    "source": "carron2022_block1_local",
+    "spine_angle_deg": 172.52,
+    "unit": [
+      -0.7564367661126298,
+      0.11272365247014668,
+      0.6442800610346839
+    ]
+  },
+  "NGC6195": {
+    "carron_sep_deg": 0.1076,
+    "carron_z_high": 0.164,
+    "carron_z_low": 0.159,
+    "dec_deg": 39.02789,
+    "distance_to_spine_mpc": 0.2399,
+    "inflow_speed_kms": 88.09,
+    "position_angle_deg": 72.12751443780202,
+    "ra_deg": 249.13569,
+    "source": "carron2022_block1",
+    "spine_angle_deg": 282.33,
+    "unit": [
+      -0.22275848819479807,
+      0.3058693306286401,
+      -0.9256471295898647
+    ]
+  },
+  "NGC7814": {
+    "carron_sep_deg": 0.0654,
+    "carron_z_high": 0.199,
+    "carron_z_low": 0.194,
+    "dec_deg": 16.14523,
+    "distance_to_spine_mpc": 0.0164,
+    "inflow_speed_kms": 76.61,
+    "position_angle_deg": 13.108706980270497,
+    "ra_deg": 0.81228,
+    "source": "carron2022_block1",
+    "spine_angle_deg": 236.37,
+    "unit": [
+      -0.5125256853680498,
+      -0.8509771771835106,
+      0.11469640687830922
+    ]
+  },
+  "PGC51017": {
+    "carron_sep_deg": 0.0923,
+    "carron_z_high": 0.154,
+    "carron_z_low": 0.15,
+    "dec_deg": 43.50376,
+    "distance_to_spine_mpc": 0.0219,
+    "inflow_speed_kms": 15.0,
+    "position_angle_deg": 127.3252347361588,
+    "ra_deg": 214.25715,
+    "source": "carron2022_block1",
+    "spine_angle_deg": 190.62,
+    "unit": [
+      -0.7415749083802682,
+      0.17704754228739444,
+      0.647086410791318
+    ]
+  },
+  "UGC00191": {
+    "carron_sep_deg": 0.1279,
+    "carron_z_high": 0.199,
+    "carron_z_low": 0.194,
+    "dec_deg": 10.87931,
+    "distance_to_spine_mpc": 0.0382,
+    "inflow_speed_kms": 25.0,
+    "position_angle_deg": 30.962009194996675,
+    "ra_deg": 5.0215,
+    "source": "carron2022_block1",
+    "spine_angle_deg": 357.56,
+    "unit": [
+      0.8128444711301447,
+      0.5085360839508806,
+      0.2840333027534944
+    ]
+  },
+  "UGC00634": {
+    "carron_sep_deg": 0.1612,
+    "carron_z_high": 0.265,
+    "carron_z_low": 0.26,
+    "dec_deg": 7.62599,
+    "distance_to_spine_mpc": 0.0869,
+    "inflow_speed_kms": 25.0,
+    "position_angle_deg": 65.16381126017399,
+    "ra_deg": 15.35488,
+    "source": "carron2022_block1",
+    "spine_angle_deg": 75.18,
+    "unit": [
+      -0.10179438530601087,
+      -0.20323737040473933,
+      0.973823636184262
+    ]
+  },
+  "UGC00891": {
+    "carron_sep_deg": 0.066,
+    "carron_z_high": 0.428,
+    "carron_z_low": 0.422,
+    "dec_deg": 12.41172,
+    "distance_to_spine_mpc": 0.0117,
+    "inflow_speed_kms": 25.0,
+    "position_angle_deg": 81.61438605320043,
+    "ra_deg": 20.32954,
+    "source": "carron2022_block1",
+    "spine_angle_deg": 79.18,
+    "unit": [
+      -0.2569484237068121,
+      -0.7867035429884564,
+      0.5613154576563831
+    ]
+  },
+  "UGC01230": {
+    "carron_sep_deg": 0.1233,
+    "carron_z_high": 0.116,
+    "carron_z_low": 0.111,
+    "dec_deg": 25.52147,
+    "distance_to_spine_mpc": 0.1156,
+    "inflow_speed_kms": 36.3,
+    "position_angle_deg": 174.47657730767423,
+    "ra_deg": 26.38438,
+    "source": "carron2022_block1",
+    "spine_angle_deg": 176.75,
+    "unit": [
+      0.9356418111417913,
+      0.3237193032465505,
+      -0.14064214855041232
+    ]
+  },
+  "UGC01281": {
+    "carron_sep_deg": 1.4198,
+    "carron_z_high": 0.394,
+    "carron_z_low": 0.388,
+    "dec_deg": 32.58783,
+    "distance_to_spine_mpc": 0.1306,
+    "inflow_speed_kms": 19.32,
+    "position_angle_deg": 60.71454831881322,
+    "ra_deg": 27.38212,
+    "source": "carron2022_block1",
+    "spine_angle_deg": 264.33,
+    "unit": [
+      0.4823686152417711,
+      0.8021043276915274,
+      0.3520641511546708
+    ]
+  },
+  "UGC04499": {
+    "carron_sep_deg": 1.8142,
+    "carron_z_high": 0.339,
+    "carron_z_low": 0.334,
+    "dec_deg": 51.65238,
+    "distance_to_spine_mpc": 0.3958,
+    "inflow_speed_kms": 25.48,
+    "position_angle_deg": 141.1670523046439,
+    "ra_deg": 129.42287,
+    "source": "carron2022_block1",
+    "spine_angle_deg": 3.25,
+    "unit": [
+      0.08914675698554579,
+      -0.9882442796710033,
+      0.12420184948904744
+    ]
+  },
+  "UGC05005": {
+    "carron_sep_deg": 0.0619,
+    "carron_z_high": 0.189,
+    "carron_z_low": 0.184,
+    "dec_deg": 22.27482,
+    "distance_to_spine_mpc": 0.058,
+    "inflow_speed_kms": 34.62,
+    "position_angle_deg": 178.89381630786085,
+    "ra_deg": 141.12245,
+    "source": "carron2022_block1",
+    "spine_angle_deg": 136.24,
+    "unit": [
+      -0.38528533278471055,
+      0.9210398053325669,
+      0.05692880934923975
+    ]
+  },
+  "UGC05414": {
+    "carron_sep_deg": 0.0332,
+    "carron_z_high": 0.361,
+    "carron_z_low": 0.355,
+    "dec_deg": 40.76151,
+    "distance_to_spine_mpc": 0.0054,
+    "inflow_speed_kms": 25.0,
+    "position_angle_deg": 161.65906011631225,
+    "ra_deg": 150.98827,
+    "source": "carron2022_block1",
+    "spine_angle_deg": 190.06,
+    "unit": [
+      -0.9050535599563999,
+      0.393375794347954,
+      -0.16165870849219222
+    ]
+  },
+  "UGC05716": {
+    "carron_sep_deg": 0.1014,
+    "carron_z_high": 0.255,
+    "carron_z_low": 0.249,
+    "dec_deg": 25.30761,
+    "distance_to_spine_mpc": 0.0377,
+    "inflow_speed_kms": 25.58,
+    "position_angle_deg": 77.85321613258058,
+    "ra_deg": 157.93028,
+    "source": "carron2022_block1",
+    "spine_angle_deg": 204.53,
+    "unit": [
+      0.3497233938355052,
+      0.7886021092850051,
+      0.5057670027151011
+    ]
+  },
+  "UGC05721": {
+    "carron_sep_deg": 0.0625,
+    "carron_z_high": 0.26,
+    "carron_z_low": 0.255,
+    "dec_deg": 27.66866,
+    "distance_to_spine_mpc": 0.0067,
+    "inflow_speed_kms": 27.89,
+    "position_angle_deg": 64.07519767155759,
+    "ra_deg": 158.07176,
+    "source": "carron2022_block1",
+    "spine_angle_deg": 172.95,
+    "unit": [
+      0.6194032073751152,
+      0.26852965051820515,
+      0.7377204711040561
+    ]
+  },
+  "UGC05750": {
+    "carron_sep_deg": 0.1394,
+    "carron_z_high": 0.204,
+    "carron_z_low": 0.199,
+    "dec_deg": 20.99019,
+    "distance_to_spine_mpc": 0.1428,
+    "inflow_speed_kms": 25.0,
+    "position_angle_deg": 92.23554340941728,
+    "ra_deg": 158.93796,
+    "source": "carron2022_block1",
+    "spine_angle_deg": 192.94,
+    "unit": [
+      0.24269050319492702,
+      0.6130136795655389,
+      0.751874689243169
+    ]
+  },
+  "UGC05764": {
+    "carron_sep_deg": 0.0197,
+    "carron_z_high": 0.35,
+    "carron_z_low": 0.344,
+    "dec_deg": 31.54727,
+    "distance_to_spine_mpc": 0.0026,
+    "inflow_speed_kms": 25.0,
+    "position_angle_deg": 92.61343225199111,
+    "ra_deg": 159.17976,
+    "source": "carron2022_block1",
+    "spine_angle_deg": 309.64,
+    "unit": [
+      -0.6031968180774797,
+      0.3390800112176488,
+      -0.721926827769853
+    ]
+  },
+  "UGC05829": {
+    "carron_sep_deg": 0.1376,
+    "carron_z_high": 0.281,
+    "carron_z_low": 0.275,
+    "dec_deg": 34.44928,
+    "distance_to_spine_mpc": 0.0207,
+    "inflow_speed_kms": 25.0,
+    "position_angle_deg": 170.65186237698697,
+    "ra_deg": 160.67828,
+    "source": "carron2022_block1",
+    "spine_angle_deg": 28.25,
+    "unit": [
+      0.9592814626237481,
+      0.05572908544204259,
+      0.2768995205886713
+    ]
+  },
+  "UGC05918": {
+    "carron_sep_deg": 0.8422,
+    "carron_z_high": 0.219,
+    "carron_z_low": 0.214,
+    "dec_deg": 65.53363,
+    "distance_to_spine_mpc": 0.1126,
+    "inflow_speed_kms": 25.0,
+    "position_angle_deg": 80.27080150793093,
+    "ra_deg": 162.40172,
+    "source": "carron2022_block1",
+    "spine_angle_deg": 353.45,
+    "unit": [
+      -0.5054419647850013,
+      -0.5275399956482894,
+      -0.6828103493838391
+    ]
+  },
+  "UGC05986": {
+    "carron_sep_deg": 0.0551,
+    "carron_z_high": 0.159,
+    "carron_z_low": 0.154,
+    "dec_deg": 36.61878,
+    "distance_to_spine_mpc": 0.0083,
+    "inflow_speed_kms": 39.55,
+    "position_angle_deg": 130.1930035814161,
+    "ra_deg": 163.12972,
+    "source": "carron2022_block1",
+    "spine_angle_deg": 189.89,
+    "unit": [
+      -0.6049890255307337,
+      0.1725445832589091,
+      0.7773137370298963
+    ]
+  },
+  "UGC05999": {
+    "carron_sep_deg": 0.0533,
+    "carron_z_high": 0.199,
+    "carron_z_low": 0.194,
+    "dec_deg": 7.6198,
+    "distance_to_spine_mpc": 0.0444,
+    "inflow_speed_kms": 25.0,
+    "position_angle_deg": 84.36890998025632,
+    "ra_deg": 163.24438,
+    "source": "carron2022_block1",
+    "spine_angle_deg": 198.64,
+    "unit": [
+      0.32216844447267756,
+      0.9449385039636693,
+      0.057434459281495404
+    ]
+  },
+  "UGC06399": {
+    "carron_sep_deg": 0.0943,
+    "carron_z_high": 0.244,
+    "carron_z_low": 0.239,
+    "dec_deg": 50.89266,
+    "distance_to_spine_mpc": 0.0296,
+    "inflow_speed_kms": 29.75,
+    "position_angle_deg": 133.53690777754807,
+    "ra_deg": 170.84676,
+    "source": "carron2022_block1",
+    "spine_angle_deg": 152.32,
+    "unit": [
+      -0.21758221313946208,
+      0.9151853367393252,
+      0.33925474196046496
+    ]
+  },
+  "UGC06446": {
+    "carron_sep_deg": 0.0387,
+    "carron_z_high": 0.35,
+    "carron_z_low": 0.344,
+    "dec_deg": 53.74666,
+    "distance_to_spine_mpc": 0.0081,
+    "inflow_speed_kms": 28.77,
+    "position_angle_deg": 148.4511541082643,
+    "ra_deg": 171.6686,
+    "source": "carron2022_block1",
+    "spine_angle_deg": 29.49,
+    "unit": [
+      0.9263313563556453,
+      -0.07977197970452717,
+      -0.36816660560992054
+    ]
+  },
+  "UGC06614": {
+    "carron_sep_deg": 0.1274,
+    "carron_z_high": 0.334,
+    "carron_z_low": 0.328,
+    "dec_deg": 17.14367,
+    "distance_to_spine_mpc": 0.1973,
+    "inflow_speed_kms": 69.93,
+    "position_angle_deg": 148.69859522411102,
+    "ra_deg": 174.81196,
+    "source": "carron2022_block1",
+    "spine_angle_deg": 237.21,
+    "unit": [
+      -0.821185129356869,
+      -0.19332744474501493,
+      -0.5369166438391582
+    ]
+  },
+  "UGC06628": {
+    "carron_sep_deg": 0.0211,
+    "carron_z_high": 0.169,
+    "carron_z_low": 0.164,
+    "dec_deg": 45.94215,
+    "distance_to_spine_mpc": 0.0056,
+    "inflow_speed_kms": 15.0,
+    "position_angle_deg": 45.90793153408634,
+    "ra_deg": 175.02395,
+    "source": "carron2022_block1",
+    "spine_angle_deg": 310.94,
+    "unit": [
+      -0.7348973591387378,
+      -0.011445160594901188,
+      -0.6780817648557335
+    ]
+  },
+  "UGC06667": {
+    "carron_sep_deg": 0.102,
+    "carron_z_high": 0.344,
+    "carron_z_low": 0.339,
+    "dec_deg": 51.59801,
+    "distance_to_spine_mpc": 0.032,
+    "inflow_speed_kms": 29.33,
+    "position_angle_deg": 174.31701558509772,
+    "ra_deg": 175.60962,
+    "source": "carron2022_block1",
+    "spine_angle_deg": 283.54,
+    "unit": [
+      0.10183920401124143,
+      -0.6343791020151974,
+      0.7662844977244081
+    ]
+  },
+  "UGC06786": {
+    "carron_sep_deg": 0.0721,
+    "carron_z_high": 0.169,
+    "carron_z_low": 0.164,
+    "dec_deg": 27.02202,
+    "distance_to_spine_mpc": 0.0369,
+    "inflow_speed_kms": 76.79,
+    "position_angle_deg": 90.5749509694462,
+    "ra_deg": 177.2894,
+    "source": "carron2022_block1",
+    "spine_angle_deg": 211.17,
+    "unit": [
+      -0.20377420886563477,
+      0.7914386625589902,
+      0.5762819754321852
+    ]
+  },
+  "UGC06787": {
+    "carron_sep_deg": 0.0147,
+    "carron_z_high": 0.13,
+    "carron_z_low": 0.125,
+    "dec_deg": 56.08435,
+    "distance_to_spine_mpc": 0.0055,
+    "inflow_speed_kms": 86.83,
+    "position_angle_deg": 65.23136386769623,
+    "ra_deg": 177.31404,
+    "source": "carron2022_block1",
+    "spine_angle_deg": 87.04,
+    "unit": [
+      0.6450515166712896,
+      -0.6356620337000706,
+      0.424078200043765
+    ]
+  },
+  "UGC06818": {
+    "carron_sep_deg": 0.0412,
+    "carron_z_high": 0.388,
+    "carron_z_low": 0.383,
+    "dec_deg": 45.80733,
+    "distance_to_spine_mpc": 0.013,
+    "inflow_speed_kms": 24.92,
+    "position_angle_deg": 50.549655545165216,
+    "ra_deg": 177.69575,
+    "source": "carron2022_block1",
+    "spine_angle_deg": 54.81,
+    "unit": [
+      0.05357578199534707,
+      -0.9975091935965897,
+      0.04588076147873407
+    ]
+  },
+  "UGC06917": {
+    "carron_sep_deg": 0.0388,
+    "carron_z_high": 0.055,
+    "carron_z_low": 0.05,
+    "dec_deg": 50.42839,
+    "distance_to_spine_mpc": 0.0122,
+    "inflow_speed_kms": 38.05,
+    "position_angle_deg": 169.07886174718823,
+    "ra_deg": 179.11989,
+    "source": "carron2022_block1",
+    "spine_angle_deg": 239.08,
+    "unit": [
+      -0.6142885649781675,
+      -0.7314004281388238,
+      0.2961468768287266
+    ]
+  },
+  "UGC06923": {
+    "carron_sep_deg": 0.1504,
+    "carron_z_high": 0.069,
+    "carron_z_low": 0.064,
+    "dec_deg": 53.16034,
+    "distance_to_spine_mpc": 0.0472,
+    "inflow_speed_kms": 27.86,
+    "position_angle_deg": 18.99943946371773,
+    "ra_deg": 179.20636,
+    "source": "carron2022_block1",
+    "spine_angle_deg": 115.73,
+    "unit": [
+      0.5416194744072059,
+      0.15725347107789484,
+      0.8257842882840625
+    ]
+  },
+  "UGC06930": {
+    "carron_sep_deg": 0.0667,
+    "carron_z_high": 0.439,
+    "carron_z_low": 0.433,
+    "dec_deg": 49.28325,
+    "distance_to_spine_mpc": 0.021,
+    "inflow_speed_kms": 37.52,
+    "position_angle_deg": 63.229396460398426,
+    "ra_deg": 179.32248,
+    "source": "carron2022_block1",
+    "spine_angle_deg": 183.14,
+    "unit": [
+      0.40048282826203935,
+      0.8180979172716245,
+      0.4127097067226165
+    ]
+  },
+  "UGC06973": {
+    "carron_sep_deg": 0.0804,
+    "carron_z_high": 0.422,
+    "carron_z_low": 0.416,
+    "dec_deg": 42.7224,
+    "distance_to_spine_mpc": 0.0253,
+    "inflow_speed_kms": 60.97,
+    "position_angle_deg": 8.590745164218998,
+    "ra_deg": 179.7176,
+    "source": "carron2022_block1",
+    "spine_angle_deg": 239.69,
+    "unit": [
+      0.4715379729829026,
+      -0.42756940248622305,
+      -0.7712563426596567
+    ]
+  },
+  "UGC06983": {
+    "carron_sep_deg": 0.0198,
+    "carron_z_high": 0.372,
+    "carron_z_low": 0.366,
+    "dec_deg": 52.70779,
+    "distance_to_spine_mpc": 0.0062,
+    "inflow_speed_kms": 38.15,
+    "position_angle_deg": 139.3522460896876,
+    "ra_deg": 179.78639,
+    "source": "carron2022_block1",
+    "spine_angle_deg": 343.4,
+    "unit": [
+      0.5254851812057811,
+      -0.7441751123282436,
+      -0.41239389729283477
+    ]
+  },
+  "UGC07089": {
+    "carron_sep_deg": 0.0792,
+    "carron_z_high": 0.291,
+    "carron_z_low": 0.286,
+    "dec_deg": 43.14336,
+    "distance_to_spine_mpc": 0.0249,
+    "inflow_speed_kms": 25.0,
+    "position_angle_deg": 54.399064149334805,
+    "ra_deg": 181.49061,
+    "source": "carron2022_block1",
+    "spine_angle_deg": 178.27,
+    "unit": [
+      0.5466580154960633,
+      0.3535399423914419,
+      0.7590616070041758
+    ]
+  },
+  "UGC07125": {
+    "carron_sep_deg": 0.116,
+    "carron_z_high": 0.224,
+    "carron_z_low": 0.219,
+    "dec_deg": 36.8023,
+    "distance_to_spine_mpc": 0.0401,
+    "inflow_speed_kms": 22.82,
+    "position_angle_deg": 155.92218697907452,
+    "ra_deg": 182.17297,
+    "source": "carron2022_block1",
+    "spine_angle_deg": 72.03,
+    "unit": [
+      0.4471605285069276,
+      0.6816678776638943,
+      -0.5791168848398457
+    ]
+  },
+  "UGC07151": {
+    "carron_sep_deg": 0.0728,
+    "carron_z_high": 0.102,
+    "carron_z_low": 0.097,
+    "dec_deg": 46.45718,
+    "distance_to_spine_mpc": 0.0087,
+    "inflow_speed_kms": 25.72,
+    "position_angle_deg": 57.503984905198216,
+    "ra_deg": 182.49417,
+    "source": "carron2022_block1",
+    "spine_angle_deg": 198.02,
+    "unit": [
+      0.37896338401903124,
+      0.2883458372968063,
+      0.8793426133689006
+    ]
+  },
+  "UGC07232": {
+    "carron_sep_deg": 0.7636,
+    "carron_z_high": 0.15,
+    "carron_z_low": 0.145,
+    "dec_deg": 36.6315,
+    "distance_to_spine_mpc": 0.0377,
+    "inflow_speed_kms": 25.0,
+    "position_angle_deg": 134.53293578571942,
+    "ra_deg": 183.43404,
+    "source": "carron2022_block1",
+    "spine_angle_deg": 203.26,
+    "unit": [
+      -0.7547468311970648,
+      0.41904860000705557,
+      0.5047330894939582
+    ]
+  },
+  "UGC07261": {
+    "carron_sep_deg": 0.0848,
+    "carron_z_high": 0.451,
+    "carron_z_low": 0.445,
+    "dec_deg": 20.65908,
+    "distance_to_spine_mpc": 0.0194,
+    "inflow_speed_kms": 26.14,
+    "position_angle_deg": 63.59683244107218,
+    "ra_deg": 183.80983,
+    "source": "carron2022_block1",
+    "spine_angle_deg": 96.88,
+    "unit": [
+      0.3467176904323293,
+      -0.3078909833892121,
+      0.8859966057998729
+    ]
+  },
+  "UGC07323": {
+    "carron_sep_deg": 0.0164,
+    "carron_z_high": 0.204,
+    "carron_z_low": 0.199,
+    "dec_deg": 45.61931,
+    "distance_to_spine_mpc": 0.0023,
+    "inflow_speed_kms": 25.0,
+    "position_angle_deg": 107.87671984822413,
+    "ra_deg": 184.37577,
+    "source": "carron2022_block1",
+    "spine_angle_deg": 169.74,
+    "unit": [
+      -0.24750059286182957,
+      0.6236607271004496,
+      0.7414787616685871
+    ]
+  },
+  "UGC07399": {
+    "carron_sep_deg": 0.0448,
+    "carron_z_high": 0.121,
+    "carron_z_low": 0.116,
+    "dec_deg": 46.29102,
+    "distance_to_spine_mpc": 0.0066,
+    "inflow_speed_kms": 36.05,
+    "position_angle_deg": 141.83935164051115,
+    "ra_deg": 185.15883,
+    "source": "carron2022_block1",
+    "spine_angle_deg": 265.47,
+    "unit": [
+      -0.5188883573997745,
+      -0.8502320880853138,
+      0.0886581578031668
+    ]
+  },
+  "UGC07524": {
+    "carron_sep_deg": 0.8422,
+    "carron_z_high": 0.286,
+    "carron_z_low": 0.281,
+    "dec_deg": 33.54686,
+    "distance_to_spine_mpc": 0.0697,
+    "inflow_speed_kms": 27.82,
+    "position_angle_deg": 112.91097404270222,
+    "ra_deg": 186.4536,
+    "source": "carron2022_block1",
+    "spine_angle_deg": 307.36,
+    "unit": [
+      -0.11071721173474983,
+      -0.25668393789747374,
+      -0.9601328319827046
+    ]
+  },
+  "UGC07577": {
+    "carron_sep_deg": 0.6615,
+    "carron_z_high": 0.116,
+    "carron_z_low": 0.111,
+    "dec_deg": 43.49948,
+    "distance_to_spine_mpc": 0.0299,
+    "inflow_speed_kms": 25.0,
+    "position_angle_deg": 90.87653603657999,
+    "ra_deg": 186.9245,
+    "source": "carron2022_block1",
+    "spine_angle_deg": 153.26,
+    "unit": [
+      0.18588814301987835,
+      0.13458095534011272,
+      0.9733106208936405
+    ]
+  },
+  "UGC07603": {
+    "carron_sep_deg": 0.1033,
+    "carron_z_high": 0.265,
+    "carron_z_low": 0.26,
+    "dec_deg": 22.82043,
+    "distance_to_spine_mpc": 0.0085,
+    "inflow_speed_kms": 21.56,
+    "position_angle_deg": 97.80386028760203,
+    "ra_deg": 187.18386,
+    "source": "carron2022_block1",
+    "spine_angle_deg": 344.64,
+    "unit": [
+      0.15101569970144965,
+      0.03204068993934884,
+      -0.9880119698829017
+    ]
+  },
+  "UGC07608": {
+    "carron_sep_deg": 0.9096,
+    "carron_z_high": 0.116,
+    "carron_z_low": 0.111,
+    "dec_deg": 43.22383,
+    "distance_to_spine_mpc": 0.1303,
+    "inflow_speed_kms": 25.0,
+    "position_angle_deg": 113.111340713946,
+    "ra_deg": 187.18366,
+    "source": "carron2022_block1",
+    "spine_angle_deg": 153.26,
+    "unit": [
+      -0.1772282229048814,
+      0.7727308681291366,
+      0.6094892636022137
+    ]
+  },
+  "UGC07690": {
+    "carron_sep_deg": 1.3858,
+    "carron_z_high": 0.372,
+    "carron_z_low": 0.366,
+    "dec_deg": 42.70412,
+    "distance_to_spine_mpc": 0.1962,
+    "inflow_speed_kms": 20.09,
+    "position_angle_deg": 63.26478099992144,
+    "ra_deg": 188.11206,
+    "source": "carron2022_block1",
+    "spine_angle_deg": 154.08,
+    "unit": [
+      0.5002601928836625,
+      0.46399604335844225,
+      0.7310591023738857
+    ]
+  },
+  "UGC08286": {
+    "carron_sep_deg": 0.0599,
+    "carron_z_high": 0.214,
+    "carron_z_low": 0.209,
+    "dec_deg": 44.03802,
+    "distance_to_spine_mpc": 0.0068,
+    "inflow_speed_kms": 28.84,
+    "position_angle_deg": 124.74601940362388,
+    "ra_deg": 198.04916,
+    "source": "carron2022_block1",
+    "spine_angle_deg": 53.47,
+    "unit": [
+      0.6567948773324883,
+      -0.46794933014732465,
+      -0.5913069537257887
+    ]
+  },
+  "UGC08490": {
+    "carron_sep_deg": 0.1015,
+    "carron_z_high": 0.121,
+    "carron_z_low": 0.116,
+    "dec_deg": 58.41873,
+    "distance_to_spine_mpc": 0.0082,
+    "inflow_speed_kms": 27.51,
+    "position_angle_deg": 70.29254593194754,
+    "ra_deg": 202.40212,
+    "source": "carron2022_block1",
+    "spine_angle_deg": 197.29,
+    "unit": [
+      -0.3303165787436165,
+      0.8794697512465177,
+      0.34267172986620953
+    ]
+  },
+  "UGC08550": {
+    "carron_sep_deg": 0.0536,
+    "carron_z_high": 0.339,
+    "carron_z_low": 0.334,
+    "dec_deg": 47.91547,
+    "distance_to_spine_mpc": 0.0063,
+    "inflow_speed_kms": 19.91,
+    "position_angle_deg": 169.42689676522903,
+    "ra_deg": 203.5118,
+    "source": "carron2022_block1",
+    "spine_angle_deg": 152.76,
+    "unit": [
+      -0.9290051261620865,
+      0.3019685890507103,
+      0.2139262648467664
+    ]
+  },
+  "UGC08699": {
+    "carron_sep_deg": 0.6795,
+    "carron_z_high": 0.366,
+    "carron_z_low": 0.361,
+    "dec_deg": 41.5033,
+    "distance_to_spine_mpc": 0.4661,
+    "inflow_speed_kms": 63.84,
+    "position_angle_deg": 175.75115058472173,
+    "ra_deg": 206.28612,
+    "source": "carron2022_block1",
+    "spine_angle_deg": 80.22,
+    "unit": [
+      -0.0962152578036514,
+      0.9048312188412841,
+      -0.41475666308809667
+    ]
+  },
+  "UGC08837": {
+    "carron_sep_deg": 0.0479,
+    "carron_z_high": 0.087,
+    "carron_z_low": 0.083,
+    "dec_deg": 53.90557,
+    "distance_to_spine_mpc": 0.006,
+    "inflow_speed_kms": 25.0,
+    "position_angle_deg": 126.87592331945802,
+    "ra_deg": 208.69001,
+    "source": "carron2022_block1",
+    "spine_angle_deg": 0.59,
+    "unit": [
+      0.6748785381906846,
+      -0.16318157055377394,
+      -0.7196601515446083
+    ]
+  },
+  "UGC09037": {
+    "carron_sep_deg": 0.0632,
+    "carron_z_high": 0.121,
+    "carron_z_low": 0.116,
+    "dec_deg": 7.058,
+    "distance_to_spine_mpc": 0.0922,
+    "inflow_speed_kms": 53.3,
+    "position_angle_deg": 18.23181999340463,
+    "ra_deg": 212.12127,
+    "source": "carron2022_block1",
+    "spine_angle_deg": 177.85,
+    "unit": [
+      0.8116837121838099,
+      0.5277223617744621,
+      -0.25035706552580816
+    ]
+  },
+  "UGC10310": {
+    "carron_sep_deg": 0.0368,
+    "carron_z_high": 0.199,
+    "carron_z_low": 0.194,
+    "dec_deg": 47.04532,
+    "distance_to_spine_mpc": 0.0098,
+    "inflow_speed_kms": 24.99,
+    "position_angle_deg": 77.97257803798946,
+    "ra_deg": 244.0746,
+    "source": "carron2022_block1",
+    "spine_angle_deg": 198.32,
+    "unit": [
+      -0.8773637410909295,
+      0.4476270772155752,
+      -0.1728087542989943
+    ]
+  },
+  "UGC12506": {
+    "carron_sep_deg": 0.0998,
+    "carron_z_high": 0.361,
+    "carron_z_low": 0.355,
+    "dec_deg": 16.07479,
+    "distance_to_spine_mpc": 0.1752,
+    "inflow_speed_kms": 81.9,
+    "position_angle_deg": 29.2322443866246,
+    "ra_deg": 349.87698,
+    "source": "carron2022_block1",
+    "spine_angle_deg": 39.5,
+    "unit": [
+      0.657316735826268,
+      0.6467550824620916,
+      0.3868366219893787
+    ]
+  },
+  "UGC12732": {
+    "carron_sep_deg": 0.0523,
+    "carron_z_high": 0.179,
+    "carron_z_low": 0.174,
+    "dec_deg": 26.23606,
+    "distance_to_spine_mpc": 0.0121,
+    "inflow_speed_kms": 25.0,
+    "position_angle_deg": 76.33562864184744,
+    "ra_deg": 355.1665,
+    "source": "carron2022_block1",
+    "spine_angle_deg": 278.68,
+    "unit": [
+      0.5204056765939747,
+      0.5860361294215386,
+      -0.6210793723682901
+    ]
+  },
+  "UGCA281": {
+    "carron_sep_deg": 0.0126,
+    "carron_z_high": 0.366,
+    "carron_z_low": 0.361,
+    "dec_deg": 48.4935,
+    "distance_to_spine_mpc": 0.0013,
+    "inflow_speed_kms": 25.0,
+    "position_angle_deg": 57.50802703609411,
+    "ra_deg": 186.56675,
+    "source": "carron2022_block1",
+    "spine_angle_deg": 349.07,
+    "unit": [
+      -0.49879026141695404,
+      -0.4411952946612905,
+      -0.746026130295946
+    ]
+  }
+}

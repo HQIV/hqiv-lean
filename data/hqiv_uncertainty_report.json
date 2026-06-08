@@ -1,0 +1,78 @@
+{
+  "meta": {
+    "samples": 5000,
+    "seed": 42,
+    "interpretation": "p50 with +/- 1 sigma from p16/p84"
+  },
+  "inputs": {
+    "m_nu_e": {
+      "central": 0.0392,
+      "rel_sigma": 0.01,
+      "abs_sigma": 0.000392
+    },
+    "m_nu_mu": {
+      "central": 0.00028,
+      "rel_sigma": 0.01,
+      "abs_sigma": 2.8e-06
+    },
+    "m_nu_tau": {
+      "central": 2e-06,
+      "rel_sigma": 0.01,
+      "abs_sigma": 2e-08
+    },
+    "derivedProtonMass_MeV": {
+      "central": 938.272,
+      "rel_sigma": 0.002,
+      "abs_sigma": 1.8765440000000002
+    },
+    "derivedNeutronMass_MeV": {
+      "central": 939.565,
+      "rel_sigma": 0.002,
+      "abs_sigma": 1.8791300000000002
+    },
+    "site_energy_referenceM": {
+      "central": 600.0,
+      "rel_sigma": 0.01,
+      "abs_sigma": 6.0
+    },
+    "h2_trace_referenceM": {
+      "central": 1200.0,
+      "rel_sigma": 0.01,
+      "abs_sigma": 12.0
+    }
+  },
+  "derived": {
+    "m_nu_mu_over_nu_e": {
+      "mean": 0.007146487263709568,
+      "p16": 0.007049824502601999,
+      "p50": 0.00714544278159529,
+      "p84": 0.007245135617010257,
+      "minus_1sigma": 9.561827899329158e-05,
+      "plus_1sigma": 9.969283541496655e-05
+    },
+    "m_nu_tau_over_nu_mu": {
+      "mean": 0.00714034148603134,
+      "p16": 0.007038591371094954,
+      "p50": 0.007138463005659944,
+      "p84": 0.007242621160612682,
+      "minus_1sigma": 9.987163456499047e-05,
+      "plus_1sigma": 0.00010415815495273817
+    },
+    "proton_minus_neutron_MeV": {
+      "mean": -1.2903844911230988,
+      "p16": -3.838629385269196,
+      "p50": -1.321917661018233,
+      "p84": 1.3541467661717614,
+      "minus_1sigma": 2.516711724250963,
+      "plus_1sigma": 2.6760644271899947
+    },
+    "h2_over_site_referenceM": {
+      "mean": 2.000090156549222,
+      "p16": 1.9724757763479441,
+      "p50": 1.9996689611574012,
+      "p84": 2.0280282053911654,
+      "minus_1sigma": 0.027193184809457094,
+      "plus_1sigma": 0.028359244233764125
+    }
+  }
+}

@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>HQIV mass spectrum — derivation calculator</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" />
+  <style>
+    :root {
+      --bg: #0c0f14;
+      --panel: #151a22;
+      --text: #e8eef4;
+      --muted: #8b9cb3;
+      --accent: #5eb8ff;
+      --accent2: #7ee787;
+      --warn: #e3b341;
+      --border: #2a3444;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "DM Sans", system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+      min-height: 100vh;
+    }
+    header {
+      padding: 1.5rem 1.75rem;
+      border-bottom: 1px solid var(--border);
+      background: linear-gradient(160deg, #121820 0%, var(--bg) 60%);
+    }
+    h1 { margin: 0 0 0.35rem; font-size: 1.4rem; letter-spacing: -0.02em; }
+    .sub { color: var(--muted); font-size: 0.9rem; max-width: 56rem; }
+    main {
+      display: grid;
+      grid-template-columns: minmax(300px, 360px) 1fr;
+      gap: 1rem;
+      padding: 1.25rem 1.75rem 2.5rem;
+      align-items: start;
+    }
+    @media (max-width: 900px) { main { grid-template-columns: 1fr; } }
+    section, aside {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1rem 1.15rem;
+    }
+    h2 {
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+      margin: 0 0 0.75rem;
+      font-weight: 600;
+    }
+    label { display: block; font-size: 0.82rem; color: var(--muted); margin-bottom: 0.25rem; }
+    select {
+      width: 100%;
+      padding: 0.5rem 0.55rem;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      background: var(--bg);
+      color: var(--text);
+      font-family: inherit;
+      font-size: 0.92rem;
+      margin-bottom: 0.85rem;
+    }
+    .sector-radios {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.35rem;
+      margin-bottom: 0.85rem;
+    }
+    .sector-radios label.radio-chip {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      margin: 0;
+      padding: 0.45rem 0.55rem;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      background: var(--bg);
+      color: var(--text);
+      font-size: 0.88rem;
+      cursor: pointer;
+    }
+    .sector-radios label.radio-chip:has(input:checked) {
+      border-color: var(--accent);
+      background: rgba(94, 184, 255, 0.1);
+    }
+    .sector-radios input { margin: 0; accent-color: var(--accent); }
+    .sector-panel { display: none; }
+    .sector-panel.active { display: block; }
+    .variety-desc {
+      font-size: 0.8rem;
+      color: var(--muted);
+      margin: -0.5rem 0 0.75rem;
+      line-height: 1.4;
+    }
+    button#btnDerive {
+      width: 100%;
+      padding: 0.55rem 0.85rem;
+      border-radius: 6px;
+      border: 1px solid var(--accent);
+      background: rgba(94, 184, 255, 0.1);
+      color: var(--accent);
+      font-family: inherit;
+      font-size: 0.92rem;
+      cursor: pointer;
+      font-weight: 600;
+    }
+    button#btnDerive:hover { background: rgba(94, 184, 255, 0.18); }
+    .result-box {
+      margin-top: 1rem;
+      padding: 0.75rem 0.85rem;
+      background: var(--bg);
+      border-radius: 8px;
+      border: 1px solid var(--border);
+    }
+    .result-value {
+      font-family: "IBM Plex Mono", monospace;
+      font-size: 1.15rem;
+      color: var(--accent2);
+      word-break: break-all;
+    }
+    .badge {
+      display: inline-block;
+      font-size: 0.72rem;
+      padding: 0.15rem 0.45rem;
+      border-radius: 4px;
+      background: rgba(227, 179, 65, 0.15);
+      color: var(--warn);
+      margin-left: 0.35rem;
+    }
+    .trace { margin: 0; padding: 0; list-style: none; }
+    .trace li {
+      border-bottom: 1px solid var(--border);
+      padding: 0.85rem 0;
+    }
+    .trace li:last-child { border-bottom: none; }
+    .step-n { font-size: 0.72rem; color: var(--muted); font-family: "IBM Plex Mono", monospace; }
+    .step-title { font-weight: 600; margin: 0.2rem 0 0.35rem; }
+    .step-plain { font-size: 0.88rem; color: var(--muted); margin: 0.35rem 0; }
+    .step-mod { font-family: "IBM Plex Mono", monospace; font-size: 0.75rem; color: var(--accent); }
+    .katex-display { margin: 0.5rem 0 !important; overflow-x: auto; }
+    footer {
+      grid-column: 1 / -1;
+      font-size: 0.78rem;
+      color: var(--muted);
+      padding-top: 0.5rem;
+    }
+    footer a { color: var(--accent); }
+    .published-box {
+      margin-top: 0.75rem;
+      padding: 0.65rem 0.75rem;
+      background: rgba(126, 231, 135, 0.06);
+      border: 1px solid rgba(126, 231, 135, 0.25);
+      border-radius: 8px;
+      font-size: 0.85rem;
+    }
+    .published-box.missing {
+      background: rgba(227, 179, 65, 0.06);
+      border-color: rgba(227, 179, 65, 0.25);
+    }
+    .published-box .pub-title {
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--muted);
+      margin-bottom: 0.35rem;
+    }
+    .pub-grid {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 0.15rem 0.65rem;
+      font-family: "IBM Plex Mono", monospace;
+      font-size: 0.8rem;
+    }
+    .pub-grid dt { color: var(--muted); }
+    .pub-grid dd { margin: 0; color: var(--text); }
+    .pub-err { color: var(--warn); }
+    .pub-ok { color: var(--accent2); }
+    details.published-table-wrap {
+      margin-top: 1rem;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: var(--bg);
+    }
+    details.published-table-wrap summary {
+      padding: 0.55rem 0.75rem;
+      cursor: pointer;
+      font-size: 0.82rem;
+      color: var(--muted);
+    }
+    .pub-filter {
+      padding: 0 0.75rem 0.5rem;
+    }
+    .pub-filter input {
+      width: 100%;
+      padding: 0.4rem 0.5rem;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      background: var(--panel);
+      color: var(--text);
+      font-size: 0.85rem;
+    }
+    .pub-table-scroll {
+      max-height: 280px;
+      overflow: auto;
+      padding: 0 0.5rem 0.5rem;
+    }
+    table.pub-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.75rem;
+      font-family: "IBM Plex Mono", monospace;
+    }
+    table.pub-table th {
+      text-align: left;
+      color: var(--muted);
+      font-weight: 600;
+      padding: 0.35rem 0.4rem;
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      background: var(--bg);
+    }
+    table.pub-table td {
+      padding: 0.3rem 0.4rem;
+      border-bottom: 1px solid rgba(42, 52, 68, 0.5);
+    }
+    table.pub-table tr.row-selected td {
+      background: rgba(94, 184, 255, 0.12);
+    }
+    table.pub-table tr:hover td { background: rgba(255, 255, 255, 0.03); }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>HQIV mass spectrum calculator</h1>
+    <p class="sub">
+      Pick a sector (lepton, hadron, boson, neutrino), an input anchor, then the target.
+      Hadron mode: <strong>12 structural varieties</strong> (octet through pentaquark) with a second menu of
+      valid valence configurations. Trace: α/γ → Fano system → ladders → mass row.
+    </p>
+  </header>
+  <main>
+    <aside>
+      <h2>Scale anchor</h2>
+      <label for="inputSelect">Input</label>
+      <select id="inputSelect"></select>
+      <p id="inputDesc" class="sub" style="margin:0 0 1rem;font-size:0.82rem;"></p>
+
+      <h2>Sector</h2>
+      <div class="sector-radios" id="sectorRadios" role="radiogroup" aria-label="Mass sector"></div>
+
+      <div id="panelLepton" class="sector-panel">
+        <label for="leptonSelect">Charged lepton</label>
+        <select id="leptonSelect"></select>
+      </div>
+
+      <div id="panelHadron" class="sector-panel">
+        <label for="hadronVarietySelect">Hadron variety (12)</label>
+        <select id="hadronVarietySelect"></select>
+        <p id="hadronVarietyDesc" class="variety-desc"></p>
+        <label for="hadronConfigSelect">Valence configuration</label>
+        <select id="hadronConfigSelect"></select>
+      </div>
+
+      <div id="panelBoson" class="sector-panel">
+        <label for="bosonSelect">Electroweak target</label>
+        <select id="bosonSelect"></select>
+      </div>
+
+      <div id="panelNeutrino" class="sector-panel">
+        <label for="neutrinoSelect">Neutrino</label>
+        <select id="neutrinoSelect"></select>
+      </div>
+
+      <button type="button" id="btnDerive">Derive with equation trace</button>
+
+      <div class="result-box">
+        <div class="step-n">HQIV derived</div>
+        <div class="result-value" id="resultOut">—</div>
+        <div class="step-plain" id="resultMeta"></div>
+      </div>
+
+      <div id="publishedMatch" class="published-box" style="display:none;"></div>
+
+      <details id="publishedTableWrap" class="published-table-wrap" style="display:none;">
+        <summary id="publishedTableSummary">Published hadron masses (PDG)</summary>
+        <div class="pub-filter">
+          <input type="search" id="pubFilter" placeholder="Filter by name, PDG id, category…" />
+        </div>
+        <div class="pub-table-scroll">
+          <table class="pub-table" id="pubTable">
+            <thead>
+              <tr>
+                <th>Particle</th>
+                <th>PDG</th>
+                <th>Mass (MeV)</th>
+                <th>±</th>
+                <th>HQIV</th>
+                <th>Δ%</th>
+              </tr>
+            </thead>
+            <tbody id="pubTableBody"></tbody>
+          </table>
+        </div>
+      </details>
+    </aside>
+
+    <section>
+      <h2>Equation trace</h2>
+      <ol class="trace" id="traceList"></ol>
+    </section>
+
+    <footer>
+      Serve locally: <code>python3 -m http.server 8765</code> →
+      <a href="http://localhost:8765/web/hqiv-mass-spectrum-calculator/">calculator</a>.
+      Modules: <code>hadron-catalog.js</code>, <code>hqiv-mass-engine.js</code>.
+      Hadron masses: constituent sum minus scaled network binding
+      <span class="badge">scaffold</span>.
+    </footer>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+  <script src="hadron-catalog.js"></script>
+  <script src="published-hadron-masses.js"></script>
+  <script src="hadron-published-data.js"></script>
+  <script src="hqiv-mass-engine.js"></script>
+  <script>
+(function () {
+  const E = window.HQIVMassEngine;
+  const Cat = window.HQIVHadronCatalog;
+  const Pub = window.HQIVPublishedHadrons;
+  let witnessData = null;
+  let publishedDb = null;
+  let lastHadronModelGeV = null;
+  let lastConfigId = null;
+  let sector = "hadron";
+
+  const inputSelect = document.getElementById("inputSelect");
+  const inputDesc = document.getElementById("inputDesc");
+  const sectorRadios = document.getElementById("sectorRadios");
+  const panels = {
+    lepton: document.getElementById("panelLepton"),
+    hadron: document.getElementById("panelHadron"),
+    boson: document.getElementById("panelBoson"),
+    neutrino: document.getElementById("panelNeutrino"),
+  };
+
+  for (const [k, v] of Object.entries(E.INPUTS)) {
+    const o = document.createElement("option");
+    o.value = k;
+    o.textContent = v.label;
+    inputSelect.appendChild(o);
+  }
+
+  for (const key of ["lepton", "hadron", "boson", "neutrino"]) {
+    const lab = document.createElement("label");
+    lab.className = "radio-chip";
+    const inp = document.createElement("input");
+    inp.type = "radio";
+    inp.name = "sector";
+    inp.value = key;
+    if (key === "hadron") inp.checked = true;
+    lab.appendChild(inp);
+    lab.appendChild(document.createTextNode(E.SECTORS[key].label));
+    sectorRadios.appendChild(lab);
+  }
+
+  for (const t of E.SECTORS.lepton.targets) {
+    const o = document.createElement("option");
+    o.value = t.id;
+    o.textContent = t.label;
+    document.getElementById("leptonSelect").appendChild(o);
+  }
+  for (const t of E.SECTORS.boson.targets) {
+    const o = document.createElement("option");
+    o.value = t.id;
+    o.textContent = t.label;
+    document.getElementById("bosonSelect").appendChild(o);
+  }
+  for (const t of E.SECTORS.neutrino.targets) {
+    const o = document.createElement("option");
+    o.value = t.id;
+    o.textContent = t.label;
+    document.getElementById("neutrinoSelect").appendChild(o);
+  }
+
+  const hadronVarietySelect = document.getElementById("hadronVarietySelect");
+  const hadronConfigSelect = document.getElementById("hadronConfigSelect");
+  const hadronVarietyDesc = document.getElementById("hadronVarietyDesc");
+
+  for (const v of Cat.HADRON_VARIETIES) {
+    const o = document.createElement("option");
+    o.value = v.id;
+    o.textContent = v.label;
+    hadronVarietySelect.appendChild(o);
+  }
+
+  function setSector(next) {
+    sector = next;
+    for (const [k, el] of Object.entries(panels)) {
+      el.classList.toggle("active", k === sector);
+    }
+  }
+
+  function refillHadronConfigs() {
+    const variety = Cat.getVariety(hadronVarietySelect.value);
+    hadronConfigSelect.innerHTML = "";
+    if (!variety) return;
+    hadronVarietyDesc.textContent =
+      variety.description + " · " + variety.closureClass + " · " + variety.valenceCount + " valence slots";
+    for (const c of variety.configs) {
+      const o = document.createElement("option");
+      o.value = c.id;
+      o.textContent = c.label;
+      hadronConfigSelect.appendChild(o);
+    }
+  }
+
+  sectorRadios.addEventListener("change", (ev) => {
+    if (ev.target.name === "sector" && ev.target.checked) setSector(ev.target.value);
+  });
+
+  hadronVarietySelect.addEventListener("change", refillHadronConfigs);
+  inputSelect.addEventListener("change", () => {
+    inputDesc.textContent = E.INPUTS[inputSelect.value].description;
+  });
+
+  function formatResult(r) {
+    if (r == null) return "—";
+    if (typeof r === "number") {
+      if (Math.abs(r) < 1e-4 && Math.abs(r) > 0) return r.toExponential(6) + " GeV";
+      if (Math.abs(r) < 1e-3 || Math.abs(r) > 1e6) return r.toExponential(6);
+      return r.toPrecision(8).replace(/\.?0+$/, "");
+    }
+    if (Array.isArray(r)) return JSON.stringify(r);
+    return JSON.stringify(r, null, 2);
+  }
+
+  function renderTrace(trace) {
+    const list = document.getElementById("traceList");
+    list.innerHTML = "";
+    trace.forEach((step, i) => {
+      const li = document.createElement("li");
+      const mod = step.module ? `<div class="step-mod">${step.module}</div>` : "";
+      let vals = "";
+      if (step.values) {
+        vals = '<pre class="step-plain" style="font-family:IBM Plex Mono,monospace;font-size:0.78rem;">'
+          + JSON.stringify(step.values, null, 2) + "</pre>";
+      }
+      li.innerHTML =
+        `<div class="step-n">Step ${i + 1}</div>` +
+        `<div class="step-title">${step.title}</div>` +
+        `<div class="step-math">\\[${step.latex}\\]</div>` +
+        `<div class="step-plain">${step.plain}</div>` + vals + mod;
+      list.appendChild(li);
+    });
+    if (window.renderMathInElement) {
+      renderMathInElement(list, {
+        delimiters: [
+          { left: "\\(", right: "\\)", display: false },
+          { left: "\\[", right: "\\]", display: true },
+        ],
+        throwOnError: false,
+      });
+    }
+  }
+
+  function buildRequest() {
+    const req = {
+      inputKey: inputSelect.value,
+      sector,
+      witnessJson: witnessData,
+    };
+    if (sector === "hadron") {
+      req.hadronVarietyId = hadronVarietySelect.value;
+      req.hadronConfigId = hadronConfigSelect.value;
+    } else if (sector === "lepton") {
+      req.targetId = document.getElementById("leptonSelect").value;
+    } else if (sector === "boson") {
+      req.targetId = document.getElementById("bosonSelect").value;
+    } else {
+      req.targetId = document.getElementById("neutrinoSelect").value;
+    }
+    return req;
+  }
+
+  function fmtMeV(x) {
+    if (x == null || Number.isNaN(x)) return "—";
+    if (Math.abs(x) < 10) return x.toFixed(4);
+    if (Math.abs(x) < 1000) return x.toFixed(2);
+    return x.toFixed(3);
+  }
+
+  function renderPublishedMatch(cmp, configId) {
+    const el = document.getElementById("publishedMatch");
+    if (!cmp) {
+      el.style.display = "none";
+      return;
+    }
+    el.style.display = "block";
+    el.classList.remove("missing");
+    const p = cmp.published;
+    const rel = cmp.rel_err_pct;
+    const relCls = rel != null && Math.abs(rel) < 15 ? "pub-ok" : "pub-err";
+    el.innerHTML =
+      '<div class="pub-title">Published reference <span class="badge">PDG</span></div>' +
+      '<dl class="pub-grid">' +
+      "<dt>Particle</dt><dd>" + p.name + " (" + p.pdg_id + ")</dd>" +
+      "<dt>Published</dt><dd>" + fmtMeV(p.mass_MeV) + " ± " + fmtMeV(p.uncertainty_MeV) + " MeV</dd>" +
+      "<dt>HQIV</dt><dd>" + fmtMeV(cmp.model_MeV) + " MeV</dd>" +
+      '<dt>Δ (HQIV−pub)</dt><dd class="' + relCls + '">' +
+      (cmp.delta_MeV >= 0 ? "+" : "") + fmtMeV(cmp.delta_MeV) + " MeV (" +
+      (rel != null ? (rel >= 0 ? "+" : "") + rel.toFixed(2) + "%" : "—") + ")</dd>" +
+      (cmp.sigma_pull != null
+        ? "<dt>Pull</dt><dd>" + cmp.sigma_pull.toFixed(2) + " σ</dd>"
+        : "") +
+      "</dl>" +
+      '<p class="step-plain" style="margin:0.45rem 0 0;font-size:0.78rem;">' +
+      (publishedDb ? publishedDb.source : "") + "</p>";
+  }
+
+  function renderPublishedTable(filterText) {
+    const wrap = document.getElementById("publishedTableWrap");
+    const body = document.getElementById("pubTableBody");
+    if (!publishedDb || sector !== "hadron") {
+      wrap.style.display = "none";
+      return;
+    }
+    wrap.style.display = "block";
+    document.getElementById("publishedTableSummary").textContent =
+      "Published hadron masses (PDG) — " + publishedDb.count + " entries";
+
+    const q = (filterText || "").toLowerCase().trim();
+    const rows = publishedDb.entries.filter((e) => {
+      if (!q) return true;
+      const hay = [e.name, e.key, e.pdg_id, e.category, e.config_id || ""].join(" ").toLowerCase();
+      return hay.includes(q);
+    });
+
+    body.innerHTML = "";
+    for (const e of rows) {
+      const tr = document.createElement("tr");
+      if (e.config_id && e.config_id === lastConfigId) tr.classList.add("row-selected");
+      let hqiv = "—";
+      let delta = "—";
+      if (e.config_id === lastConfigId && lastHadronModelGeV != null) {
+        const cmp = Pub.compareToPublished(
+          publishedDb,
+          lastHadronModelGeV,
+          e.config_id,
+          e.key
+        );
+        if (cmp) {
+          hqiv = fmtMeV(cmp.model_MeV);
+          delta =
+            cmp.rel_err_pct != null
+              ? (cmp.rel_err_pct >= 0 ? "+" : "") + cmp.rel_err_pct.toFixed(1) + "%"
+              : "—";
+        }
+      }
+      tr.innerHTML =
+        "<td>" + e.name + "</td>" +
+        "<td>" + e.pdg_id + "</td>" +
+        "<td>" + fmtMeV(e.mass_MeV) + "</td>" +
+        "<td>" + fmtMeV(e.uncertainty_MeV) + "</td>" +
+        "<td>" + hqiv + "</td>" +
+        "<td>" + delta + "</td>";
+      body.appendChild(tr);
+    }
+  }
+
+  function runDerive() {
+    try {
+      const req = buildRequest();
+      const d = E.deriveFromRequest(req);
+      document.getElementById("resultOut").textContent =
+        formatResult(d.result) + " " + (d.unit || "");
+      document.getElementById("resultMeta").textContent =
+        (d.meta || "") + (d.coupling ? " · Fano residual " + d.coupling.residual.toExponential(2) : "");
+
+      lastHadronModelGeV = null;
+      lastConfigId = null;
+      const pubEl = document.getElementById("publishedMatch");
+
+      if (sector === "hadron") {
+        lastHadronModelGeV = d.result;
+        lastConfigId = req.hadronConfigId;
+        const cfg = Cat.getConfig(req.hadronVarietyId, req.hadronConfigId);
+        const cmp = publishedDb
+          ? Pub.compareToPublished(
+              publishedDb,
+              d.result,
+              req.hadronConfigId,
+              cfg ? cfg.pdgName : null
+            )
+          : null;
+        if (cmp) {
+          renderPublishedMatch(cmp, req.hadronConfigId);
+        } else {
+          el.style.display = "block";
+          el.classList.add("missing");
+          el.innerHTML =
+            '<div class="pub-title">Published reference</div>' +
+            '<p class="step-plain" style="margin:0;">No PDG row linked for this configuration (' +
+            (cfg ? cfg.pdgName : req.hadronConfigId) +
+            "). Browse the table below.</p>";
+        }
+        renderPublishedTable(document.getElementById("pubFilter").value);
+      } else {
+        pubEl.style.display = "none";
+        document.getElementById("publishedTableWrap").style.display = "none";
+      }
+
+      renderTrace(d.trace);
+    } catch (err) {
+      document.getElementById("resultOut").textContent = "Error: " + err.message;
+      document.getElementById("traceList").innerHTML = "";
+    }
+  }
+
+  document.getElementById("pubFilter").addEventListener("input", (ev) => {
+    renderPublishedTable(ev.target.value);
+  });
+
+  document.getElementById("btnDerive").addEventListener("click", runDerive);
+
+  refillHadronConfigs();
+  setSector("hadron");
+  inputSelect.value = "codata_proton";
+  hadronVarietySelect.value = "baryon_double_charm";
+  refillHadronConfigs();
+  hadronConfigSelect.value = "ccd";
+  inputSelect.dispatchEvent(new Event("change"));
+
+  function loadPublishedDb() {
+    publishedDb = Pub.getPublishedMasses();
+    if (publishedDb) return Promise.resolve(publishedDb);
+    return Pub.fetchPublishedMasses().then((db) => {
+      publishedDb = db || Pub.getPublishedMasses();
+      return publishedDb;
+    });
+  }
+
+  Promise.all([
+    fetch("../../data/hqiv_witnesses.json").then((r) => (r.ok ? r.json() : null)),
+    loadPublishedDb(),
+  ])
+    .then(([w]) => {
+      if (w) witnessData = w;
+      runDerive();
+    })
+    .catch(() => runDerive());
+})();
+  </script>
+</body>
+</html>

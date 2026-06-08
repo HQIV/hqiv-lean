@@ -1,0 +1,11 @@
+import Hqiv.Story.Chapter05_Baryogenesis
+import Hqiv.Physics.HQIVFluidClosureScaffold
+
+/-!
+# Story — Chapter 6: effective fluid closure (HQIV / plasma scaffold)
+
+Vocabulary toward classical NS (modified inertia, eddy viscosity, coefficient maps). **Not** a proof
+of Fefferman (A)–(D); see `Hqiv.Bridge.LeanDojoClayMillennium` for the official Clay `Prop`s.
+
+Downstream: `Chapter07_PatchQFT`.
+-/

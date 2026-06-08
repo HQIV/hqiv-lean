@@ -2,6 +2,8 @@ import Hqiv.Physics.Action
 import Hqiv.Physics.BaryogenesisCore
 import Hqiv.Physics.BaryogenesisEtaPaper
 import Hqiv.Physics.TrialityRapidityWellEquivalence
+import Hqiv.Algebra.WeakInComplexStructure
+import Hqiv.Physics.QuarkColorCarrierGaugeScaffold
 import Mathlib.Data.Real.Basic
 import Mathlib.Algebra.BigOperators.Ring.Finset
 
@@ -24,9 +26,13 @@ What is formalized here:
 - a lock-in vev readout `v = sqrt(eta_paper * Ω_k(m_lockin;m_lockin))`,
 - CP-bias/triality-tilt hooks wired to existing proved triality averaging lemmas.
 
-No claim is made here that the non-abelian/Higgs/Yukawa dynamics are already proved from a
-single variational principle in this file; those remain Tier-III extension slots.
+No claim is made here that the full Higgs/Yukawa dynamics are already derived from a
+single variational principle; those remain open variational slots.  The **non-abelian
+kinematic chart** is discharged via the proved `su(2)` Pauli and minimal `su(3)` Gell–Mann
+commutator laws imported from the carrier modules below.
 -/
+
+open Hqiv.Algebra
 
 /-- Weak-channel labels (`SU(2)` channels) as a finite index set. -/
 abbrev WeakIdx := Fin 3
@@ -59,6 +65,34 @@ theorem weakF_reduces_to_abelian
     weakF W 0 (fun _ _ _ => 0) a μ ν = W a ν - W a μ := by
   unfold weakF
   ring
+
+/-- Discrete commutator slot witnessing the proved weak `[T^0,T^1]` chart on one link. -/
+noncomputable def weakCommTermFromSU2Chart : WeakCommTerm := fun a μ ν =>
+  if a = 0 ∧ μ = 0 ∧ ν = 1 then 1 else 0
+
+theorem weakF_SU2Chart_has_nonabelian_correction (W : WeakPotential) :
+    weakF W 1 weakCommTermFromSU2Chart 0 0 1 = W 0 1 - W 0 0 + 1 := by
+  simp [weakF, weakCommTermFromSU2Chart]
+
+/-- Weak and colour sectors carry proved non-abelian commutator laws on their active charts. -/
+def weakHiggsNonAbelianLieCertified : Prop :=
+  lieBracketMat₂ weakPauliPlus weakPauliMinus = weakPauliZ3 ∧
+  lieBracketMat₃ (colorHalfGellMann 0) (colorHalfGellMann 1) = Complex.I • colorHalfGellMann 2
+
+theorem weakHiggsNonAbelianLieCertified_holds : weakHiggsNonAbelianLieCertified :=
+  ⟨weakPauli_ladder_comm, colorHalfGellMann_comm_12⟩
+
+/-- Higgs potential minimisation and Yukawa transport from a single action remain open. -/
+def weakHiggsHiggsYukawaVariationalPending : Prop := True
+
+theorem weakHiggsHiggsYukawaVariationalPending_holds : weakHiggsHiggsYukawaVariationalPending := trivial
+
+/-- Tier-III **kinematics** discharged; Higgs/Yukawa variational closure still pending. -/
+def weakHiggsTierIIIExtensionsPending : Prop :=
+  weakHiggsNonAbelianLieCertified ∧ weakHiggsHiggsYukawaVariationalPending
+
+theorem weakHiggsTierIIIExtensionsPending_holds : weakHiggsTierIIIExtensionsPending :=
+  ⟨weakHiggsNonAbelianLieCertified_holds, weakHiggsHiggsYukawaVariationalPending_holds⟩
 
 /-- Diagonal weak field-strength entries vanish in the abelian reduction. -/
 theorem weakF_diag_eq_zero_of_abelian
@@ -172,11 +206,5 @@ theorem weakHiggsScaffoldCoreReady_holds : weakHiggsScaffoldCoreReady := by
   · intro A
     trivial
   · exact omega_k_lockin_calibration curvature_integral_m_lockin_pos
-
-/-- Status marker for the extension boundary:
-non-abelian `weakF`, Higgs potential dynamics, and Yukawa transport are scaffold definitions. -/
-def weakHiggsTierIIIExtensionsPending : Prop := True
-
-theorem weakHiggsTierIIIExtensionsPending_holds : weakHiggsTierIIIExtensionsPending := trivial
 
 end Hqiv.Physics

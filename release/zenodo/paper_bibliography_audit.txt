@@ -1,0 +1,16 @@
+OK   papers/closure.tex
+OK   papers/hqiv_3d_causal_growth_octonionic_gauge.tex
+OK   papers/hqiv_baryogenesis_curvature_lockin.tex
+OK   papers/factor_search_formalization/hqiv_factor_search_formalization.tex
+OK   papers/hqiv_lean_from_combinatorics_to_mass_spectrum.tex
+OK   papers/hqiv_octonionic_action_and_uniqueness.tex
+OK   papers/hqiv_rapidity_manifold_so8_closure.tex
+OK   papers/hqiv_to_furey_classification_layer.tex
+OK   papers/include/patch_theory_messaging.tex
+OK   papers/include/release_archive_macros.tex
+OK   papers/paper/HQIV_OMaxwell_fluid_chart.tex
+OK   papers/paper/archive/MHD/mhd.tex
+OK   papers/paper/mainold.tex
+OK   papers/paper/nucleon_binding_beta_decay.tex
+OK   papers/paper/octonion_lightcone_to_oshoracle.tex
+OK   papers/so8_closure_full_appendix.tex

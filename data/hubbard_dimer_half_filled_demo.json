@@ -1,0 +1,32 @@
+{
+  "U_shell": 0.8,
+  "beta": 2.5,
+  "closed_form_eigenvalues": [
+    -1.6396078054371142,
+    0.0,
+    0.8,
+    2.439607805437114
+  ],
+  "double_occupancy_per_site": 0.20097096621545382,
+  "double_occupancy_total": 0.40194193243090764,
+  "double_occupancy_total_t": 0.8832974278587911,
+  "eigenvalues": [
+    -1.6396078054371142,
+    -5.551115123125784e-17,
+    0.7999999999999995,
+    2.439607805437114
+  ],
+  "gap": 1.6396078054371137,
+  "ground_energy": -1.6396078054371137,
+  "model": "hubbard_dimer_half_filled_canonical",
+  "partition_function": 1.0188712438328564,
+  "phi_of_shell": 10.0,
+  "shell_m": 4,
+  "spin_correlation": -0.44854355067681906,
+  "spin_correlation_t": -0.08752692910590586,
+  "t_hop": 1.0,
+  "thermal_double_occupancy_total": 0.39672262459164886,
+  "thermal_energy": -1.607387490847026,
+  "thermal_spin_correlation": -0.43617635440241265,
+  "time": 0.6283185307179586
+}

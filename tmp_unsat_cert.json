@@ -1,0 +1,30 @@
+{
+  "kind": "unsat-exhausted-pool",
+  "status": "UNSAT",
+  "num_vars": 1,
+  "num_clauses": 2,
+  "search_space_size": 2,
+  "certified": true,
+  "visited_codes": 2,
+  "edges_examined": 2,
+  "frontier_remaining": 0,
+  "baseline_work": 2,
+  "survivor_work": 2,
+  "survivor_ratio": 1.0,
+  "dimacs_path": "/home/jr/Repos/HQIV_LEAN/tmp_unsat_test.cnf",
+  "output_path": "/home/jr/Repos/HQIV_LEAN/tmp_unsat_out.txt",
+  "sat_search": "rapidity-by-arity",
+  "sat_mix": "arc",
+  "heuristic_candidates": 1,
+  "arity_schedule": {
+    "min_arity": 1,
+    "max_arity": 3
+  },
+  "best_heuristic_row": {
+    "assignment_code": 0,
+    "satisfied_clause_count": 1,
+    "shell_step": 47,
+    "flip_changed": false,
+    "research_score": 1.1291666666666667
+  }
+}

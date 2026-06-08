@@ -1,0 +1,6 @@
+instance,status,elapsed_s,timeout_s,timed_out,return_code,output_file,csv_file,stderr_tail
+data/sat_benchmarks/samples/not_3cnf_mixed_width.cnf,SAT,0.047842,60,False,0,data/sat2026_bench/timed_full/not_3cnf_mixed_width.out,data/sat2026_bench/timed_full/not_3cnf_mixed_width.csv,
+data/sat_benchmarks/samples/sample_sat.cnf,SAT,0.046342,60,False,0,data/sat2026_bench/timed_full/sample_sat.out,data/sat2026_bench/timed_full/sample_sat.csv,
+data/sat_benchmarks/samples/sample_unsat_3var_8clause.cnf,UNSAT,0.045877,60,False,0,data/sat2026_bench/timed_full/sample_unsat_3var_8clause.out,data/sat2026_bench/timed_full/sample_unsat_3var_8clause.csv,
+scripts/who_indeed.cnf,UNSAT,0.095747,60,False,0,data/sat2026_bench/timed_full/who_indeed.out,data/sat2026_bench/timed_full/who_indeed.csv,
+scripts/who_owns_the_zebra.cnf,UNSAT,0.051579,60,False,0,data/sat2026_bench/timed_full/who_owns_the_zebra.out,data/sat2026_bench/timed_full/who_owns_the_zebra.csv,

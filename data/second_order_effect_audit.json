@@ -1,0 +1,180 @@
+{
+  "source": "scripts/hqiv_second_order_effect_audit.py",
+  "policy": "derived second-order toggles only; no fitted coefficients",
+  "rows": [
+    {
+      "name": "H2",
+      "base_pred_ev": 4.459676975168868,
+      "reference_ev": 4.478,
+      "base_error_pct": -0.40917875906948337,
+      "factors": {
+        "c2_lapse": 0.7375,
+        "outside_geff": 1.0236468386469084,
+        "vev_cluster_taylor": 1.0,
+        "graph_hyperclosure_weak": 1.0
+      },
+      "errors_pct": {
+        "base": -0.40917875906948337,
+        "c2_lapse": -26.55176933481374,
+        "outside_geff": 1.9458293215278977,
+        "vev_cluster_taylor": -0.40917875906948337,
+        "graph_hyperclosure_weak": -0.40917875906948337,
+        "outside_geff_plus_vev_taylor": 1.9458293215278977,
+        "c2_lapse_plus_outside_geff": -24.814950875373164
+      }
+    },
+    {
+      "name": "LiH",
+      "base_pred_ev": 2.444087763215555,
+      "reference_ev": 2.515,
+      "base_error_pct": -2.819572039142952,
+      "factors": {
+        "c2_lapse": 0.8833333333333334,
+        "outside_geff": 1.017584896133278,
+        "vev_cluster_taylor": 1.0,
+        "graph_hyperclosure_weak": 1.0
+      },
+      "errors_pct": {
+        "base": -2.819572039142952,
+        "c2_lapse": -14.157288634576268,
+        "outside_geff": -1.1106643072637732,
+        "vev_cluster_taylor": -2.819572039142952,
+        "graph_hyperclosure_weak": -2.819572039142952,
+        "outside_geff_plus_vev_taylor": -1.1106643072637732,
+        "c2_lapse_plus_outside_geff": -12.647753471416316
+      }
+    },
+    {
+      "name": "HF",
+      "base_pred_ev": 5.476717225204023,
+      "reference_ev": 5.87,
+      "base_error_pct": -6.6998769130490095,
+      "factors": {
+        "c2_lapse": 0.8833333333333334,
+        "outside_geff": 1.0078512107559137,
+        "vev_cluster_taylor": 1.0,
+        "graph_hyperclosure_weak": 1.0
+      },
+      "errors_pct": {
+        "base": -6.6998769130490095,
+        "c2_lapse": -17.58489127319329,
+        "outside_geff": -5.967357983140669,
+        "vev_cluster_taylor": -6.6998769130490095,
+        "graph_hyperclosure_weak": -6.6998769130490095,
+        "outside_geff_plus_vev_taylor": -5.967357983140669,
+        "c2_lapse_plus_outside_geff": -16.93783288510759
+      }
+    },
+    {
+      "name": "H2O",
+      "base_pred_ev": 9.473005366224866,
+      "reference_ev": 9.51,
+      "base_error_pct": -0.38900771582685256,
+      "factors": {
+        "c2_lapse": 0.8833333333333334,
+        "outside_geff": 1.0090643851461991,
+        "vev_cluster_taylor": 1.0042184029054202,
+        "graph_hyperclosure_weak": 1.1464466094067263
+      },
+      "errors_pct": {
+        "base": -0.38900771582685256,
+        "c2_lapse": -12.01029014898037,
+        "outside_geff": 0.51390468303196,
+        "vev_cluster_taylor": 0.031191583436496965,
+        "graph_hyperclosure_weak": 14.198684363829866,
+        "outside_geff_plus_vev_taylor": 0.9379128305819854,
+        "c2_lapse_plus_outside_geff": -11.212717529988424
+      }
+    },
+    {
+      "name": "CH4",
+      "base_pred_ev": 16.013227193297006,
+      "reference_ev": 17.0,
+      "base_error_pct": -5.80454592178232,
+      "factors": {
+        "c2_lapse": 0.8833333333333334,
+        "outside_geff": 1.0134241773859658,
+        "vev_cluster_taylor": 1.1434441364209447,
+        "graph_hyperclosure_weak": 1.25
+      },
+      "errors_pct": {
+        "base": -5.80454592178232,
+        "c2_lapse": -16.79401556424104,
+        "outside_geff": -4.540049437284733,
+        "vev_cluster_taylor": 7.707239643246373,
+        "graph_hyperclosure_weak": 17.74431759777211,
+        "outside_geff_plus_vev_taylor": 9.153120733970024,
+        "c2_lapse_plus_outside_geff": -15.677043669601504
+      }
+    },
+    {
+      "name": "NH3",
+      "base_pred_ev": 10.736026401449994,
+      "reference_ev": 10.07,
+      "base_error_pct": 6.613966250744724,
+      "factors": {
+        "c2_lapse": 0.8833333333333334,
+        "outside_geff": 1.0124428222605841,
+        "vev_cluster_taylor": 1.0292853661018062,
+        "graph_hyperclosure_weak": 1.2113248654051871
+      },
+      "errors_pct": {
+        "base": 6.613966250744724,
+        "c2_lapse": -5.824329811842158,
+        "outside_geff": 7.9405448832986645,
+        "vev_cluster_taylor": 9.7361952839634,
+        "graph_hyperclosure_weak": 29.14414831899652,
+        "outside_geff_plus_vev_taylor": 11.101623257434515,
+        "c2_lapse_plus_outside_geff": -4.652518686419513
+      }
+    }
+  ],
+  "summary": {
+    "base": {
+      "mean_abs_error_pct": 3.789357933269224,
+      "max_abs_error_pct": 6.6998769130490095,
+      "within_5pct": 3,
+      "within_15pct": 6
+    },
+    "c2_lapse": {
+      "mean_abs_error_pct": 15.487097461274479,
+      "max_abs_error_pct": 26.55176933481374,
+      "within_5pct": 0,
+      "within_15pct": 3
+    },
+    "outside_geff": {
+      "mean_abs_error_pct": 3.6697251025912827,
+      "max_abs_error_pct": 7.9405448832986645,
+      "within_5pct": 4,
+      "within_15pct": 6
+    },
+    "vev_cluster_taylor": {
+      "mean_abs_error_pct": 4.567209036984619,
+      "max_abs_error_pct": 9.7361952839634,
+      "within_5pct": 3,
+      "within_15pct": 6
+    },
+    "graph_hyperclosure_weak": {
+      "mean_abs_error_pct": 11.835962998643323,
+      "max_abs_error_pct": 29.14414831899652,
+      "within_5pct": 2,
+      "within_15pct": 4
+    },
+    "outside_geff_plus_vev_taylor": {
+      "mean_abs_error_pct": 5.036084738986477,
+      "max_abs_error_pct": 11.101623257434515,
+      "within_5pct": 3,
+      "within_15pct": 6
+    },
+    "c2_lapse_plus_outside_geff": {
+      "mean_abs_error_pct": 14.32380285298442,
+      "max_abs_error_pct": 24.814950875373164,
+      "within_5pct": 1,
+      "within_15pct": 3
+    }
+  },
+  "recommendation": {
+    "promote_candidate": "outside_geff",
+    "reason": "Only full derived toggle that modestly improves mean error and within-5 count without introducing a fitted coefficient; C2 lapse and vev Taylor over-correct the current network feedback."
+  }
+}

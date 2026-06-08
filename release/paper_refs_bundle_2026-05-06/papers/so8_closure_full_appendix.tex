@@ -1,0 +1,92 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath,amssymb}
+\usepackage{hyperref}
+\usepackage{fancyvrb}
+
+\input{include/release_archive_macros.tex}
+\newcommand{\ArtifactRoot}{..}
+
+\title{Appendix: Full \texorpdfstring{$\mathfrak{so}(8)$}{so(8)} Closure Artifact Bundle}
+\author{Steven Ettinger Jr\\\textit{Independent Researcher}\\\texttt{steven@disregardfiat.tech}}
+\date{\today}
+
+\newcommand{\lstinputlisting}[1]{%
+  \VerbatimInput[fontsize=\scriptsize,frame=single]{#1}%
+}
+
+\begin{document}
+\maketitle
+
+\paragraph{Companion main manuscript.}
+This appendix supports the AMS-style preprint \emph{From Discrete Null-Lattice Growth to so(8): Concrete Realization and Exact Lie Closure} (\path{papers/closure.tex} in this deposit). That manuscript states the growth-to-\(\mathfrak{so}(8)\) chain and cites the exact rational certificate \path{artifacts/so8_symbolic_certificate.json}; this file inlines the generator script, JSON header, and the \(\mathfrak{so}(3)+\Delta_4\to\mathfrak{so}(4)\) toy pipeline for audit without opening separate tools.
+
+\input{include/patch_theory_messaging.tex}
+
+\section*{Scope}
+\begin{sloppypar}
+This standalone appendix is intentionally minimal and contains only the symbolic
+proof-object pipeline and artifacts (exact rational certificates). It omits the
+full Lean file dump.
+The mirrored file tree for scripts, JSON, and Lean sources lives under \PaperReproBundleDir/ inside \CompanionCodeZip{} from this Zenodo record (see \PaperReproBundleManifest).
+After unpacking \CompanionCodeZip{}, paths below are relative to \PaperReproBundleDir/.
+\end{sloppypar}
+
+\paragraph{Remark (projected complex carrier).}
+\begin{sloppypar}
+After the frozen complex structure $J$ is fixed, coefficient-wise complexification promotes the octonion carrier to complex $8$-tuples.
+In \texttt{HQIV\_LEAN} this layer is Mathlib's Hermitian model \texttt{EuclideanSpace}\,$\mathbb{C}$\,\texttt{(Fin\,8)} (\texttt{WeakComplexOctonionCarrier} in \path{Hqiv/Algebra/WeakInComplexStructure.lean}), with \texttt{WithLp.ofLp}/\texttt{WithLp.toLp} mediating bare coefficient vectors \texttt{Fin\,8\,→\,}$\mathbb{C}$.
+The Hermitian pairing \texttt{weakCarrierCinner} is the explicit slotwise sum, and \texttt{weakCarrierCinner\_eq\_inner} identifies it with Mathlib's \texttt{inner} on \texttt{EuclideanSpace}\,$\mathbb{C}$\,\texttt{(Fin\,8)} (so orthonormality lemmas apply after rewriting).
+The electroweak bookkeeping plane \texttt{weakJComplexDoublet} carries the standard Pauli half-generators; \path{Hqiv/Physics/WeakDoubletCarrierGaugeQuadratic.lean} packages the real $2\times2$ Gram matrix \texttt{weakWPlaneGramMatrix\,g\,v} for the $(\sigma^1,\sigma^2)$ directions on the VEV ray.
+At the outer-horizon gauge data $(g,v)=(\texttt{su2CouplingDerived},\texttt{vacuumExpectationValueGauge})$ it is a scalar multiple of the identity, hence both eigenvalues equal \texttt{weakWPlaneGramEigenvalue\,g\,v}; in particular \texttt{weakWPlaneGramMatrix\_trace} gives trace $=2\lambda$ and \texttt{weakWPlaneGramMatrix\_det} gives $\det=\lambda^2$ for that common eigenvalue $\lambda$.
+The bridge \texttt{M\_W\_derived\^{}2\,=\,8\,*\,weakWPlaneGramEigenvalue\,…} matches the factor-$8$ packaging used in the main manuscript, and \texttt{ew\_carrier\_gram\_mass\_certificate} chains this spectral data directly to the rational witnesses \texttt{boson\_witness\_M\_W} / \texttt{boson\_witness\_m\_H} in \path{Hqiv/Physics/DerivedGaugeAndLeptonSector.lean}.
+The same file adds a carrier quartic \texttt{higgsQuarticPotentialCarrier} built from \texttt{higgsCarrierNormSq} (the squared carrier norm) and the geometric gauge vev anchor, with \texttt{m\_H\_sq\_eq\_two\_lambda\_times\_vgauge\_sq} implementing the $m_H^2\propto \lambda v_{\mathrm{gauge}}^2$ normalization with \texttt{higgsQuarticLambdaGaugeWitness} defined from existing masses (no new tunable parameter).
+Triality generation tags \texttt{So8RepIndex} connect to the harmonic ladder through \texttt{weakPhiOfShellOnSo8Rep} and the closed-form $\alpha^{-1}$ readout \texttt{weakOneOverAlphaEMAtRep} (aligned with \texttt{one\_over\_alpha\_EM\_derived} in \path{Hqiv/Physics/SM_GR_Unification.lean}).
+For machine-readable PDG comparisons, rational \texttt{\#eval} mirrors and small \texttt{example} bounds appear at the end of \path{Hqiv/Physics/WeakDoubletCarrierGaugeQuadratic.lean}.
+The narrative anchor in the long-form paper is the ``Projected complex carrier'' paragraph in \path{papers/paper/octonion_lightcone_to_oshoracle.tex}; the electroweak witness ladder is summarized in \path{papers/hqiv_lean_from_combinatorics_to_mass_spectrum.tex}.
+\end{sloppypar}
+
+\section*{Current Lean build split}
+\begin{sloppypar}
+The repository exposes the following \emph{named} Lake targets (see \path{lakefile.toml} for the authoritative list):
+\begin{itemize}
+\item \texttt{lake build HQIVPaperClaims}: lightweight target for \path{papers/closure.tex} using \path{Hqiv/Geometry/OctonionicLightCone.lean} and \path{Hqiv/SO8ClosureSymbolic.lean} only (no satisfiability formalism in this mirror; no heavy matrix-certificate elaboration).
+\item \texttt{lake build HQIVSO8Closure}: heavyweight matrix-closure target (\path{Hqiv/GeneratorsLieClosureData*.lean}, \path{Hqiv/GeneratorsLieClosure.lean}, \path{Hqiv/LieBracketCell.*}, \path{Hqiv/Algebra/SO8ClosureAbstract.lean}). Lie-bracket coefficients are elaborated module-by-module; the linear-independence step in \path{Hqiv/GeneratorsLieClosure.lean} routes through the single Gram-matrix axiom \texttt{so8CoordMatrix\_transpose\_mul\_self} in \path{Hqiv/So8CoordMatrix.lean} (documented bridge to the numeric orthonormality script). Expect a long cold-cache build. \emph{RAM:} default parallel Lake builds of the 784 \path{LieBracketCell} modules can exceed \(\sim\)100GB; use a full repository checkout and \texttt{scripts/build\_hqiv\_so8\_closure\_lowmem.sh} (\texttt{LEAN\_NUM\_THREADS=1}, \texttt{lake build \ldots\ -j 1}). The frozen \path{paper\_refs\_bundle\_2026-05-06/} mirror omits those \texttt{.lean} sources and supports \texttt{lake build HQIVPaperClaims} only; see \path{Hqiv/LieBracketCell/README.md} inside the bundle.
+\item \texttt{lake build HQIVStrongColorSu3Certificate}: optional \(\mathfrak{su}(3)\) color chart certificate (auto-generated \texttt{@[simp]} atoms for nonzero \(f^{abc}\) in \path{Hqiv/Physics/StrongColorSu3fStructureSimp.lean}; not part of the default \texttt{HQIVLEAN} glob).
+\item \path{Hqiv/Algebra/WeakFromLeftMulOctonion.lean}: electroweak-style \emph{definitions} from $L(e_i)$ (complex-structure $J$, candidate $W^\pm$, $Z$) with proved skewness only; \(\mathfrak{su}(2)\) closure for weak isospin remains in \path{Hqiv/Algebra/SMEmbedding.lean}.
+\end{itemize}
+The SO(8) paper targets and their referenced files are included in \PaperReproBundleDir/; the SU(3) certificate target is built in-repo on demand (and in CI) but is not duplicated in this frozen bundle.
+\end{sloppypar}
+
+\section*{Exact Symbolic Certificate (New)}
+
+\subsection*{Generator script}
+Unpack \CompanionCodeZip{} if needed, then \texttt{cd} into \PaperReproBundleDir/, then run:
+\begin{quote}\ttfamily\small
+python3 scripts/generate\_symbolic\_lie\_closure\_certificate.py
+\end{quote}
+This script computes a rank-28 closure basis and all bracket coefficients exactly
+as rational numbers, and writes:
+\begin{quote}\ttfamily\small
+artifacts/so8\_symbolic\_certificate.json
+\end{quote}
+
+\subsection*{\texttt{scripts/generate\_symbolic\_lie\_closure\_certificate.py}}
+\lstinputlisting{\ArtifactRoot/scripts/generate_symbolic_lie_closure_certificate.py}
+
+\subsection*{\texttt{artifacts/so8\_symbolic\_certificate.json} (header excerpt)}
+\VerbatimInput[fontsize=\scriptsize,frame=single,firstline=1,lastline=120]{\ArtifactRoot/artifacts/so8_symbolic_certificate.json}
+
+\section*{Toy Model Certificate: \texorpdfstring{$\mathfrak{so}(3)+\Delta_4\to\mathfrak{so}(4)$}{so(3)+Delta4 to so(4)}}
+
+This compact pedagogical artifact mirrors the exact-rational certificate pipeline
+in the smallest nontrivial closure setting.
+
+\subsection*{\texttt{scripts/generate\_symbolic\_so4\_certificate.py}}
+\lstinputlisting{\ArtifactRoot/scripts/generate_symbolic_so4_certificate.py}
+
+\subsection*{\texttt{artifacts/so4\_symbolic\_certificate.json}}
+\VerbatimInput[fontsize=\scriptsize,frame=single,firstline=1,lastline=120]{\ArtifactRoot/artifacts/so4_symbolic_certificate.json}
+
+\end{document}

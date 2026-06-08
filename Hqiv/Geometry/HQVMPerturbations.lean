@@ -11,11 +11,19 @@ namespace Hqiv
 /-!
 # Observer-centric linear response (lapse sector) — not a replay of GR perturbation theory
 
+**Agent roadmap:** [AGENTS/HQIV_PERTURBATION_THEORY_ROADMAP.md](../../AGENTS/HQIV_PERTURBATION_THEORY_ROADMAP.md) (honest scope, milestones P0–P5, shell-indexed bridge in `Hqiv.Physics.HQIVPerturbationScaffold`). For **M6** (scalar-only gravity readout / no formal spin-2 carrier slot at this API), see `Hqiv.Physics.HQIVGravityReadoutScalars` and [`AGENTS/MASS_DERIVATION_ROADMAP.md`](../../AGENTS/MASS_DERIVATION_ROADMAP.md).
+
 The goal here is **not** to reconstruct the standard pipeline (Bardeen potentials, synchronous vs
 Newtonian gauge, `Φ`/`Ψ`, matter transfer functions, etc.). HQIV is **observer-centric**: the
 informational-energy route fixes the ADM lapse in comoving gauge (`HQVM_lapse` in `HQVMetric`), and
 many steps that assume a global foliation or translation-invariant background are **deliberately
 out of scope** until they are re-derived from the same axiom base.
+
+Just as importantly, this file does **not** posit a physically fundamental **sub-Planck continuum**.
+The discrete null lattice and shell ladder remain the UV bookkeeping substrate. The calculus here is an
+IR / observer-side readout layer: derivatives and linearizations organize how finite shell data is seen
+by relativistic observers, not a claim that geometry below the lattice cutoff is a primitive smooth
+manifold in the HQIV ontology.
 
 What we **do** formalize is the **foundational** first-order response of that lapse to small changes
 in the arguments that already appear in the axioms: `Φ`, `φ`, coordinate time `t`, and — when φ is
@@ -107,6 +115,32 @@ theorem HQVM_lapse_increment_homogeneous (H t δΦ δφ δt : ℝ) :
 
 end LapseLinearization
 
+section MetricCoefficientLinearization
+
+/-- First-order change in the timelike metric coefficient induced by a lapse increment `δN`.
+
+Since `g_tt = -N^2`, the linearized part is `-2 N δN`. This is the narrow
+observer-centric metric readout used here; it is not a full curvature tensor.
+-/
+noncomputable def linearizedHQVM_g_tt_from_lapse (N δN : ℝ) : ℝ :=
+  -2 * N * δN
+
+/-- Exact `g_tt` increment is linearized piece plus the quadratic remainder `-δN^2`. -/
+theorem HQVM_g_tt_increment_eq_linearized_remainder (N δN : ℝ) :
+    HQVM_g_tt (N + δN) - HQVM_g_tt N =
+      linearizedHQVM_g_tt_from_lapse N δN - δN ^ 2 := by
+  unfold HQVM_g_tt linearizedHQVM_g_tt_from_lapse
+  ring
+
+/-- Same metric-coefficient identity, written with an exact lapse increment `ΔN`. -/
+theorem HQVM_g_tt_increment_eq_of_lapse_increment (N N' : ℝ) :
+    HQVM_g_tt N' - HQVM_g_tt N =
+      linearizedHQVM_g_tt_from_lapse N (N' - N) - (N' - N) ^ 2 := by
+  simpa [sub_eq_add_neg, add_comm, add_left_comm, add_assoc] using
+    HQVM_g_tt_increment_eq_linearized_remainder N (N' - N)
+
+end MetricCoefficientLinearization
+
 section PhiOfTIncrement
 
 /-- Exact increment of `phi_of_T` between two nonzero temperatures. -/
@@ -188,7 +222,10 @@ section LapseFromThetaLinearization
 
 /-- First-order lapse response to a temperature perturbation `δΘ` through the ladder only:
 `N = 1 + Φ + φ t` with `φ` identified as `phi_of_T Θ` gives `δN ≈ t * δφ`, and
-`δφ ≈ (∂_Θ phi_of_T)(Θ) · δΘ` in the linear regime. Background `Φ` does not enter at linear order. -/
+`δφ ≈ (∂_Θ phi_of_T)(Θ) · δΘ` in the linear regime. Background `Φ` does not enter at linear order.
+
+This packaging is algebraically valid for any `Θ`, but the concrete derivative formula for
+`phi_of_T` only holds on the nonzero-temperature domain recorded in `deriv_phi_of_T`. -/
 noncomputable def linearizedLapse_from_Theta (Θ t δΘ : ℝ) : ℝ :=
   t * (deriv phi_of_T Θ * δΘ)
 
@@ -196,6 +233,11 @@ theorem linearizedLapse_from_Theta_eq (Θ t δΘ : ℝ) :
     linearizedLapse_from_Theta Θ t δΘ = t * (deriv phi_of_T Θ) * δΘ := by
   simp [linearizedLapse_from_Theta]
   rw [← mul_assoc t (deriv phi_of_T Θ) δΘ]
+
+/-- Nonzero-domain form of `linearizedLapse_from_Theta_eq`, using the explicit derivative of `phi_of_T`. -/
+theorem linearizedLapse_from_Theta_eq_onDomain (Θ t δΘ : ℝ) (hΘ : Θ ≠ 0) :
+    linearizedLapse_from_Theta Θ t δΘ = t * (-phiTemperatureCoeff / Θ ^ 2) * δΘ := by
+  rw [linearizedLapse_from_Theta_eq, deriv_phi_of_T Θ hΘ]
 
 /-- Pure `φ`-channel piece of `linearizedHQVM_lapse` (no change in `Φ` or `t`). -/
 theorem linearizedHQVM_lapse_phi_channel (φ t δφ : ℝ) :
@@ -209,6 +251,13 @@ theorem linearizedLapse_from_Theta_eq_phi_channel (Θ t δΘ : ℝ) :
       linearizedHQVM_lapse (phi_of_T Θ) t 0 (deriv phi_of_T Θ * δΘ) 0 := by
   rw [linearizedHQVM_lapse_phi_channel, linearizedLapse_from_Theta_eq Θ t δΘ]
   rw [mul_assoc t (deriv phi_of_T Θ) δΘ]
+
+/-- Nonzero-domain `Θ`-channel identification with the explicit `phi_of_T` slope inserted. -/
+theorem linearizedLapse_from_Theta_eq_phi_channel_onDomain (Θ t δΘ : ℝ) (hΘ : Θ ≠ 0) :
+    linearizedLapse_from_Theta Θ t δΘ =
+      linearizedHQVM_lapse (phi_of_T Θ) t 0 ((-phiTemperatureCoeff / Θ ^ 2) * δΘ) 0 := by
+  rw [linearizedHQVM_lapse_phi_channel, linearizedLapse_from_Theta_eq_onDomain Θ t δΘ hΘ]
+  ring
 
 end LapseFromThetaLinearization
 

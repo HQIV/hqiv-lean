@@ -10,7 +10,9 @@ cd "$(dirname "$0")/.."
 echo "Regenerating data/hqiv_witnesses.json ..."
 
 # Ensure Python path doesn't matter for Lean; witnesses are Lean-exported.
-lake env lean -q --run scripts/export_witnesses.lean
+# Full Lean mass export needs computable ℝ snapshots; patch metadata + keep masses:
+lake env lean -q --run scripts/export_witnesses_metadata.lean
+# Optional full re-derive (may fail on noncomputable ℝ): export_witnesses.lean
 
 echo "Done."
 

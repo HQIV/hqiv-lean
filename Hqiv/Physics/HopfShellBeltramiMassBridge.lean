@@ -348,10 +348,9 @@ noncomputable def t13_outer_suppression : ℝ :=
 
 /-- Dynamic T13 outer suppression at horizon coordinate `ξ`.
 
-The canonical witness fixes `modeCount = 140` on the first outer shell beyond
-lock-in; the fluctuation **amplitude** is modulated by the same continuous
-curvature primitive `ωK(ξ)` that drives inner trapped-Casimir on T12.  At
-`ξ = 5` this recovers the static `1/140` coarse grain exactly.
+The canonical witness uses **area / γ** coarse-graining on `neutrinoSuppressionShell`
+(`modeCount = outerShellHorizonArea`, `amplitude = γ`); the static `1/140` coarse grain
+is the proved ratio `γ / area`, not a pinned mode-count constant.
 -/
 noncomputable def t13_outer_suppression_at_xi (ξ : ℝ) : ℝ :=
   let w := Hqiv.Physics.outerShellNeutrinoFluctuationWitness
@@ -440,8 +439,13 @@ theorem effective_casimir_scale_at_xi_pos (ξ : ℝ) (h : 1 < ξ) : 0 < effectiv
   have houter : 0 < t13_outer_suppression_at_xi ξ := by
     unfold t13_outer_suppression_at_xi
     have hω : 0 < ContinuousXiPath.omegaK_xi ξ := ContinuousXiPath.omegaK_xi_pos ξ h
-    simp [Hqiv.Physics.outerShellNeutrinoFluctuationWitness]
-    positivity
+    dsimp only [Hqiv.Physics.outerShellNeutrinoFluctuationWitness]
+    have hγ := Hqiv.Physics.outerShellFluctuationGamma_pos
+    have harea : 0 < Hqiv.Physics.outerShellHorizonArea Hqiv.Physics.neutrinoSuppressionShell := by
+      unfold Hqiv.Physics.outerShellHorizonArea Hqiv.Physics.neutrinoSuppressionShell
+      simp [referenceM, qcdShell, stepsFromQCDToLockin, latticeStepCount]
+      norm_num
+    exact div_pos (mul_pos hγ hω) harea
   exact div_pos hinner houter
 
 /-- At the lock-in point the dynamic scale has the explicit value determined by the
@@ -454,16 +458,18 @@ deliverable for the T1-T13 "mass from temperature and accurate" mandate.
 -/
 theorem effective_casimir_scale_at_five :
     effective_casimir_scale_at_xi 5 = 140 * (1 + (3/5) * Real.log (1 + (4/3)*(3/5))) := by
-  have hrec := t13_outer_suppression_at_xi_recovers_canonical_at_lockin
-  unfold effective_casimir_scale_at_xi t13_outer_suppression_at_xi at hrec ⊢
+  unfold effective_casimir_scale_at_xi t13_outer_suppression_at_xi
   rw [show omegaK_xi 5 = 1 by
     rw [← xiLockin_eq_five]
     simpa [omegaK_partial_xi] using omegaK_partial_xi_lockin]
   rw [t12_heavy_shell_curvatureImprintAlpha]
   unfold trappingSelectionFromHeavyHopfShellWithAlpha
   rw [phaseLiftCoeff_three_eq_four_thirds]
-  simp [Hqiv.Physics.outerShellNeutrinoFluctuationWitness]
-  ring
+  simp only [Hqiv.Physics.outerShellNeutrinoFluctuationWitness,
+    Hqiv.Physics.outerShellFluctuationGamma, Hqiv.Physics.outerShellHorizonArea,
+    Hqiv.Physics.neutrinoSuppressionShell]
+  simp [referenceM, qcdShell, stepsFromQCDToLockin, latticeStepCount, alpha]
+  ring_nf
 
 -- The dynamic scale is strictly increasing for ξ ≥ 5 in the numerical anchors
 -- (`effective_casimir_scale_at_CMB`, `heavy_gap_CMB_today_dynamic`).  A fully
@@ -591,10 +597,16 @@ theorem tuftRindlerDetuningAtXi_lockin_eq_referenceM :
 
 Unity at lock-in / homogeneous observation. The bulk integrator uses the shell-indexed
 `baryogenesisCurvatureBudgetAtShell` witness (early asymmetry seed relaxing to `1`);
-see `DynamicBBNBaryogenesis`. `omegaK_xi` remains the chart path diagnostic, not this slot. -/
-noncomputable def tuftCurvatureBudgetAtXi (_ξ : ℝ) : ℝ := 1
+see `DynamicBBNBaryogenesis`. This slot tracks the continuous ξ readout `omegaK_xi`. -/
+noncomputable def tuftCurvatureBudgetAtXi (ξ : ℝ) : ℝ := ContinuousXiPath.omegaK_xi ξ
 
-theorem tuftCurvatureBudgetAtXi_eq_one (ξ : ℝ) : tuftCurvatureBudgetAtXi ξ = 1 := rfl
+theorem tuftCurvatureBudgetAtXi_eq_omegaK (ξ : ℝ) :
+    tuftCurvatureBudgetAtXi ξ = ContinuousXiPath.omegaK_xi ξ := rfl
+
+theorem tuftCurvatureBudgetAtXi_at_lockin :
+    tuftCurvatureBudgetAtXi xiLockin = 1 := by
+  rw [tuftCurvatureBudgetAtXi_eq_omegaK]
+  simpa [omegaK_partial_xi] using omegaK_partial_xi_lockin
 
 /-- Curvature-local matter fraction: baryogenesis anchor times the homogeneous budget. -/
 noncomputable def tuftMatterFractionAtXi (ξ : ℝ) : ℝ :=
@@ -603,13 +615,17 @@ noncomputable def tuftMatterFractionAtXi (ξ : ℝ) : ℝ :=
 theorem omegaK_xi_lockin_eq_one : omegaK_xi xiLockin = 1 := by
   simpa [omegaK_partial_xi] using omegaK_partial_xi_lockin
 
-theorem tuftMatterFractionAtXi_eq_eta_paper (ξ : ℝ) :
-    tuftMatterFractionAtXi ξ = eta_paper := by
+theorem tuftMatterFractionAtXi_eq_eta_times_omegaK (ξ : ℝ) :
+    tuftMatterFractionAtXi ξ = eta_paper * ContinuousXiPath.omegaK_xi ξ := by
   unfold tuftMatterFractionAtXi tuftCurvatureBudgetAtXi
   ring
 
+theorem tuftMatterFractionAtXi_at_lockin :
+    tuftMatterFractionAtXi xiLockin = eta_paper := by
+  rw [tuftMatterFractionAtXi_eq_eta_times_omegaK, omegaK_xi_lockin_eq_one, mul_one]
+
 theorem tuftMatterFractionAtXi_lockin : tuftMatterFractionAtXi xiLockin = eta_paper :=
-  tuftMatterFractionAtXi_eq_eta_paper xiLockin
+  tuftMatterFractionAtXi_at_lockin
 
 /-- Horizon **partial** readout `η(n;N)` still uses `curvature_integral` ratios;
 that is not the same object as the homogeneous `κ₆` matter budget above. -/
@@ -617,7 +633,10 @@ theorem tuftMatterFractionAtXi_eq_eta_partial_only_at_reference (n : ℕ)
     (hΩ : OmegaKIntegerBridge) (hN : 0 < curvature_integral referenceM)
     (hn : n = referenceM) :
     tuftMatterFractionAtXi (xiOfShell n) = eta_at_horizon n referenceM := by
-  rw [tuftMatterFractionAtXi_eq_eta_paper, hn, eta_at_horizon_self referenceM hN]
+  rw [tuftMatterFractionAtXi_eq_eta_times_omegaK, hn]
+  have hω : ContinuousXiPath.omegaK_xi (xiOfShell referenceM) = 1 := by
+    rw [← xiLockin_eq_xiOfShell_referenceM, omegaK_xi_lockin_eq_one]
+  rw [hω, mul_one, eta_at_horizon_self referenceM hN]
 
 /-- Observable driving δ-corrected detuning at horizon `ξ`:
 localization `Θ_local(ξ)=ξ/T_Pl` with monogamy lift `(1+γ)`, plus the HQVM lapse
@@ -766,6 +785,12 @@ noncomputable def tuftLeptonGeometricScalar (n : ℕ) : ℝ :=
   ((n : ℝ) + 1) *
     Real.exp (tuftHelicityCoefficient * (n : ℝ) - tuftAperyZeta3 * (n : ℝ) ^ 2) *
       Real.exp ((n : ℝ) * tuftFineStructureAlpha / 6)
+
+/-- Leading APS electromagnetic spurion for anomalous magnetic moment in winding sector `n ≥ 1`.
+Inherited from the same `exp(n α_em/6)` knot-complement factor in `tuftLeptonGeometricScalar`
+(TUFT Sector Determinant Lemma; compare `(g−2)/2` at `n = 1` electron, `n = 2` muon). -/
+noncomputable def tuftAnomalousMomentSpurion (n : ℕ) : ℝ :=
+  (Real.exp ((n : ℝ) * tuftFineStructureAlpha / 6) - 1) / max n 1
 
 -- (The positivity for resonance_k_at_xi follows from the base geometric step being positive and the
 -- trapping factor being >1 by construction. Temporarily commented while the core readouts
@@ -992,8 +1017,13 @@ theorem tuftOuterCasimirDressingAtXi_pos
   have houter : 0 < t13_outer_suppression_at_xi ξ := by
     unfold t13_outer_suppression_at_xi
     have hω : 0 < ContinuousXiPath.omegaK_xi ξ := ContinuousXiPath.omegaK_xi_pos ξ hξ
-    simp [Hqiv.Physics.outerShellNeutrinoFluctuationWitness]
-    positivity
+    dsimp only [Hqiv.Physics.outerShellNeutrinoFluctuationWitness]
+    have hγ := Hqiv.Physics.outerShellFluctuationGamma_pos
+    have harea : 0 < Hqiv.Physics.outerShellHorizonArea Hqiv.Physics.neutrinoSuppressionShell := by
+      unfold Hqiv.Physics.outerShellHorizonArea Hqiv.Physics.neutrinoSuppressionShell
+      simp [referenceM, qcdShell, stepsFromQCDToLockin, latticeStepCount]
+      norm_num
+    exact div_pos (mul_pos hγ hω) harea
   exact mul_pos (div_pos houter (tuftInnerTrappingAtXi_pos ξ hξ)) hκ6
 
 theorem tuftNeutralGeometricScalar_pos (n : ℕ) : 0 < tuftNeutralGeometricScalar n := by
@@ -2110,8 +2140,8 @@ noncomputable def physical_T_for_vev_lockin_MeV (T_Pl_MeV : ℝ := hopfT_Pl_MeV)
 #check tuftHopfKappa6AtXi
 #check tuftHopfKappa6_eq_matter_fraction_gamma_lapse_concentration
 #check tuftLapseConcentrationAtXi_lockin_zero
-#check tuftMatterFractionAtXi_eq_eta_paper
-#check tuftCurvatureBudgetAtXi_eq_one
+#check tuftMatterFractionAtXi_eq_eta_times_omegaK
+#check tuftCurvatureBudgetAtXi_at_lockin
 
 /-! ## T10 neutrino mixing (admissible-cycle phase overlaps)
 

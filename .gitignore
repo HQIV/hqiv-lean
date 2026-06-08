@@ -1,24 +1,48 @@
-# Accidental copy of `.git/` metadata — never commit
-.git_disabled/
-
-.venv/
-/.lake
-HQIV
-hqvmpy
-PROtien
-
-# Local doc tooling (Verso etc.); tree is huge — not versioned here.
-docbuild/
-
-# Nested Lake build cache for the standalone generators package.
+# Lake / Lean 4 (primary build products live under .lake)
+.lake/
+**/.lake/
 HQIVGenerators/.lake/
 
-# Stray editor/build dumps at repo root (real sources live under Hqiv/).
-/Mathlib
-/Hqiv.Geometry.AuxiliaryField
-/Hqiv.Geometry.OctonionicLightCone
+# API / Verso / local doc build trees
+docbuild/
 
-# Archive and scratch — not part of default lake targets (see AGENTS/ASSUMPTIONS.md).
-archive/
-scratch/
-tmp_*.lean
+# LaTeX auxiliary and sync outputs
+paper/*.aux
+paper/*.bbl
+paper/*.blg
+paper/*.log
+paper/*.out
+paper/*.toc
+paper/*.fdb_latexmk
+paper/*.fls
+paper/*.synctex.gz
+papers/*.aux
+papers/*.bbl
+papers/*.blg
+papers/*.log
+papers/*.out
+papers/*.toc
+papers/*.fdb_latexmk
+papers/*.fls
+papers/*.synctex.gz
+
+# Local Python virtual environments (not portable; keep out of git)
+.venv/
+
+# Qiskit mod-exp build cache (pickled circuits)
+scripts/.cache/
+.venv_*/
+
+# Exceeds GitHub's 100MB per-file limit; keep locally or use Git LFS
+data/sat2026_bench/timed_unbounded/who_indeed.csv
+scripts/data/sparc_filament/raw/
+
+# Python bytecode from running repository scripts
+**/__pycache__/
+*.pyc
+*.pyo
+
+# SAIR Equational Theories Stage 2 (clone locally to run judge / harness against solver)
+external/equational-theories-lean-stage2/
+
+scripts/equational_stage2/__pycache__/

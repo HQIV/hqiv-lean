@@ -1,0 +1,21 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "hqiv-lab"
+version = "0.1.0"
+description = "HQIV chemistry and materials lab — allotropes and phases from molecular geometry"
+readme = "hqiv_lab/README.md"
+requires-python = ">=3.10"
+dependencies = []
+
+[project.optional-dependencies]
+dev = []
+
+[project.scripts]
+hqiv-lab = "hqiv_lab.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["hqiv_lab*"]

@@ -1,0 +1,585 @@
+{
+  "input": "data/fano_slice_fft_sample.json",
+  "rows": [
+    {
+      "slope": -0.08,
+      "min_points": 8,
+      "ok": true,
+      "output": "data/fano_fft_sweeps/report_s-0.08_m8.json",
+      "retained": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "retained_count": 7,
+      "dominant_periods": {
+        "0": 9.23076923076923,
+        "1": 9.23076923076923,
+        "2": 9.23076923076923,
+        "3": 17.142857142857142,
+        "4": 9.23076923076923,
+        "5": 17.142857142857142,
+        "6": 9.23076923076923
+      }
+    },
+    {
+      "slope": -0.08,
+      "min_points": 12,
+      "ok": true,
+      "output": "data/fano_fft_sweeps/report_s-0.08_m12.json",
+      "retained": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "retained_count": 7,
+      "dominant_periods": {
+        "0": 9.23076923076923,
+        "1": 9.23076923076923,
+        "2": 9.23076923076923,
+        "3": 17.142857142857142,
+        "4": 9.23076923076923,
+        "5": 17.142857142857142,
+        "6": 9.23076923076923
+      }
+    },
+    {
+      "slope": -0.08,
+      "min_points": 16,
+      "ok": true,
+      "output": "data/fano_fft_sweeps/report_s-0.08_m16.json",
+      "retained": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "retained_count": 7,
+      "dominant_periods": {
+        "0": 9.23076923076923,
+        "1": 9.23076923076923,
+        "2": 9.23076923076923,
+        "3": 17.142857142857142,
+        "4": 9.23076923076923,
+        "5": 17.142857142857142,
+        "6": 9.23076923076923
+      }
+    },
+    {
+      "slope": -0.08,
+      "min_points": 24,
+      "ok": true,
+      "output": "data/fano_fft_sweeps/report_s-0.08_m24.json",
+      "retained": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "retained_count": 7,
+      "dominant_periods": {
+        "0": 9.23076923076923,
+        "1": 9.23076923076923,
+        "2": 9.23076923076923,
+        "3": 17.142857142857142,
+        "4": 9.23076923076923,
+        "5": 17.142857142857142,
+        "6": 9.23076923076923
+      }
+    },
+    {
+      "slope": -0.08,
+      "min_points": 32,
+      "ok": true,
+      "output": "data/fano_fft_sweeps/report_s-0.08_m32.json",
+      "retained": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "retained_count": 7,
+      "dominant_periods": {
+        "0": 9.23076923076923,
+        "1": 9.23076923076923,
+        "2": 9.23076923076923,
+        "3": 17.142857142857142,
+        "4": 9.23076923076923,
+        "5": 17.142857142857142,
+        "6": 9.23076923076923
+      }
+    },
+    {
+      "slope": -0.05,
+      "min_points": 8,
+      "ok": true,
+      "output": "data/fano_fft_sweeps/report_s-0.05_m8.json",
+      "retained": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "retained_count": 7,
+      "dominant_periods": {
+        "0": 9.23076923076923,
+        "1": 9.23076923076923,
+        "2": 9.23076923076923,
+        "3": 17.142857142857142,
+        "4": 9.23076923076923,
+        "5": 17.142857142857142,
+        "6": 9.23076923076923
+      }
+    },
+    {
+      "slope": -0.05,
+      "min_points": 12,
+      "ok": true,
+      "output": "data/fano_fft_sweeps/report_s-0.05_m12.json",
+      "retained": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "retained_count": 7,
+      "dominant_periods": {
+        "0": 9.23076923076923,
+        "1": 9.23076923076923,
+        "2": 9.23076923076923,
+        "3": 17.142857142857142,
+        "4": 9.23076923076923,
+        "5": 17.142857142857142,
+        "6": 9.23076923076923
+      }
+    },
+    {
+      "slope": -0.05,
+      "min_points": 16,
+      "ok": true,
+      "output": "data/fano_fft_sweeps/report_s-0.05_m16.json",
+      "retained": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "retained_count": 7,
+      "dominant_periods": {
+        "0": 9.23076923076923,
+        "1": 9.23076923076923,
+        "2": 9.23076923076923,
+        "3": 17.142857142857142,
+        "4": 9.23076923076923,
+        "5": 17.142857142857142,
+        "6": 9.23076923076923
+      }
+    },
+    {
+      "slope": -0.05,
+      "min_points": 24,
+      "ok": true,
+      "output": "data/fano_fft_sweeps/report_s-0.05_m24.json",
+      "retained": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "retained_count": 7,
+      "dominant_periods": {
+        "0": 9.23076923076923,
+        "1": 9.23076923076923,
+        "2": 9.23076923076923,
+        "3": 17.142857142857142,
+        "4": 9.23076923076923,
+        "5": 17.142857142857142,
+        "6": 9.23076923076923
+      }
+    },
+    {
+      "slope": -0.05,
+      "min_points": 32,
+      "ok": true,
+      "output": "data/fano_fft_sweeps/report_s-0.05_m32.json",
+      "retained": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "retained_count": 7,
+      "dominant_periods": {
+        "0": 9.23076923076923,
+        "1": 9.23076923076923,
+        "2": 9.23076923076923,
+        "3": 17.142857142857142,
+        "4": 9.23076923076923,
+        "5": 17.142857142857142,
+        "6": 9.23076923076923
+      }
+    },
+    {
+      "slope": -0.03,
+      "min_points": 8,
+      "ok": true,
+      "output": "data/fano_fft_sweeps/report_s-0.03_m8.json",
+      "retained": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "retained_count": 7,
+      "dominant_periods": {
+        "0": 9.23076923076923,
+        "1": 9.23076923076923,
+        "2": 9.23076923076923,
+        "3": 17.142857142857142,
+        "4": 9.23076923076923,
+        "5": 17.142857142857142,
+        "6": 9.23076923076923
+      }
+    },
+    {
+      "slope": -0.03,
+      "min_points": 12,
+      "ok": true,
+      "output": "data/fano_fft_sweeps/report_s-0.03_m12.json",
+      "retained": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "retained_count": 7,
+      "dominant_periods": {
+        "0": 9.23076923076923,
+        "1": 9.23076923076923,
+        "2": 9.23076923076923,
+        "3": 17.142857142857142,
+        "4": 9.23076923076923,
+        "5": 17.142857142857142,
+        "6": 9.23076923076923
+      }
+    },
+    {
+      "slope": -0.03,
+      "min_points": 16,
+      "ok": true,
+      "output": "data/fano_fft_sweeps/report_s-0.03_m16.json",
+      "retained": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "retained_count": 7,
+      "dominant_periods": {
+        "0": 9.23076923076923,
+        "1": 9.23076923076923,
+        "2": 9.23076923076923,
+        "3": 17.142857142857142,
+        "4": 9.23076923076923,
+        "5": 17.142857142857142,
+        "6": 9.23076923076923
+      }
+    },
+    {
+      "slope": -0.03,
+      "min_points": 24,
+      "ok": true,
+      "output": "data/fano_fft_sweeps/report_s-0.03_m24.json",
+      "retained": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "retained_count": 7,
+      "dominant_periods": {
+        "0": 9.23076923076923,
+        "1": 9.23076923076923,
+        "2": 9.23076923076923,
+        "3": 17.142857142857142,
+        "4": 9.23076923076923,
+        "5": 17.142857142857142,
+        "6": 9.23076923076923
+      }
+    },
+    {
+      "slope": -0.03,
+      "min_points": 32,
+      "ok": true,
+      "output": "data/fano_fft_sweeps/report_s-0.03_m32.json",
+      "retained": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "retained_count": 7,
+      "dominant_periods": {
+        "0": 9.23076923076923,
+        "1": 9.23076923076923,
+        "2": 9.23076923076923,
+        "3": 17.142857142857142,
+        "4": 9.23076923076923,
+        "5": 17.142857142857142,
+        "6": 9.23076923076923
+      }
+    },
+    {
+      "slope": -0.02,
+      "min_points": 8,
+      "ok": true,
+      "output": "data/fano_fft_sweeps/report_s-0.02_m8.json",
+      "retained": [
+        0,
+        3,
+        5
+      ],
+      "retained_count": 3,
+      "dominant_periods": {
+        "0": 9.23076923076923,
+        "3": 17.142857142857142,
+        "5": 17.142857142857142
+      }
+    },
+    {
+      "slope": -0.02,
+      "min_points": 12,
+      "ok": true,
+      "output": "data/fano_fft_sweeps/report_s-0.02_m12.json",
+      "retained": [
+        0,
+        3,
+        5
+      ],
+      "retained_count": 3,
+      "dominant_periods": {
+        "0": 9.23076923076923,
+        "3": 17.142857142857142,
+        "5": 17.142857142857142
+      }
+    },
+    {
+      "slope": -0.02,
+      "min_points": 16,
+      "ok": true,
+      "output": "data/fano_fft_sweeps/report_s-0.02_m16.json",
+      "retained": [
+        0,
+        3,
+        5
+      ],
+      "retained_count": 3,
+      "dominant_periods": {
+        "0": 9.23076923076923,
+        "3": 17.142857142857142,
+        "5": 17.142857142857142
+      }
+    },
+    {
+      "slope": -0.02,
+      "min_points": 24,
+      "ok": true,
+      "output": "data/fano_fft_sweeps/report_s-0.02_m24.json",
+      "retained": [
+        0,
+        3,
+        5
+      ],
+      "retained_count": 3,
+      "dominant_periods": {
+        "0": 9.23076923076923,
+        "3": 17.142857142857142,
+        "5": 17.142857142857142
+      }
+    },
+    {
+      "slope": -0.02,
+      "min_points": 32,
+      "ok": true,
+      "output": "data/fano_fft_sweeps/report_s-0.02_m32.json",
+      "retained": [
+        0,
+        3,
+        5
+      ],
+      "retained_count": 3,
+      "dominant_periods": {
+        "0": 9.23076923076923,
+        "3": 17.142857142857142,
+        "5": 17.142857142857142
+      }
+    },
+    {
+      "slope": -0.01,
+      "min_points": 8,
+      "ok": true,
+      "output": "data/fano_fft_sweeps/report_s-0.01_m8.json",
+      "retained": [
+        3,
+        5
+      ],
+      "retained_count": 2,
+      "dominant_periods": {
+        "3": 17.142857142857142,
+        "5": 17.142857142857142
+      }
+    },
+    {
+      "slope": -0.01,
+      "min_points": 12,
+      "ok": true,
+      "output": "data/fano_fft_sweeps/report_s-0.01_m12.json",
+      "retained": [
+        3,
+        5
+      ],
+      "retained_count": 2,
+      "dominant_periods": {
+        "3": 17.142857142857142,
+        "5": 17.142857142857142
+      }
+    },
+    {
+      "slope": -0.01,
+      "min_points": 16,
+      "ok": true,
+      "output": "data/fano_fft_sweeps/report_s-0.01_m16.json",
+      "retained": [
+        3,
+        5
+      ],
+      "retained_count": 2,
+      "dominant_periods": {
+        "3": 17.142857142857142,
+        "5": 17.142857142857142
+      }
+    },
+    {
+      "slope": -0.01,
+      "min_points": 24,
+      "ok": true,
+      "output": "data/fano_fft_sweeps/report_s-0.01_m24.json",
+      "retained": [
+        3,
+        5
+      ],
+      "retained_count": 2,
+      "dominant_periods": {
+        "3": 17.142857142857142,
+        "5": 17.142857142857142
+      }
+    },
+    {
+      "slope": -0.01,
+      "min_points": 32,
+      "ok": true,
+      "output": "data/fano_fft_sweeps/report_s-0.01_m32.json",
+      "retained": [
+        3,
+        5
+      ],
+      "retained_count": 2,
+      "dominant_periods": {
+        "3": 17.142857142857142,
+        "5": 17.142857142857142
+      }
+    },
+    {
+      "slope": 0.0,
+      "min_points": 8,
+      "ok": true,
+      "output": "data/fano_fft_sweeps/report_s0.0_m8.json",
+      "retained": [],
+      "retained_count": 0,
+      "dominant_periods": {}
+    },
+    {
+      "slope": 0.0,
+      "min_points": 12,
+      "ok": true,
+      "output": "data/fano_fft_sweeps/report_s0.0_m12.json",
+      "retained": [],
+      "retained_count": 0,
+      "dominant_periods": {}
+    },
+    {
+      "slope": 0.0,
+      "min_points": 16,
+      "ok": true,
+      "output": "data/fano_fft_sweeps/report_s0.0_m16.json",
+      "retained": [],
+      "retained_count": 0,
+      "dominant_periods": {}
+    },
+    {
+      "slope": 0.0,
+      "min_points": 24,
+      "ok": true,
+      "output": "data/fano_fft_sweeps/report_s0.0_m24.json",
+      "retained": [],
+      "retained_count": 0,
+      "dominant_periods": {}
+    },
+    {
+      "slope": 0.0,
+      "min_points": 32,
+      "ok": true,
+      "output": "data/fano_fft_sweeps/report_s0.0_m32.json",
+      "retained": [],
+      "retained_count": 0,
+      "dominant_periods": {}
+    }
+  ]
+}

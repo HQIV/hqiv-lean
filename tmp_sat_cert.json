@@ -1,0 +1,41 @@
+{
+  "kind": "sat-witness",
+  "assignment": [
+    true
+  ],
+  "assignment_literals": [
+    1
+  ],
+  "satisfied_clause_count": 1,
+  "num_clauses": 1,
+  "all_clauses_satisfied": true,
+  "clause_results": [
+    {
+      "clause_index": 0,
+      "clause": [
+        1
+      ],
+      "satisfied": true
+    }
+  ],
+  "status": "SAT",
+  "num_vars": 1,
+  "search_space_size": 2,
+  "certified": true,
+  "dimacs_path": "/home/jr/Repos/HQIV_LEAN/tmp_sat_test.cnf",
+  "output_path": "/home/jr/Repos/HQIV_LEAN/tmp_sat_out.txt",
+  "sat_search": "rapidity-by-arity",
+  "sat_mix": "arc",
+  "heuristic_candidates": 2,
+  "arity_schedule": {
+    "min_arity": 1,
+    "max_arity": 3
+  },
+  "best_heuristic_row": {
+    "assignment_code": 1,
+    "satisfied_clause_count": 1,
+    "shell_step": 0,
+    "flip_changed": true,
+    "research_score": 0.24999999999999997
+  }
+}

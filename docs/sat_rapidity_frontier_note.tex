@@ -1,0 +1,623 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{hyperref}
+\usepackage{enumitem}
+
+\title{SAT Rapidity Frontier: Current Formal State and Remaining Bridge}
+\author{HQIV Lean notes}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\section*{Purpose}
+
+This note summarizes the current formal state of the SAT rapidity program in the
+repository, from the bottom-level certified facts already in Lean up to the final
+missing geometric bridge. The goal is to phrase the setup clearly enough to think
+through the last step.
+
+\section{Bottom layer: what is already certified}
+
+The SAT rapidity stack is organized as \emph{several} layers (worst-case semantics,
+shared manifold / rapidity, residual control, and later---packing, direction selection,
+exact-count/plane bridge, ribbon-cover collapse).  The first three are summarized here.
+
+\subsection{SAT worst-case certification layer}
+
+In \texttt{Hqiv/Geometry/SATWorstCaseCertified.lean}, the repository already has:
+
+\begin{itemize}[leftmargin=2em]
+  \item sound-prune semantics: pruning never removes a satisfying assignment;
+  \item survivor-exhaustion semantics: exhaustive evaluation of the surviving pool
+  with no model implies UNSAT;
+  \item work-envelope transfer: if survivor work is bounded by a baseline plus an
+  additive residual budget $\varepsilon$, and $\varepsilon$ is within the usual
+  root-scale budget, then the normalized survivor work lies inside the same
+  \(1 + n^{1/n}\) envelope used on the ATSP side;
+  \item cumulative arity-residual transfer:
+  \[
+    \sum_i \varepsilon_i \leq \text{baselineWork} \cdot n^{1/n}
+    \quad \Longrightarrow \quad
+    \frac{\text{survivorWork}}{\text{baselineWork}} \leq 1 + n^{1/n};
+  \]
+  \item a polynomial-budget hook:
+  if both baseline work and cumulative residual budget are polynomially bounded,
+  then survivor work is polynomially bounded.
+\end{itemize}
+
+So the SAT file already gives the \emph{formal landing zone} for a polynomial-time-style
+argument. What it does \emph{not} supply is the geometric theorem that forces those
+polynomial bounds.
+
+\subsection{Shared manifold / rapidity layer}
+
+In \texttt{Hqiv/Geometry/SATRapidityManifold.lean}, we now formalize the idea that:
+
+\begin{itemize}[leftmargin=2em]
+  \item variables and clauses both embed into a shared ambient manifold;
+  \item there is one common scalar rapidity observable on that manifold;
+  \item the variable-side and clause-side rapidity profiles are both read from that
+  same observable;
+  \item a common rapidity threshold can therefore control both sides at once.
+\end{itemize}
+
+At the current scaffold level, rapidity is phrased in the simplest successor-step
+form: a discrete \(m \mapsto m+1\) combinatorial step read from the shared manifold.
+
+Concretely, the file now contains:
+
+\begin{itemize}[leftmargin=2em]
+  \item a shared manifold structure \texttt{SATSharedManifold};
+  \item rapidity profiles on the variable and clause sides;
+  \item successor-step rapidity channels \texttt{variableRapidityStep} and
+  \texttt{clauseRapidityStep};
+  \item common-threshold lemmas in both profile and successor-step form;
+  \item successor-style envelope constants and transfer lemmas for
+  \(\text{varDim}+1\) and \(\text{clauseDim}+1\), mirroring the ATSP \(n+1\) route.
+\end{itemize}
+
+\subsection{Residual-control layer}
+
+The same file also introduces the first serious theorem-start for the missing bridge:
+
+\begin{quote}
+\textbf{Successor-step residual control:} each SAT residual is indexed by either a
+variable-side or clause-side successor step, and that residual is bounded by the
+corresponding rapidity step, which is itself bounded by one common threshold.
+\end{quote}
+
+Formally this is the structure \texttt{SuccessorStepResidualControl}. From it, the
+repository already proves:
+
+\begin{enumerate}[leftmargin=2em]
+  \item every residual is bounded by the common threshold;
+  \item therefore one can build a \texttt{SATSharedRapidityCertificate};
+  \item if the threshold is polynomially bounded and the residual list length is
+  polynomially bounded, then the cumulative residual budget is polynomially bounded.
+\end{enumerate}
+
+Thus rapidity can \emph{state} successor-step control cleanly; what a complete SAT
+instance theorem still needs is a \emph{geometric or encoding witness} linking that
+control to a bounded frontier (the combinatorial implications of such a witness are
+largely already packaged higher in the stack---see \S\ref{sec:constructed}).
+
+\section{Why stars-and-bars is probably not enough}
+
+If the frontier bound is treated as a generic occupancy count, one gets something like
+stars-and-bars behavior. That is too weak for the intended result: it does not force a
+sharp collapse of the frontier, and it does not naturally explain why a common rapidity
+threshold should drastically reduce the candidate family.
+
+So the current working view is:
+
+\begin{quote}
+The missing theorem is probably not a bare combinatorial counting lemma. It is more
+likely a packing theorem.
+\end{quote}
+
+In other words, the residual directions should be thought of as a family of directions,
+rays, tangent vectors, or shell points on a common manifold, and the threshold should
+force them to be sufficiently separated that only finitely many can coexist.
+
+\section{Frontier geometry: the new packing layer}
+
+\subsection{Analytical arc, annular ribbon, and moiré}
+
+On the analytical sphere, the relevant continuum between a pole and a \(k\)-arity pole
+is still a \textbf{one-dimensional arc} \(\gamma\). In Lean, the current counting kernel
+is expressed through a local 2-dimensional section
+(\texttt{Hqiv/Geometry/SATRapidityAnnulusCircle.lean}); this should be read as an
+\emph{osculating ribbon section}, not as a global claim that the ambient manifold itself
+is literally planar or globally spherical. In that local section, the arc lies on the target
+shell circle \(C_M\). Discrete candidates lie in a tubular \textbf{ribbon} (points
+within distance \(\varepsilon\) of some \(\gamma(t)\)); \textbf{moiré} here means
+that a lattice point in the ribbon generically does \emph{not} lie on \(\gamma\)
+itself. The radial annulus \(A_M(\tau)\) captures these near-arc points once
+\(\varepsilon \le \tau\); this inclusion is proved in Lean from the triangle
+inequality (\texttt{inAnnulus\_of\_shell\_arc\_ribbon}).
+
+The current bridge file \texttt{Hqiv/Geometry/SATRapidityPlaneBridge.lean} makes this
+local nature explicit: \texttt{PlaneWitnessMap} is the data \texttt{ResidualPoint M → Plane},
+and the same object is also named \texttt{LocalRibbonSectionWitness} (definitionally the
+same structure, with identity coercions) to stress that the global manifold remains abstract
+while the counting kernel lives in a chosen osculating \(2\)-plane / local ribbon section.
+
+In \texttt{Hqiv/Geometry/SATRapidityPackingBridge.lean}, the next frontier has now been
+formalized.
+
+The new object is a packing-style certificate:
+
+\begin{quote}
+\texttt{SATRapidityPackingCertificate}
+\end{quote}
+
+with the intended interpretation:
+
+\begin{itemize}[leftmargin=2em]
+  \item the residual frontier lives in an effective dimension \(d\);
+  \item there is a packing / kissing-number style bound \(\mathrm{frontierBound}(d)\);
+  \item the residual list length is bounded by that frontier bound;
+  \item that bound is controlled by the combined variable/clause dimension.
+\end{itemize}
+
+The main theorem already proved from that scaffold is:
+
+\begin{quote}
+packing control + successor-step residual control
+\(\Longrightarrow\) polynomial residual budget.
+\end{quote}
+
+So, structurally, the chain is now:
+
+\[
+\text{shared manifold}
+\Longrightarrow
+\text{successor-step rapidity}
+\Longrightarrow
+\text{residual domination}
+\Longrightarrow
+\text{packing-controlled frontier length}
+\Longrightarrow
+\text{polynomial residual budget}
+\Longrightarrow
+\text{SAT work certification.}
+\]
+
+\noindent
+The same file stack also supports a \emph{parallel} route through planar exact-count bounds
+(\(K_{\mathrm{exact}} \le 2|Q|\)) and \texttt{RibbonCoverCollapseData}; that route does not require
+an abstract kissing-number function \(K(d)\) once the local shell hypotheses hold.
+
+\section{What is now fully constructed in Lean}
+\label{sec:constructed}
+
+Since the original version of this note, the intermediate bridge has become substantially
+more explicit.
+
+\subsection{Direction selection, gap bridge, and geometric collapse are packaged}
+
+The repository now contains:
+
+\begin{itemize}[leftmargin=2em]
+  \item \texttt{DirectionSelectionCertificate}: residuals choose canonical shell directions,
+  with injectivity/separation packaged as explicit fields;
+  \item \texttt{SATRapidityGapBridge}: the single record representing the statement
+  ``rapidity gap controls canonical directions'';
+  \item \texttt{SATRapidityGeometricCollapse}: the end-stage record packaging
+  logarithmic effective dimension, sphere-code control, and successor-step bookkeeping.
+\end{itemize}
+
+Moreover, once the appropriate hypotheses are supplied (including via the plane-cover and
+ribbon-cover constructors in \texttt{SATRapidityPlaneBridge.lean}), one can build all three levels
+by explicit constructors rather than only by isolated \texttt{theorem} calls.
+
+\subsection{Exact-count route is now explicit}
+
+The exact-count route through local shell intersections has been formalized in
+\texttt{SATRapidityExactCardinality.lean} and wired to the planar model in
+\texttt{SATRapidityAnnulusCircle.lean} / \texttt{SATRapidityPlaneBridge.lean}.
+
+The key proved ingredients are:
+
+\begin{enumerate}[leftmargin=2em]
+  \item for each nonzero shell center \(q\), a local shell fiber satisfying the
+  \texttt{planeLocalShellIntersections} predicate obeys \(|I|\le 2\) (circle--circle geometry);
+  \item therefore the exact admissible-direction count
+  \[
+    K_{\mathrm{exact}} := \#\Bigl(\bigcup_{q \in Q} \mathrm{intersections}(q)\Bigr)
+  \]
+  satisfies \(K_{\mathrm{exact}} \le 2 |Q|\);
+  \item if residual list length is dominated by \(K_{\mathrm{exact}}\), then it is bounded by
+  \(2|Q|\), and hence by \(2B\) whenever \(|Q| \le B\);
+  \item when \(Q\) is the carrier of an \texttt{ArcRibbonLatticeCardBound} aligned with the
+  annulus model, the same chain yields \(\mathrm{len} \le 2\cdot\mathrm{countBound}(\cdot)\)
+  without choosing an intermediate \(B\) by hand;
+  \item natural-number and real-cast versions feed the \texttt{hSphereLen} slot once combined
+  with a frontier comparison into \texttt{sphereCodeBound effectiveDim}.
+\end{enumerate}
+
+The bridge file contains \emph{several} explicit constructor families, all hypothesis-explicit:
+
+\begin{itemize}[leftmargin=2em]
+  \item \textbf{Comparison frontier:} \texttt{DirectionSelectionCertificate.of\_plane\_cover\_bound},
+  \texttt{SATRapidityGapBridge.of\_plane\_cover\_bound},
+  \texttt{SATRapidityGeometricCollapse.of\_plane\_cover\_bound}, assuming
+  \(2B \le \mathrm{sphereCodeBound}(\mathrm{effectiveDim})\) (as reals).
+  \item \textbf{Exact frontier:} the parallel \texttt{of\_plane\_cover\_exact\_frontier} constructors
+  when \(\mathrm{sphereCodeBound}(\mathrm{effectiveDim}) = 2B\), so no separate inequality step
+  is needed at that dimension.
+  \item \textbf{Threading only:}
+  \texttt{direction\_selection\_with\_plane\_witness\_implies\_gap\_bridge} and
+  \texttt{direction\_selection\_with\_plane\_witness\_implies\_geometric\_collapse}
+  repackage an \emph{existing} certificate and only carry a
+  \texttt{PlaneWitnessMap} for joint hypotheses (they do not derive \texttt{hSphereLen} from the plane).
+\end{itemize}
+
+A small finite-size lemma internal to the same file records that the factorization/oracle
+\texttt{candidateList} has length exactly \(3(\texttt{candidateStepBound}(n)+1)\)
+(\texttt{factorization\_candidate\_family\_card\_eq}), packaging the list-length part of that
+pipeline into the SAT rapidity stack (membership in an annulus family is still separate).
+
+\subsection{Single-hypothesis collapse of steps 2--5}
+
+The strongest consolidated packaging is the structure
+
+\begin{quote}
+\texttt{RibbonCoverCollapseData M D control}
+\end{quote}
+
+in \texttt{SATRapidityPlaneBridge.lean}.  It assumes an ambient
+\texttt{DirectionSelectionCertificate} \texttt{D} and \texttt{SuccessorStepResidualControl}
+\texttt{control}, and bundles:
+
+\begin{itemize}[leftmargin=2em]
+  \item \texttt{witness} : \texttt{LocalRibbonSectionWitness M} (same as \texttt{PlaneWitnessMap});
+  \item \texttt{family} : \texttt{AnnulusLatticeFamily} at \((\texttt{shellRadius},\texttt{thresholdWidth})\) from \texttt{D.annulusModel};
+  \item \texttt{intersections} : \texttt{Plane → Finset Plane} and the fiber hypotheses
+  \texttt{hne}, \texttt{hloc} (\texttt{planeLocalShellIntersections} on each center);
+  \item cover \texttt{hCover} : residual centers land in \texttt{family.carrier};
+  \item exact-count domination \texttt{hK} : \(\texttt{D.residuals.length} \le K_{\mathrm{exact}}\);
+  \item polynomial slot \texttt{countBound}, \texttt{varDim}, \texttt{clauseDim}, \texttt{tauBits}, and
+  \texttt{hCard} : \(|\texttt{family.carrier}| \le \texttt{countBound}(\cdots)\);
+  \item real comparison \texttt{hCountFrontier} :
+  \(2\cdot\texttt{countBound}(\cdots) \le \texttt{D.sphereCodeBound}(\texttt{effectiveDim})\);
+  \item successor packaging \texttt{hShared}, \texttt{hLen}, and \texttt{hPoly} for the sphere-code step.
+\end{itemize}
+
+From this record, Lean defines:
+
+\begin{itemize}[leftmargin=2em]
+  \item \texttt{RibbonCoverCollapseData.hSphereLen} (theorem): discharges the sphere-length inequality for \texttt{D};
+  \item \texttt{toDirectionSelectionCertificate}: \texttt{D} with \texttt{hSphereLen} replaced by that proof;
+  \item \texttt{toGapBridge}, \texttt{toGeometricCollapse};
+  \item named entry points \texttt{ribbon\_cover\_collapse},
+  \texttt{ribbon\_cover\_collapse\_to\_gap\_bridge},
+  \texttt{ribbon\_cover\_collapse\_to\_direction\_selection},
+  \texttt{ribbon\_cover\_collapse\_to\_sphere\_code};
+  \item \texttt{ribbon\_cover\_collapse\_hasPolynomialResidualBudget}: closes into
+  \texttt{HasPolynomialResidualBudget} under the usual nonnegativity / threshold hypotheses;
+  \item \texttt{ribbon\_cover\_collapse\_implies\_nat\_root\_envelope}: combines the collapsed residual budget
+  with the certified ATSP-style envelope (\texttt{ATSPWorstCaseCertified}) for a single numeric worst-case bound.
+\end{itemize}
+
+The method \texttt{toGeometricCollapse} applies \texttt{DirectionSelectionCertificate.toGeometricCollapse} to the
+ambient \texttt{D}; the method \texttt{toDirectionSelectionCertificate} replaces \texttt{D.hSphereLen} with the
+theorem \texttt{RibbonCoverCollapseData.hSphereLen}.  In applications where the ribbon witness is the
+authoritative justification for the sphere-length bound, the upgraded certificate should be used when
+passing into collapse or sphere-code packaging.
+
+So the downstream pipeline after \texttt{RibbonCoverCollapseData} is fully wired in Lean; the
+remaining substantive task is still to \emph{construct} that witness (and the scaffold interfaces
+below) from first-principles geometry and encoding.
+
+\section{What the final missing piece must say}
+
+At this point, the \emph{formal} pipeline after a suitable witness is largely implemented
+in Lean (\S\ref{sec:constructed}).  What remains unproved is sharp in a different sense:
+one must \emph{construct} the witness from SAT geometry and encoding, not reprove the
+downstream certificate algebra.
+
+One seeks a theorem of the following shape.
+
+\subsection*{Desired frontier theorem}
+
+There exists a natural effective dimension \(d\) attached to the shared variable/clause
+manifold such that the residual directions generated by the SAT oracle admit a local
+ribbon-section cover, and hence form a packing/counting family on a shell, tangent sphere,
+or comparable local geometric carrier. The number of admissible residual directions is then
+bounded by a function \(K(d)\) of packing/kissing-number or exact-shell-count type.
+
+If additionally \(K(d)\) is polynomially controlled by the combined input dimension
+\(\text{varDim}+\text{clauseDim}\), then the entire residual frontier is polynomially bounded.
+
+\subsection*{Why this is the right target}
+
+This would supply what the formal pipeline is already set up to consume:
+
+\begin{enumerate}[leftmargin=2em]
+  \item identify each residual with a local ribbon-section center and associated shell data;
+  \item show thresholded rapidity forces the hypotheses used in the planar/exact-count layer
+  (nontrivial centers, \texttt{planeLocalShellIntersections} fibers, cover in a finite annulus family);
+  \item establish the exact-count domination \(\mathrm{len} \le K_{\mathrm{exact}}\) and a polynomial
+  cardinality bound on \(\#Q\) (e.g.\ via \texttt{ArcRibbonLatticeCardBound});
+  \item package these as a \texttt{RibbonCoverCollapseData} witness (or equivalent inputs to
+  \texttt{of\_plane\_cover\_bound} / \texttt{of\_plane\_cover\_exact\_frontier});
+  \item then \emph{already formalized}: \texttt{RibbonCoverCollapseData} \(\to\)
+  \texttt{SATRapidityGeometricCollapse} \(\to\) \texttt{SATRapiditySphereCodeCertificate} \(\to\)
+  \texttt{HasPolynomialResidualBudget} (see \texttt{ribbon\_cover\_collapse\_hasPolynomialResidualBudget}),
+  and hence the certified SAT work / polynomial-budget story at the worst-case layer.
+\end{enumerate}
+
+\noindent
+A separate, older abstraction \texttt{SATRapidityPackingCertificate} in
+\texttt{SATRapidityPackingBridge.lean} still represents a generic packing/kissing-style frontier
+bound; the ribbon-cover route in \texttt{SATRapidityPlaneBridge.lean} closes through the
+sphere-code certificate instead.  Either style of frontier input can feed polynomial-budget
+machinery once the numeric hypotheses match the downstream lemmas.
+
+\medskip
+\noindent
+Equivalently: the \emph{implications} after a ribbon-cover witness are already proved; what is
+still missing is the \emph{theorem that produces} that witness from first principles.
+
+\section{Interpretive note on dimension and collapse}
+
+The motivating speculation is that the bridge may depend on a nontrivial dimension regime,
+not monotone growth with dimension. In that picture, one does \emph{not} want a naive
+``more dimensions means more space'' argument. Rather, one wants a regime in which the
+shared manifold geometry imposes a sharp structural bound on admissible frontier directions.
+
+That is why sphere packing / kissing-number heuristics are more promising here than generic
+stars-and-bars counting. The right theorem would exploit geometry strong enough to turn the
+frontier into a constrained packing problem instead of an unconstrained occupancy problem.
+
+\section{Two concrete candidate approaches for the final bridge}
+
+The current best two candidate approaches are the following.
+
+\subsection{Angular separation on the rapidity sphere / local section}
+
+This is the most direct geometric route.
+
+\begin{enumerate}[leftmargin=2em]
+  \item Map each residual to a unit vector or local shell direction whose direction is the gradient of the
+  shared rapidity observable (or its local ribbon-section representative).
+  \item Use the common threshold to force angular separation between distinct
+  residual directions. A model inequality would be
+  \[
+    |\cos \theta_{ij}| \leq 1 - \delta
+  \]
+  for distinct residuals \(i \neq j\).
+  \item View the residual family as a spherical code on the unit sphere in
+  \(\mathbb{R}^d\), where \(d\) is derived from
+  \(\mathrm{varDim}+\mathrm{clauseDim}\).
+  \item Apply a spherical-code or kissing-number bound \(K(d)\) to conclude that
+  the frontier cardinality is at most \(K(d)\).
+\end{enumerate}
+
+This is attractive because it connects almost immediately to the existing packing
+certificate abstraction: \(K(d)\) can serve as the \texttt{frontierBound} in
+\texttt{SATRapidityPackingCertificate}.
+
+\subsection{Riemannian tangent-space packing}
+
+This is the more general manifold-native route.
+
+\begin{enumerate}[leftmargin=2em]
+  \item Equip the shared manifold with a Riemannian metric structure compatible
+  with the existing oracle language.
+  \item Interpret residuals as tangent vectors with norm bounded by the successor-step
+  rapidity.
+  \item Use the threshold to enforce a minimum angle between any two such tangent
+  vectors.
+  \item Apply a tangent-space packing lemma: for example, one has exponential-type
+  coarse bounds such as \(2^d\) under large pairwise angular separation, and then one
+  tries to improve these to polynomial-in-\(d\) bounds under additional curvature,
+  injectivity-radius, or shell-regularity assumptions.
+\end{enumerate}
+
+This route is more flexible, because it can absorb curvature and local manifold data,
+but the final theorem may need stronger geometric hypotheses than the spherical-code route.
+
+\section{What is still genuinely missing}
+
+Despite the progress above, a fully internal proof still lacks the following substantive ingredient.
+
+\subsection{The one remaining witness-producing theorem}
+
+The current Lean development still does \emph{not} derive from first principles that:
+
+\begin{enumerate}[leftmargin=2em]
+  \item every residual lies in a concrete local ribbon-section annulus family,
+  \item the associated shell fibers are the right admissible local intersections,
+  \item residual length is dominated by the resulting exact-count union model, and
+  \item the resulting annulus family carries the required polynomial cardinality witness.
+\end{enumerate}
+
+This whole cluster is isolated as the construction of one \texttt{RibbonCoverCollapseData}
+witness (or, equivalently, the inputs to the \texttt{of\_plane\_cover\_bound} constructor family
+together with the separate hypotheses that define a ribbon-cover collapse in the formal sense).
+
+\subsection{What is still scaffold-level}
+
+Two definitions remain intentionally lightweight placeholders in the abstract SAT scaffold:
+
+\begin{itemize}[leftmargin=2em]
+  \item \texttt{localShellIntersections} on the fully abstract manifold side is still the empty-finset placeholder;
+  \item \texttt{angle} is still the constant-\(0\) placeholder on abstract shell directions.
+\end{itemize}
+
+These do \emph{not} break the current bridge construction, because the new exact-count work is done in
+the local ribbon-section model. But a fully geometric final theorem should eventually replace those
+placeholder interfaces by real shell-intersection and angle data, or else prove that the local ribbon-section
+construction is the only geometry actually needed.
+
+\subsection*{How they fit the current Lean scaffold}
+
+A full internal proof still has to supply a frontier bound and the encoding-side hypotheses above.
+Once those are available, the \textbf{primary wired endpoint} in the current development is:
+
+\begin{itemize}[leftmargin=2em]
+  \item build a \texttt{RibbonCoverCollapseData} witness (or the equivalent plane-cover inputs);
+  \item obtain \texttt{SATRapidityGeometricCollapse} and \texttt{SATRapiditySphereCodeCertificate};
+  \item apply \texttt{ribbon\_cover\_collapse\_hasPolynomialResidualBudget} to reach
+  \texttt{HasPolynomialResidualBudget}.
+\end{itemize}
+
+\noindent
+Separately, a classical packing-style certificate \texttt{SATRapidityPackingCertificate} can still
+serve as an abstract \texttt{frontierBound} route into polynomial-budget lemmas when its numeric
+hypotheses are arranged to match \texttt{packingCertificate\_hasPolynomialResidualBudget}.
+
+\medskip
+\noindent
+So the open choice is less about ``which Lean record to use at the end'' than about \emph{which
+geometric theorem produces the frontier and cover data}.  A spherical-code bound, a tangent-space
+packing bound, or the proved planar exact-count \(\le 2\#Q\) chain are different \emph{sources} for
+those hypotheses; the repository already implements the bookkeeping once the bounds are supplied.
+
+\section{Best anchor points for the next proof attempt}
+
+After reviewing the agent-facing documentation, the best anchor points for the remaining work are
+now fairly clear.
+
+\subsection{Primary anchor: manifold rapidity roadmaps}
+
+The strongest direct anchor is the manifold roadmap:
+
+\begin{itemize}[leftmargin=2em]
+  \item \texttt{AGENTS/MANIFOLD\_ZETA\_ROADMAP.md}
+\end{itemize}
+
+This document already states, in essentially the right form, that the missing theorem is a
+\emph{ray theorem}: rapidity should factor through or agree with a canonical map from shell index
+to a unit tangent direction on a Riemannian slice. That is almost exactly the geometric-collapse
+problem now represented by \texttt{SATRapidityGeometricCollapse}.
+
+So the most natural theorem target is not a totally new idea, but a SAT-specialized version of the
+same roadmap question:
+
+\begin{quote}
+Can the shared SAT rapidity observable be shown to factor through a low-dimensional family of
+canonical directions (rays / tangent vectors / shell points) on the manifold, with enough angular
+separation to force a packing bound?
+\end{quote}
+
+\subsection{Secondary anchor: theorem index for existing reusable pieces}
+
+The next best anchor is:
+
+\begin{itemize}[leftmargin=2em]
+  \item \texttt{AGENTS/THEOREMS.md}
+\end{itemize}
+
+The most relevant existing names are:
+
+\begin{itemize}[leftmargin=2em]
+  \item Euclidean and shell-volume anchors from \texttt{SpatialSliceManifold};
+  \item the rapidity / polar-angle identification from
+  \texttt{RapidityZetaPhaseBridge};
+  \item the explicit shell-to-\(m+1\) monotonicity and shell-surface proxies from
+  \texttt{OctonionSphereConstruction} and related modules;
+  \item the Fourier patch / moir\'e slope language listed in the archive and modular-curvature notes.
+\end{itemize}
+
+These suggest that the next proof should be phrased less as ``find a new object'' and more as
+``bind together already-existing shell, phase, and patch concentration channels into one direction-selection theorem.''
+
+\subsection{Third anchor: modular / Fourier patch narrative}
+
+The file
+
+\begin{itemize}[leftmargin=2em]
+  \item \texttt{AGENTS/MODULAR\_THETA\_CURVATURE\_BRIDGE.md}
+\end{itemize}
+
+is especially relevant because it explicitly points to Fourier patch concentration and curved-manifold
+lifts via heat kernels / Laplacian spectrum. This is a strong hint that, if the SAT rapidity frontier
+really collapses, a plausible mechanism may be:
+
+\begin{enumerate}[leftmargin=2em]
+  \item moir\'e / patch concentration isolates a low-dimensional family of dominant directions,
+  \item rapidity phase selects among those directions,
+  \item packing then bounds how many such dominant directions can coexist.
+\end{enumerate}
+
+\subsection{Fourth anchor: Euler/Gauss-style shell intersection counts}
+
+There is also a simpler and potentially very powerful anchor: lattice intersection counts per shell.
+
+The existing corpus does not yet contain a full Gauss circle-problem theorem in dimension two, but it
+does contain the right style of ingredients:
+
+\begin{itemize}[leftmargin=2em]
+  \item discrete shell counts such as \texttt{r8} in
+  \texttt{Hqiv/Algebra/IntegerLatticeShellCount8.lean};
+  \item shell monotonicity and continuous sphere/ball proxies in
+  \texttt{OctonionSphereConstruction};
+  \item Euclidean shell / slice geometry in \texttt{SpatialSliceManifold} and
+  \texttt{EuclideanBallHorizontalSlice};
+  \item the explicit warning in the docs that current combinatorics are incremental shell counts,
+  not yet full Gauss-circle totals.
+\end{itemize}
+
+This suggests another framing of the direction-selection theorem:
+
+\begin{quote}
+Instead of proving the frontier bound directly from abstract packing, prove that the annulus-shell
+construction reduces the residual frontier to a controlled lattice intersection problem on one shell,
+and then bound the number of admissible intersections by an Euler/Gauss-style shell-count function.
+\end{quote}
+
+In the local 2D picture, each residual point in the annulus probes the target shell by a unit circle,
+and the canonical directions are the shell intersection points. The natural counting question is then:
+
+\begin{quote}
+How many such intersection points can occur on a fixed shell under the threshold and separation rules?
+\end{quote}
+
+That is extremely close in spirit to a circle-problem or shell-count question, and may give a simpler
+route than a fully general manifold packing theorem if the relevant shell counts can be controlled sharply.
+
+\subsection*{Recommended next Lean move}
+
+The next substantive Lean goal is unchanged in \emph{name}---produce a
+\texttt{RibbonCoverCollapseData} witness (or equivalent \texttt{of\_plane\_cover\_*} inputs) from
+shared-manifold, rapidity, and encoding hypotheses---but the \emph{downstream} implications are already
+implemented (\S\ref{sec:constructed}), so new code should focus on geometry and \texttt{hK}, not on
+re-proving certificate projections.
+
+If the Euler/Gauss-shell route is pursued, a companion module such as
+\texttt{Hqiv/Geometry/SATRapidityShellIntersectionCount.lean} could package shell-intersection counting as an
+alternate source of frontier bounds feeding the same constructors.
+
+\section{Current status in one sentence}
+
+The repository has the full formal scaffold from shared manifold rapidity through direction selection,
+gap bridge, and geometric collapse; the exact-count / planar-fiber inequalities and the
+\texttt{RibbonCoverCollapseData} packaging (including closure into \texttt{HasPolynomialResidualBudget}
+and the ATSP-style root envelope) are implemented in Lean. The remaining substantive work is to
+construct the ribbon-cover / encoding witness and to replace abstract-placeholder \texttt{localShellIntersections}
+and \texttt{angle} with geometric content where a global statement is desired.
+
+\section*{Files to consult}
+
+\begin{itemize}[leftmargin=2em]
+  \item \texttt{Hqiv/Geometry/SATWorstCaseCertified.lean}
+  \item \texttt{Hqiv/Geometry/SATRapidityManifold.lean}
+  \item \texttt{Hqiv/Geometry/SATRapidityDirectionSelection.lean}
+  \item \texttt{Hqiv/Geometry/SATRapidityExactCardinality.lean}
+  \item \texttt{Hqiv/Geometry/SATRapidityAnnulusCircle.lean}
+  \item \texttt{Hqiv/Geometry/SATRapidityPackingBridge.lean}
+  \item \texttt{Hqiv/Geometry/SATRapiditySpherePacking.lean}
+  \item \texttt{Hqiv/Geometry/SATRapidityTangentPacking.lean}
+  \item \texttt{Hqiv/Geometry/SATRapidityGapBridge.lean}
+  \item \texttt{Hqiv/Geometry/SATRapidityPlaneBridge.lean} (ribbon-cover collapse, constructors, polynomial closure)
+  \item \texttt{Hqiv/Geometry/ATSPWorstCaseCertified.lean} (envelope used by \texttt{ribbon\_cover\_collapse\_implies\_nat\_root\_envelope})
+  \item \texttt{Hqiv/Geometry/SpatialSliceRapidityScaffold.lean}
+  \item \texttt{Hqiv/Geometry/GeneralRiemannianRapidityOracle.lean}
+\end{itemize}
+
+\end{document}

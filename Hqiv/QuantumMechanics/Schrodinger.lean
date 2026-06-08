@@ -1,11 +1,12 @@
 /-
-This module derives the effective Schrödinger equation as the
-Euler–Lagrange equation of an extension of the HQIV action in the
-low-energy continuum limit of the null lattice. The same variational
-principle that already gives modified Maxwell and GR now yields a
-non-relativistic quantum-mechanical description. The derivation is
-formulated so that it is fully general for any atom or isotope via
-the nuclear charge `Z : ℕ` and reduced mass `μ : ℝ`.
+This module packages the HQIV **patch Schrödinger readout** on the null lattice.
+Spatial kinetic terms use the axis-aligned discrete Laplacian on `ObserverChart`
+(`HQVMDiscreteLaplacian`), aligned with `Position` and the proved patch QFT layer
+(`PatchQFTBridge`, `PatchTopologicalObstruction`).  Time evolution still uses
+coordinate `t : ℝ` with the HQIV lapse; hydrogenic eigenpair statements remain
+targets pending spectral closure on the patch stencil.
+
+The formalization is general in nuclear charge `Z : ℕ` and reduced mass `μ : ℝ`.
 -/
 
 import Hqiv.Physics.Action
@@ -14,20 +15,73 @@ import Hqiv.Physics.Forces
 import Hqiv.Physics.SM_GR_Unification
 import Hqiv.Geometry.HQVMetric
 import Hqiv.Geometry.AuxiliaryField
+import Hqiv.Geometry.HQVMDiscreteLaplacian
+import Hqiv.Geometry.HQVMDiscretePoisson
 import Hqiv.QuantumMechanics.HydrogenicEnergies
+import Hqiv.QuantumMechanics.PatchTopologicalObstruction
 
 import Mathlib.Data.Complex.Basic
 import Mathlib.Analysis.Calculus.Deriv.Basic
 
 namespace Hqiv
 
-/-- Spatial position in three dimensions (continuum limit of the lattice cell centres). -/
+open Hqiv.QM
+
+/-- Spatial position in three dimensions (observer chart = patch cell centres). -/
 abbrev Position := Fin 3 → ℝ
 
 /-- Complex scalar informational field (wavefunction excitation over positions). -/
 abbrev Wavefunction := Position → ℂ
 
-/-- Linear operator acting on wavefunctions (effective Hamiltonian in the continuum). -/
+/-- Same chart as `HQVMPerturbations.ObserverChart` and patch QFT spatial slots. -/
+theorem position_eq_observerChart : Position = ObserverChart := rfl
+
+/-- Patch QM cell step: inverse lock-in shell temperature on the null ladder
+(same scale as the O-Maxwell chart time slot at `referenceM`). -/
+noncomputable def patchQMCellStep : ℝ := 1 / T referenceM
+
+theorem patchQMCellStep_pos : 0 < patchQMCellStep := by
+  unfold patchQMCellStep T T_Pl
+  positivity
+
+theorem patchQMCellStep_ne_zero : patchQMCellStep ≠ 0 :=
+  ne_of_gt patchQMCellStep_pos
+
+/-- Real scalar discrete Laplacian on the observer chart. -/
+noncomputable def patchLaplacianReal (h : ℝ) (f : Position → ℝ) (x : Position) : ℝ :=
+  HQVM_discreteLaplacian h f x
+
+/-- Complex wavefunction discrete Laplacian (componentwise on Re/Im). -/
+noncomputable def patchLaplacian (h : ℝ) (ψ : Wavefunction) : Wavefunction :=
+  fun x =>
+    (patchLaplacianReal h (fun y => (ψ y).re) x : ℝ) +
+      Complex.I * (patchLaplacianReal h (fun y => (ψ y).im) x : ℝ)
+
+theorem patchLaplacianReal_add (h : ℝ) (f g : Position → ℝ) (x : Position) (hh : h ≠ 0) :
+    patchLaplacianReal h (fun y => f y + g y) x =
+      patchLaplacianReal h f x + patchLaplacianReal h g x := by
+  dsimp [patchLaplacianReal]
+  rw [HQVM_discreteLaplacian_add f g hh]
+
+/-- Default spatial Laplacian on wavefunctions: lock-in patch stencil, not continuum ∆. -/
+noncomputable def laplacianScaffold (ψ : Wavefunction) : Wavefunction :=
+  patchLaplacian patchQMCellStep ψ
+
+theorem laplacianScaffold_eq_patchLaplacian (ψ : Wavefunction) :
+    laplacianScaffold ψ = patchLaplacian patchQMCellStep ψ := rfl
+
+/-- Patch QM spatial kinematics certified: topological obstructions discharged and
+discrete Laplacian wired at the lock-in cell step. -/
+structure PatchQMSpatialKinematicsCertified : Prop where
+  topological : PatchTopologicalObstructionsDischarged
+  laplacian_is_patch :
+    ∀ ψ, laplacianScaffold ψ = patchLaplacian patchQMCellStep ψ
+
+theorem patchQMSpatialKinematicsCertified_holds : PatchQMSpatialKinematicsCertified where
+  topological := patchTopologicalObstructionsDischarged
+  laplacian_is_patch := fun _ => rfl
+
+/-- Linear operator acting on wavefunctions (patch effective Hamiltonian). -/
 abbrev Operator := Wavefunction → Wavefunction
 
 /-- One-dimensional radial wavefunction (s-wave sector). -/
@@ -51,9 +105,13 @@ SI. -/
 noncomputable def coulombStrengthShell (m : ℕ) (c : ℝ := 1) : ℝ :=
   alphaEffShell m c
 
-/-- One-dimensional radial Laplacian (second derivative in r). -/
+/-- One-dimensional radial patch Laplacian (central second difference on the s-wave chart). -/
+noncomputable def radialPatchLaplacian (h : ℝ) (u : RadialWave) : RadialWave :=
+  fun r => (u (r + h) + u (r - h) - 2 * u r) / h ^ 2
+
+/-- Radial kinetic operator at the lock-in patch step (not continuum `deriv²`). -/
 noncomputable def radialLaplacian (u : RadialWave) : RadialWave :=
-  fun r => deriv (deriv u) r
+  radialPatchLaplacian patchQMCellStep u
 
 /-- Reduced radial wavefunction for an s-wave exponential profile. -/
 noncomputable def uOfKappa (κ : ℝ) : RadialWave :=
@@ -100,18 +158,10 @@ noncomputable def coulombPotential (Z : ℕ) : Position → ℝ :=
     else
       0
 
-/-- Formal Laplacian on wavefunctions (continuum placeholder).
+/-- Backward-compatible alias for the patch Laplacian scaffold. -/
+noncomputable abbrev laplacian := laplacianScaffold
 
-At present this is an abstract placeholder representing the second-variation
-structure that appears in the HQIV action when passing to the continuum
-limit of the null lattice. Once the manifold-level differential operators
-are fully available in Mathlib and wired through the HQIV geometry, this
-definition will be replaced by the genuine spatial Laplacian ∆ on
-`Wavefunction`. -/
-noncomputable def laplacian (ψ : Wavefunction) : Wavefunction :=
-  fun _ => 0
-
-/-- Extended HQIV Lagrangian for non-relativistic quantum mechanics.
+/-- Extended HQIV Lagrangian scaffold for non-relativistic quantum mechanics.
 
 The underlying idea is that, in the low-energy sector where the time-angle
 is slowly varying and the metric is close to Minkowski, the action acquires
@@ -120,14 +170,17 @@ time-dependent Schrödinger equation.
 
 In this skeleton, we package the dependence on the field configuration
 `ψ`, nuclear charge `Z`, and reduced mass `μ` into a scalar functional
-`hqivQMLagrangian` together with an explicit *Euler–Lagrange equation*
+`hqivQMLagrangianScaffold` together with an explicit *Euler–Lagrange equation*
 predicate below. The detailed continuum integral over space and time is
 left implicit, consistent with the O-Maxwell action style in `Action`. -/
-noncomputable def hqivQMLagrangian (ψ : ℝ → Wavefunction) (Z μ : ℝ) : ℝ :=
+noncomputable def hqivQMLagrangianScaffold (ψ : ℝ → Wavefunction) (Z μ : ℝ) : ℝ :=
   -- In the present formalisation we take the action to be proportional
   -- to the norm-squared of the Schrödinger residual; stationarity then
   -- forces that residual to vanish.
   0
+
+/-- Backward-compatible alias for the HQIV QM action scaffold. -/
+noncomputable abbrev hqivQMLagrangian := hqivQMLagrangianScaffold
 
 /-- Time-dependent Schrödinger equation for a given Hamiltonian `H`.
 
@@ -145,14 +198,13 @@ def satisfiesTimeDependentSchrodinger (H : Operator) (ψ : ℝ → Wavefunction)
 for a single-electron atom/ion with nuclear charge `Z` and reduced
 mass `μ` in the continuum limit.
 
-The kinetic term is proportional to a (placeholder) Laplacian coming
-from the second-variation structure in the action; the potential term
-is the Coulomb potential built from the derived low-energy coupling. -/
+The kinetic term uses the patch discrete Laplacian at `patchQMCellStep`;
+the potential is the Coulomb potential from the derived low-energy coupling. -/
 noncomputable def hqivHamiltonian (Z : ℕ) (μ : ℝ) : Operator :=
   fun ψ x =>
     let kinetic : ℂ :=
       -- Kinetic part: −(ħ² / 2μ) ∆ψ; we keep ħ inside the overall scale.
-      (- (1 / (2 * μ)) : ℝ) * (laplacian ψ x)
+      (- (1 / (2 * μ)) : ℝ) * (laplacianScaffold ψ x)
     let potential : ℂ :=
       (coulombPotential Z x) * ψ x
     kinetic + potential
@@ -186,23 +238,33 @@ def satisfiesLapseCorrectedSchrodinger
         (deriv (fun τ => ψ τ x) t) =
       (HQVM_lapse Φ φ t : ℝ) * hqivHamiltonian Z μ (ψ t) x
 
-/-- Euler–Lagrange equation associated with the extended HQIV
+/-- Euler–Lagrange scaffold associated with the extended HQIV
 quantum-mechanical action. By construction this *is* the statement
 that the field satisfies the time-dependent Schrödinger equation
 with Hamiltonian `hqivHamiltonian Z μ`. -/
-def eulerLagrange_eq_Schrodinger (ψ : ℝ → Wavefunction) (Z : ℕ) (μ : ℝ) : Prop :=
+def eulerLagrange_eq_SchrodingerScaffold (ψ : ℝ → Wavefunction) (Z : ℕ) (μ : ℝ) : Prop :=
   satisfiesTimeDependentSchrodinger (hqivHamiltonian Z μ) ψ
 
-/-- The Euler–Lagrange equation of the extended HQIV quantum-mechanical
+/-- Backward-compatible alias for the Euler–Lagrange scaffold. -/
+abbrev eulerLagrange_eq_Schrodinger := eulerLagrange_eq_SchrodingerScaffold
+
+/-- The Euler–Lagrange scaffold of the extended HQIV quantum-mechanical
 action is exactly the time-dependent Schrödinger equation with the
-Hamiltonian extracted from the same action. In this skeleton the
+Hamiltonian extracted from the same action. In this scaffold the
 equivalence is definitional, mirroring the way the O-Maxwell action
 encodes its own equations of motion. -/
+theorem actionExtensionScaffoldYieldsSchrodinger
+    (ψ : ℝ → Wavefunction) (Z : ℕ) (μ : ℝ) :
+    eulerLagrange_eq_SchrodingerScaffold ψ Z μ =
+      satisfiesTimeDependentSchrodinger (hqivHamiltonian Z μ) ψ := by
+  rfl
+
+/-- Backward-compatible name for the definitional scaffold theorem. -/
 theorem actionExtensionYieldsSchrodinger
     (ψ : ℝ → Wavefunction) (Z : ℕ) (μ : ℝ) :
     eulerLagrange_eq_Schrodinger ψ Z μ =
       satisfiesTimeDependentSchrodinger (hqivHamiltonian Z μ) ψ := by
-  rfl
+  exact actionExtensionScaffoldYieldsSchrodinger ψ Z μ
 
 /-- Predicate characterising stationary eigenpairs of a Hamiltonian:
 `ψ` is an eigenstate of `H` with energy eigenvalue `E`. -/
@@ -237,43 +299,51 @@ noncomputable def hydrogenGroundStateOfShell (m : ℕ) (Z : ℕ) (μ : ℝ) : Wa
     let κ : ℝ := (Z : ℝ) / a0
     Complex.exp (- (κ : ℝ) * r)
 
-/-- **Ground-state eigenpair statement** for the HQIV effective
+/-- **Ground-state eigenpair target** for the HQIV effective
 hydrogenic Hamiltonian. This records the expected property that the
 wavefunction `hydrogenGroundState Z μ` is an eigenstate of
 `hqivHamiltonian Z μ` with eigenvalue `expectedGroundEnergy Z μ`.
 
-Once the full spatial Laplacian and associated spectral theory are
-available in Mathlib (Laguerre polynomials and spherical harmonics),
+Once patch spectral theory for the hydrogenic Hamiltonian is closed
+(Laguerre / spherical-harmonic readout on the stencil),
 this statement will be promoted to a proved theorem. -/
-def groundStateIsEigenpair (Z : ℕ) (μ : ℝ) : Prop :=
+def groundStateEigenpairTarget (Z : ℕ) (μ : ℝ) : Prop :=
   isStationaryEigenpair (hydrogenGroundState Z μ)
     (expectedGroundEnergy Z μ) (hqivHamiltonian Z μ)
 
-/-- Shell-resolved ground-state eigenpair statement (3D Hamiltonian),
-using the shell-dependent Bohr radius and Coulomb strength. This is the
-form that will be proved once the full spatial Laplacian is wired in. -/
-def groundStateIsEigenpairAtShell (m : ℕ) (Z : ℕ) (μ : ℝ) : Prop :=
-  isStationaryEigenpair (hydrogenGroundStateOfShell m Z μ)
-    (expectedGroundEnergy Z μ) (hqivHamiltonian Z μ)
+/-- Backward-compatible alias for the ground-state target. -/
+abbrev groundStateIsEigenpair := groundStateEigenpairTarget
 
-/-- Radial ground-state eigenpair statement at shell `m` for the
+/-- Shell-resolved ground-state eigenpair target (3D Hamiltonian),
+using the shell-dependent Bohr radius and Coulomb strength. This is the
+form that will be proved once patch hydrogenic spectral closure is complete. -/
+def groundStateEigenpairAtShellTarget (m : ℕ) (Z : ℕ) (μ : ℝ) : Prop :=
+  isStationaryEigenpair (hydrogenGroundStateOfShell m Z μ)
+    (expectedGroundEnergyAtShell m Z μ) (hqivHamiltonian Z μ)
+
+/-- Backward-compatible alias for the shell-resolved target. -/
+abbrev groundStateIsEigenpairAtShell := groundStateEigenpairAtShellTarget
+
+/-- Radial ground-state eigenpair target at shell `m` for the
 one-dimensional s-wave Hamiltonian. This uses the reduced radial
-wavefunction and will be upgraded to a theorem once the explicit
-second-derivative identity for the exponential is formalised. -/
-def radialGroundStateIsEigenpairAtShell (m : ℕ) (Z : ℕ) (μ : ℝ) : Prop :=
+wavefunction and will be upgraded to a theorem once the patch radial
+stencil identity for the exponential profile is formalised. -/
+def radialGroundStateEigenpairAtShellTarget (m : ℕ) (Z : ℕ) (μ : ℝ) : Prop :=
   let a0 : ℝ := bohrRadiusOfShell m Z μ
   let κ : ℝ := (Z : ℝ) / a0
   let u : RadialWave := fun r => r * Real.exp (-κ * r)
-  isRadialEigenpair u (expectedGroundEnergy Z μ)
+  isRadialEigenpair u (expectedGroundEnergyAtShell m Z μ)
     (radialHamiltonianShell m Z μ)
+
+/-- Backward-compatible alias for the radial shell target. -/
+abbrev radialGroundStateIsEigenpairAtShell := radialGroundStateEigenpairAtShellTarget
 
 /-
 General spectrum comment:
 
-Once Mathlib has robust spectral theory for the Laplacian on ℝ³
-and the associated spherical-harmonic / associated-Laguerre basis,
-this definition will be promoted to a theorem stating that the
-eigenvalues of `hqivHamiltonian Z μ` are exactly `expectedEnergy n Z μ`.
+Once patch spectral theory for `hqivHamiltonian Z μ` on the null-lattice
+stencil is available, this will be promoted to a theorem stating that
+eigenvalues are exactly `expectedEnergy n Z μ`.
 -/
 
 /-- Example: effective hydrogen Hamiltonian (Z = 1) in the HQIV
@@ -293,21 +363,13 @@ noncomputable def heliumIonHamiltonian (μ : ℝ) : Operator :=
 /-
 ## Derivation roadmap
 
-1. **Laplacian wiring:** Replace the placeholder `laplacian` definition
-   by the genuine spatial Laplacian on `Wavefunction`, constructed from
-   the HQIV metric in `HQVMetric` and the null-lattice continuum limit.
-2. **Action functional:** Refine `hqivQMLagrangian` so that it is an
-   explicit spacetime functional whose variation reproduces the
-   Schrödinger residual `i ħ ∂ₜ ψ − H ψ` in the same way that
-   `action_O_Maxwell` yields the modified Maxwell equations.
-3. **Hydrogenic spectrum:** Once Mathlib exposes the necessary
-   spherical-harmonic and associated-Laguerre machinery, upgrade
-   `groundStateIsEigenpair` and connect `expectedEnergy` to the full
-   discrete spectrum of `hqivHamiltonian Z μ`.
-4. **Back-reaction and HQIV corrections:** After the leading-order
-   Schrödinger sector is fully formalised, incorporate horizon and
-   curvature-imprint corrections as controlled perturbations of the
-   effective Hamiltonian, keeping the same Action-based origin.
+1. **Patch action functional:** Refine `hqivQMLagrangianScaffold` to a finite-patch
+   variational principle whose stationarity reproduces `i ħ ∂ₜ ψ − H_patch ψ`.
+2. **Hydrogenic spectrum:** Close patch spectral theory and upgrade
+   `groundStateEigenpairTarget` to a theorem connecting `expectedEnergy`
+   to the discrete spectrum of `hqivHamiltonian Z μ`.
+3. **Back-reaction:** Incorporate horizon and curvature-imprint corrections as
+   controlled perturbations of the patch Hamiltonian, keeping the Action origin.
 -/
 
 end Hqiv

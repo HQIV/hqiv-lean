@@ -1,0 +1,156 @@
+{
+  "meta": {
+    "n_min": 8,
+    "n_max": 10,
+    "trials": 5,
+    "seed_base": 1234,
+    "rounds": 2,
+    "max_steps": 240,
+    "top_k": 10,
+    "ratio_tol": 1e-12,
+    "formula": "ratio <= 1 + n^(1/n)"
+  },
+  "summary": {
+    "total": 15,
+    "passed": 15,
+    "pass_rate": 1.0,
+    "all_valid": true
+  },
+  "certificates": [
+    {
+      "n": 8,
+      "seed": 81290,
+      "oracleCost": 5.391806900284328,
+      "optimalCost": 5.391806900284328,
+      "ratio": 1.0,
+      "bound": 2.29683955465101,
+      "valid": true
+    },
+    {
+      "n": 8,
+      "seed": 81291,
+      "oracleCost": 4.994481258844394,
+      "optimalCost": 4.994481258844394,
+      "ratio": 1.0,
+      "bound": 2.29683955465101,
+      "valid": true
+    },
+    {
+      "n": 8,
+      "seed": 81292,
+      "oracleCost": 4.855037694234352,
+      "optimalCost": 4.855037694234352,
+      "ratio": 1.0,
+      "bound": 2.29683955465101,
+      "valid": true
+    },
+    {
+      "n": 8,
+      "seed": 81293,
+      "oracleCost": 5.051459353451349,
+      "optimalCost": 5.051459353451349,
+      "ratio": 1.0,
+      "bound": 2.29683955465101,
+      "valid": true
+    },
+    {
+      "n": 8,
+      "seed": 81294,
+      "oracleCost": 5.399478471013438,
+      "optimalCost": 5.399478471013438,
+      "ratio": 1.0,
+      "bound": 2.29683955465101,
+      "valid": true
+    },
+    {
+      "n": 9,
+      "seed": 91297,
+      "oracleCost": 7.130610706420997,
+      "optimalCost": 7.130610706420997,
+      "ratio": 1.0,
+      "bound": 2.2765180070092415,
+      "valid": true
+    },
+    {
+      "n": 9,
+      "seed": 91298,
+      "oracleCost": 5.891122592951277,
+      "optimalCost": 5.873256622180652,
+      "ratio": 1.0030419189761184,
+      "bound": 2.2765180070092415,
+      "valid": true
+    },
+    {
+      "n": 9,
+      "seed": 91299,
+      "oracleCost": 5.269243378862073,
+      "optimalCost": 5.269243378862073,
+      "ratio": 1.0,
+      "bound": 2.2765180070092415,
+      "valid": true
+    },
+    {
+      "n": 9,
+      "seed": 91300,
+      "oracleCost": 5.824443815514968,
+      "optimalCost": 5.658893020778591,
+      "ratio": 1.029254978690797,
+      "bound": 2.2765180070092415,
+      "valid": true
+    },
+    {
+      "n": 9,
+      "seed": 91301,
+      "oracleCost": 5.621569456839107,
+      "optimalCost": 5.542097264572846,
+      "ratio": 1.0143397325005963,
+      "bound": 2.2765180070092415,
+      "valid": true
+    },
+    {
+      "n": 10,
+      "seed": 101304,
+      "oracleCost": 5.969975937528645,
+      "optimalCost": 5.969975937528645,
+      "ratio": 1.0,
+      "bound": 2.2589254117941673,
+      "valid": true
+    },
+    {
+      "n": 10,
+      "seed": 101305,
+      "oracleCost": 5.818948591024144,
+      "optimalCost": 5.818948591024144,
+      "ratio": 1.0,
+      "bound": 2.2589254117941673,
+      "valid": true
+    },
+    {
+      "n": 10,
+      "seed": 101306,
+      "oracleCost": 6.037933358719738,
+      "optimalCost": 6.037933358719738,
+      "ratio": 1.0,
+      "bound": 2.2589254117941673,
+      "valid": true
+    },
+    {
+      "n": 10,
+      "seed": 101307,
+      "oracleCost": 6.08392670249973,
+      "optimalCost": 6.031743133751449,
+      "ratio": 1.0086514905544106,
+      "bound": 2.2589254117941673,
+      "valid": true
+    },
+    {
+      "n": 10,
+      "seed": 101308,
+      "oracleCost": 6.567426131568672,
+      "optimalCost": 6.513446770769733,
+      "ratio": 1.0082873726766572,
+      "bound": 2.2589254117941673,
+      "valid": true
+    }
+  ]
+}

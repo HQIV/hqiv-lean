@@ -1,0 +1,11 @@
+c 3-CNF: 8 clauses, one falsified corner per assignment (UNSAT)
+c Same structure as formula_unsat_forbids_all_assignments_3vars in hqiv_geometric_3sat_demo.py
+p cnf 3 8
+1 2 3 0
+-1 2 3 0
+1 -2 3 0
+-1 -2 3 0
+1 2 -3 0
+-1 2 -3 0
+1 -2 -3 0
+-1 -2 -3 0
