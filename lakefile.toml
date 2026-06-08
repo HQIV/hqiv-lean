@@ -343,6 +343,7 @@ globs = [
   "Hqiv.Physics.OMaxwellAlgebraSeed",
   "Hqiv.Physics.OctonionicZeta",
   "Hqiv.Physics.PromotedOMaxwell",
+  "Hqiv.Physics.RapidityZetaPhaseBridge",
   "Hqiv.Physics.QuarkLadderGlobalDetuning",
   "Hqiv.Physics.QuarkMetaResonance",
   "Hqiv.Physics.QuarterPeriodRelaxation",
