@@ -188,9 +188,11 @@ def weak_tipping_half_life_seconds(
     residual_mev: float,
     *,
     A: int = 1,
+    Z: int = 0,
     well_depth_mev: float = 0.0,
     width_well_depth_mev: float | None = None,
     bonded: bool = False,
+    valley_count: float | None = None,
     lab_temperature_K: float = CMB_TEMPERATURE_K,
     lab_gravity_phi_epsilon: float | None = None,
     gravity_tier: notd.GravityBindingTier = "full",
@@ -213,9 +215,11 @@ def weak_tipping_half_life_seconds(
         endpoint_q_mev,
         residual_mev,
         A=A,
+        Z=Z,
         well_depth_mev=well_depth_mev,
         width_well_depth_mev=width_well_depth_mev,
         bonded=bonded,
+        valley_count=valley_count,
         neutrino_mass_mev=neutrino_mass_mev,
         weak_bridge_energy_mev=weak_bridge_energy_mev,
         lab_temperature_factor=support_factor,
@@ -226,7 +230,7 @@ def weak_tipping_half_life_seconds(
 def isotope_environment(A: int, Z: int, *, xi: float) -> pn.NucleonEnvironment:
     if A <= 1:
         return pn.NucleonEnvironment(shell=notd.REFERENCE_M, xi=xi, bonded=False)
-    return pn.caustic_environment_for_A(A, xi=xi)
+    return pn.curvature_environment_for_A(A, Z, xi=xi)
 
 
 def imbalance_drive(A: int, Z: int, n_count: int, own_binding_mev: float) -> tuple[float, float]:
@@ -260,18 +264,35 @@ def stability_readout(
     own = notd.nucleon_own_binding_mev(env.shell, env.xi, bonded=env.bonded)
     shield = max(env.well_depth_mev, 0.0) if env.bonded else 0.0
     cluster_total = (
-        pn.cluster_caustic_total_mev(A, shell=env.shell, xi=env.xi) if env.bonded else 0.0
+        pn.cluster_binding_canonical_mev(A, Z, shell=env.shell, xi=env.xi)
+        if env.bonded
+        else 0.0
     )
-    width_well = (
-        dbi.beta_width_well_depth_mev(
+    width_well, width_valley = (
+        dbi.beta_width_ledger_slots(
             A,
             Z,
+            "beta_minus",
+            env,
             cluster_total_mev=cluster_total,
             proton_mass_mev=base.proton_mass_mev,
             neutron_mass_mev=base.neutron_mass_mev,
         )
         if env.bonded and n_count > 0
-        else 0.0
+        else (0.0, 0.0)
+    )
+    plus_width_well, plus_valley = (
+        dbi.beta_width_ledger_slots(
+            A,
+            Z,
+            "beta_plus",
+            env,
+            cluster_total_mev=cluster_total,
+            proton_mass_mev=base.proton_mass_mev,
+            neutron_mass_mev=base.neutron_mass_mev,
+        )
+        if env.bonded and Z > 0
+        else (0.0, 0.0)
     )
     host = default_molecular_host(A, Z) if molecular_host is None else molecular_host
     if host == "":
@@ -299,6 +320,10 @@ def stability_readout(
 
     beta_minus_eff = base.beta_minus_residual_mev + neutron_drive - shield
     beta_plus_eff = base.beta_plus_residual_mev + proton_drive - shield
+    beta_plus_valence = dbi.beta_plus_valence_residual_mev(A, Z, base)
+    beta_plus_endpoint = dbi.beta_plus_endpoint_q_local_contact(A, Z, env)
+    if beta_plus_endpoint is None:
+        beta_plus_endpoint = dbi.beta_plus_endpoint_q_from_budgets(A, Z, env)
 
     structurally_shielded = beta_minus_eff <= 0.0 and beta_plus_eff <= 0.0
 
@@ -318,15 +343,16 @@ def stability_readout(
         )
     if (
         Z > 0
-        and base.beta_plus_endpoint_q_mev is not None
-        and base.beta_plus_endpoint_q_mev > 0.0
-        and base.beta_plus_residual_mev > 0.0
+        and Z > n_count
+        and beta_plus_endpoint is not None
+        and beta_plus_endpoint > 0.0
+        and beta_plus_valence > 0.0
     ):
         active.append(
             (
                 "beta_plus",
-                base.beta_plus_endpoint_q_mev,
-                base.beta_plus_residual_mev,
+                beta_plus_endpoint,
+                beta_plus_valence,
             )
         )
 
@@ -351,8 +377,14 @@ def stability_readout(
                 item[1],
                 item[2],
                 A=A,
+                Z=Z,
                 well_depth_mev=shield,
-                width_well_depth_mev=width_well if item[0] == "beta_minus" else None,
+                width_well_depth_mev=(
+                    width_well if item[0] == "beta_minus" else plus_width_well
+                ),
+                valley_count=(
+                    width_valley if item[0] == "beta_minus" else plus_valley
+                ),
                 bonded=env.bonded,
                 lab_temperature_K=lab_temperature_K,
                 lab_gravity_phi_epsilon=gravity_eps,
@@ -368,8 +400,10 @@ def stability_readout(
             endpoint_q,
             residual_q,
             A=A,
+            Z=Z,
             well_depth_mev=shield,
-            width_well_depth_mev=width_well if channel == "beta_minus" else None,
+            width_well_depth_mev=width_well if channel == "beta_minus" else plus_width_well,
+            valley_count=width_valley if channel == "beta_minus" else plus_valley,
             bonded=env.bonded,
             lab_temperature_K=lab_temperature_K,
             lab_gravity_phi_epsilon=gravity_eps,
@@ -398,7 +432,7 @@ def stability_readout(
         beta_minus_raw_residual_mev=base.beta_minus_residual_mev,
         beta_plus_raw_residual_mev=base.beta_plus_residual_mev,
         beta_minus_endpoint_q_mev=base.beta_minus_endpoint_q_mev,
-        beta_plus_endpoint_q_mev=base.beta_plus_endpoint_q_mev,
+        beta_plus_endpoint_q_mev=beta_plus_endpoint,
         neutron_excess_drive_mev=neutron_drive,
         proton_excess_drive_mev=proton_drive,
         beta_minus_effective_residual_mev=beta_minus_eff,

@@ -61,7 +61,8 @@ class MaterialThermodynamicScales:
     `contact_xi` — Compton-triplet mean ξ for dynamic κ(ξ) cohesive scale.
     `contact_points` — intermolecular contact count for melt/boil divisors.
     `bulk_condensed` — ice-like tetrahedral network (4 H-bonds); uses shell-opening melt scale.
-    `medium_density_fraction` — geometric ρ_curv ∈ [0,1] from unit-cell / liquid reference.
+    `medium_density_fraction` — crystalline ρ_curv ∈ [0,1] from unit-cell geometry
+    vs own-motif melt reference (not an unrelated liquid host).
     `refractive_index_solid` — solid n from θ-derived CM; dresses κ₆ via optical ρ.
     `intermolecular_motif` — VSEPR network motif for melt ladder divisor.
     `z_heavy` — heavy-atom Z for linear-chain halogen melt dress.
@@ -229,11 +230,18 @@ def material_scales_from_network_name(
     if inter <= 0:
         inter = max(1, cp // 2)
     triplet = (1, 1, 1) if name == "H2" else (4, 3, 1)
+    mw = 16.0
+    try:
+        from hqiv_lab.spec import MoleculeSpec
+
+        mw = MoleculeSpec.from_chart_name(name).molecular_weight_amu
+    except (KeyError, ValueError):
+        pass
     return MaterialThermodynamicScales(
         name=name,
         characteristic_binding_ev=be,
         contact_points=inter,
-        molecular_weight_amu=16.0,
+        molecular_weight_amu=mw,
         intermolecular_contacts=inter,
         contact_xi=lean.xi_from_compton_triplet(triplet),
     )
@@ -292,8 +300,26 @@ def melt_motif_relative_scale_for_material(material: MaterialThermodynamicScales
     )
 
 
+def ionic_lattice_melt_cohesive_ev(material: MaterialThermodynamicScales) -> float:
+    """
+    Ionic crystal melt slot: κ(ξ)·α²·E_bind / (n_coord²·(1+α)³).
+
+    ``E_bind`` is the per-contact ``ionicBondSurplus`` lattice readout (Python witness);
+    ``n_coord`` is the rocksalt coordination (6 for NaCl).  Same κ/α spine as
+    ``intermolecular_cohesive_ev``, ionic contact closure instead of tetrahedral H-bond.
+    """
+    kappa_xi = lean.dynamic_binding_curvature_coupling_at_xi(material.contact_xi)
+    n = float(intermolecular_contact_count(material))
+    e_bind = float(material.characteristic_binding_ev)
+    return kappa_xi * KAPPA_MELT * e_bind / (n * n * (1.0 + ALPHA) ** 3)
+
+
 def melt_cohesive_ev(material: MaterialThermodynamicScales) -> float:
     """Energy scale for solid→liquid (one shell release on the cohesive ladder)."""
+    from hqiv_lab.coordination import IntermolecularMotif
+
+    if _resolve_motif(material) == IntermolecularMotif.IONIC_LATTICE:
+        return ionic_lattice_melt_cohesive_ev(material)
     if material.bulk_condensed:
         import hqiv_homogeneous_curvature_feedback as hcf
 

@@ -404,6 +404,41 @@ def molecular_binding_phi_epsilon(
     )
 
 
+def bond_state_witness_for_molecule(
+    name: str,
+    fragments: tuple[FragmentConfig, ...],
+    bonds: tuple[BondGeometry, ...],
+    *,
+    kind: str,
+    reference_ev: float,
+    reference_source: str = "dynamic_binding_chart",
+) -> dict[str, Any]:
+    """
+    Bond-state network cross-check (inside + outside + hyperclosure spine).
+
+    Witness only — does not alter dynamic chart surplus unless promoted after audit.
+    """
+    case = MoleculeCase(
+        name,
+        fragments,
+        bonds,
+        kind,
+        reference_ev,
+        reference_source,
+    )
+    ev = evaluate_case(case)
+    return {
+        "predicted_ev": ev.predicted_ev,
+        "reference_ev": ev.reference_ev,
+        "error_pct": ev.error_pct,
+        "inside_surplus_ev": ev.inside_surplus_ev,
+        "outside_contact_ev": ev.outside_contact_ev,
+        "hyperclosure_ev": ev.hyperclosure_ev,
+        "hyperclosure_trace_l1": ev.hyperclosure_trace_l1,
+        "notes": ev.notes,
+    }
+
+
 def molecular_host_phi_epsilon(
     host: str,
     *,

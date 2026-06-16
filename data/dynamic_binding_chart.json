@@ -37,10 +37,10 @@
     {
       "name": "H2",
       "kind": "dissociation",
-      "binding_ev": 4.459676975168868,
+      "binding_ev": 4.707436807122694,
       "reference_ev": 4.478,
-      "error_pct": -0.40917875906948337,
-      "dimless_core": 2.295421972513388,
+      "error_pct": 5.123644643204436,
+      "dimless_core": 2.4229454154307986,
       "surplus_dimless": 8.999999999999998,
       "eta_p": 0.2408477842003854,
       "vev_geometric_mean": 0.9471601008835248,
@@ -89,7 +89,8 @@
           "1s",
           "1s"
         ],
-        "surplus_dress_factor": 1.0
+        "surplus_dress_factor": 1.0,
+        "outside_geff_contact_dress": 1.0555555555555556
       },
       "nuclei": [
         {
@@ -132,7 +133,20 @@
         "cluster_mean_mev_per_A": 0.0,
         "cluster_spread_pct": 0.0
       },
-      "notes": "dissociation: shell=dynamicComptonTripletH2; surplus=covalent_dimer_uud; \u03b7\u2082\u00b7surplus\u00b7vev\u00b7geom\u00b7\u03ba(\u03be=2.00,w=0.87)",
+      "notes": "dissociation: shell=dynamicComptonTripletH2; surplus=covalent_dimer_uud; \u03b7\u2082\u00b7surplus\u00b7vev\u00b7geom\u00b7G_eff\u00b7\u03ba(\u03be=2.00,w=0.87)",
+      "network_binding_feedback": {
+        "contact_xi": 2.0,
+        "bare_vev_geometric_mean": 0.9471601008835248,
+        "networked_vev_geometric_mean": 0.9471601008835248,
+        "vev_network_dress": 1.0,
+        "steric_multiplier": 1.0,
+        "phase_multiplier": 1.0,
+        "geometry_alignment_factor": 1.0,
+        "curvature_feedback_at_xi": 1.1180313328215241,
+        "dimless_prefactor": 1.0589546699861765,
+        "peripheral_hydrogen_count": 0,
+        "h_h_repulsive_contact_points": 0
+      },
       "network_balance": {
         "aggregation": "arithmetic_product_of_factors",
         "lean_formula": "eta_p * surplus * geomean(tuftVevNetworked) * feedback * geomean(valley_align)",
@@ -148,16 +162,26 @@
         "geomean_eta_times_vev_per_leg": 0.22812141158081045,
         "ratio_leg_geomean_over_product": 1.0,
         "note": "Strict geomean(\u03b7_i\u00d7vev_i) per Compton leg underbinds hydrides; chart uses mean-angle \u03b7 \u00d7 networked vev (steric/phase on vev)."
+      },
+      "bond_state_witness": {
+        "predicted_ev": 1.0448302002698773,
+        "reference_ev": 4.478,
+        "error_pct": -76.66748101228501,
+        "inside_surplus_ev": -0.0003766184500446396,
+        "outside_contact_ev": 1.0444535818198326,
+        "hyperclosure_ev": 0.0,
+        "hyperclosure_trace_l1": 0.0,
+        "notes": "inside curvature surplus (hadron spine) + outside G_eff(\u03b8) contact bonding; joint shell m=5"
       }
     },
     {
       "name": "LiH",
       "kind": "dissociation",
-      "binding_ev": 2.444087763215555,
+      "binding_ev": 2.444087763215554,
       "reference_ev": 2.515,
-      "error_pct": -2.819572039142952,
-      "dimless_core": 1.2579863487138885,
-      "surplus_dimless": 8.341372219789271,
+      "error_pct": -2.8195720391429875,
+      "dimless_core": 1.257986348713888,
+      "surplus_dimless": 8.34137221978927,
       "eta_p": 0.1374270959790021,
       "vev_geometric_mean": 0.9554405494725902,
       "vev_geometric_mean_bare": 0.9554405494725902,
@@ -205,7 +229,8 @@
           "2p",
           "1s"
         ],
-        "surplus_dress_factor": 1.0
+        "surplus_dress_factor": 1.0,
+        "outside_geff_contact_dress": 1.0
       },
       "nuclei": [
         {
@@ -248,7 +273,20 @@
         "cluster_mean_mev_per_A": 5.159234322763848,
         "cluster_spread_pct": 200.0
       },
-      "notes": "dissociation: shell=dynamicComptonTripletHeavyHydride; surplus=bond_averaged_compton; \u03b7\u2082\u00b7surplus\u00b7vev\u00b7geom\u00b7\u03ba(\u03be=3.67,w=1.00)",
+      "notes": "dissociation: shell=dynamicComptonTripletHeavyHydride; surplus=bond_averaged_compton; \u03b7\u2082\u00b7surplus\u00b7vev\u00b7geom\u00b7G_eff\u00b7\u03ba(\u03be=3.67,w=1.00)",
+      "network_binding_feedback": {
+        "contact_xi": 3.6666666666666665,
+        "bare_vev_geometric_mean": 0.9554405494725902,
+        "networked_vev_geometric_mean": 0.9554405494725902,
+        "vev_network_dress": 1.0,
+        "steric_multiplier": 1.0,
+        "phase_multiplier": 1.0,
+        "geometry_alignment_factor": 1.0,
+        "curvature_feedback_at_xi": 1.1485830119656228,
+        "dimless_prefactor": 1.0974027840673173,
+        "peripheral_hydrogen_count": 1,
+        "h_h_repulsive_contact_points": 0
+      },
       "network_balance": {
         "aggregation": "arithmetic_product_of_factors",
         "lean_formula": "eta_p * surplus * geomean(tuftVevNetworked) * feedback * geomean(valley_align)",
@@ -264,15 +302,25 @@
         "geomean_eta_times_vev_per_leg": 0.08554000893037338,
         "ratio_leg_geomean_over_product": 0.6514682471236802,
         "note": "Strict geomean(\u03b7_i\u00d7vev_i) per Compton leg underbinds hydrides; chart uses mean-angle \u03b7 \u00d7 networked vev (steric/phase on vev)."
+      },
+      "bond_state_witness": {
+        "predicted_ev": 0.038312511777225694,
+        "reference_ev": 2.515,
+        "error_pct": -98.47663969076636,
+        "inside_surplus_ev": -0.0018194508769642254,
+        "outside_contact_ev": 0.03649306090026147,
+        "hyperclosure_ev": 0.0,
+        "hyperclosure_trace_l1": 0.0,
+        "notes": "inside curvature surplus (hadron spine) + outside G_eff(\u03b8) contact bonding; joint shell m=7"
       }
     },
     {
       "name": "HF",
       "kind": "dissociation",
-      "binding_ev": 5.476717225204023,
+      "binding_ev": 5.6232887645973975,
       "reference_ev": 5.87,
-      "error_pct": -6.6998769130490095,
-      "dimless_core": 2.8188985717961885,
+      "error_pct": -4.202917127812651,
+      "dimless_core": 2.894339805307484,
       "surplus_dimless": 18.682744439578542,
       "eta_p": 0.1374270959790021,
       "vev_geometric_mean": 0.9558814165223269,
@@ -321,7 +369,8 @@
           "2p",
           "1s"
         ],
-        "surplus_dress_factor": 1.0
+        "surplus_dress_factor": 1.0,
+        "outside_geff_contact_dress": 1.0267626633558598
       },
       "nuclei": [
         {
@@ -364,7 +413,20 @@
         "cluster_mean_mev_per_A": 4.195042495933809,
         "cluster_spread_pct": 200.0
       },
-      "notes": "dissociation: shell=dynamicComptonTripletHeavyHydride; surplus=bond_averaged_compton; \u03b7\u2082\u00b7surplus\u00b7vev\u00b7geom\u00b7\u03ba(\u03be=3.67,w=1.00)",
+      "notes": "dissociation: shell=dynamicComptonTripletHeavyHydride; surplus=bond_averaged_compton; \u03b7\u2082\u00b7surplus\u00b7vev\u00b7geom\u00b7G_eff\u00b7\u03ba(\u03be=3.67,w=1.00)",
+      "network_binding_feedback": {
+        "contact_xi": 3.6666666666666665,
+        "bare_vev_geometric_mean": 0.9558814165223269,
+        "networked_vev_geometric_mean": 0.9558814165223269,
+        "vev_network_dress": 1.0,
+        "steric_multiplier": 1.0,
+        "phase_multiplier": 1.0,
+        "geometry_alignment_factor": 1.0,
+        "curvature_feedback_at_xi": 1.1485830119656228,
+        "dimless_prefactor": 1.0979091564711803,
+        "peripheral_hydrogen_count": 1,
+        "h_h_repulsive_contact_points": 0
+      },
       "network_balance": {
         "aggregation": "arithmetic_product_of_factors",
         "lean_formula": "eta_p * surplus * geomean(tuftVevNetworked) * feedback * geomean(valley_align)",
@@ -380,15 +442,25 @@
         "geomean_eta_times_vev_per_leg": 0.08557947948810972,
         "ratio_leg_geomean_over_product": 0.6514682471236802,
         "note": "Strict geomean(\u03b7_i\u00d7vev_i) per Compton leg underbinds hydrides; chart uses mean-angle \u03b7 \u00d7 networked vev (steric/phase on vev)."
+      },
+      "bond_state_witness": {
+        "predicted_ev": 0.05518620161650757,
+        "reference_ev": 5.87,
+        "error_pct": -99.0598602791055,
+        "inside_surplus_ev": 0.0030060888533122235,
+        "outside_contact_ev": 0.058192290469819795,
+        "hyperclosure_ev": 0.0,
+        "hyperclosure_trace_l1": 0.0,
+        "notes": "inside curvature surplus (hadron spine) + outside G_eff(\u03b8) contact bonding; joint shell m=9"
       }
     },
     {
       "name": "H2O",
       "kind": "atomization",
-      "binding_ev": 9.473005366224866,
+      "binding_ev": 9.713995140658158,
       "reference_ev": 9.51,
-      "error_pct": -0.38900771582685256,
-      "dimless_core": 4.875811585556916,
+      "error_pct": 2.145059312914384,
+      "dimless_core": 4.99985044004464,
       "surplus_dimless": 32.364503874929305,
       "eta_p": 0.1374270959790021,
       "vev_geometric_mean": 0.9624865317936523,
@@ -437,7 +509,8 @@
           "2p",
           "1s"
         ],
-        "surplus_dress_factor": 1.197615606936416
+        "surplus_dress_factor": 1.197615606936416,
+        "outside_geff_contact_dress": 1.0254396324204058
       },
       "nuclei": [
         {
@@ -495,7 +568,20 @@
         "cluster_mean_mev_per_A": 2.9775157945277324,
         "cluster_spread_pct": 300.0
       },
-      "notes": "atomization: shell=dynamicComptonTripletHeavyHydride; surplus=electronic_compton_triplet; \u03b7\u2082\u00b7surplus\u00b7vev\u00b7geom\u00b7\u03ba(\u03be=3.67,w=1.00)",
+      "notes": "atomization: shell=dynamicComptonTripletHeavyHydride; surplus=electronic_compton_triplet; \u03b7\u2082\u00b7surplus\u00b7vev\u00b7geom\u00b7G_eff\u00b7\u03ba(\u03be=3.67,w=1.00)",
+      "network_binding_feedback": {
+        "contact_xi": 3.6666666666666665,
+        "bare_vev_geometric_mean": 0.9557574707135476,
+        "networked_vev_geometric_mean": 0.9624865317936523,
+        "vev_network_dress": 1.0070405529501967,
+        "steric_multiplier": 1.0070405529501967,
+        "phase_multiplier": 1.0,
+        "geometry_alignment_factor": 0.9916274537819773,
+        "curvature_feedback_at_xi": 1.1485830119656228,
+        "dimless_prefactor": 1.096239865992089,
+        "peripheral_hydrogen_count": 2,
+        "h_h_repulsive_contact_points": 1
+      },
       "network_balance": {
         "aggregation": "arithmetic_product_of_factors",
         "lean_formula": "eta_p * surplus * geomean(tuftVevNetworked) * feedback * geomean(valley_align)",
@@ -511,15 +597,25 @@
         "geomean_eta_times_vev_per_leg": 0.08556838269554033,
         "ratio_leg_geomean_over_product": 0.6469136175451504,
         "note": "Strict geomean(\u03b7_i\u00d7vev_i) per Compton leg underbinds hydrides; chart uses mean-angle \u03b7 \u00d7 networked vev (steric/phase on vev)."
+      },
+      "bond_state_witness": {
+        "predicted_ev": 0.10584734706365441,
+        "reference_ev": 9.51,
+        "error_pct": -98.88698898986694,
+        "inside_surplus_ev": -0.003638901753928449,
+        "outside_contact_ev": 0.07694471484917419,
+        "hyperclosure_ev": 0.025263730460551772,
+        "hyperclosure_trace_l1": 0.026006781356450355,
+        "notes": "inside curvature surplus (hadron spine) + outside G_eff(\u03b8) contact bonding; joint shell m=8"
       }
     },
     {
       "name": "CH4",
       "kind": "atomization",
-      "binding_ev": 16.013227193297006,
+      "binding_ev": 16.228191595661595,
       "reference_ev": 17.0,
-      "error_pct": -5.80454592178232,
-      "dimless_core": 8.242102231844047,
+      "error_pct": -4.540049437284733,
+      "dimless_core": 8.352745674237585,
       "surplus_dimless": 43.70686109894636,
       "eta_p": 0.1374270959790021,
       "vev_geometric_mean": 1.1946855788251365,
@@ -568,7 +664,8 @@
           "2p",
           "1s"
         ],
-        "surplus_dress_factor": 1.0
+        "surplus_dress_factor": 1.0,
+        "outside_geff_contact_dress": 1.0134241773859658
       },
       "nuclei": [
         {
@@ -656,7 +753,20 @@
         "cluster_mean_mev_per_A": 2.0155491532187724,
         "cluster_spread_pct": 500.0
       },
-      "notes": "atomization: shell=dynamicComptonTripletHeavyHydride; surplus=electronic_compton_triplet; \u03b7\u2082\u00b7surplus\u00b7vev\u00b7geom\u00b7\u03ba(\u03be=3.67,w=1.00)",
+      "notes": "atomization: shell=dynamicComptonTripletHeavyHydride; surplus=electronic_compton_triplet; \u03b7\u2082\u00b7surplus\u00b7vev\u00b7geom\u00b7G_eff\u00b7\u03ba(\u03be=3.67,w=1.00)",
+      "network_binding_feedback": {
+        "contact_xi": 3.6666666666666665,
+        "bare_vev_geometric_mean": 0.9554956224360736,
+        "networked_vev_geometric_mean": 1.1946855788251365,
+        "vev_network_dress": 1.2503307715625518,
+        "steric_multiplier": 1.2503307715625518,
+        "phase_multiplier": 1.0,
+        "geometry_alignment_factor": 0.9999999998865339,
+        "curvature_feedback_at_xi": 1.1485830119656228,
+        "dimless_prefactor": 1.3721955603231712,
+        "peripheral_hydrogen_count": 4,
+        "h_h_repulsive_contact_points": 4
+      },
       "network_balance": {
         "aggregation": "arithmetic_product_of_factors",
         "lean_formula": "eta_p * surplus * geomean(tuftVevNetworked) * feedback * geomean(valley_align)",
@@ -672,15 +782,25 @@
         "geomean_eta_times_vev_per_leg": 0.08554493957916236,
         "ratio_leg_geomean_over_product": 0.5210367223942937,
         "note": "Strict geomean(\u03b7_i\u00d7vev_i) per Compton leg underbinds hydrides; chart uses mean-angle \u03b7 \u00d7 networked vev (steric/phase on vev)."
+      },
+      "bond_state_witness": {
+        "predicted_ev": 0.16150334792755297,
+        "reference_ev": 17.0,
+        "error_pct": -99.04998030630851,
+        "inside_surplus_ev": -0.0072778035078569,
+        "outside_contact_ev": 0.14586424423917443,
+        "hyperclosure_ev": 0.008361300180521638,
+        "hyperclosure_trace_l1": 0.017214441548132783,
+        "notes": "inside curvature surplus (hadron spine) + outside G_eff(\u03b8) contact bonding; joint shell m=8"
       }
     },
     {
       "name": "NH3",
       "kind": "atomization",
-      "binding_ev": 10.736026401449994,
+      "binding_ev": 10.950056327507616,
       "reference_ev": 10.07,
-      "error_pct": 6.613966250744724,
-      "dimless_core": 5.525895941922791,
+      "error_pct": 8.739387562141165,
+      "dimless_core": 5.636058403864214,
       "surplus_dimless": 35.36548887915709,
       "eta_p": 0.1374270959790021,
       "vev_geometric_mean": 1.0027431791769492,
@@ -729,7 +849,8 @@
           "2p",
           "1s"
         ],
-        "surplus_dress_factor": 1.0
+        "surplus_dress_factor": 1.0,
+        "outside_geff_contact_dress": 1.0199356743411805
       },
       "nuclei": [
         {
@@ -802,7 +923,20 @@
         "cluster_mean_mev_per_A": 2.3558366725933704,
         "cluster_spread_pct": 400.0
       },
-      "notes": "atomization: shell=dynamicComptonTripletHeavyHydride; surplus=electronic_compton_triplet; \u03b7\u2082\u00b7surplus\u00b7vev\u00b7geom\u00b7\u03ba(\u03be=3.67,w=1.00)",
+      "notes": "atomization: shell=dynamicComptonTripletHeavyHydride; surplus=electronic_compton_triplet; \u03b7\u2082\u00b7surplus\u00b7vev\u00b7geom\u00b7G_eff\u00b7\u03ba(\u03be=3.67,w=1.00)",
+      "network_binding_feedback": {
+        "contact_xi": 3.6666666666666665,
+        "bare_vev_geometric_mean": 0.9556452807708399,
+        "networked_vev_geometric_mean": 1.0027431791769492,
+        "vev_network_dress": 1.0492838706513774,
+        "steric_multiplier": 1.0492838706513774,
+        "phase_multiplier": 1.0,
+        "geometry_alignment_factor": 0.9871850323926176,
+        "curvature_feedback_at_xi": 1.1485830119656228,
+        "dimless_prefactor": 1.1369743498716238,
+        "peripheral_hydrogen_count": 3,
+        "h_h_repulsive_contact_points": 3
+      },
       "network_balance": {
         "aggregation": "arithmetic_product_of_factors",
         "lean_formula": "eta_p * surplus * geomean(tuftVevNetworked) * feedback * geomean(valley_align)",
@@ -818,65 +952,1289 @@
         "geomean_eta_times_vev_per_leg": 0.08555833839848134,
         "ratio_leg_geomean_over_product": 0.6208693999263136,
         "note": "Strict geomean(\u03b7_i\u00d7vev_i) per Compton leg underbinds hydrides; chart uses mean-angle \u03b7 \u00d7 networked vev (steric/phase on vev)."
+      },
+      "bond_state_witness": {
+        "predicted_ev": 0.1316448320074142,
+        "reference_ev": 10.07,
+        "error_pct": -98.69270276060165,
+        "inside_surplus_ev": -0.005458352630892676,
+        "outside_contact_ev": 0.1128217378126745,
+        "hyperclosure_ev": 0.013364741563847022,
+        "hyperclosure_trace_l1": 0.020636733297116724,
+        "notes": "inside curvature surplus (hadron spine) + outside G_eff(\u03b8) contact bonding; joint shell m=8"
       }
     }
   ],
-  "diagnostic_molecules": [
+  "expanded_molecules": [
     {
-      "name": "CO",
-      "kind": "atomization",
-      "binding_ev": 35.99564862501568,
-      "reference_ev": 11.24,
-      "error_pct": 220.24598420832456,
-      "dimless_core": 18.52717208640513,
-      "surplus_dimless": 67.09219581817383,
-      "eta_p": 0.24084778420038533,
-      "vev_geometric_mean": 0.9966799146035409,
-      "vev_geometric_mean_bare": 0.9966799146035409,
+      "name": "LiF",
+      "kind": "dissociation",
+      "binding_ev": 5.66518090447404,
+      "reference_ev": 5.991,
+      "error_pct": -5.438475972725083,
+      "dimless_core": 2.9159019361263443,
+      "surplus_dimless": 19.349411106245203,
+      "eta_p": 0.1374270959790021,
+      "vev_geometric_mean": 0.9547076540184657,
+      "vev_geometric_mean_bare": 0.9547076540184657,
       "geometry_alignment_factor": 1.0,
-      "contact_xi": 5.0,
-      "dynamic_binding_curvature_coupling": 0.2,
-      "dynamic_binding_curvature_feedback": 1.150373233316249,
+      "contact_xi": 3.6666666666666665,
+      "dynamic_binding_curvature_coupling": 0.19761896274869428,
+      "dynamic_binding_curvature_feedback": 1.1485830119656228,
       "peripheral_hydrogens": 0,
       "h_h_repulsive_contact_points": 0,
       "compton_triplet_m": [
         4,
-        4,
-        4
+        3,
+        1
       ],
-      "binding_curvature_correction": 0.1503732333162492,
+      "binding_curvature_correction": 0.1485830119656228,
       "shell_readout": {
         "compton_triplet_m": [
           4,
-          4,
-          4
+          3,
+          1
         ],
-        "compton_triplet_class": "dynamicComptonTripletHomonuclearPeriod2",
-        "surplus_angle_policy": "electronic_compton_triplet",
+        "compton_triplet_class": "dynamicComptonTripletHeavyHydride",
+        "surplus_angle_policy": "bond_averaged_compton",
         "surplus_angles_rad": [
           0.3783228147386552,
-          0.3783228147386552,
-          0.3783228147386552
+          0.20177216786061608,
+          0.030265825179092414
         ],
         "eta_angles_rad": [
           0.3783228147386552,
-          0.3783228147386552,
-          0.3783228147386552
+          0.20177216786061608,
+          0.030265825179092414
         ],
-        "eta_p_linear": 0.24084778420038533,
-        "contact_xi": 5.0,
+        "eta_p_linear": 0.1290944123314065,
+        "contact_xi": 3.6666666666666665,
         "curvature_feedback_weight": 1.0,
         "has_heavy_nucleus": true,
         "electron_split": [
-          6,
-          8
+          12,
+          3,
+          9
         ],
         "electronic_shell_slots": [
           "2s",
           "2p",
           "1s"
         ],
-        "surplus_dress_factor": 1.1204238921001926
+        "surplus_dress_factor": 1.0,
+        "outside_geff_contact_dress": 1.0
+      },
+      "nuclei": [
+        {
+          "Z": 3,
+          "A": 7,
+          "m_nuclear": 7,
+          "xi_nuclear": 8.0,
+          "per_nucleon_binding_mev": 10.318468645527696,
+          "per_nucleon_trace_mev": 1.9048126952282032,
+          "inside_ratio": 2.081453525070757,
+          "tuft_vev_factor": 1.2531545520216447,
+          "valence_s_shell": 7,
+          "valence_p_shell": 6,
+          "electronic_s_shell": 4,
+          "electronic_p_shell": 3,
+          "electronic_shell_label": "2s"
+        },
+        {
+          "Z": 9,
+          "A": 19,
+          "m_nuclear": 8,
+          "xi_nuclear": 9.0,
+          "per_nucleon_binding_mev": 8.390084991867617,
+          "per_nucleon_trace_mev": 2.323582788429026,
+          "inside_ratio": 2.4906247817054834,
+          "tuft_vev_factor": 1.3404272184749788,
+          "valence_s_shell": 8,
+          "valence_p_shell": 7,
+          "electronic_s_shell": 4,
+          "electronic_p_shell": 3,
+          "electronic_shell_label": "2s"
+        }
+      ],
+      "nuclear_binding_uniformity": {
+        "count": 2.0,
+        "trace_mean_mev": 2.1141977418286144,
+        "trace_min_mev": 1.9048126952282032,
+        "trace_max_mev": 2.323582788429026,
+        "trace_spread_pct": 19.80751776031223,
+        "cluster_mean_mev_per_A": 9.354276818697656,
+        "cluster_spread_pct": 20.61499452106825
+      },
+      "notes": "dissociation: shell=dynamicComptonTripletHeavyHydride; surplus=bond_averaged_compton; \u03b7\u2082\u00b7surplus\u00b7vev\u00b7geom\u00b7G_eff\u00b7\u03ba(\u03be=3.67,w=1.00)",
+      "network_binding_feedback": {
+        "contact_xi": 3.6666666666666665,
+        "bare_vev_geometric_mean": 0.9547076540184657,
+        "networked_vev_geometric_mean": 0.9547076540184657,
+        "vev_network_dress": 1.0,
+        "steric_multiplier": 1.0,
+        "phase_multiplier": 1.0,
+        "geometry_alignment_factor": 1.0,
+        "curvature_feedback_at_xi": 1.1485830119656228,
+        "dimless_prefactor": 1.096560992799163,
+        "peripheral_hydrogen_count": 0,
+        "h_h_repulsive_contact_points": 0
+      },
+      "network_balance": {
+        "aggregation": "arithmetic_product_of_factors",
+        "lean_formula": "eta_p * surplus * geomean(tuftVevNetworked) * feedback * geomean(valley_align)",
+        "eta_policy": "phaseParticipationEta(mean_compton_angle); not geomean(slot_eta)",
+        "eta_p_chart": 0.1374270959790021,
+        "eta_slot_geomean_linear": 0.08415996770099218,
+        "eta_fragment_nuclear_geomean": 0.24084778420038533,
+        "vev_compton_slot_geomean": 0.9547076540184657,
+        "vev_networked_readout": 0.9547076540184657,
+        "vev_bare_triplet_geomean": 0.9577913207792554,
+        "geometry_bond_geomean": 1.0,
+        "participation_vev_product": 0.1312027004006836,
+        "geomean_eta_times_vev_per_leg": 0.08547439324792674,
+        "ratio_leg_geomean_over_product": 0.6514682471236803,
+        "note": "Strict geomean(\u03b7_i\u00d7vev_i) per Compton leg underbinds hydrides; chart uses mean-angle \u03b7 \u00d7 networked vev (steric/phase on vev)."
+      },
+      "bond_state_witness": {
+        "predicted_ev": 0.10707343463033686,
+        "reference_ev": 5.991,
+        "error_pct": -98.21276189900956,
+        "inside_surplus_ev": -0.0033842324813026063,
+        "outside_contact_ev": 0.10368920214903425,
+        "hyperclosure_ev": 0.0,
+        "hyperclosure_trace_l1": 0.0,
+        "notes": "inside curvature surplus (hadron spine) + outside G_eff(\u03b8) contact bonding; joint shell m=9"
+      }
+    },
+    {
+      "name": "NaCl",
+      "kind": "dissociation",
+      "binding_ev": 4.057667646667213,
+      "reference_ev": 4.259,
+      "error_pct": -4.727221256933264,
+      "dimless_core": 2.08850540637283,
+      "surplus_dimless": 12.402529993305695,
+      "eta_p": 0.14579386234664837,
+      "vev_geometric_mean": 1.0043667767065083,
+      "vev_geometric_mean_bare": 1.0043667767065083,
+      "geometry_alignment_factor": 1.0,
+      "contact_xi": 4.333333333333333,
+      "dynamic_binding_curvature_coupling": 0.19948914348241342,
+      "dynamic_binding_curvature_feedback": 1.1499891375846982,
+      "peripheral_hydrogens": 0,
+      "h_h_repulsive_contact_points": 0,
+      "compton_triplet_m": [
+        5,
+        4,
+        1
+      ],
+      "binding_curvature_correction": 0.1499891375846983,
+      "shell_readout": {
+        "compton_triplet_m": [
+          5,
+          4,
+          1
+        ],
+        "compton_triplet_class": "general",
+        "surplus_angle_policy": "detuning_compton_triplet",
+        "surplus_angles_rad": [
+          0.3783228147386552,
+          0.2251921516301519,
+          0.01801537213041215
+        ],
+        "eta_angles_rad": [
+          0.3783228147386552,
+          0.2251921516301519,
+          0.01801537213041215
+        ],
+        "eta_p_linear": 0.13648041104688502,
+        "contact_xi": 4.333333333333333,
+        "curvature_feedback_weight": 1.0,
+        "has_heavy_nucleus": true,
+        "electron_split": [
+          28,
+          11,
+          17
+        ],
+        "electronic_shell_slots": [
+          "3s",
+          "3p",
+          "1s"
+        ],
+        "surplus_dress_factor": 1.0,
+        "outside_geff_contact_dress": 1.0
+      },
+      "nuclei": [
+        {
+          "Z": 11,
+          "A": 23,
+          "m_nuclear": 9,
+          "xi_nuclear": 10.0,
+          "per_nucleon_binding_mev": 9.709394269367698,
+          "per_nucleon_trace_mev": 2.7796035788577,
+          "inside_ratio": 2.9204130793188625,
+          "tuft_vev_factor": 1.4278072916525757,
+          "valence_s_shell": 9,
+          "valence_p_shell": 8,
+          "electronic_s_shell": 5,
+          "electronic_p_shell": 4,
+          "electronic_shell_label": "3s"
+        },
+        {
+          "Z": 17,
+          "A": 35,
+          "m_nuclear": 10,
+          "xi_nuclear": 11.0,
+          "per_nucleon_binding_mev": 10.375356451820291,
+          "per_nucleon_trace_mev": 3.2723363707446906,
+          "inside_ratio": 3.369181707225013,
+          "tuft_vev_factor": 1.5150388431098074,
+          "valence_s_shell": 10,
+          "valence_p_shell": 9,
+          "electronic_s_shell": 5,
+          "electronic_p_shell": 4,
+          "electronic_shell_label": "3s"
+        }
+      ],
+      "nuclear_binding_uniformity": {
+        "count": 2.0,
+        "trace_mean_mev": 3.0259699748011952,
+        "trace_min_mev": 2.7796035788577,
+        "trace_max_mev": 3.2723363707446906,
+        "trace_spread_pct": 16.283465995704834,
+        "cluster_mean_mev_per_A": 10.042375360593994,
+        "cluster_spread_pct": 6.631520517205633
+      },
+      "notes": "dissociation: shell=general; surplus=detuning_compton_triplet; \u03b7\u2082\u00b7surplus\u00b7vev\u00b7geom\u00b7G_eff\u00b7\u03ba(\u03be=4.33,w=1.00)",
+      "network_binding_feedback": {
+        "contact_xi": 4.333333333333333,
+        "bare_vev_geometric_mean": 1.0043667767065083,
+        "networked_vev_geometric_mean": 1.0043667767065083,
+        "vev_network_dress": 1.0,
+        "steric_multiplier": 1.0,
+        "phase_multiplier": 1.0,
+        "geometry_alignment_factor": 1.0,
+        "curvature_feedback_at_xi": 1.1499891375846982,
+        "dimless_prefactor": 1.1550108833634407,
+        "peripheral_hydrogen_count": 0,
+        "h_h_repulsive_contact_points": 0
+      },
+      "network_balance": {
+        "aggregation": "arithmetic_product_of_factors",
+        "lean_formula": "eta_p * surplus * geomean(tuftVevNetworked) * feedback * geomean(valley_align)",
+        "eta_policy": "phaseParticipationEta(mean_compton_angle); not geomean(slot_eta)",
+        "eta_p_chart": 0.14579386234664837,
+        "eta_slot_geomean_linear": 0.07343444151914708,
+        "eta_fragment_nuclear_geomean": 0.24084778420038533,
+        "vev_compton_slot_geomean": 1.0043667767065083,
+        "vev_networked_readout": 1.0043667767065083,
+        "vev_bare_triplet_geomean": 1.0080160216813165,
+        "geometry_bond_geomean": 1.0,
+        "participation_vev_product": 0.1464305115886956,
+        "geomean_eta_times_vev_per_leg": 0.07854210360436857,
+        "ratio_leg_geomean_over_product": 0.5363779908451266,
+        "note": "Strict geomean(\u03b7_i\u00d7vev_i) per Compton leg underbinds hydrides; chart uses mean-angle \u03b7 \u00d7 networked vev (steric/phase on vev)."
+      },
+      "bond_state_witness": {
+        "predicted_ev": 0.11465641922215788,
+        "reference_ev": 4.259,
+        "error_pct": -97.30790281234661,
+        "inside_surplus_ev": -0.009447634275501153,
+        "outside_contact_ev": 0.10520878494665674,
+        "hyperclosure_ev": 0.0,
+        "hyperclosure_trace_l1": 0.0,
+        "notes": "inside curvature surplus (hadron spine) + outside G_eff(\u03b8) contact bonding; joint shell m=11"
+      }
+    },
+    {
+      "name": "HCl",
+      "kind": "dissociation",
+      "binding_ev": 5.060952777141083,
+      "reference_ev": 4.434,
+      "error_pct": 14.139665700069534,
+      "dimless_core": 2.6049021647049693,
+      "surplus_dimless": 14.951268771291485,
+      "eta_p": 0.14579386234664837,
+      "vev_geometric_mean": 1.0055282814654403,
+      "vev_geometric_mean_bare": 1.0055282814654403,
+      "geometry_alignment_factor": 1.0,
+      "contact_xi": 4.333333333333333,
+      "dynamic_binding_curvature_coupling": 0.19948914348241342,
+      "dynamic_binding_curvature_feedback": 1.1499891375846982,
+      "peripheral_hydrogens": 1,
+      "h_h_repulsive_contact_points": 0,
+      "compton_triplet_m": [
+        5,
+        4,
+        1
+      ],
+      "binding_curvature_correction": 0.1499891375846983,
+      "shell_readout": {
+        "compton_triplet_m": [
+          5,
+          4,
+          1
+        ],
+        "compton_triplet_class": "general",
+        "surplus_angle_policy": "detuning_compton_triplet",
+        "surplus_angles_rad": [
+          0.3783228147386552,
+          0.2251921516301519,
+          0.01801537213041215
+        ],
+        "eta_angles_rad": [
+          0.3783228147386552,
+          0.2251921516301519,
+          0.01801537213041215
+        ],
+        "eta_p_linear": 0.13648041104688502,
+        "contact_xi": 4.333333333333333,
+        "curvature_feedback_weight": 1.0,
+        "has_heavy_nucleus": true,
+        "electron_split": [
+          18,
+          17,
+          1
+        ],
+        "electronic_shell_slots": [
+          "3s",
+          "3p",
+          "1s"
+        ],
+        "surplus_dress_factor": 1.0,
+        "outside_geff_contact_dress": 1.033441977911605
+      },
+      "nuclei": [
+        {
+          "Z": 17,
+          "A": 35,
+          "m_nuclear": 10,
+          "xi_nuclear": 11.0,
+          "per_nucleon_binding_mev": 10.375356451820291,
+          "per_nucleon_trace_mev": 3.2723363707446906,
+          "inside_ratio": 3.369181707225013,
+          "tuft_vev_factor": 1.5150388431098074,
+          "valence_s_shell": 10,
+          "valence_p_shell": 9,
+          "electronic_s_shell": 5,
+          "electronic_p_shell": 4,
+          "electronic_shell_label": "3s"
+        },
+        {
+          "Z": 1,
+          "A": 1,
+          "m_nuclear": 4,
+          "xi_nuclear": 5.0,
+          "per_nucleon_binding_mev": 0.0,
+          "per_nucleon_trace_mev": 0.8786749038688855,
+          "inside_ratio": 1.0,
+          "tuft_vev_factor": 1.0,
+          "valence_s_shell": 1,
+          "valence_p_shell": null,
+          "electronic_s_shell": 1,
+          "electronic_p_shell": null,
+          "electronic_shell_label": "1s"
+        }
+      ],
+      "nuclear_binding_uniformity": {
+        "count": 2.0,
+        "trace_mean_mev": 2.075505637306788,
+        "trace_min_mev": 0.8786749038688855,
+        "trace_max_mev": 3.2723363707446906,
+        "trace_spread_pct": 115.32907566475521,
+        "cluster_mean_mev_per_A": 5.187678225910146,
+        "cluster_spread_pct": 200.0
+      },
+      "notes": "dissociation: shell=general; surplus=detuning_compton_triplet; \u03b7\u2082\u00b7surplus\u00b7vev\u00b7geom\u00b7G_eff\u00b7\u03ba(\u03be=4.33,w=1.00)",
+      "network_binding_feedback": {
+        "contact_xi": 4.333333333333333,
+        "bare_vev_geometric_mean": 1.0055282814654403,
+        "networked_vev_geometric_mean": 1.0055282814654403,
+        "vev_network_dress": 1.0,
+        "steric_multiplier": 1.0,
+        "phase_multiplier": 1.0,
+        "geometry_alignment_factor": 1.0,
+        "curvature_feedback_at_xi": 1.1499891375846982,
+        "dimless_prefactor": 1.1563466012194654,
+        "peripheral_hydrogen_count": 1,
+        "h_h_repulsive_contact_points": 0
+      },
+      "network_balance": {
+        "aggregation": "arithmetic_product_of_factors",
+        "lean_formula": "eta_p * surplus * geomean(tuftVevNetworked) * feedback * geomean(valley_align)",
+        "eta_policy": "phaseParticipationEta(mean_compton_angle); not geomean(slot_eta)",
+        "eta_p_chart": 0.14579386234664837,
+        "eta_slot_geomean_linear": 0.07343444151914708,
+        "eta_fragment_nuclear_geomean": 0.24084778420038533,
+        "vev_compton_slot_geomean": 1.0055282814654403,
+        "vev_networked_readout": 1.0055282814654403,
+        "vev_bare_triplet_geomean": 1.0080160216813165,
+        "geometry_bond_geomean": 1.0,
+        "participation_vev_product": 0.1465998518536343,
+        "geomean_eta_times_vev_per_leg": 0.07863293399544558,
+        "ratio_leg_geomean_over_product": 0.5363779908451266,
+        "note": "Strict geomean(\u03b7_i\u00d7vev_i) per Compton leg underbinds hydrides; chart uses mean-angle \u03b7 \u00d7 networked vev (steric/phase on vev)."
+      },
+      "bond_state_witness": {
+        "predicted_ev": 0.04473343800649855,
+        "reference_ev": 4.434,
+        "error_pct": -98.99112679281691,
+        "inside_surplus_ev": -0.0018194508769642237,
+        "outside_contact_ev": 0.04291398712953433,
+        "hyperclosure_ev": 0.0,
+        "hyperclosure_trace_l1": 0.0,
+        "notes": "inside curvature surplus (hadron spine) + outside G_eff(\u03b8) contact bonding; joint shell m=10"
+      }
+    },
+    {
+      "name": "HBr",
+      "kind": "dissociation",
+      "binding_ev": 3.7974046850140515,
+      "reference_ev": 3.758,
+      "error_pct": 1.0485546837161117,
+      "dimless_core": 1.95454652905135,
+      "surplus_dimless": 12.460253704310162,
+      "eta_p": 0.1374270959790021,
+      "vev_geometric_mean": 0.9554275329664926,
+      "vev_geometric_mean_bare": 0.9554275329664926,
+      "geometry_alignment_factor": 1.0,
+      "contact_xi": 3.6666666666666665,
+      "dynamic_binding_curvature_coupling": 0.19761896274869428,
+      "dynamic_binding_curvature_feedback": 1.1485830119656228,
+      "peripheral_hydrogens": 1,
+      "h_h_repulsive_contact_points": 0,
+      "compton_triplet_m": [
+        4,
+        3,
+        1
+      ],
+      "binding_curvature_correction": 0.1485830119656228,
+      "shell_readout": {
+        "compton_triplet_m": [
+          4,
+          3,
+          1
+        ],
+        "compton_triplet_class": "dynamicComptonTripletHeavyHydride",
+        "surplus_angle_policy": "bond_averaged_compton",
+        "surplus_angles_rad": [
+          0.3783228147386552,
+          0.24320752376056406,
+          0.011581310655264954
+        ],
+        "eta_angles_rad": [
+          0.3783228147386552,
+          0.20177216786061608,
+          0.030265825179092414
+        ],
+        "eta_p_linear": 0.1290944123314065,
+        "contact_xi": 3.6666666666666665,
+        "curvature_feedback_weight": 1.0,
+        "has_heavy_nucleus": true,
+        "electron_split": [
+          36,
+          35,
+          1
+        ],
+        "electronic_shell_slots": [
+          "none",
+          "none",
+          "1s"
+        ],
+        "surplus_dress_factor": 1.0,
+        "outside_geff_contact_dress": 1.0401275938568606
+      },
+      "nuclei": [
+        {
+          "Z": 35,
+          "A": 35,
+          "m_nuclear": 10,
+          "xi_nuclear": 11.0,
+          "per_nucleon_binding_mev": 10.375356451820291,
+          "per_nucleon_trace_mev": 3.2723363707446906,
+          "inside_ratio": 3.369181707225013,
+          "tuft_vev_factor": 1.5150388431098074,
+          "valence_s_shell": 10,
+          "valence_p_shell": 9,
+          "electronic_s_shell": 6,
+          "electronic_p_shell": 5,
+          "electronic_shell_label": "none"
+        },
+        {
+          "Z": 1,
+          "A": 1,
+          "m_nuclear": 4,
+          "xi_nuclear": 5.0,
+          "per_nucleon_binding_mev": 0.0,
+          "per_nucleon_trace_mev": 0.8786749038688855,
+          "inside_ratio": 1.0,
+          "tuft_vev_factor": 1.0,
+          "valence_s_shell": 1,
+          "valence_p_shell": null,
+          "electronic_s_shell": 1,
+          "electronic_p_shell": null,
+          "electronic_shell_label": "1s"
+        }
+      ],
+      "nuclear_binding_uniformity": {
+        "count": 2.0,
+        "trace_mean_mev": 2.075505637306788,
+        "trace_min_mev": 0.8786749038688855,
+        "trace_max_mev": 3.2723363707446906,
+        "trace_spread_pct": 115.32907566475521,
+        "cluster_mean_mev_per_A": 5.187678225910146,
+        "cluster_spread_pct": 200.0
+      },
+      "notes": "dissociation: shell=dynamicComptonTripletHeavyHydride; surplus=bond_averaged_compton; \u03b7\u2082\u00b7surplus\u00b7vev\u00b7geom\u00b7G_eff\u00b7\u03ba(\u03be=3.67,w=1.00)",
+      "network_binding_feedback": {
+        "contact_xi": 3.6666666666666665,
+        "bare_vev_geometric_mean": 0.9554275329664926,
+        "networked_vev_geometric_mean": 0.9554275329664926,
+        "vev_network_dress": 1.0,
+        "steric_multiplier": 1.0,
+        "phase_multiplier": 1.0,
+        "geometry_alignment_factor": 1.0,
+        "curvature_feedback_at_xi": 1.1485830119656228,
+        "dimless_prefactor": 1.0973878335295386,
+        "peripheral_hydrogen_count": 1,
+        "h_h_repulsive_contact_points": 0
+      },
+      "network_balance": {
+        "aggregation": "arithmetic_product_of_factors",
+        "lean_formula": "eta_p * surplus * geomean(tuftVevNetworked) * feedback * geomean(valley_align)",
+        "eta_policy": "phaseParticipationEta(mean_compton_angle); not geomean(slot_eta)",
+        "eta_p_chart": 0.1374270959790021,
+        "eta_slot_geomean_linear": 0.08415996770099218,
+        "eta_fragment_nuclear_geomean": 0.24084778420038533,
+        "vev_compton_slot_geomean": 0.9554275329664926,
+        "vev_networked_readout": 0.9554275329664926,
+        "vev_bare_triplet_geomean": 0.9577913207792554,
+        "geometry_bond_geomean": 1.0,
+        "participation_vev_product": 0.13130163127396738,
+        "geomean_eta_times_vev_per_leg": 0.08553884357053133,
+        "ratio_leg_geomean_over_product": 0.6514682471236803,
+        "note": "Strict geomean(\u03b7_i\u00d7vev_i) per Compton leg underbinds hydrides; chart uses mean-angle \u03b7 \u00d7 networked vev (steric/phase on vev)."
+      },
+      "bond_state_witness": {
+        "predicted_ev": 0.03880780238074412,
+        "reference_ev": 3.758,
+        "error_pct": -98.96732830280084,
+        "inside_surplus_ev": -0.0018194508769642237,
+        "outside_contact_ev": 0.036988351503779895,
+        "hyperclosure_ev": 0.0,
+        "hyperclosure_trace_l1": 0.0,
+        "notes": "inside curvature surplus (hadron spine) + outside G_eff(\u03b8) contact bonding; joint shell m=10"
+      }
+    },
+    {
+      "name": "H2S",
+      "kind": "atomization",
+      "binding_ev": 6.973592275997065,
+      "reference_ev": 8.714,
+      "error_pct": -19.97254675238622,
+      "dimless_core": 3.589348965586725,
+      "surplus_dimless": 44.74949264248765,
+      "eta_p": 0.1374270959790021,
+      "vev_geometric_mean": 0.9624865317936523,
+      "vev_geometric_mean_bare": 0.9557574707135476,
+      "geometry_alignment_factor": 0.5184090619276781,
+      "contact_xi": 3.6666666666666665,
+      "dynamic_binding_curvature_coupling": 0.19761896274869428,
+      "dynamic_binding_curvature_feedback": 1.1485830119656228,
+      "peripheral_hydrogens": 2,
+      "h_h_repulsive_contact_points": 1,
+      "compton_triplet_m": [
+        4,
+        3,
+        1
+      ],
+      "binding_curvature_correction": 0.1485830119656228,
+      "shell_readout": {
+        "compton_triplet_m": [
+          4,
+          3,
+          1
+        ],
+        "compton_triplet_class": "dynamicComptonTripletHeavyHydride",
+        "surplus_angle_policy": "electronic_compton_triplet",
+        "surplus_angles_rad": [
+          0.3783228147386552,
+          0.20177216786061608,
+          0.030265825179092414
+        ],
+        "eta_angles_rad": [
+          0.3783228147386552,
+          0.20177216786061608,
+          0.030265825179092414
+        ],
+        "eta_p_linear": 0.1290944123314065,
+        "contact_xi": 3.6666666666666665,
+        "curvature_feedback_weight": 1.0,
+        "has_heavy_nucleus": true,
+        "electron_split": [
+          18,
+          16,
+          2
+        ],
+        "electronic_shell_slots": [
+          "3s",
+          "3p",
+          "1s"
+        ],
+        "surplus_dress_factor": 1.197615606936416,
+        "outside_geff_contact_dress": 1.0184168219762457
+      },
+      "nuclei": [
+        {
+          "Z": 16,
+          "A": 16,
+          "m_nuclear": 8,
+          "xi_nuclear": 9.0,
+          "per_nucleon_binding_mev": 8.932547383583197,
+          "per_nucleon_trace_mev": 2.323582788429026,
+          "inside_ratio": 2.4906247817054834,
+          "tuft_vev_factor": 1.3404272184749788,
+          "valence_s_shell": 8,
+          "valence_p_shell": 7,
+          "electronic_s_shell": 5,
+          "electronic_p_shell": 4,
+          "electronic_shell_label": "3s"
+        },
+        {
+          "Z": 1,
+          "A": 1,
+          "m_nuclear": 4,
+          "xi_nuclear": 5.0,
+          "per_nucleon_binding_mev": 0.0,
+          "per_nucleon_trace_mev": 0.8786749038688855,
+          "inside_ratio": 1.0,
+          "tuft_vev_factor": 1.0,
+          "valence_s_shell": 1,
+          "valence_p_shell": null,
+          "electronic_s_shell": 1,
+          "electronic_p_shell": null,
+          "electronic_shell_label": "1s"
+        },
+        {
+          "Z": 1,
+          "A": 1,
+          "m_nuclear": 4,
+          "xi_nuclear": 5.0,
+          "per_nucleon_binding_mev": 0.0,
+          "per_nucleon_trace_mev": 0.8786749038688855,
+          "inside_ratio": 1.0,
+          "tuft_vev_factor": 1.0,
+          "valence_s_shell": 1,
+          "valence_p_shell": null,
+          "electronic_s_shell": 1,
+          "electronic_p_shell": null,
+          "electronic_shell_label": "1s"
+        }
+      ],
+      "nuclear_binding_uniformity": {
+        "count": 3.0,
+        "trace_mean_mev": 1.3603108653889322,
+        "trace_min_mev": 0.8786749038688855,
+        "trace_max_mev": 2.323582788429026,
+        "trace_spread_pct": 106.21894754527459,
+        "cluster_mean_mev_per_A": 2.9775157945277324,
+        "cluster_spread_pct": 300.0
+      },
+      "notes": "atomization: shell=dynamicComptonTripletHeavyHydride; surplus=electronic_compton_triplet; \u03b7\u2082\u00b7surplus\u00b7vev\u00b7geom\u00b7G_eff\u00b7\u03ba(\u03be=3.67,w=1.00)",
+      "network_binding_feedback": {
+        "contact_xi": 3.6666666666666665,
+        "bare_vev_geometric_mean": 0.9557574707135476,
+        "networked_vev_geometric_mean": 0.9624865317936523,
+        "vev_network_dress": 1.0070405529501967,
+        "steric_multiplier": 1.0070405529501967,
+        "phase_multiplier": 1.0,
+        "geometry_alignment_factor": 0.5184090619276781,
+        "curvature_feedback_at_xi": 1.1485830119656228,
+        "dimless_prefactor": 0.573098978259663,
+        "peripheral_hydrogen_count": 2,
+        "h_h_repulsive_contact_points": 1
+      },
+      "network_balance": {
+        "aggregation": "arithmetic_product_of_factors",
+        "lean_formula": "eta_p * surplus * geomean(tuftVevNetworked) * feedback * geomean(valley_align)",
+        "eta_policy": "phaseParticipationEta(mean_compton_angle); not geomean(slot_eta)",
+        "eta_p_chart": 0.1374270959790021,
+        "eta_slot_geomean_linear": 0.08415996770099218,
+        "eta_fragment_nuclear_geomean": 0.24084778420038536,
+        "vev_compton_slot_geomean": 0.9557574707135476,
+        "vev_networked_readout": 0.9624865317936523,
+        "vev_bare_triplet_geomean": 0.9577913207792554,
+        "geometry_bond_geomean": 0.5184090619276781,
+        "participation_vev_product": 0.1322717289833031,
+        "geomean_eta_times_vev_per_leg": 0.08556838269554033,
+        "ratio_leg_geomean_over_product": 0.6469136175451504,
+        "note": "Strict geomean(\u03b7_i\u00d7vev_i) per Compton leg underbinds hydrides; chart uses mean-angle \u03b7 \u00d7 networked vev (steric/phase on vev)."
+      },
+      "bond_state_witness": {
+        "predicted_ev": 0.146094182408938,
+        "reference_ev": 8.714,
+        "error_pct": -98.32345441348477,
+        "inside_surplus_ev": -0.003638901753928449,
+        "outside_contact_ev": 0.06881303254087591,
+        "hyperclosure_ev": 0.07364224811413367,
+        "hyperclosure_trace_l1": 0.07580819658807877,
+        "notes": "inside curvature surplus (hadron spine) + outside G_eff(\u03b8) contact bonding; joint shell m=8"
+      }
+    },
+    {
+      "name": "HCN",
+      "kind": "atomization",
+      "binding_ev": 13.311372588448053,
+      "reference_ev": 13.6,
+      "error_pct": -2.1222603790584285,
+      "dimless_core": 6.85144177346591,
+      "surplus_dimless": 44.420351813369635,
+      "eta_p": 0.1374270959790021,
+      "vev_geometric_mean": 0.9556452807708399,
+      "vev_geometric_mean_bare": 0.9556452807708399,
+      "geometry_alignment_factor": 1.0,
+      "contact_xi": 3.6666666666666665,
+      "dynamic_binding_curvature_coupling": 0.19761896274869428,
+      "dynamic_binding_curvature_feedback": 1.1485830119656228,
+      "peripheral_hydrogens": 1,
+      "h_h_repulsive_contact_points": 0,
+      "compton_triplet_m": [
+        4,
+        3,
+        1
+      ],
+      "binding_curvature_correction": 0.1485830119656228,
+      "shell_readout": {
+        "compton_triplet_m": [
+          4,
+          3,
+          1
+        ],
+        "compton_triplet_class": "dynamicComptonTripletHeavyHydride",
+        "surplus_angle_policy": "electronic_compton_triplet",
+        "surplus_angles_rad": [
+          0.3783228147386552,
+          0.20177216786061608,
+          0.030265825179092414
+        ],
+        "eta_angles_rad": [
+          0.3783228147386552,
+          0.20177216786061608,
+          0.030265825179092414
+        ],
+        "eta_p_linear": 0.1290944123314065,
+        "contact_xi": 3.6666666666666665,
+        "curvature_feedback_weight": 1.0,
+        "has_heavy_nucleus": true,
+        "electron_split": [
+          14,
+          13,
+          1
+        ],
+        "electronic_shell_slots": [
+          "2s",
+          "2p",
+          "1s"
+        ],
+        "surplus_dress_factor": 1.125,
+        "outside_geff_contact_dress": 1.0225122035098115
+      },
+      "nuclei": [
+        {
+          "Z": 1,
+          "A": 1,
+          "m_nuclear": 4,
+          "xi_nuclear": 5.0,
+          "per_nucleon_binding_mev": 0.0,
+          "per_nucleon_trace_mev": 0.8786749038688855,
+          "inside_ratio": 1.0,
+          "tuft_vev_factor": 1.0,
+          "valence_s_shell": 1,
+          "valence_p_shell": null,
+          "electronic_s_shell": 1,
+          "electronic_p_shell": null,
+          "electronic_shell_label": "1s"
+        },
+        {
+          "Z": 6,
+          "A": 12,
+          "m_nuclear": 8,
+          "xi_nuclear": 9.0,
+          "per_nucleon_binding_mev": 10.077745766093862,
+          "per_nucleon_trace_mev": 2.323582788429026,
+          "inside_ratio": 2.4906247817054834,
+          "tuft_vev_factor": 1.3404272184749788,
+          "valence_s_shell": 8,
+          "valence_p_shell": 7,
+          "electronic_s_shell": 4,
+          "electronic_p_shell": 3,
+          "electronic_shell_label": "2s"
+        },
+        {
+          "Z": 7,
+          "A": 14,
+          "m_nuclear": 8,
+          "xi_nuclear": 9.0,
+          "per_nucleon_binding_mev": 9.423346690373481,
+          "per_nucleon_trace_mev": 2.323582788429026,
+          "inside_ratio": 2.4906247817054834,
+          "tuft_vev_factor": 1.3404272184749788,
+          "valence_s_shell": 8,
+          "valence_p_shell": 7,
+          "electronic_s_shell": 4,
+          "electronic_p_shell": 3,
+          "electronic_shell_label": "2s"
+        }
+      ],
+      "nuclear_binding_uniformity": {
+        "count": 3.0,
+        "trace_mean_mev": 1.8419468269089794,
+        "trace_min_mev": 0.8786749038688855,
+        "trace_max_mev": 2.323582788429026,
+        "trace_spread_pct": 78.44460347342815,
+        "cluster_mean_mev_per_A": 6.500364152155782,
+        "cluster_spread_pct": 155.03355704697987
+      },
+      "notes": "atomization: shell=dynamicComptonTripletHeavyHydride; surplus=electronic_compton_triplet; \u03b7\u2082\u00b7surplus\u00b7vev\u00b7geom\u00b7G_eff\u00b7\u03ba(\u03be=3.67,w=1.00)",
+      "network_binding_feedback": {
+        "contact_xi": 3.6666666666666665,
+        "bare_vev_geometric_mean": 0.9556452807708399,
+        "networked_vev_geometric_mean": 0.9556452807708399,
+        "vev_network_dress": 1.0,
+        "steric_multiplier": 1.0,
+        "phase_multiplier": 1.0,
+        "geometry_alignment_factor": 1.0,
+        "curvature_feedback_at_xi": 1.1485830119656228,
+        "dimless_prefactor": 1.0976379349585046,
+        "peripheral_hydrogen_count": 1,
+        "h_h_repulsive_contact_points": 0
+      },
+      "network_balance": {
+        "aggregation": "arithmetic_product_of_factors",
+        "lean_formula": "eta_p * surplus * geomean(tuftVevNetworked) * feedback * geomean(valley_align)",
+        "eta_policy": "phaseParticipationEta(mean_compton_angle); not geomean(slot_eta)",
+        "eta_p_chart": 0.1374270959790021,
+        "eta_slot_geomean_linear": 0.08415996770099218,
+        "eta_fragment_nuclear_geomean": 0.24084778420038536,
+        "vev_compton_slot_geomean": 0.9556452807708399,
+        "vev_networked_readout": 0.9556452807708399,
+        "vev_bare_triplet_geomean": 0.9577913207792554,
+        "geometry_bond_geomean": 1.0,
+        "participation_vev_product": 0.13133155572237462,
+        "geomean_eta_times_vev_per_leg": 0.08555833839848134,
+        "ratio_leg_geomean_over_product": 0.6514682471236803,
+        "note": "Strict geomean(\u03b7_i\u00d7vev_i) per Compton leg underbinds hydrides; chart uses mean-angle \u03b7 \u00d7 networked vev (steric/phase on vev)."
+      },
+      "bond_state_witness": {
+        "predicted_ev": 10.73411031260551,
+        "reference_ev": 13.6,
+        "error_pct": -21.07271828966536,
+        "inside_surplus_ev": -0.008977270084759494,
+        "outside_contact_ev": 0.4961634931807341,
+        "hyperclosure_ev": 10.228969549340016,
+        "hyperclosure_trace_l1": 10.52982159490884,
+        "notes": "inside curvature surplus (hadron spine) + outside G_eff(\u03b8) contact bonding; joint shell m=9"
+      }
+    },
+    {
+      "name": "C2H2",
+      "kind": "atomization",
+      "binding_ev": 15.074456878435536,
+      "reference_ev": 17.406,
+      "error_pct": -13.39505412825729,
+      "dimless_core": 7.758911628606525,
+      "surplus_dimless": 49.83823199693911,
+      "eta_p": 0.1374270959790021,
+      "vev_geometric_mean": 0.9622228399595159,
+      "vev_geometric_mean_bare": 0.9554956224360736,
+      "geometry_alignment_factor": 1.0,
+      "contact_xi": 3.6666666666666665,
+      "dynamic_binding_curvature_coupling": 0.19761896274869428,
+      "dynamic_binding_curvature_feedback": 1.1485830119656228,
+      "peripheral_hydrogens": 2,
+      "h_h_repulsive_contact_points": 1,
+      "compton_triplet_m": [
+        4,
+        3,
+        1
+      ],
+      "binding_curvature_correction": 0.1485830119656228,
+      "shell_readout": {
+        "compton_triplet_m": [
+          4,
+          3,
+          1
+        ],
+        "compton_triplet_class": "dynamicComptonTripletHeavyHydride",
+        "surplus_angle_policy": "electronic_compton_triplet",
+        "surplus_angles_rad": [
+          0.3783228147386552,
+          0.20177216786061608,
+          0.030265825179092414
+        ],
+        "eta_angles_rad": [
+          0.3783228147386552,
+          0.20177216786061608,
+          0.030265825179092414
+        ],
+        "eta_p_linear": 0.1290944123314065,
+        "contact_xi": 3.6666666666666665,
+        "curvature_feedback_weight": 1.0,
+        "has_heavy_nucleus": true,
+        "electron_split": [
+          14,
+          12,
+          2
+        ],
+        "electronic_shell_slots": [
+          "2s",
+          "2p",
+          "1s"
+        ],
+        "surplus_dress_factor": 1.125,
+        "outside_geff_contact_dress": 1.0250091887978803
+      },
+      "nuclei": [
+        {
+          "Z": 1,
+          "A": 1,
+          "m_nuclear": 4,
+          "xi_nuclear": 5.0,
+          "per_nucleon_binding_mev": 0.0,
+          "per_nucleon_trace_mev": 0.8786749038688855,
+          "inside_ratio": 1.0,
+          "tuft_vev_factor": 1.0,
+          "valence_s_shell": 1,
+          "valence_p_shell": null,
+          "electronic_s_shell": 1,
+          "electronic_p_shell": null,
+          "electronic_shell_label": "1s"
+        },
+        {
+          "Z": 6,
+          "A": 12,
+          "m_nuclear": 8,
+          "xi_nuclear": 9.0,
+          "per_nucleon_binding_mev": 10.077745766093862,
+          "per_nucleon_trace_mev": 2.323582788429026,
+          "inside_ratio": 2.4906247817054834,
+          "tuft_vev_factor": 1.3404272184749788,
+          "valence_s_shell": 8,
+          "valence_p_shell": 7,
+          "electronic_s_shell": 4,
+          "electronic_p_shell": 3,
+          "electronic_shell_label": "2s"
+        },
+        {
+          "Z": 6,
+          "A": 12,
+          "m_nuclear": 8,
+          "xi_nuclear": 9.0,
+          "per_nucleon_binding_mev": 10.077745766093862,
+          "per_nucleon_trace_mev": 2.323582788429026,
+          "inside_ratio": 2.4906247817054834,
+          "tuft_vev_factor": 1.3404272184749788,
+          "valence_s_shell": 8,
+          "valence_p_shell": 7,
+          "electronic_s_shell": 4,
+          "electronic_p_shell": 3,
+          "electronic_shell_label": "2s"
+        },
+        {
+          "Z": 1,
+          "A": 1,
+          "m_nuclear": 4,
+          "xi_nuclear": 5.0,
+          "per_nucleon_binding_mev": 0.0,
+          "per_nucleon_trace_mev": 0.8786749038688855,
+          "inside_ratio": 1.0,
+          "tuft_vev_factor": 1.0,
+          "valence_s_shell": 1,
+          "valence_p_shell": null,
+          "electronic_s_shell": 1,
+          "electronic_p_shell": null,
+          "electronic_shell_label": "1s"
+        }
+      ],
+      "nuclear_binding_uniformity": {
+        "count": 4.0,
+        "trace_mean_mev": 1.601128846148956,
+        "trace_min_mev": 0.8786749038688855,
+        "trace_max_mev": 2.323582788429026,
+        "trace_spread_pct": 90.24307369362816,
+        "cluster_mean_mev_per_A": 5.038872883046931,
+        "cluster_spread_pct": 200.0
+      },
+      "notes": "atomization: shell=dynamicComptonTripletHeavyHydride; surplus=electronic_compton_triplet; \u03b7\u2082\u00b7surplus\u00b7vev\u00b7geom\u00b7G_eff\u00b7\u03ba(\u03be=3.67,w=1.00)",
+      "network_binding_feedback": {
+        "contact_xi": 3.6666666666666665,
+        "bare_vev_geometric_mean": 0.9554956224360736,
+        "networked_vev_geometric_mean": 0.9622228399595159,
+        "vev_network_dress": 1.0070405529501967,
+        "steric_multiplier": 1.0070405529501967,
+        "phase_multiplier": 1.0,
+        "geometry_alignment_factor": 1.0,
+        "curvature_feedback_at_xi": 1.1485830119656228,
+        "dimless_prefactor": 1.1051928077028161,
+        "peripheral_hydrogen_count": 2,
+        "h_h_repulsive_contact_points": 1
+      },
+      "network_balance": {
+        "aggregation": "arithmetic_product_of_factors",
+        "lean_formula": "eta_p * surplus * geomean(tuftVevNetworked) * feedback * geomean(valley_align)",
+        "eta_policy": "phaseParticipationEta(mean_compton_angle); not geomean(slot_eta)",
+        "eta_p_chart": 0.1374270959790021,
+        "eta_slot_geomean_linear": 0.08415996770099218,
+        "eta_fragment_nuclear_geomean": 0.24084778420038536,
+        "vev_compton_slot_geomean": 0.9554956224360736,
+        "vev_networked_readout": 0.9622228399595159,
+        "vev_bare_triplet_geomean": 0.9577913207792554,
+        "geometry_bond_geomean": 1.0,
+        "participation_vev_product": 0.13223549058030437,
+        "geomean_eta_times_vev_per_leg": 0.08554493957916236,
+        "ratio_leg_geomean_over_product": 0.6469136175451504,
+        "note": "Strict geomean(\u03b7_i\u00d7vev_i) per Compton leg underbinds hydrides; chart uses mean-angle \u03b7 \u00d7 networked vev (steric/phase on vev)."
+      },
+      "bond_state_witness": {
+        "predicted_ev": 6.498997702121519,
+        "reference_ev": 17.406,
+        "error_pct": -62.66231355784488,
+        "inside_surplus_ev": -0.01079672096172372,
+        "outside_contact_ev": 0.5678619829489406,
+        "hyperclosure_ev": 5.9203389982108545,
+        "hyperclosure_trace_l1": 9.141699923707936,
+        "notes": "inside curvature surplus (hadron spine) + outside G_eff(\u03b8) contact bonding; joint shell m=9"
+      }
+    },
+    {
+      "name": "PH3",
+      "kind": "atomization",
+      "binding_ev": 12.432320301510085,
+      "reference_ev": 9.32,
+      "error_pct": 33.39399465139576,
+      "dimless_core": 6.398988390483132,
+      "surplus_dimless": 41.90642120565375,
+      "eta_p": 0.1374270959790021,
+      "vev_geometric_mean": 1.002805968714434,
+      "vev_geometric_mean_bare": 0.9557051211431556,
+      "geometry_alignment_factor": 0.9486291848371642,
+      "contact_xi": 3.6666666666666665,
+      "dynamic_binding_curvature_coupling": 0.19761896274869428,
+      "dynamic_binding_curvature_feedback": 1.1485830119656228,
+      "peripheral_hydrogens": 3,
+      "h_h_repulsive_contact_points": 3,
+      "compton_triplet_m": [
+        4,
+        3,
+        1
+      ],
+      "binding_curvature_correction": 0.1485830119656228,
+      "shell_readout": {
+        "compton_triplet_m": [
+          4,
+          3,
+          1
+        ],
+        "compton_triplet_class": "dynamicComptonTripletHeavyHydride",
+        "surplus_angle_policy": "electronic_compton_triplet",
+        "surplus_angles_rad": [
+          0.3783228147386552,
+          0.20177216786061608,
+          0.030265825179092414
+        ],
+        "eta_angles_rad": [
+          0.3783228147386552,
+          0.20177216786061608,
+          0.030265825179092414
+        ],
+        "eta_p_linear": 0.1290944123314065,
+        "contact_xi": 3.6666666666666665,
+        "curvature_feedback_weight": 1.0,
+        "has_heavy_nucleus": true,
+        "electron_split": [
+          18,
+          15,
+          3
+        ],
+        "electronic_shell_slots": [
+          "3s",
+          "3p",
+          "1s"
+        ],
+        "surplus_dress_factor": 1.0645472061657033,
+        "outside_geff_contact_dress": 1.0169101884024032
+      },
+      "nuclei": [
+        {
+          "Z": 15,
+          "A": 15,
+          "m_nuclear": 8,
+          "xi_nuclear": 9.0,
+          "per_nucleon_binding_mev": 9.16158706008533,
+          "per_nucleon_trace_mev": 2.323582788429026,
+          "inside_ratio": 2.4906247817054834,
+          "tuft_vev_factor": 1.3404272184749788,
+          "valence_s_shell": 8,
+          "valence_p_shell": 7,
+          "electronic_s_shell": 5,
+          "electronic_p_shell": 4,
+          "electronic_shell_label": "3s"
+        },
+        {
+          "Z": 1,
+          "A": 1,
+          "m_nuclear": 4,
+          "xi_nuclear": 5.0,
+          "per_nucleon_binding_mev": 0.0,
+          "per_nucleon_trace_mev": 0.8786749038688855,
+          "inside_ratio": 1.0,
+          "tuft_vev_factor": 1.0,
+          "valence_s_shell": 1,
+          "valence_p_shell": null,
+          "electronic_s_shell": 1,
+          "electronic_p_shell": null,
+          "electronic_shell_label": "1s"
+        },
+        {
+          "Z": 1,
+          "A": 1,
+          "m_nuclear": 4,
+          "xi_nuclear": 5.0,
+          "per_nucleon_binding_mev": 0.0,
+          "per_nucleon_trace_mev": 0.8786749038688855,
+          "inside_ratio": 1.0,
+          "tuft_vev_factor": 1.0,
+          "valence_s_shell": 1,
+          "valence_p_shell": null,
+          "electronic_s_shell": 1,
+          "electronic_p_shell": null,
+          "electronic_shell_label": "1s"
+        },
+        {
+          "Z": 1,
+          "A": 1,
+          "m_nuclear": 4,
+          "xi_nuclear": 5.0,
+          "per_nucleon_binding_mev": 0.0,
+          "per_nucleon_trace_mev": 0.8786749038688855,
+          "inside_ratio": 1.0,
+          "tuft_vev_factor": 1.0,
+          "valence_s_shell": 1,
+          "valence_p_shell": null,
+          "electronic_s_shell": 1,
+          "electronic_p_shell": null,
+          "electronic_shell_label": "1s"
+        }
+      ],
+      "nuclear_binding_uniformity": {
+        "count": 4.0,
+        "trace_mean_mev": 1.2399018750089206,
+        "trace_min_mev": 0.8786749038688855,
+        "trace_max_mev": 2.323582788429026,
+        "trace_spread_pct": 116.53405109575668,
+        "cluster_mean_mev_per_A": 2.2903967650213324,
+        "cluster_spread_pct": 400.0
+      },
+      "notes": "atomization: shell=dynamicComptonTripletHeavyHydride; surplus=electronic_compton_triplet; \u03b7\u2082\u00b7surplus\u00b7vev\u00b7geom\u00b7G_eff\u00b7\u03ba(\u03be=3.67,w=1.00)",
+      "network_binding_feedback": {
+        "contact_xi": 3.6666666666666665,
+        "bare_vev_geometric_mean": 0.9557051211431556,
+        "networked_vev_geometric_mean": 1.002805968714434,
+        "vev_network_dress": 1.0492838706513774,
+        "steric_multiplier": 1.0492838706513774,
+        "phase_multiplier": 1.0,
+        "geometry_alignment_factor": 0.9486291848371642,
+        "curvature_feedback_at_xi": 1.1485830119656228,
+        "dimless_prefactor": 1.0926366919726591,
+        "peripheral_hydrogen_count": 3,
+        "h_h_repulsive_contact_points": 3
+      },
+      "network_balance": {
+        "aggregation": "arithmetic_product_of_factors",
+        "lean_formula": "eta_p * surplus * geomean(tuftVevNetworked) * feedback * geomean(valley_align)",
+        "eta_policy": "phaseParticipationEta(mean_compton_angle); not geomean(slot_eta)",
+        "eta_p_chart": 0.1374270959790021,
+        "eta_slot_geomean_linear": 0.08415996770099218,
+        "eta_fragment_nuclear_geomean": 0.24084778420038533,
+        "vev_compton_slot_geomean": 0.9557051211431556,
+        "vev_networked_readout": 1.002805968714434,
+        "vev_bare_triplet_geomean": 0.9577913207792554,
+        "geometry_bond_geomean": 0.9486291848371642,
+        "participation_vev_product": 0.13781271211083468,
+        "geomean_eta_times_vev_per_leg": 0.08556369587047173,
+        "ratio_leg_geomean_over_product": 0.6208693999263135,
+        "note": "Strict geomean(\u03b7_i\u00d7vev_i) per Compton leg underbinds hydrides; chart uses mean-angle \u03b7 \u00d7 networked vev (steric/phase on vev)."
+      },
+      "bond_state_witness": {
+        "predicted_ev": 0.14572068930699383,
+        "reference_ev": 9.32,
+        "error_pct": -98.43647329069748,
+        "inside_surplus_ev": -0.005458352630892676,
+        "outside_contact_ev": 0.1011070099692524,
+        "hyperclosure_ev": 0.03915532670684877,
+        "hyperclosure_trace_l1": 0.06046043094439884,
+        "notes": "inside curvature surplus (hadron spine) + outside G_eff(\u03b8) contact bonding; joint shell m=8"
+      }
+    }
+  ],
+  "open_shell_diagnostics": [
+    {
+      "name": "CO",
+      "kind": "atomization",
+      "binding_ev": 12.509916637833069,
+      "reference_ev": 11.24,
+      "error_pct": 11.29819072805221,
+      "dimless_core": 6.438927681237609,
+      "surplus_dimless": 30.058791286187304,
+      "eta_p": 0.18844598884025524,
+      "vev_geometric_mean": 0.9720429882957672,
+      "vev_geometric_mean_bare": 0.9720429882957672,
+      "geometry_alignment_factor": 1.0,
+      "contact_xi": 4.666666666666667,
+      "dynamic_binding_curvature_coupling": 0.1998810585681302,
+      "dynamic_binding_curvature_feedback": 1.1502838052778215,
+      "peripheral_hydrogens": 0,
+      "h_h_repulsive_contact_points": 0,
+      "compton_triplet_m": [
+        4,
+        3,
+        4
+      ],
+      "binding_curvature_correction": 0.15028380527782154,
+      "shell_readout": {
+        "compton_triplet_m": [
+          4,
+          3,
+          4
+        ],
+        "compton_triplet_class": "general",
+        "surplus_angle_policy": "electronic_compton_triplet",
+        "surplus_angles_rad": [
+          0.3783228147386552,
+          0.20177216786061608,
+          0.3783228147386552
+        ],
+        "eta_angles_rad": [
+          0.3783228147386552,
+          0.20177216786061608,
+          0.3783228147386552
+        ],
+        "eta_p_linear": 0.17341040462427743,
+        "contact_xi": 4.666666666666667,
+        "curvature_feedback_weight": 1.0,
+        "has_heavy_nucleus": true,
+        "electron_split": [
+          14,
+          8,
+          6
+        ],
+        "electronic_shell_slots": [
+          "2s",
+          "2p",
+          "1s"
+        ],
+        "surplus_dress_factor": 1.0,
+        "outside_geff_contact_dress": 1.0166340687235071
       },
       "nuclei": [
         {
@@ -919,16 +2277,55 @@
         "cluster_mean_mev_per_A": 9.50514657483853,
         "cluster_spread_pct": 12.048192771084329
       },
-      "notes": "atomization: shell=dynamicComptonTripletHomonuclearPeriod2; surplus=electronic_compton_triplet; \u03b7\u2082\u00b7surplus\u00b7vev\u00b7geom\u00b7\u03ba(\u03be=5.00,w=1.00)"
+      "notes": "atomization: shell=general; surplus=electronic_compton_triplet; \u03b7\u2082\u00b7surplus\u00b7vev\u00b7geom\u00b7G_eff\u00b7\u03ba(\u03be=4.67,w=1.00)",
+      "network_binding_feedback": {
+        "contact_xi": 4.666666666666667,
+        "bare_vev_geometric_mean": 0.9720429882957672,
+        "networked_vev_geometric_mean": 0.9720429882957672,
+        "vev_network_dress": 1.0,
+        "steric_multiplier": 1.0,
+        "phase_multiplier": 1.0,
+        "geometry_alignment_factor": 1.0,
+        "curvature_feedback_at_xi": 1.1502838052778215,
+        "dimless_prefactor": 1.11812530747048,
+        "peripheral_hydrogen_count": 0,
+        "h_h_repulsive_contact_points": 0
+      },
+      "network_balance": {
+        "aggregation": "arithmetic_product_of_factors",
+        "lean_formula": "eta_p * surplus * geomean(tuftVevNetworked) * feedback * geomean(valley_align)",
+        "eta_policy": "phaseParticipationEta(mean_compton_angle); not geomean(slot_eta)",
+        "eta_p_chart": 0.18844598884025524,
+        "eta_slot_geomean_linear": 0.1953179831590687,
+        "eta_fragment_nuclear_geomean": 0.24084778420038536,
+        "vev_compton_slot_geomean": 0.9720429882957672,
+        "vev_networked_readout": 0.9720429882957672,
+        "vev_bare_triplet_geomean": 0.9752810045163057,
+        "geometry_bond_geomean": 1.0,
+        "participation_vev_product": 0.1831776021246325,
+        "geomean_eta_times_vev_per_leg": 0.2091031502709363,
+        "ratio_leg_geomean_over_product": 1.1415323044171322,
+        "note": "Strict geomean(\u03b7_i\u00d7vev_i) per Compton leg underbinds hydrides; chart uses mean-angle \u03b7 \u00d7 networked vev (steric/phase on vev)."
+      },
+      "bond_state_witness": {
+        "predicted_ev": 0.4374635039879925,
+        "reference_ev": 11.24,
+        "error_pct": -96.10797594316733,
+        "inside_surplus_ev": -0.00715781920779527,
+        "outside_contact_ev": 0.4303056847801972,
+        "hyperclosure_ev": 0.0,
+        "hyperclosure_trace_l1": 0.0,
+        "notes": "inside curvature surplus (hadron spine) + outside G_eff(\u03b8) contact bonding; joint shell m=9"
+      }
     },
     {
       "name": "N2",
       "kind": "dissociation",
-      "binding_ev": 32.12353293196379,
+      "binding_ev": 10.97607203339288,
       "reference_ev": 9.91,
-      "error_pct": 224.15270365251047,
-      "dimless_core": 16.534171362040183,
-      "surplus_dimless": 59.88108276806918,
+      "error_pct": 10.757538177526536,
+      "dimless_core": 5.649448840716923,
+      "surplus_dimless": 19.960360922689727,
       "eta_p": 0.24084778420038533,
       "vev_geometric_mean": 0.9965781626204909,
       "vev_geometric_mean_bare": 0.9965781626204909,
@@ -976,7 +2373,8 @@
           "2p",
           "1s"
         ],
-        "surplus_dress_factor": 1.0
+        "surplus_dress_factor": 1.0,
+        "outside_geff_contact_dress": 1.0250496472451873
       },
       "nuclei": [
         {
@@ -1019,14 +2417,776 @@
         "cluster_mean_mev_per_A": 9.423346690373481,
         "cluster_spread_pct": 0.0
       },
-      "notes": "dissociation: shell=dynamicComptonTripletHomonuclearPeriod2; surplus=detuning_compton_triplet; \u03b7\u2082\u00b7surplus\u00b7vev\u00b7geom\u00b7\u03ba(\u03be=5.00,w=1.00)"
+      "notes": "dissociation: shell=dynamicComptonTripletHomonuclearPeriod2; surplus=detuning_compton_triplet; \u03b7\u2082\u00b7surplus\u00b7vev\u00b7geom\u00b7G_eff\u00b7\u03ba(\u03be=5.00,w=1.00)",
+      "network_binding_feedback": {
+        "contact_xi": 5.0,
+        "bare_vev_geometric_mean": 0.9965781626204909,
+        "networked_vev_geometric_mean": 0.9965781626204909,
+        "vev_network_dress": 1.0,
+        "steric_multiplier": 1.0,
+        "phase_multiplier": 1.0,
+        "geometry_alignment_factor": 1.0,
+        "curvature_feedback_at_xi": 1.150373233316249,
+        "dimless_prefactor": 1.1464368431861007,
+        "peripheral_hydrogen_count": 0,
+        "h_h_repulsive_contact_points": 0
+      },
+      "network_balance": {
+        "aggregation": "arithmetic_product_of_factors",
+        "lean_formula": "eta_p * surplus * geomean(tuftVevNetworked) * feedback * geomean(valley_align)",
+        "eta_policy": "phaseParticipationEta(mean_compton_angle); not geomean(slot_eta)",
+        "eta_p_chart": 0.24084778420038533,
+        "eta_slot_geomean_linear": 0.24084778420038536,
+        "eta_fragment_nuclear_geomean": 0.24084778420038536,
+        "vev_compton_slot_geomean": 0.9966409633270925,
+        "vev_networked_readout": 0.9965781626204909,
+        "vev_bare_triplet_geomean": 1.0,
+        "geometry_bond_geomean": 1.0,
+        "participation_vev_product": 0.24002364224963652,
+        "geomean_eta_times_vev_per_leg": 0.24003876766066776,
+        "ratio_leg_geomean_over_product": 1.0000630163382636,
+        "note": "Strict geomean(\u03b7_i\u00d7vev_i) per Compton leg underbinds hydrides; chart uses mean-angle \u03b7 \u00d7 networked vev (steric/phase on vev)."
+      },
+      "bond_state_witness": {
+        "predicted_ev": 0.5326587682858392,
+        "reference_ev": 9.91,
+        "error_pct": -94.62503765604602,
+        "inside_surplus_ev": -0.00715781920779527,
+        "outside_contact_ev": 0.525500949078044,
+        "hyperclosure_ev": 0.0,
+        "hyperclosure_trace_l1": 0.0,
+        "notes": "inside curvature surplus (hadron spine) + outside G_eff(\u03b8) contact bonding; joint shell m=9"
+      }
+    },
+    {
+      "name": "O2",
+      "kind": "dissociation",
+      "binding_ev": 5.666613246415511,
+      "reference_ev": 5.213,
+      "error_pct": 8.701577717542891,
+      "dimless_core": 2.91663917094916,
+      "surplus_dimless": 10.063513794678194,
+      "eta_p": 0.24084778420038533,
+      "vev_geometric_mean": 0.996535735806632,
+      "vev_geometric_mean_bare": 0.996535735806632,
+      "geometry_alignment_factor": 1.0,
+      "contact_xi": 5.0,
+      "dynamic_binding_curvature_coupling": 0.2,
+      "dynamic_binding_curvature_feedback": 1.150373233316249,
+      "peripheral_hydrogens": 0,
+      "h_h_repulsive_contact_points": 0,
+      "compton_triplet_m": [
+        4,
+        4,
+        4
+      ],
+      "binding_curvature_correction": 0.1503732333162492,
+      "shell_readout": {
+        "compton_triplet_m": [
+          4,
+          4,
+          4
+        ],
+        "compton_triplet_class": "dynamicComptonTripletHomonuclearPeriod2",
+        "surplus_angle_policy": "detuning_compton_triplet",
+        "surplus_angles_rad": [
+          0.3783228147386552,
+          0.3783228147386552,
+          0.3783228147386552
+        ],
+        "eta_angles_rad": [
+          0.3783228147386552,
+          0.3783228147386552,
+          0.3783228147386552
+        ],
+        "eta_p_linear": 0.24084778420038533,
+        "contact_xi": 5.0,
+        "curvature_feedback_weight": 1.0,
+        "has_heavy_nucleus": true,
+        "electron_split": [
+          16,
+          8,
+          8
+        ],
+        "electronic_shell_slots": [
+          "2s",
+          "2p",
+          "1s"
+        ],
+        "surplus_dress_factor": 1.0,
+        "outside_geff_contact_dress": 1.0496844352977794
+      },
+      "nuclei": [
+        {
+          "Z": 8,
+          "A": 16,
+          "m_nuclear": 8,
+          "xi_nuclear": 9.0,
+          "per_nucleon_binding_mev": 8.932547383583197,
+          "per_nucleon_trace_mev": 2.323582788429026,
+          "inside_ratio": 2.4906247817054834,
+          "tuft_vev_factor": 1.3404272184749788,
+          "valence_s_shell": 8,
+          "valence_p_shell": 7,
+          "electronic_s_shell": 4,
+          "electronic_p_shell": 3,
+          "electronic_shell_label": "2s"
+        },
+        {
+          "Z": 8,
+          "A": 16,
+          "m_nuclear": 8,
+          "xi_nuclear": 9.0,
+          "per_nucleon_binding_mev": 8.932547383583197,
+          "per_nucleon_trace_mev": 2.323582788429026,
+          "inside_ratio": 2.4906247817054834,
+          "tuft_vev_factor": 1.3404272184749788,
+          "valence_s_shell": 8,
+          "valence_p_shell": 7,
+          "electronic_s_shell": 4,
+          "electronic_p_shell": 3,
+          "electronic_shell_label": "2s"
+        }
+      ],
+      "nuclear_binding_uniformity": {
+        "count": 2.0,
+        "trace_mean_mev": 2.323582788429026,
+        "trace_min_mev": 2.323582788429026,
+        "trace_max_mev": 2.323582788429026,
+        "trace_spread_pct": 0.0,
+        "cluster_mean_mev_per_A": 8.932547383583197,
+        "cluster_spread_pct": 0.0
+      },
+      "notes": "dissociation: shell=dynamicComptonTripletHomonuclearPeriod2; surplus=detuning_compton_triplet; \u03b7\u2082\u00b7surplus\u00b7vev\u00b7geom\u00b7G_eff\u00b7\u03ba(\u03be=5.00,w=1.00)",
+      "network_binding_feedback": {
+        "contact_xi": 5.0,
+        "bare_vev_geometric_mean": 0.996535735806632,
+        "networked_vev_geometric_mean": 0.996535735806632,
+        "vev_network_dress": 1.0,
+        "steric_multiplier": 1.0,
+        "phase_multiplier": 1.0,
+        "geometry_alignment_factor": 1.0,
+        "curvature_feedback_at_xi": 1.150373233316249,
+        "dimless_prefactor": 1.1463880365150627,
+        "peripheral_hydrogen_count": 0,
+        "h_h_repulsive_contact_points": 0
+      },
+      "network_balance": {
+        "aggregation": "arithmetic_product_of_factors",
+        "lean_formula": "eta_p * surplus * geomean(tuftVevNetworked) * feedback * geomean(valley_align)",
+        "eta_policy": "phaseParticipationEta(mean_compton_angle); not geomean(slot_eta)",
+        "eta_p_chart": 0.24084778420038533,
+        "eta_slot_geomean_linear": 0.24084778420038536,
+        "eta_fragment_nuclear_geomean": 0.24084778420038536,
+        "vev_compton_slot_geomean": 0.9968164725506404,
+        "vev_networked_readout": 0.996535735806632,
+        "vev_bare_triplet_geomean": 1.0,
+        "geometry_bond_geomean": 1.0,
+        "participation_vev_product": 0.2400134238455279,
+        "geomean_eta_times_vev_per_leg": 0.240081038668266,
+        "ratio_leg_geomean_over_product": 1.0002817126711279,
+        "note": "Strict geomean(\u03b7_i\u00d7vev_i) per Compton leg underbinds hydrides; chart uses mean-angle \u03b7 \u00d7 networked vev (steric/phase on vev)."
+      },
+      "bond_state_witness": {
+        "predicted_ev": 0.49336296093595416,
+        "reference_ev": 5.213,
+        "error_pct": -90.53591097379716,
+        "inside_surplus_ev": -0.001137318508137853,
+        "outside_contact_ev": 0.4922256424278163,
+        "hyperclosure_ev": 0.0,
+        "hyperclosure_trace_l1": 0.0,
+        "notes": "inside curvature surplus (hadron spine) + outside G_eff(\u03b8) contact bonding; joint shell m=10"
+      }
+    },
+    {
+      "name": "F2",
+      "kind": "dissociation",
+      "binding_ev": 1.8774862333379054,
+      "reference_ev": 1.638,
+      "error_pct": 14.620649165928299,
+      "dimless_core": 0.9663532083356866,
+      "surplus_dimless": 2.9999999999999996,
+      "eta_p": 0.24084778420038533,
+      "vev_geometric_mean": 0.9965209314702848,
+      "vev_geometric_mean_bare": 0.9965209314702848,
+      "geometry_alignment_factor": 1.0,
+      "contact_xi": 5.0,
+      "dynamic_binding_curvature_coupling": 0.2,
+      "dynamic_binding_curvature_feedback": 1.150373233316249,
+      "peripheral_hydrogens": 0,
+      "h_h_repulsive_contact_points": 0,
+      "compton_triplet_m": [
+        4,
+        4,
+        4
+      ],
+      "binding_curvature_correction": 0.1503732333162492,
+      "shell_readout": {
+        "compton_triplet_m": [
+          4,
+          4,
+          4
+        ],
+        "compton_triplet_class": "dynamicComptonTripletHomonuclearPeriod2",
+        "surplus_angle_policy": "detuning_compton_triplet",
+        "surplus_angles_rad": [
+          0.3783228147386552,
+          0.3783228147386552,
+          0.3783228147386552
+        ],
+        "eta_angles_rad": [
+          0.3783228147386552,
+          0.3783228147386552,
+          0.3783228147386552
+        ],
+        "eta_p_linear": 0.24084778420038533,
+        "contact_xi": 5.0,
+        "curvature_feedback_weight": 1.0,
+        "has_heavy_nucleus": true,
+        "electron_split": [
+          18,
+          9,
+          9
+        ],
+        "electronic_shell_slots": [
+          "2s",
+          "2p",
+          "1s"
+        ],
+        "surplus_dress_factor": 1.0,
+        "outside_geff_contact_dress": 1.1666666666666667
+      },
+      "nuclei": [
+        {
+          "Z": 9,
+          "A": 19,
+          "m_nuclear": 8,
+          "xi_nuclear": 9.0,
+          "per_nucleon_binding_mev": 8.390084991867617,
+          "per_nucleon_trace_mev": 2.323582788429026,
+          "inside_ratio": 2.4906247817054834,
+          "tuft_vev_factor": 1.3404272184749788,
+          "valence_s_shell": 8,
+          "valence_p_shell": 7,
+          "electronic_s_shell": 4,
+          "electronic_p_shell": 3,
+          "electronic_shell_label": "2s"
+        },
+        {
+          "Z": 9,
+          "A": 19,
+          "m_nuclear": 8,
+          "xi_nuclear": 9.0,
+          "per_nucleon_binding_mev": 8.390084991867617,
+          "per_nucleon_trace_mev": 2.323582788429026,
+          "inside_ratio": 2.4906247817054834,
+          "tuft_vev_factor": 1.3404272184749788,
+          "valence_s_shell": 8,
+          "valence_p_shell": 7,
+          "electronic_s_shell": 4,
+          "electronic_p_shell": 3,
+          "electronic_shell_label": "2s"
+        }
+      ],
+      "nuclear_binding_uniformity": {
+        "count": 2.0,
+        "trace_mean_mev": 2.323582788429026,
+        "trace_min_mev": 2.323582788429026,
+        "trace_max_mev": 2.323582788429026,
+        "trace_spread_pct": 0.0,
+        "cluster_mean_mev_per_A": 8.390084991867617,
+        "cluster_spread_pct": 0.0
+      },
+      "notes": "dissociation: shell=dynamicComptonTripletHomonuclearPeriod2; surplus=detuning_compton_triplet; \u03b7\u2082\u00b7surplus\u00b7vev\u00b7geom\u00b7G_eff\u00b7\u03ba(\u03be=5.00,w=1.00)",
+      "network_binding_feedback": {
+        "contact_xi": 5.0,
+        "bare_vev_geometric_mean": 0.9965209314702848,
+        "networked_vev_geometric_mean": 0.9965209314702848,
+        "vev_network_dress": 1.0,
+        "steric_multiplier": 1.0,
+        "phase_multiplier": 1.0,
+        "geometry_alignment_factor": 1.0,
+        "curvature_feedback_at_xi": 1.150373233316249,
+        "dimless_prefactor": 1.1463710060027918,
+        "peripheral_hydrogen_count": 0,
+        "h_h_repulsive_contact_points": 0
+      },
+      "network_balance": {
+        "aggregation": "arithmetic_product_of_factors",
+        "lean_formula": "eta_p * surplus * geomean(tuftVevNetworked) * feedback * geomean(valley_align)",
+        "eta_policy": "phaseParticipationEta(mean_compton_angle); not geomean(slot_eta)",
+        "eta_p_chart": 0.24084778420038533,
+        "eta_slot_geomean_linear": 0.24084778420038536,
+        "eta_fragment_nuclear_geomean": 0.24084778420038536,
+        "vev_compton_slot_geomean": 0.9970103845522116,
+        "vev_networked_readout": 0.9965209314702848,
+        "vev_bare_triplet_geomean": 1.0,
+        "geometry_bond_geomean": 1.0,
+        "participation_vev_product": 0.24000985825392213,
+        "geomean_eta_times_vev_per_leg": 0.24012774194417427,
+        "ratio_leg_geomean_over_product": 1.000491161867724,
+        "note": "Strict geomean(\u03b7_i\u00d7vev_i) per Compton leg underbinds hydrides; chart uses mean-angle \u03b7 \u00d7 networked vev (steric/phase on vev)."
+      },
+      "bond_state_witness": {
+        "predicted_ev": 0.4416345404232468,
+        "reference_ev": 1.638,
+        "error_pct": -73.03818434534513,
+        "inside_surplus_ev": -0.001137318508137853,
+        "outside_contact_ev": 0.4404972219151089,
+        "hyperclosure_ev": 0.0,
+        "hyperclosure_trace_l1": 0.0,
+        "notes": "inside curvature surplus (hadron spine) + outside G_eff(\u03b8) contact bonding; joint shell m=10"
+      }
+    },
+    {
+      "name": "Cl2",
+      "kind": "dissociation",
+      "binding_ev": 2.67998358287155,
+      "reference_ev": 2.479,
+      "error_pct": 8.107445860086731,
+      "dimless_core": 1.3794033147132978,
+      "surplus_dimless": 4.499999999999999,
+      "eta_p": 0.24084778420038533,
+      "vev_geometric_mean": 0.9962652294033185,
+      "vev_geometric_mean_bare": 0.9962652294033185,
+      "geometry_alignment_factor": 1.0,
+      "contact_xi": 6.0,
+      "dynamic_binding_curvature_coupling": 0.19917183909278766,
+      "dynamic_binding_curvature_feedback": 1.1497505671496309,
+      "peripheral_hydrogens": 0,
+      "h_h_repulsive_contact_points": 0,
+      "compton_triplet_m": [
+        5,
+        5,
+        5
+      ],
+      "binding_curvature_correction": 0.14975056714963098,
+      "shell_readout": {
+        "compton_triplet_m": [
+          5,
+          5,
+          5
+        ],
+        "compton_triplet_class": "dynamicComptonTripletHomonuclearPeriod2",
+        "surplus_angle_policy": "detuning_compton_triplet",
+        "surplus_angles_rad": [
+          0.3783228147386552,
+          0.3783228147386552,
+          0.3783228147386552
+        ],
+        "eta_angles_rad": [
+          0.3783228147386552,
+          0.3783228147386552,
+          0.3783228147386552
+        ],
+        "eta_p_linear": 0.24084778420038533,
+        "contact_xi": 6.0,
+        "curvature_feedback_weight": 1.0,
+        "has_heavy_nucleus": true,
+        "electron_split": [
+          34,
+          17,
+          17
+        ],
+        "electronic_shell_slots": [
+          "3s",
+          "3p",
+          "1s"
+        ],
+        "surplus_dress_factor": 1.0,
+        "outside_geff_contact_dress": 1.1111111111111112
+      },
+      "nuclei": [
+        {
+          "Z": 17,
+          "A": 35,
+          "m_nuclear": 10,
+          "xi_nuclear": 11.0,
+          "per_nucleon_binding_mev": 10.375356451820291,
+          "per_nucleon_trace_mev": 3.2723363707446906,
+          "inside_ratio": 3.369181707225013,
+          "tuft_vev_factor": 1.5150388431098074,
+          "valence_s_shell": 10,
+          "valence_p_shell": 9,
+          "electronic_s_shell": 5,
+          "electronic_p_shell": 4,
+          "electronic_shell_label": "3s"
+        },
+        {
+          "Z": 17,
+          "A": 35,
+          "m_nuclear": 10,
+          "xi_nuclear": 11.0,
+          "per_nucleon_binding_mev": 10.375356451820291,
+          "per_nucleon_trace_mev": 3.2723363707446906,
+          "inside_ratio": 3.369181707225013,
+          "tuft_vev_factor": 1.5150388431098074,
+          "valence_s_shell": 10,
+          "valence_p_shell": 9,
+          "electronic_s_shell": 5,
+          "electronic_p_shell": 4,
+          "electronic_shell_label": "3s"
+        }
+      ],
+      "nuclear_binding_uniformity": {
+        "count": 2.0,
+        "trace_mean_mev": 3.2723363707446906,
+        "trace_min_mev": 3.2723363707446906,
+        "trace_max_mev": 3.2723363707446906,
+        "trace_spread_pct": 0.0,
+        "cluster_mean_mev_per_A": 10.375356451820291,
+        "cluster_spread_pct": 0.0
+      },
+      "notes": "dissociation: shell=dynamicComptonTripletHomonuclearPeriod2; surplus=detuning_compton_triplet; \u03b7\u2082\u00b7surplus\u00b7vev\u00b7geom\u00b7G_eff\u00b7\u03ba(\u03be=6.00,w=1.00)",
+      "network_binding_feedback": {
+        "contact_xi": 6.0,
+        "bare_vev_geometric_mean": 0.9962652294033185,
+        "networked_vev_geometric_mean": 0.9962652294033185,
+        "vev_network_dress": 1.0,
+        "steric_multiplier": 1.0,
+        "phase_multiplier": 1.0,
+        "geometry_alignment_factor": 1.0,
+        "curvature_feedback_at_xi": 1.1497505671496309,
+        "dimless_prefactor": 1.1454565125379226,
+        "peripheral_hydrogen_count": 0,
+        "h_h_repulsive_contact_points": 0
+      },
+      "network_balance": {
+        "aggregation": "arithmetic_product_of_factors",
+        "lean_formula": "eta_p * surplus * geomean(tuftVevNetworked) * feedback * geomean(valley_align)",
+        "eta_policy": "phaseParticipationEta(mean_compton_angle); not geomean(slot_eta)",
+        "eta_p_chart": 0.24084778420038533,
+        "eta_slot_geomean_linear": 0.24084778420038536,
+        "eta_fragment_nuclear_geomean": 0.24084778420038533,
+        "vev_compton_slot_geomean": 1.0773807025110014,
+        "vev_networked_readout": 0.9962652294033185,
+        "vev_bare_triplet_geomean": 1.0813814359173661,
+        "geometry_bond_geomean": 1.0,
+        "participation_vev_product": 0.23994827297767785,
+        "geomean_eta_times_vev_per_leg": 0.2594847549400292,
+        "ratio_leg_geomean_over_product": 1.0814195564731939,
+        "note": "Strict geomean(\u03b7_i\u00d7vev_i) per Compton leg underbinds hydrides; chart uses mean-angle \u03b7 \u00d7 networked vev (steric/phase on vev)."
+      },
+      "bond_state_witness": {
+        "predicted_ev": 0.5051870404774524,
+        "reference_ev": 2.479,
+        "error_pct": -79.62133761688374,
+        "inside_surplus_ev": -0.015468134975158566,
+        "outside_contact_ev": 0.4897189055022939,
+        "hyperclosure_ev": 0.0,
+        "hyperclosure_trace_l1": 0.0,
+        "notes": "inside curvature surplus (hadron spine) + outside G_eff(\u03b8) contact bonding; joint shell m=11"
+      }
+    }
+  ],
+  "diagnostic_molecules": [
+    {
+      "name": "CO",
+      "kind": "atomization",
+      "binding_ev": 12.509916637833069,
+      "reference_ev": 11.24,
+      "error_pct": 11.29819072805221,
+      "dimless_core": 6.438927681237609,
+      "surplus_dimless": 30.058791286187304,
+      "eta_p": 0.18844598884025524,
+      "vev_geometric_mean": 0.9720429882957672,
+      "vev_geometric_mean_bare": 0.9720429882957672,
+      "geometry_alignment_factor": 1.0,
+      "contact_xi": 4.666666666666667,
+      "dynamic_binding_curvature_coupling": 0.1998810585681302,
+      "dynamic_binding_curvature_feedback": 1.1502838052778215,
+      "peripheral_hydrogens": 0,
+      "h_h_repulsive_contact_points": 0,
+      "compton_triplet_m": [
+        4,
+        3,
+        4
+      ],
+      "binding_curvature_correction": 0.15028380527782154,
+      "shell_readout": {
+        "compton_triplet_m": [
+          4,
+          3,
+          4
+        ],
+        "compton_triplet_class": "general",
+        "surplus_angle_policy": "electronic_compton_triplet",
+        "surplus_angles_rad": [
+          0.3783228147386552,
+          0.20177216786061608,
+          0.3783228147386552
+        ],
+        "eta_angles_rad": [
+          0.3783228147386552,
+          0.20177216786061608,
+          0.3783228147386552
+        ],
+        "eta_p_linear": 0.17341040462427743,
+        "contact_xi": 4.666666666666667,
+        "curvature_feedback_weight": 1.0,
+        "has_heavy_nucleus": true,
+        "electron_split": [
+          14,
+          8,
+          6
+        ],
+        "electronic_shell_slots": [
+          "2s",
+          "2p",
+          "1s"
+        ],
+        "surplus_dress_factor": 1.0,
+        "outside_geff_contact_dress": 1.0166340687235071
+      },
+      "nuclei": [
+        {
+          "Z": 6,
+          "A": 12,
+          "m_nuclear": 8,
+          "xi_nuclear": 9.0,
+          "per_nucleon_binding_mev": 10.077745766093862,
+          "per_nucleon_trace_mev": 2.323582788429026,
+          "inside_ratio": 2.4906247817054834,
+          "tuft_vev_factor": 1.3404272184749788,
+          "valence_s_shell": 8,
+          "valence_p_shell": 7,
+          "electronic_s_shell": 4,
+          "electronic_p_shell": 3,
+          "electronic_shell_label": "2s"
+        },
+        {
+          "Z": 8,
+          "A": 16,
+          "m_nuclear": 8,
+          "xi_nuclear": 9.0,
+          "per_nucleon_binding_mev": 8.932547383583197,
+          "per_nucleon_trace_mev": 2.323582788429026,
+          "inside_ratio": 2.4906247817054834,
+          "tuft_vev_factor": 1.3404272184749788,
+          "valence_s_shell": 8,
+          "valence_p_shell": 7,
+          "electronic_s_shell": 4,
+          "electronic_p_shell": 3,
+          "electronic_shell_label": "2s"
+        }
+      ],
+      "nuclear_binding_uniformity": {
+        "count": 2.0,
+        "trace_mean_mev": 2.323582788429026,
+        "trace_min_mev": 2.323582788429026,
+        "trace_max_mev": 2.323582788429026,
+        "trace_spread_pct": 0.0,
+        "cluster_mean_mev_per_A": 9.50514657483853,
+        "cluster_spread_pct": 12.048192771084329
+      },
+      "notes": "atomization: shell=general; surplus=electronic_compton_triplet; \u03b7\u2082\u00b7surplus\u00b7vev\u00b7geom\u00b7G_eff\u00b7\u03ba(\u03be=4.67,w=1.00)",
+      "network_binding_feedback": {
+        "contact_xi": 4.666666666666667,
+        "bare_vev_geometric_mean": 0.9720429882957672,
+        "networked_vev_geometric_mean": 0.9720429882957672,
+        "vev_network_dress": 1.0,
+        "steric_multiplier": 1.0,
+        "phase_multiplier": 1.0,
+        "geometry_alignment_factor": 1.0,
+        "curvature_feedback_at_xi": 1.1502838052778215,
+        "dimless_prefactor": 1.11812530747048,
+        "peripheral_hydrogen_count": 0,
+        "h_h_repulsive_contact_points": 0
+      },
+      "network_balance": {
+        "aggregation": "arithmetic_product_of_factors",
+        "lean_formula": "eta_p * surplus * geomean(tuftVevNetworked) * feedback * geomean(valley_align)",
+        "eta_policy": "phaseParticipationEta(mean_compton_angle); not geomean(slot_eta)",
+        "eta_p_chart": 0.18844598884025524,
+        "eta_slot_geomean_linear": 0.1953179831590687,
+        "eta_fragment_nuclear_geomean": 0.24084778420038536,
+        "vev_compton_slot_geomean": 0.9720429882957672,
+        "vev_networked_readout": 0.9720429882957672,
+        "vev_bare_triplet_geomean": 0.9752810045163057,
+        "geometry_bond_geomean": 1.0,
+        "participation_vev_product": 0.1831776021246325,
+        "geomean_eta_times_vev_per_leg": 0.2091031502709363,
+        "ratio_leg_geomean_over_product": 1.1415323044171322,
+        "note": "Strict geomean(\u03b7_i\u00d7vev_i) per Compton leg underbinds hydrides; chart uses mean-angle \u03b7 \u00d7 networked vev (steric/phase on vev)."
+      },
+      "bond_state_witness": {
+        "predicted_ev": 0.4374635039879925,
+        "reference_ev": 11.24,
+        "error_pct": -96.10797594316733,
+        "inside_surplus_ev": -0.00715781920779527,
+        "outside_contact_ev": 0.4303056847801972,
+        "hyperclosure_ev": 0.0,
+        "hyperclosure_trace_l1": 0.0,
+        "notes": "inside curvature surplus (hadron spine) + outside G_eff(\u03b8) contact bonding; joint shell m=9"
+      }
+    },
+    {
+      "name": "N2",
+      "kind": "dissociation",
+      "binding_ev": 10.97607203339288,
+      "reference_ev": 9.91,
+      "error_pct": 10.757538177526536,
+      "dimless_core": 5.649448840716923,
+      "surplus_dimless": 19.960360922689727,
+      "eta_p": 0.24084778420038533,
+      "vev_geometric_mean": 0.9965781626204909,
+      "vev_geometric_mean_bare": 0.9965781626204909,
+      "geometry_alignment_factor": 1.0,
+      "contact_xi": 5.0,
+      "dynamic_binding_curvature_coupling": 0.2,
+      "dynamic_binding_curvature_feedback": 1.150373233316249,
+      "peripheral_hydrogens": 0,
+      "h_h_repulsive_contact_points": 0,
+      "compton_triplet_m": [
+        4,
+        4,
+        4
+      ],
+      "binding_curvature_correction": 0.1503732333162492,
+      "shell_readout": {
+        "compton_triplet_m": [
+          4,
+          4,
+          4
+        ],
+        "compton_triplet_class": "dynamicComptonTripletHomonuclearPeriod2",
+        "surplus_angle_policy": "detuning_compton_triplet",
+        "surplus_angles_rad": [
+          0.3783228147386552,
+          0.3783228147386552,
+          0.3783228147386552
+        ],
+        "eta_angles_rad": [
+          0.3783228147386552,
+          0.3783228147386552,
+          0.3783228147386552
+        ],
+        "eta_p_linear": 0.24084778420038533,
+        "contact_xi": 5.0,
+        "curvature_feedback_weight": 1.0,
+        "has_heavy_nucleus": true,
+        "electron_split": [
+          14,
+          7,
+          7
+        ],
+        "electronic_shell_slots": [
+          "2s",
+          "2p",
+          "1s"
+        ],
+        "surplus_dress_factor": 1.0,
+        "outside_geff_contact_dress": 1.0250496472451873
+      },
+      "nuclei": [
+        {
+          "Z": 7,
+          "A": 14,
+          "m_nuclear": 8,
+          "xi_nuclear": 9.0,
+          "per_nucleon_binding_mev": 9.423346690373481,
+          "per_nucleon_trace_mev": 2.323582788429026,
+          "inside_ratio": 2.4906247817054834,
+          "tuft_vev_factor": 1.3404272184749788,
+          "valence_s_shell": 8,
+          "valence_p_shell": 7,
+          "electronic_s_shell": 4,
+          "electronic_p_shell": 3,
+          "electronic_shell_label": "2s"
+        },
+        {
+          "Z": 7,
+          "A": 14,
+          "m_nuclear": 8,
+          "xi_nuclear": 9.0,
+          "per_nucleon_binding_mev": 9.423346690373481,
+          "per_nucleon_trace_mev": 2.323582788429026,
+          "inside_ratio": 2.4906247817054834,
+          "tuft_vev_factor": 1.3404272184749788,
+          "valence_s_shell": 8,
+          "valence_p_shell": 7,
+          "electronic_s_shell": 4,
+          "electronic_p_shell": 3,
+          "electronic_shell_label": "2s"
+        }
+      ],
+      "nuclear_binding_uniformity": {
+        "count": 2.0,
+        "trace_mean_mev": 2.323582788429026,
+        "trace_min_mev": 2.323582788429026,
+        "trace_max_mev": 2.323582788429026,
+        "trace_spread_pct": 0.0,
+        "cluster_mean_mev_per_A": 9.423346690373481,
+        "cluster_spread_pct": 0.0
+      },
+      "notes": "dissociation: shell=dynamicComptonTripletHomonuclearPeriod2; surplus=detuning_compton_triplet; \u03b7\u2082\u00b7surplus\u00b7vev\u00b7geom\u00b7G_eff\u00b7\u03ba(\u03be=5.00,w=1.00)",
+      "network_binding_feedback": {
+        "contact_xi": 5.0,
+        "bare_vev_geometric_mean": 0.9965781626204909,
+        "networked_vev_geometric_mean": 0.9965781626204909,
+        "vev_network_dress": 1.0,
+        "steric_multiplier": 1.0,
+        "phase_multiplier": 1.0,
+        "geometry_alignment_factor": 1.0,
+        "curvature_feedback_at_xi": 1.150373233316249,
+        "dimless_prefactor": 1.1464368431861007,
+        "peripheral_hydrogen_count": 0,
+        "h_h_repulsive_contact_points": 0
+      },
+      "network_balance": {
+        "aggregation": "arithmetic_product_of_factors",
+        "lean_formula": "eta_p * surplus * geomean(tuftVevNetworked) * feedback * geomean(valley_align)",
+        "eta_policy": "phaseParticipationEta(mean_compton_angle); not geomean(slot_eta)",
+        "eta_p_chart": 0.24084778420038533,
+        "eta_slot_geomean_linear": 0.24084778420038536,
+        "eta_fragment_nuclear_geomean": 0.24084778420038536,
+        "vev_compton_slot_geomean": 0.9966409633270925,
+        "vev_networked_readout": 0.9965781626204909,
+        "vev_bare_triplet_geomean": 1.0,
+        "geometry_bond_geomean": 1.0,
+        "participation_vev_product": 0.24002364224963652,
+        "geomean_eta_times_vev_per_leg": 0.24003876766066776,
+        "ratio_leg_geomean_over_product": 1.0000630163382636,
+        "note": "Strict geomean(\u03b7_i\u00d7vev_i) per Compton leg underbinds hydrides; chart uses mean-angle \u03b7 \u00d7 networked vev (steric/phase on vev)."
+      },
+      "bond_state_witness": {
+        "predicted_ev": 0.5326587682858392,
+        "reference_ev": 9.91,
+        "error_pct": -94.62503765604602,
+        "inside_surplus_ev": -0.00715781920779527,
+        "outside_contact_ev": 0.525500949078044,
+        "hyperclosure_ev": 0.0,
+        "hyperclosure_trace_l1": 0.0,
+        "notes": "inside curvature surplus (hadron spine) + outside G_eff(\u03b8) contact bonding; joint shell m=9"
+      }
     }
   ],
   "summary": {
     "count": 6,
-    "mean_abs_error_pct": 3.789357933269224,
-    "max_abs_error_pct": 6.6998769130490095,
+    "mean_abs_error_pct": 4.595105020416725,
+    "max_abs_error_pct": 8.739387562141165,
+    "within_5pct": 4,
+    "within_15pct": 6
+  },
+  "expanded_summary": {
+    "count": 8,
+    "mean_abs_error_pct": 11.77972169056771,
+    "max_abs_error_pct": 33.39399465139576,
     "within_5pct": 3,
     "within_15pct": 6
+  },
+  "open_shell_summary": {
+    "count": 5,
+    "mean_abs_error_pct": 10.697080329827333,
+    "max_abs_error_pct": 14.620649165928299,
+    "within_5pct": 0,
+    "within_15pct": 5
+  },
+  "all_molecules_summary": {
+    "count": 14,
+    "mean_abs_error_pct": 8.700600260503004,
+    "max_abs_error_pct": 33.39399465139576,
+    "within_5pct": 7,
+    "within_15pct": 12
   }
 }

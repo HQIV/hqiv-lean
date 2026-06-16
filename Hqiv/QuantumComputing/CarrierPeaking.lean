@@ -24,6 +24,9 @@ Direct updates on sparse superposition bookkeeping without materializing a full
 
 The dense path `applyGateSparse` remains the reference oracle; carrier operations
 are proved compatible on explicit support and for norm preservation under π-phase.
+
+See `SemiprimeTypedCarrierScaffold` for the two-tier bridge (semiprime spectral
+weights, prime-square Λ canaries, mirror peaks) to explicit-formula mediation.
 -/
 
 /-- Octonion carrier (same as sparse layer). -/
@@ -348,6 +351,49 @@ theorem applyPermutationCarrier_preserves_carrierNormSq {L : ℕ} (c : Superposi
     rw [applyPermutationCarrier_filter_singleton (L := L) (c := c) (perm := perm)
         (j := mapIdx k) (k := k) hnodup hk' (by rfl) hinj]
     simp only [List.foldl_cons, List.foldl_nil, zero_add]
+
+/-- Permutation fixes the wrapped flat index used by `carrierKetMass`. -/
+def permFixesWrappedFlat (L : ℕ) (perm : ℕ → ℕ) (flat : ℕ) : Prop :=
+  wrapIdx L (perm (wrapIdx L flat)) = wrapIdx L flat
+
+/-- A certified sparse permutation step preserves ket mass at flats it fixes on support. -/
+theorem applyPermutationCarrier_preserves_carrierKetMass {L : ℕ} (c : SuperpositionCarrier L)
+    (perm : ℕ → ℕ) (flat : ℕ) (hnodup : c.support.Nodup)
+    (hinj : ∀ k₁ k₂, k₁ ∈ c.support → k₂ ∈ c.support → wrapIdx L (perm k₁) = wrapIdx L (perm k₂) →
+      k₁ = k₂)
+    (hk : wrapIdx L flat ∈ c.support) (hfix : permFixesWrappedFlat L perm flat) :
+    carrierKetMass (applyPermutationCarrier c perm) flat = carrierKetMass c flat := by
+  dsimp [carrierKetMass, permFixesWrappedFlat] at hfix ⊢
+  let k0 := wrapIdx L flat
+  rw [applyPermutationCarrier_amp_preimage (L := L) (c := c) (perm := perm) (j := k0) (k := k0)
+    hnodup hk hfix hinj]
+
+theorem applyPermutationCarrier_preserves_canaryPass {L : ℕ} (c : SuperpositionCarrier L)
+    (perm : ℕ → ℕ) (probe : CanaryProbe) (hnodup : c.support.Nodup)
+    (hinj : ∀ k₁ k₂, k₁ ∈ c.support → k₂ ∈ c.support → wrapIdx L (perm k₁) = wrapIdx L (perm k₂) →
+      k₁ = k₂)
+    (hk : wrapIdx L probe.flat ∈ c.support) (hfix : permFixesWrappedFlat L perm probe.flat) :
+    probe.passes (applyPermutationCarrier c perm) ↔ probe.passes c := by
+  simp [CanaryProbe.passes, CanaryProbe.mass,
+    applyPermutationCarrier_preserves_carrierKetMass c perm probe.flat hnodup hinj hk hfix]
+
+def permutationPreservesCanarySuite (L : ℕ) (perm : ℕ → ℕ) (probes : List CanaryProbe) : Prop :=
+  ∀ p ∈ probes, permFixesWrappedFlat L perm p.flat
+
+theorem applyPermutationCarrier_preserves_carrierCanaryPasses {L : ℕ} (c : SuperpositionCarrier L)
+    (perm : ℕ → ℕ) (probes : List CanaryProbe) (hnodup : c.support.Nodup)
+    (hinj : ∀ k₁ k₂, k₁ ∈ c.support → k₂ ∈ c.support → wrapIdx L (perm k₁) = wrapIdx L (perm k₂) →
+      k₁ = k₂)
+    (hprobe : ∀ p ∈ probes, wrapIdx L p.flat ∈ c.support)
+    (hfix : permutationPreservesCanarySuite L perm probes) :
+    carrierCanaryPasses probes (applyPermutationCarrier c perm) ↔ carrierCanaryPasses probes c := by
+  constructor
+  · intro h p hp
+    exact (applyPermutationCarrier_preserves_canaryPass c perm p hnodup hinj (hprobe p hp)
+      (hfix p hp)).mp (h p hp)
+  · intro h p hp
+    exact (applyPermutationCarrier_preserves_canaryPass c perm p hnodup hinj (hprobe p hp)
+      (hfix p hp)).mpr (h p hp)
 
 /-- Identity permutation on wrapped support indices preserves norm. -/
 theorem applyPermutationCarrier_preserves_carrierNormSq_id {L : ℕ} (c : SuperpositionCarrier L)

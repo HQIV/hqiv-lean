@@ -30,13 +30,13 @@ open Hqiv.QuantumChemistry
 def clampMediumDensity (ρ : ℝ) : ℝ := max 0 (min 1 ρ)
 
 /-- κ(ξ) coupling slot used as homogeneous curvature budget proxy (chart spine). -/
-noncomputable def curvatureBudgetAtXi (ξ : ℝ) : ℝ :=
+noncomputable def bindingCurvatureBudgetAtXi (ξ : ℝ) : ℝ :=
   dynamicBindingCurvatureCouplingAtXi ξ
 
-/-- Homogeneous bulk curvature budget: dilute → 1, fully condensed → `curvatureBudgetAtXi`. -/
+/-- Homogeneous bulk curvature budget: dilute → 1, fully condensed → `bindingCurvatureBudgetAtXi`. -/
 noncomputable def homogeneousCurvatureBudgetAtXi (ξ ρ : ℝ) : ℝ :=
   let ρc := clampMediumDensity ρ
-  1 + ρc * (curvatureBudgetAtXi ξ - 1)
+  1 + ρc * (bindingCurvatureBudgetAtXi ξ - 1)
 
 /-- Local defect excess above homogeneous background (nucleation / surface site). -/
 noncomputable def localCurvatureDefectExcess (δ_coord : ℝ) : ℝ :=
@@ -63,5 +63,35 @@ noncomputable def bindingCurvatureFeedbackSecondOrderHomogeneous
 /-- Nucleation raises local curvature: defect coordination above homogeneous ρ. -/
 noncomputable def nucleationCoordinationExcess (ρ_hom ρ_local : ℝ) : ℝ :=
   max (ρ_local - clampMediumDensity ρ_hom) 0
+
+theorem nucleationCoordinationExcess_nonneg (ρ_hom ρ_local : ℝ) :
+    0 ≤ nucleationCoordinationExcess ρ_hom ρ_local := by
+  unfold nucleationCoordinationExcess
+  exact le_max_right (ρ_local - clampMediumDensity ρ_hom) 0
+
+theorem homogeneousCurvatureBudgetAtXi_dilute (ξ : ℝ) :
+    homogeneousCurvatureBudgetAtXi ξ 0 = 1 := by
+  unfold homogeneousCurvatureBudgetAtXi clampMediumDensity
+  simp
+
+theorem homogeneousCurvatureBudgetAtXi_bulk (ξ : ℝ) :
+    homogeneousCurvatureBudgetAtXi ξ 1 = bindingCurvatureBudgetAtXi ξ := by
+  unfold homogeneousCurvatureBudgetAtXi clampMediumDensity bindingCurvatureBudgetAtXi
+    dynamicBindingCurvatureCouplingAtXi
+  simp [dynamicBindingCurvatureCouplingAtXi]
+
+theorem localCurvatureDefectExcess_nonneg (δ : ℝ) :
+    0 ≤ localCurvatureDefectExcess δ := by
+  unfold localCurvatureDefectExcess
+  apply mul_nonneg
+  · apply mul_nonneg
+    · rw [gamma_eq_2_5]; norm_num
+    · rw [strongChannelFraction_eq_four_eighths]; norm_num
+  · exact le_max_right δ 0
+
+theorem effectiveCurvatureBudgetAtXi_ge_homogeneous (ξ ρ δ : ℝ) :
+    homogeneousCurvatureBudgetAtXi ξ ρ ≤ effectiveCurvatureBudgetAtXi ξ ρ δ := by
+  unfold effectiveCurvatureBudgetAtXi
+  linarith [localCurvatureDefectExcess_nonneg δ]
 
 end Hqiv.Physics

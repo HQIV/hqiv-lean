@@ -338,6 +338,14 @@ def stepsAfterLockin : Nat := latticeStepCount
 /--
 **Lock-in / reference shell index** = `qcdShell + stepsFromQCDToLockin` (currently `4`).
 
+This is the **first shell row on the ladder with enough octonion-mode degrees of freedom**
+to host the full sector spine: at `m = 4` the library proves `new_modes 4 = 40`
+(`new_modes_referenceM_numeric`), and the machine-checked closure
+`G₂ ∪ {Δ} ⇒ 𝔰𝔬(8)` (`G2_plus_Delta_closes_to_so8`) supplies the fourteen `G₂`
+generators plus harmonic `Δ` on the eight-dimensional carrier. Baryogenesis, proton
+lock-in, and downstream applied readouts (binding, SM synthesis, chemistry, BBN) all
+calibrate at this same pin — baryogenesis is an **application** of the spine, not its goal.
+
 Downstream code evaluates detuned areas, mode counts, and Fano-axis data **at this row** of the
 discrete ladder. That is a **calibration and export convention** on the null-lattice grid: the
 **physical** claim being encoded is that horizon **area functionals** (and the imprint ladder) are the

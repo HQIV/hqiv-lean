@@ -1,0 +1,137 @@
+{
+  "source": "data/miniprotein_witnesses.json",
+  "comparison_policy": "PDB/COD C\u03b1 traces grade HQIV fold readouts only \u2014 never fold inputs",
+  "witnesses": {
+    "trp_cage": {
+      "name": "trp_cage",
+      "sequence": "NLYIQWLKDGGPSSGRPPPS",
+      "pdb_id": "1L2Y",
+      "model": 1,
+      "chain": "A",
+      "reference_source": "wwPDB",
+      "reference_citation": "Neidigh JW et al., Nat. Struct. Biol. 2002; PDB 1L2Y model 1 C\u03b1 trace",
+      "ca_angstrom": [
+        [
+          -8.608,
+          3.135,
+          -1.618
+        ],
+        [
+          -4.923,
+          4.002,
+          -2.452
+        ],
+        [
+          -3.69,
+          2.738,
+          0.981
+        ],
+        [
+          -5.857,
+          -0.449,
+          0.613
+        ],
+        [
+          -4.122,
+          -1.167,
+          -2.743
+        ],
+        [
+          -0.716,
+          -0.631,
+          -0.993
+        ],
+        [
+          -1.641,
+          -2.932,
+          1.963
+        ],
+        [
+          -3.024,
+          -5.791,
+          -0.269
+        ],
+        [
+          0.466,
+          -6.016,
+          -1.905
+        ],
+        [
+          2.06,
+          -6.618,
+          1.593
+        ],
+        [
+          2.626,
+          -2.967,
+          2.723
+        ],
+        [
+          6.333,
+          -2.533,
+          3.806
+        ],
+        [
+          7.049,
+          -6.179,
+          2.704
+        ],
+        [
+          6.389,
+          -5.315,
+          -1.015
+        ],
+        [
+          9.451,
+          -3.116,
+          -1.87
+        ],
+        [
+          7.289,
+          0.084,
+          -2.054
+        ],
+        [
+          6.782,
+          3.088,
+          0.345
+        ],
+        [
+          3.287,
+          4.031,
+          1.686
+        ],
+        [
+          1.185,
+          6.543,
+          -0.353
+        ],
+        [
+          0.852,
+          10.027,
+          1.285
+        ]
+      ]
+    },
+    "GG": {
+      "name": "GG",
+      "sequence": "GG",
+      "reference_source": "HQIV beta-strand dihedral spine (pending COD C\u03b1 extraction)",
+      "reference_citation": "Moggach et al. Acta Cryst. B62, 310 (2006) COD:2100438 \u2014 crystal C\u03b1 witness to be wired",
+      "notes": "Interim witness from same derived spine for pipeline gate; replace with COD C\u03b1 when parsed",
+      "ca_angstrom": [
+        [
+          4.1874870373954325,
+          3.84630691,
+          3.018398846297712
+        ],
+        [
+          1.6752433348445386,
+          3.1354261500000002,
+          0.3007315374401882
+        ]
+      ],
+      "structure_id": "COD:2100438"
+    }
+  }
+}

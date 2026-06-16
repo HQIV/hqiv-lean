@@ -269,9 +269,60 @@ def sphere_touch_separation_m(m: int) -> float:
     return r + r
 
 
+@dataclass(frozen=True)
+class TwoAlphaInterfaceContactLedger:
+    """
+    Per-contact chart for ``n_α = 2`` two-body α breakup (⁸Be).
+
+    Distinct from post-α facet touches (no extra nucleons beyond closed α cores):
+
+    • **Barbell units** ``2n`` — trapped-inside contact units on the inter-α spine.
+    • **Mass contacts** ``2n + (n−1)`` — barbell units plus link book-keeping on
+      the breaking seam (mirror staged facet counting on ⁵Li/⁷Be).
+    • **Mass ledger** books ``inside_binding_per_unit`` on each mass contact.
+    • **Width ledger** uses the deepest **shared** seam well
+      ``Δinside · vertices / (2γ)`` and valley ``2n − 2``.
+    """
+
+    n_alpha: int
+    barbell_contact_units: int
+    mass_contact_count: int
+    inside_binding_per_unit_mev: float
+    delta_inside_mev: float
+    constructive_valley_increment: int
+    mass_ledger_vertices: int = PROTON_FACET_VERTEX_CONTACTS
+
+
+def constructive_valley_contacts(A: int, Z: int = 0) -> int:
+    """Constructive ladder contact count through ``A`` (Lean ``bbnValleyCount``)."""
+    return bbn.valley_count(A, Z)
+
+
+def two_alpha_interface_contact_ledger(
+    A: int,
+    Z: int,
+    n_alpha: int,
+    delta_inside_mev: float,
+) -> TwoAlphaInterfaceContactLedger | None:
+    """Build the per-contact ledger for pure two-α breakup."""
+    if n_alpha != 2 or delta_inside_mev <= 0.0:
+        return None
+    barbell_units = 2 * n_alpha
+    mass_contacts = barbell_units + max(n_alpha - 1, 0)
+    vc_inc = max(0, constructive_valley_contacts(A, Z) - CONSTRUCTIVE_VALLEY_CAP)
+    return TwoAlphaInterfaceContactLedger(
+        n_alpha=n_alpha,
+        barbell_contact_units=barbell_units,
+        mass_contact_count=mass_contacts,
+        inside_binding_per_unit_mev=delta_inside_mev / float(barbell_units),
+        delta_inside_mev=delta_inside_mev,
+        constructive_valley_increment=vc_inc,
+    )
+
+
 def be7_to_li7_capture_q(
     Q_be: float,
     Q_li: float,
 ) -> float:
-    """Lean `bbnBe7ToLi7CaptureQ`: γ·(4/8)·max(0, Q_Be − Q_Li)."""
-    return bbn.GAMMA_HQIV * bbn.STRONG_CHANNEL_FRACTION * max(0.0, Q_be - Q_li)
+    """Lean `bbnBe7ToLi7CaptureQ`: γ·(4/8)·|Q_Be − Q_Li| (well-depth gap)."""
+    return bbn.GAMMA_HQIV * bbn.STRONG_CHANNEL_FRACTION * abs(Q_be - Q_li)

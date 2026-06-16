@@ -1,0 +1,212 @@
+{
+  "description": "SO(4) Hopf zero orbit tangent/harmonic-tail probe",
+  "model": {
+    "zero_point": "(1/2, gamma_n)",
+    "tangent_ratio": "2 * gamma_n",
+    "doubled_endpoint": "(1, 2 * gamma_n)",
+    "projective_intercept": "(2 * gamma_n) / (1 + 2 * gamma_n)",
+    "harmonic_tail": "1 / (1 + 2 * gamma_n)"
+  },
+  "rows": [
+    {
+      "n": 1,
+      "gamma": 14.134725141734695,
+      "tangent_ratio": 28.26945028346939,
+      "doubled_endpoint": [
+        1.0,
+        28.26945028346939
+      ],
+      "origin_axis_angle_rad": 1.5354371953234305,
+      "origin_axis_angle_deg": 87.97407099943679,
+      "projective_intercept": 0.9658346846177438,
+      "harmonic_tail": 0.0341653153822562,
+      "harmonic_index_real": 29.269450283469393,
+      "nearest_harmonic_index": 29,
+      "nearest_harmonic_term": 0.034482758620689655,
+      "harmonic_tail_error": -0.0003174432384334541,
+      "harmonic_tail_rel_error": -0.00920585391457017,
+      "phase_mod_tau": 1.5683545273755222,
+      "phase_turn_fraction": 0.24961137555236765
+    },
+    {
+      "n": 2,
+      "gamma": 21.022039638771556,
+      "tangent_ratio": 42.04407927754311,
+      "doubled_endpoint": [
+        1.0,
+        42.04407927754311
+      ],
+      "origin_axis_angle_rad": 1.5470162485365673,
+      "origin_axis_angle_deg": 88.63750187930692,
+      "projective_intercept": 0.9767680011563932,
+      "harmonic_tail": 0.023231998843606827,
+      "harmonic_index_real": 43.04407927754302,
+      "nearest_harmonic_index": 43,
+      "nearest_harmonic_term": 0.023255813953488372,
+      "harmonic_tail_error": -2.3815109881544783e-05,
+      "harmonic_tail_rel_error": -0.0010240497249064257,
+      "phase_mod_tau": 2.1724837172327973,
+      "phase_turn_fraction": 0.3457615223842551
+    },
+    {
+      "n": 3,
+      "gamma": 25.01085758014569,
+      "tangent_ratio": 50.02171516029138,
+      "doubled_endpoint": [
+        1.0,
+        50.02171516029138
+      ],
+      "origin_axis_angle_rad": 1.5508076716450923,
+      "origin_axis_angle_deg": 88.85473442177377,
+      "projective_intercept": 0.9804005020831156,
+      "harmonic_tail": 0.019599497916884423,
+      "harmonic_index_real": 51.021715160291315,
+      "nearest_harmonic_index": 51,
+      "nearest_harmonic_term": 0.0196078431372549,
+      "harmonic_tail_error": -8.34522037047869e-06,
+      "harmonic_tail_rel_error": -0.0004256062388944132,
+      "phase_mod_tau": 6.161301658606931,
+      "phase_turn_fraction": 0.9806016148475865
+    },
+    {
+      "n": 4,
+      "gamma": 30.424876125859512,
+      "tangent_ratio": 60.849752251719025,
+      "doubled_endpoint": [
+        1.0,
+        60.849752251719025
+      ],
+      "origin_axis_angle_rad": 1.5543638853633166,
+      "origin_axis_angle_deg": 89.05849045887456,
+      "projective_intercept": 0.9838317864891333,
+      "harmonic_tail": 0.016168213510866725,
+      "harmonic_index_real": 61.849752251718826,
+      "nearest_harmonic_index": 62,
+      "nearest_harmonic_term": 0.016129032258064516,
+      "harmonic_tail_error": 3.9181252802208966e-05,
+      "harmonic_tail_rel_error": 0.002429237673736956,
+      "phase_mod_tau": 5.2921348971411675,
+      "phase_turn_fraction": 0.8422694283891359
+    },
+    {
+      "n": 5,
+      "gamma": 32.93506158773919,
+      "tangent_ratio": 65.87012317547838,
+      "doubled_endpoint": [
+        1.0,
+        65.87012317547838
+      ],
+      "origin_axis_angle_rad": 1.5556161033862472,
+      "origin_axis_angle_deg": 89.13023726661869,
+      "projective_intercept": 0.9850456384329391,
+      "harmonic_tail": 0.01495436156706087,
+      "harmonic_index_real": 66.87012317547837,
+      "nearest_harmonic_index": 67,
+      "nearest_harmonic_term": 0.014925373134328358,
+      "harmonic_tail_error": 2.8988432732511907e-05,
+      "harmonic_tail_rel_error": 0.0019422249930782978,
+      "phase_mod_tau": 1.5191350518412605,
+      "phase_turn_fraction": 0.2417778527246993
+    },
+    {
+      "n": 6,
+      "gamma": 37.586178158825675,
+      "tangent_ratio": 75.17235631765135,
+      "doubled_endpoint": [
+        1.0,
+        75.17235631765135
+      ],
+      "origin_axis_angle_rad": 1.5574943489480495,
+      "origin_axis_angle_deg": 89.23785281019914,
+      "projective_intercept": 0.9868718778262572,
+      "harmonic_tail": 0.013128122173742818,
+      "harmonic_index_real": 76.17235631765153,
+      "nearest_harmonic_index": 76,
+      "nearest_harmonic_term": 0.013157894736842105,
+      "harmonic_tail_error": -2.9772563099286775e-05,
+      "harmonic_tail_rel_error": -0.002262714795545795,
+      "phase_mod_tau": 6.1702516229277435,
+      "phase_turn_fraction": 0.9820260459097399
+    },
+    {
+      "n": 7,
+      "gamma": 40.9187190121475,
+      "tangent_ratio": 81.837438024295,
+      "doubled_endpoint": [
+        1.0,
+        81.837438024295
+      ],
+      "origin_axis_angle_rad": 1.5585775885524669,
+      "origin_axis_angle_deg": 89.29991786773368,
+      "projective_intercept": 0.9879281635954662,
+      "harmonic_tail": 0.012071836404533798,
+      "harmonic_index_real": 82.83743802429528,
+      "nearest_harmonic_index": 83,
+      "nearest_harmonic_term": 0.012048192771084338,
+      "harmonic_tail_error": 2.3643633449459828e-05,
+      "harmonic_tail_rel_error": 0.0019624215763051657,
+      "phase_mod_tau": 3.219607169069981,
+      "phase_turn_fraction": 0.512416395771591
+    },
+    {
+      "n": 8,
+      "gamma": 43.327073280915,
+      "tangent_ratio": 86.65414656183,
+      "doubled_endpoint": [
+        1.0,
+        86.65414656183
+      ],
+      "origin_axis_angle_rad": 1.559256710380694,
+      "origin_axis_angle_deg": 89.33882868226631,
+      "projective_intercept": 0.9885915265937292,
+      "harmonic_tail": 0.011408473406270825,
+      "harmonic_index_real": 87.65414656182975,
+      "nearest_harmonic_index": 88,
+      "nearest_harmonic_term": 0.011363636363636364,
+      "harmonic_tail_error": 4.4837042634460894e-05,
+      "harmonic_tail_rel_error": 0.003945659751832559,
+      "phase_mod_tau": 5.6279614378374845,
+      "phase_turn_fraction": 0.8957178823624063
+    },
+    {
+      "n": 9,
+      "gamma": 48.00515088116716,
+      "tangent_ratio": 96.01030176233432,
+      "doubled_endpoint": [
+        1.0,
+        96.01030176233432
+      ],
+      "origin_axis_angle_rad": 1.5603811544354893,
+      "origin_axis_angle_deg": 89.40325458090466,
+      "projective_intercept": 0.9896918164170863,
+      "harmonic_tail": 0.010308183582913744,
+      "harmonic_index_real": 97.01030176233404,
+      "nearest_harmonic_index": 97,
+      "nearest_harmonic_term": 0.010309278350515464,
+      "harmonic_tail_error": -1.0947676017201285e-06,
+      "harmonic_tail_rel_error": -0.00010619245736685247,
+      "phase_mod_tau": 4.022853730910057,
+      "phase_turn_fraction": 0.6402570566100091
+    },
+    {
+      "n": 10,
+      "gamma": 49.7738324776723,
+      "tangent_ratio": 99.5476649553446,
+      "doubled_endpoint": [
+        1.0,
+        99.5476649553446
+      ],
+      "origin_axis_angle_rad": 1.5607512256311826,
+      "origin_axis_angle_deg": 89.42445809853724,
+      "projective_intercept": 0.9900544681923332,
+      "harmonic_tail": 0.009945531807666774,
+      "harmonic_index_real": 100.54766495534444,
+      "nearest_harmonic_index": 101,
+      "nearest_harmonic_term": 0.009900990099009901,
+      "harmonic_tail_error": 4.454170865687314e-05,
+      "harmonic_tail_rel_error": 0.004498712574344187,
+      "phase_mod_tau": 5.791535327415197,
+      "phase_turn_fraction": 0.9217514754494671
+    }
+  ]
+}

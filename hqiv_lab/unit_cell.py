@@ -49,7 +49,9 @@ def unit_cell_for_allotrope(
 ) -> PhaseUnitCell:
     """Build unit cell from spec + packing template (derived geometry)."""
     mono = mono or infer_monomer_geometry(spec)
-    a, b, c = lattice_constants_from_template(mono, template, temperature_k=temperature_k)
+    a, b, c = lattice_constants_from_template(
+        mono, template, temperature_k=temperature_k, spec=spec
+    )
     return PhaseUnitCell(
         allotrope=template.label,
         molecules_per_cell=template.molecules_per_cell,

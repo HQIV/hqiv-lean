@@ -116,4 +116,43 @@ theorem h2oOrbitalSiteEnergyTrace_tuft_default_nonneg :
     latticeFullModeEnergy_nonneg electronicComptonCentreP,
     latticeFullModeEnergy_nonneg electronicComptonHydrogenS]
 
+/-!
+## Period-3 chart shells (``tuftHadronRadialShell`` offset)
+
+Period ``n`` valence row: ``tuftHeavyChartShell + (n − 2)`` for s,
+``tuftStrongChartShell + (n − 2)`` for p — Python ``electronic_compton_shells``.
+-/
+
+/-- Period index from principal shell (period 2 → offset 0). -/
+def electronicComptonPeriodOffset (period : ℕ) : ℕ :=
+  if period ≤ 2 then 0 else period - 2
+
+/-- Centre s shell at chemical period (period 2 = 4, period 3 = 5, …). -/
+def electronicComptonCentreSAtPeriod (period : ℕ) : ℕ :=
+  tuftHeavyChartShell + electronicComptonPeriodOffset period
+
+/-- Centre p shell at chemical period (period 2 = 3, period 3 = 4, …). -/
+def electronicComptonCentrePAtPeriod (period : ℕ) : ℕ :=
+  tuftStrongChartShell + electronicComptonPeriodOffset period
+
+theorem electronicComptonCentreSAtPeriod_two :
+    electronicComptonCentreSAtPeriod 2 = electronicComptonCentreS := by decide
+
+theorem electronicComptonCentrePAtPeriod_two :
+    electronicComptonCentrePAtPeriod 2 = electronicComptonCentreP := by decide
+
+theorem electronicComptonCentreSAtPeriod_three : electronicComptonCentreSAtPeriod 3 = 5 := by decide
+
+theorem electronicComptonCentrePAtPeriod_three : electronicComptonCentrePAtPeriod 3 = 4 := by decide
+
+theorem electronicComptonCentreSAtPeriod_eq_tuftHeavy_plus_offset (period : ℕ) :
+    electronicComptonCentreSAtPeriod period =
+      tuftHeavyChartShell + electronicComptonPeriodOffset period := rfl
+
+theorem period3HeavyHydrideComptonS_eq_five :
+    electronicComptonCentreSAtPeriod 3 = 5 := electronicComptonCentreSAtPeriod_three
+
+theorem period3HeavyHydrideComptonP_eq_four :
+    electronicComptonCentrePAtPeriod 3 = 4 := electronicComptonCentrePAtPeriod_three
+
 end Hqiv.QuantumChemistry

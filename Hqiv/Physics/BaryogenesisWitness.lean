@@ -1,5 +1,6 @@
 import Hqiv.Physics.BaryogenesisCore
 import Hqiv.Physics.BaryogenesisEtaPaper
+import Hqiv.Physics.TrialityRapidityWellEquivalence
 
 namespace Hqiv
 
@@ -169,5 +170,12 @@ theorem omega_k_cp_bias_eq_eta_ratio_minus_one
   have hηnz : eta_paper ≠ 0 := ne_of_gt eta_paper_pos
   rw [hηm, hηlock]
   field_simp [hηnz]
+
+/-- CP-bias vital: triality rapidity bias equals the η-ratio deviation at lock-in horizon. -/
+theorem baryogenesis_cp_bias_vital_holds (m : ℕ) (h_lockin : 0 < curvature_integral m_lockin) :
+    Hqiv.Physics.rapidityCPBias m =
+      eta_at_horizon m m_lockin / eta_at_horizon m_lockin m_lockin - 1 := by
+  rw [Hqiv.Physics.rapidityCPBias_eq_curvature_ratio_minus_one]
+  exact omega_k_cp_bias_eq_eta_ratio_minus_one m h_lockin
 
 end Hqiv

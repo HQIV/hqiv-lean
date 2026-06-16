@@ -16,6 +16,8 @@
 
 | Object | Lean / code locus | Role |
 |--------|-------------------|------|
+| **Sector zeta** (Hopf / TUFT) | `OctonionicZeta`, `TuftSynthesisZetaHolonomyDischarge`, `zetaHQIVTerm` | Finite shell-indexed spectral bodies + phase on the patch carrier—not Riemann \(\zeta(s)\) |
+| **Classical \(\zeta(s)\)** projection | `Hqiv/Story/S3*` spine (`S3HarmonicPrimeZetaPath`, `S3ZetaClosedForm`, …) | Regional closed form of SO(4) projection; Mathlib link for \(\Re s>1\); RH packaging = equivalences, not discharge |
 | Shell index \(m \in \mathbb{N}\) | `OctonionicLightCone`, `shell_shape`, `available_modes` | UV-complete counting on the null ladder |
 | TUFT Beltrami chart row | `TuftShellChart.tuftHeavyChartShell`, `tuftHadronModeShell` | Hadron / vev spectroscopy (distinct name from `referenceM`; see [`TUFT_SHELL_ONTOLOGY.md`](./TUFT_SHELL_ONTOLOGY.md)) |
 | Accessible mode budget | `accessibleModeBudgetUpToShell`, `LightConeMaxwellQFTBridge` | **Finite** causal bookkeeping up to shell \(M\) |
@@ -65,6 +67,8 @@
 When you see derivatives, charts, `AnalyticOn`, or FLRW in Lean or `main.tex`, read them as **IR / observer-readout over the ladder**, not as commitment to sub-Planck smoothness (`ASSUMPTIONS.md` §1, bullet on sub-Planck continuum).
 
 **Lean honesty (do not oversell):** satisfying `continuum_many_body_closure_*` or `HorizonContinuumClosureStatementCoreHQIV` is **not** a proof of rigorous continuum quantum field theory. Scaffold and surrogate slots remain documented in `HorizonLimitedRenormLocality` and the octonion/QM paper appendix.
+
+**Projection geometry update (2026-06, `papers/s3_zeta_so4_projection`):** the S³ / SO(4) formal note proves that **classical \(\zeta(s)\)** is a *regional closed form* of a quaternionic projection readout—not a separate ontology from the patch. Machine-checked spine includes: harmonic divergence \(\Rightarrow\) \(\Delta\) and \(\mathfrak{so}(4)\) closure; shell sum \(=\zeta(s)\) for \(\Re s>1\); prime Euler product and \(\Lambda=-\zeta'/\zeta\); **polar decoupling** \(n^{-s}=n^{-\sigma}\cdot e^{-it\log n}\) (modulus erases \(t\), phase erases \(\sigma\)); prime-log Diophantine independence; Goldbach circle \(pq+(q-N)^2=N^2\); and many RH-*equivalent* locators with **zero slack** (not RH discharge). Continuum heat-flow / de Bruijn–Newman ports in the same Lean spine are **comparison dictionaries** (`dbnHeatFamily`, lattice-dominance hypotheses). **Do not** fold this into “HQIV proves RH”; **do** use it to separate **sector zeta** (Hopf shells, `zetaHQIVTerm`) from **classical \(\zeta\)** (projection readout) and to explain why “zeta” recurs in HEP multichannel readouts (same spectral–log template). Math-only notes use `papers/include/readout_dictionary_messaging.tex`; full patch contract remains `patch_theory_messaging.tex`.
 
 ---
 
@@ -154,7 +158,9 @@ The Python quantum simulator implements **patch-local digital evolution** on \((
 
 | Artifact | Patch messaging status |
 |----------|------------------------|
-| `papers/include/patch_theory_messaging.tex` | Canonical short **reader contract** (gauge consistency discharge + patch QFT; included in Lean-aligned `.tex` files) |
+| `papers/include/patch_theory_messaging.tex` | Canonical short **reader contract** (gauge consistency discharge + patch QFT + projection-geometry / classical \(\zeta\) dictionary; included in phenomenology `.tex` files) |
+| `papers/include/readout_dictionary_messaging.tex` | **Math / formal notes only**: readout dictionary, no full patch QFT contract (`s3_zeta_so4_projection`, etc.) |
+| `papers/s3_zeta_so4_projection/` | Projection geometry note; §HEP zeta bridge; cites sector zeta vs classical \(\zeta\); **does not** include full patch contract |
 | `papers/paper/octonion_lightcone_to_oshoracle.tex` | Includes patch contract; honest finite vs continuum checklist |
 | `HQIV/paper/main.tex` | **Often reads as continuum-first GUT**; abstract uses “complete grand-unified theory.” Agents editing there should apply [MAIN_PAPER_FLRW_LEAN_ALIGNMENT.md](./MAIN_PAPER_FLRW_LEAN_ALIGNMENT.md) **and** this file. |
 | `AGENTS/MAIN_PAPER_FLRW_LEAN_ALIGNMENT.md` | FLRW/HQVM **algebraic** anchors—not patch ontology (complementary) |

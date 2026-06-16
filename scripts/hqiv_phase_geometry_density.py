@@ -39,17 +39,6 @@ import hqiv_thermodynamic_phase_from_tp as tptp
 AVOGADRO = 6.022_140_76e23
 ANGSTROM_TO_CM = 1.0e-8
 
-# Monomer MW from chart fragment labels (no extra tables).
-_ELEMENT_AMU: dict[str, float] = {
-    "H": 1.008,
-    "Li": 6.94,
-    "C": 12.011,
-    "N": 14.007,
-    "O": 15.999,
-    "F": 18.998,
-}
-
-
 @dataclass(frozen=True)
 class PhaseUnitCell:
     """Crystalline unit cell for density (geometry witness, not DFT)."""
@@ -81,14 +70,11 @@ def density_g_cm3(cell: PhaseUnitCell) -> float:
     return mass_g / cell.volume_cm3
 
 
-def liquid_reference_density_g_cm3(molecule: str) -> float:
-    """Reference liquid density at melt comparison (water = 1.0 g/cm³ scale)."""
-    refs = {
-        "H2O": 1.0,
-        "CH4": 0.423,  # boiling liquid CH4 @ 112 K order-of-magnitude
-        "NH3": 0.682,
-    }
-    return refs.get(molecule.upper(), 1.0)
+def liquid_reference_density_g_cm3(molecule: str, *, temperature_k: float = 273.15) -> float:
+    """Derived liquid ρ at melt from solid allotrope template + motif opening."""
+    import hqiv_derived_chemistry as hdc
+
+    return hdc.derived_liquid_reference_density_g_cm3(molecule, temperature_k=temperature_k)
 
 
 def _lab_cell_to_legacy(cell: Any) -> PhaseUnitCell:
@@ -132,23 +118,158 @@ def phase_unit_cell(
 
 
 def covalent_span_angstrom(name: str) -> float:
-    """Sum of chart bond lengths (geometry span for polarizability / stiffness)."""
-    for bench in chart.GMTKN55_SUITE:
-        if bench.name.upper() == name.upper():
-            if bench.bonds:
-                return sum(b.distance_angstrom for b in bench.bonds)
+    """Sum of derived covalent bond lengths for the resolved molecular spec."""
+    from hqiv_lab.spec import resolve_spec
+
+    try:
+        spec = resolve_spec(name)
+    except KeyError:
+        for bench in chart.GMTKN55_SUITE:
+            if bench.name.upper() == name.upper():
+                if bench.bonds:
+                    return sum(b.distance_angstrom for b in bench.bonds)
+        return 1.0
+    if spec.bonds:
+        return sum(b.distance_angstrom for b in spec.bonds)
+    return 1.0
+
+
+def tetrahedral_melt_density_ratio(n_inter: int) -> float:
+    """Lean ``tetrahedralMeltDensityRatio`` — neighbor lapse overlap × phaseLift(3)/(1+α)."""
+    n = max(n_inter, 1)
+    overlap = max(0.5, 1.0 - lean.GAMMA * lean.STRONG_CHANNEL_FRACTION / n)
+    return overlap * lean.PHASE_LIFT_3 / (1.0 + lean.ALPHA)
+
+
+def derived_melt_reference_density_g_cm3(
+    rho_solid_g_cm3: float,
+    *,
+    motif: str,
+    n_coord: int = 4,
+    molecule: str | None = None,
+    mono: object | None = None,
+    salt: object | None = None,
+) -> float:
+    """Own-motif melt ρ at the solid→liquid comparison (network-derived opening)."""
+    import hqiv_derived_chemistry as hdc
+
+    return hdc.derived_liquid_density_scale_from_solid(
+        rho_solid_g_cm3,
+        motif=motif,
+        mono=mono,
+        salt=salt,
+        n_coord=n_coord,
+        molecule=molecule,
+    )
+
+
+def resolve_crystalline_melt_density_ratio(
+    *,
+    motif: str,
+    n_coord: int = 4,
+    molecule: str | None = None,
+    mono: object | None = None,
+    salt: object | None = None,
+) -> tuple[float, bool]:
+    """
+    Dynamic min(ρ_s, ρ_m)/max(ρ_s, ρ_m) and whether solid is denser at melt.
+
+    Molecular crystals: ``hqiv_lab.packing.molecular_melt_density_ratio``.
+    Ionic lattices: ``hqiv_ionic_bond_network.ionic_melt_density_ratio``.
+    """
+    from hqiv_lab.coordination import IntermolecularMotif, infer_monomer_geometry
+    from hqiv_lab.packing import molecular_melt_density_ratio
+    from hqiv_lab.spec import MoleculeSpec
+
+    if motif == IntermolecularMotif.IONIC_LATTICE.value or salt is not None:
+        import hqiv_ionic_bond_network as ibn
+
+        if salt is None:
+            raise ValueError("ionic_lattice melt ratio requires an IonicSalt witness")
+        ratio = ibn.ionic_melt_density_ratio(salt, n_coord=max(n_coord, 1))
+        return min(1.0, max(0.0, ratio)), True
+
+    if mono is None and molecule is not None:
+        from hqiv_lab.spec import resolve_spec
+
+        mono = infer_monomer_geometry(resolve_spec(molecule))
+    if mono is not None:
+        return molecular_melt_density_ratio(mono)
+
+    raise ValueError(f"cannot resolve crystalline melt ratio for motif={motif!r} without geometry witness")
+
+
+def crystalline_coordination_reference(motif: str) -> int:
+    """Periodic-image reference coordination for lattice participation."""
+    if motif == "tetrahedral_hbond":
+        return 4
+    if motif == "ionic_lattice":
+        return 6
+    if motif == "pyramidal_hbond":
+        return 3
+    if motif == "linear_chain":
+        return 2
+    if motif in ("polyol_hbond", "peptide_layer"):
+        return 4
+    return 4
+
+
+def crystalline_curvature_density_fraction(
+    rho_solid_g_cm3: float,
+    *,
+    motif: str,
+    n_coord: int = 4,
+    periodic_weight: float = 1.0,
+    molecule: str | None = None,
+    mono: object | None = None,
+    salt: object | None = None,
+) -> float:
+    """
+    Crystalline ρ_curv ∈ [0,1]: network-derived melt ratio × lattice participation.
+
+    Melt opening comes from packing geometry (molecular) or ionic contact weights
+    (lattice bond length, binding/surplus lock, motif melt ladder) — not fixed slots.
+    """
+    melt_ratio, _solid_denser = resolve_crystalline_melt_density_ratio(
+        motif=motif,
+        n_coord=n_coord,
+        molecule=molecule,
+        mono=mono,
+        salt=salt,
+    )
+    rho_geom = melt_ratio
+    n_ref = crystalline_coordination_reference(motif)
+    lattice_frac = min(1.0, float(max(n_coord, 1)) / float(max(n_ref, 1)))
+    pw = min(1.0, max(0.0, float(periodic_weight)))
+    return min(1.0, max(0.0, rho_geom * lattice_frac * pw))
+
+
+def melt_comparison_curvature_density_fraction() -> float:
+    """Melt-side comparison baseline: periodic lattice released, bulk liquid horizon."""
     return 1.0
 
 
 def curvature_density_fraction(
     rho_solid_g_cm3: float,
     molecule: str,
+    *,
+    periodic_weight: float = 1.0,
 ) -> float:
-    """ρ_curvature ∈ [0,1]: solid geometry density vs liquid reference at melt."""
-    ref = liquid_reference_density_g_cm3(molecule)
-    if ref <= 0.0:
-        return 0.0
-    return min(1.0, max(0.0, rho_solid_g_cm3 / ref))
+    """Solid crystal ρ_curv via own-motif network-derived melt opening."""
+    from hqiv_lab.coordination import infer_monomer_geometry
+    from hqiv_lab.spec import MoleculeSpec
+
+    from hqiv_lab.spec import resolve_spec
+
+    mono = infer_monomer_geometry(resolve_spec(molecule))
+    return crystalline_curvature_density_fraction(
+        rho_solid_g_cm3,
+        motif=mono.motif.value,
+        n_coord=mono.intermolecular_contacts,
+        periodic_weight=periodic_weight,
+        molecule=molecule,
+        mono=mono,
+    )
 
 
 def clausius_mossotti_from_refractive_index(n: float) -> float:
@@ -208,7 +329,9 @@ def material_scales_with_phase_geometry(
     rho_g = density_g_cm3(cell)
     rho_geom = curvature_density_fraction(rho_g, molecule)
     base = tptp.material_scales_from_network_name(molecule)
-    mono = infer_monomer_geometry(MoleculeSpec.from_chart_name(molecule))
+    from hqiv_lab.spec import resolve_spec
+
+    mono = infer_monomer_geometry(resolve_spec(molecule))
     inter = mono.intermolecular_contacts
     n_solid = pmr.refractive_index_solid_readout(
         molecule, cell, allotrope=cell.allotrope
@@ -350,7 +473,29 @@ def melt_readout_with_phase_geometry(
     """Full witness: geometry → ρ_geom + n → κ₆(ρ) → T_sl @ pressure."""
     cell = phase_unit_cell(molecule, allotrope, temperature_k=temperature_at_melt_k)
     rho_g = density_g_cm3(cell)
-    rho_geom = curvature_density_fraction(rho_g, molecule)
+    from hqiv_lab.coordination import infer_monomer_geometry
+    from hqiv_lab.spec import MoleculeSpec
+
+    from hqiv_lab.spec import resolve_spec
+
+    mono = infer_monomer_geometry(resolve_spec(molecule))
+    motif = mono.motif.value
+    melt_ratio, solid_denser = resolve_crystalline_melt_density_ratio(
+        motif=motif,
+        n_coord=mono.intermolecular_contacts,
+        molecule=molecule,
+        mono=mono,
+    )
+    from hqiv_lab.packing import melt_density_g_cm3_from_solid
+
+    rho_melt = melt_density_g_cm3_from_solid(rho_g, melt_ratio, solid_denser=solid_denser)
+    rho_geom = crystalline_curvature_density_fraction(
+        rho_g,
+        motif=motif,
+        n_coord=mono.intermolecular_contacts,
+        molecule=molecule,
+        mono=mono,
+    )
     mat = material_scales_with_phase_geometry(
         molecule,
         allotrope=allotrope,
@@ -371,8 +516,10 @@ def melt_readout_with_phase_geometry(
         "allotrope": cell.allotrope,
         "unit_cell": asdict(cell),
         "density_g_cm3": rho_g,
+        "melt_reference_g_cm3": rho_melt,
         "liquid_reference_g_cm3": liquid_reference_density_g_cm3(molecule),
         "curvature_density_fraction": rho_geom,
+        "crystalline_curvature_density_fraction": rho_geom,
         "optical_curvature_density_fraction": rho_opt,
         "phase_curvature_density_fraction": rho_kappa,
         "refractive_index_solid": n_solid,
@@ -394,6 +541,18 @@ def main() -> None:
     parser.add_argument("--orbital", action="store_true", help="Earth flyby witness at --encounter-r RE")
     parser.add_argument("--encounter-r", type=float, default=2.0, help="Encounter radius in body radii")
     parser.add_argument("--json-out", type=Path, default=None)
+    parser.add_argument(
+        "--at-melt",
+        action="store_true",
+        default=True,
+        help="Use species melt witness T for lattice geometry (default: on for panel species)",
+    )
+    parser.add_argument(
+        "--reference-T",
+        action="store_true",
+        help="Force T=273.15 K lattice (debug: shows apolar thermal breathing at wrong T)",
+    )
+    parser.add_argument("--temperature-K", type=float, default=None, help="Override lattice T [K]")
     args = parser.parse_args()
     if args.orbital:
         r_m = args.encounter_r * EARTH_RADIUS_M
@@ -406,7 +565,30 @@ def main() -> None:
         print(f"  ρ_orb = {out['curvature_density_fraction']:.4f}")
         print(f"  B_hom = {out['B_hom']:.4f}  δm fraction = {out['curvature_mass_delta_fraction']:.6f}")
     else:
-        out = melt_readout_with_phase_geometry(args.molecule, allotrope=args.allotrope)
+        from hqiv_lab.species_panel import panel_entry, witness_temperature_k
+
+        t_k = args.temperature_K
+        if t_k is None:
+            if args.reference_T:
+                t_k = 273.15
+            elif args.at_melt:
+                try:
+                    t_k = panel_entry(args.molecule).witness_temperature_k
+                except KeyError:
+                    t_k = 273.15
+            else:
+                t_k = 273.15
+        allotrope = args.allotrope
+        if allotrope is None and args.at_melt:
+            try:
+                allotrope = panel_entry(args.molecule).allotrope
+            except KeyError:
+                pass
+        out = melt_readout_with_phase_geometry(
+            args.molecule,
+            allotrope=allotrope,
+            temperature_at_melt_k=t_k,
+        )
         print(f"{out['molecule']} allotrope {out['allotrope']}")
         print(f"  ρ_solid = {out['density_g_cm3']:.4f} g/cm³  →  ρ_curvature = {out['curvature_density_fraction']:.4f}")
         print(f"  T_melt ≈ {out['T_sl_at_pressure_K']:.2f} K @ 1 atm  (phase @ 273.15 K: {out['phase_at_melt']})")

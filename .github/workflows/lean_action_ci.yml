@@ -25,8 +25,10 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - name: Factor oracle (Python) unit tests
         run: python3 -m unittest scripts.test_factor_from_curvature -v
@@ -53,8 +55,10 @@ jobs:
   yang_mills_package:
     if: github.event_name == 'workflow_dispatch' && github.event.inputs.build_hqiv_yang_mills == true
     runs-on: ubuntu-latest
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - name: Build promoted HQIVYangMills target
         uses: leanprover/lean-action@v1
@@ -75,8 +79,10 @@ jobs:
         github.ref == 'refs/heads/main' &&
         github.event.inputs.extra_docs_facets != '')
     runs-on: ubuntu-latest
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - name: Install toolchain and restore build
         uses: leanprover/lean-action@v1

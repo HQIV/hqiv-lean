@@ -270,7 +270,7 @@ def evolve_shell_integrator(
 
         total_content = cumulative_baryon + cumulative_curvature_seed + RADIATION_FLOOR
         omega_m = GAMMA * cumulative_baryon / max(total_content, 1e-30)
-        omega_b = omega_m * STRONG_CHANNEL_FRACTION * COLOR_SINGLET_FRACTION
+        omega_b = lean.omega_b_from_omega_m(omega_m)
 
         is_lock = (m == m_lock) and not lockin_recorded
         if is_lock:
@@ -567,15 +567,21 @@ def run_dynamic_bbn_suite(
     network = {**epoch_net.readout_from_state(final_state, eta), **net_meta}
 
     mid_T = bbn.BBN_T_MID_MEV
+    Q_D_rel, Q_4_rel, Q_3_rel = bbn.light_binding_q_at_temperature(mid_T)
     if q_provider is not None:
         q_mid_row = q_provider(mid_T)
-        dm_mid, Q_D_mid, Q_3_mid, Q_4_mid = q_mid_row[0], q_mid_row[1], q_mid_row[2], q_mid_row[3]
-        mid = bbn.abundances_at_epoch(eta, mid_T, m_p, dm_mid, Q_D_mid, Q_4_mid, Q_3_mid)
+        dm_mid = q_mid_row[0]
+        mid = bbn.abundances_at_epoch(
+            eta, mid_T, m_p, dm_mid, Q_D_rel, Q_4_rel, Q_3_rel
+        )
         q_mid = {
             "T_MeV": mid_T,
-            "Q_D_MeV": Q_D_mid,
-            "Q_4He_MeV": Q_4_mid,
-            "Q_3He_MeV": Q_3_mid,
+            "Q_D_MeV": Q_D_rel,
+            "Q_4He_MeV": Q_4_rel,
+            "Q_3He_MeV": Q_3_rel,
+            "Q_D_hybrid_MeV": q_mid_row[1],
+            "Q_4He_hybrid_MeV": q_mid_row[3],
+            "Q_3He_hybrid_MeV": q_mid_row[2],
             "delta_m_MeV": dm_mid,
             "shell_opportunity": (
                 opportunity_provider(mid_T, mid_T * 0.99, eta) if opportunity_provider else None
@@ -583,8 +589,15 @@ def run_dynamic_bbn_suite(
             "H_s_diagnostic": epoch_net.hubble_rate_s(mid_T),
         }
     else:
-        mid = bbn.abundances_at_epoch(eta, mid_T, m_p, dm, Q_D, Q_4, Q_3)
-        q_mid = {"T_MeV": mid_T, "Q_D_MeV": Q_D, "Q_4He_MeV": Q_4, "Q_3He_MeV": Q_3}
+        mid = bbn.abundances_at_epoch(
+            eta, mid_T, m_p, dm, Q_D_rel, Q_4_rel, Q_3_rel
+        )
+        q_mid = {
+            "T_MeV": mid_T,
+            "Q_D_MeV": Q_D_rel,
+            "Q_4He_MeV": Q_4_rel,
+            "Q_3He_MeV": Q_3_rel,
+        }
 
     return {
         "use_dynamic_providers": use_dynamic_providers,

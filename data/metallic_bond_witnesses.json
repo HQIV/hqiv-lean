@@ -1,0 +1,96 @@
+{
+  "metals": [
+    {
+      "metal": "Li",
+      "Z": 3,
+      "n_bulk": 1,
+      "n_peel": 2,
+      "mass_amu": 6.973393948201812,
+      "coordination": 8,
+      "nearest_neighbor_angstrom": 2.6458860545150005,
+      "metallic_peel_surplus_ev": 17.48571428571428,
+      "valence_merge_surplus_ev": 17.48571428571428,
+      "lattice_binding_ev_per_contact": 1.0321428571428566,
+      "melt_density_ratio": 0.9959008487654321,
+      "contact_xi": [
+        4,
+        4,
+        4
+      ],
+      "network_contacts": [
+        "cluster_deficit",
+        "cluster_deficit",
+        "metallic_bond"
+      ]
+    },
+    {
+      "metal": "Na",
+      "Z": 11,
+      "n_bulk": 1,
+      "n_peel": 10,
+      "mass_amu": 22.927619084221472,
+      "coordination": 8,
+      "nearest_neighbor_angstrom": 4.398631651715013,
+      "metallic_peel_surplus_ev": 38.857142857142854,
+      "valence_merge_surplus_ev": 17.48571428571428,
+      "lattice_binding_ev_per_contact": 0.40304579663803725,
+      "melt_density_ratio": 0.999228446533377,
+      "contact_xi": [
+        5,
+        5,
+        5
+      ],
+      "network_contacts": [
+        "cluster_deficit",
+        "cluster_deficit",
+        "metallic_bond"
+      ]
+    },
+    {
+      "metal": "Al",
+      "Z": 13,
+      "n_bulk": 3,
+      "n_peel": 10,
+      "mass_amu": 12.958865990981979,
+      "coordination": 12,
+      "nearest_neighbor_angstrom": 4.260533791854208,
+      "metallic_peel_surplus_ev": 81.59999999999997,
+      "valence_merge_surplus_ev": 17.485714285714284,
+      "lattice_binding_ev_per_contact": 2.167148396966657,
+      "melt_density_ratio": 0.9986875562738735,
+      "contact_xi": [
+        5,
+        5,
+        5
+      ],
+      "network_contacts": [
+        "cluster_deficit",
+        "cluster_deficit",
+        "metallic_bond"
+      ]
+    },
+    {
+      "metal": "Cu",
+      "Z": 29,
+      "n_bulk": 11,
+      "n_peel": 18,
+      "mass_amu": 28.928970887222565,
+      "coordination": 12,
+      "nearest_neighbor_angstrom": 3.9612625804212804,
+      "metallic_peel_surplus_ev": 209.82857142857137,
+      "valence_merge_surplus_ev": 209.82857142857134,
+      "lattice_binding_ev_per_contact": 9.770129796239292,
+      "melt_density_ratio": 0.9977180403640086,
+      "contact_xi": [
+        6,
+        6,
+        6
+      ],
+      "network_contacts": [
+        "cluster_deficit",
+        "cluster_deficit",
+        "metallic_bond"
+      ]
+    }
+  ]
+}

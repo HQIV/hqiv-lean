@@ -1,0 +1,209 @@
+{
+  "source": "scripts/hqiv_foundation_audit.py",
+  "comparison_policy": "Literature witnesses grade HQIV readouts only",
+  "condensed": [
+    {
+      "name": "CH3OH",
+      "tier": "tier1_polyol",
+      "status": "audited",
+      "hqiv_spec_available": true,
+      "spec_name": "CH3OH",
+      "monomer_motif": "polyol_hbond",
+      "intermolecular_contacts": 4,
+      "witness_temperature_K": 298.15,
+      "phase": "liquid",
+      "hqiv": {
+        "density_g_cm3": 0.7859102590986004,
+        "refractive_index": 1.3872009843777777,
+        "T_sl_K": null
+      },
+      "reference": {
+        "density_g_cm3": 0.7918,
+        "refractive_index": 1.3284,
+        "melt_K": 175.59,
+        "source": "NIST Chemistry WebBook"
+      },
+      "benchmark": {
+        "density_error_pct": 0.7438419931042686,
+        "refractive_index_error_pct": 4.4264516996219285,
+        "T_sl_error_pct": null
+      }
+    },
+    {
+      "name": "C3H8O3",
+      "tier": "tier1_polyol",
+      "status": "audited",
+      "hqiv_spec_available": true,
+      "spec_name": "C3H8O3",
+      "monomer_motif": "polyol_hbond",
+      "intermolecular_contacts": 5,
+      "witness_temperature_K": 298.15,
+      "phase": "liquid",
+      "hqiv": {
+        "density_g_cm3": 1.2592355900918026,
+        "refractive_index": 1.4891719628479252,
+        "T_sl_K": null
+      },
+      "reference": {
+        "density_g_cm3": 1.259,
+        "refractive_index": 1.473,
+        "melt_K": 291.05,
+        "source": "NIST Chemistry WebBook / KDB"
+      },
+      "benchmark": {
+        "density_error_pct": 0.01871247750617473,
+        "refractive_index_error_pct": 1.0978929292549289,
+        "T_sl_error_pct": null
+      }
+    },
+    {
+      "name": "C6H12O6_alpha",
+      "tier": "tier1_sugar",
+      "status": "audited",
+      "hqiv_spec_available": true,
+      "spec_name": "C6H12O6_alpha",
+      "monomer_motif": "polyol_hbond",
+      "intermolecular_contacts": 6,
+      "witness_temperature_K": 414.0,
+      "phase": "solid",
+      "hqiv": {
+        "density_g_cm3": 1.5620623897851662,
+        "refractive_index": 2.1065199267863544,
+        "T_sl_K": 143.14735479533036
+      },
+      "reference": {
+        "density_g_cm3": 1.562,
+        "refractive_index": null,
+        "melt_K": 414.0,
+        "source": "NIST Chemistry WebBook / PubChem"
+      },
+      "benchmark": {
+        "density_error_pct": 0.003994224402442403,
+        "refractive_index_error_pct": null,
+        "T_sl_error_pct": 65.42334425233567
+      }
+    },
+    {
+      "name": "C6H12O6_monohydrate",
+      "tier": "tier1_sugar",
+      "status": "reference_only",
+      "hqiv_spec_available": false
+    },
+    {
+      "name": "C12H22O11",
+      "tier": "tier1_sugar",
+      "status": "audited",
+      "hqiv_spec_available": true,
+      "spec_name": "C12H22O11",
+      "monomer_motif": "polyol_hbond",
+      "intermolecular_contacts": 6,
+      "witness_temperature_K": 462.0,
+      "phase": "solid",
+      "hqiv": {
+        "density_g_cm3": 1.562062389785166,
+        "refractive_index": 17.26267650163206,
+        "T_sl_K": 143.14735479533036
+      },
+      "reference": {
+        "density_g_cm3": 1.587,
+        "refractive_index": null,
+        "melt_K": 462.0,
+        "source": "NIST Chemistry WebBook / ICUMSA"
+      },
+      "benchmark": {
+        "density_error_pct": 1.5713680034551973,
+        "refractive_index_error_pct": null,
+        "T_sl_error_pct": 69.01572407027481
+      }
+    },
+    {
+      "name": "GlyGly",
+      "tier": "tier2_peptide_crystal",
+      "status": "audited",
+      "hqiv_spec_available": true,
+      "spec_name": "GlyGly",
+      "monomer_motif": "peptide_layer",
+      "intermolecular_contacts": 4,
+      "witness_temperature_K": 298.15,
+      "phase": "solid",
+      "hqiv": {
+        "density_g_cm3": 1.5291856576295424,
+        "refractive_index": 17.26267650163206,
+        "T_sl_K": 199.38381560778157
+      },
+      "reference": {
+        "density_g_cm3": 1.516,
+        "refractive_index": null,
+        "melt_K": 535.15,
+        "source": "IUCr Acta Cryst B 2006 / COD"
+      },
+      "benchmark": {
+        "density_error_pct": 0.8697663344025317,
+        "refractive_index_error_pct": null,
+        "T_sl_error_pct": 62.742443126640836
+      }
+    }
+  ],
+  "peptide_geometry": [
+    {
+      "name": "N_CA",
+      "quantity": "backbone_bond_length",
+      "hqiv_value": 1.3297495507058068,
+      "reference_value": 1.459,
+      "unit": "angstrom",
+      "error_pct": 8.858838196997482,
+      "reference_source": "Engh & Huber 1999"
+    },
+    {
+      "name": "CA_C",
+      "quantity": "backbone_bond_length",
+      "hqiv_value": 1.53,
+      "reference_value": 1.525,
+      "unit": "angstrom",
+      "error_pct": 0.327868852459024,
+      "reference_source": "Engh & Huber 1999"
+    },
+    {
+      "name": "C_N_peptide",
+      "quantity": "backbone_bond_length",
+      "hqiv_value": 1.3297495507058068,
+      "reference_value": 1.336,
+      "unit": "angstrom",
+      "error_pct": 0.4678480010623706,
+      "reference_source": "Engh & Huber 1999"
+    },
+    {
+      "name": "C_O",
+      "quantity": "backbone_bond_length",
+      "hqiv_value": 1.23,
+      "reference_value": 1.231,
+      "unit": "angstrom",
+      "error_pct": 0.08123476848091891,
+      "reference_source": "Engh & Huber 1999"
+    },
+    {
+      "name": "phi_alpha",
+      "quantity": "backbone_dihedral_deg",
+      "hqiv_value": -57.0,
+      "reference_value": -60.0,
+      "unit": "degree",
+      "error_pct": -5.0,
+      "reference_source": "Ramachandran plot literature centroid"
+    },
+    {
+      "name": "psi_alpha",
+      "quantity": "backbone_dihedral_deg",
+      "hqiv_value": -47.0,
+      "reference_value": -45.0,
+      "unit": "degree",
+      "error_pct": -4.444444444444445,
+      "reference_source": "Ramachandran plot literature centroid"
+    }
+  ],
+  "summary": {
+    "condensed_audited": 5,
+    "condensed_reference_only": 1,
+    "mean_density_error_pct": 0.641536606574123,
+    "mean_refractive_index_error_pct": 2.7621723144384287
+  }
+}

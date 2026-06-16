@@ -68,12 +68,21 @@ def test_tritium_half_life_near_reference_ballpark() -> None:
 
 
 def test_geometry_factor_is_unity_for_free_neutron() -> None:
-    assert dbi.beta_geometry_width_factor(1, residual_mev=0.293, well_depth_mev=0.0, bonded=False) == 1.0
+    assert (
+        dbi.beta_geometry_width_factor(
+            1, 0, residual_mev=0.293, well_depth_mev=0.0, bonded=False
+        )
+        == 1.0
+    )
 
 
 def test_geometry_factor_suppresses_bonded_cluster() -> None:
-    free = dbi.beta_geometry_width_factor(1, residual_mev=0.293, well_depth_mev=3.5, bonded=False)
-    bonded = dbi.beta_geometry_width_factor(3, residual_mev=0.293, well_depth_mev=3.5, bonded=True)
+    free = dbi.beta_geometry_width_factor(
+        1, 0, residual_mev=0.293, well_depth_mev=3.5, bonded=False
+    )
+    bonded = dbi.beta_geometry_width_factor(
+        3, 1, residual_mev=0.293, well_depth_mev=3.5, bonded=True
+    )
     assert free == 1.0
     assert bonded < 1.0e-4
 

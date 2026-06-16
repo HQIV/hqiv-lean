@@ -1,0 +1,270 @@
+{
+  "source": "scripts/hqiv_chemistry_tuft_dynamics_witness.py",
+  "parameter_policy": "no_tabulated_angstrom_or_degrees_as_inputs",
+  "lean_modules": [
+    "Hqiv.QuantumChemistry.CentreGeometryFromTuft",
+    "Hqiv.QuantumChemistry.ChemistryBindingRoutes",
+    "Hqiv.Physics.DynamicCentreGeometry"
+  ],
+  "constants": {
+    "informational_monogamy_length_factor": 0.7,
+    "bohr_radius_angstrom": 0.529177210903
+  },
+  "bond_witness": [
+    {
+      "molecule": "H2",
+      "bond_index": 0,
+      "derived_angstrom": 0.7408480952641998,
+      "reference_angstrom": 0.7414,
+      "error_pct": -0.07444088694363839,
+      "angle_rad": null
+    },
+    {
+      "molecule": "LIH",
+      "bond_index": 0,
+      "derived_angstrom": 1.234746825440333,
+      "reference_angstrom": 1.5956,
+      "error_pct": -22.61551607919697,
+      "angle_rad": null
+    },
+    {
+      "molecule": "HF",
+      "bond_index": 0,
+      "derived_angstrom": 0.9054810053229109,
+      "reference_angstrom": 0.9168,
+      "error_pct": -1.2346198382514266,
+      "angle_rad": null
+    },
+    {
+      "molecule": "H2O",
+      "bond_index": 0,
+      "derived_angstrom": 0.92606011908025,
+      "reference_angstrom": 0.9572,
+      "error_pct": -3.2532261721427145,
+      "angle_rad": 1.7797335423494438
+    },
+    {
+      "molecule": "H2O",
+      "bond_index": 1,
+      "derived_angstrom": 0.92606011908025,
+      "reference_angstrom": 0.9572,
+      "error_pct": -3.2532261721427145,
+      "angle_rad": 1.7797335423494438
+    },
+    {
+      "molecule": "CH4",
+      "bond_index": 0,
+      "derived_angstrom": 0.9877974603522665,
+      "reference_angstrom": 1.09,
+      "error_pct": -9.376379784195745,
+      "angle_rad": 1.9106332362490186
+    },
+    {
+      "molecule": "CH4",
+      "bond_index": 1,
+      "derived_angstrom": 0.9877974603522665,
+      "reference_angstrom": 1.09,
+      "error_pct": -9.376379784195745,
+      "angle_rad": 1.9106332362490186
+    },
+    {
+      "molecule": "CH4",
+      "bond_index": 2,
+      "derived_angstrom": 0.9877974603522665,
+      "reference_angstrom": 1.09,
+      "error_pct": -9.376379784195745,
+      "angle_rad": 1.9106332362490186
+    },
+    {
+      "molecule": "CH4",
+      "bond_index": 3,
+      "derived_angstrom": 0.9877974603522665,
+      "reference_angstrom": 1.09,
+      "error_pct": -9.376379784195745,
+      "angle_rad": 1.9106332362490186
+    },
+    {
+      "molecule": "NH3",
+      "bond_index": 0,
+      "derived_angstrom": 0.9525189796253997,
+      "reference_angstrom": 1.012,
+      "error_pct": -5.877571183260904,
+      "angle_rad": 1.8451833892992313
+    },
+    {
+      "molecule": "NH3",
+      "bond_index": 1,
+      "derived_angstrom": 0.9525189796253997,
+      "reference_angstrom": 1.012,
+      "error_pct": -5.877571183260904,
+      "angle_rad": 1.8451833892992313
+    },
+    {
+      "molecule": "NH3",
+      "bond_index": 2,
+      "derived_angstrom": 0.9525189796253997,
+      "reference_angstrom": 1.012,
+      "error_pct": -5.877571183260904,
+      "angle_rad": 1.8451833892992313
+    },
+    {
+      "molecule": "LIF",
+      "bond_index": 0,
+      "derived_angstrom": 1.454860024589821,
+      "reference_angstrom": 1.5636,
+      "error_pct": -6.954462484662253,
+      "angle_rad": null
+    },
+    {
+      "molecule": "NACL",
+      "bond_index": 0,
+      "derived_angstrom": 0.6633817745312068,
+      "reference_angstrom": 2.3609,
+      "error_pct": -71.90131837302694,
+      "angle_rad": null
+    },
+    {
+      "molecule": "HCL",
+      "bond_index": 0,
+      "derived_angstrom": 1.2817441094536328,
+      "reference_angstrom": 1.2746,
+      "error_pct": 0.560498152646545,
+      "angle_rad": null
+    },
+    {
+      "molecule": "HBR",
+      "bond_index": 0,
+      "derived_angstrom": 1.3970278367839197,
+      "reference_angstrom": 1.4145,
+      "error_pct": -1.2352183256331113,
+      "angle_rad": null
+    },
+    {
+      "molecule": "H2S",
+      "bond_index": 0,
+      "derived_angstrom": 1.2937604604797608,
+      "reference_angstrom": 1.336,
+      "error_pct": -3.1616421796586294,
+      "angle_rad": 1.7797335423494438
+    },
+    {
+      "molecule": "H2S",
+      "bond_index": 1,
+      "derived_angstrom": 1.2937604604797608,
+      "reference_angstrom": 1.336,
+      "error_pct": -3.1616421796586294,
+      "angle_rad": 1.7797335423494438
+    },
+    {
+      "molecule": "HCN",
+      "bond_index": 0,
+      "derived_angstrom": 0.9877974603522665,
+      "reference_angstrom": 1.0626,
+      "error_pct": -7.039576477294705,
+      "angle_rad": null
+    },
+    {
+      "molecule": "HCN",
+      "bond_index": 1,
+      "derived_angstrom": 0.9331864727534781,
+      "reference_angstrom": 1.153,
+      "error_pct": -19.064486317998433,
+      "angle_rad": null
+    },
+    {
+      "molecule": "C2H2",
+      "bond_index": 0,
+      "derived_angstrom": 0.9877974603522665,
+      "reference_angstrom": 1.062,
+      "error_pct": -6.987056464005048,
+      "angle_rad": null
+    },
+    {
+      "molecule": "C2H2",
+      "bond_index": 1,
+      "derived_angstrom": 1.0079565921961906,
+      "reference_angstrom": 1.203,
+      "error_pct": -16.213084605470446,
+      "angle_rad": null
+    },
+    {
+      "molecule": "C2H2",
+      "bond_index": 2,
+      "derived_angstrom": 0.9877974603522665,
+      "reference_angstrom": 1.062,
+      "error_pct": -6.987056464005048,
+      "angle_rad": null
+    },
+    {
+      "molecule": "PH3",
+      "bond_index": 0,
+      "derived_angstrom": 1.3073789916427057,
+      "reference_angstrom": 1.414,
+      "error_pct": -7.5403824863715885,
+      "angle_rad": 1.8451833892992313
+    },
+    {
+      "molecule": "PH3",
+      "bond_index": 1,
+      "derived_angstrom": 1.3073789916427057,
+      "reference_angstrom": 1.414,
+      "error_pct": -7.5403824863715885,
+      "angle_rad": 1.8451833892992313
+    },
+    {
+      "molecule": "PH3",
+      "bond_index": 2,
+      "derived_angstrom": 1.3073789916427057,
+      "reference_angstrom": 1.414,
+      "error_pct": -7.5403824863715885,
+      "angle_rad": 1.8451833892992313
+    },
+    {
+      "molecule": "CO",
+      "bond_index": 0,
+      "derived_angstrom": 1.0911450184423659,
+      "reference_angstrom": 1.128,
+      "error_pct": -3.267285599081029,
+      "angle_rad": null
+    },
+    {
+      "molecule": "N2",
+      "bond_index": 0,
+      "derived_angstrom": 1.0799534916387754,
+      "reference_angstrom": 1.098,
+      "error_pct": -1.6435799964685498,
+      "angle_rad": null
+    },
+    {
+      "molecule": "O2",
+      "bond_index": 0,
+      "derived_angstrom": 1.1811991314799108,
+      "reference_angstrom": 1.208,
+      "error_pct": -2.2186149437159863,
+      "angle_rad": null
+    },
+    {
+      "molecule": "F2",
+      "bond_index": 0,
+      "derived_angstrom": 1.0559006540497924,
+      "reference_angstrom": 1.412,
+      "error_pct": -25.219500421402802,
+      "angle_rad": null
+    },
+    {
+      "molecule": "CL2",
+      "bond_index": 0,
+      "derived_angstrom": 0.46651610715290825,
+      "reference_angstrom": 1.988,
+      "error_pct": -76.53339501242915,
+      "angle_rad": null
+    }
+  ],
+  "summary": {
+    "count": 31,
+    "mean_abs_error_pct": 11.623833138435975,
+    "max_abs_error_pct": 76.53339501242915,
+    "within_5pct": 11,
+    "within_15pct": 25
+  }
+}

@@ -2,20 +2,15 @@
 """
 Dynamic `nucleon(p,n)` readout.
 
-This is the executable mirror of `Hqiv.Physics.DynamicNucleonPN`.
-
-The rule is intentionally conservative:
+Executable mirror of `Hqiv.Physics.DynamicNucleonPN` + `ProtonMassDecomposition`.
 
   mass(flavor, env) =
       constituent(flavor)
-    − own_binding(shell, ξ, bonded/free)
+    − own_binding(shell, ξ, bonded, gravity)
     − bonded_well_depth
 
-The ξ-dependent own-binding is the outside-curvature temperature layer from
-`hqiv_nuclear_outside_temperature_dynamics.py`.  The nuclear well can be supplied
-from the caustic stack.  Since the binding and well are shared by p and n, the
-p–n gap stays the derived constituent/isospin gap until an explicit weak/EM tipping
-layer is added.
+Cluster mass wells use the curvature + G_eff spine (`curvature_environment_for_A`).
+The caustic-only stack remains as a diagnostic witness.
 """
 
 from __future__ import annotations
@@ -26,6 +21,7 @@ from dataclasses import asdict, dataclass
 from pathlib import Path
 from typing import Literal
 
+import hqiv_curvature_binding_core as cbc
 import hqiv_nuclear_curvature_binding as ncur
 import hqiv_nuclear_outside_temperature_dynamics as notd
 
@@ -41,6 +37,7 @@ class NucleonEnvironment:
     xi: float
     well_depth_mev: float = 0.0
     bonded: bool = False
+    phi_gravity_epsilon: float = 0.0
 
 
 @dataclass(frozen=True)
@@ -53,6 +50,7 @@ class NucleonReadout:
     xi: float
     shell: int
     bonded: bool
+    phi_gravity_epsilon: float
 
 
 @dataclass(frozen=True)
@@ -99,7 +97,12 @@ def well_contribution(env: NucleonEnvironment) -> float:
 
 def nucleon_readout(flavor: NucleonFlavor, env: NucleonEnvironment) -> NucleonReadout:
     constituent = constituent_energy(flavor, env.shell)
-    own = notd.nucleon_own_binding_mev(env.shell, env.xi, bonded=env.bonded)
+    own = notd.nucleon_own_binding_mev(
+        env.shell,
+        env.xi,
+        bonded=env.bonded,
+        phi_gravity_epsilon=env.phi_gravity_epsilon,
+    )
     well = well_contribution(env)
     return NucleonReadout(
         flavor=flavor,
@@ -110,6 +113,7 @@ def nucleon_readout(flavor: NucleonFlavor, env: NucleonEnvironment) -> NucleonRe
         xi=env.xi,
         shell=env.shell,
         bonded=env.bonded,
+        phi_gravity_epsilon=env.phi_gravity_epsilon,
     )
 
 
@@ -128,8 +132,62 @@ def pn_pair_readout(env: NucleonEnvironment) -> PNPairReadout:
         delta_m_mev=n.mass_mev - p.mass_mev,
         beta_minus_overlap_mev=beta_minus.overlap_mev,
         beta_plus_overlap_mev=beta_plus.overlap_mev,
-        notes="shared outside-temperature binding preserves p-n gap; beta widths remain separate",
+        notes=(
+            "inner anchor + outside own-binding slot; cluster wells from curvature spine; "
+            "beta widths remain separate"
+        ),
     )
+
+
+def cluster_curvature_total_mev(
+    A: int,
+    Z: int = 0,
+    *,
+    shell: int = notd.REFERENCE_M,
+    xi: float = notd.XI_LOCKIN,
+    bonded: bool = True,
+) -> float:
+    """Curvature + G_eff network total binding for mass number ``A`` at ``xi``."""
+    bd = cbc.curvature_binding_breakdown(
+        shell, A, Z, xi=xi, bonded=bonded
+    )
+    return bd.total_mev
+
+
+def cluster_binding_canonical_mev(
+    A: int,
+    Z: int = 0,
+    *,
+    shell: int = notd.REFERENCE_M,
+    xi: float = notd.XI_LOCKIN,
+    bonded: bool = True,
+) -> float:
+    """
+    Authoritative cluster binding for the mass ledger and BBN ``Q`` (curvature + ``G_eff``).
+
+    Same spine as ``curvature_environment_for_A`` / light-panel masses at 0.003% mean.
+    Not the legacy valley ladder or caustic diagnostic stack.
+    """
+    return cluster_curvature_total_mev(A, Z, shell=shell, xi=xi, bonded=bonded)
+
+
+def cluster_binding_from_mass_ledger(
+    A: int,
+    Z: int = 0,
+    *,
+    shell: int = notd.REFERENCE_M,
+    xi: float = notd.XI_LOCKIN,
+) -> float:
+    """``M_free − M_bonded`` on the dynamic p/n readout (must match ``cluster_binding_canonical_mev``)."""
+    import hqiv_dynamic_beta_isotope as dbi
+
+    free_env = NucleonEnvironment(shell=shell, xi=xi, bonded=False)
+    bonded_env = curvature_environment_for_A(A, Z, shell=shell, xi=xi)
+    free_pair = pn_pair_readout(free_env)
+    bonded_pair = pn_pair_readout(bonded_env)
+    m_free = dbi.isotope_mass_budget(A, Z, free_pair)
+    m_bound = dbi.isotope_mass_budget(A, Z, bonded_pair)
+    return m_free - m_bound
 
 
 def cluster_caustic_total_mev(
@@ -138,7 +196,7 @@ def cluster_caustic_total_mev(
     shell: int = notd.REFERENCE_M,
     xi: float = notd.XI_LOCKIN,
 ) -> float:
-    """Outside caustic stack for mass number ``A`` at horizon ``xi`` (MeV)."""
+    """Diagnostic outside-caustic stack (legacy witness; not PDG-comparable totals)."""
     m_cluster = ncur.nucleus_curvature_shell(A)
     total, _, _, _, _ = notd.nuclear_cluster_binding_at_xi(
         shell, A, m_cluster=m_cluster, xi=xi, bonded=True
@@ -146,40 +204,82 @@ def cluster_caustic_total_mev(
     return total
 
 
+def curvature_environment_for_A(
+    A: int,
+    Z: int = 0,
+    *,
+    shell: int = notd.REFERENCE_M,
+    xi: float = notd.XI_LOCKIN,
+    phi_gravity_epsilon: float = 0.0,
+) -> NucleonEnvironment:
+    """Bonded environment with symmetric per-nucleon well from curvature spine."""
+    total = cluster_curvature_total_mev(A, Z, shell=shell, xi=xi, bonded=True)
+    well = total / max(A, 1)
+    return NucleonEnvironment(
+        shell=shell,
+        xi=xi,
+        well_depth_mev=well,
+        bonded=True,
+        phi_gravity_epsilon=phi_gravity_epsilon,
+    )
+
+
 def caustic_environment_for_A(
     A: int,
     *,
     shell: int = notd.REFERENCE_M,
     xi: float = notd.XI_LOCKIN,
+    phi_gravity_epsilon: float = 0.0,
 ) -> NucleonEnvironment:
+    """Legacy caustic-only well (diagnostic). Prefer ``curvature_environment_for_A``."""
     total = cluster_caustic_total_mev(A, shell=shell, xi=xi)
-    # Mass readout: symmetric per-nucleon well (preserves proved ΔM bookkeeping).
     well = total / max(A, 1)
-    return NucleonEnvironment(shell=shell, xi=xi, well_depth_mev=well, bonded=True)
+    return NucleonEnvironment(
+        shell=shell,
+        xi=xi,
+        well_depth_mev=well,
+        bonded=True,
+        phi_gravity_epsilon=phi_gravity_epsilon,
+    )
 
 
 def build_payload() -> dict:
     free = pn_pair_readout(
-        NucleonEnvironment(shell=notd.REFERENCE_M, xi=notd.XI_LOCKIN, bonded=False)
+        NucleonEnvironment(
+            shell=notd.REFERENCE_M,
+            xi=notd.XI_LOCKIN,
+            bonded=False,
+            phi_gravity_epsilon=notd.local_lab_gravity_phi_epsilon("full"),
+        )
     )
-    he4_env = caustic_environment_for_A(4)
+    he4_env = curvature_environment_for_A(4, 2)
     he4 = pn_pair_readout(he4_env)
     bbn_xi = notd.xi_from_T_MeV(0.1)
-    he4_bbn = pn_pair_readout(caustic_environment_for_A(4, xi=bbn_xi))
+    he4_bbn = pn_pair_readout(curvature_environment_for_A(4, 2, xi=bbn_xi))
+    he4_caustic = pn_pair_readout(caustic_environment_for_A(4, xi=notd.XI_LOCKIN))
     return {
         "source": "scripts/hqiv_dynamic_nucleon_pn.py",
         "lean_module": "Hqiv.Physics.DynamicNucleonPN",
-        "policy": "no fitted nucleon masses; uses witness-derived masses plus shared binding",
+        "policy": (
+            "inner derivedProtonMass anchor; outside own-binding slot; "
+            "cluster wells from curvature spine"
+        ),
         "free_lockin": asdict(free),
         "he4_lockin_environment": asdict(he4),
         "he4_bbn_temperature_environment": asdict(he4_bbn),
+        "he4_caustic_diagnostic": asdict(he4_caustic),
     }
 
 
 def print_report(payload: dict) -> None:
     print("HQIV dynamic nucleon(p,n) readout")
     print("=" * 72)
-    for label in ("free_lockin", "he4_lockin_environment", "he4_bbn_temperature_environment"):
+    for label in (
+        "free_lockin",
+        "he4_lockin_environment",
+        "he4_bbn_temperature_environment",
+        "he4_caustic_diagnostic",
+    ):
         row = payload[label]
         print(
             f"{label:<34} "

@@ -3,7 +3,7 @@ version = "0.1.0"
 
 # Default: lepton resonance + global-detuning obstruction only (no SO(8) / GeneratorsLieClosure).
 # Witness subset: lake build HQIVWitnesses
-# Full physics (includes SM_GR → ChargedLeptonResonance / Triality → SO8 abstract): lake build HQIVPhysics
+# Full physics (import closure of `HQIVPhysics.lean`; no TuftSynthesis / LieBracketCell): lake build HQIVPhysics
 # Full repo (no matrix Lie-closure): lake build HQIVLEAN ; SO(8) matrix + abstract closure pack: lake build HQIVSO8Closure
 # Optional SU(3) chart Lie certificate (heavy): lake build HQIVStrongColorSu3Certificate
 # Brane–bulk strong-sector cone (Fano-truss + YM package + holonomy glue): lake build HQIVBraneBulkStrongSector
@@ -28,8 +28,9 @@ name = "paper_nucleon_binding"
 # Build target for papers/nucleon_binding/ (import closure of cited Lean modules).
 # Regenerate: python3 scripts/paper_nucleon_binding_globs.py
 # Build: lake build paper_nucleon_binding
-# 146 modules in paper_nucleon_binding import closure
+# 169 modules in paper_nucleon_binding import closure
 globs = [
+  "Hqiv.Algebra.AnomalyCancellation",
   "Hqiv.Algebra.CliffordCl06SixDimension",
   "Hqiv.Algebra.CliffordCl06SixIdeal",
   "Hqiv.Algebra.CliffordCl06SixSpinorGammaMatInt",
@@ -49,6 +50,7 @@ globs = [
   "Hqiv.Algebra.ShellResidueCRT",
   "Hqiv.Algebra.Triality",
   "Hqiv.Algebra.WeakFromLeftMulOctonion",
+  "Hqiv.Algebra.WeakInComplexStructure",
   "Hqiv.Conservations",
   "Hqiv.Generators",
   "Hqiv.GeneratorsFromAxioms",
@@ -60,16 +62,19 @@ globs = [
   "Hqiv.Geometry.ContinuumSpacetimeChart",
   "Hqiv.Geometry.HQVMCausalChart",
   "Hqiv.Geometry.HQVMContinuumMetricBridge",
+  "Hqiv.Geometry.HQVMMinkowskiSubstrate",
   "Hqiv.Geometry.HQVMetric",
+  "Hqiv.Geometry.HQVMetricAnalytic",
   "Hqiv.Geometry.LatticePointMaxAbsShells",
   "Hqiv.Geometry.Now",
   "Hqiv.Geometry.NuclearTorusPerturbation",
   "Hqiv.Geometry.OctonionicLightCone",
   "Hqiv.Geometry.QuaternionMaxwellS3OMaxwellS4Spectral",
+  "Hqiv.Geometry.RapidityLorentzClosure",
   "Hqiv.Geometry.S7MetahorizonCasimir",
   "Hqiv.Geometry.SpacetimeMinkowski11Embed4",
-  "Hqiv.Geometry.RapidityLorentzClosure",
   "Hqiv.Geometry.SpatialRotationLorentzClosure",
+  "Hqiv.Geometry.SpatialSliceRapidityScaffold",
   "Hqiv.Geometry.SphericalHarmonicsBridge",
   "Hqiv.Geometry.UniverseAge",
   "Hqiv.MatrixLieBracket",
@@ -77,14 +82,16 @@ globs = [
   "Hqiv.Physics.Action",
   "Hqiv.Physics.ActionHolonomyGlue",
   "Hqiv.Physics.BBNEpochEvolution",
-  "Hqiv.Physics.BBNStoichiometricIntegrator",
   "Hqiv.Physics.BBNEpochNetwork",
   "Hqiv.Physics.BBNNetworkFromWeights",
+  "Hqiv.Physics.BBNStoichiometricIntegrator",
   "Hqiv.Physics.BaryogenesisCore",
   "Hqiv.Physics.BaryogenesisEtaPaper",
   "Hqiv.Physics.BaryogenesisWitness",
+  "Hqiv.Physics.BaryogenesisDynamicBulk",
   "Hqiv.Physics.BoundStates",
   "Hqiv.Physics.BraneBulkFanoTruss",
+  "Hqiv.Physics.CMBBirefringenceFirstPrinciples",
   "Hqiv.Physics.ChargedLeptonResonance",
   "Hqiv.Physics.ComptonHorizonPhase",
   "Hqiv.Physics.ComptonIRWindow",
@@ -94,11 +101,14 @@ globs = [
   "Hqiv.Physics.ContinuumOmaxwellClosure",
   "Hqiv.Physics.DerivedGaugeAndLeptonSector",
   "Hqiv.Physics.DerivedNucleonMass",
+  "Hqiv.Physics.DiscreteActionPoincareScaffold",
+  "Hqiv.Physics.DiscreteActionStrongPoincareBridge",
   "Hqiv.Physics.DiscretePlaquetteHolonomy",
   "Hqiv.Physics.DynamicBBNBaryogenesis",
   "Hqiv.Physics.DynamicBetaIsotope",
   "Hqiv.Physics.DynamicIsotopeStability",
   "Hqiv.Physics.DynamicNucleonPN",
+  "Hqiv.Physics.ProtonMassDecomposition",
   "Hqiv.Physics.FanoDetuningFirstOrder",
   "Hqiv.Physics.FanoLine",
   "Hqiv.Physics.FanoOmaxwellSpectrum",
@@ -108,10 +118,12 @@ globs = [
   "Hqiv.Physics.G2AutomorphismEnergyCost",
   "Hqiv.Physics.GRFromMaxwell",
   "Hqiv.Physics.GlobalDetuning",
+  "Hqiv.Physics.HQIVFluidClosureScaffold",
   "Hqiv.Physics.HQIVNuclei",
   "Hqiv.Physics.HadronMassReadout",
   "Hqiv.Physics.HomogeneousCurvatureSecondOrder",
   "Hqiv.Physics.HopfShellBeltramiMassBridge",
+  "Hqiv.Physics.HorizonBlackbodyLadder",
   "Hqiv.Physics.HorizonBlackbodySpectrum",
   "Hqiv.Physics.HyperchargePathBarrierScaffold",
   "Hqiv.Physics.InformationalEnergyMass",
@@ -126,18 +138,24 @@ globs = [
   "Hqiv.Physics.NaturalUnitMeVTheory",
   "Hqiv.Physics.NeutronBindingStabilityScaffold",
   "Hqiv.Physics.NeutronLifetimeMethod",
+  "Hqiv.Physics.NonAbelianHolonomyMeasureScaffold",
   "Hqiv.Physics.NuclearAndAtomicSpectra",
   "Hqiv.Physics.NuclearCausticBinding",
   "Hqiv.Physics.NuclearCurvatureBinding",
+  "Hqiv.Physics.NuclearContactClosure",
   "Hqiv.Physics.NuclearOutsideTemperatureDynamics",
   "Hqiv.Physics.OMaxwellAlgebraSeed",
   "Hqiv.Physics.OctonionicZeta",
   "Hqiv.Physics.PostAlphaBindingGeometry",
+  "Hqiv.Physics.QuarkColorCarrierGaugeScaffold",
   "Hqiv.Physics.QuarkMetaResonance",
   "Hqiv.Physics.QuarterPeriodRelaxation",
+  "Hqiv.Physics.RapidityZetaPhaseBridge",
   "Hqiv.Physics.ReadoutGaugeSeed",
   "Hqiv.Physics.SM_GR_Unification",
+  "Hqiv.Physics.SO8PlaquetteHolonomy",
   "Hqiv.Physics.ScaleWitness",
+  "Hqiv.Physics.SchematicPlasmaCurrent",
   "Hqiv.Physics.SphereProjectedMassTransfer",
   "Hqiv.Physics.SpinStatistics",
   "Hqiv.Physics.SpinStatisticsOperatorBridge",
@@ -145,6 +163,7 @@ globs = [
   "Hqiv.Physics.TrialityRapidityWellEquivalence",
   "Hqiv.Physics.TuftShellChart",
   "Hqiv.Physics.WeakFanoHopfBridge",
+  "Hqiv.Physics.WeakHiggsFromOMaxwellScaffold",
   "Hqiv.ProteinResearch.AtomEnergyOSHoracleBridge",
   "Hqiv.QuantumChemistry.BondStateNetwork",
   "Hqiv.QuantumChemistry.CurvatureBondContact",
@@ -153,6 +172,8 @@ globs = [
   "Hqiv.QuantumChemistry.LiH",
   "Hqiv.QuantumChemistry.LiHDerivation",
   "Hqiv.QuantumChemistry.PhaseAllotropeDerivation",
+  "Hqiv.QuantumChemistry.FoundationChemistry",
+  "Hqiv.QuantumChemistry.PeptideBackboneGeometry",
   "Hqiv.QuantumChemistry.PhaseGeometryDensity",
   "Hqiv.QuantumChemistry.PhaseMaterialResponse",
   "Hqiv.QuantumComputing.DigitalGates",
@@ -179,6 +200,9 @@ globs = [
   "Hqiv.Topology.DiscreteNullLatticeComplex",
   "Hqiv.Topology.DiscretePhaseEvolution",
   "Hqiv.Topology.HopfShellComplex",
+  "Hqiv.Topology.ParallelPoincareReferenceModel",
+  "Hqiv.Topology.ParallelPoincareScaffold",
+  "Hqiv.Topology.ShellOpeningEvolution",
   "Hqiv.Topology.SignedShellBudget",
 ]
 
@@ -191,6 +215,7 @@ globs = [
   "Hqiv.Geometry.QuantumFactorGateFrontier",
   "Hqiv.Geometry.HQIVOSHIntegratedFactorDriver",
   "Hqiv.QuantumComputing.CarrierPeaking",
+  "Hqiv.QuantumComputing.SemiprimeTypedCarrierScaffold",
   "Hqiv.QuantumComputing.FrequencyCertificate",
   "Hqiv.QuantumComputing.SparseScheduleCost",
   "Hqiv.QuantumComputing.SymbolicFrequencySlice",
@@ -218,15 +243,16 @@ globs = [
   "Hqiv.QuantumComputing.ShoreOracle",
   "Hqiv.QuantumComputing.OctonionicFT",
   "Hqiv.QuantumComputing.SemiprimeOrthogonalDiagonalQuantum",
+  "Hqiv.QuantumComputing.SemiprimeTypedCarrierScaffold",
   "Hqiv.QuantumComputing.DiagonalReflectionPeriod4",
   "Hqiv.QuantumComputing.DiagonalReflectionUnitary",
 ]
 
 [[lean_lib]]
 name = "HQIVPhysics"
-# Geometry + Conservations + Physics only (no GeneratorsLieClosureData). Use when full build crashes with exit 134.
+# Geometry + Conservations + Physics (curated superset; excludes TuftSynthesisZetaHolonomyDischarge / LieBracketCell).
 globs = ["HQIVPhysics", "Hqiv.Physics.OrbitalTrajectoryJ2Scaffold", "Hqiv.Geometry.OctonionicLightCone", "Hqiv.Geometry.SphericalHarmonicsBridge", "Hqiv.Geometry.AuxiliaryField", "Hqiv.Geometry.AuxiliaryFieldSmeared", "Hqiv.Geometry.AuxFieldRapidityNullBridge", "Hqiv.Geometry.HQVMMinkowskiSubstrate", "Hqiv.Geometry.RapidityLorentzClosure", "Hqiv.Geometry.SpatialRotationLorentzClosure", "Hqiv.Geometry.ContinuumSpacetimeChart", "Hqiv.Geometry.ContinuumMetricGradient", "Hqiv.Geometry.SpacetimeMinkowski11Embed4", "Hqiv.Geometry.HQVMetric", "Hqiv.Geometry.HQVMetricAnalytic", "Hqiv.Geometry.HQVMPerturbations", "Hqiv.Geometry.HQVMCLASSBridge", "Hqiv.Geometry.HQVMDiscreteLaplacian", "Hqiv.Geometry.HQVMDiscretePoisson", "Hqiv.Geometry.HQVMGlobalLocalDictionary", "Hqiv.Geometry.HQVMConsistency", "Hqiv.Geometry.Now", "Hqiv.Geometry.UniverseAge", "Hqiv.Conservations", "Hqiv.Physics.Baryogenesis", "Hqiv.Physics.BBNNetworkFromWeights", "Hqiv.Physics.DynamicBBNBaryogenesis", "Hqiv.Physics.NuclearCurvatureBinding", "Hqiv.Physics.NuclearCausticBinding", "Hqiv.Physics.NuclearOutsideTemperatureDynamics", "Hqiv.Physics.DynamicNucleonPN", "Hqiv.Physics.DynamicBetaIsotope", "Hqiv.Physics.DynamicIsotopeStability", "Hqiv.Physics.NeutronLifetimeMethod", "Hqiv.Physics.WeakFanoHopfBridge", "Hqiv.Physics.BBNEpochEvolution", "Hqiv.Physics.BBNEpochNetwork", "Hqiv.Physics.BBNWitness", "Hqiv.Physics.BigBangNucleosynthesis", "Hqiv.Physics.AgeNormalizedHeavyMass", "Hqiv.Physics.ModifiedMaxwell", "Hqiv.Physics.SchematicPlasmaCurrent", "Hqiv.Physics.GRFromMaxwell", "Hqiv.Physics.Forces", "Hqiv.Physics.Action", "Hqiv.Physics.ReadoutGaugeSeed", "Hqiv.Physics.ActionPlasmaBridge", "Hqiv.Physics.ContinuumOmaxwellClosure", "Hqiv.Physics.CovariantSolution", "Hqiv.Physics.SM_GR_Unification", "Hqiv.Physics.StandardModelLagrangianFromDiscreteAction", "Hqiv.Physics.WeakHiggsFromOMaxwellScaffold", "Hqiv.Algebra.Triality", "Hqiv.Physics.FanoLine", "Hqiv.Physics.FanoOmaxwellSpectrum", "Hqiv.Physics.DoublePreferredAxis", "Hqiv.Physics.DoublePreferredAxisAlpha", "Hqiv.Physics.ContinuousXiCoupling", "Hqiv.Physics.ContinuousXiPath",
-"Hqiv.Physics.ContinuousXiMixingGeometry", "Hqiv.Physics.InformationalEnergyMass", "Hqiv.Physics.HadronMassReadout", "Hqiv.Physics.NaturalUnitMeVTheory", "Hqiv.Physics.FanoResonance", "Hqiv.Physics.ChargedLeptonResonance", "Hqiv.Physics.QuarkResonanceMassFunctional", "Hqiv.Physics.QuarkSectorFromEWGauge", "Hqiv.Physics.QuarkColorCarrierGaugeScaffold", "Hqiv.Physics.StrongColorRapidityFiberBridge", "Hqiv.Physics.StrongColorCarrierClosure", "Hqiv.Physics.StrongColorSu3ChartClosure", "Hqiv.Physics.ConservedContentMassBridge", "Hqiv.Physics.LeptonGenerationLockin", "Hqiv.Physics.SurfaceWaveSelfClock", "Hqiv.Physics.GlobalDetuning", "Hqiv.Physics.LeptonResonanceGlobalDetuning", "Hqiv.Physics.QuarkLadderGlobalDetuning", "Hqiv.Physics.HarmonicLadderGlobalDetuning", "Hqiv.Physics.DerivedGaugeAndLeptonSector", "Hqiv.Physics.WeakDoubletCarrierGaugeQuadratic", "Hqiv.Physics.DerivedNucleonMass", "Hqiv.Physics.QuarkMetaResonance", "Hqiv.Physics.MetaHorizonExcitedStates", "Hqiv.Physics.MetaHorizonBeltramiExcitedStates", "Hqiv.Physics.MetaHorizonExcitedXiScale", "Hqiv.Physics.MetaHorizonTrappedPlanckMass", "Hqiv.Physics.MetaHorizonContinuousShellMass", "Hqiv.Physics.BoundStates", "Hqiv.Physics.NuclearAndAtomicSpectra", "Hqiv.Physics.SpinStatistics", "Hqiv.Physics.HQIVNuclei", "Hqiv.Physics.PostAlphaBindingGeometry", "Hqiv.Physics.HQIVAtoms", "Hqiv.Physics.HQIVMolecules", "Hqiv.Physics.HQIVTurbulenceSimulatorScaffold", "Hqiv.Physics.HQIVAssembly", "Hqiv.Physics.HQIVCollectiveModes", "Hqiv.Physics.HepDecayReadout", "Hqiv.Physics.TuftGlobalHadronReadout", "Hqiv.Physics.TuftSynthesisZetaHolonomyDischarge", "Hqiv.QuantumMechanics.HydrogenicEnergies", "Hqiv.QuantumMechanics.Schrodinger", "Hqiv.QuantumMechanics.UncertaintyPrinciple", "Hqiv.QuantumMechanics.FiniteDimVonNeumann", "Hqiv.QuantumMechanics.MonogamyTangles", "Hqiv.QuantumMechanics.MonogamyTanglesStates", "Hqiv.QuantumMechanics.MonogamyTanglesPhiConditions", "Hqiv.QuantumMechanics.MonogamyGHZFamily", "Hqiv.QuantumMechanics.MonogamyWFamily", "Hqiv.QuantumMechanics.MonogamyGHZWInterpolation", "Hqiv.ProteinResearch.ProteinHKEMinimizer", "Hqiv.ProteinResearch.ProteinVariantSelection", "Hqiv.ProteinResearch.ProteinNaturalFolding", "Hqiv.ProteinResearch.ProteinQuantumExploration",   "Hqiv.QuantumOptics.HorizonQED", "Hqiv.Physics.ActionHolonomyGlue", "Hqiv.Physics.SO8PlaquetteHolonomy", "Hqiv.Physics.NonAbelianHolonomyMeasureScaffold", "Hqiv.Physics.DiscreteActionPoincareScaffold", "Hqiv.Physics.DiscreteActionStrongPoincareBridge"]
+"Hqiv.Physics.ContinuousXiMixingGeometry", "Hqiv.Physics.InformationalEnergyMass", "Hqiv.Physics.HadronMassReadout", "Hqiv.Physics.NaturalUnitMeVTheory", "Hqiv.Physics.FanoResonance", "Hqiv.Physics.ChargedLeptonResonance", "Hqiv.Physics.QuarkResonanceMassFunctional", "Hqiv.Physics.QuarkSectorFromEWGauge", "Hqiv.Physics.QuarkColorCarrierGaugeScaffold", "Hqiv.Physics.StrongColorRapidityFiberBridge", "Hqiv.Physics.StrongColorCarrierClosure", "Hqiv.Physics.StrongColorSu3ChartClosure", "Hqiv.Physics.ConservedContentMassBridge", "Hqiv.Physics.LeptonGenerationLockin", "Hqiv.Physics.SurfaceWaveSelfClock", "Hqiv.Physics.GlobalDetuning", "Hqiv.Physics.LeptonResonanceGlobalDetuning", "Hqiv.Physics.QuarkLadderGlobalDetuning", "Hqiv.Physics.HarmonicLadderGlobalDetuning", "Hqiv.Physics.DerivedGaugeAndLeptonSector", "Hqiv.Physics.WeakDoubletCarrierGaugeQuadratic", "Hqiv.Physics.DerivedNucleonMass", "Hqiv.Physics.QuarkMetaResonance", "Hqiv.Physics.MetaHorizonExcitedStates", "Hqiv.Physics.MetaHorizonBeltramiExcitedStates", "Hqiv.Physics.MetaHorizonExcitedXiScale", "Hqiv.Physics.MetaHorizonTrappedPlanckMass", "Hqiv.Physics.MetaHorizonContinuousShellMass", "Hqiv.Physics.BoundStates", "Hqiv.Physics.NuclearAndAtomicSpectra", "Hqiv.Physics.SpinStatistics", "Hqiv.Physics.HQIVNuclei", "Hqiv.Physics.PostAlphaBindingGeometry", "Hqiv.Physics.HQIVAtoms", "Hqiv.Physics.HQIVMolecules", "Hqiv.Physics.HQIVTurbulenceSimulatorScaffold", "Hqiv.Physics.HQIVAssembly", "Hqiv.Physics.HQIVCollectiveModes", "Hqiv.Physics.HepDecayReadout", "Hqiv.Physics.TuftGlobalHadronReadout", "Hqiv.QuantumMechanics.HydrogenicEnergies", "Hqiv.QuantumMechanics.Schrodinger", "Hqiv.QuantumMechanics.UncertaintyPrinciple", "Hqiv.QuantumMechanics.FiniteDimVonNeumann", "Hqiv.QuantumMechanics.MonogamyTangles", "Hqiv.QuantumMechanics.MonogamyTanglesStates", "Hqiv.QuantumMechanics.MonogamyTanglesPhiConditions", "Hqiv.QuantumMechanics.MonogamyGHZFamily", "Hqiv.QuantumMechanics.MonogamyWFamily", "Hqiv.QuantumMechanics.MonogamyGHZWInterpolation", "Hqiv.ProteinResearch.ProteinHKEMinimizer", "Hqiv.ProteinResearch.ProteinVariantSelection", "Hqiv.ProteinResearch.ProteinNaturalFolding", "Hqiv.ProteinResearch.ProteinQuantumExploration",   "Hqiv.QuantumOptics.HorizonQED", "Hqiv.Physics.ActionHolonomyGlue", "Hqiv.Physics.SO8PlaquetteHolonomy", "Hqiv.Physics.NonAbelianHolonomyMeasureScaffold", "Hqiv.Physics.DiscreteActionPoincareScaffold", "Hqiv.Physics.DiscreteActionStrongPoincareBridge", "Hqiv.Physics.HQIVFluidClosureScaffold", "Hqiv.Physics.OrbitalFlybyScaffold", "Hqiv.Physics.CompactObjectRotatingCrustScaffold", "Hqiv.Physics.CompactObjectMhdEquivalenceScaffold", "Hqiv.Physics.CoronalLongitudinalStress", "Hqiv.Physics.OrbitalTrajectoryJ2Scaffold"]
 
 [[lean_lib]]
 name = "HQIVMeaningfulPhysics"
@@ -285,6 +311,7 @@ globs = [
   "Hqiv.Physics.BaryogenesisCore",
   "Hqiv.Physics.BaryogenesisEtaPaper",
   "Hqiv.Physics.BaryogenesisWitness",
+  "Hqiv.Physics.BaryogenesisDynamicBulk",
   "Hqiv.Physics.BoundStates",
   "Hqiv.Physics.CasimirForceFromAction",
   "Hqiv.Physics.TrappedCasimirBindingBridge",
@@ -318,6 +345,8 @@ globs = [
   "Hqiv.Physics.OrbitalFlybyScaffold",
   "Hqiv.Physics.OrbitalTrajectoryJ2Scaffold",
   "Hqiv.Physics.CoronalLongitudinalStress",
+  "Hqiv.Physics.CompactObjectRotatingCrustScaffold",
+  "Hqiv.Physics.CompactObjectMhdEquivalenceScaffold",
   "Hqiv.Physics.HQIVGravityReadoutScalars",
   "Hqiv.Physics.DynamicCentreGeometry",
   "Hqiv.Physics.HQIVMolecules",
@@ -413,11 +442,12 @@ globs = [
 [[lean_lib]]
 name = "HQIVStory"
 # Narrative spine import closure from `HQIVStory.lean` (regenerate: python3 scripts/story_lib_globs.py).
-# 190 modules (HQIVStory + 189 Hqiv)
+# 252 modules (HQIVStory + 251 Hqiv)
 globs = [
   "HQIVStory",
   "Hqiv.Algebra.CliffordHQIVSlotRefinement",
   "Hqiv.Algebra.CliffordMinimalIdeal",
+  "Hqiv.Algebra.CycleHodgeProbeScaffold",
   "Hqiv.Algebra.G2Embedding",
   "Hqiv.Algebra.IntegerLatticeShellCount8",
   "Hqiv.Algebra.MinimalSoSeedClosure",
@@ -435,6 +465,7 @@ globs = [
   "Hqiv.Geometry.ContinuumMetricGradient",
   "Hqiv.Geometry.ContinuumSpacetimeChart",
   "Hqiv.Geometry.GeneralRiemannianRapidityOracle",
+  "Hqiv.Geometry.GoldbachG2Parity",
   "Hqiv.Geometry.HQVMCausalChart",
   "Hqiv.Geometry.HQVMContinuumMetricBridge",
   "Hqiv.Geometry.HQVMetric",
@@ -460,6 +491,7 @@ globs = [
   "Hqiv.Physics.ContinuousXiCoupling",
   "Hqiv.Physics.ContinuumOmaxwellClosure",
   "Hqiv.Physics.CovariantSolution",
+  "Hqiv.Physics.DivisionAlgebraZetaScaffold",
   "Hqiv.Physics.FanoDetuningFirstOrder",
   "Hqiv.Physics.FanoLine",
   "Hqiv.Physics.FanoOmaxwellSpectrum",
@@ -470,6 +502,7 @@ globs = [
   "Hqiv.Physics.GlobalDetuning",
   "Hqiv.Physics.HQIVDirichletModularScaffold",
   "Hqiv.Physics.HQIVFluidClosureScaffold",
+  "Hqiv.Physics.HQIVHeatFlowDeformation",
   "Hqiv.Physics.HQIVLSeriesAnalytic",
   "Hqiv.Physics.HarmonicLadderGlobalDetuning",
   "Hqiv.Physics.HarmonicLadderMass",
@@ -485,6 +518,8 @@ globs = [
   "Hqiv.Physics.SpinStatistics",
   "Hqiv.Physics.SpinStatisticsOperatorBridge",
   "Hqiv.Physics.SurfaceWaveSelfClock",
+  "Hqiv.Physics.ThermodynamicLawsFromLadder",
+  "Hqiv.Physics.ToyDiscreteHeat",
   "Hqiv.Physics.TrialityRapidityWellEquivalence",
   "Hqiv.QuantumMechanics.BornMeasurementFinite",
   "Hqiv.QuantumMechanics.CCRFiniteDimObstruction",
@@ -514,6 +549,7 @@ globs = [
   "Hqiv.Story.Chapter07_PatchQFT",
   "Hqiv.Story.Chapter08_ClayMillennium",
   "Hqiv.Story.DiscreteOMaxwellHQIVInstance",
+  "Hqiv.Story.DimensionalGrowthAnalyticScaffold",
   "Hqiv.Story.DiscreteOMaxwellToYMInputs",
   "Hqiv.Story.GaugeGroupFromHQIVSketch",
   "Hqiv.Story.HQIVDissipativeBridge",
@@ -568,7 +604,31 @@ globs = [
   "Hqiv.Story.S3InteriorPathA",
   "Hqiv.Story.S3InteriorPathE",
   "Hqiv.Story.S3InteriorStripHClosedForm",
+  "Hqiv.Story.S3LogExpTrigReadoutBridge",
   "Hqiv.Story.S3OrbitVsPointwiseGap",
+  "Hqiv.Story.S3SigmaReadoutScope",
+  "Hqiv.Story.S3ZeroQuadrupletOrbit",
+  "Hqiv.Story.S3HeatFlowArrowNoBackprojection",
+  "Hqiv.Story.S3DBNLatticeInheritance",
+  "Hqiv.Story.S3DBNDiscreteContinuumComparison",
+  "Hqiv.Story.S3DBNConstantPort",
+  "Hqiv.Story.S3TangentOrbitCriticalLine",
+  "Hqiv.Story.S3EulerSpectralCancellation",
+  "Hqiv.Story.S3SpectralResonanceChanneling",
+  "Hqiv.Story.S3VerticalAxisRigidity",
+  "Hqiv.Story.S3SameHeightOrbitCollapse",
+  "Hqiv.Story.S3PolarProjectionCollapse",
+  "Hqiv.Story.S3ZeroHolonomyGoldbachChain",
+  "Hqiv.Story.S3MidpointEulerSoeBridge",
+  "Hqiv.Story.S3MidpointConstructiveSpectralSlope",
+  "Hqiv.Story.S3SoeSpectralBuild",
+  "Hqiv.Story.S3MidpointEckmannHiltonSoe",
+  "Hqiv.Story.S3MidpointSO4DeltaOrbit",
+  "Hqiv.Story.S3TuftNestedFrameTower",
+  "Hqiv.Story.S3DiophantineTransformer",
+  "Hqiv.Story.S3OctonionicAssociatorChannel",
+  "Hqiv.Story.S3OctonionS7TorsionCancellation",
+  "Hqiv.Story.S3LogPhaseEdge",
   "Hqiv.Story.S3PathCHolonomy",
   "Hqiv.Story.S3PoleZeroChannel",
   "Hqiv.Story.S3PrimalitySlotDecoupling",
@@ -578,9 +638,43 @@ globs = [
   "Hqiv.Story.S3RHObligationEquivalence",
   "Hqiv.Story.S3RHZeroSetBridge",
   "Hqiv.Story.S3RotationRigidity",
+  "Hqiv.Story.S3MirroredTwiddlePair",
+  "Hqiv.Story.S3CubicPlasticTwiddle",
+  "Hqiv.Story.S3HigherTwiddleFactorizationProbe",
+  "Hqiv.Story.S3SemiprimeExplicitFormulaMediation",
+  "Hqiv.Story.S3TwiddleFrameCrossTalkLaw",
+  "Hqiv.Story.S3StripMirrorPeakWitness",
   "Hqiv.Story.S3SO4InteriorWitness",
   "Hqiv.Story.S3SO4ZetaProjectionClosedForm",
   "Hqiv.Story.S3SixPolesResidual",
+  "Hqiv.Story.S3AnalyticStripClassification",
+  "Hqiv.Story.S3CriticalLineCarrierBundle",
+  "Hqiv.Story.S3HarmonicShellZeroCounting",
+  "Hqiv.Story.S3HopfJKUnitCircleZeroReadout",
+  "Hqiv.Story.S3CriticalCirclePhaseCancellation",
+  "Hqiv.Story.S3CumulativeHarmonicPhase",
+  "Hqiv.Story.S3ModelGuidedZeroLocator",
+  "Hqiv.Story.S3ModelGuidedLocationBound",
+  "Hqiv.Story.S3GoldbachAnnulusContradiction",
+  "Hqiv.Story.S3GoldbachAnnulusPhasePinning",
+  "Hqiv.Story.S3GoldbachAnnulusCircle",
+  "Hqiv.Story.S3GoldbachHolomorphicWeightBridge",
+  "Hqiv.Story.S3GoldbachPartitionGeneratingFunction",
+  "Hqiv.Story.S3GoldbachPerronContourRemainder",
+  "Hqiv.Story.S3ExplicitFormulaLocationBridge",
+  "Hqiv.Story.S3HopfJKEulerPrimeCircleCounting",
+  "Hqiv.Story.S3CountableCircleFill",
+  "Hqiv.Story.S3FareyRayInterpolation",
+  "Hqiv.Story.S3FareyTwiddleLanding",
+  "Hqiv.Story.S3ExplicitFormulaPrimePhaseCoincidence",
+  "Hqiv.Story.S3ExplicitFormulaPrimeLatticeTruncation",
+  "Hqiv.Story.S3ThetaPartitionTwiddleAddress",
+  "Hqiv.Story.S3DiagonalZeroAddressCapstone",
+  "Hqiv.Story.S3TwiddleAddressConstructiveZero",
+  "Hqiv.Story.S3DeepTwiddlePoleLadder",
+  "Hqiv.Story.S3DiagonalSphereTwiddlePermutations",
+  "Hqiv.Story.S3QuaternionZetaTwiddleMultisetInvariance",
+  "Hqiv.Story.S3AnalyticStripLift",
   "Hqiv.Story.S3StripRollingProjection",
   "Hqiv.Story.S3SurvivorsForcePhase",
   "Hqiv.Story.S3ToZetaBridge",
@@ -611,7 +705,7 @@ globs = [
 [[lean_lib]]
 name = "HQIVWitnesses"
 # Minimal witness build: only what `scripts/export_witnesses.lean` imports.
-globs = ["HQIVWitnesses", "Hqiv.Geometry.OctonionicLightCone", "Hqiv.Geometry.AuxiliaryField", "Hqiv.Geometry.HQVMetric", "Hqiv.Geometry.QuaternionMaxwellS3OMaxwellS4Spectral", "Hqiv.Physics.Baryogenesis", "Hqiv.Physics.BaryogenesisEtaPaper", "Hqiv.Physics.BaryogenesisWitness", "Hqiv.Physics.FanoResonance", "Hqiv.Physics.FanoOmaxwellSpectrum", "Hqiv.Physics.ContinuousXiCoupling", "Hqiv.Physics.ContinuousXiPath", "Hqiv.Physics.InformationalEnergyMass", "Hqiv.Physics.ModalFrequencyHorizon", "Hqiv.Physics.MetaHorizonExcitedStates", "Hqiv.Physics.FanoSectorSpectralMassEmergence", "Hqiv.Physics.HopfShellBeltramiMassBridge","Hqiv.Physics.TuftShellChart","Hqiv.Physics.TuftGlobalHadronReadout","Hqiv.Physics.TuftElectroweakBosonReadout", "Hqiv.Physics.DerivedGaugeAndLeptonSector", "Hqiv.Physics.DerivedNucleonMass", "Hqiv.Physics.ScaleWitness", "Hqiv.Physics.OMaxwellRationalMassLadder", "Hqiv.Physics.QuarkMetaResonance", "Hqiv.Topology.HopfShellComplex"]
+globs = ["HQIVWitnesses", "Hqiv.Geometry.OctonionicLightCone", "Hqiv.Geometry.AuxiliaryField", "Hqiv.Geometry.HQVMetric", "Hqiv.Geometry.QuaternionMaxwellS3OMaxwellS4Spectral", "Hqiv.Physics.Baryogenesis", "Hqiv.Physics.BaryogenesisEtaPaper", "Hqiv.Physics.BaryogenesisWitness", "Hqiv.Physics.BaryogenesisDynamicBulk", "Hqiv.Physics.FanoResonance", "Hqiv.Physics.FanoOmaxwellSpectrum", "Hqiv.Physics.ContinuousXiCoupling", "Hqiv.Physics.ContinuousXiPath", "Hqiv.Physics.InformationalEnergyMass", "Hqiv.Physics.ModalFrequencyHorizon", "Hqiv.Physics.MetaHorizonExcitedStates", "Hqiv.Physics.FanoSectorSpectralMassEmergence", "Hqiv.Physics.HopfShellBeltramiMassBridge","Hqiv.Physics.TuftShellChart","Hqiv.Physics.TuftGlobalHadronReadout","Hqiv.Physics.TuftElectroweakBosonReadout", "Hqiv.Physics.DerivedGaugeAndLeptonSector", "Hqiv.Physics.DerivedNucleonMass", "Hqiv.Physics.ScaleWitness", "Hqiv.Physics.OMaxwellRationalMassLadder", "Hqiv.Physics.QuarkMetaResonance", "Hqiv.Topology.HopfShellComplex"]
 
 [[lean_lib]]
 name = "HQIVRhFourierLift"
@@ -636,6 +730,8 @@ globs = [
   "Hqiv.QuantumChemistry.BondStateNetwork",
   "Hqiv.QuantumChemistry.CurvatureBondContact",
   "Hqiv.QuantumChemistry.CurvatureContactNetwork",
+  "Hqiv.QuantumChemistry.IonicContactSlot",
+  "Hqiv.QuantumChemistry.MetallicContactSlot",
   "Hqiv.QuantumChemistry.S2BindingGeometry",
   "Hqiv.QuantumChemistry.ElectronicValenceFromTuftChart",
   "Hqiv.QuantumChemistry.CentreGeometryFromTuft",
@@ -646,10 +742,12 @@ globs = [
   "Hqiv.QuantumChemistry.PhaseGeometryDensity",
   "Hqiv.QuantumChemistry.PhaseMaterialResponse",
   "Hqiv.QuantumChemistry.PhaseAllotropeDerivation",
+  "Hqiv.QuantumChemistry.FoundationChemistry",
+  "Hqiv.QuantumChemistry.PeptideBackboneGeometry",
   "Hqiv.Physics.DynamicCentreGeometry",
   "Hqiv.Physics.HopfShellBeltramiMassBridge","Hqiv.Physics.TuftShellChart","Hqiv.Physics.TuftGlobalHadronReadout","Hqiv.Physics.TuftElectroweakBosonReadout",
   "Hqiv.Physics.ContinuousXiCoupling",
-  "Hqiv.Physics.BBNNetworkFromWeights", "Hqiv.Physics.DynamicBBNBaryogenesis", "Hqiv.Physics.NuclearCurvatureBinding", "Hqiv.Physics.NuclearCausticBinding", "Hqiv.Physics.NuclearOutsideTemperatureDynamics", "Hqiv.Physics.DynamicNucleonPN", "Hqiv.Physics.DynamicBetaIsotope", "Hqiv.Physics.DynamicIsotopeStability", "Hqiv.Physics.NeutronLifetimeMethod", "Hqiv.Physics.WeakFanoHopfBridge",
+  "Hqiv.Physics.BBNNetworkFromWeights", "Hqiv.Physics.DynamicBBNBaryogenesis", "Hqiv.Physics.NuclearCurvatureBinding", "Hqiv.Physics.NuclearContactClosure", "Hqiv.Physics.NuclearCausticBinding", "Hqiv.Physics.NuclearOutsideTemperatureDynamics", "Hqiv.Physics.DynamicNucleonPN", "Hqiv.Physics.DynamicBetaIsotope", "Hqiv.Physics.DynamicIsotopeStability", "Hqiv.Physics.NeutronLifetimeMethod", "Hqiv.Physics.WeakFanoHopfBridge",
   "Hqiv.Physics.BaryogenesisCore",
 ]
 
@@ -660,6 +758,17 @@ globs = [
   "Hqiv.ProteinResearch.AtomEnergyOSHoracleBridge",
   "Hqiv.ProteinResearch.ProteinFoldingQuantumChemistry",
   "Hqiv.ProteinResearch.ProteinHKEMinimizer",
+  "Hqiv.ProteinResearch.MiniproteinFoldWitness",
+  "Hqiv.ProteinResearch.MiniproteinFoldSpine",
+  "Hqiv.ProteinResearch.MiniproteinRamachandran",
+  "Hqiv.ProteinResearch.MiniproteinSecondaryStructure",
+  "Hqiv.ProteinResearch.MiniproteinTertiaryContacts",
+  "Hqiv.ProteinResearch.MiniproteinContactClosure",
+  "Hqiv.ProteinResearch.MiniproteinCaRmsd",
+  "Hqiv.ProteinResearch.ProteinCoord3Ops",
+  "Hqiv.ProteinResearch.MiniproteinNerfPlacement",
+  "Hqiv.ProteinResearch.MiniproteinKabschAlignment",
+  "Hqiv.ProteinResearch.MiniproteinClosureConvergence",
   "Hqiv.ProteinResearch.ProteinNaturalFolding",
   "Hqiv.ProteinResearch.ProteinQCRefinement",
   "Hqiv.ProteinResearch.ProteinSolventPhaseGeometry",
@@ -724,6 +833,7 @@ name = "HQIVGoldbachG2"
 # Goldbach parity proof cone: G₂ + Δ harmonic landing certificates imply the even Goldbach statement.
 globs = [
   "Hqiv.Geometry.GoldbachG2Parity",
+  "Hqiv.Geometry.SoeModStackCombinatorics",
 ]
 
 [[lean_lib]]
@@ -1599,7 +1709,9 @@ globs = [
   "Hqiv.GeneratorsLieClosure",
   "Hqiv.SO8Closure",
   "Hqiv.SO8ClosureInterface",
-  "Hqiv.Algebra.SO8ClosureAbstract"
+  "Hqiv.Algebra.SO8ClosureAbstract",
+  "Hqiv.Physics.TuftSynthesisZetaHolonomyDischarge",
+  "Hqiv.Physics.TuftSynthesisZetaHolonomyDischargeCertified"
 ]
 
 [[lean_lib]]
@@ -1607,6 +1719,15 @@ name = "HQIVSO8Symbolic"
 # Lightweight symbolic SO(8) interface (no LieBracketCell numeric certificate build).
 globs = [
   "Hqiv.SO8ClosureSymbolic"
+]
+
+[[lean_lib]]
+name = "HQIVGravitationalWave"
+# GWTC ringdown/tail witness scaffold (Python: scripts/hqiv_gw_ringdown.py).
+globs = [
+  "Hqiv.Physics.GravitationalWaveRingdownScaffold",
+  "Hqiv.Physics.CompactObjectRotatingCrustScaffold",
+  "Hqiv.Physics.NuclearOutsideTemperatureDynamics"
 ]
 
 [[require]]
@@ -1685,6 +1806,7 @@ globs = [
   "Hqiv.Physics.BaryogenesisCore",
   "Hqiv.Physics.BaryogenesisEtaPaper",
   "Hqiv.Physics.BaryogenesisWitness",
+  "Hqiv.Physics.BaryogenesisDynamicBulk",
   "Hqiv.Physics.BoundStates",
   "Hqiv.Physics.BraneBulkFanoTruss",
   "Hqiv.Physics.CMBBirefringenceFirstPrinciples",
@@ -1827,6 +1949,7 @@ globs = [
   "Hqiv.Physics.BaryogenesisCore",
   "Hqiv.Physics.BaryogenesisEtaPaper",
   "Hqiv.Physics.BaryogenesisWitness",
+  "Hqiv.Physics.BaryogenesisDynamicBulk",
   "Hqiv.Physics.BoundStates",
   "Hqiv.Physics.BraneBulkFanoTruss",
   "Hqiv.Physics.CMBBirefringenceFirstPrinciples",

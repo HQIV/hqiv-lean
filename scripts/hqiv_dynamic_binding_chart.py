@@ -128,9 +128,103 @@ GMTKN55_SUITE: tuple[MoleculeBenchmark, ...] = (
     ),
 )
 
-# Molecules where the current nuclear-torus surplus map overshoots (large Z, no H).
-# Kept for diagnostics — not counted in the primary chart summary.
-EXTENDED_DIAGNOSTIC_SUITE: tuple[MoleculeBenchmark, ...] = (
+# Extended GMTKN55 / W4-17 panel (non-quantum contact-network spine).
+EXPANDED_MOLECULE_SUITE: tuple[MoleculeBenchmark, ...] = (
+    MoleculeBenchmark(
+        "LiF",
+        "dissociation",
+        (FragmentConfig("Li", 3, 3), FragmentConfig("F", 9, 9)),
+        (BondGeometry(0, 1, 1.5636),),
+        5.991,
+        "W4-17/GMTKN55",
+    ),
+    MoleculeBenchmark(
+        "NaCl",
+        "dissociation",
+        (FragmentConfig("Na", 11, 11), FragmentConfig("Cl", 17, 17)),
+        (BondGeometry(0, 1, 2.3609),),
+        4.259,
+        "W4-17/GMTKN55",
+    ),
+    MoleculeBenchmark(
+        "HCl",
+        "dissociation",
+        (FragmentConfig("Cl", 17, 17), FragmentConfig("H", 1, 1)),
+        (BondGeometry(0, 1, 1.2746),),
+        4.434,
+        "W4-17/GMTKN55",
+    ),
+    MoleculeBenchmark(
+        "HBr",
+        "dissociation",
+        (FragmentConfig("Br", 35, 35), FragmentConfig("H", 1, 1)),
+        (BondGeometry(0, 1, 1.4145),),
+        3.758,
+        "W4-17/GMTKN55",
+    ),
+    MoleculeBenchmark(
+        "H2S",
+        "atomization",
+        (
+            FragmentConfig("S", 16, 16),
+            FragmentConfig("H", 1, 1),
+            FragmentConfig("H", 1, 1),
+        ),
+        (
+            BondGeometry(0, 1, 1.3360, bond_angle_rad=math.radians(92.11)),
+            BondGeometry(0, 2, 1.3360, bond_angle_rad=math.radians(92.11)),
+        ),
+        8.714,
+        "W4-17/GMTKN55",
+    ),
+    MoleculeBenchmark(
+        "HCN",
+        "atomization",
+        (
+            FragmentConfig("H", 1, 1),
+            FragmentConfig("C", 6, 6),
+            FragmentConfig("N", 7, 7),
+        ),
+        (
+            BondGeometry(1, 0, 1.0626),
+            BondGeometry(1, 2, 1.1530),
+        ),
+        13.60,
+        "W4-17/GMTKN55",
+    ),
+    MoleculeBenchmark(
+        "C2H2",
+        "atomization",
+        (
+            FragmentConfig("H", 1, 1),
+            FragmentConfig("C", 6, 6),
+            FragmentConfig("C", 6, 6),
+            FragmentConfig("H", 1, 1),
+        ),
+        (
+            BondGeometry(1, 0, 1.0620),
+            BondGeometry(1, 2, 1.2030),
+            BondGeometry(2, 3, 1.0620),
+        ),
+        17.406,
+        "W4-17/GMTKN55",
+    ),
+    MoleculeBenchmark(
+        "PH3",
+        "atomization",
+        (FragmentConfig("P", 15, 15),)
+        + tuple(FragmentConfig("H", 1, 1) for _ in range(3)),
+        tuple(
+            BondGeometry(0, i + 1, 1.4140, bond_angle_rad=math.radians(93.8))
+            for i in range(3)
+        ),
+        9.32,
+        "W4-17/GMTKN55",
+    ),
+)
+
+# Homonuclear / open-shell diatomics — large surplus scale (diagnostic).
+OPEN_SHELL_DIAGNOSTIC_SUITE: tuple[MoleculeBenchmark, ...] = (
     MoleculeBenchmark(
         "CO",
         "atomization",
@@ -147,7 +241,64 @@ EXTENDED_DIAGNOSTIC_SUITE: tuple[MoleculeBenchmark, ...] = (
         9.91,
         "W4-17/GMTKN55",
     ),
+    MoleculeBenchmark(
+        "O2",
+        "dissociation",
+        (FragmentConfig("O", 8, 8), FragmentConfig("O", 8, 8)),
+        (BondGeometry(0, 1, 1.208),),
+        5.213,
+        "W4-17/GMTKN55",
+    ),
+    MoleculeBenchmark(
+        "F2",
+        "dissociation",
+        (FragmentConfig("F", 9, 9), FragmentConfig("F", 9, 9)),
+        (BondGeometry(0, 1, 1.412),),
+        1.638,
+        "W4-17/GMTKN55",
+    ),
+    MoleculeBenchmark(
+        "Cl2",
+        "dissociation",
+        (FragmentConfig("Cl", 17, 17), FragmentConfig("Cl", 17, 17)),
+        (BondGeometry(0, 1, 1.988),),
+        2.479,
+        "W4-17/GMTKN55",
+    ),
 )
+
+# Back-compat alias for older scripts/tests.
+EXTENDED_DIAGNOSTIC_SUITE: tuple[MoleculeBenchmark, ...] = OPEN_SHELL_DIAGNOSTIC_SUITE[:2]
+
+ALL_MOLECULE_BENCHMARKS: tuple[MoleculeBenchmark, ...] = (
+    GMTKN55_SUITE + EXPANDED_MOLECULE_SUITE + OPEN_SHELL_DIAGNOSTIC_SUITE
+)
+
+
+def benchmark_with_nested_wf_geometry(bench: MoleculeBenchmark) -> MoleculeBenchmark:
+    """Replace tabulated Å/° inputs with nested-WF equilibrium geometry."""
+    import hqiv_electronic_valence_shells as evs
+    import hqiv_nested_wf_bond_geometry as nwbg
+
+    if len(bench.fragments) == 2 and evs.is_ionic_diatomic(bench.fragments):
+        return bench
+    try:
+        bonds = nwbg.bonds_for_molecule_name(bench.name)
+    except KeyError:
+        return bench
+    return MoleculeBenchmark(
+        bench.name,
+        bench.kind,
+        bench.fragments,
+        bonds,
+        bench.reference_ev,
+        bench.reference_source,
+    )
+
+
+def reference_bond_lengths_angstrom(bench: MoleculeBenchmark) -> tuple[float, ...]:
+    """Tabulated comparison geometry (witness only — not used in prediction)."""
+    return tuple(b.distance_angstrom for b in bench.bonds)
 
 
 def xi_of_shell(m: int) -> float:
@@ -326,16 +477,73 @@ def surplus_dimless_for_molecule(
 ) -> float:
     frags = bench.fragments
     electrons = tuple(max(f.electrons, 0) for f in frags)
+    ionic_dress = 1.0
+    hydride_dress = 1.0
+    bond_length = bench.bonds[0].distance_angstrom if bench.bonds else None
     if bench.kind == "dissociation":
         if len(frags) != 2:
             raise ValueError(f"dissociation benchmark {bench.name} must have two fragments")
-        n1, n2 = electrons
-        base = bond_horizon_surplus_dimless(n1 + n2, n1, n2, angles)
+        if evs.is_ionic_diatomic(frags):
+            import hqiv_ionic_bond_network as ibn
+            from bonded_horizon_casimir_float import ionic_bond_surplus_dimless
+
+            a, b = frags
+            cation, anion = ibn.ionic_fragments_from_neutral_pair(
+                a.label,
+                a.z_nuclear,
+                a.electrons,
+                b.label,
+                b.z_nuclear,
+                b.electrons,
+            )
+            base = ionic_bond_surplus_dimless(cation.electrons, anion.electrons, angles)
+            if evs.is_alkali_halide_diatomic(frags):
+                ionic_dress = evs.ionic_inert_core_surplus_dress(
+                    cation.z_nuclear,
+                    anion.z_nuclear,
+                    cation.electrons,
+                    anion.electrons,
+                    bond_length_angstrom=bond_length,
+                )
+        else:
+            n1, n2 = electrons
+            z1, z2 = frags[0].z_nuclear, frags[1].z_nuclear
+            if z1 == z2 == 1:
+                base = evs.homonuclear_h2_dissociation_surplus_dimless(angles)
+            elif z1 == z2 and z1 > 1:
+                base = evs.homonuclear_dissociation_surplus_dimless(n1, n2, z1, angles)
+            else:
+                base = bond_horizon_surplus_dimless(n1 + n2, n1, n2, angles)
+            if 1 in (z1, z2):
+                hydride_dress = evs.period_hydride_dissociation_dress(max(z1, z2))
+    elif (
+        len(frags) == 2
+        and all(f.z_nuclear > 1 for f in frags)
+        and not any(f.z_nuclear == 1 for f in frags)
+    ):
+        z1, z2 = frags[0].z_nuclear, frags[1].z_nuclear
+        e1, e2 = electrons
+        base = evs.heteronuclear_diatomic_atomization_surplus_dimless(z1, z2, e1, e2, angles)
+    elif evs.use_horizon_atomization_split(
+        frags,
+        bench.bonds,
+        molecule_name=bench.name,
+    ):
+        split = evs.lean_atomization_horizon_split(bench.name, frags)
+        if split is None:
+            base = atomization_surplus_dimless(electrons, angles)
+        else:
+            base = bond_horizon_surplus_dimless(*split, angles)
+        hydride_dress = evs.period_hydride_atomization_dress(
+            evs.heavy_centre_z(frags)
+        )
     else:
-        # Fragment-separated torus surplus (larger readout); Lean ``(10,8,2)``-style
-        # bond_horizon splits are recorded in ``shell_readout.electron_split``.
+        # Fragment-separated torus surplus; Lean ``(10,8,2)`` splits in shell readout.
         base = atomization_surplus_dimless(electrons, angles)
-    return base * surplus_dress_factor
+    conjugated = 1.0
+    if bench.kind == "atomization":
+        conjugated = evs.conjugated_heavy_heavy_surplus_dress(frags, bench.bonds)
+    return base * surplus_dress_factor * ionic_dress * hydride_dress * conjugated
 
 
 @dataclass(frozen=True)
@@ -364,9 +572,15 @@ class DynamicBindingResult:
     notes: str
 
 
-def dynamic_binding_for_benchmark(bench: MoleculeBenchmark) -> DynamicBindingResult:
+def dynamic_binding_for_benchmark(
+    bench: MoleculeBenchmark,
+    *,
+    use_nested_wf_geometry: bool = True,
+) -> DynamicBindingResult:
     import hqiv_curvature_contact_network as ccn
 
+    if use_nested_wf_geometry:
+        bench = benchmark_with_nested_wf_geometry(bench)
     net = ccn.build_network_from_molecule(
         bench.name,
         bench.fragments,
@@ -396,12 +610,15 @@ def dynamic_binding_for_benchmark(bench: MoleculeBenchmark) -> DynamicBindingRes
     vev_bare = net_fb.bare_vev_geometric_mean
     geom_align = net_fb.geometry_alignment_factor
     feedback = net_fb.curvature_feedback_at_xi
-    dimless_core = eta_p * surplus * net_fb.dimless_prefactor
+    outside_geff = ccn.outside_geff_contact_dress(net, surplus)
+    dimless_core = eta_p * surplus * net_fb.dimless_prefactor * outside_geff
     binding_ev = dimless_core * EV_PER_LAMBDA_UNIT
     err = (binding_ev - bench.reference_ev) / bench.reference_ev * 100.0
+    shell_dict = shell.to_dict()
+    shell_dict["outside_geff_contact_dress"] = outside_geff
     notes = (
         f"{bench.kind}: shell={shell.compton_triplet_class}; surplus={shell.surplus_angle_policy}; "
-        f"η₂·surplus·vev·geom·κ(ξ={shell.contact_xi:.2f},w={shell.curvature_feedback_weight:.2f})"
+        f"η₂·surplus·vev·geom·G_eff·κ(ξ={shell.contact_xi:.2f},w={shell.curvature_feedback_weight:.2f})"
     )
     return DynamicBindingResult(
         name=bench.name,
@@ -427,7 +644,7 @@ def dynamic_binding_for_benchmark(bench: MoleculeBenchmark) -> DynamicBindingRes
             lean.dynamic_binding_curvature_correction_at_xi(shell.contact_xi)
             * shell.curvature_feedback_weight
         ),
-        shell_readout=shell.to_dict(),
+        shell_readout=shell_dict,
         nuclei=nuclei,
         nuclear_binding_uniformity=uniformity,
         notes=notes,
@@ -465,21 +682,58 @@ def _molecule_row_dict(bench: MoleculeBenchmark, result: DynamicBindingResult) -
         vev_networked=result.vev_geometric_mean,
         geometry_alignment=result.geometry_alignment_factor,
     )
+    try:
+        import hqiv_bond_state_network as bsn
+
+        row["bond_state_witness"] = bsn.bond_state_witness_for_molecule(
+            bench.name,
+            bench.fragments,
+            bench.bonds,
+            kind=bench.kind,
+            reference_ev=bench.reference_ev,
+            reference_source=bench.reference_source,
+        )
+    except Exception:
+        row["bond_state_witness"] = None
     return row
+
+
+def _summary_stats(rows: list[DynamicBindingResult]) -> dict[str, Any]:
+    abs_errors = [abs(r.error_pct) for r in rows]
+    n = len(abs_errors)
+    if n == 0:
+        return {"count": 0, "mean_abs_error_pct": 0.0, "max_abs_error_pct": 0.0, "within_5pct": 0, "within_15pct": 0}
+    return {
+        "count": n,
+        "mean_abs_error_pct": sum(abs_errors) / n,
+        "max_abs_error_pct": max(abs_errors),
+        "within_5pct": sum(1 for e in abs_errors if e <= 5.0),
+        "within_15pct": sum(1 for e in abs_errors if e <= 15.0),
+    }
 
 
 def build_chart_payload(
     suite: tuple[MoleculeBenchmark, ...] = GMTKN55_SUITE,
     *,
-    include_diagnostics: bool = True,
+    include_expanded: bool = True,
+    include_open_shell_diagnostics: bool = True,
 ) -> dict[str, Any]:
     rows = [dynamic_binding_for_benchmark(b) for b in suite]
-    diag_rows = (
-        [dynamic_binding_for_benchmark(b) for b in EXTENDED_DIAGNOSTIC_SUITE]
-        if include_diagnostics
-        else []
+    expanded_rows: list[DynamicBindingResult] = []
+    open_rows: list[DynamicBindingResult] = []
+    if include_expanded:
+        expanded_rows = [dynamic_binding_for_benchmark(b) for b in EXPANDED_MOLECULE_SUITE]
+    if include_open_shell_diagnostics:
+        open_rows = [dynamic_binding_for_benchmark(b) for b in OPEN_SHELL_DIAGNOSTIC_SUITE]
+    import hqiv_nested_wf_bond_geometry as nwbg
+
+    ref_lengths = {
+        b.name.upper(): list(reference_bond_lengths_angstrom(b))
+        for b in ALL_MOLECULE_BENCHMARKS
+    }
+    nested_geo_names = tuple(
+        name for name in ref_lengths if name in nwbg._BENCHMARK_TOPOLOGY
     )
-    abs_errors = [abs(r.error_pct) for r in rows]
     return {
         "source": "scripts/hqiv_dynamic_binding_chart.py",
         "lean_modules": [
@@ -489,7 +743,13 @@ def build_chart_payload(
             "Hqiv.Physics.HopfShellBeltramiMassBridge",
             "Hqiv.Physics.BaryogenesisCore",
         ],
-        "parameter_policy": "no_fitted_coefficients",
+        "parameter_policy": (
+            "chart-derived rationals only; see binding_route_provenance.scaffold_routes "
+            "for Python witnesses not yet in Lean"
+        ),
+        "binding_route_provenance": __import__(
+            "hqiv_chemistry_binding_routes", fromlist=["binding_chart_provenance_payload"]
+        ).binding_chart_provenance_payload(),
         "referenceM": REFERENCE_M,
         "ev_per_lambda_unit": EV_PER_LAMBDA_UNIT,
         "dynamic_binding_curvature_coupling": "kappa(xi) = gamma_HQIV * strongChannelFraction * B_curv(xi)",
@@ -527,18 +787,46 @@ def build_chart_payload(
             "bond_averaged_compton": "heavy hydrides + atomization — relaxed bond geometry",
             "curvature_feedback_weight": "1.0 if heavy; else 1-(4/8)(1-C2(ξ)/C2(ξ_lock)) (Hopf lapse dress)",
         },
+        "nested_wf_geometry": {
+            "input_policy": "no_tabulated_angstrom_or_degrees",
+            "ionic_diatomic_exception": (
+                "LiF/NaCl retain tabulated lattice bond until ionic nested-WF closure"
+            ),
+            "lean_modules": [
+                "Hqiv.QuantumChemistry.CentreGeometryFromTuft",
+                "Hqiv.QuantumChemistry.TorqueTreeEquilibrium",
+                "Hqiv.QuantumMechanics.Schrodinger",
+            ],
+            "formula": (
+                "r_cov = R_m/Z from hydrogenGroundStateOfShell; "
+                "r_eq from monogamy (1−α/2), homonuclear/open-shell/halogen routing; "
+                "θ from dynamicCentreAngleRad"
+            ),
+            "bond_witness": nwbg.geometry_witness_table(
+                nested_geo_names,
+                reference_lengths={k: tuple(v) for k, v in ref_lengths.items()},
+            ),
+        },
         "molecules": [
             _molecule_row_dict(b, r)
             for b, r in zip(suite, rows, strict=True)
         ],
-        "diagnostic_molecules": [asdict(r) for r in diag_rows],
-        "summary": {
-            "count": len(rows),
-            "mean_abs_error_pct": sum(abs_errors) / len(abs_errors),
-            "max_abs_error_pct": max(abs_errors),
-            "within_5pct": sum(1 for e in abs_errors if e <= 5.0),
-            "within_15pct": sum(1 for e in abs_errors if e <= 15.0),
-        },
+        "expanded_molecules": [
+            _molecule_row_dict(b, r)
+            for b, r in zip(EXPANDED_MOLECULE_SUITE, expanded_rows, strict=True)
+        ],
+        "open_shell_diagnostics": [
+            _molecule_row_dict(b, r)
+            for b, r in zip(OPEN_SHELL_DIAGNOSTIC_SUITE, open_rows, strict=True)
+        ],
+        "diagnostic_molecules": [
+            _molecule_row_dict(b, r)
+            for b, r in zip(OPEN_SHELL_DIAGNOSTIC_SUITE[:2], open_rows[:2], strict=True)
+        ],
+        "summary": _summary_stats(rows),
+        "expanded_summary": _summary_stats(expanded_rows),
+        "open_shell_summary": _summary_stats(open_rows),
+        "all_molecules_summary": _summary_stats(rows + expanded_rows),
     }
 
 
@@ -566,15 +854,29 @@ def print_report(payload: dict[str, Any]) -> None:
         f"max|err|={s['max_abs_error_pct']:.2f}%  "
         f"≤5%: {s['within_5pct']}/{s['count']}  ≤15%: {s['within_15pct']}/{s['count']}"
     )
-    diag = payload.get("diagnostic_molecules") or []
+    diag = payload.get("open_shell_diagnostics") or payload.get("diagnostic_molecules") or []
     if diag:
         print()
-        print("Diagnostics (large-Z surplus scale — open):")
+        print("Open-shell / homonuclear diagnostics (surplus scale — open):")
         for row in diag:
             print(
                 f"  {row['name']:<4} pred={row['binding_ev']:.2f} eV  "
                 f"ref={row['reference_ev']:.2f} eV  err={row['error_pct']:+.1f}%"
             )
+    exp = payload.get("expanded_molecules") or []
+    if exp:
+        es = payload.get("expanded_summary", {})
+        print()
+        print(f"Expanded panel (n={es.get('count', len(exp))}):")
+        for row in exp:
+            print(
+                f"  {row['name']:<6} {row['kind']:<14} {row['binding_ev']:10.3f} "
+                f"{row['reference_ev']:10.3f} {row['error_pct']:+8.2f}  {row['compton_triplet_m']}"
+            )
+        print(
+            f"  expanded mean|err|={es.get('mean_abs_error_pct', 0):.2f}%  "
+            f"≤15%: {es.get('within_15pct', 0)}/{es.get('count', len(exp))}"
+        )
 
 
 def main() -> None:

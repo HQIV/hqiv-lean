@@ -14,7 +14,9 @@
     "G_F_from_beta": "Forces.G_F_from_beta",
     "weakBridgeEnergyMeV": "WeakFanoHopfBridge.weakBridgeEnergyMeV",
     "tuftExcitedMassGlobalAtXi_MeV": "TuftGlobalHadronReadout.tuftExcitedMassGlobalAtXi_MeV",
-    "weakBetaChannelOpen": "DynamicIsotopeStability.weakBetaChannelOpen"
+    "weakBetaChannelOpen": "DynamicIsotopeStability.weakBetaChannelOpen",
+    "multiAlphaResonanceWidthMev": "NuclearCurvatureBinding.multiAlphaResonanceWidthMev",
+    "resonance_half_life": "SpinStatistics.resonance_half_life"
   },
   "referenceM": 4,
   "xi_lockin": 5.0,
@@ -26,12 +28,12 @@
     {
       "root": {
         "kind": "nuclear",
-        "A": 1,
-        "Z": 0,
-        "N": 1,
+        "A": 8,
+        "Z": 4,
+        "N": 4,
         "xi": 5.0,
-        "label": "n",
-        "mass_mev": 939.565
+        "label": "Z4A8",
+        "mass_mev": 7455.461558065646
       },
       "q_policy": "nucleon_gap",
       "max_depth": 2,
@@ -39,12 +41,12 @@
       "tree": {
         "state": {
           "kind": "nuclear",
-          "A": 1,
-          "Z": 0,
-          "N": 1,
+          "A": 8,
+          "Z": 4,
+          "N": 4,
           "xi": 5.0,
-          "label": "n",
-          "mass_mev": 939.565
+          "label": "Z4A8",
+          "mass_mev": 7455.461558065646
         },
         "depth": 0,
         "cumulative_weight": 1.0,
@@ -53,48 +55,48 @@
           {
             "state": {
               "kind": "nuclear",
-              "A": 1,
-              "Z": 1,
-              "N": 0,
+              "A": 4,
+              "Z": 2,
+              "N": 2,
               "xi": 5.0,
-              "label": "Z1A1",
-              "mass_mev": 938.272
+              "label": "He4",
+              "mass_mev": 3727.887028738043
             },
             "depth": 1,
             "cumulative_weight": 1.0,
-            "cumulative_time_s": 945.1835831875709,
+            "cumulative_time_s": 5.5336874858675555e-17,
             "children": [],
             "via": {
               "channel": {
-                "tag": "beta_minus",
-                "endpoint_q_mev": 0.7820010539000064,
-                "residual_mev": 0.29300000000000637,
-                "width_per_s": 0.0007333466142337671,
-                "half_life_s": 945.1835831875709,
+                "tag": "alpha",
+                "endpoint_q_mev": 0.07246347424777771,
+                "residual_mev": 0.07246347424777771,
+                "width_per_s": 1.252595457062165e+16,
+                "half_life_s": 5.5336874858675555e-17,
                 "kinematic_open": true,
                 "residual_open": true,
                 "channel_open": true,
                 "emitted": [
-                  "e-",
-                  "nu_e_bar"
+                  "alpha",
+                  "alpha"
                 ],
-                "weak_bridge_mev": 2.2832622336721425e-11,
+                "weak_bridge_mev": 0.0,
                 "geometry_factor": 1.0,
-                "q_policy": "nucleon_gap",
+                "q_policy": "mass_budget",
                 "lean_refs": [
-                  "DynamicBetaIsotope.betaWeakWidthFromResidual",
-                  "NuclearAndAtomicSpectra.half_life_from_width"
+                  "NuclearCurvatureBinding.twoAlphaSaddleQ",
+                  "SpinStatistics.resonance_half_life"
                 ]
               },
               "branching_ratio": 1.0,
               "daughter": {
                 "kind": "nuclear",
-                "A": 1,
-                "Z": 1,
-                "N": 0,
+                "A": 4,
+                "Z": 2,
+                "N": 2,
                 "xi": 5.0,
-                "label": "Z1A1",
-                "mass_mev": 938.272
+                "label": "He4",
+                "mass_mev": 3727.887028738043
               }
             }
           }

@@ -1,0 +1,419 @@
+{
+  "source": "HQIV faithful BBN integrator (partition + condition-dependent decay)",
+  "lean_modules": [
+    "Hqiv.Physics.BBNNetworkFromWeights",
+    "Hqiv.Physics.DynamicBBNBaryogenesis",
+    "Hqiv.Physics.BBNEpochEvolution",
+    "Hqiv.Physics.BBNEpochNetwork",
+    "Hqiv.Physics.NuclearCurvatureBinding",
+    "Hqiv.Physics.NuclearOutsideTemperatureDynamics",
+    "Hqiv.Physics.BBNStoichiometricIntegrator"
+  ],
+  "python_scripts": [
+    "scripts/hqiv_bbn_integrator.py",
+    "scripts/hqiv_bbn_condition_decay.py",
+    "scripts/hqiv_bbn_abundances.py",
+    "scripts/hqiv_curvature_binding_core.py"
+  ],
+  "integrator_config": {
+    "eta": 6.1e-10,
+    "m_shell": 4,
+    "n_window_steps": 48,
+    "n_tail_steps": 28,
+    "n_he3_steps": 32,
+    "use_binding_release": true,
+    "he3_stratified": true,
+    "use_he3_synthesis_window": true,
+    "stoichiometric_d_budget": true,
+    "T_high_MeV": 1.0,
+    "T_low_MeV": 0.01,
+    "li7_tail_high_MeV": 0.25,
+    "li7_tail_low_MeV": 0.05,
+    "use_free_neutron_curvature": true,
+    "use_coupled_neutron_inventory": true,
+    "use_synthesis_d_window": true,
+    "neutron_post_freeze_survival": false
+  },
+  "hqiv_inputs": {
+    "eta": 6.1e-10,
+    "referenceM": 4,
+    "derivedProtonMass_MeV": 938.272,
+    "derivedDeltaM_MeV": 1.293,
+    "lockin_network_Q_MeV": {
+      "Q_D": 2.1854759333776914,
+      "Q_4": 27.786971261957287,
+      "Q_3": 7.698673011407061,
+      "Q_7_be": 38.38333906775842,
+      "Q_be": 38.38333906775842,
+      "Q_li": 39.6032120778389,
+      "Q_form_be7": 2.8976947943940736,
+      "Q_capture_be7_li7": 0.24397460201609533
+    },
+    "T_freeze_MeV": 0.7150406619827524,
+    "T_freeze_effective_MeV": 0.7399301953014985,
+    "T_bottleneck_MeV": 0.1430081323965505
+  },
+  "synthesis_d_window": {
+    "enabled": true,
+    "T_high_MeV": 1.0,
+    "T_peak_MeV": 0.18,
+    "T_low_MeV": 0.1430081323965505,
+    "tail_gate": "synthesis_d_window_tail_gate (unity \u2265 T_peak; linear fade T_bn\u2192T_peak)",
+    "notes": "D/H log-weighted over MeV synthesis through T_bn; below \u00b3He mid-gate T_peak weights taper (thermal crush tail). n+p\u2192D capture + strong deposition boost \u03b3\u00b7strong\u00b7(1+g_np+c\u2082); Y_p from post-synthesis neutron inventory."
+  },
+  "he3_synthesis_window": {
+    "enabled": true,
+    "T_high_MeV": 0.45,
+    "T_low_MeV": 0.05,
+    "notes": "\u00b3He/H integrated on 0.45\u21920.05 MeV ladder (extended synthesis gate)."
+  },
+  "free_neutron_curvature_channel": {
+    "enabled": true,
+    "coupled_inventory": true,
+    "post_freeze_survival": false,
+    "tau_ratio_at_freeze": 1.1865669029029051,
+    "x_n_at_freeze": 0.14836758277706208,
+    "x_n_at_T_low": 0.13909480697955973,
+    "Y_p_bare_equilibrium": 0.2469135802469136,
+    "delta_Y_p": -0.002693685419396047,
+    "D_over_H_bare_uncoupled": 2.4887537704204818e-05,
+    "delta_D_over_H": 2.3096251898177702e-07,
+    "lean_modules": [
+      "Hqiv.Physics.NuclearOutsideTemperatureDynamics",
+      "Hqiv.Physics.BBNStoichiometricIntegrator"
+    ],
+    "notes": "Unified march: outside modulator + \u03bd-width set \u03c4_n(T); inventory scales n+p\u2192D and D+D\u2192\u2074He; Y_p and D/H from the same x_n ladder."
+  },
+  "abundance_readout": {
+    "Y_p": 0.24421989482751755,
+    "D_over_H": 2.5118500223186595e-05,
+    "He3_over_H": 1.0121588962277262e-05,
+    "Be7_over_H": 1.046619503010068e-12,
+    "Li7_over_H": 2.5361773451891707e-10,
+    "T_freeze_MeV": 0.7150406619827524,
+    "T_freeze_effective_MeV": 0.7399301953014985,
+    "Li7_tail_T_high_MeV": 0.25,
+    "Li7_tail_T_low_MeV": 0.05,
+    "synthesis_d_T_high_MeV": 1.0,
+    "synthesis_d_T_low_MeV": 0.1430081323965505,
+    "synthesis_d_T_peak_MeV": 0.18,
+    "stoichiometric_d_budget": true,
+    "free_neutron_curvature": true,
+    "coupled_neutron_inventory": true,
+    "tau_ratio_at_freeze": 1.1865669029029051,
+    "Y_p_bare_equilibrium": 0.2469135802469136,
+    "delta_Y_p_curvature": -0.002693685419396047,
+    "x_n_at_freeze": 0.14836758277706208,
+    "x_n_at_T_low": 0.13909480697955973,
+    "D_over_H_bare_uncoupled": 2.4887537704204818e-05,
+    "delta_D_over_H_curvature": 2.3096251898177702e-07
+  },
+  "observation_comparison": {
+    "policy": "observation targets are not integrator inputs",
+    "Y_p": {
+      "model": 0.24421989482751755,
+      "observed": 0.244,
+      "sigma": 0.004,
+      "z_score": 0.054973706879388184
+    },
+    "D_over_H": {
+      "model": 2.5118500223186595e-05,
+      "observed": 2.53e-05,
+      "sigma": 4e-07,
+      "z_score": -0.45374944203350775,
+      "coc2015": 2.579e-05
+    },
+    "He3_over_H": {
+      "model": 1.0121588962277262e-05,
+      "observed_order": 1e-05,
+      "coc2015": 9.996e-06,
+      "notes": "\u00b3He from stoichiometric D burn with trimer width \u0393(T); synthesis gate when he3_stratified=True"
+    },
+    "Li7_over_H": {
+      "model": 2.5361773451891707e-10,
+      "observed_band": [
+        1.6e-10,
+        4.5e-10
+      ],
+      "coc2015": 4.648e-10,
+      "notes": "pre-astrophysical-depletion; network \u00b3He+\u2074He\u2192\u2077Be\u2192\u2077Li ladder"
+    },
+    "Be7_over_H": {
+      "model": 1.046619503010068e-12,
+      "notes": "relic \u2077Be after partial capture; should be \u226a \u2077Li/H"
+    }
+  },
+  "condition_decay_key_epochs": [
+    {
+      "condition": {
+        "T_MeV": 1.0,
+        "eta": 6.1e-10,
+        "m_nucleon": 938.272,
+        "Q_np": 1.293,
+        "m_shell": 4
+      },
+      "effective_q": {
+        "Q_D": 1.966871857172307,
+        "Q_4": 5.900615571516921,
+        "Q_3": 3.687884732198075,
+        "Q_7_be": 32.219727568295404,
+        "Q_be": 32.219727568295404,
+        "Q_li": 33.243712896495374,
+        "release_factor": 0.8394196114990844,
+        "bounded_slope": 0.8752228232224458,
+        "Q_form_be7": 22.63122726458041,
+        "Q_capture_be7_li7": 0.204797065639994
+      },
+      "widths": {
+        "resonance_8be_erosion_mev": 1.4903051182494316,
+        "resonance_8be_erosion_at_T_mev": 1.250991343376035,
+        "trimer_3he_width_lockin_mev": 0.205297946970855,
+        "trimer_3he_width_at_T_mev": 0.17233112288783473,
+        "Q_3_eff_after_trimer_width_mev": 3.6053331916872717,
+        "be7_capture_width_mev": 0.204797065639994,
+        "be7_capture_half_life_s": 2.2277553670523994e-21,
+        "deuteron_destroy_width_mev": 1.6510308102160605
+      },
+      "thermal": {
+        "formation_D": 7.148280635096209,
+        "formation_He3": 5.590187759283668,
+        "formation_He4_dd": 7.148280635096211,
+        "formation_be7": 6739336160.957649,
+        "capture_be7_li7": 1.2272759832242046,
+        "destroy_D": 0.13989378020362808,
+        "thermal_sink_D": 0.019570269739660993,
+        "thermal_sink_He3": 0.1094014823445325,
+        "photodissociation_boost": 1.0
+      },
+      "weak_x_n": 0.21534546256312365,
+      "Y_p_freezeout": 0.2469135802469136,
+      "c2_suppression": 1.0,
+      "shell_opportunity_per_step": 1007.6265872396484,
+      "he3_synthesis_gate": 0.0,
+      "alpha_synthesis_gate": 1.0,
+      "be7_tail_gate": 0.0,
+      "weak_width_factor_free": 1.0730742857142856,
+      "outside_release_factor": 0.8394196114990844
+    },
+    {
+      "condition": {
+        "T_MeV": 0.3,
+        "eta": 6.1e-10,
+        "m_nucleon": 938.272,
+        "Q_np": 1.293,
+        "m_shell": 4
+      },
+      "effective_q": {
+        "Q_D": 1.9659623148967358,
+        "Q_4": 5.897886944690208,
+        "Q_3": 3.6861793404313796,
+        "Q_7_be": 32.20482817145677,
+        "Q_be": 32.20482817145677,
+        "Q_li": 33.22833997722457,
+        "release_factor": 0.8390314379529441,
+        "bounded_slope": 0.8775355123722877,
+        "Q_form_be7": 22.62076188633518,
+        "Q_capture_be7_li7": 0.20470236115356075
+      },
+      "widths": {
+        "resonance_8be_erosion_mev": 1.4903051182494316,
+        "resonance_8be_erosion_at_T_mev": 1.250412846353453,
+        "trimer_3he_width_lockin_mev": 0.205297946970855,
+        "trimer_3he_width_at_T_mev": 0.17225143165574372,
+        "Q_3_eff_after_trimer_width_mev": 3.6037041310299243,
+        "be7_capture_width_mev": 0.20470236115356075,
+        "be7_capture_half_life_s": 2.228786026526705e-21,
+        "deuteron_destroy_width_mev": 1.649504188029107
+      },
+      "thermal": {
+        "formation_D": 701.4907520320849,
+        "formation_He3": 309.2211608473614,
+        "formation_He4_dd": 701.4907520320854,
+        "formation_be7": 5.583504608645688e+32,
+        "capture_be7_li7": 1.9785043962355653,
+        "destroy_D": 0.001425535542846703,
+        "thermal_sink_D": 2.032151583919241e-06,
+        "thermal_sink_He3": 0.0006283842717973117,
+        "photodissociation_boost": 1.0
+      },
+      "weak_x_n": 0.013255481427098785,
+      "Y_p_freezeout": 0.2469135802469136,
+      "c2_suppression": 1.0,
+      "shell_opportunity_per_step": 1082.8493052954168,
+      "he3_synthesis_gate": 0.5555555555555556,
+      "alpha_synthesis_gate": 1.0,
+      "be7_tail_gate": 0.0,
+      "weak_width_factor_free": 1.0730742857142856,
+      "outside_release_factor": 0.8390314379529441
+    },
+    {
+      "condition": {
+        "T_MeV": 0.1,
+        "eta": 6.1e-10,
+        "m_nucleon": 938.272,
+        "Q_np": 1.293,
+        "m_shell": 4
+      },
+      "effective_q": {
+        "Q_D": 1.9651616456171994,
+        "Q_4": 5.895484936851599,
+        "Q_3": 3.6846780855322487,
+        "Q_7_be": 32.191712245289594,
+        "Q_be": 32.191712245289594,
+        "Q_li": 33.214807209669395,
+        "release_factor": 0.8386897291155755,
+        "bounded_slope": 0.8795722563128243,
+        "Q_form_be7": 22.611549222905747,
+        "Q_capture_be7_li7": 0.20461899287596028
+      },
+      "widths": {
+        "resonance_8be_erosion_mev": 1.4903051182494316,
+        "resonance_8be_erosion_at_T_mev": 1.2499035959241716,
+        "trimer_3he_width_lockin_mev": 0.205297946970855,
+        "trimer_3he_width_at_T_mev": 0.17218127953297016,
+        "Q_3_eff_after_trimer_width_mev": 3.6022700411206983,
+        "be7_capture_width_mev": 0.20461899287596028,
+        "be7_capture_half_life_s": 2.2296941047532664e-21,
+        "deuteron_destroy_width_mev": 1.6481608882310075
+      },
+      "thermal": {
+        "formation_D": 342443232.0781539,
+        "formation_He3": 29360605.921487875,
+        "formation_He4_dd": 342443232.07815516,
+        "formation_be7": 1.5874883539145396e+98,
+        "capture_be7_li7": 7.738361160088209,
+        "destroy_D": 2.920192038637737e-09,
+        "thermal_sink_D": 8.527521542523162e-18,
+        "thermal_sink_He3": 2.503731994970219e-10,
+        "photodissociation_boost": 1.44
+      },
+      "weak_x_n": 2.424215904479679e-06,
+      "Y_p_freezeout": 0.2469135802469136,
+      "c2_suppression": 0.5500564496621241,
+      "shell_opportunity_per_step": 1154.6702823979977,
+      "he3_synthesis_gate": 0.38461538461538464,
+      "alpha_synthesis_gate": 1.0,
+      "be7_tail_gate": 1.0,
+      "weak_width_factor_free": 1.0730742857142856,
+      "outside_release_factor": 0.8386897291155755
+    },
+    {
+      "condition": {
+        "T_MeV": 0.05,
+        "eta": 6.1e-10,
+        "m_nucleon": 938.272,
+        "Q_np": 1.293,
+        "m_shell": 4
+      },
+      "effective_q": {
+        "Q_D": 1.9646702012084312,
+        "Q_4": 5.8940106036252935,
+        "Q_3": 3.683756627265808,
+        "Q_7_be": 32.183661794566156,
+        "Q_be": 32.183661794566156,
+        "Q_li": 33.206500905031334,
+        "release_factor": 0.8384799909604549,
+        "bounded_slope": 0.8808228045054335,
+        "Q_form_be7": 22.605894563675054,
+        "Q_capture_be7_li7": 0.20456782209303556
+      },
+      "widths": {
+        "resonance_8be_erosion_mev": 1.4903051182494316,
+        "resonance_8be_erosion_at_T_mev": 1.249591022078103,
+        "trimer_3he_width_lockin_mev": 0.205297946970855,
+        "trimer_3he_width_at_T_mev": 0.17213822072032245,
+        "Q_3_eff_after_trimer_width_mev": 3.6013897946383318,
+        "be7_capture_width_mev": 0.20456782209303556,
+        "be7_capture_half_life_s": 2.2302518424847213e-21,
+        "deuteron_destroy_width_mev": 1.6473366525495206
+      },
+      "thermal": {
+        "formation_D": 1.1612040527129443e+17,
+        "formation_He3": 854663141897442.2,
+        "formation_He4_dd": 1.1612040527129443e+17,
+        "formation_be7": 2.2506364585172093e+196,
+        "capture_be7_li7": 59.820980377609445,
+        "destroy_D": 8.611750860356368e-18,
+        "thermal_sink_D": 7.416225288084864e-35,
+        "thermal_sink_He3": 6.338374405733874e-20,
+        "photodissociation_boost": 5.76
+      },
+      "weak_x_n": 5.876851244975667e-12,
+      "Y_p_freezeout": 0.2469135802469136,
+      "c2_suppression": 0.4456810715035569,
+      "shell_opportunity_per_step": 1201.5766613579942,
+      "he3_synthesis_gate": 0.0,
+      "alpha_synthesis_gate": 0.25,
+      "be7_tail_gate": 1.0,
+      "weak_width_factor_free": 1.0730742857142856,
+      "outside_release_factor": 0.8384799909604549
+    },
+    {
+      "condition": {
+        "T_MeV": 0.01,
+        "eta": 6.1e-10,
+        "m_nucleon": 938.272,
+        "Q_np": 1.293,
+        "m_shell": 4
+      },
+      "effective_q": {
+        "Q_D": 1.9635679859799362,
+        "Q_4": 5.890703957939809,
+        "Q_3": 3.68168997371238,
+        "Q_7_be": 32.16560618293379,
+        "Q_be": 32.16560618293379,
+        "Q_li": 33.187871462308564,
+        "release_factor": 0.8380095886434368,
+        "bounded_slope": 0.8836286813512294,
+        "Q_form_be7": 22.593212251281603,
+        "Q_capture_be7_li7": 0.20445305587495427
+      },
+      "widths": {
+        "resonance_8be_erosion_mev": 1.4903051182494316,
+        "resonance_8be_erosion_at_T_mev": 1.2488899790974146,
+        "trimer_3he_width_lockin_mev": 0.205297946970855,
+        "trimer_3he_width_at_T_mev": 0.1720416480903883,
+        "Q_3_eff_after_trimer_width_mev": 3.5994155337021567,
+        "be7_capture_width_mev": 0.20445305587495427,
+        "be7_capture_half_life_s": 2.231503756124434e-21,
+        "deuteron_destroy_width_mev": 1.6454888002044679
+      },
+      "thermal": {
+        "formation_D": 1.8909241796501377e+85,
+        "formation_He3": 4.140853357866925e+74,
+        "formation_He4_dd": 1.8909241796501377e+85,
+        "formation_be7": 1.0142320547350045e+304,
+        "capture_be7_li7": 757326925.0770705,
+        "destroy_D": 5.2884193388706996e-86,
+        "thermal_sink_D": 2.79673791037416e-171,
+        "thermal_sink_He3": 1.158088156724657e-96,
+        "photodissociation_boost": 9.0
+      },
+      "weak_x_n": 7.010088323851419e-57,
+      "Y_p_freezeout": 0.2469135802469136,
+      "c2_suppression": 0.273528119240832,
+      "shell_opportunity_per_step": 1315.3451692771062,
+      "he3_synthesis_gate": 0.0,
+      "alpha_synthesis_gate": 0.0,
+      "be7_tail_gate": 1.0,
+      "weak_width_factor_free": 1.0730742857142856,
+      "outside_release_factor": 0.8380095886434368
+    }
+  ],
+  "condition_decay_ladder_summary": {
+    "n_steps": 32,
+    "T_high_MeV": 1.0,
+    "T_low_MeV": 0.01,
+    "release_at_T_high": 0.8394196114990844,
+    "release_at_T_low": 0.8380095886434368,
+    "width_8be_erosion_lockin_MeV": 1.4903051182494316,
+    "width_8be_erosion_at_T_low_MeV": 1.2488899790974146,
+    "trimer_3he_width_lockin_MeV": 0.205297946970855,
+    "trimer_3he_width_at_T_high_MeV": 0.17233112288783473
+  },
+  "paper_statements": {
+    "primary_abundance_method": "Log-weighted stoichiometric D budget over synthesis window (T=1\u2192T_C\u2082) with coupled inventory and n+p\u2192D capture; \u2077Li/\u2077Be MeV-tail ladder separate.",
+    "decay_spine": "bbnBindingReleaseFactor(T) modulates lock-in Q; trimer_resonance_width_mev broadens \u00b3He at epoch T; multi-\u03b1 width on \u2078Be; \u2077Be\u2192\u2077Li from |Q_Be\u2212Q_Li|; free-neutron outside curvature shifts weak freeze-out (\u03c4_ratio^(1/5)).",
+    "honesty": "\u2077Li/H is pre-astrophysical-depletion. Kinetic epoch network remains diagnostic. Observation comparison is a readout layer, not a fit target."
+  }
+}

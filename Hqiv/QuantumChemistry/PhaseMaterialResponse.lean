@@ -107,6 +107,30 @@ noncomputable def liquidLocalFieldDivisorApolar (nDomains : ℕ) (η : ℝ) : �
   let n := max nDomains 1
   max (base * (1 + (max (n - 1) 0 : ℝ) * gamma_HQIV)) 1e-6
 
+/-- Polyol OH-network liquid slot: ``base · n² / (1 + γ/4)`` (dense H-bond mesh). -/
+noncomputable def liquidLocalFieldDivisorPolyol (nDomains : ℕ) (η : ℝ) : ℝ :=
+  let base := localFieldDivisorFromEta η
+  let n := max nDomains 1
+  max (base * (n : ℝ) ^ 2 / (1 + gamma_HQIV / 4)) 1e-6
+
+/-- Monomer alcohol liquid slot: ``base · n · (1 + α/3) / (1 + γ/4)``. -/
+noncomputable def liquidLocalFieldDivisorMonomerAlcohol (nDomains : ℕ) (η : ℝ) : ℝ :=
+  let base := localFieldDivisorFromEta η
+  let n := max nDomains 1
+  max (base * (n : ℝ) * (1 + alpha / 3) / (1 + gamma_HQIV / 4)) 1e-6
+
+/-- Triol polyol liquid slot: ``base · n² · (1 + γ) / (1 + γ/4)`` (three OH mesh). -/
+noncomputable def liquidLocalFieldDivisorTriolPolyol (nDomains : ℕ) (η : ℝ) : ℝ :=
+  let base := localFieldDivisorFromEta η
+  let n := max nDomains 1
+  max (base * (n : ℝ) ^ 2 * (1 + gamma_HQIV) / (1 + gamma_HQIV / 4)) 1e-6
+
+/-- Peptide-layer liquid slot: ``base · n² / (1 + γ/8)`` (sheet H-bond mesh). -/
+noncomputable def liquidLocalFieldDivisorPeptideLayer (nDomains : ℕ) (η : ℝ) : ℝ :=
+  let base := localFieldDivisorFromEta η
+  let n := max nDomains 1
+  max (base * (n : ℝ) ^ 2 / (1 + gamma_HQIV / 8)) 1e-6
+
 /-- Solid linear-chain Onsager slot: ``n_contacts / (2 G_eff(η))``. -/
 noncomputable def solidLocalFieldDivisorLinearChain (nContacts : ℕ) (η : ℝ) : ℝ :=
   max ((max nContacts 1 : ℝ) / (2 * max (gEffFromPhaseParticipation η) 1e-6)) 1e-6

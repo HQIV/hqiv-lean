@@ -1,4 +1,5 @@
 import Hqiv.Story.S3OrbitVsPointwiseGap
+import Hqiv.Geometry.GoldbachG2Parity
 import Mathlib.NumberTheory.ArithmeticFunction.VonMangoldt
 
 /-!
@@ -91,6 +92,159 @@ not hidden.
 theorem weilPositivity_iff_RiemannHypothesis :
     WeilPositivityForcesCriticalLine ↔ RiemannHypothesis :=
   allNontrivialZerosOnLine_iff_RiemannHypothesis
+
+/-! ## Shared half-slope bridge: RH side + Goldbach midpoint side -/
+
+/--
+SO(8) projected half-slope payload.
+
+The intended geometric reading is that the same normalized `1/2` readout has
+two projections:
+
+* the zeta projection, where it locks nontrivial zeros to the critical line;
+* the additive midpoint projection, where it forces positive Goldbach pair count
+  around every sufficiently large midpoint.
+
+The structure deliberately keeps both hard payloads explicit.  It does not claim
+that either one follows from bare finite symmetry alone.
+-/
+structure SO8ProjectedHalfSlopeBridge (N₀ : ℕ) : Prop where
+  critical_line :
+    WeilPositivityForcesCriticalLine
+  midpoint_pairs :
+    Hqiv.Geometry.SO4ZetaHolonomyForcesMidpointPairs N₀
+
+/-- The half-slope bridge yields Mathlib's `RiemannHypothesis`. -/
+theorem RiemannHypothesis_of_so8_projected_half_slope
+    {N₀ : ℕ}
+    (B : SO8ProjectedHalfSlopeBridge N₀) :
+    RiemannHypothesis :=
+  weilPositivity_iff_RiemannHypothesis.mp B.critical_line
+
+/--
+The half-slope bridge yields eventual midpoint Goldbach, with diagonal pairs
+allowed.
+-/
+theorem midpoint_goldbach_of_so8_projected_half_slope
+    {N₀ : ℕ}
+    (B : SO8ProjectedHalfSlopeBridge N₀) :
+    Hqiv.Geometry.MidpointGoldbachEventually N₀ :=
+  Hqiv.Geometry.midpoint_goldbach_of_so4_zeta_holonomy_bridge B.midpoint_pairs
+
+/--
+Combined conclusion: if the SO(8) projection really supplies the shared
+half-slope payload on both the zeta and midpoint-prime channels, then RH and
+eventual midpoint Goldbach follow together.
+-/
+theorem RH_and_midpoint_goldbach_of_so8_projected_half_slope
+    {N₀ : ℕ}
+    (B : SO8ProjectedHalfSlopeBridge N₀) :
+    RiemannHypothesis ∧ Hqiv.Geometry.MidpointGoldbachEventually N₀ :=
+  ⟨RiemannHypothesis_of_so8_projected_half_slope B,
+    midpoint_goldbach_of_so8_projected_half_slope B⟩
+
+/--
+If the midpoint side is strengthened from eventual to all `n > 2` by taking
+`N₀ = 2`, the usual even Goldbach parity statement follows from the same
+half-slope package.
+-/
+theorem RH_and_goldbach_parity_of_so8_projected_half_slope_from_two
+    (B : SO8ProjectedHalfSlopeBridge 2) :
+    RiemannHypothesis ∧ Hqiv.Geometry.GoldbachParity := by
+  refine ⟨RiemannHypothesis_of_so8_projected_half_slope B, ?_⟩
+  intro n hn hEven
+  rcases hEven with ⟨k, hk⟩
+  subst n
+  have hk2 : 2 ≤ k := by omega
+  rcases midpoint_goldbach_of_so8_projected_half_slope B k hk2 with
+    ⟨p, q, hMid⟩
+  refine ⟨p, q, ?_⟩
+  simpa [two_mul] using Hqiv.Geometry.goldbach_pair_of_midpoint_pair hMid
+
+/--
+Prominent joint statement: a global SO(8) projected half-slope bridge beginning
+at midpoint `2` implies both RH and the even Goldbach parity statement.
+
+This is intentionally a thin wrapper around
+`RH_and_goldbach_parity_of_so8_projected_half_slope_from_two`; the proof content
+remains in the two explicit bridge fields.
+-/
+theorem so8_half_slope_implies_rh_and_goldbach_parity
+    (B : SO8ProjectedHalfSlopeBridge 2) :
+    RiemannHypothesis ∧ Hqiv.Geometry.GoldbachParity :=
+  RH_and_goldbach_parity_of_so8_projected_half_slope_from_two B
+
+/-! ## Discharge of the bridge packaging: the bridge *is* RH ∧ Goldbach
+
+The converse constructions below rebuild a half-slope bridge from the two
+classical statements, so the packaging is an *equivalence*, not just a
+sufficient condition.  This discharges the claim "the half-slope bridge encodes
+RH together with Goldbach" exactly: the bridge has no slack content beyond the
+conjunction, and nothing was smuggled in.  The two classical conjectures
+themselves remain open; what is proved is that the geometric payload and the
+conjunction are the same proposition.
+-/
+
+/-- RH and eventual midpoint Goldbach rebuild the half-slope bridge. -/
+theorem so8_projected_half_slope_of_rh_and_midpoint_goldbach
+    {N₀ : ℕ}
+    (hRH : RiemannHypothesis)
+    (hMid : Hqiv.Geometry.MidpointGoldbachEventually N₀) :
+    SO8ProjectedHalfSlopeBridge N₀ where
+  critical_line := weilPositivity_iff_RiemannHypothesis.mpr hRH
+  midpoint_pairs :=
+    Hqiv.Geometry.so4_zeta_holonomy_bridge_of_midpoint_goldbach hMid
+
+/--
+**Bridge equivalence (general threshold).** The SO(8) projected half-slope
+bridge at threshold `N₀` is logically equivalent to the conjunction of
+`RiemannHypothesis` with eventual midpoint Goldbach from `N₀`.
+-/
+theorem so8_projected_half_slope_iff_rh_and_midpoint_goldbach
+    {N₀ : ℕ} :
+    SO8ProjectedHalfSlopeBridge N₀ ↔
+      (RiemannHypothesis ∧ Hqiv.Geometry.MidpointGoldbachEventually N₀) :=
+  ⟨RH_and_midpoint_goldbach_of_so8_projected_half_slope,
+    fun h => so8_projected_half_slope_of_rh_and_midpoint_goldbach h.1 h.2⟩
+
+/-- RH and even Goldbach parity rebuild the half-slope bridge at threshold `2`. -/
+theorem so8_projected_half_slope_two_of_rh_and_goldbach_parity
+    (hRH : RiemannHypothesis)
+    (hG : Hqiv.Geometry.GoldbachParity) :
+    SO8ProjectedHalfSlopeBridge 2 :=
+  so8_projected_half_slope_of_rh_and_midpoint_goldbach hRH
+    (Hqiv.Geometry.midpoint_goldbach_two_of_goldbach_parity hG)
+
+/--
+**Capstone equivalence.** The SO(8) projected half-slope bridge at threshold `2`
+*is* `RiemannHypothesis ∧ GoldbachParity`:
+
+`SO8ProjectedHalfSlopeBridge 2 ↔ RiemannHypothesis ∧ GoldbachParity`.
+
+This is the faithful formal content of "RH = Goldbach" in the projection story:
+both classical statements are the two channel readouts of one geometric payload,
+with a machine-checked equivalence in both directions.  Discharging the bridge
+itself is exactly as hard as the two open problems combined — by this theorem,
+provably so.
+-/
+theorem so8_projected_half_slope_two_iff_rh_and_goldbach_parity :
+    SO8ProjectedHalfSlopeBridge 2 ↔
+      (RiemannHypothesis ∧ Hqiv.Geometry.GoldbachParity) :=
+  ⟨so8_half_slope_implies_rh_and_goldbach_parity,
+    fun h => so8_projected_half_slope_two_of_rh_and_goldbach_parity h.1 h.2⟩
+
+/--
+Channel separation: the two bridge fields are *independently* equivalent to the
+two classical statements.  The zeta channel is exactly RH and the midpoint
+channel at threshold `2` is exactly Goldbach parity; neither channel leaks into
+the other.
+-/
+theorem bridge_channels_are_rh_and_goldbach :
+    (WeilPositivityForcesCriticalLine ↔ RiemannHypothesis) ∧
+      (Hqiv.Geometry.SO4ZetaHolonomyForcesMidpointPairs 2 ↔
+        Hqiv.Geometry.GoldbachParity) :=
+  ⟨weilPositivity_iff_RiemannHypothesis,
+    Hqiv.Geometry.so4_zeta_holonomy_bridge_two_iff_goldbach_parity⟩
 
 end
 

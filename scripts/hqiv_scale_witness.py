@@ -59,6 +59,18 @@ class WitnessBundle:
     codata_inv_alpha: float
     reference_m: int
     gev_per_mev: float
+    proton_inner_raw_mev: float | None = None
+    proton_observed_mev: float | None = None
+    proton_outside_increment_mev: float | None = None
+
+    @property
+    def proton_mass_inner_anchor_mev(self) -> float:
+        """Inner composite-trace anchor (defaults to derived proton mass)."""
+        return (
+            self.proton_inner_raw_mev
+            if self.proton_inner_raw_mev is not None
+            else self.derived_proton_mass_mev
+        )
 
     @property
     def m_nu_e_gev(self) -> float:
@@ -144,6 +156,19 @@ def load_witness_bundle(path: Path | None = None) -> WitnessBundle:
         codata_inv_alpha=float(raw.get("CODATA_inv_alpha", CODATA_INV_ALPHA)),
         reference_m=int(raw.get("referenceM", REFERENCE_M)),
         gev_per_mev=gev_per_mev,
+        proton_inner_raw_mev=(
+            float(raw["protonInnerRawMass_MeV"])
+            if "protonInnerRawMass_MeV" in raw
+            else None
+        ),
+        proton_observed_mev=(
+            float(raw["protonObservedMass_MeV"]) if "protonObservedMass_MeV" in raw else None
+        ),
+        proton_outside_increment_mev=(
+            float(raw["protonOutsideIncrement_MeV"])
+            if "protonOutsideIncrement_MeV" in raw
+            else None
+        ),
     )
 
 

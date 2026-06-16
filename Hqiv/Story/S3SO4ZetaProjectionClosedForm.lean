@@ -95,6 +95,153 @@ noncomputable def so4SinCosRatio (θ : ℝ) : ℝ :=
 theorem so4SinCosRatio_pi_div_four : so4SinCosRatio (Real.pi / 4) = (1 / 2 : ℝ) :=
   projectionLine_pi_div_four
 
+/-! ## Origin / real-one anchors and doubled critical-line readout -/
+
+/-- The real two-plane used for the SO(4) projection-to-`ℂ` readout. -/
+abbrev SO4ReadoutPoint := ℝ × ℝ
+
+/-- Origin anchor of the projected SO(4) readout plane. -/
+def so4ReadoutOrigin : SO4ReadoutPoint :=
+  (0, 0)
+
+/-- Real-unit anchor of the projected SO(4) readout plane. -/
+def so4ReadoutRealOne : SO4ReadoutPoint :=
+  (1, 0)
+
+/--
+The doubled complex-plane readout.
+
+For a critical-line point `s = 1/2 + i t`, this sends the real coordinate to
+`1` and the height to `2t`.  Thus the first nontrivial zero at height `t₁`
+would project to the endpoint `(1, 2t₁)`, numerically `(1, ~28.27)`.
+-/
+def so4DoubledComplexReadout (s : ℂ) : SO4ReadoutPoint :=
+  (2 * s.re, 2 * s.im)
+
+/--
+The SO(4) tangent/readout transformation.
+
+This is the construction-level version of `so4DoubledComplexReadout`: first
+take the functional-equation pair `(σ, 1 - σ)`, rotate it by 45°, then normalize
+the fixed diagonal slot by `√2`; the vertical coordinate is the doubled strip
+height.
+-/
+noncomputable def so4TangentReadoutFromRotation (s : ℂ) : SO4ReadoutPoint :=
+  (Real.sqrt 2 * rot45Diag (functionalPair s.re), 2 * s.im)
+
+/--
+The tangent/readout transformation lands on the real-one vertical line for every
+functional-equation pair: the normalized diagonal slot is exactly `1`.
+-/
+theorem so4TangentReadoutFromRotation_fst_eq_one (s : ℂ) :
+    (so4TangentReadoutFromRotation s).1 = 1 := by
+  simp [so4TangentReadoutFromRotation, rot45Diag_functionalPair]
+
+/--
+On the critical line, the doubled complex readout and the SO(4) rotated tangent
+readout are the same point.
+-/
+theorem so4DoubledComplexReadout_eq_tangentReadout_on_critical
+    {s : ℂ} (hs : s.re = (1 / 2 : ℝ)) :
+    so4DoubledComplexReadout s = so4TangentReadoutFromRotation s := by
+  ext <;> simp [so4DoubledComplexReadout, so4TangentReadoutFromRotation,
+    rot45Diag_functionalPair, hs]
+
+/--
+Exact tangent endpoint form from the SO(4) rotation-normalization map.
+-/
+theorem so4TangentReadoutFromRotation_eq_real_one_height
+    {s : ℂ} {t : ℝ} (him : s.im = t) :
+    so4TangentReadoutFromRotation s = (1, 2 * t) := by
+  ext
+  · exact so4TangentReadoutFromRotation_fst_eq_one s
+  · simp [so4TangentReadoutFromRotation, him]
+
+/--
+The SO(4) tangent/readout map factors through the critical equator precisely
+when the free rotated coordinate vanishes.
+-/
+theorem so4_tangent_readout_through_critical_equator_iff (s : ℂ) :
+    rot45Free (functionalPair s.re) = 0 ↔ s.re = (1 / 2 : ℝ) :=
+  rot45Free_re_pair_eq_zero_iff s
+
+/-- The doubled readout always has real coordinate `2 * Re(s)`. -/
+theorem so4DoubledComplexReadout_fst (s : ℂ) :
+    (so4DoubledComplexReadout s).1 = 2 * s.re :=
+  rfl
+
+/-- The doubled readout always has height coordinate `2 * Im(s)`. -/
+theorem so4DoubledComplexReadout_snd (s : ℂ) :
+    (so4DoubledComplexReadout s).2 = 2 * s.im :=
+  rfl
+
+/--
+On the critical line, the doubled readout lands on the real-one vertical
+through `x = 1`.
+-/
+theorem so4DoubledComplexReadout_real_eq_one_of_critical
+    {s : ℂ} (hs : s.re = (1 / 2 : ℝ)) :
+    (so4DoubledComplexReadout s).1 = 1 := by
+  simp [so4DoubledComplexReadout, hs]
+
+/--
+Exact endpoint form for a critical-line point of height `t`: `(1, 2t)`.
+-/
+theorem so4DoubledComplexReadout_eq_real_one_height
+    {s : ℂ} {t : ℝ}
+    (hre : s.re = (1 / 2 : ℝ)) (him : s.im = t) :
+    so4DoubledComplexReadout s = (1, 2 * t) := by
+  ext <;> simp [so4DoubledComplexReadout, hre, him]
+
+/--
+Slope of the line from the origin to a projected readout point.
+
+This is intentionally just the affine complex-plane slope; it is separate from
+the `1/2` midpoint slope in the Goldbach tangent channel.
+-/
+noncomputable def so4OriginLineSlope (P : SO4ReadoutPoint) : ℝ :=
+  P.2 / P.1
+
+/--
+For a critical-line endpoint `(1, 2t)`, the origin-line slope is exactly `2t`.
+-/
+theorem so4_origin_line_slope_doubled_critical_eq_two_height
+    {s : ℂ} {t : ℝ}
+    (hre : s.re = (1 / 2 : ℝ)) (him : s.im = t) :
+    so4OriginLineSlope (so4DoubledComplexReadout s) = 2 * t := by
+  rw [so4DoubledComplexReadout_eq_real_one_height hre him]
+  simp [so4OriginLineSlope]
+
+/--
+Named first-zero readout payload: if a first-zero height `t₁` is supplied by an
+analytic certificate, the SO(4) doubled endpoint is `(1, 2t₁)` and the line from
+the origin has slope `2t₁`.
+-/
+structure SO4FirstZeroOriginLineReadout where
+  height : ℝ
+  zero_point : ℂ
+  on_critical_line : zero_point.re = (1 / 2 : ℝ)
+  height_eq : zero_point.im = height
+  zeta_zero : riemannZeta zero_point = 0
+  doubled_endpoint :
+    so4DoubledComplexReadout zero_point = (1, 2 * height)
+  origin_line_slope :
+    so4OriginLineSlope (so4DoubledComplexReadout zero_point) = 2 * height
+
+/-- Package a critical-line zero into the origin-line doubled-readout certificate. -/
+def so4_first_zero_origin_line_readout_of_critical_zero
+    {s : ℂ} {t : ℝ}
+    (hre : s.re = (1 / 2 : ℝ)) (him : s.im = t)
+    (hz : riemannZeta s = 0) :
+    SO4FirstZeroOriginLineReadout :=
+  { height := t
+    zero_point := s
+    on_critical_line := hre
+    height_eq := him
+    zeta_zero := hz
+    doubled_endpoint := so4DoubledComplexReadout_eq_real_one_height hre him
+    origin_line_slope := so4_origin_line_slope_doubled_critical_eq_two_height hre him }
+
 /-! ## π⁴/6 from the SO(4) 8-shell equator halving -/
 
 /-- Unit 7-sphere area proxy on the SO(4) 8-shell (`π⁴/3`). -/

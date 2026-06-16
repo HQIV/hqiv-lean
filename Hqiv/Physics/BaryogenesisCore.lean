@@ -18,6 +18,12 @@ Discrete shells **m_QCD**, **m_lockin**, the temperature ladder **T_QCD** / **T_
 η-at-horizon definitions that multiply curvature ratios by `eta_paper` are in
 `Hqiv.Physics.BaryogenesisWitness`.
 
+**Lock-in shell `m_lockin = referenceM = 4`:** the first discrete row on the null ladder
+with enough octonion-mode budget for the full sector spine (`new_modes_referenceM_numeric`:
+40 new modes; `G2_plus_Delta_closes_to_so8` in `SO8ClosureAbstract`). Baryogenesis is an
+**application** of this shared curvature-ratio spine (also used in nucleon binding, SM
+synthesis, chemistry, BBN, and outside-closure witnesses), not the programme goal.
+
 **Definitions (pure math, no paper η):**
 - **m_QCD**, **m_lockin**: shell indices from the discrete ladder.
 - **T_QCD**, **T_lockin**: T(m) = 1/(m+1) in natural units.

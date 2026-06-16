@@ -1,0 +1,25 @@
+{
+  "description": "Curated neutron-star mass measurements for pulsar witness comparison (not fed into HQIV slots).",
+  "sources": [
+    "NICER pulse-profile / mass-radius analyses (J0030, J0437, J0740)",
+    "Shapiro-delay radio timing (J1614-2230, J0740+6620, J0348+0432, etc.)",
+    "Double-neutron-star systems (Damour & Taylor class)"
+  ],
+  "entries": [
+    {"name": "PSR J0030+0451", "aliases": ["J0030+0451"], "mass_msun": 1.37, "mass_err_msun": 0.16, "source": "NICER PPM (Riley et al. 2023 update)"},
+    {"name": "PSR J0437-4715", "aliases": ["J0437-4715"], "mass_msun": 1.42, "mass_err_msun": 0.04, "source": "NICER + timing (Rutherford et al. 2024)"},
+    {"name": "PSR J0740+6620", "aliases": ["J0740+6620"], "mass_msun": 2.08, "mass_err_msun": 0.07, "source": "Shapiro delay + NICER radius"},
+    {"name": "PSR J1614-2230", "aliases": ["J1614-2230"], "mass_msun": 1.97, "mass_err_msun": 0.04, "source": "Shapiro delay (Freire et al.)"},
+    {"name": "PSR J0348+0432", "aliases": ["J0348+0432"], "mass_msun": 2.01, "mass_err_msun": 0.04, "source": "White dwarf companion timing"},
+    {"name": "PSR J2215+5135", "aliases": ["J2215+5135"], "mass_msun": 2.35, "mass_err_msun": 0.17, "source": "Shapiro delay"},
+    {"name": "PSR J0514-4002A", "aliases": ["J0514-4002A", "B0514-4002A"], "mass_msun": 1.33, "mass_err_msun": 0.01, "source": "Shapiro delay", "period_s": 0.004990575, "period_dot_s_per_s": 7.0e-22},
+    {"name": "PSR B1913+16", "aliases": ["B1913+16"], "mass_msun": 1.39, "mass_err_msun": 0.01, "source": "Double NS (each component)", "period_s": 0.074126, "period_dot_s_per_s": 8.72e-16},
+    {"name": "PSR J0737-3039A", "aliases": ["J0737-3039A"], "mass_msun": 1.34, "mass_err_msun": 0.01, "source": "Double NS timing"},
+    {"name": "PSR J0737-3039B", "aliases": ["J0737-3039B"], "mass_msun": 1.25, "mass_err_msun": 0.01, "source": "Double NS timing"},
+    {"name": "PSR J1903+0327", "aliases": ["J1903+0327"], "mass_msun": 1.67, "mass_err_msun": 0.02, "source": "Main-sequence companion timing"},
+    {"name": "PSR J1756-2251", "aliases": ["J1756-2251"], "mass_msun": 1.26, "mass_err_msun": 0.04, "source": "Double NS"},
+    {"name": "PSR J1748-2446ad", "aliases": ["J1748-2446ad"], "mass_msun": 1.4, "mass_err_msun": null, "source": "Globular-cluster ms pulsar (assumed canonical)", "period_s": 0.00139595, "period_dot_s_per_s": 5.5e-20},
+    {"name": "PSR J1748-2021B", "aliases": ["J1748-2021B"], "mass_msun": 1.46, "mass_err_msun": 0.05, "source": "Shapiro delay"},
+    {"name": "PSR J0037+1715", "aliases": ["J0037+1715"], "mass_msun": 1.34, "mass_err_msun": 0.15, "source": "Shapiro delay", "period_s": 0.004865, "period_dot_s_per_s": 2.0e-20}
+  ]
+}

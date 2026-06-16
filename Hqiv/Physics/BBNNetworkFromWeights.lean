@@ -180,10 +180,13 @@ noncomputable def bbnBe7BindingQ (m_nucleon : ℝ) (c : ℝ := 1) : ℝ :=
 noncomputable def bbnLi7ClusterBindingQ (m_nucleon : ℝ) (c : ℝ := 1) : ℝ :=
   bbnClusterBinding bbnBindingShell 7 c (Z := 3)
 
-/-- ⁷Be → ⁷Li capture Q from cluster-well depth difference (daughter far-neutron well). -/
+/-- Well-depth gap |B(⁷Be) − B(⁷Li)| (electron-capture Q scale; PDG order ≈ 1.6 MeV). -/
+noncomputable def bbnBe7ToLi7WellDepthGap (m_nucleon : ℝ) (c : ℝ := 1) : ℝ :=
+  abs (bbnBe7BindingQ m_nucleon c - bbnLi7ClusterBindingQ m_nucleon c)
+
+/-- ⁷Be → ⁷Li capture Q: γ·strong·|Q_Be − Q_Li| (network ladder spine). -/
 noncomputable def bbnBe7ToLi7CaptureQ (m_nucleon : ℝ) (c : ℝ := 1) : ℝ :=
-  gamma_HQIV * bbnStrongChannelFraction *
-    max 0 (bbnBe7BindingQ m_nucleon c - bbnLi7ClusterBindingQ m_nucleon c)
+  gamma_HQIV * bbnStrongChannelFraction * bbnBe7ToLi7WellDepthGap m_nucleon c
 
 /-- ³He + ⁴He → ⁷Be reaction Q from network binding gaps. -/
 noncomputable def bbnBe7FormationQ (m_nucleon : ℝ) (c : ℝ := 1) : ℝ :=
@@ -193,23 +196,25 @@ noncomputable def bbnBe7FormationQ (m_nucleon : ℝ) (c : ℝ := 1) : ℝ :=
 noncomputable def bbnBe7ElectronCaptureQ : ℝ :=
   gamma_HQIV * bbnStrongChannelFraction * bbnNeutronProtonGap
 
-/-- ⁷Li/H η exponent (seventh-order valley proxy on α vs deuteron gap). -/
+/-- ⁷Li/H η exponent (legacy seventh-order 7/4 α proxy — illustrative only). -/
 noncomputable def bbnLi7_etaExponent (m_nucleon : ℝ) (c : ℝ := 1) : ℝ :=
   -(((7 / 4 : ℝ) * bbnHelium4BindingQ m_nucleon c - bbnDeuteronBindingQ m_nucleon c) / bbnNeutronProtonGap)
 
-/-!
-### Lithium-7 channel: explicit illustrative scaffold
+/-- ⁷Li/H η exponent from the ³He+⁴He→⁷Be→⁷Li network ladder (well-depth gap). -/
+noncomputable def bbnLi7_etaExponentLadder (m_nucleon : ℝ) (c : ℝ := 1) : ℝ :=
+  -(bbnBe7ToLi7WellDepthGap m_nucleon c / bbnNeutronProtonGap)
 
-The current `bbnLi7*` formulas are **scaffold illustrations** that demonstrate how a valley-weighted
-network readout would propagate to A=7. At mid-epoch and in window-integrated witnesses the
-resulting ⁷Li/H can be astronomically large (Boltzmann exponents driven by the 7/4 proxy and
-the gap to ⁴He). This is **not claimed** to match observational bounds. The Li channels serve
-as a template for future nuclear-network upgrades (dynamic C₂ lapse suppression, full reaction
-graph, post-BBN depletion). See the BBN paper §"Honesty on lithium".
+/-!
+### Lithium-7 channel
+
+**Network ladder (paper):** `bbnLi7_etaExponentLadder`, `bbnBe7FormationQ`, `bbnBe7ToLi7CaptureQ`
+with Python witness `integrate_be7_li7_tail_window` (MeV tail T ≈ 0.25 → 0.05).
+
+**Legacy scaffold:** `bbnLi7_etaExponent` (7/4 α proxy) remains for positivity lemmas only;
+integrated witnesses use the ladder, not the proxy.
 -/
 
-/-- Marker proposition: the Li7 abundance formulas are illustrative scaffold readouts whose
-numeric magnitude at BBN-epoch temperatures is not asserted to lie near observational values. -/
+/-- Legacy 7/4-proxy Li7 formulas (positivity lemmas); integrated abundances use the ladder. -/
 def bbnLi7_is_illustrative_scaffold : Prop := True
 
 theorem bbnLi7_is_illustrative_scaffold_holds : bbnLi7_is_illustrative_scaffold := trivial
@@ -233,9 +238,16 @@ noncomputable def bbnHe3HNumberRatio (η : ℝ) (m_nucleon : ℝ) (c : ℝ := 1)
     bbnThermalSinkFactor (bbnClusterBinding bbnBindingShell 3 c) (bbnHelium4BindingQ m_nucleon c)
       (bbnInternalTemperatureMeV η bbnNeutronProtonGap)
 
+/-- Legacy 7/4-proxy Li7/H (positivity lemmas only). -/
 noncomputable def bbnLi7HNumberRatio (η : ℝ) (m_nucleon : ℝ) (c : ℝ := 1) : ℝ :=
   (eta10 η) ^ bbnLi7_etaExponent m_nucleon c *
     bbnThermalSinkFactor (bbnHelium4BindingQ m_nucleon c * (7 / 4 : ℝ)) (bbnHelium4BindingQ m_nucleon c)
+      (bbnInternalTemperatureMeV η bbnNeutronProtonGap)
+
+/-- Integrated ⁷Li/H from the ³He+⁴He→⁷Be→⁷Li network ladder (well-depth gap exponent). -/
+noncomputable def bbnLi7HNumberRatioLadder (η : ℝ) (m_nucleon : ℝ) (c : ℝ := 1) : ℝ :=
+  (eta10 η) ^ bbnLi7_etaExponentLadder m_nucleon c *
+    bbnThermalSinkFactor (bbnBe7ToLi7WellDepthGap m_nucleon c) (bbnDeuteronBindingQ m_nucleon c)
       (bbnInternalTemperatureMeV η bbnNeutronProtonGap)
 
 structure BBNNetworkReadout where
@@ -255,7 +267,7 @@ noncomputable def bbnNetworkReadoutAt (η T_MeV : ℝ) (c : ℝ := 1) : BBNNetwo
   Yp := bbnYpFromNetworkAt T_MeV
   DH := bbnDHNumberRatio η derivedProtonMass c
   He3H := bbnHe3HNumberRatio η derivedProtonMass c
-  Li7H := bbnLi7HNumberRatio η derivedProtonMass c
+  Li7H := bbnLi7HNumberRatioLadder η derivedProtonMass c
   deuteronQ := bbnDeuteronBindingQ derivedProtonMass c
   helium4Q := bbnHelium4BindingQ derivedProtonMass c
 
@@ -415,6 +427,14 @@ theorem bbnLi7HNumberRatio_pos (η : ℝ) (hη : 0 < η) (hη10 : 1 < eta10 η) 
     Real.rpow_pos_of_pos (by linarith [hη10]) _
   exact mul_pos hpow (Real.exp_pos _)
 
+theorem bbnLi7HNumberRatioLadder_pos (η : ℝ) (hη : 0 < η) (hη10 : 1 < eta10 η) :
+    0 < bbnLi7HNumberRatioLadder η derivedProtonMass := by
+  unfold bbnLi7HNumberRatioLadder bbnLi7_etaExponentLadder bbnThermalSinkFactor bbnBoltzmannWeight
+      bbnInternalTemperatureMeV eta10 bbnNeutronProtonGap
+  have hpow : 0 < (eta10 η) ^ bbnLi7_etaExponentLadder derivedProtonMass :=
+    Real.rpow_pos_of_pos (by linarith [hη10]) _
+  exact mul_pos hpow (Real.exp_pos _)
+
 def bbn_network_vital_readout : Prop :=
   eta_at_horizon m_lockin m_lockin = eta_paper ∧
     0 < bbnNetworkReadoutAtLockin.Yp ∧
@@ -437,11 +457,7 @@ theorem bbn_network_vital_readout_holds :
     have hpow : 0 < (eta10 eta_paper) ^ bbnHe3_etaExponent derivedProtonMass :=
       Real.rpow_pos_of_pos (by linarith [hη10]) _
     exact mul_pos hpow (Real.exp_pos _)
-  · unfold bbnLi7HNumberRatio bbnLi7_etaExponent bbnThermalSinkFactor bbnBoltzmannWeight
-      bbnInternalTemperatureMeV eta10
-    have hpow : 0 < (eta10 eta_paper) ^ bbnLi7_etaExponent derivedProtonMass :=
-      Real.rpow_pos_of_pos (by linarith [hη10]) _
-    exact mul_pos hpow (Real.exp_pos _)
+  · exact bbnLi7HNumberRatioLadder_pos eta_paper eta_paper_pos hη10
 
 end
 

@@ -87,6 +87,132 @@ def post_alpha_incremental_contact_count(A: int, Z: int) -> float:
     )
 
 
+def post_alpha_incremental_geometric_touch_energy_r2(m: int, A: int, Z: int) -> float:
+    """
+    Facet + far contacts only — no α-cap ``R_m²`` duplication.
+
+    Lean target: ``postAlphaIncrementalGeometricTouchEnergy``.
+    """
+    if A <= 4:
+        return 0.0
+    unit = sphere_touch_contact_energy_unit_mev(m)
+    spin = touch.spin_stability_participation(A, Z)
+    p_sum = float(
+        touch.proton_facet_touch_contact_sum(touch.bbn_proton_facet_touches(A, Z))
+    )
+    far = touch.far_neutron_weighted_contact_sum(A, Z)
+    return (spin * p_sum + far) * unit
+
+
+def post_alpha_incremental_cluster_binding_geometry_mev(
+    m: int, A: int, Z: int, c: float = 1.0
+) -> float:
+    """Incremental geometry → MeV (differential contacts on closed α)."""
+    return post_alpha_incremental_geometric_touch_energy_r2(m, A, Z) * geometry_to_mev_coupling(
+        m, c
+    )
+
+
+def post_alpha_alpha_addition_isospin_tension(A: int, Z: int) -> float:
+    """
+    Proton-excess tension per extra nucleon beyond ⁴He.
+
+    ``max(0, Z − N) / (A − 4)`` — destabilizes α+p / ⁵Be additions; **not**
+    applied to neutron-rich far-neutron attachments (⁷Li).
+    """
+    if A <= 4:
+        return 0.0
+    proton_excess = max(0, Z - (A - Z))
+    return proton_excess / float(A - 4)
+
+
+def post_alpha_far_neutron_curvature_binding_mev(
+    m: int,
+    A: int,
+    Z: int,
+    *,
+    geff: float,
+    c: float = 1.0,
+) -> float:
+    """
+    Far-neutron shell overlap (⁷Li etc.): ``far × G_eff × deuteronBindingScale(m) × (4/8)``.
+
+    Lean witness: ``deuteronBindingScale`` on the Fresnel valley; not eroded by
+    proton-excess destabilization.
+    """
+    if A <= 4:
+        return 0.0
+    far = touch.far_neutron_weighted_contact_sum(A, Z)
+    if far <= 0.0:
+        return 0.0
+    import hqiv_nuclear_caustic_binding as ncb
+
+    _ = c
+    return (
+        far
+        * geff
+        * ncb.deuteron_binding_scale(m)
+        * bbn.STRONG_CHANNEL_FRACTION
+    )
+
+
+def post_alpha_core_destabilization_mev(
+    m: int,
+    A: int,
+    Z: int,
+    *,
+    alpha_outside_per_nucleon_mev: float,
+    c: float = 1.0,
+) -> float:
+    """
+    α-core destabilization when extra nucleons mismatch the closed α isospin slot.
+
+    ``γ · (4/8) · B_out(⁴He)/4 · (A−4) · tension`` — parameter-free erosion.
+    """
+    if A <= 4:
+        return 0.0
+    tension = post_alpha_alpha_addition_isospin_tension(A, Z)
+    return (
+        bbn.GAMMA_HQIV
+        * bbn.STRONG_CHANNEL_FRACTION
+        * alpha_outside_per_nucleon_mev
+        * float(A - 4)
+        * tension
+    )
+
+
+def post_alpha_incremental_cluster_binding_with_network_mev(
+    m: int, A: int, Z: int, c: float = 1.0
+) -> float:
+    """
+  Lean ``postAlphaCoreIncrementalBinding``: incremental facet/far geometry × deepening
+    + γ-network on α cap − relaxation (no cap double-count).
+    """
+    if A <= 4:
+        return 0.0
+    inc_geom = post_alpha_incremental_cluster_binding_geometry_mev(m, A, Z, c)
+    deepen = post_alpha_core_well_deepening(A, Z)
+    network = post_alpha_network_binding_mev(m, A, Z, c)
+    relax = post_alpha_well_relaxation_mev(m, A, Z, c)
+    return inc_geom * deepen + network - relax
+
+
+def post_alpha_core_incremental_binding_mev(
+    m: int,
+    A: int,
+    Z: int,
+    *,
+    alpha_outside_per_nucleon_mev: float,
+    c: float = 1.0,
+) -> float:
+    """Net incremental binding on α including destabilization."""
+    inc = post_alpha_incremental_cluster_binding_with_network_mev(m, A, Z, c)
+    destab = post_alpha_core_destabilization_mev(
+        m, A, Z, alpha_outside_per_nucleon_mev=alpha_outside_per_nucleon_mev, c=c
+    )
+    return inc - destab
+
+
 def post_alpha_core_well_deepening(A: int, Z: int) -> float:
     """Extra contacts deepen the α wells they touch."""
     if A <= 4:
@@ -389,13 +515,20 @@ def main() -> None:
     print(f"Shell m={M_SHELL}  trace={rows[-1].binding_geometry_mev:.4f} MeV  coupling={rows[-1].geometry_to_mev_coupling:.6f} MeV/R²")
     print()
     print(
-        f"{'Nucl':<6} {'effV':>5} {'netB':>7} {'BE/A_g':>7} {'BE/A_n':>7} {'PDG/A':>7} {'relax':>6}"
+        f"{'Nucl':<6} {'effV':>5} {'B_tot':>7} {'BE/A':>7} "
+        f"{'PDG_B':>7} {'PDG/A':>7} {'Δtot%':>7} {'relax':>6}"
     )
     for r in rows[:-1]:
+        pdg_b = f"{r.pdg_binding_mev:7.2f}" if r.pdg_binding_mev else "      —"
         pdg_a = f"{r.pdg_be_per_A:7.2f}" if r.pdg_be_per_A else "      —"
+        d_tot = (
+            f"{(r.binding_with_network_mev / r.pdg_binding_mev - 1.0) * 100.0:+7.1f}"
+            if r.pdg_binding_mev and r.pdg_binding_mev > 0
+            else "      —"
+        )
         print(
             f"{r.label:<6} {r.effective_valleys:5.1f} {r.binding_with_network_mev:7.2f} "
-            f"{r.be_per_A_geometry:7.3f} {r.be_per_A_network:7.3f} {pdg_a} {r.well_relaxation_mev:6.3f}"
+            f"{r.be_per_A_network:7.3f} {pdg_b} {pdg_a} {d_tot} {r.well_relaxation_mev:6.3f}"
         )
     print()
     print("Open problems:")

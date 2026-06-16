@@ -53,6 +53,24 @@ class TestDynamicC2BBN(unittest.TestCase):
         self.assertGreater(s, 0.0)
         self.assertLess(s, 1.0)
 
+    def test_bbn_window_release_factor_dh_order_of_magnitude(self) -> None:
+        w = bbn.load_witness()
+        m_p = float(w["derivedProtonMass_MeV"])
+        dm = float(w["derivedDeltaM_MeV"])
+        Q_D, Q_4, Q_3, _ = bbn.lockin_binding_q_network(m_p)
+        integrated = bbn.integrate_bbn_window(
+            bbn.ETA_PAPER,
+            m_p,
+            dm,
+            Q_D,
+            Q_4,
+            Q_3,
+            use_binding_release=True,
+        )
+        self.assertAlmostEqual(integrated["Yp"], 0.247, delta=0.01)
+        self.assertGreater(integrated["D_over_H"], 1e-7)
+        self.assertLess(integrated["D_over_H"], 1e-3)
+
     def test_kappa6_ratio_tracks_temperature(self) -> None:
         r_hot = lean.bbn_dynamic_c2_readout_at_T(
             10.0, eta=self.ETA, m_nucleon=self.M_P

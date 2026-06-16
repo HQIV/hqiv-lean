@@ -49,6 +49,7 @@ import Hqiv.Physics.GRFromMaxwell
 import Hqiv.Physics.HQIVGravityReadoutScalars
 import Hqiv.Physics.FureyHQIVOntologyBridge
 import Hqiv.Physics.LapseMassReadout
+import Hqiv.Physics.ProtonMassDecomposition
 import Hqiv.Physics.InformationalEnergyMass
 import Hqiv.Physics.HadronMassReadout
 import Hqiv.Physics.MassSpectrumWitness
@@ -135,6 +136,7 @@ import Hqiv.QuantumComputing.EntanglementMeasures
 import Hqiv.QuantumComputing.OctonionicFT
 import Hqiv.QuantumComputing.OSHoracle
 import Hqiv.QuantumComputing.CarrierPeaking
+import Hqiv.QuantumComputing.SemiprimeTypedCarrierScaffold
 import Hqiv.QuantumComputing.ShoreOracle
 import Hqiv.QuantumComputing.ProteinFoldingHook
 import Hqiv.Algebra.OctonionBasics

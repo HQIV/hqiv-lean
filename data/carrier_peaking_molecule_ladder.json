@@ -1,0 +1,560 @@
+{
+  "program": "hqiv_carrier_peaking_molecule_ladder",
+  "lean_spine": [
+    "Hqiv.QuantumComputing.CarrierPeaking",
+    "Hqiv.QuantumComputing.OSHoracle",
+    "Hqiv.QuantumComputing.OSHoracleHQIVNative"
+  ],
+  "molecules": [
+    {
+      "molecule": "LiF",
+      "kind": "dissociation",
+      "n_atoms": 2,
+      "n_bonds": 1,
+      "compton_shells": [
+        4,
+        4
+      ],
+      "geometry_level_count": 4,
+      "geometry_specs_sample": [
+        {
+          "angle_level": 0,
+          "bond0_level": 0,
+          "bond1_level": 0
+        },
+        {
+          "angle_level": 0,
+          "bond0_level": 1,
+          "bond1_level": 0
+        },
+        {
+          "angle_level": 0,
+          "bond0_level": 2,
+          "bond1_level": 0
+        },
+        {
+          "angle_level": 0,
+          "bond0_level": 3,
+          "bond1_level": 0
+        }
+      ],
+      "binding_witness": {
+        "binding_ev": 21.062325847757005,
+        "reference_ev": 5.991,
+        "error_pct": 251.5661132992323,
+        "contact_xi": 5.0,
+        "compton_triplet": [
+          4,
+          4,
+          4
+        ]
+      },
+      "config": {
+        "L": 11,
+        "n_levels": 4,
+        "reference_m": 4,
+        "peak_min_frac": 0.35,
+        "encodings": [
+          "mixed_radix",
+          "contact_ell"
+        ]
+      },
+      "encodings": {
+        "mixed_radix": {
+          "L": 11,
+          "sparse_basis_card": 144,
+          "encoding_samples": 4,
+          "encoding_unique": 4,
+          "encoding_injective": true,
+          "sparse_seed_len": 4,
+          "sparse_evolved_len": 8,
+          "flip_count": 4,
+          "pruned_len": 4,
+          "hqiv_pivot_flat": 0,
+          "hqiv_pivot_harmonic": {
+            "ell": 0,
+            "m": 0
+          },
+          "compression_vs_dense_card": 36.0,
+          "support_growth_factor": 2.0,
+          "peaks16": [
+            0,
+            1,
+            2,
+            3
+          ],
+          "peaks32": [
+            0,
+            2,
+            4,
+            6
+          ],
+          "secondary32": [],
+          "hist16": [
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "hist32": [
+            1.0,
+            0.0,
+            1.0,
+            0.0,
+            1.0,
+            0.0,
+            1.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        "contact_ell": {
+          "L": 11,
+          "sparse_basis_card": 144,
+          "encoding_samples": 4,
+          "encoding_unique": 1,
+          "encoding_injective": false,
+          "sparse_seed_len": 1,
+          "sparse_evolved_len": 2,
+          "flip_count": 1,
+          "pruned_len": 1,
+          "hqiv_pivot_flat": 0,
+          "hqiv_pivot_harmonic": {
+            "ell": 0,
+            "m": 0
+          },
+          "compression_vs_dense_card": 144.0,
+          "support_growth_factor": 2.0,
+          "peaks16": [
+            1
+          ],
+          "peaks32": [
+            2
+          ],
+          "secondary32": [],
+          "hist16": [
+            0.0,
+            1.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "hist32": [
+            0.0,
+            0.0,
+            1.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        }
+      },
+      "scaling_L_sweep": [
+        {
+          "L": 11,
+          "sparse_basis_card": 144,
+          "sparse_seed_len": 4,
+          "compression_vs_dense_card": 36.0,
+          "flip_count": 4,
+          "peaks16_count": 4
+        },
+        {
+          "L": 12,
+          "sparse_basis_card": 169,
+          "sparse_seed_len": 4,
+          "compression_vs_dense_card": 42.25,
+          "flip_count": 4,
+          "peaks16_count": 2
+        },
+        {
+          "L": 13,
+          "sparse_basis_card": 196,
+          "sparse_seed_len": 4,
+          "compression_vs_dense_card": 49.0,
+          "flip_count": 4,
+          "peaks16_count": 2
+        }
+      ],
+      "scaling_summary": {
+        "sparse_support_independent_of_L_card": true,
+        "dense_card_grows_quadratically": true,
+        "primary_flip_signal": 4,
+        "primary_peaks16": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "mixed_radix_injective": true
+      }
+    },
+    {
+      "molecule": "H2O",
+      "kind": "atomization",
+      "n_atoms": 3,
+      "n_bonds": 2,
+      "compton_shells": [
+        4,
+        1,
+        1
+      ],
+      "geometry_level_count": 64,
+      "geometry_specs_sample": [
+        {
+          "angle_level": 0,
+          "bond0_level": 0,
+          "bond1_level": 0
+        },
+        {
+          "angle_level": 0,
+          "bond0_level": 0,
+          "bond1_level": 1
+        },
+        {
+          "angle_level": 0,
+          "bond0_level": 0,
+          "bond1_level": 2
+        },
+        {
+          "angle_level": 0,
+          "bond0_level": 0,
+          "bond1_level": 3
+        }
+      ],
+      "binding_witness": {
+        "binding_ev": 9.473005366224866,
+        "reference_ev": 9.51,
+        "error_pct": -0.38900771582685256,
+        "contact_xi": 3.6666666666666665,
+        "compton_triplet": [
+          4,
+          3,
+          1
+        ]
+      },
+      "config": {
+        "L": 11,
+        "n_levels": 4,
+        "reference_m": 4,
+        "peak_min_frac": 0.35,
+        "encodings": [
+          "mixed_radix",
+          "contact_ell"
+        ]
+      },
+      "encodings": {
+        "mixed_radix": {
+          "L": 11,
+          "sparse_basis_card": 144,
+          "encoding_samples": 64,
+          "encoding_unique": 64,
+          "encoding_injective": true,
+          "sparse_seed_len": 64,
+          "sparse_evolved_len": 128,
+          "flip_count": 16,
+          "pruned_len": 16,
+          "hqiv_pivot_flat": 9,
+          "hqiv_pivot_harmonic": {
+            "ell": 3,
+            "m": 0
+          },
+          "compression_vs_dense_card": 2.25,
+          "support_growth_factor": 2.0,
+          "peaks16": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15
+          ],
+          "peaks32": [
+            0,
+            2,
+            4,
+            6,
+            8,
+            10,
+            12,
+            14,
+            16,
+            18,
+            20,
+            22,
+            24,
+            26,
+            28,
+            30
+          ],
+          "secondary32": [],
+          "hist16": [
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ],
+          "hist32": [
+            1.0,
+            0.0,
+            1.0,
+            0.0,
+            1.0,
+            0.0,
+            1.0,
+            0.0,
+            1.0,
+            0.0,
+            1.0,
+            0.0,
+            1.0,
+            0.0,
+            1.0,
+            0.0,
+            1.0,
+            0.0,
+            1.0,
+            0.0,
+            1.0,
+            0.0,
+            1.0,
+            0.0,
+            1.0,
+            0.0,
+            1.0,
+            0.0,
+            1.0,
+            0.0,
+            1.0,
+            0.0
+          ]
+        },
+        "contact_ell": {
+          "L": 11,
+          "sparse_basis_card": 144,
+          "encoding_samples": 64,
+          "encoding_unique": 1,
+          "encoding_injective": false,
+          "sparse_seed_len": 1,
+          "sparse_evolved_len": 2,
+          "flip_count": 1,
+          "pruned_len": 1,
+          "hqiv_pivot_flat": 9,
+          "hqiv_pivot_harmonic": {
+            "ell": 3,
+            "m": 0
+          },
+          "compression_vs_dense_card": 144.0,
+          "support_growth_factor": 2.0,
+          "peaks16": [
+            1
+          ],
+          "peaks32": [
+            3
+          ],
+          "secondary32": [],
+          "hist16": [
+            0.0,
+            1.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "hist32": [
+            0.0,
+            0.0,
+            0.0,
+            1.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        }
+      },
+      "scaling_L_sweep": [
+        {
+          "L": 11,
+          "sparse_basis_card": 144,
+          "sparse_seed_len": 64,
+          "compression_vs_dense_card": 2.25,
+          "flip_count": 16,
+          "peaks16_count": 16
+        },
+        {
+          "L": 12,
+          "sparse_basis_card": 169,
+          "sparse_seed_len": 64,
+          "compression_vs_dense_card": 2.640625,
+          "flip_count": 16,
+          "peaks16_count": 10
+        },
+        {
+          "L": 13,
+          "sparse_basis_card": 196,
+          "sparse_seed_len": 64,
+          "compression_vs_dense_card": 3.0625,
+          "flip_count": 16,
+          "peaks16_count": 5
+        }
+      ],
+      "scaling_summary": {
+        "sparse_support_independent_of_L_card": true,
+        "dense_card_grows_quadratically": true,
+        "primary_flip_signal": 16,
+        "primary_peaks16": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15
+        ],
+        "mixed_radix_injective": true
+      }
+    }
+  ],
+  "summary": {
+    "count": 2,
+    "all_mixed_radix_injective": true,
+    "all_sparse_independent_of_L": true
+  }
+}

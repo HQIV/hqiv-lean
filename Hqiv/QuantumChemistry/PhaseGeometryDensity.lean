@@ -7,8 +7,9 @@ Condensed-phase readout without macroscopic atom counting:
 
 1. **Preferred allotrope** (e.g.\ ice Ih for H₂O) fixes a unit-cell geometry witness.
 2. **Mass density** ρ_mass = Z·M/(N_A·V_cell) from lattice constants and formula weight.
-3. **Curvature density** ρ_curv = clamp(ρ_mass / ρ_liquid_ref) feeds
-   `homogeneousCurvatureBudgetAtXi` and second-order κ₆ feedback on melt / binding.
+3. **Curvature density** ρ_curv = crystalline fraction from unit-cell geometry vs
+   **own-motif melt reference** (symmetric min/max ratio × coordination participation),
+   not an unrelated liquid host.  Feeds `homogeneousCurvatureBudgetAtXi` and κ₆ feedback.
 
 Python mirror: `scripts/hqiv_phase_geometry_density.py`.
 Melt witness: `scripts/hqiv_thermodynamic_phase_from_tp.py` (`material_scales_bulk_h2o`).
@@ -22,6 +23,7 @@ Lean bridge: `Hqiv.Physics.OrbitalFlybyScaffold`.
 namespace Hqiv.QuantumChemistry
 
 open Hqiv
+open Hqiv.Algebra
 open Hqiv.Physics
 
 /-- Crystalline Bravais class for unit-cell volume (geometry witness only). -/
@@ -68,10 +70,46 @@ noncomputable def massDensityGPerCm3 (cell : PhaseUnitCell) : ℝ :=
 
 /--
 Curvature-density fraction ρ ∈ [0,1]: solid geometry density relative to a liquid
-reference at the melt comparison (H₂O liquid reference = 1.0 g/cm³ scale).
+reference at the melt comparison (legacy ratio; prefer ``crystallineCurvatureDensityFraction``).
 -/
 noncomputable def curvatureDensityFraction (ρSolid ρLiquidRef : ℝ) : ℝ :=
   clampMediumDensity (ρSolid / ρLiquidRef)
+
+/--
+Symmetric crystalline packing ratio min(ρ_s, ρ_m)/max(ρ_s, ρ_m) — ice-like and ionic
+crystals both map into [0,1] without one-sided clamp saturation.
+-/
+noncomputable def crystallineDensityRatio (ρSolid ρMelt : ℝ) : ℝ :=
+  if ρSolid ≤ 0 ∨ ρMelt ≤ 0 then 0
+  else if ρSolid ≤ ρMelt then ρSolid / ρMelt else ρMelt / ρSolid
+
+/-- Tetrahedral H-bond melt ρ at solid→liquid comparison (ice Ih → water). -/
+noncomputable def meltReferenceDensityTetrahedral (ρSolid : ℝ) : ℝ :=
+  ρSolid * (1 + alpha) / phaseLiftCoeff 3
+
+/-- Ionic lattice melt ρ: periodic-image release from bond weight and motif ladder.
+
+``ρ_m/ρ_s = max(γ/4, 1 − motifScale · contactLock · (1 − latticeWeight))``.
+Python mirror: ``ionic_melt_density_ratio`` in ``hqiv_ionic_bond_network.py``.
+-/
+noncomputable def meltReferenceDensityIonicLattice
+    (ρSolid latticeWeight motifScale contactLock : ℝ) : ℝ :=
+  let opening := max (gamma_HQIV / 4) (1 - motifScale * contactLock * (1 - latticeWeight))
+  ρSolid * opening
+
+/--
+Crystalline ρ_curv: symmetric solid/melt ratio × coordination participation × periodic weight.
+Python mirror: ``crystalline_curvature_density_fraction``.
+-/
+noncomputable def crystallineCurvatureDensityFraction
+    (ρSolid ρMelt nCoord nRef periodicWeight : ℝ) : ℝ :=
+  clampMediumDensity (
+    crystallineDensityRatio ρSolid ρMelt
+      * min 1 (nCoord / max nRef 1)
+      * clampMediumDensity periodicWeight)
+
+/-- Melt-side comparison baseline (periodic lattice released). -/
+noncomputable def meltComparisonCurvatureDensityFraction : ℝ := 1
 
 /-- Homogeneous curvature budget at contact ξ using phase-derived ρ. -/
 noncomputable def homogeneousCurvatureBudgetFromPhase (ξ ρ_phase : ℝ) : ℝ :=
@@ -90,7 +128,13 @@ noncomputable def phaseUnitCellH2OIceIh : PhaseUnitCell :=
 /-- Liquid-water reference density at melt comparison [g/cm³]. -/
 noncomputable def liquidReferenceDensityH2O : ℝ := 1.0
 
-/-- Curvature fraction for ice Ih vs liquid water reference. -/
+/-- Tetrahedral melt density ratio: neighbor lapse overlap × phaseLiftCoeff(3)/(1+α). -/
+noncomputable def tetrahedralMeltDensityRatio (nInter : ℕ) : ℝ :=
+  let n := max nInter 1
+  let overlap := max (1 / 2 : ℝ) (1 - gamma_HQIV * strongChannelFraction / n)
+  overlap * phaseLiftCoeff 3 / (1 + alpha)
+
+/-- Legacy ice Ih fraction vs unit liquid-water reference (superseded by crystalline slot). -/
 noncomputable def curvatureDensityFractionH2OIceIh : ℝ :=
   curvatureDensityFraction (massDensityGPerCm3 phaseUnitCellH2OIceIh) liquidReferenceDensityH2O
 
@@ -181,6 +225,15 @@ noncomputable def meltMotifRelativeScaleTetrahedral : ℝ := 1
 noncomputable def meltMotifRelativeScalePyramidal : ℝ :=
   (3 : ℝ) / 4 * (1 - gamma_HQIV / 8)
 
+/-- Polyol / carbohydrate OH network: pyramidal ladder × tetrahedral coordination reference. -/
+noncomputable def meltMotifRelativeScalePolyol (nInter : ℕ) : ℝ :=
+  let n := max nInter 1
+  meltMotifRelativeScalePyramidal * (4 : ℝ) / n
+
+/-- Peptide β-sheet-like layer: ``(3/4)(1 − γ/16)`` (half pyramidal bend slot). -/
+noncomputable def meltMotifRelativeScalePeptideLayer : ℝ :=
+  (3 : ℝ) / 4 * (1 - gamma_HQIV / 16)
+
 /-- Apolar close-pack melt: ``(γ/α)/√n_inter`` (``n_inter = 4`` default). -/
 noncomputable def meltMotifRelativeScaleApolar (nInter : ℕ) : ℝ :=
   let n := max nInter 1
@@ -191,6 +244,68 @@ noncomputable def meltMotifRelativeScaleLinearChain (nInter zHeavy : ℕ) : ℝ 
   let n := max nInter 1
   let hal := 1 + gamma_HQIV * (zHeavy : ℝ) / 8
   gamma_HQIV / alpha / (n : ℝ) * hal * (1 + gamma_HQIV) * (1 + gamma_HQIV / 16)
+
+/-- Ionic lattice melt ladder: ``(α/γ)/n_coord`` (Python ``melt_motif_relative_scale``). -/
+noncomputable def meltMotifRelativeScaleIonicLattice (nInter : ℕ) : ℝ :=
+  let n := max nInter 1
+  alpha / gamma_HQIV / (n : ℝ)
+
+/-- Metallic lattice melt ladder: ``(γ/α)/n_coord`` — delocalized peel release (Python mirror). -/
+noncomputable def meltMotifRelativeScaleMetallicLattice (nInter : ℕ) : ℝ :=
+  let n := max nInter 1
+  gamma_HQIV / alpha / (n : ℝ)
+
+/-- Ionic horizon contact weight ``1/(1 + d/a₀)`` on the lattice bond (geometry witness). -/
+noncomputable def ionicLatticeContactWeight (latticeBondAng bohrRadiusAng : ℝ) : ℝ :=
+  if 0 < bohrRadiusAng then 1 / (1 + latticeBondAng / bohrRadiusAng) else 0
+
+/--
+Ionic melt density ratio ``ρ_m/ρ_s`` when solid is denser.
+
+``max(γ/4, 1 − motifScale · contactLock · (1 − latticeWeight))`` — network-derived;
+Python ``ionic_melt_density_ratio``.
+-/
+noncomputable def ionicMeltDensityRatio
+    (latticeBondAng bohrRadiusAng contactLock : ℝ) (nCoord _zHeavy : ℕ) : ℝ :=
+  let dw := ionicLatticeContactWeight latticeBondAng bohrRadiusAng
+  let motifScale := meltMotifRelativeScaleIonicLattice nCoord
+  let lock := min 1 (max 0 contactLock)
+  max (gamma_HQIV / 4) (1 - motifScale * lock * (1 - dw))
+
+/--
+Metallic horizon contact weight ``1/(1 + d/a₀)`` on the nearest-neighbor bond.
+-/
+noncomputable def metallicLatticeContactWeight (nnBondAng bohrRadiusAng : ℝ) : ℝ :=
+  if 0 < bohrRadiusAng then 1 / (1 + nnBondAng / bohrRadiusAng) else 0
+
+/--
+Metallic melt density ratio ``ρ_m/ρ_s`` when solid is denser.
+
+``max(γ/4, 1 − motifScale · contactLock · (1 − latticeWeight))`` with metallic motif scale;
+Python ``metallic_melt_density_ratio``.
+-/
+noncomputable def metallicMeltDensityRatio
+    (nnBondAng bohrRadiusAng contactLock : ℝ) (nCoord _zHeavy : ℕ) : ℝ :=
+  let dw := metallicLatticeContactWeight nnBondAng bohrRadiusAng
+  let motifScale := meltMotifRelativeScaleMetallicLattice nCoord
+  let lock := min 1 (max 0 contactLock)
+  max (gamma_HQIV / 4) (1 - motifScale * lock * (1 - dw))
+
+/--
+Crystalline ρ_curv from dynamic melt ratio × coordination participation.
+
+Python ``crystalline_curvature_density_fraction`` (ratio-only path).
+-/
+noncomputable def crystallineCurvatureFractionFromMeltRatio
+    (meltRatio nCoord nRef periodicWeight : ℝ) : ℝ :=
+  clampMediumDensity (
+    clampMediumDensity meltRatio
+      * min 1 (nCoord / max nRef 1)
+      * clampMediumDensity periodicWeight)
+
+/-- Curvature fraction for ice Ih via dynamic tetrahedral melt ratio (neighbor lapse overlap). -/
+noncomputable def crystallineCurvatureDensityFractionH2OIceIh : ℝ :=
+  crystallineCurvatureFractionFromMeltRatio (tetrahedralMeltDensityRatio 4) 4 4 1
 
 theorem meltMotifRelativeScaleTetrahedral_eq_one :
     meltMotifRelativeScaleTetrahedral = 1 := rfl
@@ -203,9 +318,9 @@ theorem homogeneousCurvatureBudgetFromPhase_dilute (ξ : ℝ) :
   simp
 
 theorem homogeneousCurvatureBudgetFromPhase_condensed (ξ : ℝ) :
-    homogeneousCurvatureBudgetFromPhase ξ 1 = curvatureBudgetAtXi ξ := by
+    homogeneousCurvatureBudgetFromPhase ξ 1 = bindingCurvatureBudgetAtXi ξ := by
   unfold homogeneousCurvatureBudgetFromPhase homogeneousCurvatureBudgetAtXi
-    curvatureBudgetAtXi clampMediumDensity
+    bindingCurvatureBudgetAtXi clampMediumDensity
   simp
 
 theorem homogeneousCurvatureBudgetFromPhase_eq_homogeneous (ξ ρ : ℝ) :

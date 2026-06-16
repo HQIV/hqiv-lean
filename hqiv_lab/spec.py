@@ -36,6 +36,34 @@ class MoleculeSpec:
         return sum(element_amu(f.label, f.z_nuclear) for f in self.fragments)
 
     @classmethod
+    def from_nested_wf(cls, name: str) -> MoleculeSpec:
+        """Geometry from nested shell wavefunctions; reference binding for witnesses only."""
+        import hqiv_dynamic_binding_chart as chart
+
+        key = name.strip().upper()
+        for bench in chart.ALL_MOLECULE_BENCHMARKS:
+            if bench.name.upper() == key:
+                derived = chart.benchmark_with_nested_wf_geometry(bench)
+                return cls(
+                    derived.name,
+                    derived.fragments,
+                    derived.bonds,
+                    reference_binding_ev=derived.reference_ev,
+                    reference_source=derived.reference_source,
+                )
+        from hqiv_lab.atomic_chart import monomer_spec_from_atomic_chart
+
+        if key == "H2":
+            return cls.from_atomic_chart(1, 2)
+        raise KeyError(f"unknown molecule for nested-WF geometry: {name}")
+
+    @classmethod
+    def from_atomic_chart(cls, z_heavy: int, n_hydrogen: int, *, name: str | None = None) -> MoleculeSpec:
+        from hqiv_lab.atomic_chart import monomer_spec_from_atomic_chart
+
+        return monomer_spec_from_atomic_chart(z_heavy, n_hydrogen, name=name)
+
+    @classmethod
     def from_chart_name(cls, name: str) -> MoleculeSpec:
         import hqiv_dynamic_binding_chart as chart
 
@@ -55,10 +83,24 @@ class MoleculeSpec:
         """
         Build a minimal spec from a hill formula (H2O, CH4, NH3, HF, H2, LiH).
 
-        Uses chart data when available; otherwise raises.
+        Uses chart or foundation builders when available.
         """
         key = _normalize_formula(formula)
-        return cls.from_chart_name(key)
+        return resolve_spec(key)
+
+    @classmethod
+    def from_foundation_name(cls, name: str) -> MoleculeSpec:
+        from hqiv_lab.foundation_specs import foundation_spec
+
+        return foundation_spec(name)
+
+
+def resolve_spec(name: str) -> MoleculeSpec:
+    """GMTKN55 chart first, then foundation-tier builders."""
+    try:
+        return MoleculeSpec.from_chart_name(name)
+    except KeyError:
+        return MoleculeSpec.from_foundation_name(name)
 
 
 def _normalize_formula(formula: str) -> str:

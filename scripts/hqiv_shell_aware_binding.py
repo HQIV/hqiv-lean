@@ -227,33 +227,52 @@ def resolve_shell_aware_readout(
         compton_triplet=compton_triplet,
     )
 
-    heavy = next((f for f in fragments if f.z_nuclear > 1), None)
-    n_centre_bonds = sum(
-        1
-        for c in net.contacts
-        if c.kind == ccn.ContactKind.COVALENT_BOND
-        and heavy is not None
-        and c.i == 0
-    )
-    if n_centre_bonds == 0 and heavy is not None:
+    heavy_fragments = [f for f in fragments if f.z_nuclear > 1]
+    heavy = heavy_fragments[0] if len(heavy_fragments) == 1 else None
+    n_centre_bonds = 0
+    if heavy is not None:
+        heavy_idx = fragments.index(heavy)
+        n_centre_bonds = sum(
+            1
+            for c in net.contacts
+            if c.kind == ccn.ContactKind.COVALENT_BOND and c.i == heavy_idx
+        )
+    elif heavy_fragments:
+        n_centre_bonds = max(
+            sum(
+                1
+                for c in net.contacts
+                if c.kind == ccn.ContactKind.COVALENT_BOND and c.i == fragments.index(hf)
+            )
+            for hf in heavy_fragments
+        )
+    if n_centre_bonds == 0 and heavy_fragments:
         n_centre_bonds = sum(1 for f in fragments if f.z_nuclear == 1)
 
     dress = 1.0
-    if kind == "atomization" and heavy is not None:
+    dress_centre = heavy if heavy is not None else (
+        max(heavy_fragments, key=lambda f: f.z_nuclear) if heavy_fragments else None
+    )
+    if kind == "atomization" and dress_centre is not None and len(fragments) > 2:
         dress *= evs.centre_lone_pair_surplus_dress(
-            heavy.z_nuclear,
+            dress_centre.z_nuclear,
             n_centre_bonds,
             eta_linear,
         )
-        dress *= evs.hyperclosure_surplus_dress(n_centre_bonds)
+        dress *= evs.centre_coordination_graph_dress(n_centre_bonds)
+        dress *= evs.hyperclosure_surplus_dress(
+            n_centre_bonds,
+            dress_centre.z_nuclear,
+        )
 
     m_s, m_p, m_h = compton_triplet
+    label_centre = dress_centre if dress_centre is not None else (heavy if heavy else None)
     slot_labels = (
-        evs.electronic_shell_label(heavy.z_nuclear if heavy else 1, slot="s")
-        if heavy
+        evs.electronic_shell_label(label_centre.z_nuclear if label_centre else 1, slot="s")
+        if label_centre
         else "1s",
-        evs.electronic_shell_label(heavy.z_nuclear, slot="p")
-        if heavy and m_p > 1
+        evs.electronic_shell_label(label_centre.z_nuclear, slot="p")
+        if label_centre and m_p > 1
         else "1s",
         "1s",
     )

@@ -7,9 +7,10 @@ import Hqiv.Physics.HopfShellBeltramiMassBridge
 import Hqiv.Physics.ReadoutGaugeSeed
 import Hqiv.Physics.WeakHiggsFromOMaxwellScaffold
 import Hqiv.Algebra.WeakInComplexStructure
-import Hqiv.SO8Closure
+import Hqiv.SO8ClosureSymbolic
 import Hqiv.Topology.DiscretePhaseEvolution
 import Hqiv.Topology.HopfShellComplex
+import Mathlib.LinearAlgebra.Matrix.NonsingularInverse
 
 /-!
 # TUFT synthesis: zeta subleading + holonomy upgrade discharge
@@ -19,7 +20,8 @@ as open relative to Nielsen's external smooth contact-manifold programme.  In HQ
 honest geometry is already **continuous Lie data on the octonion light-cone carrier**:
 
 * **SO(8)** — 28 antisymmetric generators, bracket closure, linear independence
-  (`SO8Closure.so8_closure_theorem` / `GeneratorsLieClosure`).
+  (symbolic: `SO8ClosureSymbolic.so8_closure_theorem_symbolic`; certified matrix closure:
+  build target HQIVSO8Closure / `SO8Closure.so8_closure_theorem`).
 * **G₂ + Δ chart** — `phaseLiftDelta` antisymmetric in \(\mathfrak{so}(8)\), preferred
   \((e_1,e_7)\) U(1) plane (`DiscretePhaseEvolution`).
 * **Hopf-shell torsion** — skew 8×8 matrices on the octonion carrier, supplying Δ-action
@@ -156,17 +158,17 @@ theorem patchSubleadingZetaDischarged_holds : PatchSubleadingZetaDischarged wher
 /-- SO(8) Lie algebra on the octonion light-cone carrier (28 generators, bracket closure). -/
 structure LightconeSO8HolonomyDischarged : Prop where
   so8_closure :
-    (∀ k : Fin 28, so8Generator k + (so8Generator k)ᵀ = 0) ∧
+    (∀ k : Fin 28, so8Generator k + Matrix.transpose (so8Generator k) = 0) ∧
       (∀ i j : Fin 28, ∃ f : Fin 28 → ℝ,
         lieBracket (so8Generator i) (so8Generator j) = ∑ k, f k • so8Generator k) ∧
       LinearIndependent ℝ (fun k : Fin 28 => so8Generator k)
-  delta_antisymmetric_in_so8 : phaseLiftDelta + phaseLiftDeltaᵀ = 0
+  delta_antisymmetric_in_so8 : phaseLiftDelta + Matrix.transpose phaseLiftDelta = 0
   delta_u1_plane :
     phaseLiftDelta 1 7 = -1 ∧ phaseLiftDelta 7 1 = 1
   triality_three_eight_dim_slots : Fintype.card Algebra.So8RepIndex = 3
   shell_torsion_skew :
     ∀ (s : HopfShell) (h : s.integrable),
-      HopfShell.torsionMatrix s h + (HopfShell.torsionMatrix s h)ᵀ = 0
+      HopfShell.torsionMatrix s h + Matrix.transpose (HopfShell.torsionMatrix s h) = 0
   hopf_shell_so8_admissible :
     ∀ (s : HopfShell) (h : s.integrable),
       ∃ hol : SO8AdmissibleHolonomy (s.toDiscrete3Complex_integrable h),
@@ -175,7 +177,7 @@ structure LightconeSO8HolonomyDischarged : Prop where
           hol.triality_three_slots
 
 theorem lightconeSO8HolonomyDischarged_holds : LightconeSO8HolonomyDischarged where
-  so8_closure := so8_closure_theorem
+  so8_closure := so8_closure_theorem_symbolic
   delta_antisymmetric_in_so8 := delta_antisymmetric
   delta_u1_plane := preferred_delta_u1_plane
   triality_three_eight_dim_slots := so8_triality_three_slots_default

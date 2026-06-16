@@ -7,7 +7,7 @@ import hqiv_dynamic_nucleon_pn as pn
 import hqiv_nuclear_outside_temperature_dynamics as notd
 
 
-def test_free_lockin_recovers_witness_masses() -> None:
+def test_free_lockin_recovers_witness_masses_without_gravity() -> None:
     env = pn.NucleonEnvironment(shell=notd.REFERENCE_M, xi=notd.XI_LOCKIN, bonded=False)
     row = pn.pn_pair_readout(env)
     witness = pn._load_witness()
@@ -27,35 +27,43 @@ def test_gap_preserved_under_well_depth() -> None:
     assert abs(row.delta_m_mev - float(witness["derivedDeltaM_MeV"])) < 1e-9
 
 
+def test_curvature_well_lower_than_caustic_for_he4() -> None:
+    curv = pn.curvature_environment_for_A(4, 2)
+    caust = pn.caustic_environment_for_A(4)
+    assert curv.well_depth_mev > caust.well_depth_mev
+
+
 def test_bonded_environment_lowers_both_masses_equally() -> None:
     free = pn.pn_pair_readout(
         pn.NucleonEnvironment(shell=notd.REFERENCE_M, xi=notd.XI_LOCKIN, bonded=False)
     )
-    bonded = pn.pn_pair_readout(pn.caustic_environment_for_A(4))
+    bonded = pn.pn_pair_readout(pn.curvature_environment_for_A(4, 2))
     assert bonded.proton.mass_mev < free.proton.mass_mev
     assert bonded.neutron.mass_mev < free.neutron.mass_mev
     assert abs((free.neutron.mass_mev - free.proton.mass_mev) - bonded.delta_m_mev) < 1e-9
 
 
 def test_bbn_environment_releases_some_binding() -> None:
-    lock = pn.pn_pair_readout(pn.caustic_environment_for_A(4))
+    lock = pn.pn_pair_readout(pn.curvature_environment_for_A(4, 2))
     bbn_xi = notd.xi_from_T_MeV(0.1)
-    bbn = pn.pn_pair_readout(pn.caustic_environment_for_A(4, xi=bbn_xi))
+    bbn = pn.pn_pair_readout(pn.curvature_environment_for_A(4, 2, xi=bbn_xi))
     assert bbn.proton.mass_mev > lock.proton.mass_mev
     assert bbn.delta_m_mev == lock.delta_m_mev
 
 
-def test_payload_exports_three_environments() -> None:
+def test_payload_exports_environments() -> None:
     payload = pn.build_payload()
     assert "free_lockin" in payload
     assert "he4_lockin_environment" in payload
     assert "he4_bbn_temperature_environment" in payload
+    assert "he4_caustic_diagnostic" in payload
 
 
 if __name__ == "__main__":
-    test_free_lockin_recovers_witness_masses()
+    test_free_lockin_recovers_witness_masses_without_gravity()
     test_gap_preserved_under_well_depth()
+    test_curvature_well_lower_than_caustic_for_he4()
     test_bonded_environment_lowers_both_masses_equally()
     test_bbn_environment_releases_some_binding()
-    test_payload_exports_three_environments()
+    test_payload_exports_environments()
     print("test_hqiv_dynamic_nucleon_pn: OK")

@@ -1,0 +1,415 @@
+{
+  "lean_modules": [
+    "Hqiv.Physics.GravitationalWaveRingdownScaffold",
+    "Hqiv.Physics.CompactObjectRotatingCrustScaffold",
+    "Hqiv.Physics.NuclearOutsideTemperatureDynamics"
+  ],
+  "python_module": "scripts/hqiv_gw_ringdown.py",
+  "flow": "measured (f\u2082\u2082\u2080, \u03c4\u2082\u2082\u2080) \u2192 inferred M_f (GR Kerr vs HQIV-unmapped Kerr)",
+  "catalog_filter": "GWTC-5.0",
+  "gwosc_url": "https://gwosc.org/eventapi/json/GWTC/",
+  "official_links": {
+    "gwosc_catalog": "https://gwosc.org/GWTC-5.0/",
+    "zenodo_pe_part1": "https://zenodo.org/records/20348005",
+    "zenodo_pe_part2": "https://zenodo.org/records/20348006",
+    "zenodo_candidates": "https://zenodo.org/records/20276130",
+    "zenodo_notebook": "https://doi.org/10.5281/zenodo.20276105",
+    "pe_summary_table_url": "https://zenodo.org/api/records/20348005/files/IGWN-GWTC5p0-29ebe06b7_25-PESummaryTable.hdf5/content"
+  },
+  "fetch_error": null,
+  "hqiv_horizon_slots": {
+    "horizon_epsilon": 0.5,
+    "horizon_lapse": 0.5,
+    "geff_modulator": 1.1101698002503162,
+    "freq_scale": 1.5970286304978538,
+    "damp_scale_base": 0.45038155414357534,
+    "damp_scale_with_eta": 0.9527180903344662,
+    "eta_merger": 0.3731692916971075,
+    "eta_lockin_surface": 0.3345736442497853,
+    "tail_exponent": 4.26610188015019
+  },
+  "lattice_constants": {
+    "alpha": 0.6,
+    "gamma": 0.4,
+    "gr_tail_exponent": 4.0,
+    "merger_hot_surface_T_K": 100000000000.0
+  },
+  "interpretation": {
+    "detection_inputs": "f\u2082\u2082\u2080 (Hz) and \u03c4\u2082\u2082\u2080 (s) \u2014 primary inputs to mass inference",
+    "gwtc5_pe_summary": "Zenodo PESummaryTable.hdf5 supplies M_f and a* medians; Kerr f,\u03c4 computed from those when ringdown PE not loaded",
+    "gr_inference": "Kerr (2,2,0) inversion: spin from 2\u03c0f\u03c4, mass from \u03c4 and f",
+    "hqiv_inference": "unmap f,\u03c4 through horizon slots then same Kerr inversion",
+    "mass_tail": "charmed-core \u0394M for HMNS-class inferred masses only"
+  },
+  "event_count": 8,
+  "events": [
+    {
+      "common_name": "GW150914",
+      "catalog": "GWTC-1.0",
+      "measurement": {
+        "f_220_hz": 251.0,
+        "tau_220_s": 0.004,
+        "omega_ratio": 6.308318048408305
+      },
+      "measurement_source": "literature_ringdown",
+      "gr_inference": {
+        "final_mass_msun": 67.56786259436886,
+        "final_spin": 0.6,
+        "mass_from_frequency_msun": 66.68574896199756,
+        "mass_from_damping_msun": 67.56786259436886,
+        "omega_M_real": 0.518,
+        "omega_M_imag": -0.0832
+      },
+      "hqiv_inference": {
+        "final_mass_msun": 76.2675136176925,
+        "final_spin": 0.0,
+        "mass_from_frequency_msun": 76.82652342527088,
+        "mass_from_damping_msun": 76.2675136176925,
+        "omega_M_real": 0.373676,
+        "omega_M_imag": -0.089472
+      },
+      "hqiv_slots": {
+        "horizon_epsilon": 0.5,
+        "horizon_lapse": 0.5,
+        "geff_modulator": 1.1101698002503162,
+        "freq_scale": 1.5970286304978538,
+        "damp_scale_base": 0.45038155414357534,
+        "damp_scale_with_eta": 0.9527180903344662,
+        "eta_merger": 0.3731692916971075,
+        "eta_lockin_surface": 0.3345736442497853,
+        "tail_exponent": 4.26610188015019
+      },
+      "mass_tail_delta_msun": 0.0,
+      "effective_mass_msun": 76.2675136176925,
+      "catalog_final_mass_msun": 65.0,
+      "chi_eff": null,
+      "snr": null,
+      "remnant_class": "BBH",
+      "mass_ratio_gr_over_catalog": 1.0395055783749056,
+      "mass_ratio_hqiv_over_catalog": 1.1733463633491155,
+      "notes": "Literature Kerr-fit f\u2082\u2082\u2080; GR inference \u2248 catalog M_f"
+    },
+    {
+      "common_name": "GW190521",
+      "catalog": "GWTC-2.1",
+      "measurement": {
+        "f_220_hz": 64.0,
+        "tau_220_s": 0.0095,
+        "omega_ratio": 3.8201766667651884
+      },
+      "measurement_source": "literature_ringdown",
+      "gr_inference": {
+        "final_mass_msun": 172.57091982996397,
+        "final_spin": 0.0,
+        "mass_from_frequency_msun": 188.6653850811406,
+        "mass_from_damping_msun": 172.57091982996397,
+        "omega_M_real": 0.373676,
+        "omega_M_imag": -0.089472
+      },
+      "hqiv_inference": {
+        "final_mass_msun": 181.1353448420197,
+        "final_spin": 0.0,
+        "mass_from_frequency_msun": 301.3040215584842,
+        "mass_from_damping_msun": 181.1353448420197,
+        "omega_M_real": 0.373676,
+        "omega_M_imag": -0.089472
+      },
+      "hqiv_slots": {
+        "horizon_epsilon": 0.5,
+        "horizon_lapse": 0.5,
+        "geff_modulator": 1.1101698002503162,
+        "freq_scale": 1.5970286304978538,
+        "damp_scale_base": 0.45038155414357534,
+        "damp_scale_with_eta": 0.9527180903344662,
+        "eta_merger": 0.3731692916971075,
+        "eta_lockin_surface": 0.3345736442497853,
+        "tail_exponent": 4.26610188015019
+      },
+      "mass_tail_delta_msun": 0.0,
+      "effective_mass_msun": 181.1353448420197,
+      "catalog_final_mass_msun": 142.0,
+      "chi_eff": null,
+      "snr": null,
+      "remnant_class": "BBH",
+      "mass_ratio_gr_over_catalog": 1.2152881678166476,
+      "mass_ratio_hqiv_over_catalog": 1.2756010200142232,
+      "notes": "High-mass BBH schematic ringdown witness"
+    },
+    {
+      "common_name": "GW170817",
+      "catalog": "GWTC-1.0",
+      "measurement": {
+        "f_220_hz": 1850.0,
+        "tau_220_s": 0.00011999999999999999,
+        "omega_ratio": 1.394867138193868
+      },
+      "measurement_source": "literature_ringdown",
+      "gr_inference": {
+        "final_mass_msun": 2.1798431978521764,
+        "final_spin": 0.0,
+        "mass_from_frequency_msun": 6.526802510915134,
+        "mass_from_damping_msun": 2.1798431978521764,
+        "omega_M_real": 0.373676,
+        "omega_M_imag": -0.089472
+      },
+      "hqiv_inference": {
+        "final_mass_msun": 2.2880254085307743,
+        "final_spin": 0.0,
+        "mass_from_frequency_msun": 10.423490475536752,
+        "mass_from_damping_msun": 2.2880254085307743,
+        "omega_M_real": 0.373676,
+        "omega_M_imag": -0.089472
+      },
+      "hqiv_slots": {
+        "horizon_epsilon": 0.5,
+        "horizon_lapse": 0.5,
+        "geff_modulator": 1.1101698002503162,
+        "freq_scale": 1.5970286304978538,
+        "damp_scale_base": 0.45038155414357534,
+        "damp_scale_with_eta": 0.9527180903344662,
+        "eta_merger": 0.3731692916971075,
+        "eta_lockin_surface": 0.3345736442497853,
+        "tail_exponent": 4.26610188015019
+      },
+      "mass_tail_delta_msun": 0.0,
+      "effective_mass_msun": 2.2880254085307743,
+      "catalog_final_mass_msun": 2.74,
+      "chi_eff": null,
+      "snr": null,
+      "remnant_class": "HMNS_candidate",
+      "mass_ratio_gr_over_catalog": 0.7955632108949549,
+      "mass_ratio_hqiv_over_catalog": 0.8350457695367789,
+      "notes": "HMNS / merger remnant \u2014 Kerr overlay schematic only"
+    },
+    {
+      "common_name": "GW241230_233618",
+      "catalog": "GWTC-5.0",
+      "measurement": {
+        "f_220_hz": 150.85408070524937,
+        "tau_220_s": 0.0066839872147617715,
+        "omega_ratio": 6.335378136174731
+      },
+      "measurement_source": "pe_kerr_ringdown_from_pe_mass_spin",
+      "gr_inference": {
+        "final_mass_msun": 110.61635687143588,
+        "final_spin": 0.68,
+        "mass_from_frequency_msun": 112.235565377506,
+        "mass_from_damping_msun": 110.61635687143588,
+        "omega_M_real": 0.523975,
+        "omega_M_imag": -0.081513
+      },
+      "hqiv_inference": {
+        "final_mass_msun": 127.4427714805815,
+        "final_spin": 0.0,
+        "mass_from_frequency_msun": 127.8285432491583,
+        "mass_from_damping_msun": 127.4427714805815,
+        "omega_M_real": 0.373676,
+        "omega_M_imag": -0.089472
+      },
+      "hqiv_slots": {
+        "horizon_epsilon": 0.5,
+        "horizon_lapse": 0.5,
+        "geff_modulator": 1.1101698002503162,
+        "freq_scale": 1.5970286304978538,
+        "damp_scale_base": 0.45038155414357534,
+        "damp_scale_with_eta": 0.9527180903344662,
+        "eta_merger": 0.3731692916971075,
+        "eta_lockin_surface": 0.3345736442497853,
+        "tail_exponent": 4.26610188015019
+      },
+      "mass_tail_delta_msun": 0.0,
+      "effective_mass_msun": 127.4427714805815,
+      "catalog_final_mass_msun": 111.65494382871074,
+      "chi_eff": -0.14161402588324984,
+      "snr": 11.551939323600937,
+      "remnant_class": "BBH",
+      "mass_ratio_gr_over_catalog": 0.9906982447739336,
+      "mass_ratio_hqiv_over_catalog": 1.1413983753024926,
+      "notes": "PE summary medians from Zenodo PESummaryTable.hdf5"
+    },
+    {
+      "common_name": "GW240824_205609",
+      "catalog": "GWTC-5.0",
+      "measurement": {
+        "f_220_hz": 164.82071189909345,
+        "tau_220_s": 0.006248841239093575,
+        "omega_ratio": 6.4712942090471826
+      },
+      "measurement_source": "pe_kerr_ringdown_from_pe_mass_spin",
+      "gr_inference": {
+        "final_mass_msun": 103.41492739691854,
+        "final_spin": 0.68,
+        "mass_from_frequency_msun": 102.72491146515131,
+        "mass_from_damping_msun": 103.41492739691854,
+        "omega_M_real": 0.523975,
+        "omega_M_imag": -0.081513
+      },
+      "hqiv_inference": {
+        "final_mass_msun": 119.1458960743419,
+        "final_spin": 0.0,
+        "mass_from_frequency_msun": 116.9965664967441,
+        "mass_from_damping_msun": 119.1458960743419,
+        "omega_M_real": 0.373676,
+        "omega_M_imag": -0.089472
+      },
+      "hqiv_slots": {
+        "horizon_epsilon": 0.5,
+        "horizon_lapse": 0.5,
+        "geff_modulator": 1.1101698002503162,
+        "freq_scale": 1.5970286304978538,
+        "damp_scale_base": 0.45038155414357534,
+        "damp_scale_with_eta": 0.9527180903344662,
+        "eta_merger": 0.3731692916971075,
+        "eta_lockin_surface": 0.3345736442497853,
+        "tail_exponent": 4.26610188015019
+      },
+      "mass_tail_delta_msun": 0.0,
+      "effective_mass_msun": 119.1458960743419,
+      "catalog_final_mass_msun": 103.12184664076626,
+      "chi_eff": 0.08193624327972697,
+      "snr": 7.790210228428906,
+      "remnant_class": "BBH",
+      "mass_ratio_gr_over_catalog": 1.0028420821164428,
+      "mass_ratio_hqiv_over_catalog": 1.1553894732839374,
+      "notes": "PE summary medians from Zenodo PESummaryTable.hdf5"
+    },
+    {
+      "common_name": "GW241125_010116",
+      "catalog": "GWTC-5.0",
+      "measurement": {
+        "f_220_hz": 168.62370713787996,
+        "tau_220_s": 0.006167756373197827,
+        "omega_ratio": 6.534700865504343
+      },
+      "measurement_source": "pe_kerr_ringdown_from_pe_mass_spin",
+      "gr_inference": {
+        "final_mass_msun": 102.07301692123907,
+        "final_spin": 0.68,
+        "mass_from_frequency_msun": 100.40814144605014,
+        "mass_from_damping_msun": 102.07301692123907,
+        "omega_M_real": 0.523975,
+        "omega_M_imag": -0.081513
+      },
+      "hqiv_inference": {
+        "final_mass_msun": 117.59986079586874,
+        "final_spin": 0.0,
+        "mass_from_frequency_msun": 114.35792574513454,
+        "mass_from_damping_msun": 117.59986079586874,
+        "omega_M_real": 0.373676,
+        "omega_M_imag": -0.089472
+      },
+      "hqiv_slots": {
+        "horizon_epsilon": 0.5,
+        "horizon_lapse": 0.5,
+        "geff_modulator": 1.1101698002503162,
+        "freq_scale": 1.5970286304978538,
+        "damp_scale_base": 0.45038155414357534,
+        "damp_scale_with_eta": 0.9527180903344662,
+        "eta_merger": 0.3731692916971075,
+        "eta_lockin_surface": 0.3345736442497853,
+        "tail_exponent": 4.26610188015019
+      },
+      "mass_tail_delta_msun": 0.0,
+      "effective_mass_msun": 117.59986079586874,
+      "catalog_final_mass_msun": 101.36190026585689,
+      "chi_eff": 0.06433717952662897,
+      "snr": 9.87733185599953,
+      "remnant_class": "BBH",
+      "mass_ratio_gr_over_catalog": 1.0070156207955556,
+      "mass_ratio_hqiv_over_catalog": 1.1601978700815803,
+      "notes": "PE summary medians from Zenodo PESummaryTable.hdf5"
+    },
+    {
+      "common_name": "GW240618_071627",
+      "catalog": "GWTC-5.0",
+      "measurement": {
+        "f_220_hz": 168.3528970665272,
+        "tau_220_s": 0.006084219723894486,
+        "omega_ratio": 6.435841683632276
+      },
+      "measurement_source": "pe_kerr_ringdown_from_pe_mass_spin",
+      "gr_inference": {
+        "final_mass_msun": 100.69053076226282,
+        "final_spin": 0.68,
+        "mass_from_frequency_msun": 100.56965655165986,
+        "mass_from_damping_msun": 100.69053076226282,
+        "omega_M_real": 0.523975,
+        "omega_M_imag": -0.081513
+      },
+      "hqiv_inference": {
+        "final_mass_msun": 116.00707766128899,
+        "final_spin": 0.0,
+        "mass_from_frequency_msun": 114.54188027499661,
+        "mass_from_damping_msun": 116.00707766128899,
+        "omega_M_real": 0.373676,
+        "omega_M_imag": -0.089472
+      },
+      "hqiv_slots": {
+        "horizon_epsilon": 0.5,
+        "horizon_lapse": 0.5,
+        "geff_modulator": 1.1101698002503162,
+        "freq_scale": 1.5970286304978538,
+        "damp_scale_base": 0.45038155414357534,
+        "damp_scale_with_eta": 0.9527180903344662,
+        "eta_merger": 0.3731692916971075,
+        "eta_lockin_surface": 0.3345736442497853,
+        "tail_exponent": 4.26610188015019
+      },
+      "mass_tail_delta_msun": 0.0,
+      "effective_mass_msun": 116.00707766128899,
+      "catalog_final_mass_msun": 100.6393522336373,
+      "chi_eff": 0.0006164860384459548,
+      "snr": 8.122155671260304,
+      "remnant_class": "BBH",
+      "mass_ratio_gr_over_catalog": 1.000508533963004,
+      "mass_ratio_hqiv_over_catalog": 1.152700957295264,
+      "notes": "PE summary medians from Zenodo PESummaryTable.hdf5"
+    },
+    {
+      "common_name": "GW240519_012815",
+      "catalog": "GWTC-5.0",
+      "measurement": {
+        "f_220_hz": 168.21775963071892,
+        "tau_220_s": 0.006019407494299084,
+        "omega_ratio": 6.3621727564609625
+      },
+      "measurement_source": "pe_kerr_ringdown_from_pe_mass_spin",
+      "gr_inference": {
+        "final_mass_msun": 99.61792357613224,
+        "final_spin": 0.68,
+        "mass_from_frequency_msun": 100.6504490050628,
+        "mass_from_damping_msun": 99.61792357613224,
+        "omega_M_real": 0.523975,
+        "omega_M_imag": -0.081513
+      },
+      "hqiv_inference": {
+        "final_mass_msun": 114.77131076047394,
+        "final_spin": 0.0,
+        "mass_from_frequency_msun": 114.63389728929404,
+        "mass_from_damping_msun": 114.77131076047394,
+        "omega_M_real": 0.373676,
+        "omega_M_imag": -0.089472
+      },
+      "hqiv_slots": {
+        "horizon_epsilon": 0.5,
+        "horizon_lapse": 0.5,
+        "geff_modulator": 1.1101698002503162,
+        "freq_scale": 1.5970286304978538,
+        "damp_scale_base": 0.45038155414357534,
+        "damp_scale_with_eta": 0.9527180903344662,
+        "eta_merger": 0.3731692916971075,
+        "eta_lockin_surface": 0.3345736442497853,
+        "tail_exponent": 4.26610188015019
+      },
+      "mass_tail_delta_msun": 0.0,
+      "effective_mass_msun": 114.77131076047394,
+      "catalog_final_mass_msun": 100.28120404372622,
+      "chi_eff": -0.044030793844230275,
+      "snr": 10.609852093971538,
+      "remnant_class": "BBH",
+      "mass_ratio_gr_over_catalog": 0.993385794736721,
+      "mass_ratio_hqiv_over_catalog": 1.144494742109693,
+      "notes": "PE summary medians from Zenodo PESummaryTable.hdf5"
+    }
+  ]
+}

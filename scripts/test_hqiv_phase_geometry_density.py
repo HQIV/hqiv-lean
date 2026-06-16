@@ -16,12 +16,28 @@ class TestPhaseGeometryDensity(unittest.TestCase):
     def test_curvature_fraction_from_geometry(self) -> None:
         rho = pgd.density_g_cm3(pgd.phase_unit_cell("H2O", "Ih"))
         frac = pgd.curvature_density_fraction(rho, "H2O")
-        self.assertAlmostEqual(frac, 0.88, delta=0.06)
+        self.assertAlmostEqual(frac, 0.791, delta=0.02)
+
+    def test_crystalline_ice_uses_own_melt_reference(self) -> None:
+        cell = pgd.phase_unit_cell("H2O", "Ih")
+        rho = pgd.density_g_cm3(cell)
+        ratio, solid_denser = pgd.resolve_crystalline_melt_density_ratio(
+            motif="tetrahedral_hbond", n_coord=4, molecule="H2O"
+        )
+        self.assertFalse(solid_denser)
+        rho_melt = pgd.derived_melt_reference_density_g_cm3(
+            rho, motif="tetrahedral_hbond", n_coord=4, molecule="H2O"
+        )
+        self.assertGreater(rho_melt, rho)
+        self.assertAlmostEqual(rho / rho_melt, ratio, places=3)
+
+    def test_melt_comparison_baseline_is_unity(self) -> None:
+        self.assertEqual(pgd.melt_comparison_curvature_density_fraction(), 1.0)
 
     def test_bulk_h2o_uses_derived_rho_not_unity(self) -> None:
         mat = tptp.material_scales_bulk_h2o()
-        self.assertLess(mat.medium_density_fraction or 1.0, 0.95)
-        self.assertGreater(mat.medium_density_fraction or 0.0, 0.80)
+        self.assertLess(mat.medium_density_fraction or 1.0, 0.85)
+        self.assertGreater(mat.medium_density_fraction or 0.0, 0.75)
 
     def test_melt_near_273k_with_phase_geometry(self) -> None:
         mat = tptp.material_scales_bulk_h2o()
