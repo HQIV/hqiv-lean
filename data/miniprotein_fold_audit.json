@@ -1,0 +1,55 @@
+{
+  "source": "scripts/hqiv_miniprotein_fold_audit.py",
+  "comparison_policy": "PDB C\u03b1 witnesses grade HQIV fold readouts only",
+  "folds": [
+    {
+      "name": "GG",
+      "sequence": "GG",
+      "n_residues": 2,
+      "strategy": "beta_strand_dipeptide",
+      "network_contacts": 3,
+      "bond_geometry_angstrom": {
+        "N_CA": 1.2143618047556726,
+        "CA_C": 1.2143618047556726,
+        "C_N": 1.3297495507058068,
+        "C_O": 1.298220806960941
+      },
+      "predicted_radius_of_gyration_A": 1.650494347728614,
+      "witness_radius_of_gyration_A": null,
+      "ca_rmsd_angstrom": 1.8189875843673018,
+      "ca_rmsd_pass_angstrom": 2.0,
+      "passed": true
+    },
+    {
+      "name": "trp_cage",
+      "sequence": "NLYIQWLKDGGPSSGRPPPS",
+      "n_residues": 20,
+      "strategy": "secondary_structure_spine+staged_tertiary_contacts",
+      "network_contacts": 40,
+      "bond_geometry_angstrom": {
+        "N_CA": 1.2143618047556726,
+        "CA_C": 1.2143618047556726,
+        "C_N": 1.3297495507058068,
+        "C_O": 1.298220806960941
+      },
+      "predicted_radius_of_gyration_A": 6.029432668703606,
+      "witness_radius_of_gyration_A": 7.001187790475271,
+      "ca_rmsd_angstrom": 7.258788219425817,
+      "ca_rmsd_pass_angstrom": 5.0,
+      "passed": false,
+      "radius_of_gyration_error_pct": 13.87986083009634,
+      "tertiary_contacts": 24,
+      "hydrophobic_pairs": 3,
+      "diagnostics": {
+        "witness_end_to_end_ca_A": 12.058966498004711,
+        "predicted_end_to_end_ca_A": 10.92348122926829,
+        "notes": "Tertiary graph: helix i\u00b13/4, sheet i+2, helix\u2013sheet register, hydrophobic, compact terminus \u2014 staged closure (SS \u2192 hydro \u2192 terminus). All targets from derived peptide geometry (no PDB inputs)."
+      }
+    }
+  ],
+  "summary": {
+    "targets": 2,
+    "passed": 1,
+    "mean_ca_rmsd_angstrom": 4.538887901896559
+  }
+}

@@ -111,13 +111,14 @@ noncomputable def dynamicComptonXiMean (t : DynamicComptonTriplet) : ℝ :=
 noncomputable def dynamicBindingCurvatureCouplingAtXi (xi : ℝ) : ℝ :=
   gamma_HQIV * strongChannelFraction * omegaKContinuous xi xiLockin
 
-/-- Dimensionless cluster-binding contrast (B_lock − B_qcd) / B_lock. -/
-noncomputable def clusterBindingContrastRelative : ℝ :=
-  (bbnClusterBinding m_lockin 4 - bbnClusterBinding m_QCD 4) / bbnClusterBinding m_lockin 4
+/-- Dimensionless cluster-binding contrast (B_lock − B_qcd) / B_lock.
+    Canonical definition lives in `Hqiv.Physics.DynamicBBNBaryogenesis`. -/
+abbrev clusterBindingContrastRelative : ℝ :=
+  Hqiv.Physics.clusterBindingContrastRelative
 
 /-- Binding-curvature correction at contact ξ (dimensionless). -/
 noncomputable def dynamicBindingCurvatureCorrectionAtXi (xi : ℝ) : ℝ :=
-  dynamicBindingCurvatureCouplingAtXi xi * clusterBindingContrastRelative
+  dynamicBindingCurvatureCouplingAtXi xi * Hqiv.Physics.clusterBindingContrastRelative
 
 /-- First-order binding feedback at ξ. -/
 noncomputable def dynamicBindingCurvatureFeedbackAtXi (xi : ℝ) : ℝ :=
@@ -209,6 +210,20 @@ noncomputable def perNucleonClusterBindingMeV (m A : ℕ) (c : ℝ := 1) : ℝ :
 
 theorem perNucleonClusterBindingMeV_eq (m A : ℕ) (c : ℝ) :
     perNucleonClusterBindingMeV m A c = bbnClusterBinding m A c / (A : ℝ) := rfl
+
+/-- At lock-in ξ, chemistry-chart correction matches the baryogenesis dimless slot. -/
+theorem dynamicBindingCurvatureCorrectionAtXi_lockin_eq_baryogenesis_dimless :
+    dynamicBindingCurvatureCorrectionAtXi xiLockin =
+      Hqiv.Physics.baryogenesis_binding_curvature_correction_dimless := by
+  unfold dynamicBindingCurvatureCorrectionAtXi Hqiv.Physics.baryogenesis_binding_curvature_correction_dimless
+  rw [dynamicBindingCurvatureCouplingAtXi, omegaKContinuous_lockin]
+  ring
+
+theorem dynamicBindingCurvatureFeedbackAtXi_lockin_eq_baryogenesis :
+    dynamicBindingCurvatureFeedbackAtXi xiLockin =
+      1 + Hqiv.Physics.baryogenesis_binding_curvature_correction_dimless := by
+  unfold dynamicBindingCurvatureFeedbackAtXi
+  rw [dynamicBindingCurvatureCorrectionAtXi_lockin_eq_baryogenesis_dimless]
 
 end
 

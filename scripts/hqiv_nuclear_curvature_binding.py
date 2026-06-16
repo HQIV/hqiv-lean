@@ -48,6 +48,8 @@ STABLE_MASS_NUMBER: dict[int, int] = {
     7: 14,  # N
     8: 16,  # O
     9: 19,  # F
+    11: 23,  # Na — main isotope pin (ionic panel)
+    17: 35,  # Cl
 }
 
 

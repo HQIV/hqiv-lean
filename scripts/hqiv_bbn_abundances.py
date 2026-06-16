@@ -24,6 +24,7 @@ from dataclasses import asdict, dataclass
 from pathlib import Path
 
 import hqiv_excited_states as hes
+import hqiv_lean_physics_primitives as lean
 
 ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT / "data" / "bbn_witnesses.json"
@@ -43,6 +44,9 @@ STRONG_CHANNEL_FRACTION = 4.0 / 8.0
 BBN_T_LOW_MEV = 0.01
 BBN_T_HIGH_MEV = 1.0
 BBN_T_MID_MEV = 0.1
+# ⁷Be synthesis + ⁷Be→⁷Li capture: MeV tail after α lock-in (not full 1→0.01 window).
+BBN_LI7_TAIL_T_HIGH_MEV = 0.25
+BBN_LI7_TAIL_T_LOW_MEV = 0.05
 
 
 def load_witness() -> dict:
@@ -114,6 +118,33 @@ def cluster_binding_mev(m: int, A: int, c: float = 1.0, *, Z: int = 0) -> float:
     return float(A) * hes.e_bind_from_nucleon_trace_mev(m, c) * valley_binding_factor(A, Z)
 
 
+def cluster_binding_network_mev(
+    m: int,
+    A: int,
+    Z: int = 0,
+    *,
+    c: float = 1.0,
+    xi: float | None = None,
+    apply_spin_magnetic: bool = True,
+) -> float:
+    """
+    BBN / integrator entry: canonical curvature + ``G_eff`` binding (mass-ledger spine).
+
+    Signature matches ``hqiv_curvature_binding_core.cluster_binding_network_mev``
+    (``Z`` before ``c``). Legacy valley ladder: ``cluster_binding_mev``.
+    """
+    del c, apply_spin_magnetic  # canonical spine is fully determined by (shell, A, Z, xi)
+    import hqiv_dynamic_nucleon_pn as pn
+    import hqiv_nuclear_outside_temperature_dynamics as notd
+
+    return pn.cluster_binding_canonical_mev(
+        A,
+        Z,
+        shell=m,
+        xi=notd.XI_LOCKIN if xi is None else xi,
+    )
+
+
 def cluster_mass_mev(
     m: int, A: int, m_nucleon: float, c: float = 1.0, *, Z: int = 0
 ) -> float:
@@ -158,7 +189,7 @@ def be7_to_li7_capture_q(
     Q_be: float,
     Q_li: float,
 ) -> float:
-    """⁷Be + e⁻ → ⁷Li: release from Be well minus weaker Li far-neutron well."""
+    """⁷Be + e⁻ → ⁷Li: γ·strong·|Q_Be − Q_Li| (well-depth gap; Lean ``bbnBe7ToLi7CaptureQ``)."""
     from hqiv_post_alpha_sphere_touching import be7_to_li7_capture_q as _q
 
     return _q(Q_be, Q_li)
@@ -167,7 +198,7 @@ def be7_to_li7_capture_q(
 def lockin_binding_q(
     m_nucleon: float, m_shell: int | None = None, c: float = 1.0
 ) -> tuple[float, float, float, float]:
-    """Q_D, Q_4, Q_3, Q_7 at lock-in shell (nuclear-scale network witness)."""
+    """Q_D, Q_4, Q_3, Q_7 at lock-in shell (legacy valley witness)."""
     m_shell = m_shell if m_shell is not None else REFERENCE_M
     Q_D = 2.0 * m_nucleon - cluster_mass_mev(m_shell, 2, m_nucleon, c)
     Q_4 = 4.0 * m_nucleon - cluster_mass_mev(m_shell, 4, m_nucleon, c)
@@ -176,14 +207,51 @@ def lockin_binding_q(
     return Q_D, Q_4, Q_3, Q_7
 
 
+def lockin_binding_q_network(
+    m_nucleon: float,
+    m_shell: int | None = None,
+    c: float = 1.0,
+    *,
+    xi: float | None = None,
+) -> tuple[float, float, float, float]:
+    """Q_D, Q_4, Q_3, Q_7 on shared-well network + spin–magnetic residual spine."""
+    m_shell = m_shell if m_shell is not None else REFERENCE_M
+    Q_D = cluster_binding_network_mev(m_shell, 2, Z=1, c=c, xi=xi)
+    Q_4 = cluster_binding_network_mev(m_shell, 4, Z=2, c=c, xi=xi)
+    # BBN ³He/H track and ³He+⁴He→⁷Be use ³He binding (not triton).
+    Q_3 = cluster_binding_network_mev(m_shell, 3, Z=2, c=c, xi=xi)
+    Q_7 = cluster_binding_network_mev(m_shell, 7, Z=4, c=c, xi=xi)
+    return Q_D, Q_4, Q_3, Q_7
+
+
 def lockin_li7_be7_q(
     m_nucleon: float, m_shell: int | None = None, c: float = 1.0
 ) -> tuple[float, float]:
-    """⁷Be and ⁷Li cluster binding Q at lock-in (distinct post-α valley geometry)."""
+    """⁷Be and ⁷Li cluster binding Q at lock-in (geometry / `bbnClusterBinding` spine)."""
     m_shell = m_shell if m_shell is not None else REFERENCE_M
     Q_be = cluster_binding_mev(m_shell, 7, c, Z=4)
     Q_li = li7_cluster_binding_q(m_shell, m_nucleon, c)
     return Q_be, Q_li
+
+
+def lockin_li7_be7_q_network(
+    m_nucleon: float,
+    m_shell: int | None = None,
+    c: float = 1.0,
+    *,
+    xi: float | None = None,
+) -> tuple[float, float]:
+    """⁷Be and ⁷Li network curvature binding at lock-in (paper BBN spine)."""
+    del m_nucleon  # network Q is trace-derived at ``m_shell``
+    m_shell = m_shell if m_shell is not None else REFERENCE_M
+    Q_be = cluster_binding_network_mev(m_shell, 7, Z=4, c=c, xi=xi)
+    Q_li = cluster_binding_network_mev(m_shell, 7, Z=3, c=c, xi=xi)
+    return Q_be, Q_li
+
+
+def li7_well_depth_gap(Q_be: float, Q_li: float) -> float:
+    """|B(⁷Li) − B(⁷Be)| at lock-in — electron-capture Q scale (PDG order ≈ 1.6 MeV)."""
+    return abs(Q_li - Q_be)
 
 
 def neutron_proton_ratio(T_mev: float, Q_np: float) -> float:
@@ -216,7 +284,44 @@ def eta_exponent_he3(Q_3: float, Q_D: float, Q_np: float) -> float:
 
 
 def eta_exponent_li7(Q_4: float, Q_D: float, Q_np: float) -> float:
+    """Legacy 7/4 α proxy (illustrative scaffold only — not used in network ladder)."""
     return -(((7.0 / 4.0) * Q_4 - Q_D) / Q_np)
+
+
+def eta_exponent_li7_ladder(Q_be: float, Q_li: float, Q_np: float) -> float:
+    """⁷Li/H η exponent from Be vs Li well-depth gap (³He+⁴He→⁷Be→⁷Li ladder)."""
+    return -(li7_well_depth_gap(Q_be, Q_li) / Q_np)
+
+
+def be7_li7_ladder_at_epoch(
+    eta: float,
+    T_mev: float,
+    Q_np: float,
+    Q_D: float,
+    Q_4: float,
+    Q_3: float,
+    Q_7: float,
+    Q_be: float,
+    Q_li: float,
+    He3_over_H: float,
+) -> tuple[float, float]:
+    """
+    ⁷Be/H and ⁷Li/H from the HQIV network ladder at epoch ``T``.
+
+    Production: ³He + ⁴He → ⁷Be (``be7_formation_q``) with ³He inventory.
+    Capture: ⁷Be + e⁻ → ⁷Li via well-depth gap ``|Q_Be − Q_Li|`` and ``bbnBindingReleaseFactor``.
+    """
+    gap = li7_well_depth_gap(Q_be, Q_li)
+    Q_form = be7_formation_q(Q_7, Q_3, Q_4)
+    rel = lean.bbn_binding_release_factor(T_mev)
+    eta_fac = eta10(eta) ** eta_exponent_li7_ladder(Q_be, Q_li, Q_np)
+    thermal = thermal_sink(gap * rel, Q_D * rel, T_mev)
+    branch = STRONG_CHANNEL_FRACTION * GAMMA_HQIV * (Q_form / Q_4)
+    li7_h = He3_over_H * eta_fac * thermal * branch
+    # Relic ⁷Be after partial capture in the MeV tail (subdominant to ⁷Li/H).
+    capture_tail = math.exp(-gap * rel / max(T_mev, 0.02)) * STRONG_CHANNEL_FRACTION
+    be7_h = li7_h * capture_tail
+    return be7_h, li7_h
 
 
 def freezeout_temperature_mev(Q_np: float, eta: float) -> float:
@@ -234,24 +339,142 @@ def abundances_at_epoch(
     Q_3: float,
     *,
     T_freeze_mev: float | None = None,
+    Q_7: float | None = None,
+    Q_be: float | None = None,
+    Q_li: float | None = None,
+    use_li7_ladder: bool = True,
 ) -> dict[str, float]:
     """Lock-in Q's; thermal factors at epoch T; Y_p from single freeze-out temperature."""
     T_f = T_freeze_mev if T_freeze_mev is not None else freezeout_temperature_mev(Q_np, eta)
     x_n = neutron_proton_ratio(T_f, Q_np)
     Yp = y_p_from_neutron_fraction(x_n)
-    e10 = eta10(eta)
-    DH = e10 ** eta_exponent_dh(Q_D, Q_4, Q_np) * thermal_sink(Q_D, Q_4, T_mev)
-    He3H = e10 ** eta_exponent_he3(Q_3, Q_D, Q_np) * thermal_sink(Q_3, Q_4, T_mev)
-    Li7H = e10 ** eta_exponent_li7(Q_4, Q_D, Q_np) * thermal_sink(1.75 * Q_4, Q_4, T_mev)
+    DH = eta10(eta) ** eta_exponent_dh(Q_D, Q_4, Q_np) * thermal_sink(Q_D, Q_4, T_mev)
+    He3H = eta10(eta) ** eta_exponent_he3(Q_3, Q_D, Q_np) * thermal_sink(Q_3, Q_4, T_mev)
+    if Q_7 is None or Q_be is None or Q_li is None:
+        _, Q_4_net, Q_3_net, Q_7_net = lockin_binding_q_network(m_nucleon, REFERENCE_M)
+        Q_be_net, Q_li_net = lockin_li7_be7_q_network(m_nucleon, REFERENCE_M)
+        Q_7 = Q_7 if Q_7 is not None else Q_7_net
+        Q_be = Q_be if Q_be is not None else Q_be_net
+        Q_li = Q_li if Q_li is not None else Q_li_net
+        del Q_4_net, Q_3_net
+    Q_form = be7_formation_q(Q_7, Q_3, Q_4)
+    Q_cap = be7_to_li7_capture_q(Q_be, Q_li)
+    if use_li7_ladder:
+        Be7H, Li7H = be7_li7_ladder_at_epoch(
+            eta, T_mev, Q_np, Q_D, Q_4, Q_3, Q_7, Q_be, Q_li, He3H
+        )
+    else:
+        Be7H = 0.0
+        Li7H = (
+            eta10(eta) ** eta_exponent_li7(Q_4, Q_D, Q_np)
+            * thermal_sink(1.75 * Q_4, Q_4, T_mev)
+        )
     return {
         "T_MeV": T_mev,
         "shell_index": shell_index_from_mev(T_mev),
         "Yp": Yp,
         "D_over_H": DH,
         "He3_over_H": He3H,
+        "Be7_over_H": Be7H,
         "Li7_over_H": Li7H,
+        "Q_7Be_formation_MeV": Q_form,
+        "Q_be7_to_li7_capture_MeV": Q_cap,
+        "Q_7Be_binding_MeV": Q_be,
+        "Q_7Li_binding_MeV": Q_li,
         "xn": x_n,
         "T_freeze_MeV": T_f,
+    }
+
+
+def light_binding_q_at_temperature(
+    T_mev: float,
+    *,
+    m_shell: int = REFERENCE_M,
+    c: float = 1.0,
+) -> tuple[float, float, float]:
+    """
+    Light-nucleus Q at cosmological temperature ``T``.
+
+    Uses ``bbnBindingReleaseFactor`` on the composite trace (Lean
+    ``bbnDeuteronBindingQ_effectiveAtT`` / ``bbnHelium4BindingQ_effectiveAtT``).
+    """
+    return lean.bbn_light_binding_q_effective_at_t(T_mev, m_shell, c)
+
+
+def integrate_be7_li7_tail_window(
+    eta: float,
+    m_nucleon: float,
+    Q_np: float,
+    Q_D_lock: float,
+    Q_4_lock: float,
+    Q_3_lock: float,
+    Q_7_lock: float,
+    Q_be_lock: float,
+    Q_li_lock: float,
+    *,
+    n_steps: int = 24,
+    T_high: float = BBN_LI7_TAIL_T_HIGH_MEV,
+    T_low: float = BBN_LI7_TAIL_T_LOW_MEV,
+    use_binding_release: bool = True,
+    m_shell: int = REFERENCE_M,
+    c: float = 1.0,
+    he3_over_h: float | None = None,
+) -> dict[str, float]:
+    """Log-weighted average of ⁷Be/⁷Li over the BBN MeV tail (after ⁴He synthesis)."""
+    if n_steps < 2:
+        raise ValueError("n_steps must be >= 2")
+    temps = [T_high * (T_low / T_high) ** (i / (n_steps - 1)) for i in range(n_steps)]
+    weights: list[float] = []
+    be7_vals: list[float] = []
+    li7_vals: list[float] = []
+    for i, T in enumerate(temps):
+        if i == 0:
+            w = abs(math.log(temps[1] / temps[0]))
+        elif i == n_steps - 1:
+            w = abs(math.log(temps[-1] / temps[-2]))
+        else:
+            w = abs(math.log(temps[i + 1] / temps[i - 1]) / 2.0)
+        weights.append(w)
+        if use_binding_release:
+            Q_D_t, Q_4_t, Q_3_t = light_binding_q_at_temperature(T, m_shell=m_shell, c=c)
+        else:
+            Q_D_t, Q_4_t, Q_3_t = Q_D_lock, Q_4_lock, Q_3_lock
+        if he3_over_h is not None:
+            be7_h, li7_h = be7_li7_ladder_at_epoch(
+                eta,
+                T,
+                Q_np,
+                Q_D_t,
+                Q_4_lock,
+                Q_3_t,
+                Q_7_lock,
+                Q_be_lock,
+                Q_li_lock,
+                he3_over_h,
+            )
+        else:
+            row = abundances_at_epoch(
+                eta,
+                T,
+                m_nucleon,
+                Q_np,
+                Q_D_t,
+                Q_4_t,
+                Q_3_t,
+                Q_7=Q_7_lock,
+                Q_be=Q_be_lock,
+                Q_li=Q_li_lock,
+            )
+            be7_h, li7_h = row["Be7_over_H"], row["Li7_over_H"]
+        be7_vals.append(be7_h)
+        li7_vals.append(li7_h)
+    total_w = sum(weights)
+    return {
+        "Be7_over_H": sum(v * w for v, w in zip(be7_vals, weights)) / total_w,
+        "Li7_over_H": sum(v * w for v, w in zip(li7_vals, weights)) / total_w,
+        "T_tail_low_MeV": T_low,
+        "T_tail_high_MeV": T_high,
+        "n_steps": float(n_steps),
     }
 
 
@@ -266,6 +489,12 @@ def integrate_bbn_window(
     n_steps: int = 40,
     T_high: float = BBN_T_HIGH_MEV,
     T_low: float = BBN_T_LOW_MEV,
+    use_binding_release: bool = False,
+    m_shell: int = REFERENCE_M,
+    c: float = 1.0,
+    Q_7: float | None = None,
+    Q_be: float | None = None,
+    Q_li: float | None = None,
 ) -> dict[str, float]:
     """
     Log-spaced average over the BBN temperature window (universe aging: T drops, shell grows).
@@ -283,15 +512,48 @@ def integrate_bbn_window(
         else:
             w = abs(math.log(temps[i + 1] / temps[i - 1]) / 2.0)
         weights.append(w)
-        rows.append(abundances_at_epoch(eta, T, m_nucleon, Q_np, Q_D, Q_4, Q_3))
+        if use_binding_release:
+            Q_D_t, Q_4_t, Q_3_t = light_binding_q_at_temperature(
+                T, m_shell=m_shell, c=c
+            )
+            rows.append(
+                abundances_at_epoch(eta, T, m_nucleon, Q_np, Q_D_t, Q_4_t, Q_3_t)
+            )
+        else:
+            rows.append(abundances_at_epoch(eta, T, m_nucleon, Q_np, Q_D, Q_4, Q_3))
     total_w = sum(weights)
     out: dict[str, float] = {}
-    for key in ("Yp", "D_over_H", "He3_over_H", "Li7_over_H"):
+    for key in ("Yp", "D_over_H", "He3_over_H"):
         vals = [r[key] for r in rows]
         if any(math.isinf(v) for v in vals):
             out[key] = float("nan")
         else:
             out[key] = sum(v * w for v, w in zip(vals, weights)) / total_w
+    if Q_7 is None or Q_be is None or Q_li is None:
+        _, _, _, Q_7_lock = lockin_binding_q_network(m_nucleon, m_shell, c)
+        Q_be_lock, Q_li_lock = lockin_li7_be7_q_network(m_nucleon, m_shell, c)
+    else:
+        Q_7_lock, Q_be_lock, Q_li_lock = Q_7, Q_be, Q_li
+    he3_inventory = out.get("He3_over_H", float("nan"))
+    li_tail = integrate_be7_li7_tail_window(
+        eta,
+        m_nucleon,
+        Q_np,
+        Q_D,
+        Q_4,
+        Q_3,
+        Q_7_lock,
+        Q_be_lock,
+        Q_li_lock,
+        use_binding_release=use_binding_release,
+        m_shell=m_shell,
+        c=c,
+        he3_over_h=he3_inventory if not math.isnan(he3_inventory) else None,
+    )
+    out["Be7_over_H"] = li_tail["Be7_over_H"]
+    out["Li7_over_H"] = li_tail["Li7_over_H"]
+    out["Li7_tail_T_low_MeV"] = li_tail["T_tail_low_MeV"]
+    out["Li7_tail_T_high_MeV"] = li_tail["T_tail_high_MeV"]
     out["T_window_low_MeV"] = T_low
     out["T_window_high_MeV"] = T_high
     out["n_steps"] = float(n_steps)
@@ -317,11 +579,21 @@ class EpochRow:
     Yp: float
     D_over_H: float
     He3_over_H: float
+    Be7_over_H: float
     Li7_over_H: float
 
 
 def build_epoch_table(
-    eta: float, m_nucleon: float, Q_np: float, Q_D: float, Q_4: float, Q_3: float
+    eta: float,
+    m_nucleon: float,
+    Q_np: float,
+    Q_D: float,
+    Q_4: float,
+    Q_3: float,
+    *,
+    use_binding_release: bool = False,
+    m_shell: int = REFERENCE_M,
+    c: float = 1.0,
 ) -> list[EpochRow]:
     rows = []
     for label, T in [
@@ -331,7 +603,13 @@ def build_epoch_table(
         ("bbn_T_0.01_MeV", BBN_T_LOW_MEV),
         ("cmb_today", cmb_temperature_mev()),
     ]:
-        a = abundances_at_epoch(eta, T, m_nucleon, Q_np, Q_D, Q_4, Q_3)
+        if use_binding_release:
+            Q_D_t, Q_4_t, Q_3_t = light_binding_q_at_temperature(
+                T, m_shell=m_shell, c=c
+            )
+            a = abundances_at_epoch(eta, T, m_nucleon, Q_np, Q_D_t, Q_4_t, Q_3_t)
+        else:
+            a = abundances_at_epoch(eta, T, m_nucleon, Q_np, Q_D, Q_4, Q_3)
         rows.append(
             EpochRow(
                 label=label,
@@ -340,6 +618,7 @@ def build_epoch_table(
                 Yp=a["Yp"],
                 D_over_H=a["D_over_H"],
                 He3_over_H=a["He3_over_H"],
+                Be7_over_H=a["Be7_over_H"],
                 Li7_over_H=a["Li7_over_H"],
             )
         )
@@ -366,15 +645,38 @@ def main() -> None:
     m_p = float(w["derivedProtonMass_MeV"])
     dm = float(w["derivedDeltaM_MeV"])
     eta = ETA_PAPER
-    Q_D, Q_4, Q_3, _Q_7 = lockin_binding_q(m_p, REFERENCE_M)
-
-    mid = abundances_at_epoch(eta, BBN_T_MID_MEV, m_p, dm, Q_D, Q_4, Q_3)
-    integrated = integrate_bbn_window(eta, m_p, dm, Q_D, Q_4, Q_3)
-    epoch_table = build_epoch_table(eta, m_p, dm, Q_D, Q_4, Q_3)
+    Q_D_net, Q_4_net, Q_3_net, Q_7_net = lockin_binding_q_network(m_p, REFERENCE_M)
+    Q_be_net, Q_li_net = lockin_li7_be7_q_network(m_p, REFERENCE_M)
+    Q_D_valley, Q_4_valley, Q_3_valley, _Q_7_v = lockin_binding_q(m_p, REFERENCE_M)
+    Q_D_mid, Q_4_mid, Q_3_mid = light_binding_q_at_temperature(BBN_T_MID_MEV)
+    mid = abundances_at_epoch(
+        eta,
+        BBN_T_MID_MEV,
+        m_p,
+        dm,
+        Q_D_mid,
+        Q_4_mid,
+        Q_3_mid,
+        Q_7=Q_7_net,
+        Q_be=Q_be_net,
+        Q_li=Q_li_net,
+    )
+    integrated = integrate_bbn_window(
+        eta, m_p, dm, Q_D_net, Q_4_net, Q_3_net, use_binding_release=True
+    )
+    integrated_valley = integrate_bbn_window(
+        eta, m_p, dm, Q_D_valley, Q_4_valley, Q_3_valley, use_binding_release=False
+    )
+    epoch_table = build_epoch_table(
+        eta, m_p, dm, Q_D_net, Q_4_net, Q_3_net, use_binding_release=True
+    )
     coc = coc2015_abundances(eta)
 
     payload = {
-        "source": "HQIV BBN: lock-in η + network Q at referenceM; abundances at cosmological T",
+        "source": (
+            "HQIV BBN: network Q at lock-in + bbnBindingReleaseFactor per epoch T "
+            "(dynamicBBNReadoutAtT spine)"
+        ),
         "lean_modules": [
             "Hqiv.Physics.BBNNetworkFromWeights",
             "Hqiv.Physics.BBNEpochEvolution",
@@ -385,12 +687,26 @@ def main() -> None:
             "eta_paper": eta,
             "derivedProtonMass_MeV": m_p,
             "derivedDeltaM_MeV": dm,
-            "Q_D_lockin_MeV": Q_D,
-            "Q_4He_lockin_MeV": Q_4,
+            "Q_D_lockin_network_MeV": Q_D_net,
+            "Q_4He_lockin_network_MeV": Q_4_net,
+            "Q_3He_lockin_network_MeV": Q_3_net,
+            "Q_7Be_lockin_network_MeV": Q_7_net,
+            "Q_7Be_formation_lockin_MeV": be7_formation_q(Q_7_net, Q_3_net, Q_4_net),
+            "Q_7Be_binding_network_MeV": Q_be_net,
+            "Q_7Li_binding_network_MeV": Q_li_net,
+            "Q_be7_to_li7_capture_MeV": be7_to_li7_capture_q(Q_be_net, Q_li_net),
+            "Q_D_lockin_valley_MeV": Q_D_valley,
+            "Q_4He_lockin_valley_MeV": Q_4_valley,
+            "Q_mid_epoch_effective_MeV": {
+                "Q_D": Q_D_mid,
+                "Q_4He": Q_4_mid,
+                "Q_3He": Q_3_mid,
+            },
             "lockin_T_MeV": lockin_temperature_mev(),
             "cmb_T_MeV": cmb_temperature_mev(),
         },
         "bbn_window_integrated": integrated,
+        "bbn_window_integrated_valley_lockin": integrated_valley,
         "bbn_mid_epoch": mid,
         "epoch_comparison": [asdict(r) for r in epoch_table],
         "comparison_coc2015": coc,
@@ -410,7 +726,12 @@ def main() -> None:
     print(f"  Y_p   = {integrated['Yp']:.5f}")
     print(f"  D/H   = {integrated['D_over_H']:.4e}")
     print(f"  ³He/H = {integrated['He3_over_H']:.4e}")
+    print(f"  ⁷Be/H = {integrated['Be7_over_H']:.4e}")
     print(f"  ⁷Li/H = {integrated['Li7_over_H']:.4e}")
+    print(
+        f"  (⁷Li tail window T = {integrated['Li7_tail_T_high_MeV']} → "
+        f"{integrated['Li7_tail_T_low_MeV']} MeV)"
+    )
     print("\nMid-epoch (T = 0.1 MeV):")
     print(f"  Y_p   = {mid['Yp']:.5f}  |  D/H = {mid['D_over_H']:.4e}")
 

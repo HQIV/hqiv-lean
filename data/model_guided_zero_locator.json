@@ -1,0 +1,187 @@
+{
+  "description": "Model-guided Hardy-Z zero locator (Option 1)",
+  "model": {
+    "balance_offset": 2.356194490192345,
+    "candidate_period": 3.141592653589793,
+    "candidate_formula": "t_k = 3\u03c0/4 + k\u03c0"
+  },
+  "parameters": {
+    "cover_height": 50.0,
+    "window": 1.0,
+    "grid_steps": 80,
+    "prec": 50
+  },
+  "candidates": [
+    {
+      "index": 0,
+      "height": 2.356194490192345
+    },
+    {
+      "index": 1,
+      "height": 5.497787143782138
+    },
+    {
+      "index": 2,
+      "height": 8.63937979737193
+    },
+    {
+      "index": 3,
+      "height": 11.780972450961723
+    },
+    {
+      "index": 4,
+      "height": 14.922565104551516
+    },
+    {
+      "index": 5,
+      "height": 18.06415775814131
+    },
+    {
+      "index": 6,
+      "height": 21.205750411731103
+    },
+    {
+      "index": 7,
+      "height": 24.347343065320896
+    },
+    {
+      "index": 8,
+      "height": 27.48893571891069
+    },
+    {
+      "index": 9,
+      "height": 30.630528372500482
+    },
+    {
+      "index": 10,
+      "height": 33.772121026090275
+    },
+    {
+      "index": 11,
+      "height": 36.913713679680065
+    },
+    {
+      "index": 12,
+      "height": 40.05530633326986
+    },
+    {
+      "index": 13,
+      "height": 43.19689898685966
+    },
+    {
+      "index": 14,
+      "height": 46.33849164044945
+    },
+    {
+      "index": 15,
+      "height": 49.48008429403924
+    }
+  ],
+  "located_zeros": [
+    {
+      "candidate_index": 4,
+      "candidate_height": 14.922565104551516,
+      "located_height": 14.134725141734695,
+      "hardy_z_at_located": 6.668186342283778e-16,
+      "distance_to_candidate": 0.7878399628168218
+    },
+    {
+      "candidate_index": 6,
+      "candidate_height": 21.205750411731103,
+      "located_height": 21.022039638771556,
+      "hardy_z_at_located": -1.160916404432883e-15,
+      "distance_to_candidate": 0.18371077295954663
+    },
+    {
+      "candidate_index": 7,
+      "candidate_height": 24.347343065320896,
+      "located_height": 25.01085758014569,
+      "hardy_z_at_located": 8.49884485575286e-16,
+      "distance_to_candidate": 0.6635145148247936
+    },
+    {
+      "candidate_index": 9,
+      "candidate_height": 30.630528372500482,
+      "located_height": 30.424876125859512,
+      "hardy_z_at_located": 1.0578057324100325e-15,
+      "distance_to_candidate": 0.2056522466409696
+    },
+    {
+      "candidate_index": 10,
+      "candidate_height": 33.772121026090275,
+      "located_height": 32.93506158773919,
+      "hardy_z_at_located": 2.7490910092466363e-15,
+      "distance_to_candidate": 0.8370594383510834
+    },
+    {
+      "candidate_index": 11,
+      "candidate_height": 36.913713679680065,
+      "located_height": 37.586178158825675,
+      "hardy_z_at_located": -6.666942710405275e-15,
+      "distance_to_candidate": 0.67246447914561
+    },
+    {
+      "candidate_index": 12,
+      "candidate_height": 40.05530633326986,
+      "located_height": 40.9187190121475,
+      "hardy_z_at_located": 4.794581520531557e-15,
+      "distance_to_candidate": 0.8634126788776371
+    },
+    {
+      "candidate_index": 13,
+      "candidate_height": 43.19689898685966,
+      "located_height": 43.327073280915,
+      "hardy_z_at_located": -4.3167091771724725e-15,
+      "distance_to_candidate": 0.13017429405534386
+    },
+    {
+      "candidate_index": 15,
+      "candidate_height": 49.48008429403924,
+      "located_height": 49.7738324776723,
+      "hardy_z_at_located": 2.4488081356777964e-15,
+      "distance_to_candidate": 0.2937481836330633
+    }
+  ],
+  "known_zero_comparison": [
+    {
+      "known_zero": 14.134725141734695,
+      "nearest_model_index": 4,
+      "nearest_model_height": 14.922565104551516,
+      "model_distance": 0.7878399628168218,
+      "located_height": 14.134725141734695,
+      "located_distance": 0.0
+    },
+    {
+      "known_zero": 21.022039638771556,
+      "nearest_model_index": 6,
+      "nearest_model_height": 21.205750411731103,
+      "model_distance": 0.18371077295954663,
+      "located_height": 21.022039638771556,
+      "located_distance": 0.0
+    },
+    {
+      "known_zero": 25.01085758014569,
+      "nearest_model_index": 7,
+      "nearest_model_height": 24.347343065320896,
+      "model_distance": 0.6635145148247936,
+      "located_height": 25.01085758014569,
+      "located_distance": 0.0
+    },
+    {
+      "known_zero": 30.424876125859512,
+      "nearest_model_index": 9,
+      "nearest_model_height": 30.630528372500482,
+      "model_distance": 0.2056522466409696,
+      "located_height": 30.424876125859512,
+      "located_distance": 0.0
+    },
+    {
+      "known_zero": 32.93506158773919,
+      "nearest_model_index": 10,
+      "nearest_model_height": 33.772121026090275,
+      "model_distance": 0.8370594383510834,
+      "located_height": 32.93506158773919,
+      "located_distance": 0.0
+    }
+  ]
+}

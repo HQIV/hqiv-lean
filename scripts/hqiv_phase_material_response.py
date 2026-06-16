@@ -64,7 +64,9 @@ def phase_lift_coeff(m: int) -> float:
 
 
 def _spec_for_molecule(molecule: str) -> MoleculeSpec:
-    return MoleculeSpec.from_chart_name(molecule)
+    from hqiv_lab.spec import resolve_spec
+
+    return resolve_spec(molecule)
 
 
 def optical_contact_theta_rad(molecule: str) -> float:
@@ -297,7 +299,36 @@ def clausius_mossotti_local_field_divisor(
             return max(base * n_dom * n_dom / 4.0, 1e-6)
         if motif == IntermolecularMotif.LINEAR_CHAIN:
             return max(base * (1.0 + lean.STRONG_CHANNEL_FRACTION), 1e-6)
+        if motif == IntermolecularMotif.POLYOL_HBOND:
+            spec = _spec_for_molecule(molecule)
+            if spec.molecular_weight_amu < 50.0:
+                return max(
+                    base * n_dom * (1.0 + lean.ALPHA / 3.0) / (1.0 + lean.GAMMA / 4.0),
+                    1e-6,
+                )
+            from hqiv_lab.polyol_geometry import is_triol_polyol
+
+            if is_triol_polyol(spec):
+                return max(
+                    base * n_dom * n_dom * (1.0 + lean.GAMMA) / (1.0 + lean.GAMMA / 4.0),
+                    1e-6,
+                )
+            return max(base * n_dom * n_dom / (1.0 + lean.GAMMA / 4.0), 1e-6)
+        if motif == IntermolecularMotif.PEPTIDE_LAYER:
+            return max(base * n_dom * n_dom / (1.0 + lean.GAMMA / 8.0), 1e-6)
         return max(base * (1.0 + (n_dom - 1) * lean.STRONG_CHANNEL_FRACTION), 1e-6)
+
+    if motif == IntermolecularMotif.POLYOL_HBOND:
+        spec = _spec_for_molecule(molecule)
+        if spec.molecular_weight_amu >= 50.0:
+            return max(
+                n_dom * n_dom * (1.0 + lean.GAMMA) / (1.0 + lean.GAMMA / 4.0),
+                1e-6,
+            )
+        return max(n_dom * phase_lift_coeff(n_dom - 1) / geff, 1e-6)
+
+    if motif == IntermolecularMotif.PEPTIDE_LAYER:
+        return max(n_dom * phase_lift_coeff(n_dom - 1) / geff, 1e-6)
 
     if motif == IntermolecularMotif.LINEAR_CHAIN:
         return max(n_dom / (2.0 * geff), 1e-6)
@@ -337,6 +368,8 @@ def phase_orientation_cm_factor(
         return 1.0 + (lift - 1.0) * geff
     if motif == IntermolecularMotif.PYRAMIDAL_HBOND:
         return 1.0 + (lift - 1.0) * geff * (1.0 + lean.GAMMA / 4.0)
+    if motif == IntermolecularMotif.POLYOL_HBOND:
+        return geff
     return geff
 
 
@@ -486,7 +519,7 @@ def material_response_readout(
     cell = pgd.phase_unit_cell(molecule, allotrope, temperature_k=temperature_k)
     if phase == "liquid":
         rho_g = pgd.liquid_reference_density_g_cm3(molecule)
-        rho_curv = pgd.curvature_density_fraction(rho_g, molecule)
+        rho_curv = pgd.melt_comparison_curvature_density_fraction()
     else:
         rho_g = pgd.density_g_cm3(cell)
         rho_curv = pgd.curvature_density_fraction(rho_g, molecule)
@@ -565,14 +598,44 @@ def main() -> None:
         help="Derived allotrope label (default: species preferred at --temperature-K)",
     )
     parser.add_argument("--phase", choices=("solid", "liquid"), default="solid")
-    parser.add_argument("--temperature-K", type=float, default=273.15)
+    parser.add_argument(
+        "--at-melt",
+        action="store_true",
+        default=True,
+        help="Use species melt witness T (default on for panel species)",
+    )
+    parser.add_argument(
+        "--reference-T",
+        action="store_true",
+        help="Force T=273.15 K (debug)",
+    )
+    parser.add_argument("--temperature-K", type=float, default=None)
     parser.add_argument("--json-out", type=Path, default=None)
     args = parser.parse_args()
+    from hqiv_lab.species_panel import panel_entry
+
+    t_k = args.temperature_K
+    if t_k is None:
+        if args.reference_T:
+            t_k = 273.15
+        elif args.at_melt:
+            try:
+                t_k = panel_entry(args.molecule).witness_temperature_k
+            except KeyError:
+                t_k = 273.15
+        else:
+            t_k = 273.15
+    allotrope = args.allotrope
+    if allotrope is None and args.at_melt and args.phase == "solid":
+        try:
+            allotrope = panel_entry(args.molecule).allotrope
+        except KeyError:
+            pass
     out = material_response_readout(
         args.molecule,
-        allotrope=args.allotrope,
+        allotrope=allotrope,
         phase=args.phase,
-        temperature_k=args.temperature_K,
+        temperature_k=t_k,
     )
     print(f"{out['molecule']} {out['phase']} ({out['allotrope']}) @ {out['temperature_K']:.2f} K")
     print(f"  n = {out['refractive_index']:.4f}   ε_r = {out['dielectric_constant']:.4f}")

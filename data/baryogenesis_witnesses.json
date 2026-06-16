@@ -1,0 +1,91 @@
+{
+  "source": "HQIV baryogenesis Lean witness audit",
+  "python_script": "scripts/hqiv_baryogenesis_witness.py",
+  "lean_symbol_audit": {
+    "lean_modules": [
+      "Hqiv.Physics.BaryogenesisDynamicBulk",
+      "Hqiv.Physics.DynamicBBNBaryogenesis",
+      "Hqiv.Physics.BaryogenesisWitness",
+      "Hqiv.Physics.HomogeneousCurvatureSecondOrder",
+      "Hqiv.Physics.NuclearOutsideTemperatureDynamics"
+    ],
+    "color_singlet_fraction": 0.3333333333333333,
+    "baryon_strong_color_fraction": 0.16666666666666666,
+    "cluster_binding_contrast_relative": 0.7518661665812458,
+    "binding_curvature_correction_dimless": 0.1503732333162492,
+    "binding_curvature_correction_mev": 1.0570334906288699,
+    "mev_factorization_check": true,
+    "eta_at_horizon_lockin": 6.1e-10,
+    "eta_at_horizon_dynamic_lockin": 7.017276723229119e-10,
+    "eta10_dynamic_lockin": 7.017276723229119,
+    "dynamic_correction_factor": 1.150373233316249,
+    "omega_b_from_omega_m_at_lockin": 0.04989944552562245,
+    "curvature_budget_at_xi_lockin": 1.0,
+    "curvature_budget_local_global_at_xi_lockin": 1.0,
+    "curvature_seed_excess_unity": 0.0
+  },
+  "shell_curvature_budget_audit": {
+    "shell_rows": [
+      {
+        "m": 3,
+        "xi": 4.0,
+        "omega_m_fraction_prev": 0.0,
+        "shell_seed_budget": 1.0863417271509341,
+        "B_local_global": 0.9938079899999065,
+        "combined_curvature_budget": 1.0796150883128968,
+        "curvature_seed_excess": 0.07961508831289676,
+        "shell_budget_lockin_is_one": null
+      },
+      {
+        "m": 4,
+        "xi": 5.0,
+        "omega_m_fraction_prev": 0.03603603603603604,
+        "shell_seed_budget": 1.0,
+        "B_local_global": 1.0,
+        "combined_curvature_budget": 1.0,
+        "curvature_seed_excess": 0.0,
+        "shell_budget_lockin_is_one": true
+      }
+    ],
+    "lockin_shell_budget_one": true,
+    "lockin_B_local_global_one": true,
+    "lockin_combined_one": true
+  },
+  "dynamic_bulk_integrator": {
+    "omega_m_lockin": 0.2993966731537347,
+    "omega_b_lockin": 0.04989944552562245,
+    "omega_b_from_omega_m_check": 0.04989944552562245,
+    "omega_b_check_pass": true,
+    "dynamic_shell_omega_m_formula_check": false,
+    "eta_from_dynamic_bulk": {
+      "eta": 6.197824246382018e-10,
+      "eta10": 6.197824246382018,
+      "Omega_b_h2": 0.022668120515597665,
+      "n_b_m3": 0.25456128213879037,
+      "n_gamma_m3": 410726848.67982596,
+      "rho_crit_kg_m3": 8.53285516373932e-27,
+      "H0_km_s_Mpc": 67.4,
+      "T_CMB_K": 2.7255
+    }
+  },
+  "vital_bundle": {
+    "checks": {
+      "color_singlet_one_third": true,
+      "baryon_channel_one_sixth": true,
+      "mev_dimless_factorization": true,
+      "omega_b_readout": true,
+      "dynamic_eta_uses_dimless_not_mev": true,
+      "curvature_budget_unity_at_lockin": true,
+      "B_local_global_unity_at_lockin": true,
+      "curvature_seed_excess_zero_at_unity": true,
+      "shell_budget_lockin_one": true,
+      "lockin_combined_budget_one": true
+    },
+    "all_pass": true
+  },
+  "native_spine_modules": [
+    "Hqiv.Physics.BaryogenesisDynamicBulk.baryogenesis_native_spine_vital_holds_any",
+    "Hqiv.Physics.BaryogenesisDynamicBulk.curvatureBudgetLocalGlobalAtXi",
+    "Hqiv.Physics.NuclearOutsideTemperatureDynamics.outsideCurvatureBindingModulatorChart"
+  ]
+}

@@ -1,0 +1,335 @@
+{
+  "lean_modules": [
+    "Hqiv.Physics.NuclearOutsideTemperatureDynamics",
+    "Hqiv.Physics.GlobalDetuning",
+    "Hqiv.Physics.HepDecayReadout",
+    "Hqiv.Physics.GravitationalWaveRingdownScaffold"
+  ],
+  "python_modules": [
+    "hqiv_compact_object_mass",
+    "hqiv_stellar_collapse"
+  ],
+  "lattice_constants": {
+    "alpha": 0.6,
+    "gamma": 0.4,
+    "c_rindler_shared": 0.2,
+    "epsilon_charm_tip": 0.24,
+    "epsilon_top_tip_center": 0.6,
+    "epsilon_horizon": 0.5
+  },
+  "hqiv_geometry_ceilings": {
+    "neutron_star_max_msun": 1.9815260161325043,
+    "epsilon_ns_max": 0.2,
+    "direct_bh_uniform_sphere_msun": 7.832669317322833,
+    "epsilon_horizon": 0.5,
+    "direct_bh_at_ns_radius_msun": 4.953815040331254,
+    "charmed_tail_at_ns_radius_msun": 3.15508264586293,
+    "top_seed_at_ns_radius_msun": 3.9630520322650034,
+    "gradient_collapse_tail": {
+      "uniform_nuclear_max": 1.9815260161325043,
+      "charmed_core_at_same_R": 3.15508264586293,
+      "delta_charm_tail": 1.1735566297304256,
+      "top_seed_at_same_R": 3.9630520322650034,
+      "horizon_at_same_R": 4.953815040331254,
+      "full_top_sphere_at_same_R": 365.92845271595735
+    },
+    "tipping_thresholds": {
+      "epsilon_charm_tip": 0.24,
+      "epsilon_top_tip_center": 0.6,
+      "epsilon_horizon_surface": 0.5,
+      "epsilon_uniform_ns_max_surface": 0.2
+    },
+    "interpretation": "Uniform nuclear sphere: one mass at \u03b5=\u03b3/2 (NS max) and one at \u03b5=\u00bd (Schwarzschild). Gradient-collapse at fixed NS radius gives a lower direct-BH threshold (~5 M\u2609) before envelope fallback."
+  },
+  "iron_core_prescription": {
+    "formula": "M_Fe \u2248 0.08 (M_ZAMS \u2212 5)^{1.55} for M_ZAMS \u2265 8",
+    "role": "comparison scaffold \u2014 not an HQIV axiom"
+  },
+  "trad_comparison": {
+    "pair_instability_zams_window_msun": [
+      140.0,
+      260.0
+    ],
+    "literature_direct_bh_ceiling_msun": 45.0,
+    "fallback_formula": "failed-SN fraction of ZAMS (schematic)"
+  },
+  "direct_bh_ceiling_scan": {
+    "hqiv_threshold_uniform_horizon_msun": 7.832669317322833,
+    "hqiv_threshold_horizon_at_ns_radius_msun": 4.953815040331254,
+    "hqiv_neutron_star_max_msun": 1.9815260161325043,
+    "max_uniform_direct_bh_below_pi_msun": 538.6592372147496,
+    "max_fallback_bh_below_pi_msun": 538.6592372147496,
+    "zams_first_epsilon_ge_ns_max": 13.0,
+    "zams_first_epsilon_ge_horizon": 25.0,
+    "zams_fallback_reaches_literature_ceiling": 63.0,
+    "literature_direct_bh_ceiling_msun": 45.0,
+    "same_epsilon_ceilings_as_compact_object": true,
+    "verdict": "Same \u03b5 slots as compact-object witness: NS max ~1.98 M\u2609 (\u03b5=\u03b3/2), Schwarzschild threshold ~7.8 M\u2609 for uniform nuclear sphere, gradient-tail threshold ~5.0 M\u2609 at fixed NS radius. Stellar cores above the threshold form direct BHs with M_rem = M_core (no HQIV cap below pair instability). Trad fallback channel reaches ~45 M\u2609 near ZAMS 63.0 \u2014 comparable to population-synthesis ceiling."
+  },
+  "rows": [
+    {
+      "zams_mass_msun": 8,
+      "iron_core_mass_msun": 0.43916521318640295,
+      "outcome_uniform": "neutron_star",
+      "remnant_uniform_msun": 0.43916521318640234,
+      "epsilon_surface": 0.07324569390690208,
+      "compactness_rs_over_r": 0.14649138781380416,
+      "horizon_at_core_radius_msun": 2.9978910005590076,
+      "fallback_bh_mass_msun": 0.43916521318640295,
+      "trad_pair_instability": false,
+      "notes": "core below \u03b3/2 ceiling"
+    },
+    {
+      "zams_mass_msun": 10,
+      "iron_core_mass_msun": 0.9693787466570615,
+      "outcome_uniform": "neutron_star",
+      "remnant_uniform_msun": 0.96937874665706,
+      "epsilon_surface": 0.12417260884466129,
+      "compactness_rs_over_r": 0.24834521768932255,
+      "horizon_at_core_radius_msun": 3.903351776516771,
+      "fallback_bh_mass_msun": 0.9693787466570615,
+      "trad_pair_instability": false,
+      "notes": "core below \u03b3/2 ceiling"
+    },
+    {
+      "zams_mass_msun": 12,
+      "iron_core_mass_msun": 1.6330216745268755,
+      "outcome_uniform": "neutron_star",
+      "remnant_uniform_msun": 1.6330216745268755,
+      "epsilon_surface": 0.17580239038016102,
+      "compactness_rs_over_r": 0.35160478076032214,
+      "horizon_at_core_radius_msun": 4.644480860003024,
+      "fallback_bh_mass_msun": 1.6330216745268755,
+      "trad_pair_instability": false,
+      "notes": "core below \u03b3/2 ceiling"
+    },
+    {
+      "zams_mass_msun": 15,
+      "iron_core_mass_msun": 2.8385071138686038,
+      "outcome_uniform": "charmed_tail_metastable",
+      "remnant_uniform_msun": 2.8385071138686038,
+      "epsilon_surface": 0.2541500119855084,
+      "compactness_rs_over_r": 0.5083000239710168,
+      "horizon_at_core_radius_msun": 5.584314341937657,
+      "fallback_bh_mass_msun": 2.8385071138686038,
+      "trad_pair_instability": false,
+      "notes": ""
+    },
+    {
+      "zams_mass_msun": 18,
+      "iron_core_mass_msun": 4.262870926729441,
+      "outcome_uniform": "charmed_tail_metastable",
+      "remnant_uniform_msun": 4.262870926729441,
+      "epsilon_surface": 0.33329714886005457,
+      "compactness_rs_over_r": 0.6665942977201091,
+      "horizon_at_core_radius_msun": 6.395000589277983,
+      "fallback_bh_mass_msun": 4.262870926729441,
+      "trad_pair_instability": false,
+      "notes": ""
+    },
+    {
+      "zams_mass_msun": 20,
+      "iron_core_mass_msun": 5.321467799175206,
+      "outcome_uniform": "charmed_tail_metastable",
+      "remnant_uniform_msun": 5.321467799175206,
+      "epsilon_surface": 0.3864124424447413,
+      "compactness_rs_over_r": 0.7728248848894826,
+      "horizon_at_core_radius_msun": 6.885735569884243,
+      "fallback_bh_mass_msun": 5.321467799175206,
+      "trad_pair_instability": false,
+      "notes": ""
+    },
+    {
+      "zams_mass_msun": 25,
+      "iron_core_mass_msun": 8.311635326509847,
+      "outcome_uniform": "direct_black_hole",
+      "remnant_uniform_msun": 8.311635326509847,
+      "epsilon_surface": 0.5201809738332734,
+      "compactness_rs_over_r": 1.0403619476665469,
+      "horizon_at_core_radius_msun": 7.9891765987329855,
+      "fallback_bh_mass_msun": 8.311635326509847,
+      "trad_pair_instability": false,
+      "notes": "core \u03b5\u2265\u00bd; fallback channel up to 8.3 M\u2609"
+    },
+    {
+      "zams_mass_msun": 30,
+      "iron_core_mass_msun": 11.746189430880193,
+      "outcome_uniform": "direct_black_hole",
+      "remnant_uniform_msun": 11.746189430880193,
+      "epsilon_surface": 0.6550807086268814,
+      "compactness_rs_over_r": 1.3101614172537628,
+      "horizon_at_core_radius_msun": 8.965452100933833,
+      "fallback_bh_mass_msun": 11.746189430880193,
+      "trad_pair_instability": false,
+      "notes": "core \u03b5\u2265\u00bd; fallback channel up to 11.7 M\u2609"
+    },
+    {
+      "zams_mass_msun": 35,
+      "iron_core_mass_msun": 15.582169772415334,
+      "outcome_uniform": "direct_black_hole",
+      "remnant_uniform_msun": 15.582169772415334,
+      "epsilon_surface": 0.7908888102813094,
+      "compactness_rs_over_r": 1.5817776205626188,
+      "horizon_at_core_radius_msun": 9.851049584879666,
+      "fallback_bh_mass_msun": 15.582169772415334,
+      "trad_pair_instability": false,
+      "notes": "core \u03b5\u2265\u00bd; fallback channel up to 15.6 M\u2609"
+    },
+    {
+      "zams_mass_msun": 40,
+      "iron_core_mass_msun": 19.787706301458478,
+      "outcome_uniform": "direct_black_hole",
+      "remnant_uniform_msun": 19.787706301458478,
+      "epsilon_surface": 0.9274569934550176,
+      "compactness_rs_over_r": 1.8549139869100355,
+      "horizon_at_core_radius_msun": 10.667721760199436,
+      "fallback_bh_mass_msun": 19.787706301458478,
+      "trad_pair_instability": false,
+      "notes": "core \u03b5\u2265\u00bd; fallback channel up to 19.8 M\u2609"
+    },
+    {
+      "zams_mass_msun": 45,
+      "iron_core_mass_msun": 24.337892782918836,
+      "outcome_uniform": "direct_black_hole",
+      "remnant_uniform_msun": 24.337892782918836,
+      "epsilon_surface": 1.064679255468859,
+      "compactness_rs_over_r": 2.129358510937718,
+      "horizon_at_core_radius_msun": 11.429683004484298,
+      "fallback_bh_mass_msun": 24.337892782918836,
+      "trad_pair_instability": false,
+      "notes": "core \u03b5\u2265\u00bd; fallback channel up to 24.3 M\u2609"
+    },
+    {
+      "zams_mass_msun": 50,
+      "iron_core_mass_msun": 29.212544256116967,
+      "outcome_uniform": "direct_black_hole",
+      "remnant_uniform_msun": 29.212544256116967,
+      "epsilon_surface": 1.2024759491274084,
+      "compactness_rs_over_r": 2.404951898254817,
+      "horizon_at_core_radius_msun": 12.14683099371568,
+      "fallback_bh_mass_msun": 29.212544256116967,
+      "trad_pair_instability": false,
+      "notes": "core \u03b5\u2265\u00bd; fallback channel up to 29.2 M\u2609"
+    },
+    {
+      "zams_mass_msun": 60,
+      "iron_core_mass_msun": 39.87054348797354,
+      "outcome_uniform": "direct_black_hole",
+      "remnant_uniform_msun": 39.87054348797354,
+      "epsilon_surface": 1.4795565887884146,
+      "compactness_rs_over_r": 2.9591131775768287,
+      "horizon_at_core_radius_msun": 13.473814989605398,
+      "fallback_bh_mass_msun": 39.87054348797354,
+      "trad_pair_instability": false,
+      "notes": "core \u03b5\u2265\u00bd; fallback channel up to 39.9 M\u2609"
+    },
+    {
+      "zams_mass_msun": 70,
+      "iron_core_mass_msun": 51.65420595142265,
+      "outcome_uniform": "direct_black_hole",
+      "remnant_uniform_msun": 51.65420595142265,
+      "epsilon_surface": 1.7583308790081114,
+      "compactness_rs_over_r": 3.5166617580162227,
+      "horizon_at_core_radius_msun": 14.688420299073973,
+      "fallback_bh_mass_msun": 51.65420595142265,
+      "trad_pair_instability": false,
+      "notes": "core \u03b5\u2265\u00bd; fallback channel up to 51.7 M\u2609"
+    },
+    {
+      "zams_mass_msun": 80,
+      "iron_core_mass_msun": 64.48147231925465,
+      "outcome_uniform": "direct_black_hole",
+      "remnant_uniform_msun": 64.48147231925465,
+      "epsilon_surface": 2.0385440796819365,
+      "compactness_rs_over_r": 4.077088159363873,
+      "horizon_at_core_radius_msun": 15.815569788737498,
+      "fallback_bh_mass_msun": 64.48147231925465,
+      "trad_pair_instability": false,
+      "notes": "core \u03b5\u2265\u00bd; fallback channel up to 64.5 M\u2609"
+    },
+    {
+      "zams_mass_msun": 100,
+      "iron_core_mass_msun": 93.01683866452538,
+      "outcome_uniform": "direct_black_hole",
+      "remnant_uniform_msun": 93.01683866452538,
+      "epsilon_surface": 2.6025826284043485,
+      "compactness_rs_over_r": 5.205165256808697,
+      "horizon_at_core_radius_msun": 17.87010288344895,
+      "fallback_bh_mass_msun": 93.01683866452538,
+      "trad_pair_instability": false,
+      "notes": "core \u03b5\u2265\u00bd; fallback channel up to 93.0 M\u2609"
+    },
+    {
+      "zams_mass_msun": 120,
+      "iron_core_mass_msun": 125.0753248552821,
+      "outcome_uniform": "direct_black_hole",
+      "remnant_uniform_msun": 125.0753248552821,
+      "epsilon_surface": 3.1706227360033177,
+      "compactness_rs_over_r": 6.341245472006635,
+      "horizon_at_core_radius_msun": 19.724094487025596,
+      "fallback_bh_mass_msun": 125.0753248552821,
+      "trad_pair_instability": false,
+      "notes": "core \u03b5\u2265\u00bd; fallback channel up to 125.1 M\u2609"
+    },
+    {
+      "zams_mass_msun": 140,
+      "iron_core_mass_msun": 160.36416532443548,
+      "outcome_uniform": "pair_instability_disrupted",
+      "remnant_uniform_msun": 0.0,
+      "epsilon_surface": 3.7419820104178942,
+      "compactness_rs_over_r": 7.4839640208357885,
+      "horizon_at_core_radius_msun": 21.4277039384439,
+      "fallback_bh_mass_msun": 160.36416532443548,
+      "trad_pair_instability": true,
+      "notes": "trad PI window \u2014 no direct BH (comparison)"
+    },
+    {
+      "zams_mass_msun": 160,
+      "iron_core_mass_msun": 198.6571127222418,
+      "outcome_uniform": "pair_instability_disrupted",
+      "remnant_uniform_msun": 0.0,
+      "epsilon_surface": 4.316180079059854,
+      "compactness_rs_over_r": 8.632360158119708,
+      "horizon_at_core_radius_msun": 23.01307047938476,
+      "fallback_bh_mass_msun": 198.6571127222418,
+      "trad_pair_instability": true,
+      "notes": "trad PI window \u2014 no direct BH (comparison)"
+    },
+    {
+      "zams_mass_msun": 200,
+      "iron_core_mass_msun": 283.5591296078861,
+      "outcome_uniform": "pair_instability_disrupted",
+      "remnant_uniform_msun": 0.0,
+      "epsilon_surface": 5.471745628164316,
+      "compactness_rs_over_r": 10.943491256328633,
+      "horizon_at_core_radius_msun": 25.91121269858954,
+      "fallback_bh_mass_msun": 283.5591296078861,
+      "trad_pair_instability": true,
+      "notes": "trad PI window \u2014 no direct BH (comparison)"
+    },
+    {
+      "zams_mass_msun": 260,
+      "iron_core_mass_msun": 429.76126235843543,
+      "outcome_uniform": "pair_instability_disrupted",
+      "remnant_uniform_msun": 0.0,
+      "epsilon_surface": 7.219630776728514,
+      "compactness_rs_over_r": 14.439261553457028,
+      "horizon_at_core_radius_msun": 29.763382342467686,
+      "fallback_bh_mass_msun": 429.76126235843543,
+      "trad_pair_instability": true,
+      "notes": "trad PI window \u2014 no direct BH (comparison)"
+    },
+    {
+      "zams_mass_msun": 300,
+      "iron_core_mass_msun": 538.6592372147496,
+      "outcome_uniform": "direct_black_hole",
+      "remnant_uniform_msun": 538.6592372147496,
+      "epsilon_surface": 8.392787316464377,
+      "compactness_rs_over_r": 16.78557463292875,
+      "horizon_at_core_radius_msun": 32.09060452169722,
+      "fallback_bh_mass_msun": 538.6592372147496,
+      "trad_pair_instability": false,
+      "notes": "core \u03b5\u2265\u00bd; fallback channel up to 538.7 M\u2609"
+    }
+  ]
+}

@@ -30,6 +30,7 @@ from typing import Any
 
 import hqiv_bbn_abundances as bbn
 import hqiv_excited_states as hes
+import hqiv_lean_physics_primitives as lean
 
 ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT / "data" / "bbn_witnesses.json"
@@ -171,14 +172,15 @@ def be7_fusion_gate(T_mev: float) -> float:
 def rate_He3_He4_to_Be7(
     eta: float, T_mev: float, Q_7: float, Q_3: float, Q_4: float, Q_np: float
 ) -> float:
-    """³He + ⁴He → ⁷Be: barrier scaled by weak channel (not raw 7 MeV tail)."""
-    Q_barrier = bbn.be7_electron_capture_q(Q_7, Q_np)
+    """³He + ⁴He → ⁷Be: ``bbnBe7FormationQ`` thermal weight (network lock-in gap)."""
+    del Q_np
+    Q_form = bbn.be7_formation_q(Q_7, Q_3, Q_4)
     return (
         RATE_SCALE
         * BE7_FORM_MULT
         * eta
         * alpha_eff_ratio_at_T(T_mev)
-        * formation_weight(Q_barrier, T_mev)
+        * formation_weight(Q_form, T_mev)
         * T_mev**1.5
         * be7_fusion_gate(T_mev)
     )
@@ -470,17 +472,58 @@ def readout_from_state(s: NetworkState, eta: float) -> dict[str, float]:
     }
 
 
+def network_q_provider_at_T(
+    T_mev: float,
+    *,
+    Q_np: float,
+    Q_D: float,
+    Q_3: float,
+    Q_4: float,
+    Q_7: float,
+    Q_li: float,
+) -> tuple[float, float, float, float, float, float]:
+    """Per-epoch network Q with uniform ``bbnBindingReleaseFactor`` on lock-in values."""
+    rel = lean.bbn_binding_release_factor(T_mev)
+    return (Q_np, Q_D * rel, Q_3 * rel, Q_4 * rel, Q_7 * rel, Q_li * rel)
+
+
 def main() -> None:
     w = bbn.load_witness()
     m_p = float(w["derivedProtonMass_MeV"])
     dm = float(w["derivedDeltaM_MeV"])
     eta = bbn.ETA_PAPER
-    Q_D, Q_4, Q_3, Q_7 = bbn.lockin_binding_q(m_p, hes.REFERENCE_M)
+    Q_D, Q_4, Q_3, Q_7 = bbn.lockin_binding_q_network(m_p, hes.REFERENCE_M)
+    Q_be, Q_li = bbn.lockin_li7_be7_q_network(m_p, hes.REFERENCE_M)
 
-    final, meta = integrate_cooling_network(eta, dm, Q_D, Q_3, Q_4, n_steps=400)
+    q_provider = lambda T: network_q_provider_at_T(  # noqa: E731
+        T,
+        Q_np=dm,
+        Q_D=Q_D,
+        Q_3=Q_3,
+        Q_4=Q_4,
+        Q_7=Q_7,
+        Q_li=Q_li,
+    )
+    final, meta = integrate_cooling_network(
+        eta, dm, Q_D, Q_3, Q_4, n_steps=400, q_provider=q_provider
+    )
     abund = readout_from_state(final, eta)
-    partition = bbn.integrate_bbn_window(eta, m_p, dm, Q_D, Q_4, Q_3)
-    tail = bbn.abundances_at_epoch(eta, bbn.BBN_T_MID_MEV, m_p, dm, Q_D, Q_4, Q_3)
+    partition = bbn.integrate_bbn_window(
+        eta, m_p, dm, Q_D, Q_4, Q_3, use_binding_release=True, Q_7=Q_7, Q_be=Q_be, Q_li=Q_li
+    )
+    Q_D_mid, Q_4_mid, Q_3_mid = bbn.light_binding_q_at_temperature(bbn.BBN_T_MID_MEV)
+    tail = bbn.abundances_at_epoch(
+        eta,
+        bbn.BBN_T_MID_MEV,
+        m_p,
+        dm,
+        Q_D_mid,
+        Q_4_mid,
+        Q_3_mid,
+        Q_7=Q_7,
+        Q_be=Q_be,
+        Q_li=Q_li,
+    )
     coc = bbn.coc2015_abundances(eta)
 
     payload = {
@@ -501,6 +544,9 @@ def main() -> None:
             "Q_4He_lockin_MeV": Q_4,
             "Q_3He_binding_MeV": Q_3,
             "Q_7Be_binding_MeV": Q_7,
+            "Q_7Li_binding_MeV": Q_li,
+            "Q_be7_formation_MeV": bbn.be7_formation_q(Q_7, Q_3, Q_4),
+            "Q_be7_to_li7_capture_MeV": bbn.be7_to_li7_capture_q(Q_be, Q_li),
             "rate_scale": RATE_SCALE,
             "weak_rate_mult": WEAK_RATE_MULT,
             "dd_rate_mult": DD_RATE_MULT,
@@ -510,7 +556,7 @@ def main() -> None:
         },
         "epoch_network_integration": {**abund, **meta},
         "hqiv_weight_readout_at_T_0p1_MeV": tail,
-        "partition_average_legacy": partition,
+        "bbn_window_integrated_network_ladder": partition,
         "comparison_coc2015": coc,
         "observed_comparison_layer": {
             "Yp": "0.244 ± 0.004",
@@ -536,11 +582,14 @@ def main() -> None:
     print(f"  ⁷Be/H        = {abund['Be7_over_H']:.4e}")
     print(f"  ⁷Li/H        = {abund['Li7_over_H']:.4e}")
     print(f"  n_n relic/H  = {abund['n_n_relic']:.4e}")
-    print("\nHQIV weights at T=0.1 MeV (D, ³He, ⁷Li):")
+    print("\nHQIV weights at T=0.1 MeV (D, ³He, ⁷Be, ⁷Li ladder):")
     print(f"  D/H          = {tail['D_over_H']:.4e}")
     print(f"  ³He/H        = {tail['He3_over_H']:.4e}")
-    print("\nPartition average (legacy):")
+    print(f"  ⁷Be/H        = {tail['Be7_over_H']:.4e}")
+    print(f"  ⁷Li/H        = {tail['Li7_over_H']:.4e}")
+    print("\nWindow-integrated network ladder (primary paper readout):")
     print(f"  D/H          = {partition['D_over_H']:.4e}")
+    print(f"  ⁷Li/H        = {partition['Li7_over_H']:.4e}")
     print("\nCoc2015:")
     print(f"  D/H          = {coc['D_over_H']:.4e}")
 

@@ -56,10 +56,18 @@ class AllotropeCandidate:
         }
 
 
-def liquid_reference_density_g_cm3(spec: MoleculeSpec) -> float:
-    """Liquid comparison scale at melt (species-specific where tabulated)."""
-    refs = {"H2O": 1.0, "CH4": 0.423, "NH3": 0.682, "HF": 1.0}
-    return refs.get(spec.formula_key, 1.0)
+def liquid_reference_density_g_cm3(
+    spec: MoleculeSpec,
+    *,
+    temperature_k: float = 273.15,
+) -> float:
+    """Liquid comparison scale from solid template + motif melt opening."""
+    import hqiv_derived_chemistry as hdc
+
+    return hdc.derived_liquid_reference_density_g_cm3(
+        spec.name,
+        temperature_k=temperature_k,
+    )
 
 
 def _score_candidate(
@@ -118,7 +126,7 @@ def derive_allotropes(
 ) -> tuple[AllotropeCandidate, ...]:
     """All allotrope candidates for this monomer, sorted by score (best first)."""
     mono = infer_monomer_geometry(spec)
-    templates = templates_for_motif(mono.motif)
+    templates = templates_for_motif(mono.motif, spec=spec)
     candidates: list[AllotropeCandidate] = []
 
     for tmpl in templates:

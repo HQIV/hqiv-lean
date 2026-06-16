@@ -6,6 +6,7 @@ from __future__ import annotations
 import math
 
 import hqiv_decay_chain as dc
+import hqiv_dynamic_nucleon_pn as pn
 import hqiv_dynamic_beta_isotope as dbi
 import hqiv_lean_physics_primitives as lean
 import hqiv_tuft_global_hadron_readout as tuft
@@ -20,6 +21,49 @@ def test_neutron_beta_minus_open_at_lockin() -> None:
     assert ch.channel_open
     assert ch.endpoint_q_mev is not None
     assert abs(ch.endpoint_q_mev - 0.782) < 0.02
+
+
+def test_be7_beta_plus_valence_residual_proton_rich() -> None:
+    """⁷Be: per-nucleon β+ valence ledger open on proton slot (Z > N)."""
+    be7 = dc.NuclearState(A=7, Z=4, label="Be7")
+    _, _, _, _, valence = dc.beta_residuals(be7)
+    assert valence > 0.0
+    ch = dc.evaluate_nuclear_channel(be7, channel="beta_plus", residual_mode="raw")
+    assert ch is not None
+    assert ch.residual_mev > 0.0
+    assert ch.residual_open
+    assert ch.kinematic_open
+    assert ch.channel_open
+    assert ch.endpoint_q_mev is not None and ch.endpoint_q_mev > 0.0
+
+
+def test_be7_beta_plus_not_open_on_neutron_rich_li7() -> None:
+    li7 = dc.NuclearState(A=7, Z=3, label="Li7")
+    ch = dc.evaluate_nuclear_channel(li7, channel="beta_plus", residual_mode="raw")
+    assert ch is not None
+    assert ch.residual_mev <= 0.0
+
+
+def test_be7_width_ledger_matches_local_contact_q_slots() -> None:
+    """⁷Be β+ width uses the same local facet binding + post-α valleys as endpoint Q."""
+    import hqiv_post_alpha_sphere_touching as touch
+
+    be7 = dc.NuclearState(A=7, Z=4, label="Be7")
+    env = dc._nuclear_environment(be7)
+    cluster = pn.cluster_binding_canonical_mev(7, 4, xi=be7.xi)
+    pair = pn.pn_pair_readout(env)
+    well, valley = dbi.beta_width_ledger_slots(
+        7,
+        4,
+        "beta_plus",
+        env,
+        cluster_total_mev=cluster,
+        proton_mass_mev=pair.proton.mass_mev,
+        neutron_mass_mev=pair.neutron.mass_mev,
+    )
+    assert well == dbi.beta_plus_facet_proton_local_binding_mev(7, 4, env)
+    assert valley == touch.post_alpha_outside_valley_count_effective(7, 4)
+    assert well < env.well_depth_mev
 
 
 def test_proton_beta_plus_closed_at_lockin() -> None:
@@ -43,6 +87,43 @@ def test_tritium_to_he3_edge() -> None:
     assert beta_edges, "T beta_minus open under raw overlap residual (EM-tipping path)"
     assert isinstance(beta_edges[0].daughter, dc.NuclearState)
     assert beta_edges[0].daughter.Z == 2
+
+
+def test_be8_alpha_channel_open_on_trapped_inside_ledger() -> None:
+    """⁸Be: per-contact inter-α barbell Q + shared-seam width ledger."""
+    import hqiv_post_alpha_sphere_touching as touch
+
+    be8 = dc.NuclearState(A=8, Z=4, label="Be8")
+    ch = dc.evaluate_alpha_channel(be8)
+    assert ch is not None
+    n_alpha, delta, erosion = dc._alpha_lattice_slots(be8)
+    assert n_alpha == 2
+    assert delta is not None and delta > 0.0
+    assert erosion > 0.0
+    ledger = touch.two_alpha_interface_contact_ledger(8, 4, 2, delta)
+    assert ledger is not None
+    assert ledger.barbell_contact_units == 4
+    assert ledger.mass_contact_count == 5
+    width_decay = dc.alpha_decay_width_mev(be8, ch.endpoint_q_mev or 0.0)
+    assert width_decay > 0.0
+    assert width_decay < erosion / 100.0
+    assert ch.endpoint_q_mev is not None
+    assert 0.08 < ch.endpoint_q_mev < 0.10
+    assert ch.channel_open
+    assert ch.emitted == ("alpha", "alpha")
+    assert math.isfinite(ch.half_life_s) and ch.half_life_s > 0.0
+    tau_pdg = 6.7e-17
+    assert 0.75 * tau_pdg <= ch.half_life_s <= 1.25 * tau_pdg
+    edges = [e for e in dc.edges_from_nuclear_state(be8) if e.channel.tag == "alpha"]
+    assert len(edges) == 1
+    assert edges[0].channel.channel_open
+    assert edges[0].terminal_breakup
+
+
+def test_he4_no_alpha_emission() -> None:
+    he4 = dc.NuclearState(A=4, Z=2, label="He4")
+    ch = dc.evaluate_alpha_channel(he4)
+    assert ch is None
 
 
 def test_he4_structurally_stable_no_open_edges() -> None:
@@ -122,6 +203,11 @@ def test_width_halflife_consistency() -> None:
 
 if __name__ == "__main__":
     test_neutron_beta_minus_open_at_lockin()
+    test_be7_width_ledger_matches_local_contact_q_slots()
+    test_be7_beta_plus_valence_residual_proton_rich()
+    test_be7_beta_plus_not_open_on_neutron_rich_li7()
+    test_be8_alpha_channel_open_on_trapped_inside_ledger()
+    test_he4_no_alpha_emission()
     test_proton_beta_plus_closed_at_lockin()
     test_tritium_to_he3_edge()
     test_he4_structurally_stable_no_open_edges()

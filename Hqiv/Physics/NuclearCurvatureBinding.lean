@@ -3,6 +3,8 @@ import Hqiv.Physics.ComptonIRWindow
 import Hqiv.Physics.MetaHorizonTrappedPlanckMass
 import Hqiv.Physics.BBNNetworkFromWeights
 import Hqiv.Physics.HQIVNuclei
+import Hqiv.Physics.NuclearAndAtomicSpectra
+import Hqiv.Physics.PostAlphaBindingGeometry
 
 import Mathlib.Algebra.BigOperators.Ring.Finset
 
@@ -16,8 +18,12 @@ hadron):
   readout shell, minus the separated-nucleon inside contribution.
 * **Outside:** isotope-valley **contact points** bonded via `G_eff(θ/θ₀) = (θ/θ₀)^α`
   (lattice α = 3/5), scaled by the nucleon trace at the binding shell.
+* **Network (shared wells):** valley occupancy deepens wells; deepened sites interact
+  via `γ`; barbell / tetra cooperative closure; post-α extension for `A > 4`.
+* **Residual:** spin–statistics participation + magnetic dipole contrast
+  (`μ_n μ_p / R_m`) — last few percent (see `nuclearSpinMagneticResidualParticipation`).
 
-Python counterpart: `scripts/hqiv_nuclear_inside_outside_binding.py`.
+Python counterpart: `scripts/hqiv_curvature_binding_core.py`.
 -/
 
 namespace Hqiv.Physics
@@ -77,6 +83,235 @@ theorem nuclearClusterBindingCurvature_add
 
 theorem nuclearValleyContactCount_four :
     nuclearValleyContactCount 4 = 6 := bbnValleyCount_four
+
+/-- Per-valley-contact well deepening increment: `(4/8) / constructiveValleyCap`. -/
+noncomputable def nuclearDeepeningPerValleyContact : ℝ :=
+  strongChannelFraction / (constructiveValleyCap : ℝ)
+
+/-- Intrinsic well deepening from valley occupancy (constructive ladder). -/
+noncomputable def nuclearIntrinsicWellDeepening (A : ℕ) : ℝ :=
+  if nuclearValleyContactCount A ≤ 1 then 1
+  else
+    1 + nuclearDeepeningPerValleyContact *
+      ((nuclearValleyContactCount A : ℝ) - 1)
+
+/-- Mass-deficit deepening: each nucleon loses `B/A` into shared wells. -/
+noncomputable def nuclearMassDeficitWellDeepening (bindingPerNucleon : ℝ) : ℝ :=
+  if bindingPerNucleon ≤ 0 then 1
+  else
+    1 + gamma_HQIV * strongChannelFraction * bindingPerNucleon / m_proton_MeV_central
+
+/-- Constructive valley ladder in `G_eff × trace` currency (`A ≤ 4` spine). -/
+noncomputable def nuclearValleyLadderOutside (m : ℕ) (A : ℕ) (θ : ℝ) (c : ℝ := 1) : ℝ :=
+  if A ≤ 1 then 0
+  else
+    (A : ℝ) * (1 + (nuclearValleyContactCount A : ℝ) / (constructiveValleyCap : ℝ)) *
+      nuclearOutsideContactCoupling θ * bbnNucleonTraceBinding m c
+
+/-- Barbell cooperative participation: `(vc − 2) / (cap − 2)`. -/
+noncomputable def nuclearBarbellCooperativeParticipation (A : ℕ) : ℝ :=
+  if nuclearValleyContactCount A ≤ 2 then 0
+  else
+    ((nuclearValleyContactCount A : ℝ) - 2) /
+      ((constructiveValleyCap : ℝ) - 2)
+
+/-- Barbell torus scale at shell `m` (matches `NuclearCausticBinding`). -/
+noncomputable def nuclearBarbellTorusScale (m : ℕ) : ℝ :=
+  gamma_HQIV * Hqiv.new_modes (m + 1) / R_m (m + 1)
+
+/-- Tetrahedral closure scale two shells above binding drum `m`. -/
+noncomputable def nuclearTetrahedralClosureScale (m : ℕ) : ℝ :=
+  gamma_HQIV * modes (m + 2) / R_m (m + 2)
+
+/-- Closed α tetra cooperative boost (⁴He shell completion). -/
+noncomputable def alphaClosedCooperativeParticipation (A : ℕ) : ℝ :=
+  if A = 4 then
+    1 + gamma_HQIV * strongChannelFraction / (constructiveValleyCap : ℝ)
+  else 1
+
+/-- Proton Coulomb erosion on outside contacts: valley + EM repulsion for proton-rich nuclei. -/
+noncomputable def protonCoulombOutsideErosion (m A Z : ℕ) (geff : ℝ) : ℝ :=
+  if Z < 2 ∨ A = 0 then 0
+  else
+    let protonExcess := max 0 ((2 * Z - A : ℤ) : ℝ) / (A : ℝ)
+    let vc := (nuclearValleyContactCount A : ℝ)
+    let cap := (constructiveValleyCap : ℝ)
+    let valleyPart := if cap = 0 then 0 else vc / cap
+    let erosion :=
+      protonExcess * geff * deuteronBindingScale m * strongChannelFraction * valleyPart
+    if 4 < A ∧ 0 < vc then erosion * cap / vc else erosion
+
+/-- γ-network on valley contacts (`vc > 2` only). -/
+noncomputable def nuclearGammaNetworkOnValleyContacts
+    (m : ℕ) (A : ℕ) (θ : ℝ) (c : ℝ := 1) : ℝ :=
+  if A ≤ 1 ∨ nuclearValleyContactCount A ≤ 2 then 0
+  else
+    let deepen := nuclearIntrinsicWellDeepening A
+    let coreVc := (min (nuclearValleyContactCount A) constructiveValleyCap : ℝ)
+    gamma_HQIV * (deepen - 1) * coreVc *
+      nuclearOutsideContactCoupling θ * bbnNucleonTraceBinding m c *
+        deuteronBindingScale m * alphaClosedCooperativeParticipation A
+
+/-- Outside shared-well network for constructive valley nuclei (`A ≤ 4`). -/
+noncomputable def nuclearOutsideNetworkBindingAtShell
+    (m : ℕ) (A : ℕ) (θ : ℝ) (c : ℝ := 1) : ℝ :=
+  if A ≤ 1 then 0
+  else if 4 < A then 0
+  else
+    let geff := nuclearOutsideContactCoupling θ
+    let trace := bbnNucleonTraceBinding m c
+    let intrinsic := nuclearIntrinsicWellDeepening A
+    let ladder :=
+      if A < 3 then
+        (A : ℝ) * (1 + (nuclearValleyContactCount A : ℝ) / (constructiveValleyCap : ℝ)) *
+          geff * trace
+      else
+        nuclearValleyLadderOutside m A θ c * intrinsic
+    let network := nuclearGammaNetworkOnValleyContacts m A θ c
+    let barbell :=
+      nuclearBarbellCooperativeParticipation A *
+        nuclearBarbellTorusScale m * geff * trace * intrinsic
+    let tetra :=
+      if A < 4 then 0
+      else
+        nuclearTetrahedralClosureScale m * geff * trace * intrinsic *
+          alphaClosedCooperativeParticipation A
+    ladder + network + barbell + tetra
+
+/-- Spin–statistics + residual magnetic dipole participation (dimensionless). -/
+noncomputable def nuclearSpinMagneticResidualParticipation (m A Z : ℕ) : ℝ :=
+  let vc := (nuclearValleyContactCount A : ℝ)
+  let cap := (constructiveValleyCap : ℝ)
+  let r := (R_m m : ℝ)
+  let muProduct := gamma_HQIV * gamma_HQIV
+  let valleyPart := if cap = 0 then 0 else vc / cap
+  let isospinAsym :=
+    if A = 0 then 0
+    else (Int.natAbs ((A : ℤ) - 2 * (Z : ℤ)) : ℝ) / (A : ℝ)
+  gamma_HQIV * strongChannelFraction *
+    (muProduct * valleyPart / r + spinStabilityParticipation A Z * isospinAsym * valleyPart)
+
+/-- Incremental facet/far geometry only (no α-cap duplication). -/
+noncomputable def postAlphaIncrementalGeometricTouchEnergy (m A Z : ℕ) : ℝ :=
+  if A ≤ 4 then 0
+  else
+    spinStabilityParticipation A Z *
+      (protonFacetTouchContactSum (bbnProtonFacetTouches A Z) : ℝ) *
+        sphereTouchContactEnergyUnit m +
+      farNeutronWeightedContactSum A Z * sphereTouchContactEnergyUnit m
+
+/-- Proton-excess tension: `max(0, Z − N) / (A − 4)` (not neutron-rich far-neutron). -/
+noncomputable def postAlphaAlphaAdditionIsospinTension (A Z : ℕ) : ℝ :=
+  if A ≤ 4 then 0
+  else
+    let n := A - Z
+    max 0 ((Z : ℝ) - (n : ℝ)) / (A - 4 : ℝ)
+
+/-- Barbell torus scale: `γ · new_modes(m+1) / R_{m+1}` (inter-α barbell links). -/
+noncomputable def barbellTorusScale (m : ℕ) : ℝ :=
+  gamma_HQIV * Hqiv.new_modes (m + 1) / R_m (m + 1)
+
+/-- Closed α multiple count when `A = 4n` and `Z = A/2`. -/
+noncomputable def closedAlphaClusterCount (A Z : ℕ) : Option ℕ :=
+  if 8 ≤ A ∧ A % 4 = 0 ∧ Z = A / 2 then some (A / 4) else none
+
+/-- Resonance-width denominator: discrete shell radius `R_m = m + 1` on the binding ladder. -/
+noncomputable def resonanceWidthShellRadius (m : ℕ) : ℝ := (m + 1 : ℝ)
+
+/-- Two-α resonance width (⁸Be): erodes over-tight double closure.
+
+`B · γ · (4/8) · 2n / (cap · R_m)` for `n = 2` only; Python
+`multi_alpha_resonance_width_mev`. -/
+noncomputable def multiAlphaResonanceWidthMev (m : ℕ) (nAlpha : ℕ) (clusterTotal : ℝ) : ℝ :=
+  if nAlpha ≠ 2 ∨ clusterTotal ≤ 0 then 0
+  else
+    clusterTotal * gamma_HQIV * strongChannelFraction * (2 * nAlpha : ℝ) /
+      (constructiveValleyCap * resonanceWidthShellRadius m)
+
+/-- Trimer resonance width (³He / ³H): saddle broadening on three-body valley closure.
+
+Same lattice spine as `multiAlphaResonanceWidthMev` with constructive valley contacts
+`bbnValleyCount A` in place of `2n` (`A = 3` only). Python `trimer_resonance_width_mev`. -/
+noncomputable def trimerResonanceWidthMev (m : ℕ) (A : ℕ) (clusterTotal : ℝ) : ℝ :=
+  if A ≠ 3 ∨ clusterTotal ≤ 0 then 0
+  else
+    clusterTotal * gamma_HQIV * strongChannelFraction * (bbnValleyCount A : ℝ) /
+      (constructiveValleyCap * resonanceWidthShellRadius m)
+
+theorem multiAlphaResonanceWidthMev_zero_of_not_two (m : ℕ) (nAlpha : ℕ) (clusterTotal : ℝ)
+    (h : nAlpha ≠ 2) :
+    multiAlphaResonanceWidthMev m nAlpha clusterTotal = 0 := by
+  unfold multiAlphaResonanceWidthMev
+  simp [h]
+
+theorem trimerResonanceWidthMev_zero_of_not_three (m : ℕ) (A : ℕ) (clusterTotal : ℝ)
+    (h : A ≠ 3) :
+    trimerResonanceWidthMev m A clusterTotal = 0 := by
+  unfold trimerResonanceWidthMev
+  simp [h]
+
+/-- Inter-α barbell / deuteron horizon coupling between closed α clusters. -/
+noncomputable def interAlphaCoupling (m n : ℕ) (geff trace : ℝ) : ℝ :=
+  if n < 2 ∨ n = 2 then 0
+  else if 4 ≤ n then
+    let link := geff * strongChannelFraction * gamma_HQIV *
+      (deuteronBindingScale m) *
+      (1 + gamma_HQIV * ((n - 3 : ℝ) / constructiveValleyCap))
+    (n - 1 : ℝ) * link
+  else
+    (n - 1 : ℝ) * geff * trace * barbellTorusScale m *
+      strongChannelFraction * gamma_HQIV
+
+/-- Far-neutron curvature binding (shielded from proton-excess destabilization). -/
+noncomputable def postAlphaFarNeutronCurvatureBinding (m A Z : ℕ) (geff : ℝ) : ℝ :=
+  if A ≤ 4 then 0
+  else
+    (farNeutronWeightedContactSum A Z : ℝ) * geff *
+      deuteronBindingScale m * strongChannelFraction
+
+/-- α-core destabilization when extras mismatch closed-α isospin. -/
+noncomputable def postAlphaCoreDestabilization
+    (m A Z : ℕ) (alphaOutsidePerNucleon : ℝ) : ℝ :=
+  if A ≤ 4 then 0
+  else
+    gamma_HQIV * strongChannelFraction * alphaOutsidePerNucleon *
+      (A - 4 : ℝ) * postAlphaAlphaAdditionIsospinTension A Z
+
+/-- Incremental post-α binding (geometry × deepen + network − relax). -/
+noncomputable def postAlphaCoreIncrementalBinding (m A Z : ℕ) (c : ℝ := 1) : ℝ :=
+  if A ≤ 4 then 0
+  else
+    postAlphaIncrementalGeometricTouchEnergy m A Z * geometryToMeVCoupling m c *
+        postAlphaCoreWellDeepening A Z +
+      postAlphaNetworkBindingEnergy m A Z c -
+      postAlphaWellRelaxationEnergy m A Z c
+
+/-- Outside binding with spin–magnetic residual (few-percent closure). -/
+noncomputable def nuclearOutsideNetworkWithResidualAtShell
+    (m : ℕ) (A : ℕ) (Z : ℕ) (θ : ℝ) (c : ℝ := 1) : ℝ :=
+  if A ≤ 1 then 0
+  else if 4 < A then
+    let he4Out := nuclearOutsideNetworkBindingAtShell m 4 θ c *
+      (1 + nuclearSpinMagneticResidualParticipation m 4 Z)
+    let inc := postAlphaCoreIncrementalBinding m A Z c -
+      postAlphaCoreDestabilization m A Z (he4Out / 4)
+    (he4Out + inc * nuclearOutsideContactCoupling θ) *
+      (1 + nuclearSpinMagneticResidualParticipation m A Z)
+  else
+    nuclearOutsideNetworkBindingAtShell m A θ c *
+      (1 + nuclearSpinMagneticResidualParticipation m A Z)
+
+/-- Total cluster binding: inside + networked outside + spin–magnetic residual. -/
+noncomputable def nuclearClusterBindingNetworkCurvature
+    (m m_cluster : ℕ) (A : ℕ) (Z : ℕ) (θ : ℝ) (c : ℝ := 1) : ℝ :=
+  nuclearInsideBindingAtShell m m_cluster A c +
+    nuclearOutsideNetworkWithResidualAtShell m A Z θ c
+
+theorem nuclearClusterBindingNetworkCurvature_add
+    (m m_cluster : ℕ) (A : ℕ) (Z : ℕ) (θ : ℝ) (c : ℝ) :
+    nuclearClusterBindingNetworkCurvature m m_cluster A Z θ c =
+      nuclearInsideBindingAtShell m m_cluster A c +
+        nuclearOutsideNetworkWithResidualAtShell m A Z θ c := rfl
 
 end
 

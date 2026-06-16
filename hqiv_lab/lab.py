@@ -24,8 +24,21 @@ class MaterialsLab:
     Output: derived allotropes, unit cells, and downstream material readouts.
     """
 
+    def spec_from_atomic_chart(self, z_heavy: int, n_hydrogen: int) -> MoleculeSpec:
+        """Monomer from atomic number + H count (no GMTKN55 chart)."""
+        from hqiv_lab.atomic_chart import monomer_spec_from_atomic_chart
+
+        return monomer_spec_from_atomic_chart(z_heavy, n_hydrogen)
+
+    def atomic_chart_readout(self, z_heavy: int, n_hydrogen: int) -> dict[str, Any]:
+        from hqiv_lab.atomic_chart import chart_readout
+
+        return chart_readout(z_heavy, n_hydrogen)
+
     def spec_from_name(self, name: str) -> MoleculeSpec:
-        return MoleculeSpec.from_chart_name(name)
+        from hqiv_lab.spec import resolve_spec
+
+        return resolve_spec(name)
 
     def spec_from_formula(self, formula: str) -> MoleculeSpec:
         return MoleculeSpec.from_formula(formula)

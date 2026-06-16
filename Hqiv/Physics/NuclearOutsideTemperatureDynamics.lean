@@ -160,6 +160,61 @@ noncomputable def localCurvatureWeakWidthFactorHigh (ξ φ : ℝ) : ℝ :=
   let c := localCurvatureWeakWidthCatalysis ξ φ
   1 + c * (1 + gamma_HQIV / 5)
 
+/-!
+## Outside-curvature binding modulator (Python `outside_curvature_binding_modulator`)
+
+Bonded branch deepens wells when inside/outside temperature balance favors closure;
+free branch weakens when Ω readout drops below lock-in. Unity at `ξ_lock`.
+-/
+
+/-- Chart background temperature `T_bg = 1/ξ` on the dimensionless ladder. -/
+noncomputable def chartBackgroundTemperatureAtXi (ξ : ℝ) : ℝ :=
+  if 0 < ξ then 1 / ξ else 0
+
+/-- Inner trapped contact temperature at ξ. -/
+noncomputable def effectiveInsideTemperatureAtXi (ξ : ℝ) : ℝ :=
+  chartBackgroundTemperatureAtXi ξ / max (tuftInnerTrappingAtXi ξ) 1e-30
+
+/-- Outer T13-suppressed temperature at ξ. -/
+noncomputable def effectiveOutsideTemperatureAtXi (ξ : ℝ) : ℝ :=
+  chartBackgroundTemperatureAtXi ξ * t13_outer_suppression_at_xi ξ
+
+/-- Log inside/outside balance driving bonded deepening. -/
+noncomputable def outsideTemperatureBalanceAtXi (ξ : ℝ) : ℝ :=
+  Real.log (effectiveInsideTemperatureAtXi ξ / max (effectiveOutsideTemperatureAtXi ξ) 1e-30)
+
+/-- Bonded outside-curvature modulator (deepen branch). -/
+noncomputable def outsideCurvatureBindingModulatorBonded (ξ : ℝ) : ℝ :=
+  let release := outsideCurvatureReleaseFactor ξ
+  let omega_norm := omegaReadoutAtXi ξ / max (omegaReadoutAtXi xiLockin) 1e-30
+  let balance := outsideTemperatureBalanceAtXi ξ
+  release * (1 + gamma_HQIV * max 0 balance * omega_norm)
+
+/-- Free outside-curvature modulator (β− weakening branch). -/
+noncomputable def outsideCurvatureBindingModulatorFree (ξ : ℝ) : ℝ :=
+  let release := outsideCurvatureReleaseFactor ξ
+  let omega_norm := omegaReadoutAtXi ξ / max (omegaReadoutAtXi xiLockin) 1e-30
+  let deficit := max 0 (1 - omega_norm)
+  let hot_release_penalty := gamma_HQIV * (1 - release)
+  let sub_lock_penalty := gamma_HQIV * deficit
+  let weaken := 1 - hot_release_penalty - sub_lock_penalty
+  release * max weaken 0
+
+/-- Unified bonded/free outside modulator (off-lock-in chart extension).
+
+At `ξ = ξ_lock` Python applies an explicit unity readout before this formula;
+see `outsideCurvatureBindingModulatorLockinReadout`.
+-/
+noncomputable def outsideCurvatureBindingModulatorChart (ξ : ℝ) (bonded : Bool) : ℝ :=
+  if bonded then outsideCurvatureBindingModulatorBonded ξ
+  else outsideCurvatureBindingModulatorFree ξ
+
+/-- Lock-in calibration row (Python short-circuit at `XI_LOCKIN`). -/
+def outsideCurvatureBindingModulatorLockinReadout : ℝ := 1
+
+theorem outsideCurvatureBindingModulatorLockinReadout_eq_one :
+    outsideCurvatureBindingModulatorLockinReadout = 1 := rfl
+
 end
 
 end Hqiv.Physics

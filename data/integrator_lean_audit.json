@@ -1,7 +1,7 @@
 {
   "source": "HQIV integrator \u2194 Lean witness audit",
   "python_script": "scripts/hqiv_integrator_lean_audit.py",
-  "policy": "Comparison targets (Coc et al. band) are not integrator inputs. B_curv sets eta/Omega_b; dynamic C2 sets D/H in the MeV bottleneck.",
+  "policy": "Comparison targets (Coc et al. band) are not integrator inputs. Faithful BBN integrator: synthesis-window D/H, coupled neutron inventory, post-synthesis Y_p. Dynamic bulk row retained for C\u2082 decomposition scaffold.",
   "lean_alignment": [
     "Hqiv.Physics.HopfShellBeltramiMassBridge.tuftHopfKappa6AtXi",
     "Hqiv.Physics.HopfShellBeltramiMassBridge.tuftLapseConcentrationAtXi",
@@ -102,13 +102,190 @@
       "c2_opportunity_suppression": 0.27427254738864354
     }
   ],
+  "stoichiometric_spine": {
+    "lean_module": "Hqiv.Physics.BBNStoichiometricIntegrator",
+    "python_module": "scripts/hqiv_bbn_condition_decay.py",
+    "constants": {
+      "bbnSynthesisDWindowHighMeV": 1.0,
+      "bbnHe3SynthesisLowMeV": 0.05,
+      "bbnHe3SynthesisMidMeV": 0.18,
+      "bbnHe3SynthesisHighMeV": 0.45,
+      "bbnHe3Be7FeedMidMeV": 0.15,
+      "bbnHe3Be7FeedHighMeV": 0.35,
+      "bbnAlphaSynthesisGateLowMeV": 0.035,
+      "bbnAlphaSynthesisGateWidthMeV": 0.06
+    },
+    "gate_samples_at_T_0p2_MeV": {
+      "bbnHe3SynthesisGate": 0.9259259259259258,
+      "bbnHe3Be7FeedGate": 0.7499999999999999,
+      "bbnAlphaSynthesisGate": 1.0,
+      "bbnNpToDeuteriumSynthesisGate": 1.0,
+      "bbnSynthesisDWindowTailGate": 1.0,
+      "bbnDynamicC2OpportunitySuppression": 1.0
+    },
+    "strong_deposition_boost": {
+      "bbnSynthesisStrongDepositionBoost": 1.3
+    },
+    "window_bounds": {
+      "bbnSynthesisDWindowLowMeV": 0.1430081323965505,
+      "bbnSynthesisDWindowPeakMeV": 0.18,
+      "bbnHe3SynthesisWindowHighMeV": 0.45,
+      "bbnHe3SynthesisWindowLowMeV": 0.05
+    },
+    "python_to_lean": [
+      [
+        "HE3_SYNTH_LOW_MEV",
+        "bbnHe3SynthesisLowMeV"
+      ],
+      [
+        "HE3_SYNTH_MID_MEV",
+        "bbnHe3SynthesisMidMeV"
+      ],
+      [
+        "HE3_SYNTH_HIGH_MEV",
+        "bbnHe3SynthesisHighMeV"
+      ],
+      [
+        "he3_synthesis_gate",
+        "bbnHe3SynthesisGate"
+      ],
+      [
+        "he3_be7_feed_gate",
+        "bbnHe3Be7FeedGate"
+      ],
+      [
+        "alpha_synthesis_gate",
+        "bbnAlphaSynthesisGate"
+      ],
+      [
+        "np_to_deuterium_synthesis_gate",
+        "bbnNpToDeuteriumSynthesisGate"
+      ],
+      [
+        "synthesis_d_window_tail_gate",
+        "bbnSynthesisDWindowTailGate"
+      ],
+      [
+        "synthesis_strong_deposition_boost",
+        "bbnSynthesisStrongDepositionBoost"
+      ],
+      [
+        "trimer_width_suppress_at_T",
+        "bbnTrimerWidthStrongSuppressAtT"
+      ],
+      [
+        "synthesis_window_end_mev",
+        "bbnSynthesisWindowEndMeV"
+      ],
+      [
+        "bbn_binding_release_factor",
+        "bbnBindingReleaseFactor"
+      ],
+      [
+        "bbn_dynamic_c2_opportunity_suppression",
+        "bbnDynamicC2OpportunitySuppression"
+      ]
+    ]
+  },
+  "faithful_bbn_integrator": {
+    "integrator": "hqiv_bbn_integrator.py",
+    "payload_path": "data/bbn_integrator.json",
+    "eta": 6.1e-10,
+    "eta10": 6.1,
+    "Yp": 0.24421989482751755,
+    "D_over_H": 2.5118500223186595e-05,
+    "He3_over_H": 1.0121588962277262e-05,
+    "Li7_over_H": 2.5361773451891707e-10,
+    "opportunity_mode": "synthesis_window_stoichiometric_inventory",
+    "synthesis_d_window": {
+      "enabled": true,
+      "T_high_MeV": 1.0,
+      "T_peak_MeV": 0.18,
+      "T_low_MeV": 0.1430081323965505,
+      "tail_gate": "synthesis_d_window_tail_gate (unity \u2265 T_peak; linear fade T_bn\u2192T_peak)",
+      "notes": "D/H log-weighted over MeV synthesis through T_bn; below \u00b3He mid-gate T_peak weights taper (thermal crush tail). n+p\u2192D capture + strong deposition boost \u03b3\u00b7strong\u00b7(1+g_np+c\u2082); Y_p from post-synthesis neutron inventory."
+    },
+    "he3_synthesis_window": {
+      "enabled": true,
+      "T_high_MeV": 0.45,
+      "T_low_MeV": 0.05,
+      "notes": "\u00b3He/H integrated on 0.45\u21920.05 MeV ladder (extended synthesis gate)."
+    },
+    "free_neutron_curvature_channel": {
+      "enabled": true,
+      "coupled_inventory": true,
+      "post_freeze_survival": false,
+      "tau_ratio_at_freeze": 1.1865669029029051,
+      "x_n_at_freeze": 0.14836758277706208,
+      "x_n_at_T_low": 0.13909480697955973,
+      "Y_p_bare_equilibrium": 0.2469135802469136,
+      "delta_Y_p": -0.002693685419396047,
+      "D_over_H_bare_uncoupled": 2.4887537704204818e-05,
+      "delta_D_over_H": 2.3096251898177702e-07,
+      "lean_modules": [
+        "Hqiv.Physics.NuclearOutsideTemperatureDynamics",
+        "Hqiv.Physics.BBNStoichiometricIntegrator"
+      ],
+      "notes": "Unified march: outside modulator + \u03bd-width set \u03c4_n(T); inventory scales n+p\u2192D and D+D\u2192\u2074He; Y_p and D/H from the same x_n ladder."
+    },
+    "observation_comparison": {
+      "policy": "observation targets are not integrator inputs",
+      "Y_p": {
+        "model": 0.24421989482751755,
+        "observed": 0.244,
+        "sigma": 0.004,
+        "z_score": 0.054973706879388184
+      },
+      "D_over_H": {
+        "model": 2.5118500223186595e-05,
+        "observed": 2.53e-05,
+        "sigma": 4e-07,
+        "z_score": -0.45374944203350775,
+        "coc2015": 2.579e-05
+      },
+      "He3_over_H": {
+        "model": 1.0121588962277262e-05,
+        "observed_order": 1e-05,
+        "coc2015": 9.996e-06,
+        "notes": "\u00b3He from stoichiometric D burn with trimer width \u0393(T); synthesis gate when he3_stratified=True"
+      },
+      "Li7_over_H": {
+        "model": 2.5361773451891707e-10,
+        "observed_band": [
+          1.6e-10,
+          4.5e-10
+        ],
+        "coc2015": 4.648e-10,
+        "notes": "pre-astrophysical-depletion; network \u00b3He+\u2074He\u2192\u2077Be\u2192\u2077Li ladder"
+      },
+      "Be7_over_H": {
+        "model": 1.046619503010068e-12,
+        "notes": "relic \u2077Be after partial capture; should be \u226a \u2077Li/H"
+      }
+    },
+    "z_scores": {
+      "Yp": 0.054973706879388184,
+      "D_over_H": -0.45374944203350775,
+      "He3_over_H": null,
+      "Li7_over_H": null
+    },
+    "lean_modules": [
+      "Hqiv.Physics.BBNNetworkFromWeights",
+      "Hqiv.Physics.DynamicBBNBaryogenesis",
+      "Hqiv.Physics.BBNEpochEvolution",
+      "Hqiv.Physics.BBNEpochNetwork",
+      "Hqiv.Physics.NuclearCurvatureBinding",
+      "Hqiv.Physics.NuclearOutsideTemperatureDynamics",
+      "Hqiv.Physics.BBNStoichiometricIntegrator"
+    ]
+  },
   "dynamic_bulk_bbn": {
     "integrator": "hqiv_dynamic_bulk_bbn.py",
     "payload_path": "data/dynamic_bulk_bbn_v2.json",
     "eta10": 6.197824246382018,
     "Omega_b": 0.04989944552562245,
-    "Yp": 0.24614011152727566,
-    "D_over_H": 1.8496499978707592e-05,
+    "Yp": 1.0,
+    "D_over_H": 9.547507713067009e-60,
     "opportunity_mode": "shell_curvature_casimir_dynamic_C2",
     "observation_comparison": {
       "comparison_policy": "observation targets are not inputs to the integrator",
@@ -127,24 +304,24 @@
       "Y_p": {
         "observed": 0.244,
         "sigma": 0.004,
-        "model": 0.24614011152727566,
-        "z_score": 0.5350278818189169
+        "model": 1.0,
+        "z_score": 189.0
       },
       "D_over_H": {
         "observed": 2.53e-05,
         "sigma": 4e-07,
-        "model": 1.8496499978707592e-05,
-        "z_score": -17.008750053231015
+        "model": 9.547507713067009e-60,
+        "z_score": -63.25
       },
       "Be7_over_H": {
-        "model": 6.153564323825132e-07,
+        "model": 0.0,
         "notes": "relic \u2077Be after capture (should be \u226a Li7/H in standard BBN)"
       },
       "Li7_over_H": {
         "observed": 4.65e-10,
         "sigma": 1.5e-10,
-        "model": 7.648785509876494e-05,
-        "z_score": 509915.93399176624,
+        "model": 7.474895016005876e-102,
+        "z_score": -3.1,
         "notes": "spite plateau / post-BBN depletion band; integrator is pre-destruction"
       },
       "nuclear_binding_paper": "papers/nucleon_binding/hqiv_nucleon_binding_from_composite_trace.tex",
@@ -152,24 +329,34 @@
     },
     "z_scores": {
       "eta10": 1.6304041063669672,
-      "Yp": 0.5350278818189169,
-      "D_over_H": -17.008750053231015
+      "Yp": 189.0,
+      "D_over_H": -63.25
     },
     "lockin": {
       "proton_mass_MeV": 938.272,
       "delta_m_MeV": 1.293,
-      "Q_D_MeV": 2.343133076983804,
-      "Q_4He_MeV": 7.029399230951185,
-      "Q_3He_MeV": 4.393374519344427
+      "Q_D_MeV": 2.1854759333776914,
+      "Q_4He_MeV": 27.786971261957287,
+      "Q_3He_MeV": 7.698673011407061
     }
   },
   "paper_record": {
     "recommended_citation_row": {
+      "eta10": 6.1,
+      "Yp": 0.24421989482751755,
+      "D_over_H": 2.5118500223186595e-05,
+      "He3_over_H": 1.0121588962277262e-05,
+      "Li7_over_H": 2.5361773451891707e-10,
+      "driver": "hqiv_bbn_integrator (BBNStoichiometricIntegrator mirror)",
+      "payload": "data/bbn_integrator.json"
+    },
+    "legacy_dynamic_bulk_row": {
       "eta10": 6.197824246382018,
       "Omega_b": 0.04989944552562245,
-      "Yp": 0.24614011152727566,
-      "D_over_H": 1.8496499978707592e-05,
-      "driver": "bbnShellReactionOpportunity_dynamic_integrator (Python mirror)"
+      "Yp": 1.0,
+      "D_over_H": 9.547507713067009e-60,
+      "driver": "bbnShellReactionOpportunity_dynamic_integrator (scaffold)",
+      "notes": "Pre-synthesis-window bulk integrator; D/H understates faithful readout."
     },
     "formulas": {
       "kappa6": "eta_paper * B_curv(xi) * gamma * C2(xi)",
@@ -177,7 +364,9 @@
       "T_ref": "T_freeze(eta)",
       "w(T)": "gamma * (4/8) * Q_D_eff(T) / Q_np",
       "c2_suppression": "(kappa6_ref/kappa6)^w for T <= T_bottleneck(eta)",
-      "integrator_opportunity": "base_shell * (1 + delta_bind/4) * c2_suppression"
+      "integrator_opportunity": "base_shell * (1 + delta_bind/4) * c2_suppression",
+      "synthesis_d_window": "log-weight D/H over 1.0\u2192T_bn with tail_gate(T_bn\u2192T_peak) below \u00b3He mid",
+      "Y_p_readout": "2 x_n/(1+x_n) at post-synthesis T_low (coupled inventory march)"
     }
   }
 }

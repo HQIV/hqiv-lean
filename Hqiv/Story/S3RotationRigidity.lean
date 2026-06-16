@@ -62,6 +62,67 @@ noncomputable def projectionLine (θ : ℝ) : ℝ :=
   Real.sin θ / (Real.cos θ + Real.sin θ)
 
 /--
+Algebraic projective intercept as a function of a tangent ratio `u = tan θ`.
+
+When `cos θ ≠ 0`, `projectionLine θ` is this value with `u = tan θ`:
+`sin θ / (cos θ + sin θ) = tan θ / (1 + tan θ)`.  Keeping this algebraic
+form separate lets us discuss hyperbolic/projective intercepts without treating
+the raw affine height slope as invariant.
+-/
+noncomputable def projectiveInterceptFromTan (u : ℝ) : ℝ :=
+  u / (1 + u)
+
+/-- A tangent ratio `1` gives the critical midpoint intercept `1/2`. -/
+theorem projectiveInterceptFromTan_one :
+    projectiveInterceptFromTan 1 = (1 / 2 : ℝ) := by
+  norm_num [projectiveInterceptFromTan]
+
+/-- A tangent ratio `1/2` gives projective intercept `1/3`. -/
+theorem projectiveInterceptFromTan_half :
+    projectiveInterceptFromTan (1 / 2 : ℝ) = (1 / 3 : ℝ) := by
+  norm_num [projectiveInterceptFromTan]
+
+/--
+If an intercept target is `r ≠ 1`, the tangent ratio required to hit it is
+`r / (1 - r)`.
+-/
+theorem projectiveInterceptFromTan_solve
+    {r : ℝ} (hr : r ≠ 1) :
+    projectiveInterceptFromTan (r / (1 - r)) = r := by
+  unfold projectiveInterceptFromTan
+  have hden : 1 - r ≠ 0 := by
+    intro h
+    apply hr
+    linarith
+  field_simp [hden]
+  ring
+
+/--
+Origin-centered tangent ratio that meets a target projective intercept `T`.
+
+The line through the origin has slope/tangent ratio `T / (1 - T)`; feeding that
+ratio into the SO(4) projective intercept recovers `T`.
+-/
+noncomputable def originCenteredTangentRatioForIntercept (T : ℝ) : ℝ :=
+  T / (1 - T)
+
+/-- The origin-centered tangent ratio for intercept `T ≠ 1` lands back on `T`. -/
+theorem projectiveIntercept_originCenteredTangentRatio
+    {T : ℝ} (hT : T ≠ 1) :
+    projectiveInterceptFromTan (originCenteredTangentRatioForIntercept T) = T :=
+  projectiveInterceptFromTan_solve hT
+
+/-- For intercept `1/3`, the origin-centered tangent ratio is `1/2`. -/
+theorem originCenteredTangentRatioForIntercept_one_third :
+    originCenteredTangentRatioForIntercept (1 / 3 : ℝ) = (1 / 2 : ℝ) := by
+  norm_num [originCenteredTangentRatioForIntercept]
+
+/-- For the critical intercept `1/2`, the origin-centered tangent ratio is `1`. -/
+theorem originCenteredTangentRatioForIntercept_one_half :
+    originCenteredTangentRatioForIntercept (1 / 2 : ℝ) = (1 : ℝ) := by
+  norm_num [originCenteredTangentRatioForIntercept]
+
+/--
 Affine readout in `σ`: vanishing is equivalent to landing on the projection line.
 -/
 theorem rotFree_vanishes_iff_on_projection_line (θ σ : ℝ)

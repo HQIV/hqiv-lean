@@ -17,6 +17,23 @@ ROOTS = (
     "HQIVMeaningfulPhysics",
 )
 
+# Never auto-include matrix Lie-closure certificate modules in physics libs.
+# Full closure: `lake build HQIVSO8Closure` (or `scripts/build_hqiv_so8_closure_lowmem.sh`).
+CLOSURE_CERTIFICATE_PREFIXES = (
+    "Hqiv.GeneratorsLieClosure",
+    "Hqiv.GeneratorsLieClosureData",
+    "Hqiv.LieBracketCell.",
+    "Hqiv.So8CoordMatrix",
+    "Hqiv.SO8Closure",
+    "Hqiv.SO8ClosureInterface",
+    "Hqiv.Algebra.SO8ClosureAbstract",
+    "Hqiv.Physics.TuftSynthesisZetaHolonomyDischargeCertified",
+)
+
+
+def is_closure_certificate(mod: str) -> bool:
+    return any(mod.startswith(p) or mod == p.rstrip(".") for p in CLOSURE_CERTIFICATE_PREFIXES)
+
 
 def mod_to_path(mod: str) -> str | None:
     p = mod.replace(".", "/") + ".lean"
@@ -57,7 +74,7 @@ def import_closure() -> list[str]:
         seen.add(m)
         for imp in read_hqiv_imports(p):
             q.append(imp)
-    hqiv = [m for m in seen if m.startswith("Hqiv.")]
+    hqiv = [m for m in seen if m.startswith("Hqiv.") and not is_closure_certificate(m)]
     globs: list[str] = ["HQIVMeaningfulPhysics", "HQIVPhysics"] + sorted(hqiv, key=str)
     # Dedup, preserve order
     out, done = [], set()

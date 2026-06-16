@@ -64,4 +64,34 @@ noncomputable def bindingCurvatureFeedbackSecondOrderHomogeneous
 noncomputable def nucleationCoordinationExcess (ρ_hom ρ_local : ℝ) : ℝ :=
   max (ρ_local - clampMediumDensity ρ_hom) 0
 
+theorem nucleationCoordinationExcess_nonneg (ρ_hom ρ_local : ℝ) :
+    0 ≤ nucleationCoordinationExcess ρ_hom ρ_local := by
+  unfold nucleationCoordinationExcess
+  exact max_nonneg _ _
+
+theorem homogeneousCurvatureBudgetAtXi_dilute (ξ : ℝ) :
+    homogeneousCurvatureBudgetAtXi ξ 0 = 1 := by
+  unfold homogeneousCurvatureBudgetAtXi clampMediumDensity
+  simp
+
+theorem homogeneousCurvatureBudgetAtXi_bulk (ξ : ℝ) :
+    homogeneousCurvatureBudgetAtXi ξ 1 = curvatureBudgetAtXi ξ := by
+  unfold homogeneousCurvatureBudgetAtXi clampMediumDensity curvatureBudgetAtXi
+    dynamicBindingCurvatureCouplingAtXi
+  simp [dynamicBindingCurvatureCouplingAtXi]
+
+theorem localCurvatureDefectExcess_nonneg (δ : ℝ) :
+    0 ≤ localCurvatureDefectExcess δ := by
+  unfold localCurvatureDefectExcess
+  apply mul_nonneg
+  · apply mul_nonneg
+    · rw [gamma_eq_2_5]; norm_num
+    · rw [strongChannelFraction_eq_four_eighths]; norm_num
+  · exact le_max_left _ _
+
+theorem effectiveCurvatureBudgetAtXi_ge_homogeneous (ξ ρ δ : ℝ) :
+    homogeneousCurvatureBudgetAtXi ξ ρ ≤ effectiveCurvatureBudgetAtXi ξ ρ δ := by
+  unfold effectiveCurvatureBudgetAtXi
+  linarith [localCurvatureDefectExcess_nonneg δ]
+
 end Hqiv.Physics

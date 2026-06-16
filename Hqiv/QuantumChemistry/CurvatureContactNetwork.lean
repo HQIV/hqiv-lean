@@ -19,6 +19,11 @@ extensions to condensed phases (liquid coordination, solid periodic images).
 * **Contacts** (typed):
   * `clusterDeficit` — node self: lowers effective mass (D, T, … valley memory).
   * `covalentBond` — attractive edge: outside `G_eff(θ)` closure (same as `CurvatureBondContact`).
+  * `ionicBond` — lattice ion pair: `ionicBondSurplus` joint−separated electron seas
+    (`Hqiv.Geometry.BondedHorizonCasimir`).
+  * `metallicBond` — delocalized bulk vs localized peel: `metallicPeelSurplus`
+    (`Hqiv.Geometry.BondedHorizonCasimir`; Python ``hqiv_metallic_bond_network``).
+  * `ionSolvation` — aqueous ion–H₂O contact (hydration shell on the host network).
   * `stericRepulsion` — repulsive edge (e.g. peripheral H–H): adds curvature mass back.
   * `hyperclosure` — graph-level multi-bond closure (`BondStateNetwork.hyperWeight`).
   * `periodicImage` — lattice repeat for solid/liquid scaffolds (coordination-weighted).
@@ -59,6 +64,9 @@ inductive DerivedPhase
 inductive ContactKind
   | clusterDeficit
   | covalentBond
+  | ionicBond
+  | metallicBond
+  | ionSolvation
   | stericRepulsion
   | hyperclosure
   | periodicImage

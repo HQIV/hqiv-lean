@@ -66,9 +66,18 @@ noncomputable def bbnHe3HAtEpoch (η T_MeV : ℝ) : ℝ :=
   (eta10 η) ^ bbnHe3_etaExponent derivedProtonMass *
     bbnThermalSinkFactor (bbnClusterBinding bbnBindingShell 3) bbnHelium4QAtLockin T_MeV
 
-noncomputable def bbnLi7HAtEpoch (η T_MeV : ℝ) : ℝ :=
+/-- Legacy 7/4-proxy Li7/H at epoch T (positivity lemmas only). -/
+noncomputable def bbnLi7HAtEpochLegacy (η T_MeV : ℝ) : ℝ :=
   (eta10 η) ^ bbnLi7_etaExponent derivedProtonMass *
     bbnThermalSinkFactor (bbnHelium4QAtLockin * (7 / 4 : ℝ)) bbnHelium4QAtLockin T_MeV
+
+/-- Integrated ⁷Li/H at epoch T from the Be7/Li7 network ladder. -/
+noncomputable def bbnLi7HAtEpochLadder (η T_MeV : ℝ) : ℝ :=
+  (eta10 η) ^ bbnLi7_etaExponentLadder derivedProtonMass *
+    bbnThermalSinkFactor (bbnBe7ToLi7WellDepthGap derivedProtonMass) bbnDeuteronQAtLockin T_MeV
+
+noncomputable def bbnLi7HAtEpoch (η T_MeV : ℝ) : ℝ :=
+  bbnLi7HAtEpochLadder η T_MeV
 
 structure BBNEpochReadout where
   T_MeV : ℝ
@@ -155,7 +164,8 @@ theorem bbn_epoch_vital_readout_holds : bbn_epoch_vital_readout := by
   · exact bbnDHAtEpoch_pos eta_paper bbnMidEpochTemperatureMeV hη10 hT
   · unfold bbnHe3HAtEpoch bbnHe3_etaExponent bbnThermalSinkFactor bbnBoltzmannWeight eta10
     exact mul_pos (Real.rpow_pos_of_pos hηpos _) (bbnBoltzmannWeight_pos _ _)
-  · unfold bbnLi7HAtEpoch bbnLi7_etaExponent bbnThermalSinkFactor bbnBoltzmannWeight eta10
+  · unfold bbnLi7HAtEpoch bbnLi7HAtEpochLadder bbnLi7_etaExponentLadder bbnThermalSinkFactor
+      bbnBoltzmannWeight eta10
     exact mul_pos (Real.rpow_pos_of_pos hηpos _) (bbnBoltzmannWeight_pos _ _)
 
 end

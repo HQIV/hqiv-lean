@@ -1,5 +1,5 @@
 {
-  "source": "HQIV BBN: lock-in \u03b7 + network Q at referenceM; abundances at cosmological T",
+  "source": "HQIV BBN: network Q at lock-in + bbnBindingReleaseFactor per epoch T (dynamicBBNReadoutAtT spine)",
   "lean_modules": [
     "Hqiv.Physics.BBNNetworkFromWeights",
     "Hqiv.Physics.BBNEpochEvolution"
@@ -10,16 +10,44 @@
     "eta_paper": 6.1e-10,
     "derivedProtonMass_MeV": 938.272,
     "derivedDeltaM_MeV": 1.293,
-    "Q_D_lockin_MeV": 2.343133076983804,
-    "Q_4He_lockin_MeV": 7.029399230951185,
+    "Q_D_lockin_network_MeV": 2.1854759333776914,
+    "Q_4He_lockin_network_MeV": 27.786971261957287,
+    "Q_3He_lockin_network_MeV": 7.698673011407061,
+    "Q_7Be_lockin_network_MeV": 38.38333906775842,
+    "Q_7Be_formation_lockin_MeV": 2.8976947943940736,
+    "Q_7Be_binding_network_MeV": 38.38333906775842,
+    "Q_7Li_binding_network_MeV": 39.6032120778389,
+    "Q_be7_to_li7_capture_MeV": 0.24397460201609533,
+    "Q_D_lockin_valley_MeV": 2.343133076983804,
+    "Q_4He_lockin_valley_MeV": 7.029399230951185,
+    "Q_mid_epoch_effective_MeV": {
+      "Q_D": 1.9651616456171994,
+      "Q_4He": 5.895484936851599,
+      "Q_3He": 3.6846780855322487
+    },
     "lockin_T_MeV": 2.4418e+21,
     "cmb_T_MeV": 2.31971e-10
   },
   "bbn_window_integrated": {
     "Yp": 0.24691358024691362,
+    "D_over_H": 4.616899422754461e-06,
+    "He3_over_H": 0.0008263255668007276,
+    "Be7_over_H": 5.193180372856831e-10,
+    "Li7_over_H": 1.234800403120826e-07,
+    "Li7_tail_T_low_MeV": 0.05,
+    "Li7_tail_T_high_MeV": 0.25,
+    "T_window_low_MeV": 0.01,
+    "T_window_high_MeV": 1.0,
+    "n_steps": 40.0
+  },
+  "bbn_window_integrated_valley_lockin": {
+    "Yp": 0.24691358024691362,
     "D_over_H": 6.806268570945086e-07,
     "He3_over_H": 0.00030447447657838114,
-    "Li7_over_H": 2.049990674939668e+221,
+    "Be7_over_H": 7.39471703116253e-10,
+    "Li7_over_H": 1.4766313566326124e-07,
+    "Li7_tail_T_low_MeV": 0.05,
+    "Li7_tail_T_high_MeV": 0.25,
     "T_window_low_MeV": 0.01,
     "T_window_high_MeV": 1.0,
     "n_steps": 40.0
@@ -28,9 +56,14 @@
     "T_MeV": 0.1,
     "shell_index": 1.2209e+23,
     "Yp": 0.2469135802469136,
-    "D_over_H": 6.331486303112733e-24,
-    "He3_over_H": 2.0259760969460958e-13,
-    "Li7_over_H": 7.044242898103586e+16,
+    "D_over_H": 3.4967217581137734e-20,
+    "He3_over_H": 2.2605003252717724e-11,
+    "Be7_over_H": 1.3942445548300528e-19,
+    "Li7_over_H": 7.737736347122298e-15,
+    "Q_7Be_formation_MeV": 28.803176045374574,
+    "Q_be7_to_li7_capture_MeV": 0.24397460201609533,
+    "Q_7Be_binding_MeV": 38.38333906775842,
+    "Q_7Li_binding_MeV": 39.6032120778389,
     "xn": 0.14084507042253522,
     "T_freeze_MeV": 0.7150406619827524
   },
@@ -40,36 +73,40 @@
       "T_MeV": 2.4418e+21,
       "shell_index": 4.0,
       "Yp": 0.2469135802469136,
-      "D_over_H": 0.0014246263921707946,
-      "He3_over_H": 0.056851794983886025,
-      "Li7_over_H": 8.945705455445067e-07
+      "D_over_H": 0.0014246263921707774,
+      "He3_over_H": 0.0568517949838773,
+      "Be7_over_H": 0.003959499522896275,
+      "Li7_over_H": 0.00791899904579255
     },
     {
       "label": "bbn_T_1_MeV",
       "T_MeV": 1.0,
       "shell_index": 1.2209e+22,
       "Yp": 0.2469135802469136,
-      "D_over_H": 1.3136553966220222e-05,
-      "He3_over_H": 0.004073176175152631,
-      "Li7_over_H": 0.0001742755922910472
+      "D_over_H": 7.986520280695764e-05,
+      "He3_over_H": 0.009856688934386869,
+      "Be7_over_H": 0.0001675714931745948,
+      "Li7_over_H": 0.0009331281965097893
     },
     {
       "label": "bbn_mid_T_0.1_MeV",
       "T_MeV": 0.1,
       "shell_index": 1.2209e+23,
       "Yp": 0.2469135802469136,
-      "D_over_H": 6.331486303112733e-24,
-      "He3_over_H": 2.0259760969460958e-13,
-      "Li7_over_H": 7.044242898103586e+16
+      "D_over_H": 3.4967217581137734e-20,
+      "He3_over_H": 2.2605003252717724e-11,
+      "Be7_over_H": 1.3942445548300528e-19,
+      "Li7_over_H": 7.737736347122298e-15
     },
     {
       "label": "bbn_T_0.01_MeV",
       "T_MeV": 0.01,
       "shell_index": 1.2209e+24,
       "Yp": 0.2469135802469136,
-      "D_over_H": 4.282997746399088e-207,
-      "He3_over_H": 1.8777835928731922e-116,
-      "Li7_over_H": 8.199962699758673e+222
+      "D_over_H": 1.1519295077081288e-173,
+      "He3_over_H": 1.047623673722948e-97,
+      "Be7_over_H": 5.060796079909059e-148,
+      "Li7_over_H": 1.5975605498094013e-125
     },
     {
       "label": "cmb_today",
@@ -78,6 +115,7 @@
       "Yp": 0.2469135802469136,
       "D_over_H": 0.0,
       "He3_over_H": 0.0,
+      "Be7_over_H": 0.0,
       "Li7_over_H": 0.0
     }
   ],

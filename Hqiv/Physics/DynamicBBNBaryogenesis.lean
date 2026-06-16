@@ -162,6 +162,13 @@ theorem bbnBindingReleaseFactor_pos (T_MeV : ℝ) :
   unfold bbnBindingReleaseFactor
   exact Real.exp_pos _
 
+theorem bbnBoundedCurvatureTemperatureSlope_nonneg_of_slope_nonneg {T_MeV : ℝ}
+    (h : 0 ≤ bbnCurvatureTemperatureSlope T_MeV) :
+    0 ≤ bbnBoundedCurvatureTemperatureSlope T_MeV := by
+  unfold bbnBoundedCurvatureTemperatureSlope
+  have hden : 0 ≤ 1 + bbnCurvatureTemperatureSlope T_MeV := by linarith
+  exact div_nonneg h hden
+
 theorem T_Pl_MeV_pos : 0 < T_Pl_MeV := by
   unfold T_Pl_MeV
   norm_num
@@ -393,9 +400,9 @@ noncomputable def dynamicBBNReadoutAtT (η T_MeV : ℝ) (useBindingFeedback : Bo
     He3H := (eta10 η) ^ bbnHe3_etaExponent (dynamicProtonMass_at_xi ξ) *
               bbnThermalSinkFactor (bbnClusterBinding_effectiveAtT T_MeV 3)
                 (bbnHelium4BindingQ_effectiveAtT T_MeV) T_MeV
-    Li7H := (eta10 η) ^ bbnLi7_etaExponent (dynamicProtonMass_at_xi ξ) *
-              bbnThermalSinkFactor (bbnHelium4BindingQ_effectiveAtT T_MeV * (7/4))
-                (bbnHelium4BindingQ_effectiveAtT T_MeV) T_MeV
+    Li7H := (eta10 η) ^ bbnLi7_etaExponentLadder (dynamicProtonMass_at_xi ξ) *
+              bbnThermalSinkFactor (bbnBe7ToLi7WellDepthGap (dynamicProtonMass_at_xi ξ))
+                (bbnDeuteronBindingQ_effectiveAtT T_MeV) T_MeV
     bindingCurvaturePerturbation := δ
   }
 
@@ -446,22 +453,23 @@ This is the natural way the "gluon = curvature artifact" story feeds back
 into the baryon asymmetry itself.
 -/
 
-/-- Derived correction to the curvature integral between QCD and lock-in
-from binding condensation. Coefficient is the same strong-channel geometric
-weight used everywhere else in the dynamic BBN/baryogenesis machinery
-(γ · 4/8). No free κ.
--/
-noncomputable def baryogenesis_binding_curvature_correction (m_QCD m_lockin : Nat) : ℝ :=
-  (gamma_HQIV * Hqiv.Physics.strongChannelFraction) *
-    (bbnClusterBinding m_lockin 4 - bbnClusterBinding m_QCD 4)
+/-- Dimensionless cluster-binding contrast `(B_lock − B_qcd) / B_lock` on the BBN chart. -/
+noncomputable def clusterBindingContrastRelative : ℝ :=
+  (bbnClusterBinding m_lockin 4 - bbnClusterBinding m_QCD 4) / bbnClusterBinding m_lockin 4
 
-/-- Dynamic eta_at_horizon with the derived binding correction on the curvature
-integral (no free scales).
--/
+/-- Dimensionless binding-curvature correction at lock-in: `γ · (4/8) · contrast`.
+    Matches `DynamicBindingChart.dynamicBindingCurvatureCorrectionAtXi` at `ξ_lock`
+    when `ω_K(ξ_lock)/ω_K(ξ_lock) = 1`. -/
+noncomputable def baryogenesis_binding_curvature_correction_dimless : ℝ :=
+  gamma_HQIV * strongChannelFraction * clusterBindingContrastRelative
+
+/-- MeV-scale binding condensation between QCD and lock-in (audit / chemistry layer). -/
+noncomputable def baryogenesis_binding_curvature_correction (_m_QCD _m_lockin : Nat) : ℝ :=
+  baryogenesis_binding_curvature_correction_dimless * bbnClusterBinding m_lockin 4
+
+/-- Dynamic `η` at horizon with dimensionless binding feedback (no MeV-scale multiplier). -/
 noncomputable def eta_at_horizon_dynamic (n N : Nat) : ℝ :=
-  let base := eta_at_horizon n N
-  let corr := baryogenesis_binding_curvature_correction m_QCD m_lockin
-  base * (1 + corr)
+  eta_at_horizon n N * (1 + baryogenesis_binding_curvature_correction_dimless)
 
 /-!
 ## Vital theorems (skeleton)
@@ -484,17 +492,6 @@ theorem dynamicProtonMass_at_xi_recovers_lockin
   unfold dynamicProtonMass_at_xi
   field_simp [hgap]
 
--- Positivity of the derived binding curvature perturbation.
--- (The efficiency is nonnegative by construction from gamma*strong*slope ≥ 0;
--- strict positivity holds away from the lock-in point where the slope vanishes.
--- Full case analysis left as future polishing; the definitions themselves are now free of ad-hoc scales.)
-theorem bbn_binding_curvature_perturbation_pos
-    (T_MeV : ℝ) (η : ℝ)
-    (hT : 0 < T_MeV)
-    (hQ : 0 < bbnHelium4BindingQ_effectiveAtT T_MeV) :
-    0 ≤ bbn_binding_curvature_perturbation T_MeV η := by
-  sorry  -- scales removed from the definition; proof of non-negativity in all regimes is routine geometry but not required for the computational path to be clean.
-
 -- The perturbation is exactly the derived efficiency times (Q4_eff / T).
 theorem bbn_binding_curvature_perturbation_eq
     (T_MeV : ℝ) (η : ℝ) :
@@ -502,12 +499,41 @@ theorem bbn_binding_curvature_perturbation_eq
       bbn_binding_curvature_efficiency T_MeV * (bbnHelium4BindingQ_effectiveAtT T_MeV / T_MeV) := by
   rfl
 
--- The dynamic eta readout is the base curvature eta times the binding correction factor.
+/-- Nonnegativity when the raw curvature–temperature slope is nonnegative (BBN epoch: ξ ≫ ξ_lockin). -/
+theorem bbn_binding_curvature_perturbation_nonneg
+    (T_MeV : ℝ) (η : ℝ)
+    (hT : 0 < T_MeV)
+    (hslope : 0 ≤ bbnCurvatureTemperatureSlope T_MeV)
+    (hQ : 0 < bbnHelium4BindingQ_effectiveAtT T_MeV) :
+    0 ≤ bbn_binding_curvature_perturbation T_MeV η := by
+  rw [bbn_binding_curvature_perturbation_eq]
+  apply mul_nonneg
+  · unfold bbn_binding_curvature_efficiency
+    apply mul_nonneg
+    · apply mul_nonneg
+      · rw [gamma_eq_2_5]; norm_num
+      · rw [strongChannelFraction_eq_four_eighths]; norm_num
+    · exact bbnBoundedCurvatureTemperatureSlope_nonneg_of_slope_nonneg hslope
+  · exact div_nonneg (le_of_lt hQ) (le_of_lt hT)
+
 theorem eta_at_horizon_dynamic_eq (n N : Nat) :
     eta_at_horizon_dynamic n N =
-      eta_at_horizon n N *
-        (1 + baryogenesis_binding_curvature_correction m_QCD m_lockin) := by
+      eta_at_horizon n N * (1 + baryogenesis_binding_curvature_correction_dimless) := by
   rfl
+
+theorem baryogenesis_binding_curvature_correction_dimless_eq :
+    baryogenesis_binding_curvature_correction_dimless =
+      gamma_HQIV * strongChannelFraction * clusterBindingContrastRelative := rfl
+
+theorem baryogenesis_binding_curvature_correction_mev_factorization (m_QCD' m_lockin' : Nat) :
+    baryogenesis_binding_curvature_correction m_QCD' m_lockin' =
+      baryogenesis_binding_curvature_correction_dimless * bbnClusterBinding m_lockin 4 := by
+  unfold baryogenesis_binding_curvature_correction
+  rfl
+
+theorem clusterBindingContrastRelative_eq :
+    clusterBindingContrastRelative =
+      (bbnClusterBinding m_lockin 4 - bbnClusterBinding m_QCD 4) / bbnClusterBinding m_lockin 4 := rfl
 
 /-!
 ## Publication anchors (BBN dynamic-$C_2$ lab)

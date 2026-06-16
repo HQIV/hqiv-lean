@@ -11,6 +11,9 @@ Network rule (single engine for molecules → liquids → solids):
   **Contacts** (typed, parameter-free):
     • cluster_deficit     — node self; lowers m_eff → dresses vev down (D, T, valley)
     • covalent_bond       — attractive edge; G_eff(θ) outside closure
+    • ionic_bond          — lattice ion pair; ionicBondSurplus joint−separated seas
+    • metallic_bond       — delocalized bulk vs peel; metallicPeelSurplus + valence merge
+    • ion_solvation       — aqueous ion–H₂O hydration contact
     • steric_repulsion    — repulsive edge (peripheral H–H); adds curvature mass back
     • hyperclosure        — multi-bond graph closure (≥2 bonds)
     • periodic_image      — lattice repeat (solid/liquid scaffold)
@@ -57,6 +60,9 @@ STRONG_FRAC = lean.STRONG_CHANNEL_FRACTION
 class ContactKind(str, Enum):
     CLUSTER_DEFICIT = "cluster_deficit"
     COVALENT_BOND = "covalent_bond"
+    IONIC_BOND = "ionic_bond"
+    METALLIC_BOND = "metallic_bond"
+    ION_SOLVATION = "ion_solvation"
     STERIC_REPULSION = "steric_repulsion"
     HYPERCLOSURE = "hyperclosure"
     PERIODIC_IMAGE = "periodic_image"
@@ -188,10 +194,40 @@ def _bond_contacts(
         centre_bond_count[bond.frag_i] = centre_bond_count.get(bond.frag_i, 0) + 1
         centre_bond_count[bond.frag_j] = centre_bond_count.get(bond.frag_j, 0) + 1
 
+    import hqiv_ionic_bond_network as ibn
+    import hqiv_metallic_bond_network as mbn
+
     for bond in bonds:
         a = nodes[bond.frag_i]
         b = nodes[bond.frag_j]
         dw = 1.0 / (1.0 + bond.distance_angstrom / BOHR_RADIUS_ANGSTROM)
+        ionic_kind = ibn.classify_bond_kind(molecule_name, a.z_nuclear, b.z_nuclear)
+        if ionic_kind == ContactKind.IONIC_BOND:
+            cation, anion = ibn.ionic_fragments_from_neutral_pair(
+                a.label, a.z_nuclear, a.electrons,
+                b.label, b.z_nuclear, b.electrons,
+            )
+            out.append(
+                ibn._ionic_bond_contact(
+                    nodes,
+                    bond,
+                    cation=cation,
+                    anion=anion,
+                )
+            )
+            continue
+        if mbn.classify_bond_kind(molecule_name, a.z_nuclear, b.z_nuclear) == ContactKind.METALLIC_BOND:
+            z_m = a.z_nuclear
+            metal = mbn.MetalFragment(a.label, z_m, z_m)
+            out.append(
+                mbn._metallic_bond_contact(
+                    nodes,
+                    bond,
+                    metal=metal,
+                    coordination=mbn.metallic_coordination(z_m),
+                )
+            )
+            continue
         heavy = a if a.mass_number >= b.mass_number else b
         n_centre = centre_bond_count.get(heavy.index, 1)
         z_centre = heavy.z_nuclear if heavy.mass_number >= b.mass_number else None
@@ -234,6 +270,24 @@ def covalent_bond_geometries(
         c.bond_geometry
         for c in network.contacts
         if c.kind == ContactKind.COVALENT_BOND and c.bond_geometry is not None
+    )
+
+
+def outside_geff_contact_dress(
+    network: CurvatureContactNetwork,
+    surplus_dimless: float,
+) -> float:
+    """
+    Outside ``G_eff(θ)`` contact participation dress on the surplus readout.
+
+    ``1 + (4/8) · Σ G_eff(θ_bond) / surplus`` — bond geometry only (no fitted κ).
+    """
+    geoms = covalent_bond_geometries(network)
+    if not geoms:
+        return 1.0
+    return 1.0 + STRONG_FRAC * sum(g.geff_theta for g in geoms) / max(
+        abs(surplus_dimless),
+        1e-12,
     )
 
 
@@ -530,7 +584,12 @@ def build_network_from_molecule(
 
     coordination: dict[int, int] = {n.index: 0 for n in nodes}
     for c in contacts:
-        if c.kind == ContactKind.COVALENT_BOND and c.j is not None:
+        if c.kind in (
+            ContactKind.COVALENT_BOND,
+            ContactKind.IONIC_BOND,
+            ContactKind.METALLIC_BOND,
+            ContactKind.ION_SOLVATION,
+        ) and c.j is not None:
             coordination[c.i] = coordination.get(c.i, 0) + 1
             coordination[c.j] = coordination.get(c.j, 0) + 1
         if c.kind == ContactKind.STERIC_REPULSION:
@@ -572,7 +631,7 @@ def build_network_from_molecule(
     contacts = [
         c
         for c in contacts
-        if c.kind != ContactKind.COVALENT_BOND
+        if c.kind not in (ContactKind.COVALENT_BOND, ContactKind.IONIC_BOND, ContactKind.METALLIC_BOND)
     ]
     contacts.extend(
         _bond_contacts(
@@ -718,10 +777,10 @@ def build_protein_network(
 
 
 def example_catalog() -> list[CurvatureContactNetwork]:
-    from hqiv_dynamic_binding_chart import GMTKN55_SUITE
+    from hqiv_dynamic_binding_chart import ALL_MOLECULE_BENCHMARKS
 
     nets = []
-    for bench in GMTKN55_SUITE:
+    for bench in ALL_MOLECULE_BENCHMARKS:
         nets.append(
             build_network_from_molecule(
                 bench.name,

@@ -24,27 +24,56 @@ DEST = REPO / "papers" / "nucleon_binding" / "scripts"
 ZIP_PATH = REPO / "papers" / "nucleon_binding" / "scripts.zip"
 
 ENTRY_SCRIPTS = [
+    "hqiv_nucleon_binding_integrator.py",
+    "hqiv_nucleon_binding_lean_primitives.py",
+    "test_hqiv_nucleon_binding_integrator.py",
     "hqiv_isotope_stability_halflife.py",
     "hqiv_dynamic_beta_isotope.py",
     "hqiv_isotope_pdg_benchmark.py",
     "hqiv_nuclear_outside_temperature_dynamics.py",
     "hqiv_bond_state_network.py",
+    "hqiv_curvature_binding_program.py",
+    "hqiv_binding_energy_program.py",
+    "test_hqiv_curvature_binding_program.py",
+    "test_hqiv_binding_energy_program.py",
     "hqiv_nuclear_caustic_binding.py",
     "hqiv_nuclear_inside_outside_binding.py",
+    "hqiv_proton_mass_decomposition.py",
     "hqiv_dynamic_nucleon_pn.py",
     "hqiv_phase_geometry_density.py",
     "hqiv_thermodynamic_phase_from_tp.py",
     "hqiv_homogeneous_curvature_feedback.py",
     "hqiv_phase_material_response.py",
     "test_hqiv_phase_material_response.py",
+    "hqiv_condensed_phase_audit.py",
+    "test_hqiv_condensed_phase_audit.py",
     "hqiv_curvature_contact_network.py",
     "hqiv_weak_fano_hopf_bridge.py",
+    "hqiv_bbn_integrator.py",
+    "hqiv_bbn_condition_decay.py",
+    "hqiv_bbn_paper_tables.py",
+    "test_hqiv_bbn_integrator.py",
+    "hqiv_integrator_lean_audit.py",
+]
+
+DATA_MIRROR = [
+    "isotope_stability_halflife.json",
+    "dynamic_beta_isotope_chart.json",
+    "isotope_pdg_benchmark.json",
+    "nucleon_binding_integrator.json",
+    "bbn_integrator.json",
+    "bbn_paper_tables.json",
+    "integrator_lean_audit.json",
+    "curvature_binding_program.json",
+    "binding_energy_program.json",
+    "hqiv_lab_witnesses.json",
 ]
 
 EXTRA_MIRROR = [
     "hqiv_lean_physics_primitives.py",
     "hqiv_scale_witness.py",
     "hqiv_nuclear_curvature_binding.py",
+    "hqiv_curvature_binding_core.py",
     "hqiv_mass_calculator_core.py",
     "hqiv_continuous_shell_mass.py",
     "hqiv_excited_states.py",
@@ -58,6 +87,9 @@ EXTRA_MIRROR = [
 
 def module_to_script(name: str) -> str | None:
     if name.startswith("hqiv_") or name.startswith("test_hqiv_"):
+        return f"{name}.py"
+    candidate = SCRIPTS_ROOT / f"{name}.py"
+    if candidate.is_file():
         return f"{name}.py"
     return None
 
@@ -99,16 +131,25 @@ def sha256_file(path: Path) -> str:
     return digest.hexdigest()
 
 
+def ignore_pycache(_dir: str, names: list[str]) -> set[str]:
+    return {name for name in names if name == "__pycache__" or name.endswith(".pyc")}
+
+
 def copy_tree(src: Path, dest: Path) -> None:
     if dest.exists():
         shutil.rmtree(dest)
-    shutil.copytree(src, dest)
+    shutil.copytree(src, dest, ignore=ignore_pycache)
+
+
+def archive_path(path: Path, root: Path) -> bool:
+    rel = path.relative_to(root)
+    return "__pycache__" not in rel.parts and not rel.name.endswith(".pyc")
 
 
 def write_manifest(root: Path) -> None:
     lines: list[str] = []
     for path in sorted(root.rglob("*")):
-        if not path.is_file():
+        if not path.is_file() or not archive_path(path, root):
             continue
         rel = path.relative_to(root).as_posix()
         lines.append(f"{sha256_file(path)}  {rel}")
@@ -121,7 +162,7 @@ def build_zip() -> None:
         ZIP_PATH.unlink()
     with zipfile.ZipFile(ZIP_PATH, "w", compression=zipfile.ZIP_DEFLATED) as archive:
         for path in sorted(DEST.rglob("*")):
-            if path.is_file():
+            if path.is_file() and archive_path(path, DEST):
                 archive.write(path, path.relative_to(DEST.parent).as_posix())
 
 
@@ -133,13 +174,18 @@ def main() -> None:
     copy_tree(REPO / "hqiv_lab", DEST / "hqiv_lab")
     shutil.copy2(REPO / "pyproject.toml", DEST / "pyproject.toml")
 
-    readme_src = DEST / "README.md"
-    if readme_src.is_file():
-        pass
+    data_dest = DEST / "data"
+    data_dest.mkdir(exist_ok=True)
+    for name in DATA_MIRROR:
+        src = REPO / "data" / name
+        if src.is_file():
+            shutil.copy2(src, data_dest / name)
+
     write_manifest(DEST)
     build_zip()
     n_scripts = len(list(DEST.glob("hqiv_*.py"))) + len(list(DEST.glob("test_hqiv_*.py")))
-    print(f"copied {n_scripts} scripts + hqiv_lab/ + pyproject.toml -> {DEST}")
+    n_data = len(list(data_dest.glob("*.json")))
+    print(f"copied {n_scripts} scripts + hqiv_lab/ + pyproject.toml + {n_data} data/*.json -> {DEST}")
     print(f"wrote {DEST / 'MANIFEST.sha256'} ({sum(1 for _ in (DEST / 'MANIFEST.sha256').open())} lines)")
     print(f"created {ZIP_PATH} ({ZIP_PATH.stat().st_size} bytes)")
 

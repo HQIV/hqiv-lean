@@ -1,0 +1,19 @@
+{
+  "official_links": {
+    "gwosc_catalog": "https://gwosc.org/GWTC-5.0/",
+    "zenodo_pe_part1": "https://zenodo.org/records/20348005",
+    "zenodo_pe_part2": "https://zenodo.org/records/20348006",
+    "zenodo_candidates": "https://zenodo.org/records/20276130",
+    "zenodo_notebook": "https://doi.org/10.5281/zenodo.20276105",
+    "pe_summary_table_url": "https://zenodo.org/api/records/20348005/files/IGWN-GWTC5p0-29ebe06b7_25-PESummaryTable.hdf5/content"
+  },
+  "local_files": {
+    "pe_summary_table": "/home/jr/Repos/HQIV_LEAN/data/gwtc5_pe/PESummaryTable.hdf5",
+    "combined_pe_pattern": "IGWN-GWTC5p0-29ebe06b7_25-{event}-combined_PEDataRelease.hdf5"
+  },
+  "usage": {
+    "summary_table": "python3 scripts/hqiv_gw_ringdown.py --pe-summary",
+    "single_pe_file": "python3 scripts/hqiv_gw_ringdown.py --pe-hdf5 path/to/combined_PEDataRelease.hdf5",
+    "ringdown_inputs": "python3 scripts/hqiv_gw_ringdown.py --f 251 --tau-ms 4"
+  }
+}

@@ -395,10 +395,28 @@ def neutron_width_ledger_comparison(
     }
 
 
-def environment_for_reference(ref: ReferenceIsotope, *, xi: float) -> pn.NucleonEnvironment:
+def environment_for_reference(
+    ref: ReferenceIsotope,
+    *,
+    xi: float,
+    lab_env: notd.LabOutsideEnvironment | None = None,
+) -> pn.NucleonEnvironment:
+    lab_env = lab_env or notd.LabOutsideEnvironment(
+        lab_temperature_K=ish.CMB_TEMPERATURE_K,
+        reference_temperature_K=ish.CMB_TEMPERATURE_K,
+        gravity_tier="full",
+    )
+    phi = lab_env.combined_phi_epsilon
     if ref.A <= 1:
-        return pn.NucleonEnvironment(shell=notd.REFERENCE_M, xi=xi, bonded=False)
-    return pn.caustic_environment_for_A(ref.A, xi=xi)
+        return pn.NucleonEnvironment(
+            shell=notd.REFERENCE_M,
+            xi=xi,
+            bonded=False,
+            phi_gravity_epsilon=phi,
+        )
+    return pn.curvature_environment_for_A(
+        ref.A, ref.Z, xi=xi, phi_gravity_epsilon=phi
+    )
 
 
 def predicted_mass_for_reference(ref: ReferenceIsotope, *, xi: float) -> float:
@@ -713,12 +731,25 @@ def build_payload(
         for ref in REFERENCE_ISOTOPES
     ]
     abs_mass = [abs(r.mass_error_pct) for r in rows]
+    lab_env = notd.LabOutsideEnvironment(
+        lab_temperature_K=lab_temperature_K,
+        reference_temperature_K=ish.CMB_TEMPERATURE_K,
+        gravity_tier="full",
+    )
+    import hqiv_proton_mass_decomposition as pmd
+
+    lab_audit = notd.lab_outside_decomposition(
+        lab_env, inner_raw_mev=pmd.proton_inner_raw_mev()
+    ).to_dict()
+    outside_k = notd.earth_outside_closure_k(lab_env).to_dict()
     return {
         "source": "scripts/hqiv_isotope_pdg_benchmark.py",
         "comparison_policy": "reference isotope data used only for benchmark, not for HQIV fit",
         "em_tipping_qualified": qualify_em_tipping,
         "xi": xi,
         "lab_temperature_K": lab_temperature_K,
+        "lab_outside_environment": lab_audit,
+        "outside_closure_K": outside_k,
         "neutrino_mass_mev": ish.model_electron_neutrino_mass_mev()
         if neutrino_mass_mev is None
         else neutrino_mass_mev,

@@ -28,6 +28,8 @@ QCD_SHELL = 1  # BaryogenesisCore.m_QCD
 XI_LOCKIN = float(REFERENCE_M + 1)  # xiLockin = 5 at referenceM = 4
 T13_OUTER_MODE_COUNT = 140.0
 STRONG_CHANNEL_FRACTION = 4.0 / 8.0  # bbnStrongChannelFraction
+# Lean `constructiveValleyCap` (= pairwiseNucleonContactCount 4 = 6).
+CONSTRUCTIVE_VALLEY_CAP = 6.0
 ETA_PAPER = 6.10e-10
 # Binding curvature feedback and baryogenesis correction are now fully derived
 # (gamma_HQIV * strongChannelFraction * bounded_slope, no free κ).
@@ -194,11 +196,39 @@ def eta_at_horizon(n: int, N: int, eta_paper: float = ETA_PAPER) -> float:
     return eta_paper * curvature_integral(n) / den
 
 
-def _cluster_binding_contrast_relative() -> float:
-    """Dimensionless (B_lock − B_qcd) / B_lock on the BBN cluster chart."""
+COLOR_SINGLET_FRACTION = 1 / 3  # Lean: Hqiv.Physics.colorSingletFraction
+
+
+def color_singlet_fraction() -> float:
+    """Lean ``colorSingletFraction``."""
+    return COLOR_SINGLET_FRACTION
+
+
+def baryon_strong_color_fraction() -> float:
+    """Lean ``baryonStrongColorFraction`` = (4/8)·(1/3) = 1/6."""
+    return STRONG_CHANNEL_FRACTION * COLOR_SINGLET_FRACTION
+
+
+def omega_b_from_omega_m(omega_m: float) -> float:
+    """Lean ``omegaBFromOmegaM``."""
+    return omega_m * baryon_strong_color_fraction()
+
+
+def cluster_binding_contrast_relative() -> float:
+    """Lean ``clusterBindingContrastRelative``."""
     bind_lock = bbn.cluster_binding_mev(REFERENCE_M, 4)
     bind_qcd = bbn.cluster_binding_mev(QCD_SHELL, 4)
     return (bind_lock - bind_qcd) / max(bind_lock, 1e-30)
+
+
+def _cluster_binding_contrast_relative() -> float:
+    """Deprecated alias for ``cluster_binding_contrast_relative``."""
+    return cluster_binding_contrast_relative()
+
+
+def baryogenesis_binding_curvature_correction_dimless() -> float:
+    """Lean ``baryogenesis_binding_curvature_correction_dimless``."""
+    return GAMMA * STRONG_CHANNEL_FRACTION * cluster_binding_contrast_relative()
 
 
 def dynamic_binding_curvature_coupling_at_xi(xi: float, xi_lock: float = XI_LOCKIN) -> float:
@@ -306,10 +336,9 @@ def xi_from_compton_triplet(triplet: tuple[int, int, int]) -> float:
 
 
 def baryogenesis_binding_curvature_correction() -> float:
-    """Raw MeV-scale product at lock-in (BBN η layer); prefer dimensionless dynamic_* for chemistry."""
+    """MeV-scale product (Lean ``baryogenesis_binding_curvature_correction``)."""
     bind_lock = bbn.cluster_binding_mev(REFERENCE_M, 4)
-    bind_qcd = bbn.cluster_binding_mev(QCD_SHELL, 4)
-    return (GAMMA * STRONG_CHANNEL_FRACTION) * (bind_lock - bind_qcd)
+    return baryogenesis_binding_curvature_correction_dimless() * bind_lock
 
 
 def lih_binding_curvature_correction(kappa_bind: float | None = None) -> float:
@@ -329,8 +358,10 @@ def eta_at_horizon_dynamic(
     N: int,
     eta_paper: float = ETA_PAPER,
 ) -> float:
-    """Lean `eta_at_horizon_dynamic n N`."""
-    return eta_at_horizon(n, N, eta_paper) * (1.0 + baryogenesis_binding_curvature_correction())
+    """Lean ``eta_at_horizon_dynamic``: dimensionless binding feedback at lock-in."""
+    return eta_at_horizon(n, N, eta_paper) * (
+        1.0 + baryogenesis_binding_curvature_correction_dimless()
+    )
 
 
 def bbn_curvature_temperature_slope(T_MeV: float, xi_lock: float = XI_LOCKIN) -> float:
@@ -422,6 +453,42 @@ def bbn_deuteron_binding_q_effective_at_t(
 ) -> float:
     """Lean `bbnDeuteronBindingQ_effectiveAtT`."""
     return 2.0 * bbn_nucleon_trace_binding_effective_at_t(T_MeV, m_shell, c) * bbn.valley_binding_factor(2)
+
+
+def bbn_helium4_binding_q_effective_at_t(
+    T_MeV: float,
+    m_shell: int = REFERENCE_M,
+    c: float = 1.0,
+) -> float:
+    """Lean `bbnHelium4BindingQ_effectiveAtT`."""
+    return 4.0 * bbn_nucleon_trace_binding_effective_at_t(T_MeV, m_shell, c) * bbn.valley_binding_factor(4)
+
+
+def bbn_he3_binding_q_effective_at_t(
+    T_MeV: float,
+    m_shell: int = REFERENCE_M,
+    c: float = 1.0,
+) -> float:
+    """³He effective Q at BBN temperature (valley trace × release factor)."""
+    return 3.0 * bbn_nucleon_trace_binding_effective_at_t(T_MeV, m_shell, c) * bbn.valley_binding_factor(3)
+
+
+def bbn_light_binding_q_effective_at_t(
+    T_MeV: float,
+    m_shell: int = REFERENCE_M,
+    c: float = 1.0,
+) -> tuple[float, float, float]:
+    """
+    D, ⁴He, ³He binding Q at epoch ``T`` via ``bbnBindingReleaseFactor``.
+
+    Mirrors ``dynamicBBNReadoutAtT`` thermal/exponent inputs (curvature-temperature
+    release on the valley composite trace — not raw lock-in network Q).
+    """
+    return (
+        bbn_deuteron_binding_q_effective_at_t(T_MeV, m_shell, c),
+        bbn_helium4_binding_q_effective_at_t(T_MeV, m_shell, c),
+        bbn_he3_binding_q_effective_at_t(T_MeV, m_shell, c),
+    )
 
 
 def bbn_dynamic_c2_lapse_exponent(

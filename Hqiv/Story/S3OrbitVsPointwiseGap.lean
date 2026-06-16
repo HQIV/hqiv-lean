@@ -10,28 +10,25 @@ complex slice it is `riemannZeta` again, with the same zeros at the same real pa
 What the lift buys, geometrically, is the functional-equation symmetry `s ↔ 1-s`,
 which in the 45° picture is the **orbit / reflection cancellation**.
 
-This module makes the decisive distinction explicit:
+This module records the **σ-orbit** half of the projection story:
 
 * `orbit_free_sum_cancels` — the 45° free coordinates of a reflection pair
-  `{σ, 1-σ}` **always** sum to zero. This is the geometric image of the functional
-  equation, and it holds for *every* `σ`.
-* `orbit_cancels_off_line` — therefore orbit cancellation is satisfied by pairs
-  **off** the critical line (`σ ≠ 1/2`); it cannot, by itself, force `Re = 1/2`.
-* `pointwise_free_zero_iff_on_line` — the strong condition is *pointwise* vanishing
-  of a single free coordinate, which holds **iff** `σ = 1/2`.
+  `{σ, 1-σ}` **always** sum to zero (functional-equation image).
+* `orbit_cancels_off_line` — this cancellation also holds for pairs **off** the line;
+  orbit cancellation alone does not exclude off-line points.
+* `pointwise_free_zero_iff_on_line` — pointwise vanishing of a *single* free coordinate
+  holds **iff** `σ = 1/2`.
 
-So the gap between what the geometry/ℍ-lift gives for free (orbit cancellation =
-functional-equation symmetry, zeros paired about `1/2`) and what RH asserts
-(pointwise: every nontrivial zero *on* `1/2`) is exactly:
+**Scope note.** The equator readout factors through `Re s` and is blind to imaginary
+height; see `S3SigmaReadoutScope`.  The full ζ-zero orbit under FE + Schwarz reflection
+is the quadruplet `{s, 1-s, conj s, conj (1-s)}`, collapsing to a pair on the line;
+see `S3ZeroQuadrupletOrbit`.
 
-`AllNontrivialZerosOnLine ↔ RiemannHypothesis`  (`allNontrivialZerosOnLine_iff_RiemannHypothesis`).
+The RH packaging equivalence remains:
 
-The equivalence is real and proved; it shows the construction faithfully encodes
-RH. But an equivalence (and the symmetry it encodes) is **not** a proof that all
-zeros lie on the line: a hypothetical off-line zero `β` comes with its mirror
-`1-β`, and that symmetric pair cancels on its orbit just like everything else.
-Closing RH means upgrading orbit cancellation to pointwise cancellation at the
-actual zeta zeros — and that upgrade is RH itself.
+`AllNontrivialZerosOnLine ↔ RiemannHypothesis` (`allNontrivialZerosOnLine_iff_RiemannHypothesis`).
+
+That equivalence faithfully encodes Mathlib's RH predicate; closing it is RH-hard.
 -/
 
 namespace Hqiv.Story

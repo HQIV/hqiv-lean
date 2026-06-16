@@ -18,6 +18,15 @@ from collections import deque
 REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 PAPER_ROOTS = (
+    # Upstream finite-patch / Lorentz / Wilson holonomy (§scope, intro)
+    "Hqiv.Algebra.AnomalyCancellation",
+    "Hqiv.QuantumMechanics.PatchTopologicalObstruction",
+    "Hqiv.Geometry.RapidityLorentzClosure",
+    "Hqiv.Geometry.SpatialRotationLorentzClosure",
+    "Hqiv.Physics.SO8PlaquetteHolonomy",
+    "Hqiv.Physics.ActionHolonomyGlue",
+    "Hqiv.Physics.DiscreteActionPoincareScaffold",
+    "Hqiv.Physics.DiscreteActionStrongPoincareBridge",
     "Hqiv.Physics.ScaleWitness",
     "Hqiv.Physics.NuclearCurvatureBinding",
     "Hqiv.Physics.NuclearCausticBinding",
@@ -34,6 +43,8 @@ PAPER_ROOTS = (
     "Hqiv.Physics.Forces",
     "Hqiv.Physics.NuclearAndAtomicSpectra",
     "Hqiv.Physics.NuclearOutsideTemperatureDynamics",
+    "Hqiv.Physics.CompactObjectRotatingCrustScaffold",
+    "Hqiv.Physics.BBNStoichiometricIntegrator",
     "Hqiv.Physics.DerivedGaugeAndLeptonSector",
     "Hqiv.Physics.DynamicNucleonPN",
     "Hqiv.Physics.HomogeneousCurvatureSecondOrder",

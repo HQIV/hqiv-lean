@@ -1,0 +1,192 @@
+{
+  "source": "BBN paper tables (faithful integrator)",
+  "python_script": "scripts/hqiv_bbn_paper_tables.py",
+  "eta_paper": 6.1e-10,
+  "eta10_paper": 6.1,
+  "tau_n_reference_s": 879.4,
+  "tau_ratio_at_freeze_witness": 1.1865883186325596,
+  "weak_width_factor_at_freeze": 1.0730742857142856,
+  "provider_decomposition": [
+    {
+      "layer": "lockin_Q_at_freeze",
+      "label": "Lock-in $Q$ at $T_\\mathrm{freeze}$",
+      "D_over_H": 7.94215631446888e-32,
+      "notes": "Static partition; no window integral"
+    },
+    {
+      "layer": "hybrid_Q_T_partition",
+      "label": "Hybrid $Q(T)$ release, partition window",
+      "Y_p": 0.25839737206490854,
+      "D_over_H": 4.441870588276206e-06,
+      "He3_over_H": 2.4407117566465503e-05,
+      "Li7_over_H": 3.61084051140877e-09
+    },
+    {
+      "layer": "stoichiometric_C2_full_window",
+      "label": "Stoichiometric + $C_2$, full $1\\to 0.01$ MeV",
+      "Y_p": 0.2469135802469136,
+      "D_over_H": 8.117535849114494e-06,
+      "He3_over_H": 9.735535282971952e-06,
+      "Li7_over_H": 2.4394434628777934e-10
+    },
+    {
+      "layer": "synthesis_window_uncoupled",
+      "label": "Synthesis window + $C_2$, uncoupled inventory",
+      "Y_p": 0.2469135802469136,
+      "D_over_H": 1.8438226721368847e-05,
+      "He3_over_H": 9.735535282971952e-06,
+      "Li7_over_H": 2.4394434628777934e-10
+    },
+    {
+      "layer": "faithful_full",
+      "label": "Faithful integrator (coupled inventory + curvature)",
+      "Y_p": 0.24421989482751755,
+      "D_over_H": 2.5118500223186595e-05,
+      "He3_over_H": 1.0121588962277262e-05,
+      "Li7_over_H": 2.5361773451891707e-10
+    }
+  ],
+  "eta_sweep": [
+    {
+      "Y_p": 0.25384025822615447,
+      "D_over_H": 2.7946822057842347e-05,
+      "He3_over_H": 1.0769431040062324e-05,
+      "Li7_over_H": 2.829989599294034e-10,
+      "eta10": 5.8
+    },
+    {
+      "Y_p": 0.2505515002811242,
+      "D_over_H": 2.694126663503618e-05,
+      "He3_over_H": 1.0545281376626493e-05,
+      "Li7_over_H": 2.7267591922805846e-10,
+      "eta10": 5.9
+    },
+    {
+      "Y_p": 0.24734573819720507,
+      "D_over_H": 2.600185178977415e-05,
+      "He3_over_H": 1.032948199872667e-05,
+      "Li7_over_H": 2.628944400366048e-10,
+      "eta10": 6.0
+    },
+    {
+      "Y_p": 0.24421989482751755,
+      "D_over_H": 2.5118500223186595e-05,
+      "He3_over_H": 1.0121588962277262e-05,
+      "Li7_over_H": 2.5361773451891707e-10,
+      "eta10": 6.1
+    },
+    {
+      "Y_p": 0.24117104243779502,
+      "D_over_H": 2.4281491409910194e-05,
+      "He3_over_H": 9.921188751410776e-06,
+      "Li7_over_H": 2.448120643735793e-10,
+      "eta10": 6.2
+    },
+    {
+      "Y_p": 0.23819639379178825,
+      "D_over_H": 2.3488144248253092e-05,
+      "He3_over_H": 9.727895740824653e-06,
+      "Li7_over_H": 2.3644644387127636e-10,
+      "eta10": 6.3
+    },
+    {
+      "Y_p": 0.23529329386394382,
+      "D_over_H": 2.2746317871158952e-05,
+      "He3_over_H": 9.541349906217916e-06,
+      "Li7_over_H": 2.2849237597512025e-10,
+      "eta10": 6.4
+    }
+  ],
+  "sensitivity": {
+    "gamma": [
+      {
+        "gamma": 0.36,
+        "Y_p": 0.2446945183416983,
+        "D_over_H": 1.9481505687026323e-05,
+        "He3_over_H": 8.569988604806817e-06,
+        "Li7_over_H": 1.680049072277081e-10
+      },
+      {
+        "gamma": 0.4,
+        "Y_p": 0.24421989482751755,
+        "D_over_H": 2.5118500223186595e-05,
+        "He3_over_H": 1.0121588962277262e-05,
+        "Li7_over_H": 2.5361773451891707e-10
+      },
+      {
+        "gamma": 0.44,
+        "Y_p": 0.24369573883770815,
+        "D_over_H": 3.219309950554414e-05,
+        "He3_over_H": 1.1924073605538443e-05,
+        "Li7_over_H": 3.7929828058210785e-10
+      }
+    ],
+    "w_strong": [
+      {
+        "w_strong": 0.45,
+        "Y_p": 0.2446945183416983,
+        "D_over_H": 1.948150568702634e-05,
+        "He3_over_H": 8.569988604806818e-06,
+        "Li7_over_H": 1.6800490722770812e-10
+      },
+      {
+        "w_strong": 0.5,
+        "Y_p": 0.24421989482751755,
+        "D_over_H": 2.5118500223186595e-05,
+        "He3_over_H": 1.0121588962277262e-05,
+        "Li7_over_H": 2.5361773451891707e-10
+      },
+      {
+        "w_strong": 0.55,
+        "Y_p": 0.24369573883770815,
+        "D_over_H": 3.219309950554415e-05,
+        "He3_over_H": 1.1924073605538443e-05,
+        "Li7_over_H": 3.7929828058210785e-10
+      }
+    ],
+    "he3_gates": [
+      {
+        "he3_stratified": false,
+        "he3_synthesis_window": false,
+        "Y_p": 0.24421989482751755,
+        "D_over_H": 0.0001499560682574034,
+        "He3_over_H": 0.00013930837884334934,
+        "Li7_over_H": 3.068036446222499e-07
+      },
+      {
+        "he3_stratified": false,
+        "he3_synthesis_window": true,
+        "Y_p": 0.24421989482751755,
+        "D_over_H": 0.0001499560682574034,
+        "He3_over_H": 5.808584006892141e-05,
+        "Li7_over_H": 4.3893210165918467e-10
+      },
+      {
+        "he3_stratified": true,
+        "he3_synthesis_window": false,
+        "Y_p": 0.24421989482751755,
+        "D_over_H": 2.5118500223186595e-05,
+        "He3_over_H": 1.514969972694312e-06,
+        "Li7_over_H": 1.7454420627898192e-09
+      },
+      {
+        "he3_stratified": true,
+        "he3_synthesis_window": true,
+        "Y_p": 0.24421989482751755,
+        "D_over_H": 2.5118500223186595e-05,
+        "He3_over_H": 1.0121588962277262e-05,
+        "Li7_over_H": 2.5361773451891707e-10
+      }
+    ]
+  },
+  "observation_anchors": {
+    "Y_p_center": 0.244,
+    "Y_p_sigma": 0.004,
+    "D_over_H": 2.53e-05,
+    "D_over_H_sigma": 4e-07,
+    "Li7_band": [
+      1.6e-10,
+      4.5e-10
+    ]
+  }
+}

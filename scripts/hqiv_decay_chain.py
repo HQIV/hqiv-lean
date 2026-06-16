@@ -22,6 +22,7 @@ from dataclasses import asdict, dataclass, field
 from pathlib import Path
 from typing import Literal
 
+import hqiv_curvature_binding_core as cbc
 import hqiv_dynamic_beta_isotope as dbi
 import hqiv_dynamic_nucleon_pn as pn
 import hqiv_isotope_stability_halflife as stability
@@ -29,6 +30,14 @@ import hqiv_lean_physics_primitives as lean
 import hqiv_nuclear_outside_temperature_dynamics as notd
 import hqiv_tuft_global_hadron_readout as tuft
 import hqiv_weak_fano_hopf_bridge as weak_bridge
+
+try:
+    from hqiv_bbn_condition_decay import resonance_half_life_from_width_mev
+except ImportError:
+    def resonance_half_life_from_width_mev(width_mev: float) -> float:
+        if width_mev <= 0.0:
+            return math.inf
+        return math.log(2.0) * 6.582119569e-22 / width_mev
 
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_JSON = ROOT / "data" / "decay_chain_readout.json"
@@ -49,19 +58,22 @@ LEAN_MAPPING = {
     "weakBridgeEnergyMeV": "WeakFanoHopfBridge.weakBridgeEnergyMeV",
     "tuftExcitedMassGlobalAtXi_MeV": "TuftGlobalHadronReadout.tuftExcitedMassGlobalAtXi_MeV",
     "weakBetaChannelOpen": "DynamicIsotopeStability.weakBetaChannelOpen",
+    "multiAlphaResonanceWidthMev": "NuclearCurvatureBinding.multiAlphaResonanceWidthMev",
+    "resonance_half_life": "SpinStatistics.resonance_half_life",
 }
 
 ChannelTag = Literal[
     "beta_minus",
     "beta_plus",
+    "alpha",
     "gamma",
     "strong_overlap",
     "weak_hadron",
     "stable",
 ]
 
-QPolicy = Literal["nucleon_gap", "mass_budget"]
-ResidualMode = Literal["effective", "raw"]
+QPolicy = Literal["nucleon_gap", "mass_budget", "local_contact"]
+ResidualMode = Literal["effective", "raw", "valence"]
 
 
 @dataclass(frozen=True)
@@ -127,6 +139,7 @@ class DecayEdge:
     daughter: DecayState
     channel: DecayChannel
     branching_ratio: float = 1.0
+    terminal_breakup: bool = False
 
 
 @dataclass
@@ -199,6 +212,136 @@ def beta_plus_daughter(state: NuclearState) -> NuclearState | None:
     )
 
 
+def he4_state(xi: float = notd.XI_LOCKIN) -> NuclearState:
+    return NuclearState(A=4, Z=2, xi=xi, label="He4")
+
+
+def alpha_daughter(state: NuclearState) -> NuclearState | None:
+    """``(A,Z) → (A−4,Z−2) + α`` when kinematically valid on the chart."""
+    if state.A < 8 or state.Z < 2:
+        return None
+    n_alpha = cbc.closed_alpha_cluster_count(state.A, state.Z)
+    if n_alpha == 2:
+        return None
+    a_d = state.A - 4
+    z_d = state.Z - 2
+    if a_d < 4 or z_d < 2:
+        return None
+    return NuclearState(A=a_d, Z=z_d, xi=state.xi, label=f"Z{z_d}A{a_d}")
+
+
+def alpha_binding_erosion_mev(state: NuclearState) -> tuple[float, int | None]:
+    """
+    Two-α **binding erosion** on the mass ledger (BBN / ``B_cluster`` spine).
+
+    Not the decay-width clock — see ``alpha_decay_width_mev``.
+    """
+    env = _nuclear_environment(state)
+    n_alpha = cbc.closed_alpha_cluster_count(state.A, state.Z)
+    if n_alpha is None or n_alpha < 2:
+        return 0.0, n_alpha
+    cluster_total = pn.cluster_binding_canonical_mev(
+        state.A, state.Z, shell=env.shell, xi=state.xi
+    )
+    erosion = cbc.multi_alpha_resonance_width_mev(
+        env.shell, n_alpha, cluster_total
+    )
+    return erosion, n_alpha
+
+
+def alpha_resonance_width_mev(state: NuclearState) -> tuple[float, int | None]:
+    """Alias for ``alpha_binding_erosion_mev`` (legacy / BBN naming)."""
+    return alpha_binding_erosion_mev(state)
+
+
+def _alpha_lattice_slots(
+    state: NuclearState,
+) -> tuple[int | None, float | None, float]:
+    """``(n_alpha, delta_inside, binding_erosion_mev)``."""
+    env = _nuclear_environment(state)
+    n_alpha = cbc.closed_alpha_cluster_count(state.A, state.Z)
+    delta_inside: float | None = None
+    erosion = 0.0
+    if n_alpha is None:
+        return None, None, 0.0
+    cluster_total = pn.cluster_binding_canonical_mev(
+        state.A, state.Z, shell=env.shell, xi=state.xi
+    )
+    if n_alpha >= 2:
+        erosion = cbc.multi_alpha_resonance_width_mev(
+            env.shell, n_alpha, cluster_total
+        )
+    if n_alpha == 2:
+        delta_inside = cbc.multi_alpha_trapped_inside_delta_mev(
+            env.shell, state.A, state.Z
+        )
+    return n_alpha, delta_inside, erosion
+
+
+def alpha_decay_width_mev(state: NuclearState, q_kin_mev: float) -> float:
+    """Strong α width ledger from per-contact slots (SpinStatistics ``ΔE``)."""
+    env = _nuclear_environment(state)
+    n_alpha, delta_inside, _ = _alpha_lattice_slots(state)
+    cluster_total = pn.cluster_binding_canonical_mev(
+        state.A, state.Z, shell=env.shell, xi=state.xi
+    )
+    daughter = alpha_daughter(state)
+    he4 = he4_state(state.xi)
+    parent_m = nuclear_mass_budget_mev(state)
+    daughter_m = nuclear_mass_budget_mev(daughter) if daughter else None
+    alpha_m = nuclear_mass_budget_mev(he4)
+    _, _, width = dbi.alpha_width_ledger_slots(
+        state.A,
+        state.Z,
+        env,
+        q_kin_mev=q_kin_mev,
+        n_alpha=n_alpha,
+        delta_inside_mev=delta_inside,
+        cluster_total_mev=cluster_total,
+        parent_mass_mev=parent_m,
+        daughter_mass_mev=daughter_m,
+        alpha_mass_mev=alpha_m,
+    )
+    return width
+
+
+def endpoint_q_alpha(parent: NuclearState) -> float | None:
+    """
+    α-emission endpoint Q (mass ledger II).
+
+    Two-α lattice: per-contact inter-α barbell chart on ``Δinside``.
+    Otherwise: ``M_parent − M_daughter − M_α`` with local-contact fallback.
+    """
+    if parent.A < 8 or parent.Z < 2:
+        return None
+    env = _nuclear_environment(parent)
+    n_alpha, delta_inside, _ = _alpha_lattice_slots(parent)
+    he4 = he4_state(parent.xi)
+    daughter = alpha_daughter(parent)
+    if n_alpha == 2 and delta_inside is not None:
+        q = dbi.alpha_endpoint_q_from_local_contacts(
+            parent.A,
+            parent.Z,
+            env,
+            n_alpha=n_alpha,
+            delta_inside_mev=delta_inside,
+        )
+        if q is not None:
+            return q
+    if daughter is None:
+        return None
+    return dbi.alpha_endpoint_q_from_local_contacts(
+        parent.A,
+        parent.Z,
+        env,
+        n_alpha=n_alpha,
+        delta_inside_mev=delta_inside,
+        parent_mass_mev=nuclear_mass_budget_mev(parent),
+        daughter_mass_mev=nuclear_mass_budget_mev(daughter),
+        alpha_mass_mev=nuclear_mass_budget_mev(he4),
+    )
+
+
 def endpoint_q_beta_minus(
     parent: NuclearState,
     *,
@@ -228,11 +371,19 @@ def endpoint_q_beta_plus(
     m_e_mev: float | None = None,
 ) -> float | None:
     m_e = dbi.model_electron_mass_mev() if m_e_mev is None else m_e_mev
+    env = _nuclear_environment(parent)
     if q_policy == "nucleon_gap":
-        env = _nuclear_environment(parent)
         pair = pn.pn_pair_readout(env)
         gap = pair.proton.mass_mev - pair.neutron.mass_mev
         return gap - m_e
+    if parent.Z <= 0:
+        return None
+    if q_policy == "local_contact" or (
+        q_policy == "mass_budget" and parent.A > 4 and env.bonded
+    ):
+        return dbi.beta_plus_endpoint_q_local_contact(
+            parent.A, parent.Z, env, m_e_mev=m_e
+        )
     daughter = beta_plus_daughter(parent)
     if daughter is None:
         return None
@@ -245,50 +396,82 @@ def endpoint_q_beta_plus(
 
 def beta_residuals(
     state: NuclearState,
-) -> tuple[float, float, float, float]:
-    """Raw and effective β± residuals (MeV). Returns (β− raw, β+ raw, β− eff, β+ eff)."""
+) -> tuple[float, float, float, float, float]:
+    """
+    β± overlap residuals (MeV).
+
+    Returns ``(β− raw, β+ raw, β− eff, β+ eff, β+ valence)``.
+    ``β+ valence`` is the per-nucleon proton-slot ledger (parallel to β− raw).
+    """
     env = _nuclear_environment(state)
     base = dbi.beta_channel_readout(state.key, state.A, state.Z, env)
     shield = max(env.well_depth_mev, 0.0) if env.bonded else 0.0
     own = notd.nucleon_own_binding_mev(env.shell, env.xi, bonded=env.bonded)
     n_count = state.N
-    if state.A > 1:
-        neutron_drive = max(0.0, (n_count - state.Z) / state.A) * own
-        proton_drive = max(0.0, (state.Z - n_count) / state.A) * own
-    else:
-        neutron_drive = proton_drive = 0.0
+    neutron_drive, proton_drive = stability.imbalance_drive(
+        state.A, state.Z, n_count, own
+    )
     beta_minus_eff = base.beta_minus_residual_mev + neutron_drive - shield
     beta_plus_eff = base.beta_plus_residual_mev + proton_drive - shield
+    beta_plus_valence = dbi.beta_plus_valence_residual_mev(state.A, state.Z, base)
     return (
         base.beta_minus_residual_mev,
         base.beta_plus_residual_mev,
         beta_minus_eff,
         beta_plus_eff,
+        beta_plus_valence,
     )
+
+
+def _cluster_width_total_mev(state: NuclearState, env: pn.NucleonEnvironment) -> float:
+    if not env.bonded:
+        return 0.0
+    return pn.cluster_binding_canonical_mev(
+        state.A, state.Z, shell=env.shell, xi=env.xi
+    )
+
+
+def _beta_channel_residual(
+    state: NuclearState,
+    channel: Literal["beta_minus", "beta_plus"],
+    *,
+    residual_mode: ResidualMode,
+) -> float:
+    raw_minus, raw_plus, eff_minus, eff_plus, valence_plus = beta_residuals(state)
+    if channel == "beta_minus":
+        return raw_minus if residual_mode == "raw" else eff_minus
+    if residual_mode == "raw" or residual_mode == "valence":
+        return valence_plus
+    return eff_plus
 
 
 def width_geometry_factor(
     state: NuclearState,
     *,
     residual_mev: float,
+    channel: Literal["beta_minus", "beta_plus"] = "beta_minus",
 ) -> float:
     env = _nuclear_environment(state)
     if state.A <= 1 or not env.bonded:
         return 1.0
-    cluster_total = pn.cluster_caustic_total_mev(state.A, shell=env.shell, xi=env.xi)
+    cluster_total = _cluster_width_total_mev(state, env)
     pair = pn.pn_pair_readout(env)
-    width_well = dbi.beta_width_well_depth_mev(
+    width_well, valley = dbi.beta_width_ledger_slots(
         state.A,
         state.Z,
+        channel,
+        env,
         cluster_total_mev=cluster_total,
         proton_mass_mev=pair.proton.mass_mev,
         neutron_mass_mev=pair.neutron.mass_mev,
     )
     return dbi.beta_geometry_width_factor(
         state.A,
+        state.Z,
         residual_mev=residual_mev,
         well_depth_mev=width_well,
         bonded=env.bonded,
+        valley_count=valley,
     )
 
 
@@ -315,35 +498,93 @@ def weak_width_and_halflife(
         else weak_bridge_mev
     )
     shield = max(env.well_depth_mev, 0.0) if env.bonded else 0.0
-    cluster_total = (
-        pn.cluster_caustic_total_mev(state.A, shell=env.shell, xi=env.xi)
-        if env.bonded
-        else 0.0
-    )
     width_well: float | None = None
-    if env.bonded and state.N > 0 and channel == "beta_minus":
+    valley_count: float | None = None
+    if env.bonded and (
+        (channel == "beta_minus" and state.N > 0)
+        or (channel == "beta_plus" and state.Z > 0)
+    ):
+        cluster_total = _cluster_width_total_mev(state, env)
         pair = pn.pn_pair_readout(env)
-        width_well = dbi.beta_width_well_depth_mev(
+        width_well, valley_count = dbi.beta_width_ledger_slots(
             state.A,
             state.Z,
+            channel,
+            env,
             cluster_total_mev=cluster_total,
             proton_mass_mev=pair.proton.mass_mev,
             neutron_mass_mev=pair.neutron.mass_mev,
         )
-    geom = width_geometry_factor(state, residual_mev=residual_mev)
+    geom = width_geometry_factor(state, residual_mev=residual_mev, channel=channel)
     half_life = dbi.weak_beta_half_life_seconds(
         endpoint_q_mev,
         residual_mev,
         A=state.A,
+        Z=state.Z,
         well_depth_mev=shield,
         width_well_depth_mev=width_well,
         bonded=env.bonded,
+        valley_count=valley_count,
         neutrino_mass_mev=nu_mev,
         weak_bridge_energy_mev=bridge,
         local_curvature_width_factor=local_curvature_width_factor,
     )
     width = 0.0 if not math.isfinite(half_life) or half_life <= 0.0 else math.log(2.0) / half_life
     return width, half_life, bridge, geom
+
+
+def evaluate_alpha_channel(state: NuclearState) -> DecayChannel | None:
+    """α emission: trapped-inside saddle Q + strong width ledger (≠ binding erosion)."""
+    if state.A < 8 or state.Z < 2:
+        return None
+    n_alpha, delta_inside, _ = _alpha_lattice_slots(state)
+    if n_alpha is None or n_alpha < 1:
+        return None
+    if n_alpha != 2 and alpha_daughter(state) is None:
+        return None
+    endpoint_q = endpoint_q_alpha(state)
+    if endpoint_q is None:
+        return None
+    width_mev = alpha_decay_width_mev(state, endpoint_q)
+    residual = max(width_mev, endpoint_q, 0.0)
+    kinematic_open = endpoint_q > 0.0
+    width_open = width_mev > 0.0
+    channel_open = kinematic_open and width_open
+    if not channel_open:
+        return DecayChannel(
+            tag="alpha",
+            endpoint_q_mev=endpoint_q,
+            residual_mev=residual,
+            width_per_s=0.0,
+            half_life_s=math.inf,
+            kinematic_open=kinematic_open,
+            residual_open=width_open,
+            channel_open=False,
+            emitted=("alpha", "alpha") if n_alpha == 2 else ("alpha",),
+            lean_refs=("NuclearCurvatureBinding.multiAlphaTrappedInsideDelta",),
+        )
+    half_life = resonance_half_life_from_width_mev(width_mev)
+    width_per_s = (
+        0.0
+        if not math.isfinite(half_life) or half_life <= 0.0
+        else math.log(2.0) / half_life
+    )
+    emitted: tuple[str, ...] = ("alpha", "alpha") if n_alpha == 2 else ("alpha",)
+    return DecayChannel(
+        tag="alpha",
+        endpoint_q_mev=endpoint_q,
+        residual_mev=residual,
+        width_per_s=width_per_s,
+        half_life_s=half_life,
+        kinematic_open=True,
+        residual_open=True,
+        channel_open=True,
+        emitted=emitted,
+        lean_refs=(
+            "NuclearCurvatureBinding.twoAlphaMassQLocalContacts",
+            "SpinStatistics.resonance_half_life",
+        ),
+    )
 
 
 def evaluate_nuclear_channel(
@@ -364,11 +605,7 @@ def evaluate_nuclear_channel(
     if endpoint_q is None:
         return None
 
-    raw_minus, raw_plus, eff_minus, eff_plus = beta_residuals(state)
-    if residual_mode == "raw":
-        residual = raw_minus if channel == "beta_minus" else raw_plus
-    else:
-        residual = eff_minus if channel == "beta_minus" else eff_plus
+    residual = _beta_channel_residual(state, channel, residual_mode=residual_mode)
 
     kinematic_open = endpoint_q > 0.0
     residual_open = residual > 0.0
@@ -430,6 +667,9 @@ def open_channels_nuclear(
         )
         if ch is not None:
             channels.append(ch)
+    alpha_ch = evaluate_alpha_channel(state)
+    if alpha_ch is not None:
+        channels.append(alpha_ch)
     return channels
 
 
@@ -462,10 +702,18 @@ def edges_from_nuclear_state(
     for i, ch in enumerate(channels):
         if not ch.channel_open:
             continue
+        terminal_breakup = False
         if ch.tag == "beta_minus":
             daughter = beta_minus_daughter(state)
-        else:
+        elif ch.tag == "beta_plus":
             daughter = beta_plus_daughter(state)
+        else:
+            width, n_alpha = alpha_binding_erosion_mev(state)
+            if n_alpha == 2:
+                daughter = he4_state(state.xi)
+                terminal_breakup = True
+            else:
+                daughter = alpha_daughter(state)
         if daughter is None:
             continue
         edges.append(
@@ -474,6 +722,7 @@ def edges_from_nuclear_state(
                 daughter=daughter,
                 channel=ch,
                 branching_ratio=br.get(i, 0.0),
+                terminal_breakup=terminal_breakup,
             )
         )
     return edges
@@ -606,7 +855,9 @@ def expand_chain(
             )
             node.children.append(child)
             all_nodes.append(child)
-            if child.depth < max_depth:
+            if edge.terminal_breakup or child.depth >= max_depth:
+                terminal.append(child)
+            elif child.depth < max_depth:
                 frontier.append(child)
             else:
                 terminal.append(child)

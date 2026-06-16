@@ -91,6 +91,30 @@ theorem strip_rolling_critical_proj (t : ℝ) :
       (Real.cos t + Real.sin t) / Real.sqrt 2 := by
   simp [criticalProj, imagSum, stripRollingMap]
 
+/-- Angle-subtraction form: `(cos t + sin t)/√2 = cos(t − π/4)`. -/
+theorem cos_sin_sum_div_sqrt_two_eq_cos_sub_pi_four (t : ℝ) :
+    (Real.cos t + Real.sin t) / Real.sqrt 2 = Real.cos (t - Real.pi / 4) := by
+  rw [Real.cos_sub, Real.cos_pi_div_four, Real.sin_pi_div_four]
+  have hsqrt : Real.sqrt 2 * Real.sqrt 2 = 2 := Real.mul_self_sqrt (by norm_num : (0 : ℝ) ≤ 2)
+  field_simp [← hsqrt]
+  rw [pow_two, hsqrt]
+
+theorem strip_rolling_critical_proj_eq_cos_sub_pi_four (t : ℝ) :
+    criticalProj (stripRollingMap t) = Real.cos (t - Real.pi / 4) := by
+  rw [strip_rolling_critical_proj, cos_sin_sum_div_sqrt_two_eq_cos_sub_pi_four]
+
+theorem strip_rolling_critical_proj_eq_zero_iff (t : ℝ) :
+    criticalProj (stripRollingMap t) = 0 ↔
+      ∃ n : ℤ, t = (3 * Real.pi / 4) + (n : ℝ) * Real.pi := by
+  rw [strip_rolling_critical_proj_eq_cos_sub_pi_four, Real.cos_eq_zero_iff]
+  constructor
+  · rintro ⟨n, hn⟩
+    refine ⟨n, ?_⟩
+    linarith
+  · rintro ⟨n, ht⟩
+    refine ⟨n, ?_⟩
+    linarith
+
 theorem strip_rolling_cancellation_iff (t : ℝ) :
     criticalProj (stripRollingMap t) = 0 ↔ Real.cos t + Real.sin t = 0 := by
   rw [strip_rolling_critical_proj]

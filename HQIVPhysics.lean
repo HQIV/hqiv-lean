@@ -29,6 +29,8 @@ import Hqiv.Physics.GRFromMaxwell
 import Hqiv.Physics.HQIVGravityReadoutScalars
 import Hqiv.Physics.HQIVFluidClosureScaffold
 import Hqiv.Physics.OrbitalFlybyScaffold
+import Hqiv.Physics.CompactObjectRotatingCrustScaffold
+import Hqiv.Physics.CompactObjectMhdEquivalenceScaffold
 import Hqiv.Physics.OrbitalTrajectoryJ2Scaffold
 import Hqiv.Physics.SO8PlaquetteHolonomy
 import Hqiv.Physics.NonAbelianHolonomyMeasureScaffold

@@ -4,6 +4,12 @@
 **Python:** `scripts/hqiv_curvature_contact_network.py`, `scripts/hqiv_thermodynamic_phase_from_tp.py`  
 **Consumers:** `hqiv_dynamic_binding_chart.py`, protein folding (`ProteinFoldingHook`), bulk materials
 
+**Python canonical (Lean-proved):** once discharged in Lean, mirror **dimensionless**
+pure functions in ``hqvmpy/src/pyhqiv/`` — ``bonded_horizon_casimir.py``,
+``nuclear_torus_perturbation.py``, ``chemistry/{ionic,metallic}_contact.py``.
+No Bohr radius, hydrogen IP, or other measurement anchors in ``src/``.
+HQIV_LEAN ``scripts/`` keeps network witnesses / JSON export.
+
 ## Purpose
 
 Single parameter-free rule engine for how **bound cluster mass** and **contact curvature**
@@ -44,6 +50,9 @@ Optional `BondGeometry.bond_angle_rad` overrides inferred angles. Each node carr
 |------|------|------|
 | `cluster_deficit` | attractive (mass down) | Node: `tuftVevFactorNetworkedAtCluster` |
 | `covalent_bond` | attractive | Edge: `G_eff(θ)`, weight `1/(1+d/a₀)` |
+| `ionic_bond` | attractive | Edge: `ionicBondSurplus` joint−separated seas (`IonicContactSlot`) |
+| `metallic_bond` | attractive | Edge: `metallicPeelSurplus` bulk vs peel + valence merge (`MetallicContactSlot`) |
+| `ion_solvation` | attractive | Ion–H₂O hydration shell contacts |
 | `steric_repulsion` | repulsive (mass back) | Peripheral H–H (CH₄: 4 points, 2 per H) |
 | `hyperclosure` | graph | ≥2 bonds: `1/√n_bonds` |
 | `periodic_image` | lattice | When **derived** phase is `solid` |
