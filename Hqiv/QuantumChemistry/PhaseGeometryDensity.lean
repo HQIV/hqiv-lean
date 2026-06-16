@@ -318,9 +318,9 @@ theorem homogeneousCurvatureBudgetFromPhase_dilute (ξ : ℝ) :
   simp
 
 theorem homogeneousCurvatureBudgetFromPhase_condensed (ξ : ℝ) :
-    homogeneousCurvatureBudgetFromPhase ξ 1 = curvatureBudgetAtXi ξ := by
+    homogeneousCurvatureBudgetFromPhase ξ 1 = bindingCurvatureBudgetAtXi ξ := by
   unfold homogeneousCurvatureBudgetFromPhase homogeneousCurvatureBudgetAtXi
-    curvatureBudgetAtXi clampMediumDensity
+    bindingCurvatureBudgetAtXi clampMediumDensity
   simp
 
 theorem homogeneousCurvatureBudgetFromPhase_eq_homogeneous (ξ ρ : ℝ) :
