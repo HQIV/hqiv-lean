@@ -442,11 +442,12 @@ globs = [
 [[lean_lib]]
 name = "HQIVStory"
 # Narrative spine import closure from `HQIVStory.lean` (regenerate: python3 scripts/story_lib_globs.py).
-# 190 modules (HQIVStory + 189 Hqiv)
+# 252 modules (HQIVStory + 251 Hqiv)
 globs = [
   "HQIVStory",
   "Hqiv.Algebra.CliffordHQIVSlotRefinement",
   "Hqiv.Algebra.CliffordMinimalIdeal",
+  "Hqiv.Algebra.CycleHodgeProbeScaffold",
   "Hqiv.Algebra.G2Embedding",
   "Hqiv.Algebra.IntegerLatticeShellCount8",
   "Hqiv.Algebra.MinimalSoSeedClosure",
@@ -464,6 +465,7 @@ globs = [
   "Hqiv.Geometry.ContinuumMetricGradient",
   "Hqiv.Geometry.ContinuumSpacetimeChart",
   "Hqiv.Geometry.GeneralRiemannianRapidityOracle",
+  "Hqiv.Geometry.GoldbachG2Parity",
   "Hqiv.Geometry.HQVMCausalChart",
   "Hqiv.Geometry.HQVMContinuumMetricBridge",
   "Hqiv.Geometry.HQVMetric",
@@ -489,6 +491,7 @@ globs = [
   "Hqiv.Physics.ContinuousXiCoupling",
   "Hqiv.Physics.ContinuumOmaxwellClosure",
   "Hqiv.Physics.CovariantSolution",
+  "Hqiv.Physics.DivisionAlgebraZetaScaffold",
   "Hqiv.Physics.FanoDetuningFirstOrder",
   "Hqiv.Physics.FanoLine",
   "Hqiv.Physics.FanoOmaxwellSpectrum",
@@ -499,6 +502,7 @@ globs = [
   "Hqiv.Physics.GlobalDetuning",
   "Hqiv.Physics.HQIVDirichletModularScaffold",
   "Hqiv.Physics.HQIVFluidClosureScaffold",
+  "Hqiv.Physics.HQIVHeatFlowDeformation",
   "Hqiv.Physics.HQIVLSeriesAnalytic",
   "Hqiv.Physics.HarmonicLadderGlobalDetuning",
   "Hqiv.Physics.HarmonicLadderMass",
@@ -514,6 +518,8 @@ globs = [
   "Hqiv.Physics.SpinStatistics",
   "Hqiv.Physics.SpinStatisticsOperatorBridge",
   "Hqiv.Physics.SurfaceWaveSelfClock",
+  "Hqiv.Physics.ThermodynamicLawsFromLadder",
+  "Hqiv.Physics.ToyDiscreteHeat",
   "Hqiv.Physics.TrialityRapidityWellEquivalence",
   "Hqiv.QuantumMechanics.BornMeasurementFinite",
   "Hqiv.QuantumMechanics.CCRFiniteDimObstruction",
@@ -543,6 +549,7 @@ globs = [
   "Hqiv.Story.Chapter07_PatchQFT",
   "Hqiv.Story.Chapter08_ClayMillennium",
   "Hqiv.Story.DiscreteOMaxwellHQIVInstance",
+  "Hqiv.Story.DimensionalGrowthAnalyticScaffold",
   "Hqiv.Story.DiscreteOMaxwellToYMInputs",
   "Hqiv.Story.GaugeGroupFromHQIVSketch",
   "Hqiv.Story.HQIVDissipativeBridge",
