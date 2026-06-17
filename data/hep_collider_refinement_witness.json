@@ -1,0 +1,136 @@
+{
+  "lean_module": "Hqiv/Physics/HepColliderRefinements.lean",
+  "upstream": "hqiv_strong_sector_collider_discharge.py",
+  "mc_shower_petra": {
+    "mean_thrust": 0.9212203422482264,
+    "thrust_std": 0.037498457679848454,
+    "fraction_T_gt_0p9": 0.71575,
+    "fraction_3_jet": 0.4815,
+    "fraction_4plus_jet": 0.00675
+  },
+  "cases": [
+    {
+      "case_id": "thrust_fraction_T_gt_0p9",
+      "quantity": "Fraction of events with T > 0.9 (PETRA-class)",
+      "predicted": 0.71575,
+      "reference": 0.58,
+      "reference_sigma": 0.12,
+      "n_sigma": 1.1312500000000003,
+      "tolerance_sigma": 2.5,
+      "status": "pass",
+      "unit": "dimensionless",
+      "lean_def": "thrustDistributionWidth + partonShowerMC",
+      "notes": ""
+    },
+    {
+      "case_id": "thrust_std",
+      "quantity": "RMS thrust width \u03c3_T",
+      "predicted": 0.037498457679848454,
+      "reference": 0.055,
+      "reference_sigma": 0.02,
+      "n_sigma": 0.8750771160075773,
+      "tolerance_sigma": 2.5,
+      "status": "pass",
+      "unit": "dimensionless",
+      "lean_def": "thrustDistributionWidth",
+      "notes": ""
+    },
+    {
+      "case_id": "four_jet_fraction_petra",
+      "quantity": "4+ jet fraction at \u221as \u2248 35 GeV",
+      "predicted": 0.00675,
+      "reference": 0.045,
+      "reference_sigma": 0.02,
+      "n_sigma": 1.9124999999999999,
+      "tolerance_sigma": 2.5,
+      "status": "pass",
+      "unit": "dimensionless",
+      "lean_def": "partonShowerMC",
+      "notes": ""
+    },
+    {
+      "case_id": "ggH_mean_pT",
+      "quantity": "Mean Higgs pT from gg fusion (13 TeV class)",
+      "predicted": 35.74571428571429,
+      "reference": 35.0,
+      "reference_sigma": 12.0,
+      "n_sigma": 0.06214285714285772,
+      "tolerance_sigma": 2.5,
+      "status": "pass",
+      "unit": "GeV",
+      "lean_def": "ggHpTFalloffGeV",
+      "notes": ""
+    },
+    {
+      "case_id": "ggH_frac_pT_gt_30",
+      "quantity": "Fraction of ggH events with pT > 30 GeV",
+      "predicted": 0.4320294810375243,
+      "reference": 0.42,
+      "reference_sigma": 0.12,
+      "n_sigma": 0.10024567531270272,
+      "tolerance_sigma": 2.5,
+      "status": "pass",
+      "unit": "dimensionless",
+      "lean_def": "ggHpTSpectrum",
+      "notes": ""
+    },
+    {
+      "case_id": "qgp_v2",
+      "quantity": "Elliptic flow v2 (central AuAu, RHIC-class)",
+      "predicted": 0.05968310365946075,
+      "reference": 0.055,
+      "reference_sigma": 0.02,
+      "n_sigma": 0.23415518297303753,
+      "tolerance_sigma": 2.5,
+      "status": "pass",
+      "unit": "dimensionless",
+      "lean_def": "qgpV2Discharge",
+      "notes": ""
+    },
+    {
+      "case_id": "qgp_RAA_5GeV",
+      "quantity": "Jet quenching R_AA at pT = 5 GeV",
+      "predicted": 0.26388650964118704,
+      "reference": 0.22,
+      "reference_sigma": 0.08,
+      "n_sigma": 0.548581370514838,
+      "tolerance_sigma": 2.5,
+      "status": "pass",
+      "unit": "dimensionless",
+      "lean_def": "qgpRAAWeightAtPT",
+      "notes": ""
+    },
+    {
+      "case_id": "pdf_fg_ratio_0p1_over_0p01",
+      "quantity": "f_g(0.1) / f_g(0.01) at Q0 = M_Z",
+      "predicted": 0.24179255583813086,
+      "reference": 0.35,
+      "reference_sigma": 0.12,
+      "n_sigma": 0.9017287013489094,
+      "tolerance_sigma": 2.5,
+      "status": "pass",
+      "unit": "dimensionless",
+      "lean_def": "pdfGluonShapeAtX",
+      "notes": ""
+    },
+    {
+      "case_id": "pdf_fg_at_x0p1",
+      "quantity": "Normalised f_g(0.1) at Q0 = M_Z",
+      "predicted": 0.1915908839498463,
+      "reference": 0.19,
+      "reference_sigma": 0.08,
+      "n_sigma": 0.01988604937307875,
+      "tolerance_sigma": 2.5,
+      "status": "pass",
+      "unit": "dimensionless",
+      "lean_def": "pdfGluonShapeAtX (x f_g slot)",
+      "notes": ""
+    }
+  ],
+  "summary": {
+    "pass": 9,
+    "fail": 0,
+    "total": 9,
+    "all_pass": true
+  }
+}

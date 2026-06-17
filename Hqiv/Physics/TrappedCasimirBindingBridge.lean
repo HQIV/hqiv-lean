@@ -16,8 +16,10 @@ selection.  The binding cell `latticeSimplexCount m · α_eff(m)` factorizes as
 
 The middle slot is per-mode trapped zero-point; the last slot is the normalized SO(8)
 trace selection.  T11/T12 Hopf contact data supplies the **contact amplification**
-witness on integrable shells; proving it reproduces `α_eff/(φ/2)` shell-by-shell
-remains open except at the structural identification below.
+witness on integrable shells.  The literal identity `hopfTrappedSelection = normalizedSO8TraceSelection`
+is false (different scales); the discharged bridge is the shared kernel
+`curvatureLogAmplification` with contact vs ladder chart coordinates — see
+`GluonCurvatureArtifact.lean` (`StrongSectorCurvatureKernelBridge`).
 
 No new axioms; no `sorry`.
 -/

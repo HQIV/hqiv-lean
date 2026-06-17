@@ -1,0 +1,90 @@
+{
+  "description": "Comparison-layer observables for strong-sector collider discharge witnesses. Never used as HQIV inputs.",
+  "sources": {
+    "petra_r23": "Bartel et al. 1979; Berger et al. 1979; summary in Peskin & Schroeder Ch. 17",
+    "petra_thrust": "PDG 2024 event-shape summaries; PETRA √s ≈ 35 GeV",
+    "ggH_sigma": "PDG 2024 inclusive σ(gg→H) at √s = 13 TeV, NLO+NNLO",
+    "qgp_eta_s": "RHIC/LHC hydro summaries; Adams et al. 2005",
+    "glueball_0pp": "Lattice QCD; Close 2014 review",
+    "glueball_2pp": "Lattice QCD; Close 2014 review",
+    "pdf_gluon_moment": "Global PDF fits at Q0 = M_Z; PDG 2024"
+  },
+  "cases": [
+    {
+      "id": "petra_r23",
+      "quantity": "R_{23} = σ(3-jet)/σ(2-jet)",
+      "sqrt_s_gev": 35.0,
+      "reference": 0.97,
+      "reference_sigma": 0.08,
+      "tolerance_sigma": 2.0,
+      "unit": "dimensionless"
+    },
+    {
+      "id": "petra_mean_thrust",
+      "quantity": "⟨T⟩ event thrust",
+      "sqrt_s_gev": 35.0,
+      "reference": 0.92,
+      "reference_sigma": 0.04,
+      "tolerance_sigma": 2.0,
+      "unit": "dimensionless"
+    },
+    {
+      "id": "nonabelian_splitting",
+      "quantity": "C_A/C_F soft splitting ratio",
+      "reference": 2.25,
+      "reference_sigma": 0.0,
+      "tolerance_sigma": 0.0,
+      "unit": "dimensionless"
+    },
+    {
+      "id": "ggH_sigma_lo",
+      "quantity": "σ(gg→H) LO band at 13 TeV",
+      "sqrt_s_gev": 13000.0,
+      "reference": 19.0,
+      "reference_sigma": 5.0,
+      "tolerance_sigma": 2.0,
+      "unit": "pb"
+    },
+    {
+      "id": "ggH_sigma_nlo",
+      "quantity": "σ(gg→H) NLO+NNLO at 13 TeV",
+      "sqrt_s_gev": 13000.0,
+      "reference": 48.6,
+      "reference_sigma": 2.0,
+      "tolerance_sigma": 3.0,
+      "unit": "pb"
+    },
+    {
+      "id": "qgp_eta_s",
+      "quantity": "η/s at RHIC/LHC hydro",
+      "reference": 0.25,
+      "reference_sigma": 0.10,
+      "tolerance_sigma": 2.0,
+      "unit": "dimensionless"
+    },
+    {
+      "id": "glueball_0pp",
+      "quantity": "0^{++} glueball mass",
+      "reference": 1710.0,
+      "reference_sigma": 80.0,
+      "tolerance_sigma": 2.0,
+      "unit": "MeV"
+    },
+    {
+      "id": "glueball_2pp",
+      "quantity": "2^{++} glueball mass",
+      "reference": 2390.0,
+      "reference_sigma": 120.0,
+      "tolerance_sigma": 2.0,
+      "unit": "MeV"
+    },
+    {
+      "id": "pdf_gluon_moment",
+      "quantity": "∫_0^1 x f_g(x, M_Z)",
+      "reference": 0.05,
+      "reference_sigma": 0.015,
+      "tolerance_sigma": 2.5,
+      "unit": "dimensionless"
+    }
+  ]
+}

@@ -1,0 +1,80 @@
+{
+  "description": "HEP refinement comparison targets (differential / MC-level). Never HQIV inputs.",
+  "cases": [
+    {
+      "id": "thrust_fraction_T_gt_0p9",
+      "quantity": "Fraction of events with T > 0.9 (PETRA-class)",
+      "sqrt_s_gev": 35.0,
+      "reference": 0.58,
+      "reference_sigma": 0.12,
+      "tolerance_sigma": 2.5,
+      "unit": "dimensionless"
+    },
+    {
+      "id": "thrust_std",
+      "quantity": "RMS thrust width σ_T",
+      "sqrt_s_gev": 35.0,
+      "reference": 0.055,
+      "reference_sigma": 0.020,
+      "tolerance_sigma": 2.5,
+      "unit": "dimensionless"
+    },
+    {
+      "id": "four_jet_fraction_petra",
+      "quantity": "4+ jet fraction at √s ≈ 35 GeV",
+      "sqrt_s_gev": 35.0,
+      "reference": 0.045,
+      "reference_sigma": 0.020,
+      "tolerance_sigma": 2.5,
+      "unit": "dimensionless"
+    },
+    {
+      "id": "ggH_mean_pT",
+      "quantity": "Mean Higgs pT from gg fusion (13 TeV class)",
+      "reference": 35.0,
+      "reference_sigma": 12.0,
+      "tolerance_sigma": 2.5,
+      "unit": "GeV"
+    },
+    {
+      "id": "ggH_frac_pT_gt_30",
+      "quantity": "Fraction of ggH events with pT > 30 GeV",
+      "reference": 0.42,
+      "reference_sigma": 0.12,
+      "tolerance_sigma": 2.5,
+      "unit": "dimensionless"
+    },
+    {
+      "id": "qgp_v2",
+      "quantity": "Elliptic flow v2 (central AuAu, RHIC-class)",
+      "reference": 0.055,
+      "reference_sigma": 0.020,
+      "tolerance_sigma": 2.5,
+      "unit": "dimensionless"
+    },
+    {
+      "id": "qgp_RAA_5GeV",
+      "quantity": "Jet quenching R_AA at pT = 5 GeV",
+      "reference": 0.22,
+      "reference_sigma": 0.08,
+      "tolerance_sigma": 2.5,
+      "unit": "dimensionless"
+    },
+    {
+      "id": "pdf_fg_ratio_0p1_over_0p01",
+      "quantity": "f_g(0.1) / f_g(0.01) at Q0 = M_Z",
+      "reference": 0.35,
+      "reference_sigma": 0.12,
+      "tolerance_sigma": 2.5,
+      "unit": "dimensionless"
+    },
+    {
+      "id": "pdf_fg_at_x0p1",
+      "quantity": "Normalised f_g(0.1) at Q0 = M_Z",
+      "reference": 0.19,
+      "reference_sigma": 0.08,
+      "tolerance_sigma": 2.5,
+      "unit": "dimensionless"
+    }
+  ]
+}
