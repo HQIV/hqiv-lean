@@ -24,6 +24,30 @@ globs = ["HQIVLEAN","Hqiv.Geometry.OctonionicLightCone","Hqiv.Geometry.Spherical
 
 
 [[lean_lib]]
+name = "paper_gluon_curvature"
+# Build target for papers/gluon_curvature_artifact/ (import closure of cited Lean modules).
+# Build: lake build paper_gluon_curvature
+globs = [
+  "Hqiv.Physics.HepColliderRefinements",
+  "Hqiv.Physics.StrongSectorColliderDischarge",
+  "Hqiv.Physics.StrongChannelEmissionScaffold",
+  "Hqiv.Physics.GluonCurvatureArtifact",
+  "Hqiv.Physics.TrappedCasimirBindingBridge",
+  "Hqiv.Physics.BoundStates",
+  "Hqiv.Physics.HadronMassReadout",
+  "Hqiv.Physics.StrongColorSu3ChartClosure",
+  "Hqiv.Physics.HopfShellBeltramiMassBridge",
+  "Hqiv.Physics.Forces",
+  "Hqiv.Physics.DerivedGaugeAndLeptonSector",
+  "Hqiv.Physics.DerivedNucleonMass",
+  "Hqiv.Physics.QuarkMetaResonance",
+  "Hqiv.Physics.CasimirForceFromAction",
+  "Hqiv.Physics.ContinuousXiCoupling",
+  "Hqiv.Physics.ContinuousXiPath",
+  "Hqiv.Topology.HopfShellComplex",
+]
+
+[[lean_lib]]
 name = "paper_nucleon_binding"
 # Build target for papers/nucleon_binding/ (import closure of cited Lean modules).
 # Regenerate: python3 scripts/paper_nucleon_binding_globs.py
@@ -315,6 +339,7 @@ globs = [
   "Hqiv.Physics.BoundStates",
   "Hqiv.Physics.CasimirForceFromAction",
   "Hqiv.Physics.TrappedCasimirBindingBridge",
+  "Hqiv.Physics.GluonCurvatureArtifact",
   "Hqiv.Physics.ChargedLeptonResonance",
   "Hqiv.Physics.ComptonHorizonPhase",
   "Hqiv.Physics.ConservedContentMassBridge",

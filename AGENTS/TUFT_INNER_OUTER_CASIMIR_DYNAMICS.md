@@ -168,7 +168,7 @@ Still open: full strong-sector trapped-planck or T8 determinant on the quark–a
 - `T11T12TrappedCasimirWitness` + heavy-chart witness at shell 4
 - `heavyHopfTorsionCoefficient_gt_outerHorizonNeutrinoSuppression` (T11 contact > T13 outer **witness** — ordering only; does not validate `1/140` as a neutrino mass)
 
-**Still open:** proving `hopfTrappedSelectionFromShell` (T11/T12 contact amplification) equals `normalizedSO8TraceSelection` / `alphaEffAtShell/(φ/2)` on each shell — that would close the “no independent gluon” reading. Today the identification is structural + witness at the heavy chart, not a shell-by-shell derivation from Hopf data.
+**Discharged (2026-06):** `hopfTrappedSelectionFromShell` and `traceSelectionLogAmplification` are not pointwise equal — different log arguments and scales — but both are instances of one curvature log kernel `curvatureLogAmplification(x,c) = 1 + c·α·log x` at contact vs ladder chart coordinates. Lean bundles `StrongSectorCurvatureKernelBridge` at shells $m=2,3,4$ in `GluonCurvatureArtifact.lean`; normalised trace selection is the ladder kernel divided by the Casimir zero-point budget, not a third mechanism.
 
 ---
 
@@ -191,7 +191,7 @@ Still open: full strong-sector trapped-planck or T8 determinant on the quark–a
 ## 6. Open fix targets (priority order)
 
 1. ~~**T8 full sector determinant** — close μ/e ~2% gap~~ → **Charged leptons closed** via generation-indexed `tuftSectorZetaSubleadingCoeff` (`1/4π` for `n≥2`, `γ/(2d_n²)` for electron). Primary chart: `leptonMassSpectrum_at_xi_from_vev_T8_MeV`.
-2. **Hopf → alphaEffAtShell** — prove `hopfTrappedSelectionFromShell` reproduces `normalizedSO8TraceSelection` shell-by-shell (structural bridge landed in `TrappedCasimirBindingBridge.lean`)
+2. ~~**Hopf → trace-selection kernel**~~ — **Discharged:** unified `curvatureLogAmplification` + `StrongSectorCurvatureKernelBridge` at $m=2,3,4` (`GluonCurvatureArtifact.lean`). Literal equality `hopfTrappedSelection = normalizedSO8TraceSelection` was never the correct target (different chart coordinates).
 3. **Neutrino absolute scale + hierarchy** — outer T8 anchor + T10 `middleToLight=3` on ν₁–ν₂ split. Lean: `neutrinoMassSpectrum_at_xi_from_T10_MeV`, `assembleT10PMNSMixingReadout`, `t10NeutrinoOverlapMatrix`, `t10PMNSUnitaryReal`. **Absolute scale passes caps** (Σm_ν ~0.007 eV). T10 steepens oscillation Δm²21 diagnostic (~0.08× lab ref vs ~0.06× bare holonomy). **Closed:** holonomy×torsion bridge, PMNS θ₁₂/θ₂₃ from phase ratios, δ=π/5, witness export uses TUFT T10 masses (retired `m_nu_e_derived` from JSON).
 4. ~~**Meson readout**~~ — strong-chart anchor landed (`mesonVectorExcitedMassReadout`); refine with trapped-planck on strong shell
 4b. **Vev-pinned hadrons + inline excitations** — Phase 1 landed: `tuftHadronGroundAtXi_MeV`, `tuftHadronExcitedMassAtXi_MeV`, `tuftMesonVectorMassAtXi_MeV` (see [`TUFT_VEV_HADRON_PROGRAM.md`](./TUFT_VEV_HADRON_PROGRAM.md)). **Next:** geometry-only proton/τ pin; decouple excitation shell from `referenceM`.

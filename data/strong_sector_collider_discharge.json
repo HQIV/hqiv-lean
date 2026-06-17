@@ -1,0 +1,145 @@
+{
+  "lean_module": "Hqiv/Physics/StrongSectorColliderDischarge.lean",
+  "build": "lake build paper_gluon_curvature",
+  "inputs": {
+    "alpha_s_at_MZ": 0.118,
+    "beta0_from_beta3": 7.0,
+    "derived_proton_mev": 938.27208816,
+    "alpha": 0.6,
+    "gamma": 0.4
+  },
+  "running": {
+    "alpha_s_at_petra_scale": 0.15070370979107328,
+    "alpha_s_at_higgs_scale": 0.11328963631891235,
+    "petra_mu_mev": 17500.0
+  },
+  "parton_shower": {
+    "three_jet_steps": 1,
+    "step_weight_shell4_unit_trace": 0.2928916346229618
+  },
+  "cases": [
+    {
+      "case_id": "petra_r23",
+      "quantity": "R_{23} = \u03c3(3-jet)/\u03c3(2-jet)",
+      "predicted": 0.9770324327310355,
+      "reference": 0.97,
+      "reference_sigma": 0.08,
+      "n_sigma": 0.08790540913794359,
+      "tolerance_sigma": 2.0,
+      "status": "pass",
+      "unit": "dimensionless",
+      "lean_def": "petraR23Discharge",
+      "notes": ""
+    },
+    {
+      "case_id": "petra_mean_thrust",
+      "quantity": "\u27e8T\u27e9 event thrust",
+      "predicted": 0.9232472308622854,
+      "reference": 0.92,
+      "reference_sigma": 0.04,
+      "n_sigma": 0.08118077155713499,
+      "tolerance_sigma": 2.0,
+      "status": "pass",
+      "unit": "dimensionless",
+      "lean_def": "meanThrustDischarge",
+      "notes": ""
+    },
+    {
+      "case_id": "nonabelian_splitting",
+      "quantity": "C_A/C_F soft splitting ratio",
+      "predicted": 2.25,
+      "reference": 2.25,
+      "reference_sigma": 0.0,
+      "n_sigma": null,
+      "tolerance_sigma": 0.0,
+      "status": "pass",
+      "unit": "dimensionless",
+      "lean_def": "nonAbelianSplittingFromFilter",
+      "notes": ""
+    },
+    {
+      "case_id": "ggH_sigma_lo",
+      "quantity": "\u03c3(gg\u2192H) LO band at 13 TeV",
+      "predicted": 19.631046174700298,
+      "reference": 19.0,
+      "reference_sigma": 5.0,
+      "n_sigma": 0.12620923494005964,
+      "tolerance_sigma": 2.0,
+      "status": "pass",
+      "unit": "pb",
+      "lean_def": "ggHSigmaPbLODischarge",
+      "notes": ""
+    },
+    {
+      "case_id": "ggH_sigma_nlo",
+      "quantity": "\u03c3(gg\u2192H) NLO+NNLO at 13 TeV",
+      "predicted": 44.16985389307567,
+      "reference": 48.6,
+      "reference_sigma": 2.0,
+      "n_sigma": 2.2150730534621665,
+      "tolerance_sigma": 3.0,
+      "status": "pass",
+      "unit": "pb",
+      "lean_def": "ggHSigmaPbNLODischarge",
+      "notes": ""
+    },
+    {
+      "case_id": "qgp_eta_s",
+      "quantity": "\u03b7/s at RHIC/LHC hydro",
+      "predicted": 0.14920775914865186,
+      "reference": 0.25,
+      "reference_sigma": 0.1,
+      "n_sigma": 1.0079224085134812,
+      "tolerance_sigma": 2.0,
+      "status": "pass",
+      "unit": "dimensionless",
+      "lean_def": "qgpEtaOverSDischarge",
+      "notes": ""
+    },
+    {
+      "case_id": "glueball_0pp",
+      "quantity": "0^{++} glueball mass",
+      "predicted": 1688.8897586879998,
+      "reference": 1710.0,
+      "reference_sigma": 80.0,
+      "n_sigma": 0.26387801640000247,
+      "tolerance_sigma": 2.0,
+      "status": "pass",
+      "unit": "MeV",
+      "lean_def": "glueball0ppMassMeV",
+      "notes": ""
+    },
+    {
+      "case_id": "glueball_2pp",
+      "quantity": "2^{++} glueball mass",
+      "predicted": 2540.9051086059503,
+      "reference": 2390.0,
+      "reference_sigma": 120.0,
+      "n_sigma": 1.2575425717162527,
+      "tolerance_sigma": 2.0,
+      "status": "pass",
+      "unit": "MeV",
+      "lean_def": "glueball2ppMassMeV",
+      "notes": ""
+    },
+    {
+      "case_id": "pdf_gluon_moment",
+      "quantity": "\u222b_0^1 x f_g(x, M_Z)",
+      "predicted": 0.03933333333333333,
+      "reference": 0.05,
+      "reference_sigma": 0.015,
+      "n_sigma": 0.7111111111111115,
+      "tolerance_sigma": 2.5,
+      "status": "pass",
+      "unit": "dimensionless",
+      "lean_def": "pdfGluonFirstMomentDischarge",
+      "notes": ""
+    }
+  ],
+  "summary": {
+    "pass": 9,
+    "fail": 0,
+    "total": 9,
+    "all_pass": true
+  }
+}
