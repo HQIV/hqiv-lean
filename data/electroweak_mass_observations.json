@@ -1,0 +1,200 @@
+{
+  "schema": "hqiv_electroweak_mass_observations_v2",
+  "citation": "CDF (2022) arXiv:2204.06207; CMS (2024); D0; LEP EWWG; PDG 2024; SM global EW fit — comparison layer only",
+  "pole_xi_lock": 5.0,
+  "pole_sigma_mev": 12.0,
+  "dressing_sigma_ppm": 150.0,
+  "default_collider_reference_tesla": 4.0,
+  "default_kinematic_coupling_exponent_lhc": 0.08,
+  "facilities": [
+    {
+      "id": "lep_line_shape",
+      "method": "lep_line_shape",
+      "dressing_chart": "line_shape",
+      "magnetic_field_tesla": 0.0,
+      "collider_reference_tesla": 4.0,
+      "comoving_stream_fraction": 0.0,
+      "line_shape_stream_fraction": 0.0,
+      "sqrt_s_tev": 0.091,
+      "notes": "Lean lepLineShapeFacility; symmetric e+e- line-shape stack (no solenoid B)."
+    },
+    {
+      "id": "cdf_tevatron",
+      "method": "tevatron_kinematic",
+      "dressing_chart": "collider_universal",
+      "magnetic_field_tesla": 1.411,
+      "collider_reference_tesla": 4.0,
+      "comoving_stream_fraction": 0.0,
+      "kinematic_coupling_exponent": 1.0,
+      "sqrt_s_tev": 1.96,
+      "notes": "Lean cdfTevatronFacility; B=1411/1000 T; universal B_ref=4 T; exponent 1."
+    },
+    {
+      "id": "d0_tevatron",
+      "method": "tevatron_kinematic",
+      "dressing_chart": "collider_native",
+      "magnetic_field_tesla": 2.0,
+      "collider_reference_tesla": 4.0,
+      "comoving_stream_fraction": 0.06,
+      "kinematic_coupling_exponent": 0.088,
+      "sqrt_s_tev": 1.96,
+      "notes": "Lean d0TevatronFacility; native B_ref=B_fac=2 T; stream 6/100; exponent 11/125."
+    },
+    {
+      "id": "cms_lhc",
+      "method": "lhc_kinematic",
+      "dressing_chart": "collider_native",
+      "magnetic_field_tesla": 3.8,
+      "collider_reference_tesla": 4.0,
+      "comoving_stream_fraction": 0.12,
+      "kinematic_coupling_exponent": 0.08,
+      "sqrt_s_tev": 13.0,
+      "notes": "Lean cmsLhcFacility; native B_ref=3.8 T; stream 12/100; exponent gamma/5=2/25."
+    },
+    {
+      "id": "atlas_lhc",
+      "method": "lhc_kinematic",
+      "dressing_chart": "collider_native",
+      "magnetic_field_tesla": 2.0,
+      "collider_reference_tesla": 4.0,
+      "comoving_stream_fraction": 0.12,
+      "kinematic_coupling_exponent": 0.08,
+      "sqrt_s_tev": 13.0,
+      "notes": "Lean atlasLhcFacility; native B_ref=2 T; stream 12/100; exponent gamma/5=2/25."
+    }
+  ],
+  "mass_observations": [
+    {
+      "id": "cdf_w_mass_2022",
+      "facility_id": "cdf_tevatron",
+      "quantity": "m_W_MeV",
+      "reference_mev": 80433.5,
+      "reference_sigma_mev": 9.4,
+      "source": "CDF Run II, arXiv:2204.06207",
+      "benchmark_status": "readout"
+    },
+    {
+      "id": "cms_w_mass_2024",
+      "facility_id": "cms_lhc",
+      "quantity": "m_W_MeV",
+      "reference_mev": 80360.2,
+      "reference_sigma_mev": 9.9,
+      "source": "CMS combined W mass (2024 era)",
+      "benchmark_status": "readout"
+    },
+    {
+      "id": "d0_w_mass",
+      "facility_id": "d0_tevatron",
+      "quantity": "m_W_MeV",
+      "reference_mev": 80375.4,
+      "reference_sigma_mev": 14.3,
+      "source": "D0 Tevatron combination",
+      "benchmark_status": "readout"
+    },
+    {
+      "id": "sm_global_ew_fit_w",
+      "facility_id": null,
+      "quantity": "m_W_MeV",
+      "reference_mev": 80357.0,
+      "reference_sigma_mev": 6.0,
+      "source": "SM global electroweak fit central"
+    },
+    {
+      "id": "lep_combined_w",
+      "facility_id": "lep_line_shape",
+      "quantity": "m_W_MeV",
+      "reference_mev": 80376.0,
+      "reference_sigma_mev": 7.0,
+      "source": "LEP Electroweak Working Group",
+      "benchmark_status": "readout"
+    },
+    {
+      "id": "pdg_w_mass",
+      "facility_id": null,
+      "quantity": "m_W_MeV",
+      "reference_mev": 80379.0,
+      "reference_sigma_mev": 12.0,
+      "source": "PDG 2024 world average"
+    }
+  ],
+  "ordering_checks": [
+    {
+      "id": "lep_dressing_lt_cdf",
+      "metric": "facility_mass_dressing_factor",
+      "low_facility_id": "lep_line_shape",
+      "high_facility_id": "cdf_tevatron",
+      "expect": "low_less_than_high",
+      "benchmark_status": "readout"
+    }
+  ],
+  "tension_checks": [
+    {
+      "id": "reference_sm_lt_lep_lt_cdf",
+      "kind": "reference_ordering",
+      "observation_ids": ["sm_global_ew_fit_w", "lep_combined_w", "cdf_w_mass_2022"],
+      "lean_proved": true
+    }
+  ],
+  "diagnostic_checks": [
+    {
+      "id": "hqiv_pole_lt_sm_global",
+      "kind": "pole_ordering",
+      "observation_id": "sm_global_ew_fit_w",
+      "expect": "pole_less_than_reference"
+    },
+    {
+      "id": "hqiv_lep_within_2sigma",
+      "kind": "n_sigma",
+      "observation_id": "lep_combined_w",
+      "facility_id": "lep_line_shape",
+      "tolerance_sigma": 2.0
+    },
+    {
+      "id": "hqiv_cdf_within_2sigma",
+      "kind": "n_sigma",
+      "observation_id": "cdf_w_mass_2022",
+      "facility_id": "cdf_tevatron",
+      "tolerance_sigma": 2.0
+    },
+    {
+      "id": "hqiv_cms_within_2sigma",
+      "kind": "n_sigma",
+      "observation_id": "cms_w_mass_2024",
+      "facility_id": "cms_lhc",
+      "tolerance_sigma": 2.0
+    },
+    {
+      "id": "hqiv_d0_within_2sigma",
+      "kind": "n_sigma",
+      "observation_id": "d0_w_mass",
+      "facility_id": "d0_tevatron",
+      "tolerance_sigma": 2.0
+    },
+    {
+      "id": "hqiv_certified_blend_ordering",
+      "kind": "prediction_ordering",
+      "low_observation_id": "sm_global_ew_fit_w",
+      "mid_facility_id": "lep_line_shape",
+      "high_facility_id": "cdf_tevatron",
+      "expect": "ref_lt_mid_lt_high"
+    }
+  ],
+  "sensitivity_checks": [
+    {
+      "id": "cdf_b_ref_stability",
+      "facility_id": "cdf_tevatron",
+      "variants": [
+        {"label": "B_ref=3.5 T", "collider_reference_tesla": 3.5},
+        {"label": "B_ref=4.5 T", "collider_reference_tesla": 4.5}
+      ]
+    },
+    {
+      "id": "cms_exponent_stability",
+      "facility_id": "cms_lhc",
+      "variants": [
+        {"label": "exp=gamma/6", "kinematic_coupling_exponent": 0.0666667},
+        {"label": "exp=gamma/4", "kinematic_coupling_exponent": 0.1}
+      ]
+    }
+  ]
+}

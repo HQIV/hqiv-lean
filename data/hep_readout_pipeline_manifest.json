@@ -1,0 +1,74 @@
+{
+  "source": "scripts/hqiv_hep_readout_pipeline.py",
+  "mode": "paper",
+  "generated_at": "2026-06-21T03:47:15.222466+00:00",
+  "strict": true,
+  "steps": [
+    {
+      "step": "spine_discharge_law",
+      "path": "data/spine_discharge_law.json"
+    },
+    {
+      "step": "hep_decay_benchmark",
+      "path": "data/hep_decay_benchmark.json",
+      "pass": 81,
+      "fail": 0
+    },
+    {
+      "step": "spine_gap_closure_terms",
+      "path": "data/spine_gap_closure_terms.json"
+    },
+    {
+      "step": "branching_comparison_tex",
+      "path": "papers/hep_decay_readout/generated/branching_comparison.tex"
+    },
+    {
+      "step": "readout_error_distribution_tex",
+      "path": "papers/hep_decay_readout/generated/readout_error_distribution.tex"
+    },
+    {
+      "step": "excited_mass_comparison_tex",
+      "path": "papers/hep_decay_readout/generated/excited_mass_comparison.tex",
+      "rows": 111
+    },
+    {
+      "step": "sigma_audit_tex",
+      "path": "papers/hep_decay_readout/generated/sigma_floor_sensitivity.tex"
+    },
+    {
+      "step": "anomaly_discharge_summary",
+      "path": "papers/hep_decay_readout/generated/anomaly_discharge_summary.tex",
+      "discharged": 9
+    },
+    {
+      "step": "electroweak_mass_benchmark",
+      "path": "data/electroweak_mass_benchmark.json",
+      "fail": 0
+    },
+    {
+      "step": "strong_sector_collider_discharge",
+      "path": "data/strong_sector_collider_discharge.json",
+      "fail": 0
+    },
+    {
+      "step": "hep_collider_refinement_witness",
+      "path": "data/hep_collider_refinement_witness.json",
+      "fail": 0
+    },
+    {
+      "step": "certified_strong_discharge_demo",
+      "path": "data/hep_readout_pipeline_demo.json"
+    },
+    {
+      "step": "unittest_hep",
+      "ok": true,
+      "tail": [
+        "Ran 111 tests in 106.464s",
+        "",
+        "OK"
+      ]
+    }
+  ],
+  "errors": [],
+  "ok": true
+}

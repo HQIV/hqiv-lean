@@ -3,13 +3,13 @@
 
 from __future__ import annotations
 
-import json
+import os
 import subprocess
 import sys
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parents[1]
-sys.path.insert(0, str(ROOT / "scripts"))
+SCRIPTS = Path(__file__).resolve().parent
+sys.path.insert(0, str(SCRIPTS))
 
 import hqiv_strong_sector_collider_discharge as dsc
 
@@ -32,9 +32,9 @@ def test_witness_all_pass() -> None:
 
 def test_cli_strict() -> None:
     proc = subprocess.run(
-        [sys.executable, str(ROOT / "scripts" / "hqiv_strong_sector_collider_discharge.py"), "--strict"],
-        cwd=ROOT,
-        env={**dict(**{"PYTHONPATH": str(ROOT / "scripts")})},
+        [sys.executable, str(SCRIPTS / "hqiv_strong_sector_collider_discharge.py"), "--strict"],
+        cwd=dsc.ROOT,
+        env={**os.environ, "PYTHONPATH": str(SCRIPTS)},
         capture_output=True,
         text=True,
         check=False,

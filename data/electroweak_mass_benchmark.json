@@ -1,0 +1,446 @@
+{
+  "observations_path": "/home/jr/Repos/HQIV_LEAN/data/electroweak_mass_observations.json",
+  "certificate_path": "/home/jr/Repos/HQIV_LEAN/data/electroweak_mass_witness_certificate.json",
+  "summary": {
+    "readout": 12,
+    "skip": 2,
+    "pass": 1
+  },
+  "certificate": {
+    "schema": "hqiv_electroweak_mass_witness_v2",
+    "pole_xi_lock": 5.0,
+    "pole_mw_mev": 80215.58568424634,
+    "line_shape_radiative_stack_density": 0.09375000000000001,
+    "kinematic_coupling_exponent_lhc": 0.08,
+    "predictions": {
+      "lep_line_shape": {
+        "apparent_mw_mev": 80382.7014877552,
+        "dressing_factor": 1.0020833333333334,
+        "dressing_ppm": 2083.333333333437,
+        "predicted_sigma_mev": 17.028847457052553
+      },
+      "cdf_tevatron": {
+        "apparent_mw_mev": 80437.3952593381,
+        "dressing_factor": 1.0027651680555556,
+        "dressing_ppm": 2765.1680555556004,
+        "predicted_sigma_mev": 17.040434177527203
+      },
+      "d0_tevatron": {
+        "apparent_mw_mev": 80371.43778880419,
+        "dressing_factor": 1.0019429154973865,
+        "dressing_ppm": 1942.915497386455,
+        "predicted_sigma_mev": 17.026461274357906
+      },
+      "cms_lhc": {
+        "apparent_mw_mev": 80358.76594963329,
+        "dressing_factor": 1.0017849432147832,
+        "dressing_ppm": 1784.9432147831744,
+        "predicted_sigma_mev": 17.0237767811492
+      },
+      "atlas_lhc": {
+        "apparent_mw_mev": 80358.76594963329,
+        "dressing_factor": 1.0017849432147832,
+        "dressing_ppm": 1784.9432147831744,
+        "predicted_sigma_mev": 17.0237767811492
+      }
+    },
+    "sensitivity": [
+      {
+        "case_id": "cdf_b_ref_stability",
+        "facility_id": "cdf_tevatron",
+        "central_mev": 80437.3952593381,
+        "variants": [
+          {
+            "label": "B_ref=3.5 T",
+            "apparent_mw_mev": 80505.2961496723,
+            "dressing_ppm": 3611.6480725623123
+          },
+          {
+            "label": "B_ref=4.5 T",
+            "apparent_mw_mev": 80390.84263246699,
+            "dressing_ppm": 2184.8241426611903
+          }
+        ]
+      },
+      {
+        "case_id": "cms_exponent_stability",
+        "facility_id": "cms_lhc",
+        "central_mev": 80358.76594963329,
+        "variants": [
+          {
+            "label": "exp=gamma/6",
+            "apparent_mw_mev": 80334.88489624792,
+            "dressing_ppm": 1487.2323250394447
+          },
+          {
+            "label": "exp=gamma/4",
+            "apparent_mw_mev": 80394.60093077506,
+            "dressing_ppm": 2231.67661249013
+          }
+        ]
+      }
+    ],
+    "lean_module": "Hqiv.Physics.ElectroweakMassObservation",
+    "lean_theorems": [
+      "Hqiv.Physics.lineShapeRadiativeStackDensity_eq_fifteen_gamma_over_sixtyfour",
+      "Hqiv.Physics.kinematicCouplingExponentLHC_eq_two_over_twentyfive",
+      "Hqiv.Physics.lineShapeMassFactor_lep_eq",
+      "Hqiv.Physics.colliderKinematicMassFactor_cdf_eq",
+      "Hqiv.Physics.colliderCurvatureWidthFactor_gt_one_of_pos_field",
+      "Hqiv.Physics.sm_global_ref_lt_lep_ref",
+      "Hqiv.Physics.lep_ref_lt_cdf_ref",
+      "Hqiv.Physics.sm_global_ref_lt_cdf_ref",
+      "Hqiv.Physics.cdf_tension_ppm_positive"
+    ],
+    "python_module": "scripts/hqiv_electroweak_mass_observation.py"
+  },
+  "facility_ledger": [
+    {
+      "facility_id": "lep_line_shape",
+      "method": "lep_line_shape",
+      "dressing_chart": "line_shape",
+      "magnetic_field_tesla": 0.0,
+      "effective_b_ref_tesla": 4.0,
+      "comoving_stream_fraction": 0.0,
+      "line_shape_stream_fraction": 0.0,
+      "kinematic_coupling_exponent": 1.0,
+      "facility_mass_dressing_factor": 1.0020833333333334,
+      "dressing_ppm": 2083.333333333437,
+      "pole_mw_mev": 80215.58568424634,
+      "apparent_mw_mev": 80382.7014877552,
+      "predicted_sigma_mev": 17.028847457052553,
+      "notes": "Lean lepLineShapeFacility; symmetric e+e- line-shape stack (no solenoid B)."
+    },
+    {
+      "facility_id": "cdf_tevatron",
+      "method": "tevatron_kinematic",
+      "dressing_chart": "collider_universal",
+      "magnetic_field_tesla": 1.411,
+      "effective_b_ref_tesla": 4.0,
+      "comoving_stream_fraction": 0.0,
+      "line_shape_stream_fraction": 0.0,
+      "kinematic_coupling_exponent": 1.0,
+      "facility_mass_dressing_factor": 1.0027651680555556,
+      "dressing_ppm": 2765.1680555556004,
+      "pole_mw_mev": 80215.58568424634,
+      "apparent_mw_mev": 80437.3952593381,
+      "predicted_sigma_mev": 17.040434177527203,
+      "notes": "Lean cdfTevatronFacility; B=1411/1000 T; universal B_ref=4 T; exponent 1."
+    },
+    {
+      "facility_id": "d0_tevatron",
+      "method": "tevatron_kinematic",
+      "dressing_chart": "collider_native",
+      "magnetic_field_tesla": 2.0,
+      "effective_b_ref_tesla": 2.0,
+      "comoving_stream_fraction": 0.06,
+      "line_shape_stream_fraction": 0.0,
+      "kinematic_coupling_exponent": 0.088,
+      "facility_mass_dressing_factor": 1.0019429154973865,
+      "dressing_ppm": 1942.915497386455,
+      "pole_mw_mev": 80215.58568424634,
+      "apparent_mw_mev": 80371.43778880419,
+      "predicted_sigma_mev": 17.026461274357906,
+      "notes": "Lean d0TevatronFacility; native B_ref=B_fac=2 T; stream 6/100; exponent 11/125."
+    },
+    {
+      "facility_id": "cms_lhc",
+      "method": "lhc_kinematic",
+      "dressing_chart": "collider_native",
+      "magnetic_field_tesla": 3.8,
+      "effective_b_ref_tesla": 3.8,
+      "comoving_stream_fraction": 0.12,
+      "line_shape_stream_fraction": 0.0,
+      "kinematic_coupling_exponent": 0.08,
+      "facility_mass_dressing_factor": 1.0017849432147832,
+      "dressing_ppm": 1784.9432147831744,
+      "pole_mw_mev": 80215.58568424634,
+      "apparent_mw_mev": 80358.76594963329,
+      "predicted_sigma_mev": 17.0237767811492,
+      "notes": "Lean cmsLhcFacility; native B_ref=3.8 T; stream 12/100; exponent gamma/5=2/25."
+    },
+    {
+      "facility_id": "atlas_lhc",
+      "method": "lhc_kinematic",
+      "dressing_chart": "collider_native",
+      "magnetic_field_tesla": 2.0,
+      "effective_b_ref_tesla": 2.0,
+      "comoving_stream_fraction": 0.12,
+      "line_shape_stream_fraction": 0.0,
+      "kinematic_coupling_exponent": 0.08,
+      "facility_mass_dressing_factor": 1.0017849432147832,
+      "dressing_ppm": 1784.9432147831744,
+      "pole_mw_mev": 80215.58568424634,
+      "apparent_mw_mev": 80358.76594963329,
+      "predicted_sigma_mev": 17.0237767811492,
+      "notes": "Lean atlasLhcFacility; native B_ref=2 T; stream 12/100; exponent gamma/5=2/25."
+    }
+  ],
+  "sensitivity": [
+    {
+      "case_id": "cdf_b_ref_stability",
+      "facility_id": "cdf_tevatron",
+      "central_mev": 80437.3952593381,
+      "variants": [
+        {
+          "label": "B_ref=3.5 T",
+          "apparent_mw_mev": 80505.2961496723,
+          "dressing_ppm": 3611.6480725623123
+        },
+        {
+          "label": "B_ref=4.5 T",
+          "apparent_mw_mev": 80390.84263246699,
+          "dressing_ppm": 2184.8241426611903
+        }
+      ]
+    },
+    {
+      "case_id": "cms_exponent_stability",
+      "facility_id": "cms_lhc",
+      "central_mev": 80358.76594963329,
+      "variants": [
+        {
+          "label": "exp=gamma/6",
+          "apparent_mw_mev": 80334.88489624792,
+          "dressing_ppm": 1487.2323250394447
+        },
+        {
+          "label": "exp=gamma/4",
+          "apparent_mw_mev": 80394.60093077506,
+          "dressing_ppm": 2231.67661249013
+        }
+      ]
+    }
+  ],
+  "cases": [
+    {
+      "panel": "pole",
+      "case_id": "tuft_pole_vs_pdg",
+      "quantity": "m_W_pole_MeV",
+      "reference": 80379.0,
+      "predicted": 80215.586,
+      "error": -163.41431575366005,
+      "error_pct": -0.20330473849346228,
+      "tolerance": "diagnostic",
+      "status": "readout",
+      "notes": "Pole is not fitted to PDG; facility dressing is separate.",
+      "reference_sigma": null,
+      "predicted_sigma": null,
+      "n_sigma": null
+    },
+    {
+      "panel": "facility_mass",
+      "case_id": "cdf_w_mass_2022",
+      "quantity": "m_W_MeV",
+      "reference": 80433.5,
+      "predicted": 80437.395,
+      "error": 3.8952593380963663,
+      "error_pct": 0.0048428320763069695,
+      "tolerance": "3 sigma",
+      "status": "readout",
+      "notes": "pole=80215.59; f_dress=1.002765; 2765 ppm; CDF Run II, arXiv:2204.06207",
+      "reference_sigma": 9.4,
+      "predicted_sigma": 17.04,
+      "n_sigma": 0.4143892912868475
+    },
+    {
+      "panel": "facility_mass",
+      "case_id": "cms_w_mass_2024",
+      "quantity": "m_W_MeV",
+      "reference": 80360.2,
+      "predicted": 80358.766,
+      "error": -1.4340503667044686,
+      "error_pct": -0.0017845281205179538,
+      "tolerance": "3 sigma",
+      "status": "readout",
+      "notes": "pole=80215.59; f_dress=1.001785; 1785 ppm; CMS combined W mass (2024 era)",
+      "reference_sigma": 9.9,
+      "predicted_sigma": 17.024,
+      "n_sigma": 0.14485357239439076
+    },
+    {
+      "panel": "facility_mass",
+      "case_id": "d0_w_mass",
+      "quantity": "m_W_MeV",
+      "reference": 80375.4,
+      "predicted": 80371.438,
+      "error": -3.962211195801501,
+      "error_pct": -0.0049296316980089695,
+      "tolerance": "3 sigma",
+      "status": "readout",
+      "notes": "pole=80215.59; f_dress=1.001943; 1943 ppm; D0 Tevatron combination",
+      "reference_sigma": 14.3,
+      "predicted_sigma": 17.026,
+      "n_sigma": 0.27707770600010495
+    },
+    {
+      "panel": "reference_only",
+      "case_id": "sm_global_ew_fit_w",
+      "quantity": "m_W_MeV",
+      "reference": 80357.0,
+      "predicted": null,
+      "error": null,
+      "error_pct": null,
+      "tolerance": "comparison_anchor",
+      "status": "skip",
+      "notes": "SM global electroweak fit central",
+      "reference_sigma": 6.0,
+      "predicted_sigma": null,
+      "n_sigma": null
+    },
+    {
+      "panel": "facility_mass",
+      "case_id": "lep_combined_w",
+      "quantity": "m_W_MeV",
+      "reference": 80376.0,
+      "predicted": 80382.701,
+      "error": 6.701487755199196,
+      "error_pct": 0.008337672632625654,
+      "tolerance": "3 sigma",
+      "status": "readout",
+      "notes": "pole=80215.59; f_dress=1.002083; 2083 ppm; LEP Electroweak Working Group",
+      "reference_sigma": 7.0,
+      "predicted_sigma": 17.029,
+      "n_sigma": 0.9573553935998851
+    },
+    {
+      "panel": "reference_only",
+      "case_id": "pdg_w_mass",
+      "quantity": "m_W_MeV",
+      "reference": 80379.0,
+      "predicted": null,
+      "error": null,
+      "error_pct": null,
+      "tolerance": "comparison_anchor",
+      "status": "skip",
+      "notes": "PDG 2024 world average",
+      "reference_sigma": 12.0,
+      "predicted_sigma": null,
+      "n_sigma": null
+    },
+    {
+      "panel": "ordering",
+      "case_id": "lep_dressing_lt_cdf",
+      "quantity": "facility_mass_dressing_factor",
+      "reference": "high=1.00277",
+      "predicted": "low=1.00208, high=1.00277",
+      "error": 0.0006818347222221632,
+      "error_pct": null,
+      "tolerance": "low_less_than_high",
+      "status": "readout",
+      "notes": "Python witness; not a Lean certificate",
+      "reference_sigma": null,
+      "predicted_sigma": null,
+      "n_sigma": null
+    },
+    {
+      "panel": "tension",
+      "case_id": "reference_sm_lt_lep_lt_cdf",
+      "quantity": "m_W_MeV",
+      "reference": 80433.5,
+      "predicted": [
+        80357.0,
+        80376.0,
+        80433.5
+      ],
+      "error": 76.5,
+      "error_pct": 952.0016924474533,
+      "tolerance": "monotone_increasing",
+      "status": "pass",
+      "notes": "Lean: sm_global_ref_lt_lep_ref; lep_ref_lt_cdf_ref",
+      "reference_sigma": null,
+      "predicted_sigma": null,
+      "n_sigma": null
+    },
+    {
+      "panel": "diagnostic",
+      "case_id": "hqiv_pole_lt_sm_global",
+      "quantity": "m_W_pole_MeV",
+      "reference": 80357.0,
+      "predicted": 80215.586,
+      "error": -141.41431575366005,
+      "error_pct": -1759.8257246246133,
+      "tolerance": "pole_less_than_reference",
+      "status": "readout",
+      "notes": "diagnostic; not a Lean certificate",
+      "reference_sigma": null,
+      "predicted_sigma": null,
+      "n_sigma": null
+    },
+    {
+      "panel": "diagnostic",
+      "case_id": "hqiv_lep_within_2sigma",
+      "quantity": "m_W_MeV",
+      "reference": 80376.0,
+      "predicted": 80382.701,
+      "error": 6.701487755199196,
+      "error_pct": 0.008337672632625654,
+      "tolerance": "2 sigma",
+      "status": "readout",
+      "notes": "diagnostic comparison; not a Lean certificate",
+      "reference_sigma": 7.0,
+      "predicted_sigma": null,
+      "n_sigma": 0.9573553935998851
+    },
+    {
+      "panel": "diagnostic",
+      "case_id": "hqiv_cdf_within_2sigma",
+      "quantity": "m_W_MeV",
+      "reference": 80433.5,
+      "predicted": 80437.395,
+      "error": 3.8952593380963663,
+      "error_pct": 0.0048428320763069695,
+      "tolerance": "2 sigma",
+      "status": "readout",
+      "notes": "diagnostic comparison; not a Lean certificate",
+      "reference_sigma": 9.4,
+      "predicted_sigma": null,
+      "n_sigma": 0.4143892912868475
+    },
+    {
+      "panel": "diagnostic",
+      "case_id": "hqiv_cms_within_2sigma",
+      "quantity": "m_W_MeV",
+      "reference": 80360.2,
+      "predicted": 80358.766,
+      "error": -1.4340503667044686,
+      "error_pct": -0.0017845281205179538,
+      "tolerance": "2 sigma",
+      "status": "readout",
+      "notes": "diagnostic comparison; not a Lean certificate",
+      "reference_sigma": 9.9,
+      "predicted_sigma": null,
+      "n_sigma": 0.14485357239439076
+    },
+    {
+      "panel": "diagnostic",
+      "case_id": "hqiv_d0_within_2sigma",
+      "quantity": "m_W_MeV",
+      "reference": 80375.4,
+      "predicted": 80371.438,
+      "error": -3.962211195801501,
+      "error_pct": -0.0049296316980089695,
+      "tolerance": "2 sigma",
+      "status": "readout",
+      "notes": "diagnostic comparison; not a Lean certificate",
+      "reference_sigma": 14.3,
+      "predicted_sigma": null,
+      "n_sigma": 0.27707770600010495
+    },
+    {
+      "panel": "diagnostic",
+      "case_id": "hqiv_certified_blend_ordering",
+      "quantity": "m_W_MeV",
+      "reference": 80357.0,
+      "predicted": "mid=80382.70, high=80437.40",
+      "error": 80.39525933809637,
+      "error_pct": 319.8413051159102,
+      "tolerance": "ref_lt_mid_lt_high",
+      "status": "readout",
+      "notes": "diagnostic; not a Lean certificate",
+      "reference_sigma": null,
+      "predicted_sigma": null,
+      "n_sigma": null
+    }
+  ]
+}

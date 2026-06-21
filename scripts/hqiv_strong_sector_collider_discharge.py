@@ -25,20 +25,16 @@ from pathlib import Path
 from typing import Any, Literal
 
 import hqiv_excited_states as hes
-import hqiv_lean_physics_primitives as lean
+import hqiv_repo_paths as paths
 import hqiv_tuft_hadron_s7_confinement as s7
 
 Status = Literal["pass", "fail", "skip"]
 
+ALPHA = hes.ALPHA
+GAMMA = hes.GAMMA
+STRONG_CHANNEL_FRACTION = 4.0 / 8.0  # Lean `bbnStrongChannelFraction`
 
-def _repo_root() -> Path:
-    for parent in Path(__file__).resolve().parents:
-        if (parent / "lakefile.toml").exists() and (parent / "data").is_dir():
-            return parent
-    return Path(__file__).resolve().parents[1]
-
-
-ROOT = _repo_root()
+ROOT = paths.repo_root(Path(__file__))
 DEFAULT_OBS = ROOT / "data" / "strong_sector_collider_observations.json"
 DEFAULT_JSON = ROOT / "data" / "strong_sector_collider_discharge.json"
 
@@ -91,7 +87,7 @@ def petra_r23_discharge(alpha_s: float, sqrt_s_mev: float) -> float:
 
 def mean_thrust_discharge(alpha_s: float) -> float:
     """Lean `meanThrustDischarge`."""
-    return 1.0 - N_STRONG * lean.GAMMA * alpha_s / math.pi
+    return 1.0 - N_STRONG * GAMMA * alpha_s / math.pi
 
 
 def gg_h_sigma_pb_lo(alpha_s: float, m_top_gev: float, v_ew: float = 246.22) -> float:
@@ -101,7 +97,7 @@ def gg_h_sigma_pb_lo(alpha_s: float, m_top_gev: float, v_ew: float = 246.22) -> 
         dim
         * (N_STRONG / 8.0)
         * (TRIPLE_BUDGET / NC)
-        * (lean.GAMMA / 8.0)
+        * (GAMMA / 8.0)
         * (21.0 / 20.0)
         * 389379.0
     )
@@ -114,17 +110,17 @@ def gg_h_sigma_pb_nlo(alpha_s: float, m_top_gev: float, v_ew: float = 246.22) ->
 
 def pdf_gluon_first_moment_discharge() -> float:
     """Lean `pdfGluonFirstMomentDischarge`."""
-    return ALPHA_S_MZ * CF * lean.STRONG_CHANNEL_FRACTION / 2.0
+    return ALPHA_S_MZ * CF * STRONG_CHANNEL_FRACTION / 2.0
 
 
 def qgp_eta_over_s_discharge() -> float:
     """Lean `qgpEtaOverSDischarge`."""
-    return (1.0 / (4.0 * math.pi)) * CA * lean.STRONG_CHANNEL_FRACTION / (2.0 * lean.GAMMA)
+    return (1.0 / (4.0 * math.pi)) * CA * STRONG_CHANNEL_FRACTION / (2.0 * GAMMA)
 
 
 def glueball_0pp_mass_mev() -> float:
     """Lean `glueball0ppMassMeV`."""
-    return DERIVED_PROTON_MEV * lean.GAMMA * (TRIPLE_BUDGET / 2.0)
+    return DERIVED_PROTON_MEV * GAMMA * (TRIPLE_BUDGET / 2.0)
 
 
 def glueball_2pp_mass_mev() -> float:
@@ -242,8 +238,8 @@ def build_witness(
             "alpha_s_at_MZ": ALPHA_S_MZ,
             "beta0_from_beta3": BETA0,
             "derived_proton_mev": DERIVED_PROTON_MEV,
-            "alpha": lean.ALPHA,
-            "gamma": lean.GAMMA,
+            "alpha": ALPHA,
+            "gamma": GAMMA,
         },
         "running": {
             "alpha_s_at_petra_scale": petra_alpha,

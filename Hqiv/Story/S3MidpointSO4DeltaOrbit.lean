@@ -182,9 +182,10 @@ def SO4DeltaOrbitProfile (N : ℕ) : Prop :=
 **Status.**  Extinction + pigeonhole ⇒ `SO4GapOrbitCollision` (proved).  The missing
 step is `SO4DeltaOrbitObstruction`: turn collision geometry + critical-line weight +
 Δ-orbit amplification into a **global** stack survivor.  The square-orbit special
-case shows distinct square gaps cannot both be extinct at the same collision modulus;
-the general case (no square requirement) remains open — i.e. the route is not yet
-stronger than EH cardinality, but it **localizes** the obstruction on SO(4) orbit data.
+case (`S3SO4SquareOrbitCollision`) proves Ng-square ⇒ perfect-square gap and
+`SO4SquareOrbitCollisionCloses` at square midpoints `N = m²`, with extinction
+contradiction when closure holds; the general composite case remains open.
+See `S3OrbitEnergyNonExtinctionBridge` for the shared orbit-energy packaging.
 -/
 
 end

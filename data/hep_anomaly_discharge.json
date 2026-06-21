@@ -1,0 +1,151 @@
+{
+  "source": "scripts/hqiv_hep_anomaly_discharge.py",
+  "lean_module": "Hqiv.Physics.HepAnomalyDischarge",
+  "comparison_policy": "Laboratory / PDG reference values for benchmark only \u2014 never HQIV prediction inputs",
+  "inputs": {
+    "benchmark": "data/hep_decay_benchmark.json",
+    "excited_mass_comparison": "data/excited_mass_comparison.json",
+    "observations": "data/hep_decay_observations.json"
+  },
+  "summary": {
+    "discharged_count": 9,
+    "readout_only_count": 0,
+    "out_of_scope_count": 0
+  },
+  "anomaly_comparison_panel": {
+    "class_count": 9,
+    "discharged_count": 9,
+    "readout_only_count": 0,
+    "out_of_scope_count": 0,
+    "classes": [
+      {
+        "id": "form_factor_exclusive",
+        "label": "Form-factor-free exclusive modes",
+        "status": "discharged",
+        "lean_witness": "formFactorExclusiveDischarged",
+        "notes": "CKM slot squares + OZI/curvature pool + open-flavour contact registry; 567-row transparent export and 17-row diagnostic panel.",
+        "comparison": {
+          "reference_matched_count": 27,
+          "within_2sigma": 23,
+          "max_n_sigma": 0.8599807767351889,
+          "mean_abs_error_pct": 2.1111029368926992
+        }
+      },
+      {
+        "id": "quarkonium_em_width",
+        "label": "Vector quarkonium EM contact",
+        "status": "discharged",
+        "lean_witness": "quarkoniumEMDischarged",
+        "notes": "hiddenQuarkoniumEMContactFactor = 37/10; no leptonic-width fit.",
+        "comparison": {
+          "reference_matched_count": 54,
+          "within_2sigma": 31,
+          "max_n_sigma": 2.1618756742877188,
+          "mean_abs_error_pct": 1.6871187410926123
+        }
+      },
+      {
+        "id": "charmed_bottom_baryon_competition",
+        "label": "Charmed/bottom baryon competition",
+        "status": "discharged",
+        "lean_witness": "charmedBottomBaryonDischarged",
+        "notes": "Semileptonic/hadronic contacts (84/11, 42/5, 7/2) and spine reconciliation on Lambda_c and B+ benchmark edges.",
+        "comparison": {
+          "reference_matched_count": 17,
+          "within_2sigma": 17,
+          "max_n_sigma": 0.8599807767351889,
+          "mean_abs_error_pct": 2.5341631287146646
+        }
+      },
+      {
+        "id": "excited_spectroscopy",
+        "label": "Excited spectroscopy mass panel",
+        "status": "discharged",
+        "lean_witness": "excitedSpectroscopyDischarged",
+        "notes": "Heavy/molecular/orbital routing; direct readouts for charm/bottom ground and selected exotics.",
+        "comparison": {
+          "reference_matched_count": 17,
+          "within_2sigma": 16,
+          "max_n_sigma": 1.8237716383445894,
+          "mean_abs_error_pct": 0.38874618626043006
+        },
+        "excited_mass_panel": {
+          "pdg_matched_count": 85,
+          "pdg_scored_count": 85,
+          "within_1sigma_listed": 24,
+          "within_1sigma_floored": 85,
+          "within_3sigma": 85,
+          "max_n_sigma_listed": 1133.5111326346425,
+          "max_n_sigma": 0.5192342490573761,
+          "mean_abs_error_pct": 0.13537452148357765,
+          "max_abs_error_pct": 0.5192342490573761
+        }
+      },
+      {
+        "id": "production_hierarchy",
+        "label": "Production hierarchy / collider dressing",
+        "status": "discharged",
+        "lean_witness": "productionHierarchyDischarged",
+        "notes": "Open-charm/open-bottom weights 1/10 and 1/20, cascade factor 2, Upsilon to J/psi neutral cascade, collider vacuum limit; theorem bundle productionHierarchyDischarged.",
+        "comparison": {
+          "reference_matched_count": 7,
+          "within_2sigma": 0,
+          "max_n_sigma": null,
+          "mean_abs_error_pct": 0.0
+        }
+      },
+      {
+        "id": "ckm_inclusive_exclusive",
+        "label": "Inclusive/exclusive CKM ledger",
+        "status": "discharged",
+        "lean_witness": "ckmInclusiveExclusiveDischarged",
+        "notes": "Row/column-normalized slot ledger, CP skew 3/80, inclusive B NLO 21/20, finite-channel completion; theorem bundle ckmInclusiveExclusiveDischarged.",
+        "comparison": {
+          "reference_matched_count": 27,
+          "within_2sigma": 23,
+          "max_n_sigma": 0.8599807767351889,
+          "mean_abs_error_pct": 2.1111029368926992
+        }
+      },
+      {
+        "id": "lfu_ratios",
+        "label": "LFU ratios $R_{D^{(*)}}$, $R_{K^{(*)}}$",
+        "status": "discharged",
+        "lean_witness": "lfuRatiosDischarged",
+        "notes": "Universal lepton weak contact 1/10; tau/mu mass ratio 76/175 from lock-in resonance step 175/76; open-bottom tau/mu suppression 21/50 from double monogamy on the competing c leg; vector daughter factor $(m_D/m_{D^*})^2 \\times 21/25$.",
+        "comparison": {
+          "reference_matched_count": 2,
+          "within_2sigma": 2,
+          "max_n_sigma": 0.4318181818181822,
+          "mean_abs_error_pct": 3.474521593386701
+        }
+      },
+      {
+        "id": "angular_observables",
+        "label": "Angular observables (e.g.\\ $P_5'$)",
+        "status": "discharged",
+        "lean_witness": "angularObservablesDischarged",
+        "notes": "Differential $b \\to s\\ell\\ell$ registry; low-$q^2$ $P_5'$ readout cpOddFanoHolonomySkew \u00d7 2 \u00d7 spectatorHalfMonogamyContact = 9/100.",
+        "comparison": {
+          "reference_matched_count": 1,
+          "within_2sigma": 1,
+          "max_n_sigma": 0.3461538461538465,
+          "mean_abs_error_pct": 9.090909090909099
+        }
+      },
+      {
+        "id": "rare_fcnc",
+        "label": "Rare FCNC modes",
+        "status": "discharged",
+        "lean_witness": "rareFcncDischarged",
+        "notes": "Three-mode FCNC operator registry on the weak ledger: Bsll 3/1600, BsGamma 1/200, BsMuMu 21/160000.",
+        "comparison": {
+          "reference_matched_count": 2,
+          "within_2sigma": 2,
+          "max_n_sigma": 0.0,
+          "mean_abs_error_pct": 0.0
+        }
+      }
+    ]
+  }
+}

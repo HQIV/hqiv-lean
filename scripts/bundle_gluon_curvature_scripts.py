@@ -1,17 +1,17 @@
 #!/usr/bin/env python3
 """Refresh papers/gluon_curvature_artifact/scripts/ and scripts.zip for Zenodo.
 
+Minimal self-contained bundle for the gluon curvature discharge witnesses only.
+
 Usage (from repository root):
   python3 scripts/bundle_gluon_curvature_scripts.py
 """
 from __future__ import annotations
 
-import ast
 import hashlib
 import os
 import shutil
 import zipfile
-from collections import deque
 from pathlib import Path
 
 REPO = Path(__file__).resolve().parents[1]
@@ -20,7 +20,12 @@ DEST = REPO / "papers" / "gluon_curvature_artifact" / "scripts"
 PAPER_DATA = REPO / "papers" / "gluon_curvature_artifact" / "data"
 ZIP_PATH = REPO / "papers" / "gluon_curvature_artifact" / "scripts.zip"
 
-ENTRY_SCRIPTS = [
+# Curated closure for this paper only (no transitive hqiv-lab dump).
+BUNDLE_SCRIPTS = [
+    "hqiv_repo_paths.py",
+    "cubic_phase_relax_probe.py",
+    "hqiv_excited_states.py",
+    "hqiv_tuft_hadron_s7_confinement.py",
     "hqiv_strong_sector_collider_discharge.py",
     "hqiv_hep_collider_refinements.py",
     "test_hqiv_strong_sector_collider_discharge.py",
@@ -33,51 +38,6 @@ DATA_MIRROR = [
     "hep_collider_refinement_observations.json",
     "hep_collider_refinement_witness.json",
 ]
-
-EXTRA_MIRROR = [
-    "hqiv_lean_physics_primitives.py",
-    "hqiv_excited_states.py",
-    "hqiv_tuft_hadron_s7_confinement.py",
-    "hqiv_hep_decay_readout.py",
-]
-
-
-def module_to_script(name: str) -> str | None:
-    if name.startswith("hqiv_") or name.startswith("test_hqiv_"):
-        return f"{name}.py"
-    candidate = SCRIPTS_ROOT / f"{name}.py"
-    if candidate.is_file():
-        return f"{name}.py"
-    return None
-
-
-def imports_in(path: Path) -> list[str]:
-    tree = ast.parse(path.read_text(encoding="utf-8"), filename=str(path))
-    out: list[str] = []
-    for node in ast.walk(tree):
-        if isinstance(node, ast.Import):
-            out.extend(alias.name.split(".")[0] for alias in node.names)
-        elif isinstance(node, ast.ImportFrom) and node.module:
-            out.append(node.module.split(".")[0])
-    return out
-
-
-def script_closure() -> list[str]:
-    seen: set[str] = set()
-    queue: deque[str] = deque(ENTRY_SCRIPTS + EXTRA_MIRROR)
-    while queue:
-        rel = queue.popleft()
-        if rel in seen:
-            continue
-        src = SCRIPTS_ROOT / rel
-        if not src.is_file():
-            continue
-        seen.add(rel)
-        for imp in imports_in(src):
-            dep = module_to_script(imp)
-            if dep:
-                queue.append(dep)
-    return sorted(seen)
 
 
 def sha256_file(path: Path) -> str:
@@ -109,8 +69,9 @@ def write_readme() -> None:
     readme.write_text(
         """# Reproducer scripts — gluon curvature artifact
 
-Self-contained import closure for `papers/gluon_curvature_artifact/`.
-Bundled in `papers/gluon_curvature_artifact/scripts.zip` for Zenodo.
+Minimal import closure for `papers/gluon_curvature_artifact/` (Zenodo bundle).
+Zenodo record: [`10.5281/zenodo.20724572`](https://doi.org/10.5281/zenodo.20724572).
+Comparison JSON lives in `data/` beside these scripts (never HQIV inputs).
 
 ## Entry scripts
 
@@ -121,16 +82,26 @@ Bundled in `papers/gluon_curvature_artifact/scripts.zip` for Zenodo.
 | `test_hqiv_strong_sector_collider_discharge.py` | Unit tests for discharge witness |
 | `test_hqiv_hep_collider_refinements.py` | Unit tests for refinement witness |
 
-## Quick start
+## Quick start (standalone, from extracted `scripts/`)
+
+```bash
+cd scripts
+PYTHONPATH=. python3 hqiv_strong_sector_collider_discharge.py --strict
+PYTHONPATH=. python3 hqiv_hep_collider_refinements.py --strict
+python3 test_hqiv_strong_sector_collider_discharge.py
+python3 test_hqiv_hep_collider_refinements.py
+```
+
+## Quick start (HQIV-LEAN repository root)
 
 ```bash
 PYTHONPATH=scripts python3 scripts/hqiv_strong_sector_collider_discharge.py --strict
 PYTHONPATH=scripts python3 scripts/hqiv_hep_collider_refinements.py --strict
 ```
 
-Lean: `lake build paper_gluon_curvature`
+Lean (full checkout only): `lake build paper_gluon_curvature`
 
-Comparison data live in `data/*.json` (never HQIV inputs).
+Dependencies: Python 3.10+ stdlib only.
 """,
         encoding="utf-8",
     )
@@ -150,33 +121,32 @@ def main() -> None:
         shutil.rmtree(DEST)
     os.makedirs(DEST, exist_ok=True)
 
-    missing = [rel for rel in ENTRY_SCRIPTS if not (SCRIPTS_ROOT / rel).is_file()]
+    missing = [rel for rel in BUNDLE_SCRIPTS if not (SCRIPTS_ROOT / rel).is_file()]
     if missing:
-        raise SystemExit(f"missing entry scripts: {missing}")
+        raise SystemExit(f"missing bundle scripts: {missing}")
 
-    for rel in script_closure():
+    for rel in BUNDLE_SCRIPTS:
         shutil.copy2(SCRIPTS_ROOT / rel, DEST / rel)
-
-    if (REPO / "pyproject.toml").is_file():
-        shutil.copy2(REPO / "pyproject.toml", DEST / "pyproject.toml")
 
     data_dest = DEST / "data"
     data_dest.mkdir(exist_ok=True)
     PAPER_DATA.mkdir(parents=True, exist_ok=True)
     for name in DATA_MIRROR:
         src = REPO / "data" / name
-        if src.is_file():
-            shutil.copy2(src, data_dest / name)
-            shutil.copy2(src, PAPER_DATA / name)
+        if not src.is_file():
+            raise SystemExit(f"missing data file: {src}")
+        shutil.copy2(src, data_dest / name)
+        shutil.copy2(src, PAPER_DATA / name)
 
     write_readme()
     write_manifest(DEST)
     build_zip()
     n_scripts = len(list(DEST.glob("*.py")))
     n_data = len(list(data_dest.glob("*.json")))
+    zip_kb = ZIP_PATH.stat().st_size / 1024
     print(f"copied {n_scripts} scripts -> {DEST}")
     print(f"mirrored {n_data} data/*.json -> {PAPER_DATA}")
-    print(f"created {ZIP_PATH} ({ZIP_PATH.stat().st_size} bytes)")
+    print(f"created {ZIP_PATH} ({zip_kb:.1f} KiB)")
 
 
 if __name__ == "__main__":

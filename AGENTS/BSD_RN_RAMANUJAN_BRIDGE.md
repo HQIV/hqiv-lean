@@ -23,6 +23,15 @@ This note **sharpens the direction of travel** toward a **Birch–Swinnerton-Dye
 | **Curvature / imprint slots** | `deltaE`, `IntegratedScalarCurvatureSlot`, `deltaE_geometricModel` (abstract per-shell data), rapidity defect scaffolding |
 | **ℝⁿ geometry (constructive slices)** | `SpatialSliceManifold`, `EuclideanBallHorizontalSlice`, continuum charts elsewhere — **not** full global Ricci theory |
 | **Dirichlet / L-series scaffolding** | `HQIVDirichletModularScaffold`, `HQIVLSeriesAnalytic` |
+| **Mul-mod BSD coefficient / L-series (proved fit)** | `MulModBSDCoefficientScaffold`, `MulModBSDLSeriesScaffold`, `S3MulModBSDCoefficientBridge` — structured cascade residue stream, `\|a_n\| ≤ 1`, half-plane holomorphy; **not** Petersson or `L(E,s)` |
+| **Prime Euler factors (proved local layer)** | `MulModBSDEulerFactor` — `a_p` from holonomy trace, weight-`2` local polynomial, charts at `p ∈ {7,11,13,…,41}`, **`a_p = p · coeff(p)`** |
+| **Ramanujan–Petersson audit (proved)** | `MulModBSDRamanujanPetersson` — **global RP fails** at Fano shell `p=7` (`a_7=6 > 2√7`); **prefix RP holds** at `{11,13,…,41}`; small primes `2,3,5` OK |
+| **Cascade-prefix modularity (proved object)** | `MulModBSDCascadePrefixModularity` — scoped prefix Hecke eigenform data, uniform good-prime traces, bad shell record at `7`; open full Hecke multiplicativity |
+| **Weak numerator Hecke on good composites (proved)** | `MulModBSDCascadePrefixHecke` — distinct products and prime squares carry trace `6` and `n·coeff(n)=6`; classical `a_{pq}=a_p a_q` **refuted** at `143=11·13` |
+| **Tamagawa-analog bad shell (proved record)** | `MulModBSDBadPrimeTamagawaAnalog` at `p=7` — RP excess, normalized residue `6/7`, single-cube fibre degeneracy (`card=3`) |
+| **Rotation angle ladder (proved)** | `S3RotationRigidity` / `S3MulModBSDConvergenceRotationBridge` — 45° pins `Re=1/2` (FE/holonomy adjoint); 90° pins `Re=1` (mul-mod L-series convergence wall) |
+| **Story spine dual capstone** | `HQIVStory` imports `S3MulModBSDRotationDualCapstone` — single bundle linking RH holonomy adjoint and BSD coefficient/L-series tracks |
+| **Weight-`2` completed L target (hypothesis)** | `MulModBSDCompletedLFunctionalScaffold` — `WeightTwoCompletedLInvolutionHypothesis`, `MulModBSDLObjectHypothesis` |
 
 None of the above is an **elliptic curve**, a **modular form of weight 2 for \(\Gamma_0(N)\)**, or **BSD**.
 
@@ -47,8 +56,8 @@ Step **4** is **years** of math; steps **1–3** are where this repo can **push 
 |-----------|------|------------|
 | **B0 — Dictionary** | One table: classical **Ramanujan–Petersson** ↔ HQIV **monogamic** sum ↔ **curvature slot** names. | This § + row in `THEOREMS.md` for **proved** rewrites only. |
 | **B1 — ℝⁿ bookkeeping** | Explicit **dimension** parameter or family of slice lemmas cited in docs; align shell index with scale in \(\mathbb{R}^n\) **where already proved**. | Cross-refs to `SpatialSliceManifold` / ball slices; no fake manifold theorem. |
-| **B2 — Arbitrary curvature as hypothesis** | `Prop` bundle: “curvature profile \(R_{\mathrm{vol}}(m)\) lies in class \(\mathcal{C}\)” ⇒ coefficient bound of Ramanujan type **or** summability as in existing lemmas. | New `Prop` record + `ASSUMPTIONS.md`. |
-| **B3 — L-object lock** | Same as **M2** in [MODULAR_FORMS_LADDER.md](./MODULAR_FORMS_LADDER.md), but **stating** the target is **BSD-compatible** L-function shape (doc only until Mathlib matches). | |
+| **B2 — Arbitrary curvature as hypothesis** | `Prop` bundle: “curvature profile \(R_{\mathrm{vol}}(m)\) lies in class \(\mathcal{C}\)” ⇒ coefficient bound of Ramanujan type **or** summability as in existing lemmas. | **Partial:** `mulModBSDLocalCoeff` bounded (`norm_mulModBSDLocalCoeff_le_one`); full curvature-class `Prop` still open. |
+| **B3 — L-object lock** | Same as **M2** in [MODULAR_FORMS_LADDER.md](./MODULAR_FORMS_LADDER.md), but **stating** the target is **BSD-compatible** L-function shape (doc only until Mathlib matches). | **Partial:** `mulModBSDLSeries` + `MulModBSDLObjectHypothesis` (hypothesis record only). |
 | **B4 — Elliptic curve interface (optional)** | Import or stub **curve** + **L(E,s)** names from Mathlib; **no** theorem until modularity bridge exists. | |
 
 ---

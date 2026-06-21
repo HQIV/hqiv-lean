@@ -186,7 +186,8 @@ The Python quantum simulator implements **patch-local digital evolution** on \((
 ## Quick checklist before shipping agent work
 
 - [ ] Claims use **patch-closed** / **accessible patch** / **finite layer** where “complete” or “QFT” appear  
-- [ ] Continuum limits labeled **readout** or **calculation approximation**, **never** as “open problem” or “future work that completes the theory”  
+- [ ] Continuum limits labeled **readout** or **calculation approximation**, **never** as “open problem” or “future work that completes the theory”
+- [ ] **HEP decay readout papers:** follow [HEP_DECAY_READOUT_PHRASING.md](./HEP_DECAY_READOUT_PHRASING.md) for quarantined comparison layer, finite-patch readout, and honesty-boundary language  
 - [ ] In load-bearing places (\(\delta_E(m)\), mass ladders, lock-in vev, proton anchor, \(\alpha=3/5\), \(\gamma=2/5\), \(\alpha_{\rm GUT}=1/42\)), add an explicit note such as “a continuum version would destroy these results”  
 - [ ] References to \(\mathfrak{so}(8)\)/\(\mathrm{SO}(8)\)/\(G_2\)/\(\Delta\) and their exponentials use the **de-facto continuum algebra from discrete construction** framing (allowed; one principled exception)  
 - [ ] Simulator scope matches **gate closure** on support (no silent aliasing)  

@@ -23,7 +23,7 @@ import hqiv_lean_physics_primitives as lean
 if TYPE_CHECKING:
     import hqiv_hep_decay_chain as hep
 
-BranchingPolicy = Literal["width_only", "width_topology", "width_prior"]
+BranchingPolicy = Literal["width_only", "width_topology", "contact_seed"]
 
 # Charm / bottom states targeted for branching + production benchmarks.
 NEW_STATE_IDS = frozenset(
@@ -87,7 +87,7 @@ def phase_space_factor(
     """
     if sqrt_s_gev <= 0.0 or mass_gev <= 0.0:
         return 0.0
-    if collision_mode == "head_on" and sqrt_s_gev < 20.0:
+    if collision_mode in ("ee", "head_on") and sqrt_s_gev < 20.0:
         # e⁺e⁻ annihilation: single on-shell vector state when m ≲ √s.
         if mass_gev > sqrt_s_gev:
             return 0.0
@@ -125,6 +125,20 @@ def phase_space_q_weight(q_mev: float, parent_mass_mev: float, n_daughters: int)
     return q_frac**exponent * (1.0 + lean.GAMMA * exponent / 4.0)
 
 
+def _certified_strong_spine_topology_only(parent_id: str, channel: str) -> bool:
+    """Finite Lean strong spanning sets: BR from spine contacts, not multibody Q."""
+    import hqiv_hep_decay_certificates as cert
+
+    return channel == "strong" and cert.is_certified_strong_discharge_parent_id(parent_id)
+
+
+def _certified_light_weak_spine_discharge(parent_id: str, channel: str) -> bool:
+    """Finite light weak spanning sets: shared pole width; BR from spine × kinematic × coupling."""
+    import hqiv_hep_decay_certificates as cert
+
+    return channel == "weak" and cert.is_light_weak_discharge_parent_id(parent_id)
+
+
 def channel_topology_weight(
     *,
     parent_id: str,
@@ -133,15 +147,23 @@ def channel_topology_weight(
     parent_mass_mev: float,
     n_daughters: int,
     relative_prior: float,
+    daughter_ids: tuple[str, ...] | list[str] | None = None,
 ) -> float:
     """Effective topology weight multiplying partial width before BR normalization."""
     ckm = ckm_topology_factor(parent_id, channel)
     ps = phase_space_q_weight(q_mev, parent_mass_mev, n_daughters)
     if channel == "electromagnetic":
         return max(relative_prior, 1e-6)
+    if _certified_strong_spine_topology_only(parent_id, channel):
+        return max(relative_prior, 1e-6)
+    if _certified_light_weak_spine_discharge(parent_id, channel):
+        return max(relative_prior, 1e-6)
     if channel == "strong":
         return max(relative_prior, 1e-6) * max(ps, 1e-3)
-    return max(relative_prior, 1e-6) * max(ps, 1e-6) * max(ckm, 1e-6)
+    weight = max(relative_prior, 1e-6) * max(ps, 1e-6) * max(ckm, 1e-6)
+    if parent_id in OPEN_BOTTOM_MESONS | BOTTOM_BARYONS:
+        weight *= hdr.inclusive_b_nlo_ledger_factor()
+    return weight
 
 
 def normalize_branching_ratios(
@@ -158,8 +180,8 @@ def normalize_branching_ratios(
         return []
     if policy == "width_only":
         weights = [w for w, _ in weighted_edges]
-    elif policy == "width_prior":
-        weights = [w * tw for w, tw in weighted_edges]
+    elif policy == "contact_seed":
+        weights = [max(tw, 1e-6) for _, tw in weighted_edges]
     else:
         weights = [w * tw for w, tw in weighted_edges]
     total = sum(weights)
@@ -170,12 +192,10 @@ def normalize_branching_ratios(
 
 
 def branching_policy_for(parent_id: str) -> BranchingPolicy:
-    """New states use topology-weighted widths; quarkonium uses width-only."""
+    """All hadronic parents compete via partial width × topology (no PDG priors)."""
     if parent_id in HIDDEN_QUARKONIA:
         return "width_only"
-    if parent_id in NEW_STATE_IDS:
-        return "width_topology"
-    return "width_prior"
+    return "width_topology"
 
 
 @dataclass(frozen=True)
@@ -206,14 +226,26 @@ def production_rate_proxy(
     )
     if ps <= 0.0:
         return 0.0
-    rate = ps * flavor_production_weight(species_id)
-    if flavor_sector(species_id) == "hidden_quarkonium":
+    fw = flavor_production_weight(species_id)
+    if collision_mode == "ee" and species_id in HIDDEN_QUARKONIA:
+        mass_gev = mass_mev / 1000.0
+        width = max(lean.GAMMA * mass_gev, 1e-9)
+        if abs(mass_gev - sqrt_s_gev) <= width and fw > 0.0:
+            rate = ps / fw
+        else:
+            rate = ps * fw
+    elif flavor_sector(species_id) == "hidden_quarkonium":
         mass_gev = mass_mev / 1000.0
         on_shell = math.exp(
             -((mass_gev - sqrt_s_gev) ** 2)
-            / max((0.02 * sqrt_s_gev) ** 2, 1e-9)
+            / max((lean.GAMMA * sqrt_s_gev) ** 2, 1e-9)
         )
-        rate *= 1.0 + 100.0 * on_shell
+        if fw > 0.0 and on_shell > 0.0:
+            rate = ps * fw * (1.0 + on_shell / fw)
+        else:
+            rate = ps * fw
+    else:
+        rate = ps * fw
     return rate
 
 

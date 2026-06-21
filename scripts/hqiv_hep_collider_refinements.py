@@ -20,8 +20,6 @@ from dataclasses import asdict, dataclass
 from pathlib import Path
 from typing import Any, Literal
 
-import hqiv_excited_states as hes
-import hqiv_lean_physics_primitives as lean
 import hqiv_strong_sector_collider_discharge as dsc
 
 Status = Literal["pass", "fail", "skip"]
@@ -68,12 +66,12 @@ def thrust_with_fluctuation(n_axes: int, alpha_s: float, rng: random.Random) -> 
 
 def thrust_distribution_width(alpha_s: float) -> float:
     """Lean `thrustDistributionWidth`."""
-    return lean.GAMMA * alpha_s / math.pi * math.sqrt(N_STRONG)
+    return dsc.GAMMA * alpha_s / math.pi * math.sqrt(N_STRONG)
 
 
 def emission_probability_per_step(alpha_s: float) -> float:
     """Lean `partonShowerEmissionProbability`."""
-    return min(0.95, alpha_s / math.pi * CF * lean.STRONG_CHANNEL_FRACTION)
+    return min(0.95, alpha_s / math.pi * CF * dsc.STRONG_CHANNEL_FRACTION)
 
 
 def parton_shower_event(
@@ -137,7 +135,7 @@ def mc_shower_summary(
 
 def gg_h_pt_falloff_gev() -> float:
     """Lean `ggHpTFalloffGeV` = γ m_H / (1 + γ)."""
-    return lean.GAMMA * 125.11 / (1.0 + lean.GAMMA)
+    return dsc.GAMMA * 125.11 / (1.0 + dsc.GAMMA)
 
 
 def gg_h_mean_pt_gev(alpha_s: float) -> float:
@@ -153,12 +151,12 @@ def gg_h_pt_fraction_above(alpha_s: float, pt_cut_gev: float = 30.0) -> float:
 
 def qgp_v2_discharge() -> float:
     """Lean `qgpV2Discharge` = γ η/s."""
-    return lean.GAMMA * dsc.qgp_eta_over_s_discharge()
+    return dsc.GAMMA * dsc.qgp_eta_over_s_discharge()
 
 
 def qgp_raa_at_pt(pt_gev: float) -> float:
     """Lean `qgpRAAWeightAtPT`: exp(-pT / (γ M_p / 100 GeV))."""
-    scale = lean.GAMMA * dsc.DERIVED_PROTON_MEV / 100.0
+    scale = dsc.GAMMA * dsc.DERIVED_PROTON_MEV / 100.0
     return math.exp(-pt_gev / max(scale, 1e-6))
 
 
@@ -167,7 +165,7 @@ def pdf_gluon_x_shape(x: float) -> float:
     if not 0.0 < x < 1.0:
         return 0.0
     moment = dsc.pdf_gluon_first_moment_discharge()
-    return moment * (x ** (lean.GAMMA - 1.0)) * ((1.0 - x) ** lean.GAMMA)
+    return moment * (x ** (dsc.GAMMA - 1.0)) * ((1.0 - x) ** dsc.GAMMA)
 
 
 def pdf_gluon_normalized(x: float, *, n_grid: int = 200) -> float:

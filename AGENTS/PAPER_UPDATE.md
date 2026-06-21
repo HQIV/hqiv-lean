@@ -4,6 +4,8 @@ This file tracks how to align the **HQIV preprint** in the sibling tree (`HQIV/p
 
 **Target manuscript (external to this repo):** `../HQIV/paper/main.tex` (relative to this repo root), i.e. the canonical paper sources beside `HQIV_LEAN` under your `HQIV` checkout. Adjust the path if your layout differs.
 
+**In-repo Tier-2 decay note:** `papers/hep_decay_readout/hqiv_hep_decay_readout_from_multichannel.tex` — phrasing contract in [`HEP_DECAY_READOUT_PHRASING.md`](./HEP_DECAY_READOUT_PHRASING.md).
+
 ---
 
 ## Source map (read before editing `main.tex`)

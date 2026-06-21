@@ -17,10 +17,11 @@ from typing import Any, Literal
 import cubic_phase_relax_probe as cpr
 import hqiv_coupling_linear_system as hcls
 import hqiv_excited_states as hes
+import hqiv_repo_paths as paths
 import hqiv_scale_witness as sw
 import informational_energy_mass as iem
 
-ROOT = Path(__file__).resolve().parents[1]
+ROOT = paths.repo_root(Path(__file__))
 REFERENCE_M = cpr.REFERENCE_M
 XI_LOCKIN = sw.XI_LOCKIN
 L_COLOR_COMPOSED = 3
@@ -92,7 +93,7 @@ def derived_quark_gev() -> dict[str, float]:
 
 
 def parse_hadron_catalog(catalog_path: Path | None = None) -> list[dict[str, Any]]:
-    text = (catalog_path or ROOT / "web/hqiv-mass-spectrum-calculator/hadron-catalog.js").read_text()
+    text = (catalog_path or paths.hadron_catalog_path(Path(__file__))).read_text()
     out: list[dict[str, Any]] = []
     structure: HadronStructure = "baryon"
     variety_id = "unknown"
@@ -105,7 +106,7 @@ def parse_hadron_catalog(catalog_path: Path | None = None) -> list[dict[str, Any
         if vm and "HADRON_VARIETIES" not in line and "structure:" in line:
             variety_id = vm.group(1)
         sm = re.search(r'structure:\s*"([^"]+)"', line)
-        if sm and "valenceCount" in line:
+        if sm:
             structure = sm.group(1)  # type: ignore[assignment]
         for cm in config_re.finditer(line):
             cid, label, pdg, val_raw, note = (

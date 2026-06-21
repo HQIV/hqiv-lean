@@ -1,6 +1,56 @@
 {
   "source": "scripts/hqiv_spine_gap_closure_terms.py",
-  "policy": "Candidates are exact spine factors, not fitted priors. They are not applied to the benchmark until the corresponding finite-channel or spectator enumeration is implemented.",
+  "policy": "Unified spine discharge product (hqiv_spine_discharge_weight.py): ledger observables \u2192 \u220f g_k^{e_k}. OpenFlavourContactKind is a diagnostic label for active slots. Remaining benchmark rows without unambiguous finite-channel spanning stay diagnostic only.",
+  "applied_routing": [
+    {
+      "case_id": "D_plus_weak_Kpi",
+      "applied_term": "double_monogamy_exclusion",
+      "lean": "doubleMonogamyExclusionFactor_eq_twentyone_twentyfive",
+      "status": "applied_in_open_flavour_contact_kind"
+    },
+    {
+      "case_id": "D0_weak_Kpi",
+      "applied_term": "double_monogamy_exclusion",
+      "lean": "doubleMonogamyExclusionFactor_eq_twentyone_twentyfive",
+      "status": "applied_in_open_flavour_contact_kind"
+    },
+    {
+      "case_id": "lambda_c_weak_pKpi",
+      "applied_term": "charmed_baryon_double_monogamy",
+      "lean": "charmedBaryonDoubleMonogamyContact_eq_fortytwo_fifths",
+      "status": "applied_in_open_flavour_contact_kind"
+    },
+    {
+      "case_id": "B0_weak_Dpi",
+      "applied_term": "neutral_spectator_monogamy_complement",
+      "lean": "neutralSpectatorMonogamyComplement_eq_five_thirds",
+      "status": "applied_in_open_flavour_contact_kind"
+    },
+    {
+      "case_id": "K_plus_weak_pi",
+      "applied_term": "semileptonic_neutrino_channel_completion",
+      "lean": "semileptonicNeutrinoChannelCompletion_eq_eleven_ninetieths",
+      "status": "applied_in_open_flavour_contact_kind"
+    },
+    {
+      "case_id": "K_plus_weak_mu_branching",
+      "applied_term": "semileptonic_neutrino_channel_completion",
+      "lean": "semileptonicNeutrinoChannelCompletion_eq_eleven_ninetieths",
+      "status": "applied_in_open_flavour_contact_kind"
+    },
+    {
+      "case_id": "phi_strong_KK",
+      "applied_term": "hidden_strangeness_kk_retention",
+      "lean": "hiddenStrangenessKkRetention_over_leak_eq_twentyone_over_twentyfive",
+      "status": "applied_in_open_flavour_contact_kind"
+    },
+    {
+      "case_id": "phi_strong_KK_branching",
+      "applied_term": "hidden_strangeness_kk_retention",
+      "lean": "hiddenStrangenessKkRetention_over_leak_eq_twentyone_over_twentyfive",
+      "status": "applied_in_open_flavour_contact_kind"
+    }
+  ],
   "terms": {
     "finite_channel_completion": {
       "factor": 0.022222222222222223,
@@ -25,72 +75,50 @@
       "lean": "neutralSpectatorMonogamyComplement_eq_five_thirds",
       "formula": "1/(1 - gamma_HQIV) = 5/3",
       "use": "neutral/oscillating open-bottom spectator completion"
+    },
+    "semileptonic_neutrino_channel_completion": {
+      "factor": 0.12222222222222223,
+      "lean": "semileptonicNeutrinoChannelCompletion_eq_eleven_ninetieths",
+      "formula": "gamma_HQIV/4 + 1/45 = 11/90",
+      "use": "K\u00b1 semileptonic with implicit \u03bd finite-channel completion"
+    },
+    "isospin_half_hadronic_monogamy_exclusion": {
+      "factor": 0.23229629629629628,
+      "lean": "isospinHalfHadronicMonogamyExclusion_eq_2352_over_10125",
+      "formula": "(1+\u03b3)\u00b7(1-\u03b3\u00b2)\u00b7(4/9)\u00b2 = 2352/10125",
+      "use": "K hadronic charged outlet vs semileptonic competition"
+    },
+    "isospin_half_neutral_hadronic_monogamy_exclusion": {
+      "factor": 0.09955555555555555,
+      "lean": "isospinHalfNeutralHadronicMonogamyExclusion_eq_1008_over_10125",
+      "formula": "(1-\u03b3)\u00b7(1-\u03b3\u00b2)\u00b7(4/9)\u00b2 = 1008/10125",
+      "use": "K hadronic neutral \u03c0\u2070 outlet vs semileptonic competition"
+    },
+    "hidden_strangeness_kk_retention": {
+      "factor": 0.84,
+      "lean": "hiddenStrangenessKkRetentionContact_eq_twentyone_twentyfive",
+      "formula": "1 - gamma_HQIV^2 = 21/25",
+      "use": "\u03c6 \u2192 K\u207aK\u207b retained discharge weight"
+    },
+    "hidden_strangeness_vector_leak": {
+      "factor": 0.16000000000000003,
+      "lean": "hiddenStrangenessVectorLeakContact_eq_four_twentyfive",
+      "formula": "gamma_HQIV^2 = 4/25",
+      "use": "\u03c6 OZI / non-s\u0304s strong leak (3\u03c0)"
     }
   },
   "candidate_rows": [
     {
-      "case_id": "D_plus_weak_Kpi",
-      "reference": 0.55,
-      "current_predicted": 0.6373910735598175,
-      "candidate_term": "double_monogamy_exclusion",
-      "candidate_factor": 0.84,
-      "candidate_lean_certificate": "doubleMonogamyExclusionFactor_eq_twentyone_twentyfive",
-      "candidate_formula": "1 - gamma_HQIV^2 = 21/25",
-      "odds_reweighted_prediction": 0.5962117047608815,
-      "current_abs_error_pct": 15.889286101784993,
-      "candidate_abs_error_pct": 8.402128138342068,
-      "status": "postulate_from_spine_not_applied"
-    },
-    {
-      "case_id": "D0_weak_Kpi",
-      "reference": 0.55,
-      "current_predicted": 0.6373910735598175,
-      "candidate_term": "double_monogamy_exclusion",
-      "candidate_factor": 0.84,
-      "candidate_lean_certificate": "doubleMonogamyExclusionFactor_eq_twentyone_twentyfive",
-      "candidate_formula": "1 - gamma_HQIV^2 = 21/25",
-      "odds_reweighted_prediction": 0.5962117047608815,
-      "current_abs_error_pct": 15.889286101784993,
-      "candidate_abs_error_pct": 8.402128138342068,
-      "status": "postulate_from_spine_not_applied"
-    },
-    {
-      "case_id": "lambda_c_weak_pKpi",
-      "reference": 0.27,
-      "current_predicted": 0.30870583311787053,
-      "candidate_term": "double_monogamy_exclusion",
-      "candidate_factor": 0.84,
-      "candidate_lean_certificate": "doubleMonogamyExclusionFactor_eq_twentyone_twentyfive",
-      "candidate_formula": "1 - gamma_HQIV^2 = 21/25",
-      "odds_reweighted_prediction": 0.2727866317246051,
-      "current_abs_error_pct": 14.33549374735945,
-      "candidate_abs_error_pct": 1.0320858239277975,
-      "status": "postulate_from_spine_not_applied"
-    },
-    {
       "case_id": "B_plus_weak_Dpi",
       "reference": 0.45,
-      "current_predicted": 0.3532041534488497,
+      "current_predicted": 0.4553243171549027,
       "candidate_term": "spectator_half_monogamy_contact",
       "candidate_factor": 1.2,
       "candidate_lean_certificate": "spectatorHalfMonogamyContact_eq_six_fifths",
       "candidate_formula": "1 + gamma_HQIV/2 = 6/5",
-      "odds_reweighted_prediction": 0.39587971240136033,
-      "current_abs_error_pct": 21.510188122477846,
-      "candidate_abs_error_pct": 12.026730577475487,
-      "status": "postulate_from_spine_not_applied"
-    },
-    {
-      "case_id": "B0_weak_Dpi",
-      "reference": 0.16,
-      "current_predicted": 0.10091547241395704,
-      "candidate_term": "neutral_spectator_monogamy_complement",
-      "candidate_factor": 1.6666666666666667,
-      "candidate_lean_certificate": "neutralSpectatorMonogamyComplement_eq_five_thirds",
-      "candidate_formula": "1/(1 - gamma_HQIV) = 5/3",
-      "odds_reweighted_prediction": 0.15759025718858005,
-      "current_abs_error_pct": 36.92782974127685,
-      "candidate_abs_error_pct": 1.5060892571374662,
+      "odds_reweighted_prediction": 0.5007852410054694,
+      "current_abs_error_pct": 1.183181589978366,
+      "candidate_abs_error_pct": 11.285609112326522,
       "status": "postulate_from_spine_not_applied"
     }
   ]

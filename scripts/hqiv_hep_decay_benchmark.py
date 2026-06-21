@@ -22,6 +22,7 @@ from typing import Any, Literal
 import hqiv_hep_decay_chain as hep
 import hqiv_hep_decay_sigma as hsig
 import hqiv_hep_multichannel_expansion as mc
+import hqiv_hep_patch_species as hps
 import hqiv_hep_production_readout as hpr
 import hqiv_lean_physics_primitives as lean
 
@@ -58,10 +59,32 @@ class BenchmarkCase:
     reference_sigma: float | None = None
     predicted_sigma: float | None = None
     n_sigma: float | None = None
+    dressing_weak_width_factor: float | None = None
+    dressing_outside_support_factor: float | None = None
+    log10_abs_ratio: float | None = None
 
 
 def load_json(path: Path) -> dict[str, Any]:
     return json.loads(path.read_text(encoding="utf-8"))
+
+
+def lookup_reference_branching_sigma(
+    observations: dict[str, Any],
+    case_id: str,
+    *,
+    item: dict[str, Any] | None = None,
+) -> float | None:
+    """Resolve quarantined PDG branching σ from a row or the curated diagnostic panel."""
+    if item is not None:
+        raw = item.get("reference_branching_sigma")
+        if raw is not None:
+            return float(raw)
+    for row in observations.get("branching_comparison_panel") or []:
+        if str(row.get("id")) == case_id:
+            raw = row.get("reference_branching_sigma")
+            if raw is not None:
+                return float(raw)
+    return None
 
 
 def _branching_sigma_fields(
@@ -90,14 +113,16 @@ def _branching_sigma_fields(
         contains_daughter=contains_daughter,
         n_samples=n_samples,
     )
-    ref_sigma = float(reference_sigma) if reference_sigma is not None else 0.0
+    if reference_sigma is None:
+        return pred_sigma, None, None
+    ref_sigma = float(reference_sigma)
     n_sig = hsig.n_sigma(
         predicted,
         reference,
         pred_sigma=pred_sigma,
         ref_sigma=ref_sigma,
     )
-    return pred_sigma, ref_sigma if reference_sigma is not None else None, n_sig
+    return pred_sigma, ref_sigma, n_sig
 
 
 def _branching_pass(
@@ -325,12 +350,12 @@ def _find_decay_edge(
 ) -> hep.HepDecayEdge | None:
     parent = hep.build_particle(parent_id)
     edges = hep.edges_from_particle(parent, env=env)
-    want = {hep.BEAM_SPECIES.get(d, d) for d in daughter_ids}
+    want = tuple(hps.resolve_species_alias(hep.BEAM_SPECIES.get(d, d)) for d in daughter_ids)
     for edge in edges:
         if edge.mode.channel != channel:
             continue
-        got = {d.species_id for d in edge.daughters}
-        if got == want:
+        got = tuple(hps.resolve_species_alias(d.species_id) for d in edge.daughters)
+        if hps.daughter_patches_match(got, want):
             return edge
     return None
 
@@ -465,7 +490,11 @@ def benchmark_decay_panel(
             err = edge.branching_ratio - ref_br
             br_tol = float(item.get("branching_abs_tol", 0.15))
             ok_br = abs(err) <= br_tol
-            ref_sigma = item.get("reference_branching_sigma")
+            ref_sigma = lookup_reference_branching_sigma(
+                observations,
+                case_id,
+                item=item,
+            )
             pred_sigma, ref_sigma_out, n_sig = _branching_sigma_fields(
                 observations,
                 parent_id=parent_id,
@@ -473,13 +502,18 @@ def benchmark_decay_panel(
                 daughter_ids=daughters,
                 predicted=edge.branching_ratio,
                 reference=ref_br,
-                reference_sigma=float(ref_sigma) if ref_sigma is not None else None,
+                reference_sigma=ref_sigma,
                 env=env,
             )
             ok_br = _branching_pass(ok=ok_br, n_sigma=n_sig, observations=observations)
             note = item.get("notes", "")
             if n_sig is not None:
                 note = f"{note}; n_σ={n_sig:.2f}".strip("; ")
+            br_status: Status = (
+                "readout"
+                if parent_id not in hpr.NEW_STATE_IDS and not ok_br
+                else ("pass" if ok_br else "fail")
+            )
             rows.append(
                 BenchmarkCase(
                     panel="decay",
@@ -490,7 +524,7 @@ def benchmark_decay_panel(
                     error=err,
                     error_pct=err / ref_br * 100.0 if ref_br else None,
                     tolerance=f"±{br_tol}",
-                    status="pass" if ok_br else "fail",
+                    status=br_status,
                     notes=note,
                     reference_sigma=ref_sigma_out,
                     predicted_sigma=pred_sigma,
@@ -540,25 +574,11 @@ def benchmark_half_life_panel(
         ratio = pred_hl / ref_hl if ref_hl > 0 else math.nan
         log_err = abs(math.log10(ratio)) if ratio > 0 else math.inf
         ok = log_err <= log_band
-        pred_sigma = None
-        n_sig = None
-        if edges and math.isfinite(pred_hl):
-            dom = min(
-                (e for e in edges if e.channel_open and math.isfinite(e.half_life_s)),
-                key=lambda e: e.half_life_s,
-            )
-            parent_sig = hsig.predicted_mass_sigma_mev(sid)
-            daughter_sigs = [
-                hsig.predicted_mass_sigma_mev(d.species_id) for d in dom.daughters
-            ]
-            q_sig = hsig.q_sigma_mev(parent_sig, daughter_sigs)
-            w_sig = hsig.width_sigma_from_q(q_sig)
-            pred_sigma = hsig.half_life_sigma_from_width(dom.width_per_s, w_sig)
-            if pred_sigma and math.isfinite(pred_sigma) and pred_sigma > 0:
-                n_sig = abs(pred_hl - ref_hl) / pred_sigma
-                hl_sigma_band = float(item.get("half_life_n_sigma_band", 2.0))
-                if not ok and n_sig <= hl_sigma_band:
-                    ok = True
+        f_weak = env.weak_width_factor()
+        f_out = env.outside_support_factor()
+        # Half-life witnesses: log10|pred/ref| on dressing-aware HQIV readouts.
+        # Same τ_app = τ0·f_out/f_weak ledger as the nucleon β paper bottle/beam
+        # section; no n_σ (width MC σ is not a PDG lifetime uncertainty).
         if not ok and item.get("expect_status") == "fail":
             status: Status = "known_gap"
             note_suffix = " (tracked known gap)"
@@ -566,8 +586,6 @@ def benchmark_half_life_panel(
             status = "pass" if ok else "fail"
             note_suffix = ""
         note = (item.get("notes", "") + note_suffix).strip()
-        if n_sig is not None:
-            note = f"{note}; n_σ={n_sig:.2f}".strip("; ")
         rows.append(
             BenchmarkCase(
                 panel="half_life",
@@ -580,8 +598,11 @@ def benchmark_half_life_panel(
                 tolerance=f"log10|pred/ref| ≤ {log_band}",
                 status=status,
                 notes=note,
-                predicted_sigma=pred_sigma,
-                n_sigma=n_sig,
+                predicted_sigma=None,
+                n_sigma=None,
+                dressing_weak_width_factor=f_weak,
+                dressing_outside_support_factor=f_out,
+                log10_abs_ratio=log_err if math.isfinite(log_err) else None,
             )
         )
     return rows
@@ -699,7 +720,11 @@ def benchmark_branching_new_states_panel(
             ]
             pred = sum(e.branching_ratio for e in selected)
             err = pred - ref_br
-            ref_sigma = item.get("reference_branching_sigma")
+            ref_sigma = lookup_reference_branching_sigma(
+                observations,
+                case_id,
+                item=item,
+            )
             pred_sigma, ref_sigma_out, n_sig = _branching_sigma_fields(
                 observations,
                 parent_id=parent_id,
@@ -707,7 +732,7 @@ def benchmark_branching_new_states_panel(
                 daughter_ids=None,
                 predicted=pred,
                 reference=ref_br,
-                reference_sigma=float(ref_sigma) if ref_sigma is not None else None,
+                reference_sigma=ref_sigma,
                 env=env,
                 aggregate="strong_neutral_inclusive_contains",
                 contains_daughter=contains,
@@ -764,7 +789,11 @@ def benchmark_branching_new_states_panel(
             continue
         err = edge.branching_ratio - ref_br
         ok = abs(err) <= br_tol
-        ref_sigma = item.get("reference_branching_sigma")
+        ref_sigma = lookup_reference_branching_sigma(
+            observations,
+            case_id,
+            item=item,
+        )
         pred_sigma, ref_sigma_out, n_sig = _branching_sigma_fields(
             observations,
             parent_id=parent_id,
@@ -772,7 +801,7 @@ def benchmark_branching_new_states_panel(
             daughter_ids=daughters,
             predicted=edge.branching_ratio,
             reference=ref_br,
-            reference_sigma=float(ref_sigma) if ref_sigma is not None else None,
+            reference_sigma=ref_sigma,
             env=env,
         )
         ok = _branching_pass(ok=ok, n_sigma=n_sig, observations=observations)
@@ -1129,7 +1158,17 @@ def readout_parent_ids(observations: dict[str, Any]) -> list[str]:
 
 def reference_branching_index(observations: dict[str, Any]) -> dict[tuple[str, str, tuple[str, ...]], float]:
     """Map (parent, channel, daughters) → PDG reference branching (comparison only)."""
-    out: dict[tuple[str, str, tuple[str, ...]], float] = {}
+    return {
+        key: float(meta[0])
+        for key, meta in reference_branching_meta_index(observations).items()
+    }
+
+
+def reference_branching_meta_index(
+    observations: dict[str, Any],
+) -> dict[tuple[str, str, tuple[str, ...]], tuple[float, float | None]]:
+    """Map (parent, channel, daughters) → (reference branching, optional PDG σ)."""
+    out: dict[tuple[str, str, tuple[str, ...]], tuple[float, float | None]] = {}
     source_rows = (
         (observations.get("decay_channels") or [])
         + (observations.get("branching_new_states") or [])
@@ -1146,7 +1185,11 @@ def reference_branching_index(observations: dict[str, Any]) -> dict[tuple[str, s
             str(item["channel"]),
             tuple(str(d) for d in item["daughter_ids"]),
         )
-        out[key] = float(ref)
+        ref_sigma = item.get("reference_branching_sigma")
+        out[key] = (
+            float(ref),
+            float(ref_sigma) if ref_sigma is not None else None,
+        )
     return out
 
 
@@ -1162,7 +1205,7 @@ def benchmark_readout_panel(
 ) -> list[BenchmarkCase]:
     """Full open-channel readout: HQIV predictions from the Lean-aligned calculator."""
     env = env or hep.ExperimentEnvironment()
-    ref_index = reference_branching_index(observations)
+    ref_index = reference_branching_meta_index(observations)
     rows: list[BenchmarkCase] = []
     for parent_id in readout_parent_ids(observations):
         try:
@@ -1172,15 +1215,32 @@ def benchmark_readout_panel(
         for edge in hep.edges_from_particle(parent, env=env):
             daughters = tuple(sorted(d.species_id for d in edge.daughters))
             case_id = f"{parent_id}_{edge.mode.channel}_{'_'.join(daughters)}"
-            ref_br = ref_index.get((parent_id, edge.mode.channel, daughters))
+            meta = ref_index.get((parent_id, edge.mode.channel, daughters))
+            ref_br = meta[0] if meta is not None else None
+            ref_sigma = meta[1] if meta is not None else None
             pred = edge.branching_ratio
             err = None
             err_pct = None
             notes = ""
+            pred_sigma = None
+            n_sig = None
             if ref_br is not None:
                 err = pred - ref_br
                 err_pct = err / ref_br * 100.0 if ref_br else None
                 notes = "PDG comparison row"
+                if ref_sigma is not None:
+                    pred_sigma, ref_sigma_out, n_sig = _branching_sigma_fields(
+                        observations,
+                        parent_id=parent_id,
+                        channel=edge.mode.channel,
+                        daughter_ids=list(daughters),
+                        predicted=pred,
+                        reference=ref_br,
+                        reference_sigma=ref_sigma,
+                        env=env,
+                    )
+                    if n_sig is not None:
+                        notes = f"{notes}; n_σ={n_sig:.2f}"
             rows.append(
                 BenchmarkCase(
                     panel="readout",
@@ -1193,6 +1253,9 @@ def benchmark_readout_panel(
                     tolerance="diagnostic",
                     status="readout",
                     notes=notes,
+                    reference_sigma=ref_sigma if ref_sigma is not None else None,
+                    predicted_sigma=pred_sigma,
+                    n_sigma=n_sig,
                 )
             )
     return rows
@@ -1264,6 +1327,162 @@ def error_distribution_summary(
         "median_abs_error_pct": sorted(selected)[count // 2] if count else None,
         "max_abs_error_pct": max(selected) if count else None,
     }
+
+
+def n_sigma_distribution_summary(
+    rows: list[BenchmarkCase],
+    *,
+    panel: str,
+    label: str,
+) -> dict[str, Any]:
+    """Aggregate Monte Carlo n_sigma for rows with propagated uncertainties."""
+    selected = [
+        float(r.n_sigma)
+        for r in rows
+        if r.panel == panel
+        and r.n_sigma is not None
+        and r.reference_sigma is not None
+        and math.isfinite(r.n_sigma)
+    ]
+    open_count = sum(1 for r in rows if r.panel == panel)
+    bins = {
+        "within_1sigma": sum(1 for e in selected if e <= 1.0),
+        "within_2sigma": sum(1 for e in selected if e <= 2.0),
+        "within_3sigma": sum(1 for e in selected if e <= 3.0),
+        "above_3sigma": sum(1 for e in selected if e > 3.0),
+    }
+    count = len(selected)
+    return {
+        "label": label,
+        "panel": panel,
+        "open_channel_count": open_count,
+        "reference_matched_count": count,
+        **bins,
+        "within_1sigma_fraction": bins["within_1sigma"] / count if count else None,
+        "within_2sigma_fraction": bins["within_2sigma"] / count if count else None,
+        "within_3sigma_fraction": bins["within_3sigma"] / count if count else None,
+        "mean_n_sigma": sum(selected) / count if count else None,
+        "median_n_sigma": sorted(selected)[count // 2] if count else None,
+        "max_n_sigma": max(selected) if count else None,
+    }
+
+
+SPECTRUM_PANEL_ORDER = (
+    "mass",
+    "decay",
+    "branching",
+    "branching_comparison",
+    "readout",
+    "half_life",
+)
+SPECTRUM_COMBINED_PANELS = (
+    "mass",
+    "decay",
+    "branching",
+    "branching_comparison",
+    "readout",
+)
+
+
+def _finite_n_sigma_rows(rows: list[BenchmarkCase]) -> list[BenchmarkCase]:
+    return [
+        r
+        for r in rows
+        if r.n_sigma is not None
+        and r.reference_sigma is not None
+        and math.isfinite(float(r.n_sigma))
+    ]
+
+
+def aggregate_n_sigma_values(vals: list[float]) -> dict[str, Any]:
+    if not vals:
+        return {
+            "reference_matched_count": 0,
+            "within_1sigma": 0,
+            "within_2sigma": 0,
+            "within_3sigma": 0,
+            "above_3sigma": 0,
+            "within_1sigma_fraction": None,
+            "within_2sigma_fraction": None,
+            "within_3sigma_fraction": None,
+            "mean_n_sigma": None,
+            "median_n_sigma": None,
+            "max_n_sigma": None,
+        }
+    count = len(vals)
+    bins = {
+        "within_1sigma": sum(1 for e in vals if e <= 1.0),
+        "within_2sigma": sum(1 for e in vals if e <= 2.0),
+        "within_3sigma": sum(1 for e in vals if e <= 3.0),
+        "above_3sigma": sum(1 for e in vals if e > 3.0),
+    }
+    ordered = sorted(vals)
+    return {
+        "reference_matched_count": count,
+        **bins,
+        "within_1sigma_fraction": bins["within_1sigma"] / count,
+        "within_2sigma_fraction": bins["within_2sigma"] / count,
+        "within_3sigma_fraction": bins["within_3sigma"] / count,
+        "mean_n_sigma": sum(vals) / count,
+        "median_n_sigma": ordered[count // 2],
+        "max_n_sigma": max(vals),
+    }
+
+
+def spectrum_n_sigma_report(rows: list[BenchmarkCase]) -> dict[str, Any]:
+    """Per-panel and combined n_sigma across the benchmark calculation spectrum."""
+    by_panel: dict[str, dict[str, Any]] = {}
+    for panel in SPECTRUM_PANEL_ORDER:
+        summary = n_sigma_distribution_summary(rows, panel=panel, label=panel)
+        if summary.get("reference_matched_count", 0) > 0:
+            by_panel[panel] = summary
+
+    combined_vals = [
+        float(r.n_sigma)
+        for r in rows
+        if r.panel in SPECTRUM_COMBINED_PANELS
+        and r.n_sigma is not None
+        and r.reference_sigma is not None
+        and math.isfinite(float(r.n_sigma))
+    ]
+    combined = {
+        "label": "combined mass + branching spectrum (excl. half-life)",
+        "panels": list(SPECTRUM_COMBINED_PANELS),
+        "open_channel_count": sum(1 for r in rows if r.panel in SPECTRUM_COMBINED_PANELS),
+        **aggregate_n_sigma_values(combined_vals),
+    }
+
+    sorted_cases: list[dict[str, Any]] = []
+    for row in sorted(
+        _finite_n_sigma_rows(rows),
+        key=lambda r: float(r.n_sigma),
+        reverse=True,
+    ):
+        sorted_cases.append(
+            {
+                "panel": row.panel,
+                "case_id": row.case_id,
+                "quantity": row.quantity,
+                "n_sigma": float(row.n_sigma),
+                "reference": row.reference,
+                "predicted": row.predicted,
+                "notes": row.notes,
+            }
+        )
+
+    return {
+        "by_panel": by_panel,
+        "combined": combined,
+        "sorted_cases": sorted_cases,
+    }
+
+
+def worst_n_sigma_deviations(
+    rows: list[BenchmarkCase],
+    *,
+    limit: int = 15,
+) -> list[dict[str, Any]]:
+    return spectrum_n_sigma_report(rows)["sorted_cases"][:limit]
 
 
 def benchmark_branching_normalization() -> list[BenchmarkCase]:
@@ -1368,7 +1587,23 @@ def build_payload(
     serialized = [serialize_case(r) for r in rows]
     sigma_summary = hsig.benchmark_sigma_summary(serialized)
 
-    return {
+    anomaly_comparison_panel: dict[str, Any] | None = None
+    try:
+        import hqiv_hep_anomaly_discharge as anomaly_dis
+
+        excited_path = ROOT / "data" / "excited_mass_comparison.json"
+        excited_payload = (
+            load_json(excited_path) if excited_path.is_file() else None
+        )
+        anomaly_comparison_panel = anomaly_dis.build_anomaly_comparison_panel(
+            {"rows": serialized},
+            excited_payload,
+            observations,
+        )
+    except Exception:
+        anomaly_comparison_panel = None
+
+    payload_core = {
         "source": "scripts/hqiv_hep_decay_benchmark.py",
         "comparison_policy": observations.get("comparison_policy"),
         "citation": observations.get("citation"),
@@ -1376,6 +1611,15 @@ def build_payload(
         "predictions_from": "scripts/hqiv_hep_decay_chain.py",
         "lean_modules": [
             "Hqiv.Physics.HepDecayReadout",
+            "Hqiv.Physics.HepDecayChannelRouting",
+            "Hqiv.Physics.SpineDischargeWeight",
+            "Hqiv.Physics.SpineDischargeUniqueness",
+            "Hqiv.Physics.HepAnomalyDischarge",
+            "Hqiv.Physics.HepExtendedAnomalyDischarge",
+            "Hqiv.Physics.ExcitedMassPanelReadout",
+            "Hqiv.Physics.ExcitedMassComparisonHonesty",
+            "Hqiv.Physics.ElectroweakMassObservation",
+            "Hqiv.Physics.AcceleratorOutsideDressing",
             "Hqiv.Physics.TuftGlobalHadronReadout",
             "Hqiv.Physics.HadronMassReadout",
             "Hqiv.Physics.WeakFanoHopfBridge",
@@ -1408,9 +1652,24 @@ def build_payload(
                 panel="branching_comparison",
                 label="curated diagnostic branching comparisons",
             ),
+            "readout_n_sigma_distribution": n_sigma_distribution_summary(
+                rows,
+                panel="readout",
+                label="full open-channel readout rows with propagated n_sigma",
+            ),
+            "diagnostic_branching_n_sigma_distribution": n_sigma_distribution_summary(
+                rows,
+                panel="branching_comparison",
+                label="curated diagnostic branching comparisons",
+            ),
+            "spectrum_n_sigma": spectrum_n_sigma_report(rows),
+            "worst_n_sigma_deviations": worst_n_sigma_deviations(rows),
             "worst_reference_deviations": outliers,
         },
     }
+    if anomaly_comparison_panel is not None:
+        payload_core["summary"]["anomaly_comparison_panel"] = anomaly_comparison_panel
+    return payload_core
 
 
 def print_report(payload: dict[str, Any]) -> None:
