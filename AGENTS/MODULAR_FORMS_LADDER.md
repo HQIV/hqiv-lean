@@ -25,6 +25,7 @@ This document is the **coherent thread** for analytic number theory in HQIV_LEAN
 - **Theta coefficient bridge (M1):** `Hqiv.Algebra.ModularThetaBridgeScaffold` — `thetaZ8FormalCoeff` (= `r8`), `CoeffsAgreeWithR8`, `thetaZ8FormalCoeffComplex`; plan in [MODULAR_THETA_ACTION_PLAN.md](./MODULAR_THETA_ACTION_PLAN.md).
 - **F/G rapidity scaffolds:** `SpatialSliceRapidityScaffold` (spiral domains, `hqivCoeff` inputs).
 - **Dirichlet / L-series layer:** `HQIVDirichletModularScaffold`, `HQIVLSeriesAnalytic` (convergence, analytic strips where proved).
+- **Mul-mod BSD coefficient channel (M1/M2 partial):** `Hqiv.Algebra.MulModBSDCoefficientScaffold`, `MulModBSDLSeriesScaffold`, `MulModBSDCompletedLFunctionalScaffold`, **`MulModBSDEulerFactor`**; Story capstone `Hqiv.Story.S3MulModBSDCoefficientBridge` (`mulMod_bsd_channel_capstone`). Structured cascade local residue `mulModBSDLocalCoeff`, `mulModBSDLSeries` holomorphic on `Re s > 1`; prime Euler factors `mulModBSDPrimeAp` with **`a_p = p · coeff(p)`**; **not** Hecke multiplicativity or BSD.
 - **Heat / Tao–Rodgers packaging:** `HQIVHeatFlowDeformation`, `TaoRodgersNewmanScaffold`, `HQIVRHClosureScaffold` (hypothesis-shaped; not classical \(\Lambda\)).
 - **Execution probes:** `scripts/factor_from_curvature.py`, zeta-related witnesses (non-theorem data).
 

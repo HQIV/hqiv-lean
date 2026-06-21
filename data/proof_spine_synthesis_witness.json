@@ -1,0 +1,41 @@
+{
+  "schema": "hqiv_proof_spine_synthesis_v1",
+  "lean_capstone": "Hqiv.Physics.ProofSpineInventory.proofSpineInventory_holds",
+  "python_module": "scripts/hqiv_proof_spine_synthesis_export.py",
+  "generated_at": "2026-06-19T04:11:26.476121+00:00",
+  "build_targets": [
+    "lake build paper_flavor_mixing",
+    "lake build HQIVPhysics"
+  ],
+  "tier_papers": {
+    "flavor": "papers/flavor_mixing_readout/hqiv_flavor_mixing_readout.tex",
+    "hep_decay": "papers/hep_decay_readout/hqiv_hep_decay_readout_from_multichannel.tex",
+    "tuft_sm": "papers/tuft_sm_lagrangian/hqiv_tuft_sm_lagrangian_synthesis.tex",
+    "gluon_curvature": "papers/gluon_curvature_artifact/",
+    "baryogenesis": "papers/baryogenesis_lockin/"
+  },
+  "jarlskog_phenomenology": {
+    "J_ledger": 0.037500000000000006,
+    "J_parameterization": 0.0007809406583424311,
+    "correction_ratio": 0.020825084222464825,
+    "percent_of_ledger": 2.0825084222464825,
+    "delta_cp_deg": 16.875
+  },
+  "longitudinal_phenomenology": {
+    "referenceM": 4,
+    "imprint_phase_at_referenceM": 0.2080272298832345,
+    "longitudinal_correction_factor": 1.083210891953294,
+    "p5_prime_baseline": 0.0275,
+    "p5_prime_longitudinal": 0.029788299528715582,
+    "p5_prime_relative_ppm": 83210.8919532939,
+    "a_fb_baseline": 0.054958437681503367,
+    "a_fb_longitudinal": 0.059523781059545124,
+    "a_fb_relative_ppm": 83069.01670857103
+  },
+  "open_items": [
+    "PMNS angle closure lighter than CKM (T10 wrapper; full Wolfenstein-style PMNS Jarlskog pending)",
+    "Ledger Jarlskog vs PDG parameterization product differ by O(50\u00d7); correction ratio is a prediction",
+    "Longitudinal correction is multiplicative scaffold; form-factor insertion in rare decays open",
+    "ContinuumManyBodyQFTScaffold: renormalization/microcausality gaps flagged in PROOF_SPINE_MAP"
+  ]
+}

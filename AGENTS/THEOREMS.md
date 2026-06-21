@@ -519,6 +519,37 @@ explicitly carry the full Furey Clifford claim).
 
 **Narrative:** Trivial-character / `hqivCoeff ≡ 1` branch matches ζ, **`LFunction`**, and inherits the completed ζ FE (`ThetaCompletedLFunctionalScaffold`); `r₈` is **not** a Dirichlet character series — modular identification for Θ₈ remains open. See module doc and [MODULAR_THETA_CURVATURE_BRIDGE.md](./MODULAR_THETA_CURVATURE_BRIDGE.md).
 
+## Mul-mod BSD coefficient / L-series bridge (`Hqiv.Algebra.MulModBSD*` / `Hqiv.Story.S3MulModBSDCoefficientBridge`)
+
+| Name | Output / meaning |
+|------|------------------|
+| `Hqiv.Algebra.mulModBSDLocalResidueCoeffReal` / `mulModBSDLocalCoeff` | Structured cascade local residue `(m mod n)/n` at shell `n`; Mathlib `LSeries` index `n+1`. |
+| `Hqiv.Algebra.norm_mulModBSDLocalCoeff_le_one` / `abscissaOfAbsConv_mulModBSDLocalCoeff_le_one` | Uniform bound `\|a_n\| ≤ 1` ⇒ abscissa `≤ 1`. |
+| `Hqiv.Algebra.mulModBSDCoefficientFit` / `mulModBSDCoefficientFit` | Fit bundle (coefficient stream + bounds). |
+| `Hqiv.Algebra.mulModBSDLSeries` | `LSeries mulModBSDLocalCoeff`. |
+| `Hqiv.Algebra.differentiableOn_mulModBSDLSeries` / `analyticOnNhd_mulModBSDLSeries` / `mulModBSDLSeries_hasDerivAt` | Half-plane `\Re s > 1` holomorphy and derivative (`MulModBSDLSeriesScaffold`). |
+| `Hqiv.Algebra.WeightTwoCompletedLInvolutionHypothesis` / `MulModBSDLObjectHypothesis` | **Hypothesis** weight-`2` completed-L target (`s ↦ 2-s`); not proved for mul-mod coeffs. |
+| `Hqiv.Story.mulMod_bsd_transport_coefficient_fit` / `mulMod_bsd_channel_capstone` | Global structured Lie promotion + coefficient/analytic fit (`S3MulModBSDCoefficientBridge`). |
+| `Hqiv.Story.mulMod_bsd_770_residue` | Witness: obstruction shell `770` residue `(13/770)`. |
+| `Hqiv.Algebra.mulModBSDPrimeAp` / `mulModBSDLocalEulerPoly` | Prime-indexed local Hecke coefficient and weight-`2` Euler polynomial (`MulModBSDEulerFactor`). |
+| `Hqiv.Algebra.mulModBSDPrimeAp_eq_prime_shell_coeff` | **`a_p = p · coeff(p)`** — local Euler factor agrees with global stream. |
+| `Hqiv.Algebra.mulModBSDEulerFactorFit` / `mulModBSDPrimeEulerSlot7` / `slot11` / `MulModBSDCascadePrefixEulerSlots` | Proved prime charts at `p ∈ {7,11,13,…,41}` + compatibility bundle. |
+| `Hqiv.Algebra.MulModBSDHeckeEigenformHypothesis` | **Hypothesis:** global Ramanujan–Petersson on all `a_p`; **refuted** (`mulModBSD_global_ramanujan_petersson_fails`, witness `p=7`). |
+| `Hqiv.Algebra.MulModBSDRamanujanPeterssonCascadePrefixHypothesis` / `mulModBSD_ramanujan_petersson_cascade_prefix` | **Proved** RP at cascade prefix `{11,13,…,41}` (`MulModBSDRamanujanPetersson`). |
+| `Hqiv.Story.mulMod_bsd_ramanujan_petersson_fails_globally` / `mulMod_bsd_ramanujan_petersson_cascade_prefix` | Story re-exports of global RP failure and prefix RP success. |
+| `Hqiv.Algebra.MulModBSDCascadePrefixModularityObject` / `mulModBSD_cascade_prefix_modularity` | **Proved** prefix modularity bundle: good shells `{11,…,41}`, uniform `a_p=6`, prefix RP, bad shell at `7`. |
+| `Hqiv.Story.mulMod_bsd_cascade_prefix_modularity` | Story capstone for prefix modularity object. |
+| `Hqiv.Algebra.IsHarmonicCascadeGoodCompositeShell` / `MulModBSDWeakNumeratorHeckeHypothesis` / `mulModBSD_weak_numerator_hecke` | **Proved** weak numerator Hecke on good composites (distinct products + prime squares): holonomy trace `6`, `n·coeff(n)=6`. |
+| `Hqiv.Algebra.MulModBSDClassicalCompositeHolonomyHeckeTarget` / `mulModBSD_classical_composite_holonomy_hecke_fails` | **Refuted** classical `a_{pq}=a_p a_q` on holonomy traces (witness `143=11·13`: `6 ≠ 36`). |
+| `Hqiv.Algebra.MulModBSDBadPrimeTamagawaAnalog` / `mulModBSD_bad_prime_tamagawa_analog` | First-class bad shell at `p=7`: RP excess, ratio `> 1`, residue `6/7`, Fano fibre card `3`. |
+| `Hqiv.Algebra.MulModBSDCascadePrefixModularityObjectExtended` / `mulModBSD_cascade_prefix_modularity_extended` | Extended prefix bundle: base + weak numerator Hecke + Tamagawa analog + classical Hecke failure at `143`. |
+| `Hqiv.Story.MulModBSDCascadePrefixHeckeCapstone` / `mulMod_bsd_cascade_prefix_hecke_capstone` / `mulMod_bsd_classical_hecke_fails_at_143` | Story capstones for extended prefix object and composite Hecke refutation. |
+| `Hqiv.Algebra.MulModBSDClassicalPrimeSquareHolonomyHeckeTarget` / `mulModBSD_classical_prime_square_holonomy_hecke_fails` | **Refuted** classical `a_{p²} = a_p²` on holonomy traces; witnesses `121=11²`, `169=13²`. |
+| `Hqiv.Story.S3MulModBSDConvergenceRotationBridge` / `mulMod_bsd_convergence_rotation_capstone` | **45° → Re=1/2** (FE critical line); **90° → Re=1** (absolute convergence wall); holonomy adjoint on line. |
+| `Hqiv.Story.S3MulModBSDRotationDualCapstone` / `mulMod_bsd_rotation_dual_capstone_inhabited` | Story spine capstone: coefficient fit + prefix Hecke + 45°/90° rotation dual (RH adjoint ⟷ BSD convergence). |
+
+**Narrative:** Mul-mod transport supplies a **canonical bounded coefficient channel** toward BSD-shaped L-data; modularity and elliptic-curve identification remain **open**. See [BSD_RN_RAMANUJAN_BRIDGE.md](./BSD_RN_RAMANUJAN_BRIDGE.md).
+
 **Next:** Mathlib `ModularForm` / classical θ `q`-expansion identification — still not proved for `r₈`; `LSeries` + trivial FE hooks are in place. See [MODULAR_THETA_ACTION_PLAN.md](./MODULAR_THETA_ACTION_PLAN.md) (P2–P3).
 
 Narrative / open items (parked): [archive/OCTONION_SPHERE_PATCH.md](./archive/OCTONION_SPHERE_PATCH.md).

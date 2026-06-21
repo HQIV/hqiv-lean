@@ -1,0 +1,130 @@
+{
+  "source": "scripts/hqiv_spine_discharge_weight.py",
+  "law": "W(parent,channel,daughters) = prod_k g_k^{e_k(obs)}",
+  "lean_modules": [
+    "Hqiv/Physics/SpineDischargeWeight.lean",
+    "Hqiv/Physics/SpineDischargeUniqueness.lean"
+  ],
+  "uniqueness": "Any competitor law on DischargeObservables that factorizes through the same slot table equals spineLightProduct (Lean: spineLightProduct_unique_factorization_fn).",
+  "heavy_sector": "Python atomic slots mirror OpenFlavourContactKind routing; Lean reconciliation theorems in SpineDischargeWeight.lean (spineDischargeWeight_eq_routing_* on certified heavy-flavour rows).",
+  "generators": [
+    {
+      "slot": "charged_isospin_outlet",
+      "generator_value": 1.4
+    },
+    {
+      "slot": "neutral_isospin_outlet",
+      "generator_value": 0.6
+    },
+    {
+      "slot": "monogamy_competition",
+      "generator_value": 0.84
+    },
+    {
+      "slot": "semileptonic_hadronic_competition",
+      "generator_value": 1.3
+    },
+    {
+      "slot": "light_pseudoscalar_tag",
+      "generator_value": 0.19753086419753085
+    },
+    {
+      "slot": "visible_lepton_weak",
+      "generator_value": 0.12222222222222223
+    },
+    {
+      "slot": "hidden_strangeness_kk",
+      "generator_value": 0.84
+    },
+    {
+      "slot": "hidden_strangeness_leak",
+      "generator_value": 0.16000000000000003
+    },
+    {
+      "slot": "open_charm_double_monogamy",
+      "generator_value": 0.84
+    },
+    {
+      "slot": "neutral_spectator",
+      "generator_value": 1.6666666666666667
+    },
+    {
+      "slot": "bottom_external_weak",
+      "generator_value": 3.5
+    },
+    {
+      "slot": "charm_pion_only",
+      "generator_value": 0.025974025974025976
+    },
+    {
+      "slot": "finite_channel_completion",
+      "generator_value": 0.022222222222222223
+    },
+    {
+      "slot": "charmed_baryon_three_body",
+      "generator_value": 10.0
+    },
+    {
+      "slot": "spectator_half_monogamy",
+      "generator_value": 1.2
+    },
+    {
+      "slot": "bottom_strange_double_monogamy",
+      "generator_value": 6.249999999999999
+    },
+    {
+      "slot": "bottom_strange_open_charm",
+      "generator_value": 12.5
+    },
+    {
+      "slot": "ozi_suppressed_strong",
+      "generator_value": 0.1
+    },
+    {
+      "slot": "open_charm_vector_leak",
+      "generator_value": 0.16000000000000003
+    },
+    {
+      "slot": "lepton_neutrino_weak",
+      "generator_value": 0.1
+    }
+  ],
+  "certificate_edges": [
+    {
+      "parent": "K_plus",
+      "channel": "weak",
+      "daughters": [
+        "mu_plus"
+      ],
+      "weight": 0.11611111111111111
+    },
+    {
+      "parent": "B0",
+      "channel": "weak",
+      "daughters": [
+        "D0",
+        "pi_zero"
+      ],
+      "weight": 1.5
+    },
+    {
+      "parent": "lambda_c",
+      "channel": "weak",
+      "daughters": [
+        "p",
+        "K_minus",
+        "pi_plus"
+      ],
+      "weight": 7.636363636363636
+    },
+    {
+      "parent": "phi",
+      "channel": "strong",
+      "daughters": [
+        "K_plus",
+        "K_minus"
+      ],
+      "weight": 0.84
+    }
+  ]
+}

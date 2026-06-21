@@ -1,0 +1,143 @@
+{
+  "source": "scripts/hqiv_accelerator_outside_dressing.py",
+  "lean_modules": [
+    "Hqiv.Physics.AcceleratorOutsideDressing",
+    "Hqiv.Physics.ElectroweakMassObservation",
+    "Hqiv.Physics.HepDecayReadout"
+  ],
+  "policy": "Pole/chart masses from TUFT discharge are compared to PDG tabulation at Earth-surface gravity (K_mass_chart). Optional accelerator dressing (K_facility from B-field + stream / line-shape stack) applies only to species routes listed in species_routes; it documents facility apparent mass, not a fit knob.",
+  "formula": {
+    "m_apparent": "m_pole * K_mass_chart * K_facility",
+    "delta_lab": "m_pole * (K_mass_chart - 1)",
+    "delta_accelerator": "m_pole * (K_facility - 1)  [eligible species only]",
+    "K_facility_collider": "colliderCurvatureWidthFactor^kinematicCouplingExponent",
+    "K_facility_line_shape": "lineShapeMassFactor(streamFraction)"
+  },
+  "facilities": {
+    "earth_surface": {
+      "lean_route": "earthSurface",
+      "K_facility": 1.0,
+      "K_mass_chart": 1.000296135249801,
+      "components": [
+        "gravity_phi",
+        "cmb_proper_motion_v_over_c"
+      ],
+      "source": "data/earth_outside_closure.json"
+    },
+    "atlas_lhc": {
+      "method": "lhc_kinematic",
+      "dressing_chart": "collider_native",
+      "magnetic_field_tesla": 2.0,
+      "collider_reference_tesla": 4.0,
+      "comoving_stream_fraction": 0.12,
+      "line_shape_stream_fraction": 0.0,
+      "kinematic_coupling_exponent": 0.08,
+      "id": "atlas_lhc",
+      "K_facility": 1.0017849432147832,
+      "dressing_ppm": 1784.9432147831744,
+      "collider_width_factor": 1.0225422222222222,
+      "effective_reference_tesla": 2.0
+    },
+    "bes_charmonium": {
+      "method": "lep_line_shape",
+      "dressing_chart": "line_shape",
+      "magnetic_field_tesla": 1.0,
+      "collider_reference_tesla": 4.0,
+      "comoving_stream_fraction": 0.02,
+      "line_shape_stream_fraction": 0.04,
+      "kinematic_coupling_exponent": 1.0,
+      "notes": "BESIII / charmonium e+e- factory: line-shape radiative stack + small stream.",
+      "id": "bes_charmonium",
+      "K_facility": 1.0021188888888888,
+      "dressing_ppm": 2118.8888888887814,
+      "collider_width_factor": 1.0013977777777778,
+      "effective_reference_tesla": 4.0
+    },
+    "cdf_tevatron": {
+      "method": "tevatron_kinematic",
+      "dressing_chart": "collider_universal",
+      "magnetic_field_tesla": 1.411,
+      "collider_reference_tesla": 4.0,
+      "comoving_stream_fraction": 0.0,
+      "line_shape_stream_fraction": 0.0,
+      "kinematic_coupling_exponent": 1.0,
+      "id": "cdf_tevatron",
+      "K_facility": 1.0027651680555556,
+      "dressing_ppm": 2765.1680555556004,
+      "collider_width_factor": 1.0027651680555556,
+      "effective_reference_tesla": 4.0
+    },
+    "cms_lhc": {
+      "method": "lhc_kinematic",
+      "dressing_chart": "collider_native",
+      "magnetic_field_tesla": 3.8,
+      "collider_reference_tesla": 4.0,
+      "comoving_stream_fraction": 0.12,
+      "line_shape_stream_fraction": 0.0,
+      "kinematic_coupling_exponent": 0.08,
+      "id": "cms_lhc",
+      "K_facility": 1.0017849432147832,
+      "dressing_ppm": 1784.9432147831744,
+      "collider_width_factor": 1.0225422222222222,
+      "effective_reference_tesla": 3.8
+    },
+    "d0_tevatron": {
+      "method": "tevatron_kinematic",
+      "dressing_chart": "collider_native",
+      "magnetic_field_tesla": 2.0,
+      "collider_reference_tesla": 4.0,
+      "comoving_stream_fraction": 0.06,
+      "line_shape_stream_fraction": 0.0,
+      "kinematic_coupling_exponent": 0.088,
+      "id": "d0_tevatron",
+      "K_facility": 1.0019429154973865,
+      "dressing_ppm": 1942.915497386455,
+      "collider_width_factor": 1.0223022222222222,
+      "effective_reference_tesla": 2.0
+    },
+    "lep_line_shape": {
+      "method": "lep_line_shape",
+      "dressing_chart": "line_shape",
+      "magnetic_field_tesla": 0.0,
+      "collider_reference_tesla": 4.0,
+      "comoving_stream_fraction": 0.0,
+      "line_shape_stream_fraction": 0.0,
+      "kinematic_coupling_exponent": 1.0,
+      "id": "lep_line_shape",
+      "K_facility": 1.0020833333333334,
+      "dressing_ppm": 2083.333333333437,
+      "collider_width_factor": 1.0,
+      "effective_reference_tesla": 4.0
+    },
+    "lhc_lhcb": {
+      "method": "lhc_kinematic",
+      "dressing_chart": "collider_native",
+      "magnetic_field_tesla": 0.4,
+      "collider_reference_tesla": 4.0,
+      "comoving_stream_fraction": 0.08,
+      "line_shape_stream_fraction": 0.0,
+      "kinematic_coupling_exponent": 0.08,
+      "notes": "LHCb dipole-scale B and lower \u03b2\u03b3 stream proxy for bottom spectroscopy.",
+      "id": "lhc_lhcb",
+      "K_facility": 1.001771008584652,
+      "dressing_ppm": 1771.0085846520674,
+      "collider_width_factor": 1.0223644444444444,
+      "effective_reference_tesla": 0.4
+    }
+  },
+  "species_routes": {
+    "by_category": {
+      "baryon_charm": "cms_lhc",
+      "baryon_double_charm": "cms_lhc",
+      "pentaquark_charm": "cms_lhc",
+      "tetraquark": "cms_lhc",
+      "baryon_bottom": "lhc_lhcb",
+      "meson_bottom": "lhc_lhcb"
+    },
+    "hidden_charm_match_prefixes": [
+      "heavy:hidden_charm",
+      "heavy:hidden_bottom"
+    ],
+    "overrides": {}
+  }
+}

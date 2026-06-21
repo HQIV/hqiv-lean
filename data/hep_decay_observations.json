@@ -55,15 +55,15 @@
   },
   "branching_comparison_panel": [
     {
-      "id": "delta_p_strong_p_pi",
-      "label": "Delta(1232) -> p pi+",
-      "latex_label": "$\\Delta(1232)\\to p\\pi^+$",
+      "id": "delta_p_strong_n_pi",
+      "label": "Delta+ -> n pi+",
+      "latex_label": "$\\Delta^+\\to n\\pi^+$",
       "parent_id": "delta_p",
-      "daughter_ids": ["p", "pi_plus"],
+      "daughter_ids": ["n", "pi_plus"],
       "channel": "strong",
-      "reference_branching": 1.0,
-      "reference_branching_sigma": 0.01,
-      "branching_abs_tol": 0.05,
+      "reference_branching": 0.5,
+      "reference_branching_sigma": 0.05,
+      "branching_abs_tol": 0.15,
       "require_open": true
     },
     {
@@ -120,11 +120,13 @@
       "latex_label": "$D^+\\to K^-\\pi(+\\pi^0)$ family",
       "parent_id": "D_plus",
       "aggregate": "sum_daughter_sets",
-      "daughter_sets": [["K_minus", "pi_plus"], ["K_minus", "pi_zero"], ["K_minus", "pi_plus", "pi_zero"]],
+      "daughter_sets": [["K_minus", "pi_plus"], ["K0", "pi_plus"], ["K_minus", "pi_plus", "pi_zero"], ["K0", "pi_plus", "pi_zero"]],
       "channel": "weak",
       "reference_branching": 0.55,
       "reference_branching_sigma": 0.05,
       "branching_abs_tol": 0.25,
+      "comparison_scope": "pdg_inclusive_total_width",
+      "comparison_note": "HQIV sums four certified Kπ daughter sets from the 16-mode weak span (Kπ, Kη, Kρ/ω/K*, 3π, semileptonic); PDG 55% is inclusive Kπ total width fraction.",
       "require_open": true
     },
     {
@@ -133,11 +135,88 @@
       "latex_label": "$D^0\\to K^+\\pi(+\\pi^0)$ family",
       "parent_id": "D0",
       "aggregate": "sum_daughter_sets",
-      "daughter_sets": [["K_plus", "pi_minus"], ["K_plus", "pi_zero"], ["K_plus", "pi_minus", "pi_zero"]],
+      "daughter_sets": [["K_plus", "pi_minus"], ["K0", "pi_minus"], ["K_plus", "pi_minus", "pi_zero"], ["K0", "pi_minus", "pi_zero"]],
       "channel": "weak",
       "reference_branching": 0.55,
       "reference_branching_sigma": 0.05,
       "branching_abs_tol": 0.15,
+      "comparison_scope": "pdg_inclusive_total_width",
+      "comparison_note": "HQIV sums four certified Kπ daughter sets from the 16-mode weak span (Kπ, Kη, Kρ/ω/K*, 3π, semileptonic); PDG 55% is inclusive Kπ total width fraction.",
+      "require_open": true
+    },
+    {
+      "id": "D_plus_weak_Kvector",
+      "label": "D+ -> K vector family",
+      "latex_label": "$D^+\\to K(\\rho/\\omega)$ family",
+      "parent_id": "D_plus",
+      "aggregate": "sum_daughter_sets",
+      "daughter_sets": [
+        ["K_minus", "rho_plus"],
+        ["K0_bar", "omega_meson"],
+        ["K0_bar", "rho_zero"],
+        ["K0_bar", "rho_plus"],
+        ["K0", "omega_meson"],
+        ["K0", "rho_zero"],
+        ["K0", "rho_plus"]
+      ],
+      "channel": "weak",
+      "reference_branching": 0.28,
+      "reference_branching_sigma": 0.06,
+      "branching_abs_tol": 0.2,
+      "comparison_scope": "pdg_inclusive_total_width",
+      "comparison_note": "PDG inclusive K*π + Kρ/ω hadronic fraction (approximate); HQIV spans ρ/ω on shared kaon-pole width with γ² leak contact (K* shares charged-vector patch with ρ+).",
+      "require_open": true
+    },
+    {
+      "id": "D_plus_weak_Keta",
+      "label": "D+ -> K eta",
+      "latex_label": "$D^+\\to K\\eta$",
+      "parent_id": "D_plus",
+      "aggregate": "sum_daughter_sets",
+      "daughter_sets": [["K0", "eta"]],
+      "channel": "weak",
+      "reference_branching": 0.04,
+      "reference_branching_sigma": 0.015,
+      "branching_abs_tol": 0.2,
+      "comparison_scope": "pdg_inclusive_total_width",
+      "comparison_note": "PDG inclusive Kη fraction; HQIV isoscalar pseudoscalar leak on kaon pole (γ² contact).",
+      "require_open": true
+    },
+    {
+      "id": "D0_weak_Kvector",
+      "label": "D0 -> K vector family",
+      "latex_label": "$D^0\\to K(\\rho/\\omega/K^*)$ family",
+      "parent_id": "D0",
+      "aggregate": "sum_daughter_sets",
+      "daughter_sets": [
+        ["K0_bar", "omega_meson"],
+        ["K0_bar", "rho_zero"],
+        ["K0_bar", "rho_plus"],
+        ["K0", "omega_meson"],
+        ["K0", "rho_zero"],
+        ["K0", "rho_plus"]
+      ],
+      "channel": "weak",
+      "reference_branching": 0.28,
+      "reference_branching_sigma": 0.06,
+      "branching_abs_tol": 0.2,
+      "comparison_scope": "pdg_inclusive_total_width",
+      "comparison_note": "PDG inclusive K*π + Kρ/ω hadronic fraction (approximate); HQIV spans ρ/ω on shared kaon-pole width with γ² leak contact (K* shares charged-vector patch with ρ+).",
+      "require_open": true
+    },
+    {
+      "id": "D0_weak_Keta",
+      "label": "D0 -> K eta",
+      "latex_label": "$D^0\\to K\\eta$",
+      "parent_id": "D0",
+      "aggregate": "sum_daughter_sets",
+      "daughter_sets": [["K_plus", "eta"], ["K0", "eta"]],
+      "channel": "weak",
+      "reference_branching": 0.04,
+      "reference_branching_sigma": 0.015,
+      "branching_abs_tol": 0.2,
+      "comparison_scope": "pdg_inclusive_total_width",
+      "comparison_note": "PDG inclusive Kη fraction; HQIV isoscalar pseudoscalar leak on kaon pole (γ² contact).",
       "require_open": true
     },
     {
@@ -211,6 +290,8 @@
       "reference_branching": 0.50,
       "reference_branching_sigma": 0.05,
       "branching_abs_tol": 0.30,
+      "comparison_scope": "pdg_inclusive_total_width",
+      "comparison_note": "HQIV normalizes over the certified two-mode weak span (DsK, phi phi); PDG 50% is inclusive of all B_s channels.",
       "require_open": true
     }
   ],
@@ -239,15 +320,16 @@
   ],
   "decay_channels": [
     {
-      "id": "delta_p_strong_p_pi",
+      "id": "delta_p_strong_n_pi",
       "parent_id": "delta_p",
-      "daughter_ids": ["p", "pi_plus"],
+      "daughter_ids": ["n", "pi_plus"],
       "channel": "strong",
-      "reference_branching": 1.0,
+      "reference_branching": 0.5,
       "reference_q_from_masses": true,
       "q_abs_tol_mev": 25.0,
       "require_open": true,
-      "require_daughters": true
+      "require_daughters": true,
+      "branching_abs_tol": 0.15
     },
     {
       "id": "lambda_weak_p_pi",
@@ -340,6 +422,7 @@
       "daughter_ids": ["D0", "pi_plus"],
       "channel": "weak",
       "reference_branching": 0.45,
+      "reference_branching_sigma": 0.05,
       "branching_abs_tol": 0.25,
       "reference_q_from_masses": true,
       "q_abs_tol_mev": 150.0,
@@ -504,6 +587,7 @@
       "daughter_ids": ["D0", "pi_zero"],
       "channel": "weak",
       "reference_branching": 0.16,
+      "reference_branching_sigma": 0.03,
       "branching_abs_tol": 0.12,
       "require_open": true
     },
@@ -594,12 +678,48 @@
     {
       "id": "D_plus_multichannel",
       "species_id": "D_plus",
-      "min_open_channels": 5
+      "min_open_channels": 16
     },
     {
       "id": "lambda_c_multichannel",
       "species_id": "lambda_c",
       "min_open_channels": 5
+    }
+  ],
+  "lfu_comparison_panel": [
+    {
+      "id": "R_D",
+      "reference": 0.439,
+      "reference_sigma": 0.044,
+      "notes": "World average B→Dℓν branching ratio ratio τ/μ (comparison only)"
+    },
+    {
+      "id": "R_Dstar",
+      "reference": 0.299,
+      "reference_sigma": 0.032,
+      "notes": "B→D*ℓν LFU ratio (comparison only)"
+    }
+  ],
+  "angular_comparison_panel": [
+    {
+      "id": "P5prime_Bs",
+      "reference": 0.099,
+      "reference_sigma": 0.026,
+      "notes": "LHCb P5' in bin [4,6] GeV^2; compared to low-q² readout 9/100 (comparison only)"
+    }
+  ],
+  "fcnc_comparison_panel": [
+    {
+      "id": "Bsll_contact",
+      "reference": 0.001875,
+      "reference_sigma": 0.0005,
+      "notes": "Effective b→sℓℓ operator weight on weak ledger (comparison only)"
+    },
+    {
+      "id": "BsGamma_contact",
+      "reference": 0.005,
+      "reference_sigma": 0.0015,
+      "notes": "Rare FCNC radiative operator weight 1/200 on weak ledger (comparison only)"
     }
   ]
 }

@@ -13,6 +13,7 @@ This folder is for **AI agents and new contributors** who need orientation witho
 | Doc | Contents |
 |-----|----------|
 | [PATCH_ONTOLOGY.md](./PATCH_ONTOLOGY.md) | **Agent contract:** patch QFT, no required continuum, observable-universe = accessible patch, completeness vocabulary, **gauge discharged vs continuum-only**, **sector zeta vs classical ζ projection** (2026-06), sim anti-patterns, `main.tex` alignment notes |
+| [HEP_DECAY_READOUT_PHRASING.md](./HEP_DECAY_READOUT_PHRASING.md) | **Tier-2 HEP decay note:** quarantined comparison layer, finite-patch readout, honesty boundary, anti-patterns (no changelog / unqualified “first principles”) |
 | [CKM_PMNS_FANO_OVERLAP.md](./CKM_PMNS_FANO_OVERLAP.md) | **Open discharge programme:** Fano-cycle overlaps + holonomy phases → CKM/PMNS (scaffold vs proved; anti-patterns) |
 | [TUFT_SHELL_ONTOLOGY.md](./TUFT_SHELL_ONTOLOGY.md) | **TUFT vs HQIV shell language:** `tuftHadronModeShell` vs `referenceM`; hadron papers must not conflate chart names |
 | [STORY.md](./STORY.md) | **Router:** Story spine vs textbook defaults; where HQIV intentionally differs; links to audit sources (kept short — not a duplicate of `ASSUMPTIONS` / `THEOREMS`) |

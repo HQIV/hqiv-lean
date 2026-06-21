@@ -1,0 +1,65 @@
+{
+  "schema": "hqiv_flavor_mixing_witness_v2",
+  "lean_module": "Hqiv.Physics.ProofSpineInventory",
+  "python_module": "scripts/hqiv_flavor_mixing_export.py",
+  "generated_at": "2026-06-19T04:11:26.377897+00:00",
+  "ckm": {
+    "V_us2": 0.05,
+    "V_cd2": 0.025,
+    "V_cb2": 0.0125,
+    "cp_odd_skew": 0.037500000000000006,
+    "delta_cp": 0.2945243112740431,
+    "delta_cp_deg": 16.875,
+    "jarlskog_ledger": 0.037500000000000006,
+    "jarlskog_from_angles": 0.0007809406583424311,
+    "jarlskog_correction_ratio": 0.020825084222464825
+  },
+  "pmns": {
+    "sin2_theta12": 0.25,
+    "sin2_theta23": 0.3333333333333333,
+    "delta_cp": 0.6283185307179586,
+    "normal_ordering": true
+  },
+  "differential": {
+    "p5_prime": 0.0275,
+    "b_to_kstar_mumu_forward_backward": 0.054958437681503367,
+    "bs_to_mumu_angular_flatness": 0.9985957247620533,
+    "transverse_weight": 0.9969795701276083
+  },
+  "sievers_bridge": {
+    "fiber_drag_kappa7": 1.5,
+    "singlet_stiffness_kappa1": 6,
+    "glueball_backreaction": 0.25,
+    "cb_over_us": 0.25
+  },
+  "certificates": [
+    "fanoHolonomyOverlapCertificate_holds",
+    "assembleCkmHolonomyReadout",
+    "ckmJarlskogFromAngles_eq_sin_delta_sin_cos_envelope",
+    "assemblePMNSHolonomyReadout",
+    "flavorDifferentialReadoutCertificate_holds",
+    "flavorLongitudinalAmplitudeCertificate_holds",
+    "gluonSieversHopfBridgeCertificate_holds",
+    "proofSpineInventory_holds"
+  ],
+  "experimental_comparison": {
+    "delta_cp_ckm_deg": 68.5,
+    "jarlskog_pdg": 3.08e-05,
+    "bs_br_ppb": 2.8,
+    "p5_prime_lfhcb": -0.047
+  },
+  "phenomenology": {
+    "jarlskog": {
+      "J_ledger": 0.037500000000000006,
+      "J_parameterization": 0.0007809406583424311,
+      "correction_ratio": 0.020825084222464825,
+      "percent_of_ledger": 2.0825084222464825
+    },
+    "longitudinal_at_referenceM": {
+      "imprint_phase_at_referenceM": 0.2080272298832345,
+      "correction_factor": 1.083210891953294,
+      "p5_prime_ppm_shift": 83210.8919532939,
+      "a_fb_ppm_shift": 83069.01670857103
+    }
+  }
+}

@@ -1,0 +1,195 @@
+{
+  "source": "scripts/hqiv_solar_dynamics.py",
+  "generated_at": "2026-06-19T04:42:51.430088+00:00",
+  "lean_modules": [
+    "Hqiv.Physics.SolarDynamics",
+    "Hqiv.Physics.CoronalLongitudinalStress",
+    "Hqiv.Physics.WeakFanoHopfBridge",
+    "Hqiv.Physics.NuclearOutsideTemperatureDynamics",
+    "Hqiv.Geometry.AuxiliaryField",
+    "Hqiv.Geometry.OctonionicLightCone"
+  ],
+  "constants": {
+    "alpha": 0.6,
+    "gamma": 0.4,
+    "referenceM": 4,
+    "phi_of_shell_referenceM": 10.0,
+    "jupiter_orbital_period_years": 11.862,
+    "active_belt_witness": {
+      "latitude_monogamy_deg": 23.578178478201835,
+      "latitude_rindler_half_deg": 26.56505117707799,
+      "latitude_legacy_obs_deg": 30.0,
+      "gamma": 0.4,
+      "formula_monogamy": "90 - arccos(gamma)",
+      "formula_rindler_half": "arcsin(sqrt(gamma/2))",
+      "compact_object_witness_ref": "papers/compact_object_witness"
+    }
+  },
+  "inputs": {
+    "m_photo": 0,
+    "m_corona": 8,
+    "m_ism": 0,
+    "m_whim": 1,
+    "hopf_winding": 1,
+    "discharge_threshold": 10.0,
+    "omega_sun_rad_s": 2.8653290845717256e-06,
+    "rotation_period_days": 25.38,
+    "galactic_v_c_m_s": 233000.0
+  },
+  "proved_algebra": {
+    "description": "Lean-certified identities (zero sorry)",
+    "delta_phi_formula": "2 * (m_corona - m_photo)",
+    "E_HQIV_formula": "E_star * (alpha/4pi) * Lambda_s * dphi_ds",
+    "E_eff_formula": "J/sigma + E_HQIV",
+    "heating_flux_boundary": "nq * v_parallel * E_star * (3/20pi) * Lambda_s * delta_phi",
+    "galactic_modulator": "outsideGravityGeffModulator(epsilon_gal)",
+    "whim_boundary_shape": "max(0, delta_phi) / phi(m_ism)",
+    "planetary_coupling": "gamma * dipole_ratio * sin^2(alignment)",
+    "environment_phase": "interior_phase * geff * (1 + planetary_coupling)"
+  },
+  "readout_model": {
+    "description": "Python phenomenology \u2014 Jupiter beat + galactic WHIM outside curvature",
+    "outside_curvature_whim": {
+      "epsilon_galactic": 6.040465889309489e-07,
+      "geff_modulator": 1.000000144971164,
+      "whim_delta_phi": 2.0,
+      "whim_boundary_shape": 1.0,
+      "combined_outside_gate": 1.4000002029596295
+    },
+    "planetary_magnetic_coupling": {
+      "jupiter_harmonic": 1.4,
+      "saturn_harmonic": 1.2,
+      "dipole_gate": 5.639999999999999,
+      "planetary_magnetic_coupling": 0.18931119634883423,
+      "combined_multiplier": 1.1893111963488343
+    },
+    "cycle_oscillator": {
+      "m_photo": 0,
+      "m_corona": 8,
+      "hopf_winding": 1,
+      "discharge_threshold": 10.0,
+      "cycle_phase": 9.599999999999998,
+      "cycle_phase_environment": 13.632001976246903,
+      "rotation_period_days": 25.38,
+      "estimated_period_days": 4124.791653654083,
+      "estimated_period_years": 11.293064075712753,
+      "jupiter_orbital_carrier_years": 11.862,
+      "outside_gate": 1.4000002029596295,
+      "planetary_multiplier": 1.1893111963488343,
+      "discharge_active": false,
+      "claim_status": "readout_model"
+    },
+    "sunspot_pin": {
+      "gate": 28.799999999999997,
+      "threshold": 5.0,
+      "pin_stress": 6.875493541569878e+23,
+      "pin_active": true,
+      "convection_suppression_proxy": 0.8520710059171598
+    }
+  },
+  "flux_tube": {
+    "label": "photosphere_corona_column",
+    "m_photo": 0,
+    "m_corona": 8,
+    "phi_photo": 2.0,
+    "phi_corona": 18.0,
+    "delta_phi": 16.0,
+    "j_parallel": 1000.0,
+    "sigma": 10000000.0,
+    "dphi_ds": 16.0,
+    "nq": 1e+20,
+    "v_parallel": 5000.0,
+    "e_ohm": 0.0001,
+    "e_hqiv": 2.2493856872006073,
+    "e_eff": 2.2494856872006075,
+    "force_density": 2.2494856872006074e+20,
+    "heating_flux_boundary": 1.1246928436003036e+24,
+    "coupling_log": 2.9444389791664403
+  },
+  "latitude_scan": [
+    {
+      "colatitude_deg": 0.0,
+      "sin_colatitude": 0.0,
+      "shear_gate": 0.0,
+      "rotation_current_gate": 0.0,
+      "rho_pol": 1.0,
+      "grad_axial_phi_si": 978222961368.7764,
+      "a_longitudinal_si": 158654111514.11188,
+      "a_grav_si": 978222961368.7764,
+      "notes": "pole"
+    },
+    {
+      "colatitude_deg": 15.0,
+      "sin_colatitude": 0.25881904510252074,
+      "shear_gate": 0.017337588530253686,
+      "rotation_current_gate": 0.4993225496713061,
+      "rho_pol": 0.9955127018922193,
+      "grad_axial_phi_si": 944890822255.0745,
+      "a_longitudinal_si": 153248103758.42645,
+      "a_grav_si": 978222961368.7761,
+      "notes": "active_belt"
+    },
+    {
+      "colatitude_deg": 30.0,
+      "sin_colatitude": 0.49999999999999994,
+      "shear_gate": 0.12499999999999996,
+      "rotation_current_gate": 3.5999999999999983,
+      "rho_pol": 0.9375,
+      "grad_axial_phi_si": 847165935110.6038,
+      "a_longitudinal_si": 137398490986.07007,
+      "a_grav_si": 978222961368.7761,
+      "notes": "active_belt"
+    },
+    {
+      "colatitude_deg": 45.0,
+      "sin_colatitude": 0.7071067811865475,
+      "shear_gate": 0.3535533905932737,
+      "rotation_current_gate": 10.18233764908628,
+      "rho_pol": 0.7500000000000002,
+      "grad_axial_phi_si": 691708089496.2479,
+      "a_longitudinal_si": 112185398114.75522,
+      "a_grav_si": 978222961368.7764,
+      "notes": "active_belt"
+    },
+    {
+      "colatitude_deg": 60.0,
+      "sin_colatitude": 0.8660254037844386,
+      "shear_gate": 0.6495190528383289,
+      "rotation_current_gate": 18.70614872174387,
+      "rho_pol": 0.4375000000000001,
+      "grad_axial_phi_si": 489111480684.3883,
+      "a_longitudinal_si": 79327055757.05595,
+      "a_grav_si": 978222961368.7764,
+      "notes": "active_belt"
+    },
+    {
+      "colatitude_deg": 75.0,
+      "sin_colatitude": 0.9659258262890683,
+      "shear_gate": 0.9012210650134382,
+      "rotation_current_gate": 25.95516667238702,
+      "rho_pol": 0.12948729810778048,
+      "grad_axial_phi_si": 253182732758.8267,
+      "a_longitudinal_si": 41062705643.671265,
+      "a_grav_si": 978222961368.7761,
+      "notes": "active_belt"
+    },
+    {
+      "colatitude_deg": 90.0,
+      "sin_colatitude": 1.0,
+      "shear_gate": 1.0,
+      "rotation_current_gate": 28.799999999999997,
+      "rho_pol": 0.0,
+      "grad_axial_phi_si": 5.9898880924635845e-05,
+      "a_longitudinal_si": 9.714762491866217e-06,
+      "a_grav_si": 978222961368.7764,
+      "notes": "equator"
+    }
+  ],
+  "caveats": [
+    "Photosphere/corona shell indices are explicit inputs, not derived from horizon shells.",
+    "Estimated cycle period uses Jupiter orbital carrier + galactic WHIM gate (readout_model).",
+    "Planetary magnetic coupling uses dimensionless dipole witnesses, not fitted B-tables.",
+    "Galactic \u03b5_gal = (v_c/c)^2 books outside curvature from the Milky-Way disk support.",
+    "No full MHD dynamo PDE or plasma opacity theory is included."
+  ]
+}

@@ -156,6 +156,14 @@ import Hqiv.Algebra.ThetaZ8EisensteinQCoeff
 import Hqiv.Algebra.ThetaZ8DeltaProductScaffold
 import Hqiv.Algebra.ThetaZ8E4DeltaProduct
 import Hqiv.Algebra.ThetaCompletedLFunctionalScaffold
+import Hqiv.Algebra.MulModBSDCoefficientScaffold
+import Hqiv.Algebra.MulModBSDLSeriesScaffold
+import Hqiv.Algebra.MulModBSDCompletedLFunctionalScaffold
+import Hqiv.Algebra.MulModBSDEulerFactor
+import Hqiv.Algebra.MulModBSDRamanujanPetersson
+import Hqiv.Algebra.MulModBSDCascadePrefixModularity
+import Hqiv.Algebra.MulModBSDCascadePrefixHecke
+import Hqiv.Algebra.MulModHodgeLift
 import Hqiv.Algebra.OctonionSphereFourierAxis
 import Hqiv.Algebra.OctonionSphereFourierPatch
 import Hqiv.Archive.Algebra.MoireJerkSphereModeBridge

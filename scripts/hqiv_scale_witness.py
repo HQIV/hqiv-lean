@@ -20,10 +20,12 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Literal
 
+import hqiv_repo_paths as paths
+
 ScaleWitness = Literal["proton_lockin", "codata_alpha", "cmb_now"]
 DEFAULT_SCALE_WITNESS: ScaleWitness = "proton_lockin"
 
-_ROOT = Path(__file__).resolve().parents[1]
+_ROOT = paths.repo_root(Path(__file__))
 DEFAULT_WITNESS_JSON = _ROOT / "data" / "hqiv_witnesses.json"
 
 # Comparison layer (not active anchors under proton_lockin)

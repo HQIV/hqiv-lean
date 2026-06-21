@@ -1,0 +1,88 @@
+{
+  "schema": "hqiv_electroweak_mass_witness_v2",
+  "pole_xi_lock": 5.0,
+  "pole_mw_mev": 80215.58568424634,
+  "line_shape_radiative_stack_density": 0.09375000000000001,
+  "kinematic_coupling_exponent_lhc": 0.08,
+  "predictions": {
+    "lep_line_shape": {
+      "apparent_mw_mev": 80382.7014877552,
+      "dressing_factor": 1.0020833333333334,
+      "dressing_ppm": 2083.333333333437,
+      "predicted_sigma_mev": 17.028847457052553
+    },
+    "cdf_tevatron": {
+      "apparent_mw_mev": 80437.3952593381,
+      "dressing_factor": 1.0027651680555556,
+      "dressing_ppm": 2765.1680555556004,
+      "predicted_sigma_mev": 17.040434177527203
+    },
+    "d0_tevatron": {
+      "apparent_mw_mev": 80371.43778880419,
+      "dressing_factor": 1.0019429154973865,
+      "dressing_ppm": 1942.915497386455,
+      "predicted_sigma_mev": 17.026461274357906
+    },
+    "cms_lhc": {
+      "apparent_mw_mev": 80358.76594963329,
+      "dressing_factor": 1.0017849432147832,
+      "dressing_ppm": 1784.9432147831744,
+      "predicted_sigma_mev": 17.0237767811492
+    },
+    "atlas_lhc": {
+      "apparent_mw_mev": 80358.76594963329,
+      "dressing_factor": 1.0017849432147832,
+      "dressing_ppm": 1784.9432147831744,
+      "predicted_sigma_mev": 17.0237767811492
+    }
+  },
+  "sensitivity": [
+    {
+      "case_id": "cdf_b_ref_stability",
+      "facility_id": "cdf_tevatron",
+      "central_mev": 80437.3952593381,
+      "variants": [
+        {
+          "label": "B_ref=3.5 T",
+          "apparent_mw_mev": 80505.2961496723,
+          "dressing_ppm": 3611.6480725623123
+        },
+        {
+          "label": "B_ref=4.5 T",
+          "apparent_mw_mev": 80390.84263246699,
+          "dressing_ppm": 2184.8241426611903
+        }
+      ]
+    },
+    {
+      "case_id": "cms_exponent_stability",
+      "facility_id": "cms_lhc",
+      "central_mev": 80358.76594963329,
+      "variants": [
+        {
+          "label": "exp=gamma/6",
+          "apparent_mw_mev": 80334.88489624792,
+          "dressing_ppm": 1487.2323250394447
+        },
+        {
+          "label": "exp=gamma/4",
+          "apparent_mw_mev": 80394.60093077506,
+          "dressing_ppm": 2231.67661249013
+        }
+      ]
+    }
+  ],
+  "lean_module": "Hqiv.Physics.ElectroweakMassObservation",
+  "lean_theorems": [
+    "Hqiv.Physics.lineShapeRadiativeStackDensity_eq_fifteen_gamma_over_sixtyfour",
+    "Hqiv.Physics.kinematicCouplingExponentLHC_eq_two_over_twentyfive",
+    "Hqiv.Physics.lineShapeMassFactor_lep_eq",
+    "Hqiv.Physics.colliderKinematicMassFactor_cdf_eq",
+    "Hqiv.Physics.colliderCurvatureWidthFactor_gt_one_of_pos_field",
+    "Hqiv.Physics.sm_global_ref_lt_lep_ref",
+    "Hqiv.Physics.lep_ref_lt_cdf_ref",
+    "Hqiv.Physics.sm_global_ref_lt_cdf_ref",
+    "Hqiv.Physics.cdf_tension_ppm_positive"
+  ],
+  "python_module": "scripts/hqiv_electroweak_mass_observation.py"
+}

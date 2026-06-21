@@ -3,12 +3,13 @@
 
 from __future__ import annotations
 
+import os
 import subprocess
 import sys
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parents[1]
-sys.path.insert(0, str(ROOT / "scripts"))
+SCRIPTS = Path(__file__).resolve().parent
+sys.path.insert(0, str(SCRIPTS))
 
 import hqiv_hep_collider_refinements as ref
 
@@ -20,9 +21,9 @@ def test_witness_all_pass() -> None:
 
 def test_cli_strict() -> None:
     proc = subprocess.run(
-        [sys.executable, str(ROOT / "scripts" / "hqiv_hep_collider_refinements.py"), "--strict"],
-        cwd=ROOT,
-        env={"PYTHONPATH": str(ROOT / "scripts"), **dict()},
+        [sys.executable, str(SCRIPTS / "hqiv_hep_collider_refinements.py"), "--strict"],
+        cwd=ref.ROOT,
+        env={**os.environ, "PYTHONPATH": str(SCRIPTS)},
         capture_output=True,
         text=True,
         check=False,

@@ -247,6 +247,52 @@ theorem projectionLine_eq_half_iff_cos_eq_sin (θ : ℝ) (hden : Real.cos θ + R
     rw [htwice]
     field_simp [hsin]
 
+/-! ## 90° rotation — absolute convergence wall `Re s = 1` -/
+
+/-- The 90° free coordinate on the functional-equation pair is `σ − 1`. -/
+theorem rotFree_functionalPair_pi_div_two (σ : ℝ) :
+    rotFree (Real.pi / 2) (functionalPair σ) = σ - 1 := by
+  rw [rotFree_functionalPair, Real.cos_pi_div_two, Real.sin_pi_div_two]
+  ring
+
+/-- The 90° projection line is the right strip edge `σ = 1`. -/
+theorem projectionLine_pi_div_two :
+    projectionLine (Real.pi / 2) = (1 : ℝ) := by
+  unfold projectionLine
+  rw [Real.cos_pi_div_two, Real.sin_pi_div_two]
+  norm_num
+
+/-- The 90° equator is exactly `Re s = 1` when `σ = Re s`. -/
+theorem rotFree_pi_div_two_eq_zero_iff (σ : ℝ) :
+    rotFree (Real.pi / 2) (functionalPair σ) = 0 ↔ σ = (1 : ℝ) := by
+  rw [rotFree_functionalPair_pi_div_two]
+  constructor <;> intro h <;> linarith
+
+/-- Alias: the 90° readout used for the convergence-wall identification. -/
+noncomputable def rot90Free (p : ℝ × ℝ) : ℝ :=
+  rotFree (Real.pi / 2) p
+
+theorem rot90Free_eq_rotFree_pi_div_two (p : ℝ × ℝ) :
+    rot90Free p = rotFree (Real.pi / 2) p :=
+  rfl
+
+theorem rot90Free_functionalPair (σ : ℝ) :
+    rot90Free (functionalPair σ) = σ - 1 :=
+  rotFree_functionalPair_pi_div_two σ
+
+theorem rot90Free_functionalPair_eq_zero_iff (σ : ℝ) :
+    rot90Free (functionalPair σ) = 0 ↔ σ = (1 : ℝ) :=
+  rotFree_pi_div_two_eq_zero_iff σ
+
+/--
+**Angle ladder on the FE pair:** 45° pins the critical line `σ = 1/2`; 90° pins
+the absolute-convergence wall `σ = 1`.
+-/
+theorem rotation_angle_critical_line_vs_convergence_wall :
+    projectionLine (Real.pi / 4) = (1 / 2 : ℝ) ∧
+      projectionLine (Real.pi / 2) = (1 : ℝ) :=
+  ⟨projectionLine_pi_div_four, projectionLine_pi_div_two⟩
+
 end
 
 end Hqiv.Story

@@ -1,0 +1,228 @@
+{
+  "good_prefix_primes": [
+    11,
+    13,
+    17,
+    19,
+    23,
+    29,
+    31,
+    37,
+    41
+  ],
+  "bad_prime_shell": 7,
+  "uniform_good_trace": 6,
+  "global_ramanujan_petersson": false,
+  "prefix_ramanujan_petersson": true,
+  "elliptic_curve_scan_note": "No Cremona/LMFDB curve in conductors <=5077 matches a_p=6 on all good prefix primes; constant trace-6 rigidity on {11..41} is mul-mod specific, not a standard newform signature.",
+  "local_invariants": [
+    {
+      "p": 2,
+      "holonomy_trace": 1,
+      "a_p": 1,
+      "normalized_coeff": 0.5,
+      "charpoly": {
+        "deg3": 1,
+        "x2": -1,
+        "x1": 1,
+        "x0": -1
+      },
+      "euler_weight2_shape": "1 - 1*p^(-s) + p^(1-2s)",
+      "ramanujan_petersson": true,
+      "shell_class": "small_prime",
+      "point_count_analog_p_plus_1_minus_ap": 2
+    },
+    {
+      "p": 3,
+      "holonomy_trace": 2,
+      "a_p": 2,
+      "normalized_coeff": 0.6666666666666666,
+      "charpoly": {
+        "deg3": 1,
+        "x2": -2,
+        "x1": 2,
+        "x0": -1
+      },
+      "euler_weight2_shape": "1 - 2*p^(-s) + p^(1-2s)",
+      "ramanujan_petersson": true,
+      "shell_class": "small_prime",
+      "point_count_analog_p_plus_1_minus_ap": 2
+    },
+    {
+      "p": 5,
+      "holonomy_trace": 1,
+      "a_p": 1,
+      "normalized_coeff": 0.2,
+      "charpoly": {
+        "deg3": 1,
+        "x2": -1,
+        "x1": 1,
+        "x0": -1
+      },
+      "euler_weight2_shape": "1 - 1*p^(-s) + p^(1-2s)",
+      "ramanujan_petersson": true,
+      "shell_class": "small_prime",
+      "point_count_analog_p_plus_1_minus_ap": 5
+    },
+    {
+      "p": 7,
+      "holonomy_trace": 6,
+      "a_p": 6,
+      "normalized_coeff": 0.8571428571428571,
+      "charpoly": {
+        "deg3": 1,
+        "x2": -6,
+        "x1": 6,
+        "x0": -1
+      },
+      "euler_weight2_shape": "1 - 6*p^(-s) + p^(1-2s)",
+      "ramanujan_petersson": false,
+      "shell_class": "bad_fano",
+      "point_count_analog_p_plus_1_minus_ap": 2
+    },
+    {
+      "p": 11,
+      "holonomy_trace": 6,
+      "a_p": 6,
+      "normalized_coeff": 0.5454545454545454,
+      "charpoly": {
+        "deg3": 1,
+        "x2": -6,
+        "x1": 6,
+        "x0": -1
+      },
+      "euler_weight2_shape": "1 - 6*p^(-s) + p^(1-2s)",
+      "ramanujan_petersson": true,
+      "shell_class": "good_prefix",
+      "point_count_analog_p_plus_1_minus_ap": 6
+    },
+    {
+      "p": 13,
+      "holonomy_trace": 6,
+      "a_p": 6,
+      "normalized_coeff": 0.46153846153846156,
+      "charpoly": {
+        "deg3": 1,
+        "x2": -6,
+        "x1": 6,
+        "x0": -1
+      },
+      "euler_weight2_shape": "1 - 6*p^(-s) + p^(1-2s)",
+      "ramanujan_petersson": true,
+      "shell_class": "good_prefix",
+      "point_count_analog_p_plus_1_minus_ap": 8
+    },
+    {
+      "p": 17,
+      "holonomy_trace": 6,
+      "a_p": 6,
+      "normalized_coeff": 0.35294117647058826,
+      "charpoly": {
+        "deg3": 1,
+        "x2": -6,
+        "x1": 6,
+        "x0": -1
+      },
+      "euler_weight2_shape": "1 - 6*p^(-s) + p^(1-2s)",
+      "ramanujan_petersson": true,
+      "shell_class": "good_prefix",
+      "point_count_analog_p_plus_1_minus_ap": 12
+    },
+    {
+      "p": 19,
+      "holonomy_trace": 6,
+      "a_p": 6,
+      "normalized_coeff": 0.3157894736842105,
+      "charpoly": {
+        "deg3": 1,
+        "x2": -6,
+        "x1": 6,
+        "x0": -1
+      },
+      "euler_weight2_shape": "1 - 6*p^(-s) + p^(1-2s)",
+      "ramanujan_petersson": true,
+      "shell_class": "good_prefix",
+      "point_count_analog_p_plus_1_minus_ap": 14
+    },
+    {
+      "p": 23,
+      "holonomy_trace": 6,
+      "a_p": 6,
+      "normalized_coeff": 0.2608695652173913,
+      "charpoly": {
+        "deg3": 1,
+        "x2": -6,
+        "x1": 6,
+        "x0": -1
+      },
+      "euler_weight2_shape": "1 - 6*p^(-s) + p^(1-2s)",
+      "ramanujan_petersson": true,
+      "shell_class": "good_prefix",
+      "point_count_analog_p_plus_1_minus_ap": 18
+    },
+    {
+      "p": 29,
+      "holonomy_trace": 6,
+      "a_p": 6,
+      "normalized_coeff": 0.20689655172413793,
+      "charpoly": {
+        "deg3": 1,
+        "x2": -6,
+        "x1": 6,
+        "x0": -1
+      },
+      "euler_weight2_shape": "1 - 6*p^(-s) + p^(1-2s)",
+      "ramanujan_petersson": true,
+      "shell_class": "good_prefix",
+      "point_count_analog_p_plus_1_minus_ap": 24
+    },
+    {
+      "p": 31,
+      "holonomy_trace": 6,
+      "a_p": 6,
+      "normalized_coeff": 0.1935483870967742,
+      "charpoly": {
+        "deg3": 1,
+        "x2": -6,
+        "x1": 6,
+        "x0": -1
+      },
+      "euler_weight2_shape": "1 - 6*p^(-s) + p^(1-2s)",
+      "ramanujan_petersson": true,
+      "shell_class": "good_prefix",
+      "point_count_analog_p_plus_1_minus_ap": 26
+    },
+    {
+      "p": 37,
+      "holonomy_trace": 6,
+      "a_p": 6,
+      "normalized_coeff": 0.16216216216216217,
+      "charpoly": {
+        "deg3": 1,
+        "x2": -6,
+        "x1": 6,
+        "x0": -1
+      },
+      "euler_weight2_shape": "1 - 6*p^(-s) + p^(1-2s)",
+      "ramanujan_petersson": true,
+      "shell_class": "good_prefix",
+      "point_count_analog_p_plus_1_minus_ap": 32
+    },
+    {
+      "p": 41,
+      "holonomy_trace": 6,
+      "a_p": 6,
+      "normalized_coeff": 0.14634146341463414,
+      "charpoly": {
+        "deg3": 1,
+        "x2": -6,
+        "x1": 6,
+        "x0": -1
+      },
+      "euler_weight2_shape": "1 - 6*p^(-s) + p^(1-2s)",
+      "ramanujan_petersson": true,
+      "shell_class": "good_prefix",
+      "point_count_analog_p_plus_1_minus_ap": 36
+    }
+  ]
+}

@@ -266,23 +266,49 @@ def benchmark_sigma_summary(
     rows: list[dict[str, Any]],
 ) -> dict[str, float]:
     """Aggregate n_σ for rows that carry sigma fields."""
-    vals = [float(r["n_sigma"]) for r in rows if r.get("n_sigma") is not None]
+    vals = [
+        float(r["n_sigma"])
+        for r in rows
+        if r.get("n_sigma") is not None
+        and math.isfinite(float(r["n_sigma"]))
+        and r.get("panel") != "half_life"
+    ]
     if not vals:
         return {}
-    out = {
+    ordered = sorted(vals)
+    out: dict[str, float] = {
         "mean_n_sigma": sum(vals) / len(vals),
+        "median_n_sigma": ordered[len(vals) // 2],
         "max_n_sigma": max(vals),
         "count": float(len(vals)),
     }
     branching_vals = [
         float(r["n_sigma"])
         for r in rows
-        if r.get("n_sigma") is not None and r.get("panel") in ("branching", "branching_comparison", "decay")
+        if r.get("n_sigma") is not None
+        and math.isfinite(float(r["n_sigma"]))
+        and r.get("panel") in ("branching", "branching_comparison", "decay", "readout")
         and r.get("quantity") in ("branching_ratio", "inclusive_branching_ratio")
     ]
     if branching_vals:
+        br_ordered = sorted(branching_vals)
         out["mean_branching_n_sigma"] = sum(branching_vals) / len(branching_vals)
+        out["median_branching_n_sigma"] = br_ordered[len(branching_vals) // 2]
         out["max_branching_n_sigma"] = max(branching_vals)
+        out["branching_n_sigma_count"] = float(len(branching_vals))
+    mass_vals = [
+        float(r["n_sigma"])
+        for r in rows
+        if r.get("n_sigma") is not None
+        and math.isfinite(float(r["n_sigma"]))
+        and r.get("panel") == "mass"
+    ]
+    if mass_vals:
+        m_ordered = sorted(mass_vals)
+        out["mean_mass_n_sigma"] = sum(mass_vals) / len(mass_vals)
+        out["median_mass_n_sigma"] = m_ordered[len(mass_vals) // 2]
+        out["max_mass_n_sigma"] = max(mass_vals)
+        out["mass_n_sigma_count"] = float(len(mass_vals))
     return out
 
 

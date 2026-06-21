@@ -1185,6 +1185,40 @@ theorem new_modes_referenceM_numeric : new_modes referenceM = 40 := by
   rw [hr, new_modes_succ 3]
   norm_num
 
+/-- Root light-cone statement of the current programme pin: `referenceM = 4`. -/
+theorem referenceM_eq_four_lightcone : referenceM = 4 := by
+  unfold referenceM qcdShell stepsFromQCDToLockin latticeStepCount
+  norm_num
+
+/-- The first shell whose newly unlocked mode budget reaches the sector capacity `40`
+is shell `4`.
+
+This is the theorem-level "why 4" statement available from the null-lattice mode
+count alone: the value is a minimal capacity threshold, not a proton-mass fit. -/
+theorem new_modes_ge_forty_iff_four_le (m : Nat) :
+    40 ≤ new_modes m ↔ 4 ≤ m := by
+  constructor
+  · intro h
+    by_contra hnot
+    have hlt : m < 4 := Nat.lt_of_not_ge hnot
+    interval_cases m <;> norm_num [new_modes, available_modes, latticeSimplexCount] at h
+  · intro hm
+    obtain ⟨k, rfl⟩ := Nat.exists_eq_add_of_le hm
+    rw [show 4 + k = (k + 3) + 1 by omega, new_modes_succ (k + 3)]
+    push_cast
+    have hk : (0 : ℝ) ≤ k := Nat.cast_nonneg k
+    nlinarith
+
+/-- The reference shell is exactly the minimal shell reaching the `40`-mode sector
+capacity. -/
+theorem referenceM_first_shell_with_sector_capacity :
+    40 ≤ new_modes referenceM ∧ ∀ m : Nat, 40 ≤ new_modes m → referenceM ≤ m := by
+  constructor
+  · rw [new_modes_ge_forty_iff_four_le, referenceM_eq_four_lightcone]
+  · intro m hm
+    rw [referenceM_eq_four_lightcone]
+    exact (new_modes_ge_forty_iff_four_le m).1 hm
+
 -- `curvature_integral` and `omega_k_partial` are noncomputable; `#check` only prints types.
 #check curvature_integral 10
 #check omega_k_partial referenceM

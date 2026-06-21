@@ -84,3 +84,25 @@ Nothing below is a criticism of §5 — it is the **gap list** relative to the *
 - L-function / motive layer unchanged from [MANIFOLD_ZETA_ROADMAP.md](./MANIFOLD_ZETA_ROADMAP.md) §4 — **strategy only**.
 
 When adding Lean, **prefer lemmas that also help** the zeta / rapidity / `eff` story (same `m` ladder); see [MANIFOLD_ZETA_ROADMAP.md](./MANIFOLD_ZETA_ROADMAP.md) **Proof priority**.
+
+---
+
+## 6. Mul-mod cascade Hodge-lift (scoped; still **not** Hodge)
+
+The mul-mod BSD prefix channel now has an **HQIV-internal Hodge-flavored lift** that packages
+good-prefix rigidity and bad-shell defect data. It does **not** define Hodge classes on a
+complex projective variety or prove algebraicity.
+
+| Roadmap analogy | Mul-mod object | Lean anchor |
+|-----------------|----------------|-------------|
+| **45° rotation → middle Hodge filtration / adjoint step** | FE critical line `σ = 1/2`; holonomy adjoint on cascade transformer | `projectionLine (π/4) = 1/2`, `harmonic_cascade_holonomy_transformer_adjoint_iff` (`S3MulModHodgeRotationBridge`) |
+| **90° rotation → weight / pure part before extension** | Absolute-convergence wall `σ = 1`; `mulModBSDLSeries` holomorphic on `Re s > 1` | `projectionLine (π/2) = 1`, `differentiableOn_mulModBSDLSeries` |
+| **Cascade promotion → period map / VHS** | Prefix modularity + Lie holonomy promotion on good shells | `MulModBSDCascadePrefixModularityObjectExtended`, `SO4StructuredCascadeLiePromotion` |
+| **Good-prefix numerator rigidity → (p,p)-type / integrality** | `(shell) · coeff(shell) = 6` on good composites; uniform trace `6` on `{11,…,41}` | `MulModBSDWeakNumeratorHeckeHypothesis`, `mulMod_hodge_good_prefix_numerator_rigid` (`MulModHodgeLift`) |
+| **Bad shell at 7 → limiting mixed structure / monodromy** | Fano base fibre; Ramanujan–Petersson fails; Tamagawa analog | `MulModBSDBadPrimeTamagawaAnalog`, `shellResidueFano 7` |
+| **Associator defect → extension class** | Anti-Hermitian perturbation sheet; defect cancellation on critical line | `S3HarmonicHolonomyAssociatorPerturb` (RH track; wired in story capstone, not claimed for Hodge) |
+
+**Honest scope:** `MulModHodgeLift` is a **proved bundle** over existing BSD prefix data.
+`S3MulModHodgeRotationBridge` ties the bundle to the same 45°/90° rotation ladder used for
+RH/BSD dual capstones. No claim that every good-prefix class is algebraic (weak scoped
+Hodge-conjecture **language** only in module docstrings as an explicit **target**, not a theorem).

@@ -1,0 +1,31 @@
+{
+  "description": "Example batch input for hqiv_outside_curvature_calculator.py batch",
+  "overlay": {
+    "facility_id": "reader_cms_like",
+    "magnetic_field_tesla": 3.8,
+    "collider_reference_tesla": 4.0,
+    "comoving_stream_fraction": 0.12,
+    "dressing_chart": "collider_native",
+    "kinematic_coupling_exponent": 0.08,
+    "lab_temperature_K": 300.0,
+    "gravity_tier": "full",
+    "beam_velocity_m_s": null
+  },
+  "include_panel": true,
+  "comparisons": [
+    {
+      "label": "Lambda_c+ @ CMS-like",
+      "hqiv_pole_mev": 2286.46,
+      "reference_mev": 2286.46,
+      "sigma_reference_mev": 0.14,
+      "comparison_frame": "facility_apparent"
+    },
+    {
+      "label": "J/psi @ BES-like (line-shape preset in overlay comment)",
+      "hqiv_pole_mev": 3090.099,
+      "reference_mev": 3096.9,
+      "sigma_reference_mev": 0.006,
+      "comparison_frame": "earth_tabulated"
+    }
+  ]
+}

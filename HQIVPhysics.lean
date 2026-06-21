@@ -37,6 +37,7 @@ import Hqiv.Physics.NonAbelianHolonomyMeasureScaffold
 import Hqiv.Physics.DiscreteActionPoincareScaffold
 import Hqiv.Physics.DiscreteActionStrongPoincareBridge
 import Hqiv.Physics.CoronalLongitudinalStress
+import Hqiv.Physics.SolarDynamics
 import Hqiv.Physics.HQIVTurbulenceSimulatorScaffold
 import Hqiv.Physics.ToyDiscreteHeat
 import Hqiv.Physics.ThermodynamicLawsFromLadder
@@ -54,6 +55,16 @@ import Hqiv.Physics.DerivedGaugeAndLeptonSector
 import Hqiv.Physics.InformationalEnergyMass
 import Hqiv.Physics.HadronMassReadout
 import Hqiv.Physics.HepDecayReadout
+import Hqiv.Physics.ExcitedMassComparisonHonesty
+import Hqiv.Physics.ExcitedMassPanelReadout
+import Hqiv.Physics.HepAnomalyDischarge
+import Hqiv.Physics.HepExtendedAnomalyDischarge
+import Hqiv.Physics.HepDecayChannelRouting
+import Hqiv.Physics.SpineDischargeWeight
+import Hqiv.Physics.SpineDischargeUniqueness
+import Hqiv.Physics.ElectroweakMassObservation
+import Hqiv.Physics.AcceleratorOutsideDressing
+import Hqiv.Physics.ProofSpineInventory
 import Hqiv.Physics.NaturalUnitMeVTheory
 import Hqiv.Physics.ScaleWitness
 import Hqiv.Physics.DiscretePlaquetteHolonomy

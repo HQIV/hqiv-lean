@@ -1,0 +1,20 @@
+{
+  "source": "SILSO 13-month smoothed monthly sunspot extrema (https://www.sidc.be/SILSO/cyclesminmax)",
+  "note": "Cycle 25 maximum month follows SILSO 2025 confirmation (Oct 2024, SN 160.8 smoothed).",
+  "cycles": [
+    {"number": 12, "minimum": {"year": 1878, "month": 12, "sn": 3.7}, "maximum": {"year": 1883, "month": 12, "sn": 124.4}},
+    {"number": 13, "minimum": {"year": 1890, "month": 3, "sn": 8.3}, "maximum": {"year": 1894, "month": 1, "sn": 146.5}},
+    {"number": 14, "minimum": {"year": 1902, "month": 1, "sn": 4.5}, "maximum": {"year": 1906, "month": 2, "sn": 107.1}},
+    {"number": 15, "minimum": {"year": 1913, "month": 7, "sn": 2.5}, "maximum": {"year": 1917, "month": 8, "sn": 175.7}},
+    {"number": 16, "minimum": {"year": 1923, "month": 8, "sn": 9.3}, "maximum": {"year": 1928, "month": 4, "sn": 130.2}},
+    {"number": 17, "minimum": {"year": 1933, "month": 9, "sn": 5.8}, "maximum": {"year": 1937, "month": 4, "sn": 198.6}},
+    {"number": 18, "minimum": {"year": 1944, "month": 2, "sn": 12.9}, "maximum": {"year": 1947, "month": 5, "sn": 218.7}},
+    {"number": 19, "minimum": {"year": 1954, "month": 4, "sn": 5.1}, "maximum": {"year": 1958, "month": 3, "sn": 285.0}},
+    {"number": 20, "minimum": {"year": 1964, "month": 10, "sn": 14.3}, "maximum": {"year": 1968, "month": 11, "sn": 156.6}},
+    {"number": 21, "minimum": {"year": 1976, "month": 3, "sn": 17.8}, "maximum": {"year": 1979, "month": 12, "sn": 232.9}},
+    {"number": 22, "minimum": {"year": 1986, "month": 9, "sn": 13.5}, "maximum": {"year": 1989, "month": 11, "sn": 212.5}},
+    {"number": 23, "minimum": {"year": 1996, "month": 8, "sn": 11.2}, "maximum": {"year": 2001, "month": 11, "sn": 180.3}},
+    {"number": 24, "minimum": {"year": 2008, "month": 12, "sn": 2.2}, "maximum": {"year": 2014, "month": 4, "sn": 116.4}},
+    {"number": 25, "minimum": {"year": 2019, "month": 12, "sn": 1.8}, "maximum": {"year": 2024, "month": 10, "sn": 160.8}}
+  ]
+}

@@ -50,9 +50,59 @@ def G2DeltaSeedSet : Set (Matrix (Fin 8) (Fin 8) ℝ) :=
 def GoldbachPair (n p q : ℕ) : Prop :=
   Nat.Prime p ∧ Nat.Prime q ∧ p + q = n
 
-/-- The even Goldbach statement, restricted to the parity case `2 < n` and `Even n`. -/
+/--
+**Even Goldbach (parity form used in the bridge).**
+
+Every even integer `n > 2` is the sum of two primes.  Ordered pairs `(p, q)` are
+allowed; there is no ordering constraint beyond `p + q = n`.
+
+The smallest case is `n = 4` (`2 + 2`).  This is the predicate wired into
+`SO8ProjectedHalfSlopeBridge` via `GoldbachParity` / `SO4ZetaHolonomyForcesMidpointPairs 2`.
+-/
 def GoldbachParity : Prop :=
   ∀ n : ℕ, 2 < n → Even n → ∃ p q : ℕ, GoldbachPair n p q
+
+/--
+**Classical even Goldbach (standard number-theory statement).**
+
+Every even integer `n ≥ 4` is the sum of two primes.  Diagonal pairs `(p, p)` are
+explicitly allowed when `n = 2p` and `p` is prime.
+
+**Comparison to `GoldbachParity`.**  For even `n`, the conditions `2 < n` and
+`4 ≤ n` are equivalent (the first positive even case is `n = 4`).  The bridge
+and holonomy modules use `GoldbachParity`; this definition matches the usual
+literature wording.
+
+**Midpoint form.**  Writing `n = 2N`, a pair `(p, q)` with `p + q = 2N` and
+`p ≤ N ≤ q` is a `GoldbachMidpointPair N p q`; see `goldbach_pair_of_midpoint_pair`
+and `midpoint_goldbach_two_iff_goldbach_parity` for the equivalence with
+`MidpointGoldbachEventually 2`.
+-/
+def ClassicalEvenGoldbach : Prop :=
+  ∀ n : ℕ, 4 ≤ n → Even n → ∃ p q : ℕ, GoldbachPair n p q
+
+theorem classical_even_goldbach_iff_goldbach_parity :
+    ClassicalEvenGoldbach ↔ GoldbachParity := by
+  constructor
+  · intro h n hn hEven
+    have h4 : 4 ≤ n := by
+      rcases hEven with ⟨k, hk⟩
+      subst hk
+      omega
+    exact h n h4 hEven
+  · intro h n hn hEven
+    exact h n (lt_of_lt_of_le (by decide : 2 < 4) hn) hEven
+
+/-- Smallest even integer in the classical Goldbach statement. -/
+def classicalGoldbachThreshold : ℕ := 4
+
+theorem classical_goldbach_threshold_eq_four :
+    classicalGoldbachThreshold = 4 := rfl
+
+theorem four_is_classical_goldbach_case :
+    ClassicalEvenGoldbach → ∃ p q : ℕ, GoldbachPair 4 p q := by
+  intro h
+  exact h 4 (by decide) (by decide : Even 4)
 
 /--
 Two odd block norms land on the even axis in the sum-form carrier.
@@ -3443,6 +3493,75 @@ theorem composite_midpoint_has_survivor_four : CompositeMidpointHasSurvivor 4 :=
 
 theorem soe_forward_forces_off_diagonal_four : SOEForwardForcesOffDiagonalReflection 4 :=
   fun _ => offDiagonalPrimeReflection_four
+
+/-! #### Example: `12 = 5 + 7` at reflection midpoint `N = 6` -/
+
+theorem not_prime_six : ¬ Nat.Prime 6 := by decide
+
+theorem goldbach_midpoint_pair_six_five_seven : GoldbachMidpointPair 6 5 7 := by
+  refine ⟨nat_prime_five, nat_prime_seven, by decide, by decide, by decide⟩
+
+theorem dual_midpoint_survivor_six_five : dualMidpointSurvivor 6 5 := by
+  unfold dualMidpointSurvivor sieveFromTwo sieveFromTwoN
+  refine ⟨nat_prime_five, nat_prime_seven, by decide, by decide⟩
+
+theorem composite_midpoint_has_survivor_six : CompositeMidpointHasSurvivor 6 := by
+  intro _
+  exact ⟨5, dual_midpoint_survivor_six_five⟩
+
+/-! #### Example: `18 = 7 + 11` at reflection midpoint `N = 9` -/
+
+theorem not_prime_nine : ¬ Nat.Prime 9 := by decide
+
+theorem goldbach_midpoint_pair_nine_seven_eleven : GoldbachMidpointPair 9 7 11 := by
+  refine ⟨nat_prime_seven, nat_prime_eleven, by decide, by decide, by decide⟩
+
+theorem dual_midpoint_survivor_nine_seven : dualMidpointSurvivor 9 7 := by
+  unfold dualMidpointSurvivor sieveFromTwo sieveFromTwoN
+  refine ⟨nat_prime_seven, nat_prime_eleven, by decide, by decide⟩
+
+theorem composite_midpoint_has_survivor_nine : CompositeMidpointHasSurvivor 9 := by
+  intro _
+  exact ⟨7, dual_midpoint_survivor_nine_seven⟩
+
+/-! #### Example: `20 = 3 + 17` at reflection midpoint `N = 10` -/
+
+theorem nat_prime_seventeen : Nat.Prime 17 := by decide
+theorem not_prime_ten : ¬ Nat.Prime 10 := by decide
+
+theorem goldbach_midpoint_pair_ten_three_seventeen : GoldbachMidpointPair 10 3 17 := by
+  refine ⟨nat_prime_three, nat_prime_seventeen, by decide, by decide, by decide⟩
+
+theorem dual_midpoint_survivor_ten_three : dualMidpointSurvivor 10 3 := by
+  unfold dualMidpointSurvivor sieveFromTwo sieveFromTwoN
+  refine ⟨nat_prime_three, nat_prime_seventeen, by decide, by decide⟩
+
+theorem composite_midpoint_has_survivor_ten : CompositeMidpointHasSurvivor 10 := by
+  intro _
+  exact ⟨3, dual_midpoint_survivor_ten_three⟩
+
+/-- Explicit SoE/midpoint survivors for small composite midpoints (witness route). -/
+theorem composite_midpoint_has_survivor_small_composites :
+    CompositeMidpointHasSurvivor 4 ∧ CompositeMidpointHasSurvivor 6 ∧
+      CompositeMidpointHasSurvivor 8 ∧ CompositeMidpointHasSurvivor 9 ∧
+      CompositeMidpointHasSurvivor 10 ∧ CompositeMidpointHasSurvivor 15 := by
+  refine ⟨composite_midpoint_has_survivor_four, composite_midpoint_has_survivor_six, ?_⟩
+  refine ⟨composite_midpoint_has_survivor_eight, composite_midpoint_has_survivor_nine, ?_⟩
+  exact ⟨composite_midpoint_has_survivor_ten, composite_midpoint_has_survivor_fifteen⟩
+
+theorem eckmann_hilton_forward_collapse_small_composites :
+    EckmannHiltonForwardCollapse 4 ∧ EckmannHiltonForwardCollapse 6 ∧
+      EckmannHiltonForwardCollapse 8 ∧ EckmannHiltonForwardCollapse 9 ∧
+      EckmannHiltonForwardCollapse 10 ∧ EckmannHiltonForwardCollapse 15 := by
+  rcases composite_midpoint_has_survivor_small_composites with
+    ⟨h4, h6, h8, h9, h10, h15⟩
+  refine ⟨?_, ?_, ?_, ?_, ?_, ?_⟩
+  · exact (eckmann_hilton_forward_collapse_iff_composite 4).mpr h4
+  · exact (eckmann_hilton_forward_collapse_iff_composite 6).mpr h6
+  · exact (eckmann_hilton_forward_collapse_iff_composite 8).mpr h8
+  · exact (eckmann_hilton_forward_collapse_iff_composite 9).mpr h9
+  · exact (eckmann_hilton_forward_collapse_iff_composite 10).mpr h10
+  · exact (eckmann_hilton_forward_collapse_iff_composite 15).mpr h15
 
 theorem composite_overlay_survivor_iff_composite (N : ℕ) :
     CompositeMidpointOverlaySurvivor N ↔ CompositeMidpointHasSurvivor N := by
