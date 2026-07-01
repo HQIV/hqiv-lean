@@ -54,6 +54,15 @@ theorem effCorrected_pos (δ : ℝ) (m : ℕ) (h : rindlerDenPos δ m) : 0 < eff
   unfold effCorrected rindlerDenPos at *
   exact div_pos (shellSurface_pos m) h
 
+theorem rindlerDenPos_zero (m : ℕ) : rindlerDenPos 0 m := by
+  unfold rindlerDenPos rindlerDenWithDelta cRindler
+  rw [gammaHQIV_eq]
+  have hm : (0 : ℝ) ≤ (m : ℝ) := Nat.cast_nonneg m
+  nlinarith
+
+theorem effCorrected_zero_pos (m : ℕ) : 0 < effCorrected 0 m :=
+  effCorrected_pos 0 m (rindlerDenPos_zero m)
+
 /-- Geometric resonance step on corrected surfaces. -/
 noncomputable def geometricStepCorrected (δ : ℝ) (m_from m_to : ℕ) : ℝ :=
   effCorrected δ m_from / effCorrected δ m_to
@@ -63,6 +72,15 @@ theorem geometricStepCorrected_zero (m_from m_to : ℕ) :
       detunedSurface m_from / detunedSurface m_to := by
   unfold geometricStepCorrected
   rw [effCorrected_zero_eq_detuned, effCorrected_zero_eq_detuned]
+
+/-- **Geometric resonance step** on δ = 0 detuned surfaces (legacy `geometricResonanceStep`). -/
+noncomputable def geometricResonanceStep (m_from m_to : ℕ) : ℝ :=
+  geometricStepCorrected 0 m_from m_to
+
+theorem geometricResonanceStep_eq_detuned_ratio (m_from m_to : ℕ) :
+    geometricResonanceStep m_from m_to =
+      detunedSurface m_from / detunedSurface m_to :=
+  geometricStepCorrected_zero m_from m_to
 
 /-- Global detuning hypothesis: one scalar observer datum times a coefficient. -/
 structure GlobalDetuningHypothesis where

@@ -146,8 +146,12 @@ Positive below lock-in (a deficit → outward pull toward the horizon), negative
 (a surplus → inward pull toward the Planck pole), zero at lock-in. -/
 def modeDeficit (m : ℕ) : ℤ := (sectorClosureCapacity : ℤ) - (newModes m : ℤ)
 
-private theorem modeDeficit_eq (m : ℕ) : modeDeficit m = 40 - 8 * ((m : ℤ) + 1) := by
+theorem modeDeficit_eq (m : ℕ) : modeDeficit m = 40 - 8 * ((m : ℤ) + 1) := by
   unfold modeDeficit; rw [sectorClosureCapacity_eq_forty, newModes_eq]; push_cast; ring
+
+/-- Each outward shell step unlocks eight more modes, so the deficit drops by eight. -/
+theorem modeDeficit_succ (m : ℕ) : modeDeficit (m + 1) = modeDeficit m - 8 := by
+  rw [modeDeficit_eq, modeDeficit_eq]; push_cast; ring
 
 /-- **Outward pull below lock-in:** the deficit is positive exactly for `m < referenceM`. -/
 theorem modeDeficit_pos_iff (m : ℕ) : 0 < modeDeficit m ↔ m < referenceM := by
@@ -160,6 +164,20 @@ theorem modeDeficit_neg_iff (m : ℕ) : modeDeficit m < 0 ↔ referenceM < m := 
 /-- **No net pull at lock-in:** the deficit vanishes exactly at `referenceM`. -/
 theorem modeDeficit_eq_zero_iff (m : ℕ) : modeDeficit m = 0 ↔ m = referenceM := by
   rw [modeDeficit_eq, show referenceM = 4 from rfl]; omega
+
+/-- Each outward shell step drops the deficit by eight, hence strictly decreases it. -/
+theorem modeDeficit_succ_lt (m : ℕ) : modeDeficit (m + 1) < modeDeficit m := by
+  rw [modeDeficit_succ]; linarith
+
+/-- Below lock-in, stepping outward strictly reduces the positive deficit. -/
+theorem modeDeficit_succ_lt_of_below {m : ℕ} (h : m < referenceM) :
+    modeDeficit (m + 1) < modeDeficit m :=
+  modeDeficit_succ_lt m
+
+/-- Above lock-in, stepping outward makes the surplus more negative. -/
+theorem modeDeficit_succ_lt_of_above {m : ℕ} (h : referenceM < m) :
+    modeDeficit (m + 1) < modeDeficit m :=
+  modeDeficit_succ_lt m
 
 theorem modeDeficit_referenceM : modeDeficit referenceM = 0 :=
   (modeDeficit_eq_zero_iff referenceM).mpr rfl

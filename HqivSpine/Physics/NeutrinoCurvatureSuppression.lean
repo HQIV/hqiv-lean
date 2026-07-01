@@ -2,7 +2,12 @@ import HqivSpine.Physics.Shell
 import HqivSpine.Physics.NeutrinoSeesaw
 
 /-!
-# `HqivSpine.Physics.NeutrinoCurvatureSuppression` — the **HQIV-native** neutrino-mass mechanism
+# `HqivSpine.Physics.NeutrinoCurvatureSuppression` — outer-horizon lattice bridge for `1/140`
+
+**Note:** absolute neutrino mass in the spine now routes through
+`CarrierMonogamySuppression` (`γ/(7·8)` on the octonionic carrier). This module keeps the
+horizon-area uniqueness lemmas and the seesaw rhyme; the outer-shell narrative is a consistency
+bridge, not the defining spine story.
 
 The textbook **type-I seesaw** (`NeutrinoSeesaw`) is a graft: it postulates a sterile right-handed
 state with a *free* heavy Majorana mass `M_R` and a *free* Dirac coupling `m_D`, and reads off
@@ -53,10 +58,9 @@ and the neutrino mass is a charged-sector anchor scale `m_χ` (a ladder rung) da
 * **The one physical posit (now in foundation constants):** that the chargeless neutrino relaxes to the
   shell whose horizon area *saturates the octonionic carrier surface* `7·8`. This selection principle is
   the input; given it, the shell and the factor are unique.
-* **Honest open frontier (not claimed solved):** the *absolute normalization* of the charged anchor
-  `m_χ` and the generation *ordering*. With the legacy `M_Z`-like witness the `1/140` factor overshoots
-  the cosmological `Σm_ν < 0.12 eV` bound by ~`10⁸` and the naive cascade inverts ordering. The
-  **suppression factor is now uniquely pinned**; the **calibration of `m_χ` and the ordering remain open**.
+* **Honest open frontier (not claimed solved):** MeV unit labels and cosmological `Σm_ν` comparison
+  remain quarantined (`Frontiers.mevUnitConventionFrontier`). The charged anchor is now the derived
+  matched lepton nested Hopf readout (`NeutrinoAbsoluteScale`), not a free `M_Z`.
 
 Combined with `NeutrinoMixing` (`θ = π/4`, `δ = π/5`, genuinely native *numbers*), the neutrino
 sector is: native mixing angle + phase, and a native *mechanism* for the mass with an open
@@ -153,23 +157,8 @@ Together (`neutrinoSuppression_unique_from_foundations`) these force
 /-- **Numerator is the unique chargeless complement.** `γ = 1 − α` from the foundation unit split
 `alphaRat d + gammaRat d = 1` at `d = transverseDim = 3`. The charged sector couples through the
 curvature-imprint exponent `α`; the neutral mode carries only the complement. -/
-theorem gammaHQIV_eq_one_sub_alphaEM : gammaHQIV = 1 - alphaEM := by
-  have h : alphaRat transverseDim + gammaRat transverseDim = 1 :=
-    alpha_add_gamma transverseDim (by decide)
-  unfold gammaHQIV alphaEM
-  have hc : ((alphaRat transverseDim : ℝ)) + ((gammaRat transverseDim : ℝ)) = 1 := by
-    exact_mod_cast h
-  linarith
-
-/-- The outer-horizon area is strictly monotone in the shell (the horizon recedes one step at a
-time), hence the shell ↦ area map is injective. -/
-theorem latticeSimplexCount_strictMono : StrictMono latticeSimplexCount := by
-  apply strictMono_nat_of_lt_succ
-  intro n
-  show latticeSimplexCount n < latticeSimplexCount (n + 1)
-  unfold latticeSimplexCount
-  rw [shellNumer_increment]
-  omega
+theorem gammaHQIV_eq_one_sub_alphaEM : gammaHQIV = 1 - alphaEM :=
+  HqivSpine.Physics.gammaHQIV_eq_one_sub_alphaEM
 
 /-- **The closure shell's area is the octonionic carrier surface:** `S(referenceM+2) = 7·8 =
 imaginaryDim · carrierMultiplicity`. The `7` imaginary directions wrap the `8`-component carrier. -/

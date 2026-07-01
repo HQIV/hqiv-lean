@@ -1,5 +1,6 @@
 import HqivSpine.Physics.Proton
-import HqivSpine.Physics.Frontiers
+import HqivSpine.Physics.ClosureAction
+import HqivSpine.Physics.ContentClassCompositeTrace
 
 /-!
 # `HqivSpine.Physics.NucleonLadder` — one anchor, real nucleon masses
@@ -13,8 +14,9 @@ excited-baryon masses as **exact rational multiples** of that single anchor.
   weights sum to `3` (`nucleonWeight_sum`); the binding closes to `E_bind = 3·latticeSimplexCount(m)·α_eff(m)`
   (`E_bind_nucleon`), positive (`E_bind_nucleon_pos`) and bounded `≤ count(m)/14` (`E_bind_nucleon_le`),
   so the QCD-trace shift on the ground state is sub-`2.2` MeV — the proton ground *is* the anchor.
-* **One anchor.** `protonConstituent = readout + E_bind(4)`; the ground composite mass reproduces the
-  anchor exactly (`ground_reproduces_anchor`) — no new number, just the inversion `Proton` already proved.
+* **One anchor.** `protonConstituent = readout + (3/5)·E_bind(4)` with Hopf fiber localization at
+  lock-in winding `3`; the ground composite mass reproduces the anchor exactly
+  (`ground_reproduces_anchor`) — no new number, just the inversion `Proton` already proved.
 * **Operational radial ladder.** The excited baryons sit at `M(n) = m_p · S(4+n)/S(4)` with
   `S(m) = latticeSimplexCount(m) = (m+1)(m+2)`; this is the **exact rational** `m_p·(n+5)(n+6)/30`
   (`radialMass_ratio`), giving rungs `m_p, (7/5)m_p, (28/15)m_p, (12/5)m_p, …` (`radialMass_one/two/three`),
@@ -43,9 +45,23 @@ def nucleonTraceDiagonal : So8TraceDiagonal := fun k i => if k = 0 ∧ (i : ℕ)
 /-- **Nucleon trace state:** the all-ones octonion carrier. -/
 def nucleonTraceState : OctonionState := fun _ => 1
 
+theorem nucleonTraceState_eq_contentClass :
+    nucleonTraceState = ContentClassCompositeTrace.contentClassTraceState := rfl
+
 /-- **Nucleon network weight** from the concrete composite trace. -/
 noncomputable def nucleonWeight : NetworkWeight :=
   networkWeightFromCompositeTrace nucleonTraceDiagonal nucleonTraceState
+
+/-- The nucleon trace is the quark content-class trace (`l = 3`). -/
+theorem nucleonTraceDiagonal_eq_contentClass :
+    nucleonTraceDiagonal = ContentClassCompositeTrace.contentClassTraceDiagonal .quark := by
+  funext k i
+  simp [nucleonTraceDiagonal, ContentClassCompositeTrace.contentClassTraceDiagonal, conservedTripleCount]
+
+theorem nucleonWeight_eq_contentClass_quark :
+    nucleonWeight = ContentClassCompositeTrace.contentClassWeight .quark := by
+  unfold nucleonWeight ContentClassCompositeTrace.contentClassWeight
+  rw [nucleonTraceDiagonal_eq_contentClass, nucleonTraceState_eq_contentClass]
 
 theorem nucleonWeight_zero : nucleonWeight 0 = 3 := by
   unfold nucleonWeight networkWeightFromCompositeTrace compositeTraceAtGenerator
@@ -120,16 +136,28 @@ theorem E_bind_nucleon_le (m : ℕ) :
 
 /-! ## One anchor: the constituent and the reproduced ground -/
 
-/-- **Proton constituent** = the single now-slice readout plus the (now concrete) nucleon binding at the
+/-- **Proton lock-in binding** with Hopf fiber–base weight `n/(n+2)` at winding `3`. -/
+noncomputable def protonHopfBinding (coupling : ℝ := 1) : ℝ :=
+  hopfFibrationShape hopfLockinWinding * E_bind_from_network protonLockinShell nucleonWeight coupling
+
+theorem protonHopfBinding_eq (coupling : ℝ) :
+    protonHopfBinding coupling =
+      hopfFibrationShape hopfLockinWinding *
+        E_bind_from_network protonLockinShell nucleonWeight coupling := rfl
+
+theorem protonHopfBinding_one :
+    protonHopfBinding 1 = (3 : ℝ) / 5 * E_bind_from_network protonLockinShell nucleonWeight 1 := by
+  rw [protonHopfBinding, hopfFibrationShape_lockin]
+
+/-- **Proton constituent** = the single now-slice readout plus Hopf-localized nucleon binding at the
 lock-in shell. The only dimensionful input is the readout. -/
 noncomputable def protonConstituent (s : NowSlice) (protonFactor : ℝ) : ℝ :=
-  protonReadout s protonFactor + E_bind_from_network protonLockinShell nucleonWeight 1
+  protonReadout s protonFactor + protonHopfBinding 1
 
 /-- **The ground composite mass reproduces the anchor exactly** — no new number. -/
 theorem ground_reproduces_anchor (s : NowSlice) (protonFactor : ℝ) :
-    M_composite_from_network protonLockinShell (protonConstituent s protonFactor) nucleonWeight 1
-      = protonReadout s protonFactor := by
-  unfold M_composite_from_network protonConstituent; ring
+    protonConstituent s protonFactor - protonHopfBinding 1 = protonReadout s protonFactor := by
+  unfold protonConstituent; ring
 
 /-! ## Operational radial excitation ladder (exact rational multiples) -/
 
@@ -195,6 +223,10 @@ theorem rindlerDetuning_pos (m : ℕ) : 0 < rindlerDetuning m := by
 
 /-- **Detuned surface** `S̃(m) = latticeSimplexCount(m) / (1 + (γ/2)m)`. -/
 noncomputable def detunedSurface (m : ℕ) : ℝ := (latticeSimplexCount m : ℝ) / rindlerDetuning m
+
+theorem detunedSurface_pos (m : ℕ) : 0 < detunedSurface m := by
+  unfold detunedSurface
+  exact div_pos (by exact_mod_cast latticeSimplexCount_pos m) (rindlerDetuning_pos m)
 
 /-- **Operational orbital step:** detuned-surface ratio `S̃(4+ℓ)/S̃(4)`. -/
 noncomputable def orbitalStep (ℓ : ℕ) : ℝ := detunedSurface (referenceM + ℓ) / detunedSurface referenceM
@@ -341,11 +373,23 @@ shell (`E_bind_strictMono`), so the bare composite-trace readout drops — which
 physical tower must be the operational surface law, not the bare binding. -/
 theorem naive_excited_lt_ground (s : NowSlice) (protonFactor : ℝ) {n ℓ : ℕ} (h : 1 ≤ n + ℓ) :
     naiveExcitedMass s protonFactor n ℓ < protonReadout s protonFactor := by
-  unfold naiveExcitedMass M_composite_from_network protonConstituent
-  have hlt : E_bind_from_network protonLockinShell nucleonWeight 1
+  unfold naiveExcitedMass M_composite_from_network protonConstituent protonHopfBinding
+  have hshape : hopfFibrationShape hopfLockinWinding < 1 :=
+    hopfFibrationShape_lt_one (by decide : 0 < hopfLockinWinding)
+  have hinc : E_bind_from_network protonLockinShell nucleonWeight 1
+      < E_bind_from_network (protonLockinShell + n + ℓ) nucleonWeight 1 :=
+    E_bind_strictMono (by
+      rw [protonLockinShell]
+      omega)
+  have hlt : hopfFibrationShape hopfLockinWinding * E_bind_from_network protonLockinShell nucleonWeight 1
       < E_bind_from_network (protonLockinShell + n + ℓ) nucleonWeight 1 := by
-    apply E_bind_strictMono
-    simp only [protonLockinShell, referenceM]; omega
+    have hpos := E_bind_nucleon_pos protonLockinShell
+    calc
+      hopfFibrationShape hopfLockinWinding * E_bind_from_network protonLockinShell nucleonWeight 1
+          < (1 : ℝ) * E_bind_from_network protonLockinShell nucleonWeight 1 := by
+              gcongr
+      _ < E_bind_from_network (protonLockinShell + n + ℓ) nucleonWeight 1 := by
+        simpa [one_mul] using hinc
   linarith [hlt]
 
 /-- `ΔM(1,0) < 0` — the original specific case. -/
@@ -366,6 +410,17 @@ def mesonTraceDiagonal : So8TraceDiagonal := fun k i => if k = 0 ∧ (i : ℕ) <
 
 noncomputable def mesonWeight : NetworkWeight :=
   networkWeightFromCompositeTrace mesonTraceDiagonal nucleonTraceState
+
+/-- The meson trace is the charged-lepton content-class trace (`l = 2`). -/
+theorem mesonTraceDiagonal_eq_contentClass :
+    mesonTraceDiagonal = ContentClassCompositeTrace.contentClassTraceDiagonal .chargedLepton := by
+  funext k i
+  simp [mesonTraceDiagonal, ContentClassCompositeTrace.contentClassTraceDiagonal, conservedTripleCount]
+
+theorem mesonWeight_eq_contentClass_chargedLepton :
+    mesonWeight = ContentClassCompositeTrace.contentClassWeight .chargedLepton := by
+  unfold mesonWeight ContentClassCompositeTrace.contentClassWeight
+  rw [mesonTraceDiagonal_eq_contentClass, nucleonTraceState_eq_contentClass]
 
 theorem mesonWeight_zero : mesonWeight 0 = 2 := by
   unfold mesonWeight networkWeightFromCompositeTrace compositeTraceAtGenerator
@@ -396,16 +451,25 @@ theorem E_bind_meson (m : ℕ) (c : ℝ) :
 noncomputable def carrierMass (s : NowSlice) (protonFactor : ℝ) : ℝ :=
   protonConstituent s protonFactor / 3
 
-/-- **Meson ground** = two carriers minus the two-carrier binding. -/
-noncomputable def mesonGround (s : NowSlice) (protonFactor : ℝ) : ℝ :=
-  2 * carrierMass s protonFactor - E_bind_from_network protonLockinShell mesonWeight 1
+/-- **Meson lock-in binding** with the same Hopf fiber localization as the proton. -/
+noncomputable def mesonHopfBinding (coupling : ℝ := 1) : ℝ :=
+  hopfFibrationShape hopfLockinWinding * E_bind_from_network protonLockinShell mesonWeight coupling
 
-/-- **Meson ground is exactly `2/3` of the proton.** Carrier mass and binding both scale with count, so
-they cancel in the ratio and the meson rides the *same* single anchor. -/
+theorem mesonHopfBinding_one :
+    mesonHopfBinding 1 = (3 : ℝ) / 5 * E_bind_from_network protonLockinShell mesonWeight 1 := by
+  rw [mesonHopfBinding, hopfFibrationShape_lockin]
+
+/-- **Meson ground** = two carriers minus the Hopf-localized two-carrier binding. -/
+noncomputable def mesonGround (s : NowSlice) (protonFactor : ℝ) : ℝ :=
+  2 * carrierMass s protonFactor - mesonHopfBinding 1
+
+/-- **Meson ground is exactly `2/3` of the proton.** Carrier mass and Hopf-localized binding both
+scale with trace count, so they cancel in the ratio and the meson rides the *same* single anchor. -/
 theorem mesonGround_eq (s : NowSlice) (protonFactor : ℝ) :
     mesonGround s protonFactor = 2 / 3 * protonReadout s protonFactor := by
-  unfold mesonGround carrierMass protonConstituent
-  rw [E_bind_meson, E_bind_nucleon]; ring
+  unfold mesonGround carrierMass protonConstituent protonHopfBinding mesonHopfBinding
+  rw [E_bind_meson, E_bind_nucleon, hopfFibrationShape_lockin]
+  ring
 
 theorem mesonGround_lt_proton (s : NowSlice) (protonFactor : ℝ)
     (h : 0 < protonReadout s protonFactor) :
@@ -421,8 +485,11 @@ theorem mesonRadialMass_eq (s : NowSlice) (protonFactor : ℝ) (n : ℕ) :
 
 /-! ## MeV comparison (comparison only — the single allowed anchor) -/
 
+/-- **Comparison only:** empirical proton mass in MeV (same value as `Frontiers.protonMass_MeV_comparison`). -/
+def protonMass_MeV_comparison : ℝ := 938.272
+
 /-- The radial rungs against the `referenceM = 4` proton comparison anchor (`938.272` MeV, comparison
-only per `Frontiers`). Exact rational outputs: `938.272, 1313.58, 1751.44, 2251.85 …` MeV. -/
+only). Exact rational outputs: `938.272, 1313.58, 1751.44, 2251.85 …` MeV. -/
 theorem radialMass_one_comparison :
     radialMass protonMass_MeV_comparison 1 = 938.272 * (7 / 5) := by
   rw [radialMass_one]; norm_num [protonMass_MeV_comparison]
@@ -440,8 +507,7 @@ structure NucleonLadderDischarged : Prop where
     = 3 * (latticeSimplexCount m : ℝ) * alphaEffAtShell m 1
   binding_pos : ∀ m : ℕ, 0 < E_bind_from_network m nucleonWeight 1
   ground_anchor : ∀ (s : NowSlice) (pf : ℝ),
-    M_composite_from_network protonLockinShell (protonConstituent s pf) nucleonWeight 1
-      = protonReadout s pf
+    protonConstituent s pf - protonHopfBinding 1 = protonReadout s pf
   rung_rational : ∀ (mp : ℝ) (n : ℕ),
     radialMass mp n = mp * (((n : ℝ) + 5) * ((n : ℝ) + 6) / 30)
   rungs_increase : ∀ mp : ℝ, 0 < mp → StrictMono (radialMass mp)

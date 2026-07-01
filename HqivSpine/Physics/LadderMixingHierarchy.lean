@@ -50,8 +50,8 @@ noncomputable def sinθLadder (gL gH : ℕ) : ℝ :=
 noncomputable def cosθLadder (gL gH : ℕ) : ℝ :=
   cosθ (beltramiMinEigenvalue gL) (beltramiMinEigenvalue gH)
 
-theorem ladderEigen_pos (g : ℕ) : 0 < beltramiMinEigenvalue g := by
-  unfold beltramiMinEigenvalue; positivity
+theorem ladderEigen_pos (g : ℕ) : 0 < beltramiMinEigenvalue g :=
+  beltramiMinEigenvalue_pos g
 
 theorem sinθLadder_pos (gL gH : ℕ) : 0 < sinθLadder gL gH := by
   unfold sinθLadder sinθ
@@ -71,7 +71,8 @@ theorem cosθLadder_pos (gL gH : ℕ) : 0 < cosθLadder gL gH := by
 `sin²θ = (gₗ+1)/((gₗ+1)+(gₕ+1))`. -/
 theorem sinθLadder_sq (gL gH : ℕ) :
     sinθLadder gL gH ^ 2 = ((gL : ℝ) + 1) / (((gL : ℝ) + 1) + ((gH : ℝ) + 1)) := by
-  unfold sinθLadder sinθ beltramiMinEigenvalue
+  unfold sinθLadder sinθ
+  rw [beltramiMinEigenvalue_eq_succ, beltramiMinEigenvalue_eq_succ]
   rw [Real.sq_sqrt (by positivity)]
 
 /-- **Pythagoras** for the ladder angle. -/

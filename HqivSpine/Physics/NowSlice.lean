@@ -19,6 +19,11 @@ them; here they stay explicit, and the proton is a readout from this slice.
 
 The slice's curvature imprint `Ω_k · δ_E(m)` reuses the combinatorial `δ_E` from
 `Curvature`; the load-bearing `1/(m+1)` discreteness is proved there.
+
+**Causal-diamond reading:** the slice is the **local apex chart** of an observer's
+finite causal patch on the null lattice — time, place, lapse `N`, and discrete `Ω_k`.
+Global imprint glue `(α,γ) = (3/5,2/5)` is **not** stored on the slice; it enters only
+through the evaluation map in `NowSliceCausalDiamond`.
 -/
 
 namespace HqivSpine.Physics
