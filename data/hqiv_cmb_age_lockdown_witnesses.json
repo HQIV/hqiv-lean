@@ -1,0 +1,64 @@
+{
+  "title": "HQIV cosmological outside-curvature lock-down (age / T_CMB / birefringence)",
+  "single_external_dimensionful_input": {
+    "name": "T_CMB",
+    "value_K": 2.7255,
+    "source": "FIRAS CMB monopole"
+  },
+  "derived_constants": {
+    "T_Planck_K": 1.4167841617232972e+32,
+    "t_Planck_s": 5.391246446661944e-44,
+    "alpha": 0.6,
+    "referenceM": 4,
+    "alpha_denominator_q": 5
+  },
+  "xi_to_shell_map": {
+    "temperature_ladder_depth_m_T": 5.198254124833232e+31,
+    "cells_per_shell_latticeSimplexCount": 2.702184594634571e+63,
+    "note": "m_T = T_Pl/T_CMB - 1; cells/shell = (m_T+2)(m_T+1) ~ (T_Pl/T_CMB)^2 (DERIVED)."
+  },
+  "route_A_integer_impedance": {
+    "route": "A_integer_monogamy_impedance",
+    "impedance_referenceM_times_q_squared": 100,
+    "m_prop": 0.01,
+    "beta_deg": 0.3420671775872036,
+    "predicted_wall_clock_age_Gyr": 46.16460770371066,
+    "age_input": "none (pure integers + T_CMB + lattice count)"
+  },
+  "route_B_class_dynamics": {
+    "route": "B_class_dynamics_wall_clock_age",
+    "t_wall_Gyr": 51.2,
+    "m_prop": 0.01109074733800556,
+    "beta_deg": 0.37917301766838984,
+    "age_input": "wall-clock age from HQIV-modified CLASS background run"
+  },
+  "falsifier_apparent_age": {
+    "route": "falsifier_apparent_age",
+    "t_apparent_Gyr": 13.8,
+    "m_prop": 0.002989302993446811,
+    "beta_deg": 0.10261137517740979,
+    "deviation_sigma": -2.546687498112662,
+    "verdict": "REJECTED: apparent age gives -2.55 sigma; chain selects wall-clock."
+  },
+  "lock": {
+    "wall_clock_age_integer_route_Gyr": 46.16460770371066,
+    "wall_clock_age_class_route_Gyr": 51.2,
+    "age_agreement_fraction": 0.9016524942130988,
+    "age_deviation_pct": 9.834750578690127,
+    "beta_integer_route_deg": 0.3420671775872036,
+    "beta_class_route_deg": 0.37917301766838984,
+    "eskilt_pr4_central_deg": 0.342,
+    "eskilt_pr4_sigma_deg": 0.094,
+    "integer_route_within_1sigma": true,
+    "class_route_within_1sigma": true,
+    "lock": "Integer monogamy impedance predicts the wall-clock age from T_CMB + lattice count alone; it agrees with the independent CLASS dynamics value to ~90%. Both beta routes bracket Eskilt PR4 within 1 sigma; the apparent age is rejected at -2.55 sigma."
+  },
+  "local_gravity_stack": {
+    "earth_surface_phi_over_c2": 6.953e-10,
+    "solar_at_1AU_phi_over_c2": 9.871e-09,
+    "galactic_vc_phi_over_c2": 6.04e-07,
+    "full_local_stack_phi_over_c2": 6.146e-07,
+    "cmb_dipole_v_over_c": 0.001234,
+    "scope": "These dress the lab-frame outside modulator (~0.3 ppm) but are a global multiplicative factor: they cancel exactly in dimensionless ratios (m_p/m_e, alpha ratios), and are 4 orders below the ~0.2% residuals. Recorded for completeness; negligible for the cosmo lock."
+  }
+}

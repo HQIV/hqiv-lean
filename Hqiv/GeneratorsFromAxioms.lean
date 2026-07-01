@@ -8,6 +8,7 @@ import Hqiv.Geometry.OctonionicLightCone
 import Hqiv.Generators
 import Hqiv.MatrixLieBracket
 import Hqiv.OctonionLeftMultiplication
+import Hqiv.Foundation.OctonionForcing
 
 namespace Hqiv
 
@@ -16,6 +17,29 @@ namespace Hqiv
 
 We **prove** that the 28 so(8) generators (defined in `Generators.lean` from
 `matrices.py` output) **arise from** the first assumptions of the framework.
+
+## Status update: the "first assumptions" are now the `Hqiv.Foundation` forcing layer
+
+The octonion factor `8`, the seven imaginary directions, and the Fano incidence are
+no longer taken as primitives here. They are **derived** in the axiom-free spine
+`Hqiv.Foundation.{ThreeDGrowth, CarrierBudget, SevenImaginaryIncidence, PhaseLiftForcing,
+ClosureConstraint, OctonionForcing}` from the single input `transverseDim = 3`:
+
+* `Hqiv.Foundation.carrierMultiplicity = 8` (`= 2³`),
+* `Hqiv.Foundation.imaginaryDim = 7`,
+* the full Fano incidence on those seven directions, and
+* `Hqiv.Foundation.soDim carrierMultiplicity = 28` with branching `28 = 14 + 7 + 7`.
+
+The concrete `octonionLeftMul_*` matrices, `phaseLiftDelta`, and the 28
+`so8Generator`s are therefore best read as a **witness/certification layer**: an
+explicit realization that discharges the abstract forcing data, not a free-standing
+premise. The single remaining gap — that the forced skeleton determines the octonion
+product *uniquely* — is isolated as `Hqiv.Foundation.OctonionTableUnique` and the
+honesty-boundary implication `Hqiv.Foundation.threeD_forces_octonion_of_uniqueness`.
+
+The bridge lemmas at the end of this file tie the numerals used downstream
+(`octonionImaginaryCount`, `g2Dim`, `lieClosureDim`) and the concrete phase-lift
+`phaseLiftDelta` back to that Foundation layer.
 
 ## First assumptions (in order)
 
@@ -148,5 +172,44 @@ def generators_from_octonion_closure : Prop :=
    (depends on `so8CoordMatrix_det_ne_zero`; det = -1 via script).
 6. **Combined theorem** — `generators_from_octonion_closure` in GeneratorsLieClosure.
 -/
+
+/-!
+## Bridges to the `Hqiv.Foundation` forcing layer
+
+These lemmas exhibit the numerals and the phase-lift used in this file as
+**consequences** of the axiom-free 3D-growth spine, demoting them from primitives to
+witnesses of the forced skeleton.
+-/
+
+/-- The imaginary-unit count `7` used here is the Foundation-derived `imaginaryDim`. -/
+theorem octonionImaginaryCount_eq_foundation :
+    octonionImaginaryCount = Hqiv.Foundation.imaginaryDim := by
+  unfold octonionImaginaryCount
+  rw [Hqiv.Foundation.imaginaryDim_eq_seven]
+
+/-- The `𝔤₂` dimension `14` used here is the Foundation-derived `g2Dim`. -/
+theorem g2Dim_eq_foundation :
+    g2Dim = Hqiv.Foundation.g2Dim := by
+  unfold g2Dim
+  rw [Hqiv.Foundation.g2Dim_eq_fourteen]
+
+/-- The closure dimension `28` used here is the Foundation-derived `soDim` of the carrier. -/
+theorem lieClosureDim_eq_foundation :
+    lieClosureDim = Hqiv.Foundation.soDim Hqiv.Foundation.carrierMultiplicity := by
+  unfold lieClosureDim
+  rw [Hqiv.Foundation.soDim_carrier]
+
+/-- **The concrete phase-lift is the abstract forced plane generator.**
+
+`phaseLiftDelta` (pasted from `matrices.py`) is *exactly* the table-free
+`Hqiv.Foundation.foundationDelta = planeGenerator (e₁) (e₇)`. So the distinguished
+`(e₁, e₇)` rotation is forced by the Foundation layer, and these matrices realize it. -/
+theorem phaseLiftDelta_eq_foundationDelta :
+    phaseLiftDelta = Hqiv.Foundation.foundationDelta := by
+  ext i j
+  fin_cases i <;> fin_cases j <;>
+    simp [phaseLiftDelta, Hqiv.Foundation.foundationDelta, Hqiv.Foundation.planeGenerator,
+      Hqiv.Foundation.phaseLiftPlaneI, Hqiv.Foundation.phaseLiftPlaneJ,
+      Matrix.sub_apply, Matrix.of_apply]
 
 end Hqiv

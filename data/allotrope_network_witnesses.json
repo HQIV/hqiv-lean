@@ -1,0 +1,395 @@
+{
+  "source": "scripts/hqiv_allotrope_network.py",
+  "lean_module": "Hqiv.QuantumChemistry.AllotropeNetwork",
+  "parameter_policy": "no_fitted_coefficients",
+  "input_policy": "NIST/CRC bond lengths & angles are comparison-only; never in the solve",
+  "law": {
+    "capacity": "cap(Z) = 8 - valence_electron_count(Z)  (octet shared-pair budget)",
+    "offer": "each atom commits cap(Z)/k to each of its k bonds",
+    "bond_order": "per bond = geometric mean of the two endpoints' offers (sqrt)",
+    "symmetric_order": "homonuclear uniform-k reduces to cap/k",
+    "angle": "theta = arccos(-1/(domains-1)), domains = k + VSEPR lone pairs",
+    "length": "r = pair_single_bond_carrier * 1/(1+(p-1)*strong/4)",
+    "spectrum": "allowed k in [ceil(cap/3), cap]  (1 <= p <= 3)"
+  },
+  "rows": [
+    {
+      "element_z": 6,
+      "name": "carbyne (sp)",
+      "coordination": 2,
+      "octet_capacity": 4,
+      "bond_order": 2.0,
+      "lone_pairs": 0,
+      "steric_domains": 2,
+      "bond_angle_deg": 180.0,
+      "bond_length_angstrom": 1.1199517691068783,
+      "length_reliable": true,
+      "hybridization": "sp",
+      "comparison": {
+        "r": 1.28,
+        "angle": 180.0
+      },
+      "angle_error_deg": 0.0,
+      "length_error_pct": -12.50376803852513
+    },
+    {
+      "element_z": 6,
+      "name": "graphite/graphene (sp2)",
+      "coordination": 3,
+      "octet_capacity": 4,
+      "bond_order": 1.3333333333333333,
+      "lone_pairs": 0,
+      "steric_domains": 3,
+      "bond_angle_deg": 120.00000000000001,
+      "bond_length_angstrom": 1.2095479106354288,
+      "length_reliable": true,
+      "hybridization": "sp2",
+      "comparison": {
+        "r": 1.421,
+        "angle": 120.0
+      },
+      "angle_error_deg": 1.4210854715202004e-14,
+      "length_error_pct": -14.880512974283691
+    },
+    {
+      "element_z": 6,
+      "name": "diamond (sp3)",
+      "coordination": 4,
+      "octet_capacity": 4,
+      "bond_order": 1.0,
+      "lone_pairs": 0,
+      "steric_domains": 4,
+      "bond_angle_deg": 109.47122063449069,
+      "bond_length_angstrom": 1.2599457402452383,
+      "length_reliable": true,
+      "hybridization": "sp3",
+      "comparison": {
+        "r": 1.544,
+        "angle": 109.5
+      },
+      "angle_error_deg": -0.028779365509308263,
+      "length_error_pct": -18.397296616241043
+    },
+    {
+      "element_z": 14,
+      "name": "Z14 k=2",
+      "coordination": 2,
+      "octet_capacity": 4,
+      "bond_order": 2.0,
+      "lone_pairs": 1,
+      "steric_domains": 3,
+      "bond_angle_deg": 120.00000000000001,
+      "bond_length_angstrom": 0.5759751955406802,
+      "length_reliable": false,
+      "hybridization": "sp2"
+    },
+    {
+      "element_z": 14,
+      "name": "silicene (sp2)",
+      "coordination": 3,
+      "octet_capacity": 4,
+      "bond_order": 1.3333333333333333,
+      "lone_pairs": 0,
+      "steric_domains": 3,
+      "bond_angle_deg": 120.00000000000001,
+      "bond_length_angstrom": 0.6220532111839346,
+      "length_reliable": false,
+      "hybridization": "sp2"
+    },
+    {
+      "element_z": 14,
+      "name": "silicon (diamond-cubic)",
+      "coordination": 4,
+      "octet_capacity": 4,
+      "bond_order": 1.0,
+      "lone_pairs": 0,
+      "steric_domains": 4,
+      "bond_angle_deg": 109.47122063449069,
+      "bond_length_angstrom": 0.6479720949832652,
+      "length_reliable": false,
+      "hybridization": "sp3",
+      "comparison": {
+        "angle": 109.5
+      },
+      "angle_error_deg": -0.028779365509308263
+    },
+    {
+      "element_z": 8,
+      "name": "dioxygen O2",
+      "coordination": 1,
+      "octet_capacity": 2,
+      "bond_order": 2.0,
+      "lone_pairs": 2,
+      "steric_domains": 3,
+      "bond_angle_deg": null,
+      "bond_length_angstrom": 0.8399638268301589,
+      "length_reliable": true,
+      "hybridization": "sp2",
+      "comparison": {
+        "r": 1.208
+      },
+      "length_error_pct": -30.46657062664247
+    },
+    {
+      "element_z": 8,
+      "name": "ozone-like O3 (single-bond limit)",
+      "coordination": 2,
+      "octet_capacity": 2,
+      "bond_order": 1.0,
+      "lone_pairs": 1,
+      "steric_domains": 3,
+      "bond_angle_deg": 120.00000000000001,
+      "bond_length_angstrom": 0.9449593051839288,
+      "length_reliable": true,
+      "hybridization": "sp2"
+    },
+    {
+      "element_z": 7,
+      "name": "dinitrogen N2",
+      "coordination": 1,
+      "octet_capacity": 3,
+      "bond_order": 3.0,
+      "lone_pairs": 1,
+      "steric_domains": 2,
+      "bond_angle_deg": null,
+      "bond_length_angstrom": 0.8639627933110203,
+      "length_reliable": true,
+      "hybridization": "sp"
+    },
+    {
+      "element_z": 7,
+      "name": "azo-like (bo 1.5)",
+      "coordination": 2,
+      "octet_capacity": 3,
+      "bond_order": 1.5,
+      "lone_pairs": 0,
+      "steric_domains": 2,
+      "bond_angle_deg": 180.0,
+      "bond_length_angstrom": 1.0164268156600238,
+      "length_reliable": true,
+      "hybridization": "sp"
+    },
+    {
+      "element_z": 7,
+      "name": "trivalent N network",
+      "coordination": 3,
+      "octet_capacity": 3,
+      "bond_order": 1.0,
+      "lone_pairs": 0,
+      "steric_domains": 3,
+      "bond_angle_deg": 120.00000000000001,
+      "bond_length_angstrom": 1.0799534916387754,
+      "length_reliable": true,
+      "hybridization": "sp2"
+    },
+    {
+      "element_z": 16,
+      "name": "Z16 k=1",
+      "coordination": 1,
+      "octet_capacity": 2,
+      "bond_order": 2.0,
+      "lone_pairs": 2,
+      "steric_domains": 3,
+      "bond_angle_deg": null,
+      "bond_length_angstrom": 0.5039782960980952,
+      "length_reliable": false,
+      "hybridization": "sp2"
+    },
+    {
+      "element_z": 16,
+      "name": "sulfur S8 ring",
+      "coordination": 2,
+      "octet_capacity": 2,
+      "bond_order": 1.0,
+      "lone_pairs": 2,
+      "steric_domains": 4,
+      "bond_angle_deg": 109.47122063449069,
+      "bond_length_angstrom": 0.5669755831103571,
+      "length_reliable": false,
+      "hybridization": "sp3",
+      "comparison": {
+        "angle": 108.0
+      },
+      "angle_error_deg": 1.4712206344906917
+    }
+  ],
+  "networks": [
+    {
+      "name": "O2 (O=O)",
+      "coordinations": [
+        1,
+        1
+      ],
+      "bond_order": 2.0,
+      "bond_length_angstrom": 0.8399638268301589,
+      "length_reliable": true,
+      "central_angles_deg": [],
+      "bonds": [
+        {
+          "i": 0,
+          "j": 1,
+          "z_i": 8,
+          "z_j": 8,
+          "coordination_i": 1,
+          "coordination_j": 1,
+          "offer_i": 2.0,
+          "offer_j": 2.0,
+          "bond_order": 2.0,
+          "bond_length_angstrom": 0.8399638268301589,
+          "length_reliable": true
+        }
+      ],
+      "comparison": {
+        "bond_order": 2.0,
+        "r": 1.208
+      },
+      "bond_order_error": 0.0
+    },
+    {
+      "name": "O3 ozone (bent)",
+      "coordinations": [
+        1,
+        2,
+        1
+      ],
+      "bond_order": 1.4142135623730951,
+      "bond_length_angstrom": 0.8984409993201247,
+      "length_reliable": true,
+      "central_angles_deg": [
+        120.00000000000001
+      ],
+      "bonds": [
+        {
+          "i": 0,
+          "j": 1,
+          "z_i": 8,
+          "z_j": 8,
+          "coordination_i": 1,
+          "coordination_j": 2,
+          "offer_i": 2.0,
+          "offer_j": 1.0,
+          "bond_order": 1.4142135623730951,
+          "bond_length_angstrom": 0.8984409993201247,
+          "length_reliable": true
+        },
+        {
+          "i": 1,
+          "j": 2,
+          "z_i": 8,
+          "z_j": 8,
+          "coordination_i": 2,
+          "coordination_j": 1,
+          "offer_i": 1.0,
+          "offer_j": 2.0,
+          "bond_order": 1.4142135623730951,
+          "bond_length_angstrom": 0.8984409993201247,
+          "length_reliable": true
+        }
+      ],
+      "comparison": {
+        "bond_order": 1.5,
+        "r": 1.278,
+        "angle": 116.8
+      },
+      "bond_order_error": -0.08578643762690485,
+      "angle_error_deg": 3.200000000000017
+    },
+    {
+      "name": "CO2 (O=C=O)",
+      "coordinations": [
+        1,
+        2,
+        1
+      ],
+      "bond_order": 2.0,
+      "bond_length_angstrom": 0.9699066830598807,
+      "length_reliable": true,
+      "central_angles_deg": [
+        180.0
+      ],
+      "bonds": [
+        {
+          "i": 0,
+          "j": 1,
+          "z_i": 8,
+          "z_j": 6,
+          "coordination_i": 1,
+          "coordination_j": 2,
+          "offer_i": 2.0,
+          "offer_j": 2.0,
+          "bond_order": 2.0,
+          "bond_length_angstrom": 0.9699066830598807,
+          "length_reliable": true
+        },
+        {
+          "i": 1,
+          "j": 2,
+          "z_i": 6,
+          "z_j": 8,
+          "coordination_i": 2,
+          "coordination_j": 1,
+          "offer_i": 2.0,
+          "offer_j": 2.0,
+          "bond_order": 2.0,
+          "bond_length_angstrom": 0.9699066830598807,
+          "length_reliable": true
+        }
+      ],
+      "comparison": {
+        "bond_order": 2.0,
+        "r": 1.163,
+        "angle": 180.0
+      },
+      "bond_order_error": 0.0,
+      "angle_error_deg": 0.0
+    },
+    {
+      "name": "N3- azide (linear)",
+      "coordinations": [
+        1,
+        2,
+        1
+      ],
+      "bond_order": 2.1213203435596424,
+      "bond_length_angstrom": 0.9471904952017665,
+      "length_reliable": true,
+      "central_angles_deg": [
+        180.0
+      ],
+      "bonds": [
+        {
+          "i": 0,
+          "j": 1,
+          "z_i": 7,
+          "z_j": 7,
+          "coordination_i": 1,
+          "coordination_j": 2,
+          "offer_i": 3.0,
+          "offer_j": 1.5,
+          "bond_order": 2.1213203435596424,
+          "bond_length_angstrom": 0.9471904952017665,
+          "length_reliable": true
+        },
+        {
+          "i": 1,
+          "j": 2,
+          "z_i": 7,
+          "z_j": 7,
+          "coordination_i": 2,
+          "coordination_j": 1,
+          "offer_i": 1.5,
+          "offer_j": 3.0,
+          "bond_order": 2.1213203435596424,
+          "bond_length_angstrom": 0.9471904952017665,
+          "length_reliable": true
+        }
+      ],
+      "comparison": {
+        "bond_order": 2.0,
+        "angle": 180.0
+      },
+      "bond_order_error": 0.12132034355964239,
+      "angle_error_deg": 0.0
+    }
+  ]
+}

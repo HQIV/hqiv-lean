@@ -46,7 +46,7 @@ governed by the radial weight alone, and the radial weight is σ-driven —
 so "torsion cancels at every zero" is exactly RH, with zero slack.  The
 genuinely new unconditional content is the rigidity (single S⁷ point, odd
 defect, chirality flip) and the orbit form of the locator.  Note the
-frozen-table caveat recorded in `AGENTS/OCTONION_TABLE_AUDIT_TODO.md`:
+frozen-table caveat recorded in `AGENTS/archive/OCTONION_TABLE_AUDIT_TODO.md`:
 the witness direction `−e₃ − e₄` is specific to the current tables.
 -/
 

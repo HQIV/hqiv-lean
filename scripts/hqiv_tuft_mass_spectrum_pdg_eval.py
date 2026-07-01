@@ -20,7 +20,7 @@ import math
 from dataclasses import asdict, dataclass
 from pathlib import Path
 
-import hqiv_coupling_linear_system as hcls
+import hqiv_alpha_readout as alpha_readout
 import hqiv_continuous_shell_mass as csm
 import hqiv_excited_states as hes
 import hqiv_tuft_hadron_s7_confinement as h7
@@ -32,7 +32,8 @@ import hqiv_tuft_electroweak_boson_readout as ew
 
 ALPHA = 3.0 / 5.0
 TUFT_APERY_ZETA3 = 1.2020569031595942
-TUFT_FINE_STRUCTURE_ALPHA = 1.0 / 137.035999084
+# Comparison layer only — physical readouts use `tuft_fine_structure_alpha_derived()`.
+TUFT_FINE_STRUCTURE_ALPHA_CODATA = 1.0 / 137.035999084
 TUFT_HELICITY_COEFFICIENT = 6.0 * math.sqrt(2.0) * math.exp(
     TUFT_APERY_ZETA3 / (24.0 * math.pi * math.pi)
 )
@@ -244,19 +245,48 @@ def legacy_shell_quotient_spectrum_at_xi(xi: float) -> tuple[float, float, float
     return heavy, heavy / k_tm, heavy / (k_tm * K_MU_E)
 
 
-def tuft_lepton_geometric_scalar(n: int) -> float:
+def tuft_fine_structure_alpha_derived(c: float = 1.0) -> float:
+    """Lean `tuftFineStructureAlphaDerived`: primary O–Maxwell brace α (proton_lockin)."""
+    return alpha_readout.tuft_fine_structure_alpha_derived(c_fano=c)
+
+
+def tuft_lepton_geometric_scalar(n: int, *, c: float = 1.0) -> float:
+    alpha = tuft_fine_structure_alpha_derived(c)
     return (
         (n + 1.0)
         * math.exp(TUFT_HELICITY_COEFFICIENT * n - TUFT_APERY_ZETA3 * n * n)
-        * math.exp(n * TUFT_FINE_STRUCTURE_ALPHA / 6.0)
+        * math.exp(n * alpha / 6.0)
     )
 
 
-def tuft_anomalous_moment_spurion(n: int) -> float:
-    """Lean `tuftAnomalousMomentSpurion`: APS EM spurion from exp(n α_em/6) Beltrami slot."""
+def tuft_anomalous_moment_spurion(n: int, *, c: float = 1.0) -> float:
+    """Lean `tuftAnomalousMomentSpurionDerived` (default c=1): APS EM spurion, derived α."""
     if n <= 0:
         raise ValueError("winding sector n must be ≥ 1")
-    return (math.exp(n * TUFT_FINE_STRUCTURE_ALPHA / 6.0) - 1.0) / n
+    alpha = tuft_fine_structure_alpha_derived(c)
+    return (math.exp(n * alpha / 6.0) - 1.0) / n
+
+
+def tuft_anomalous_moment_spurion_codata(n: int) -> float:
+    """Lean `tuftAnomalousMomentSpurion_CODATA`: comparison layer only."""
+    if n <= 0:
+        raise ValueError("winding sector n must be ≥ 1")
+    alpha = alpha_readout.resolve_alpha_em(tier="codata_comparison").alpha
+    return (math.exp(n * alpha / 6.0) - 1.0) / n
+
+
+def tuft_anomalous_moment_full_t8(n: int, *, c: float = 1.0) -> float:
+    """Lean `tuftAnomalousMomentFullT8`: leading APS spurion × T8 torsion subleading."""
+    return (
+        tuft_anomalous_moment_spurion(n, c=c)
+        * hopf_t8_torsion_subleading(n)
+        / hopf_t8_torsion_subleading(3)
+    )
+
+
+def charged_lepton_anomalous_moment_spectrum(*, c: float = 1.0) -> tuple[float, float]:
+    """Lean `chargedLeptonAnomalousMomentSpectrum`: (a_e, a_μ)."""
+    return tuft_anomalous_moment_full_t8(1, c=c), tuft_anomalous_moment_full_t8(2, c=c)
 
 
 def hopf_torsion_coefficient(n: int) -> float:
@@ -508,16 +538,34 @@ def build_spectrum_sections() -> list[SpectrumSection]:
 
     g2_rows = [
         _row_anomalous_moment(
-            "a_e (TUFT APS spurion, n=1)",
-            tuft_anomalous_moment_spurion(1),
+            "a_e (T8 full, derived α, n=1)",
+            tuft_anomalous_moment_full_t8(1),
             "a_e",
-            "tuftAnomalousMomentSpurion",
+            "tuftAnomalousMomentFullT8",
         ),
         _row_anomalous_moment(
-            "a_μ (TUFT APS spurion, n=2)",
+            "a_μ (T8 full, derived α, n=2)",
+            tuft_anomalous_moment_full_t8(2),
+            "a_mu",
+            "tuftAnomalousMomentFullT8",
+        ),
+        _row_anomalous_moment(
+            "a_e (leading spurion only; diagnostic)",
+            tuft_anomalous_moment_spurion(1),
+            "a_e",
+            "tuftAnomalousMomentSpurionDerived",
+        ),
+        _row_anomalous_moment(
+            "a_μ (leading spurion only; diagnostic)",
             tuft_anomalous_moment_spurion(2),
             "a_mu",
-            "tuftAnomalousMomentSpurion",
+            "tuftAnomalousMomentSpurionDerived",
+        ),
+        _row_anomalous_moment(
+            "a_e (CODATA α; comparison only)",
+            tuft_anomalous_moment_spurion_codata(1),
+            "a_e",
+            "tuftAnomalousMomentSpurion_CODATA",
         ),
     ]
 
@@ -575,7 +623,7 @@ def build_spectrum_sections() -> list[SpectrumSection]:
 
     return [
         SpectrumSection("Charged leptons (vev → T8)", lepton_rows),
-        SpectrumSection("Anomalous magnetic moment (TUFT APS spurion)", g2_rows),
+        SpectrumSection("Anomalous magnetic moment (T8 sector determinant)", g2_rows),
         SpectrumSection("Neutrinos (outer T8+T10)", neutrino_rows),
         SpectrumSection("Quark family (vev-pinned + resonance ladder)", quark_rows),
         SpectrumSection("Electroweak bosons (outer closure + Weinberg)", ew_boson_rows),

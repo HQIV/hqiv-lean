@@ -84,7 +84,7 @@ At triple-point `(T,P)`, readout is still `molecular_cluster` for dilute `H2O`, 
 
 Carrier-peaking geometry readout is documented separately: `AGENTS/CARRIER_PEAKING_GEOMETRY_ENCODING.md` (deferred).
 
-**Solid ice / allotropes:** geometry-first target (unit cell + H-bond contacts + periodic positions), not `(T,P)` alone — see `AGENTS/ICE_SOLID_GEOMETRY.md`.
+**Solid ice / allotropes:** geometry-first target (unit cell + H-bond contacts + periodic positions), not `(T,P)` alone — see `AGENTS/archive/ICE_SOLID_GEOMETRY.md`.
 
 **Next (homogeneous + nucleation):** `AGENTS/HOMOGENEOUS_CURVATURE_SECOND_ORDER.md` — compute `B_hom(ξ,ρ)`, add local `δB` at defects, feed `B_eff` back into binding/melt (replaces ρ-only proxy).
 

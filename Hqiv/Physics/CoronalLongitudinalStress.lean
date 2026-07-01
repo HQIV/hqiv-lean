@@ -89,6 +89,28 @@ theorem coronalLongitudinalHQIVField_zero_of_dphi_zero
     coronalLongitudinalHQIVField Estar couplingLog 0 = 0 := by
   unfold coronalLongitudinalHQIVField; ring
 
+/-- Positive footpoint inputs ⇒ nonvanishing HQIV field (α/4π slot). -/
+theorem coronalLongitudinalHQIVField_ne_zero_of_pos_inputs
+    (Estar couplingLog dphi_ds : ℝ)
+    (hE : 0 < Estar) (hΛ : 0 < couplingLog) (hd : dphi_ds ≠ 0) :
+    coronalLongitudinalHQIVField Estar couplingLog dphi_ds ≠ 0 := by
+  intro h0
+  rw [coronalLongitudinalHQIVField_alpha_3_5] at h0
+  have hpre_ne : Estar * (3 / (20 * Real.pi)) * couplingLog ≠ 0 := by
+    intro h
+    rcases mul_eq_zero.mp h with hEA0 | hL0
+    · rcases mul_eq_zero.mp hEA0 with hE0 | hA0
+      · linarith [hE]
+      · have : 0 < 3 / (20 * Real.pi) := by positivity
+        linarith
+    · linarith [hΛ]
+  have hd0 : dphi_ds = 0 := by
+    rw [mul_eq_zero] at h0
+    cases h0 with
+    | inl hpre => exact absurd hpre hpre_ne
+    | inr hd0 => exact hd0
+  exact hd hd0
+
 theorem coronalLongitudinalHQIVField_zero_of_couplingLog_zero
     (Estar dphi_ds : ℝ) :
     coronalLongitudinalHQIVField Estar 0 dphi_ds = 0 := by

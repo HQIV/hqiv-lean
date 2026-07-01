@@ -107,9 +107,40 @@ class TestHQIVSolarDynamics(unittest.TestCase):
         self.assertIn("lean_modules", payload)
         self.assertIn("proved_algebra", payload)
         self.assertIn("readout_model", payload)
+        self.assertIn("heating_comparison", payload)
         self.assertIn("outside_curvature_whim", payload["readout_model"])
         self.assertIn("planetary_magnetic_coupling", payload["readout_model"])
-        self.assertIn("Hqiv.Physics.NuclearOutsideTemperatureDynamics", payload["lean_modules"])
+        self.assertIn("Hqiv.Physics.CoronalHeatingComparisonWitness", payload["lean_modules"])
+
+    def test_coronal_heating_comparison_hqiv_length_independent(self) -> None:
+        row = sd.coronal_heating_comparison_readout(loop_length_1=1.0e8, loop_length_2=3.0e8)
+        self.assertTrue(row.hqiv_length_independent)
+        self.assertAlmostEqual(row.hqiv_flux_loop_1, row.hqiv_flux_loop_2)
+        self.assertTrue(row.wave_length_fluxes_differ)
+        self.assertNotAlmostEqual(row.wave_flux_loop_1, row.wave_flux_loop_2)
+
+    def test_coronal_heating_comparison_ratios(self) -> None:
+        row = sd.coronal_heating_comparison_readout()
+        self.assertAlmostEqual(row.hqiv_to_alfven, row.hqiv_flux / row.alfven_flux)
+        self.assertAlmostEqual(row.hqiv_to_nanoflare, row.hqiv_flux / row.nanoflare_flux)
+        self.assertEqual(row.claim_status, "comparison_witness")
+
+    def test_alfven_flux_zero_damping(self) -> None:
+        self.assertAlmostEqual(sd.alfven_wave_heating_flux_density(1.0, 1.0e6, 0.0), 0.0)
+
+    def test_estar_calibration_roundtrip(self) -> None:
+        p_ph = sd.phi_of_shell(0)
+        p_cor = sd.phi_of_shell(8)
+        target = 1.0e3
+        nq = 1.0e20
+        v_par = 5.0e3
+        lam = 1.0
+        e_star = sd.estar_for_target_heating_flux(target, nq, v_par, p_ph, p_cor, coupling_log=lam)
+        flux = sd.heating_flux_boundary(nq, v_par, p_ph, p_cor, e_star=e_star, coupling_log=lam)
+        self.assertAlmostEqual(flux, target, delta=target * 1.0e-9)
+
+    def test_nanoflare_flux_zero_cross_section(self) -> None:
+        self.assertAlmostEqual(sd.nanoflare_heating_flux_density(1.0e24, 1.0, 0.0), 0.0)
 
     def test_json_cli_roundtrip(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
@@ -131,6 +162,7 @@ class TestHQIVSolarDynamics(unittest.TestCase):
             data = json.loads(out.read_text(encoding="utf-8"))
             self.assertEqual(data["source"], "scripts/hqiv_solar_dynamics.py")
             self.assertIn("flux_tube", data)
+            self.assertIn("heating_comparison", data)
 
 
 if __name__ == "__main__":

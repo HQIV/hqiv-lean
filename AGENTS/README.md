@@ -17,6 +17,7 @@ This folder is for **AI agents and new contributors** who need orientation witho
 | [CKM_PMNS_FANO_OVERLAP.md](./CKM_PMNS_FANO_OVERLAP.md) | **Open discharge programme:** Fano-cycle overlaps + holonomy phases → CKM/PMNS (scaffold vs proved; anti-patterns) |
 | [TUFT_SHELL_ONTOLOGY.md](./TUFT_SHELL_ONTOLOGY.md) | **TUFT vs HQIV shell language:** `tuftHadronModeShell` vs `referenceM`; hadron papers must not conflate chart names |
 | [STORY.md](./STORY.md) | **Router:** Story spine vs textbook defaults; where HQIV intentionally differs; links to audit sources (kept short — not a duplicate of `ASSUMPTIONS` / `THEOREMS`) |
+| [HQIVSPINE.md](./HQIVSPINE.md) | **Clean spine charter** (`HqivSpine/`): the Mathlib-only, `sorry`-free, foundation-anchored rebuild — ethics contract, distilled theorem index, and the live target list. Read before adding to `HqivSpine/`. |
 | [THEOREMS.md](./THEOREMS.md) | Curated **theorems and defs with usable outputs** (Lean names, modules, what you get) |
 | [ASSUMPTIONS.md](./ASSUMPTIONS.md) | **Honest accounting**: conceptual axioms, Mathlib trust, script data, `sorry`s, bridge assumptions |
 | [FUREY_ALIGNMENT_GAP_ANALYSIS.md](./FUREY_ALIGNMENT_GAP_ANALYSIS.md) | **Peg-hole audit**: theorem-backed HQIV anchors vs Furey-style fermion/classification targets; accepted anchor, narrative-only links, and open blockers |
@@ -27,21 +28,24 @@ This folder is for **AI agents and new contributors** who need orientation witho
 | [NAVIER_STOKES_HQIV_NARRATIVE.md](./NAVIER_STOKES_HQIV_NARRATIVE.md) | **Paper-level** HQIV vs classical 3D NS / Millennium framing (standing-wave / horizon structure, one possible self-clock state language, `φ·t`, `δ_E`, Fano)—not a Lean PDE result; points to roadmap |
 | [FLUID_OMAXWELL_ROADMAP.md](./FLUID_OMAXWELL_ROADMAP.md) | **Ladder** (F0–F5): effective modified fluid (`f`, `g_vac`, `ν_eddy`), plasma ↔ algebra-first O-Maxwell attachment, classical NS limit—same honesty pattern as RH/manifold roadmaps |
 | [O_MAXWELL_EIGEN_SHELL_SELECTION.md](./O_MAXWELL_EIGEN_SHELL_SELECTION.md) | **Design:** one lifted O-Maxwell + \(\varphi\); Fano projections for sectors; **target** eigen-shell / standing-wave selection to replace quark shell **tables** (links to `MASS_DERIVATION_ROADMAP.md`) |
+| [ATOM_CONSTRUCTION_FROM_MATH.md](./ATOM_CONSTRUCTION_FROM_MATH.md) | **Architecture:** build atoms from nucleus + electronic discharge registry (heavy-decay uniqueness template); `papers/nucleon_binding` + `QuantumChemistry` spine |
 | [MAIN_PAPER_FLRW_LEAN_ALIGNMENT.md](./MAIN_PAPER_FLRW_LEAN_ALIGNMENT.md) | **Main paper ↔ Lean:** FLRW/HQVM node claims mapped to proved iff chains (`HQVM_FLRW_PaperAlignment`); suggested **paper-only** rigor edits (`main.tex` not in this repo) |
 | [LIGHTCONE_FUNDAMENTALS_DERIVATION_PLAN.md](./LIGHTCONE_FUNDAMENTALS_DERIVATION_PLAN.md) | **Roadmap**: lightcone axioms → kinetic (Boltzmann) → balance laws / modified fluids → linear response → Einstein/emergent → scattering/unitarity → Dirac → information bounds; milestones and honesty (L0–L3) |
 | [HQIV_PERTURBATION_THEORY_ROADMAP.md](./HQIV_PERTURBATION_THEORY_ROADMAP.md) | **Perturbation theory**: what is proved vs classical GR; lapse/`phi_of_T`/resolution; links to `HQVMPerturbations`, `HQIVPerturbationScaffold`, Pillar C; milestones P0–P5 |
-| [REFACTOR_END_TO_END_PLAN.md](./REFACTOR_END_TO_END_PLAN.md) | **Refactor / cleanup plan:** optional linear `Hqiv.Story` spine (light cone → … → Dojo/Clay wiring); `lake build HQIVStory` — `HQIVLEAN.lean` remains the full superset for now |
+| [REFACTOR_END_TO_END_PLAN.md](./REFACTOR_END_TO_END_PLAN.md) | **Refactor / cleanup plan:** optional linear `Hqiv.Story` spine (light cone → … → Dojo/Clay wiring); `lake build HQIVStory` — `Targets/HQIVLEAN.lean` remains the full superset for now |
 | [LEAN_DOJO_MILLENNIUM_ALIGNMENT.md](./LEAN_DOJO_MILLENNIUM_ALIGNMENT.md) | **Standard:** proofs toward Millennium problems must satisfy / align with **lean-dojo/LeanMillenniumPrizeProblems**; what “compatible” means for HQIV |
 | [MODULAR_FORMS_LADDER.md](./MODULAR_FORMS_LADDER.md) | **Ladder** (M0–M5): modular forms / L-series / BSD thread—long-horizon analytic layer beyond lattice zeta probes |
 | [BSD_RN_RAMANUJAN_BRIDGE.md](./BSD_RN_RAMANUJAN_BRIDGE.md) | **BSD strategy:** ℝⁿ + **arbitrary Ramanujan-type curvature** as bridge from HQIV shells to BSD-shaped L-data—**not** a proof |
 | [HODGE_HQIV_NARRATIVE.md](./HODGE_HQIV_NARRATIVE.md) | **Paper-level** analogy to the Hodge conjecture (cycles, periods, Fano vs algebraic cycles)—**not** a proof; **§5** lists proved HQIV-internal scaffold wires (`HodgeRapidityZetaBridge`, Fano strand lemmas) |
 | [QUANTUM_CHEMISTRY_OUTPUTS.md](./QUANTUM_CHEMISTRY_OUTPUTS.md) | Target output architecture for the Lean+numerical quantum-chemistry stack (foundational → intermediate → user-facing + interoperability + uncertainty policy) |
 | [QUANTUM_CIRCUIT_NEXT_PRIME_PROBE.md](./QUANTUM_CIRCUIT_NEXT_PRIME_PROBE.md) | **Probe-level** quantum-circuit metaphor for `LatticeNextPrimeGenerator` (Fano register, diagonal rapidity, sparse simulation)—**not** Lean complexity or Grover theorems |
+| [BRANE_BULK_FANO_TRUSS_INTEGRATION.md](./BRANE_BULK_FANO_TRUSS_INTEGRATION.md) | **Agent peg** for the optional `HQIVBraneBulkStrongSector` target + `BraneBulkFanoTruss` / `HQIVYangMillsPackage` (proved / partial / open; brane–bulk claims quarantined; one heavy build at a time) |
+| [ATSP_ALGORITHM_STATUS.md](./ATSP_ALGORITHM_STATUS.md) | **Status ledger** for the ATSP worst-case certified thread (`Hqiv/Geometry/ATSPWorstCaseCertified.lean`): what is proved vs scaffold |
 | [archive/](./archive/) | Parked SAT/moiré / complexity-adjacent **prose** (see `archive/README.md`); Lean counterparts under `Hqiv/Archive/` — **wired:** `Hqiv/Geometry/SATRapidityAnnulusCircle.lean` imports `OctonionAxisAngles` and exposes the osculating-circle / `π/(2k)` arc in `Plane` (see [THEOREMS.md](./THEOREMS.md) row). |
 
 ## Quick table of contents (code areas)
 
-- **Root imports:** `HQIVLEAN.lean` — single entry listing the modules pulled into the full library build; use `HQIVStory.lean` + `Hqiv/Story/Chapter*` for the **linear narrative** spine only.
+- **Root imports:** `Targets/HQIVLEAN.lean` — single entry listing the modules pulled into the full library build; use `Targets/HQIVStory.lean` + `Hqiv/Story/Chapter*` for the **linear narrative** spine only.
 - **Light cone & combinatorics:** `Hqiv/Geometry/OctonionicLightCone.lean`, `SphericalHarmonicsBridge.lean`
 - **Millennium roadmaps (probe scaffolds):** `Hqiv/Geometry/SpatialSliceRapidityScaffold.lean` (shells, rapidity bridge, `deltaE` comparison `Prop`), `Hqiv/Algebra/CycleHodgeProbeScaffold.lean` (Fano-indexed cycle skeleton); see `AGENTS/MANIFOLD_ZETA_ROADMAP.md` §0; modular forms / L-functions / BSD thread: [MODULAR_FORMS_LADDER.md](./MODULAR_FORMS_LADDER.md); formal standards: [LEAN_DOJO_MILLENNIUM_ALIGNMENT.md](./LEAN_DOJO_MILLENNIUM_ALIGNMENT.md)
 - **Metric / lapse / cosmology bridge:** `Hqiv/Geometry/HQVMetric.lean`, `HQVMPerturbations.lean`, `HQVMCLASSBridge.lean`, `HQVM_FLRW_PaperAlignment.lean`, `UniverseAge.lean`, `Now.lean`
@@ -72,7 +76,7 @@ See `lakefile.toml` (comments at top of the file list every named `lean_lib`). R
 | `HQIVSO8Closure` | Full certified \(\mathfrak{so}(8)\) matrix Lie-closure data + abstract closure |
 | `HQIVStrongColorSu3Certificate` | Optional `su(3)` package: `f^{abc}` `@[simp]` table + `StrongColorSu3LieCertificate` + **proved** eight-generator chart Lie law (`StrongColorSu3LieChartLaw`; CI may build explicitly; not in default `HQIVLEAN` glob) |
 | `HQIVBraneBulkStrongSector` | Brane–bulk integration cone: `BraneBulkFanoTruss`, `HQIVYangMillsPackage`, `ActionHolonomyGlue` (heavy `SO8ClosureAbstract` via YM package; run one build at a time; `G2DeltaGeneratedLie` is a separate `lake build` when needed) |
-| `HQIVStory` | Linear narrative spine (`HQIVStory.lean` + `Hqiv/Story/Chapter*`) |
+| `HQIVStory` | Linear narrative spine (`Targets/HQIVStory.lean` + `Hqiv/Story/Chapter*`) |
 
 Use the smallest target that contains the modules you are editing.
 

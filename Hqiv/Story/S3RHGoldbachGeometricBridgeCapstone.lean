@@ -201,6 +201,55 @@ step (`S3GoldbachGapOneActivationBudget`, `S3GoldbachAnnulusTwinPrimeSweep`).
 | Δ twin ladder `N = 4, 6` + zero activation | **Theorem** (`delta_holonomy_twin_ladder_certificate_capstone`) |
 | Plastic ratio ↔ first twin ↔ twiddle shell `8` | **Theorem** (`plastic_ratio_twin_twiddle_anchor_capstone`) |
 | Plastic ratio **not** global for all twins | **Theorem** (`plasticP_five_ne_twin_small_prime`, `plasticQ_six_ne_second_twin_shell`) |
+
+---
+
+## 7. Pythagorean inradius lattice — candidate holonomy loop label (NOTE, not yet a theorem)
+
+*Recorded for future agents working the holonomy side of this bridge. This is a
+structural observation about a candidate base space + loop label; it is **not** a
+holonomy proof and adds **no** Lean theorem.*
+
+**Identity.** Every primitive Pythagorean triple comes from Euclid parameters
+`m > n > 0`, `gcd(m,n) = 1`, opposite parity, with
+`A = m² − n²`, `B = 2mn`, `C = m² + n²`. The incircle radius is the integer
+
+> `r = (A + B − C)/2 = n(m − n)`,
+
+and non-primitive scalings by `k ≥ 2` give `r = k·r₀`. So `r` is an intrinsic
+**integer defect** attached to each right-triangle cell, not merely "an integer".
+
+**Rigid integer coordinates.** Reparametrize by the leg gap `g = m − n` (then `g` is
+odd and `gcd(n, g) = 1`). With the semiperimeter `s = m(m + n)`:
+
+> `r = n·g`,  `s = m(m + n)`,  `Area = r·s`,  `C = s − r`.
+
+So `(r, s)` is a rigid integral coordinate system on the cell, more informative than
+`r` alone — exactly the kind of discrete label a transport/monodromy story needs.
+
+**Surjectivity + divisor fibers.** Every `r ∈ ℕ⁺` is realized: `(m,n) = (r+1, r)` gives
+triple `(2r+1, 2r(r+1), 2r²+2r+1)` with inradius `r`. Fixing `r` reduces classification
+to a **divisor problem**: primitive triples of inradius `r` ↔ factorizations `r = n·g`
+with `gcd(n,g) = 1`, `g` odd. Prime `r` forces `g = 1` — i.e. primes sit on the
+gap-one boundary `m − n = 1` of this lattice.
+
+**Why this is relevant here, and where it is already touched.** The bridge's additive
+channel is the **square-midpoint / gap-one** vantage: §6's
+`square_diff_prime_forces_unit_mn_at_square_midpoint` already lives on the same `m − n`
+unit edge that `r = n·g` flags as the prime boundary, and the certified
+`midpoint_slope_half` (`N/(p+q) = 1/2`) is the half-slope readout on the additive side.
+The inradius gives an arithmetic-to-geometry labeling of those cells.
+
+**Honest gap (what this does NOT give).** `r` (or `(r,s)`) is a scalar **loop label /
+defect charge**, not a holonomy. Holonomy needs a *transport law* under loop
+composition — a phase or operator with `H(γ₁γ₂) = H(γ₁)·H(γ₂)` — defined on this base.
+This note supplies the **base space** (Euclid lattice fibered by the inradius map
+`(n,g) ↦ n·g`) and a candidate discrete charge; the connection/transport operator and
+its composition law remain **open** and are the actual holonomy content.
+
+**Suggested next lemma chain (for whoever picks this up):**
+`Euclid lattice` → `inradius fiber map (n,g) ↦ n·g` → `divisor fibers (gcd, g odd)` →
+`candidate holonomy operator on cell composition`, then prove the composition law.
 -/
 
 namespace Hqiv.Story

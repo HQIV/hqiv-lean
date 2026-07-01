@@ -22,7 +22,7 @@
 |---|------|--------|
 | P1.1 | Expose `θ` formal coefficient `thetaZ8FormalCoeff = r8` | ✅ `Hqiv.Algebra.ModularThetaBridgeScaffold` |
 | P1.2 | Hypothesis `CoeffsAgreeWithR8` + trivial `thetaZ8FormalCoeffComplex` | ✅ same module |
-| P1.3 | Import in `HQIVLEAN.lean` | ✅ |
+| P1.3 | Import in `Targets/HQIVLEAN.lean` | ✅ |
 | P1.4 | `lake build HQIVLEAN` | ✅ (verify after merge) |
 
 **Next (not done in this pass):** Mathlib search for `ModularForm` / Jacobi θ matching weight-4 and `r₈`; add `import` only when dependency cost is acceptable.

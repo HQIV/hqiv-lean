@@ -140,32 +140,32 @@ theorem spineLightSlotGenerators_are_gamma_rationals :
 theorem dischargeObservables_Kplus_piplus_charged_not_neutral :
     (dischargeObservables .K_plus .weak [.pi_plus]).chargedIsospinOutlet = 1 ∧
       (dischargeObservables .K_plus .weak [.pi_plus]).neutralIsospinOutlet = 0 := by
-  native_decide
+  decide
 
 theorem dischargeObservables_Kplus_mu_no_hadronic_isospin :
     (dischargeObservables .K_plus .weak [.mu_plus]).visibleLeptonWeak = 1 ∧
       (dischargeObservables .K_plus .weak [.mu_plus]).chargedIsospinOutlet = 0 ∧
         (dischargeObservables .K_plus .weak [.mu_plus]).neutralIsospinOutlet = 0 := by
-  native_decide
+  decide
 
 theorem dischargeObservables_lambda_piminus_no_monogamy :
     (dischargeObservables .lambda .weak [.p, .pi_minus]).monogamyCompetition = 0 := by
-  native_decide
+  decide
 
 theorem dischargeObservables_phi_KK_not_leak :
     (dischargeObservables .phi .strong [.K_plus, .K_minus]).hiddenStrangenessKk = 1 ∧
       (dischargeObservables .phi .strong [.K_plus, .K_minus]).hiddenStrangenessLeak = 0 := by
-  native_decide
+  decide
 
 theorem dischargeObservables_injective_Kplus_weak_pi :
     dischargeObservables .K_plus .weak [.pi_plus] ≠
       dischargeObservables .K_plus .weak [.mu_plus] := by
-  native_decide
+  decide
 
 theorem dischargeObservables_injective_Kplus_weak_mu_vs_pi0 :
     dischargeObservables .K_plus .weak [.mu_plus] ≠
       dischargeObservables .K_plus .weak [.pi_zero] := by
-  native_decide
+  decide
 
 /--
 On any light-active edge, a factorizing competitor law agreeing with spine slot values

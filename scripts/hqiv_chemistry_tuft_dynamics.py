@@ -18,6 +18,7 @@ import math
 import hqiv_lean_physics_primitives as lean
 import hqiv_dynamic_binding_chart as dbc
 import hqiv_isotope_hydrogenic_scales as ihs
+import hqiv_particle_shell_structure as pss
 
 # TUFT chart shells (TuftShellChart / electronic valence)
 TUFT_HEAVY_CHART_SHELL = 4
@@ -39,21 +40,21 @@ def period2_valence_electron_count(z: int) -> int:
 
 
 def centre_lone_pair_count(z: int, n_bonds: int) -> int:
-    """Period-2 centre lone pairs — Lean ``DynamicCentreGeometry.centreLonePairCount``."""
+    """Period-2 centre lone pairs from the derived electron budget.
+
+    Delegates to :func:`hqiv_particle_shell_structure.lone_pair_count` — the leftover ``(V − X)/2``
+    electrons paired up, with conservation proven in ``LonePairPartition.electron_budget_closes``.
+    """
     if z < 3 or z > 10 or n_bonds < 1:
         return 0
-    valence = period2_valence_electron_count(z)
-    if valence < n_bonds:
-        return 0
-    return (valence - n_bonds) // 2
+    return pss.lone_pair_count(z, n_bonds)
 
 
 def period3_centre_lone_pair_count(z: int, n_bonds: int) -> int:
-    """Period-3 VSEPR lone pairs: ``(V − X) / 2``."""
+    """Period-3 lone pairs from the same derived budget (one rule, no period special-case)."""
     if z < 11 or z > 18 or n_bonds < 1:
         return 0
-    valence = min(z, 18) - 10
-    return max(0, (valence - n_bonds) // 2)
+    return pss.lone_pair_count(z, n_bonds)
 
 
 def steric_domain_count(n_bonds: int, n_lp: int) -> int:
@@ -61,6 +62,14 @@ def steric_domain_count(n_bonds: int, n_lp: int) -> int:
 
 
 def centre_angle_rad_from_domains(n_domains: int) -> float:
+    """Steric-domain angle = `arccos(−1/(d−1))`.
+
+    This is NOT an injected VSEPR rule.  The σ-domains are unit informational-monogamy contacts; at
+    equilibrium their directions sum to zero (Kirchhoff node law) and, being equivalent, share one
+    pairwise cosine `c`, forcing `0 = d·(1 + (d−1)c)` ⇒ `c = −1/(d−1)`.  The derivation and its
+    numerical check live in ``hqiv_allotrope_network.balanced_unit_contact_cos`` and the Lean proof
+    ``Hqiv/QuantumChemistry/VSEPRFromBalance.lean``.
+    """
     if n_domains <= 2:
         return math.pi
     return math.acos(-1.0 / (n_domains - 1))
@@ -241,14 +250,26 @@ def homonuclear_bond_equilibrium_bohr(z: int, *, c: float = 1.0) -> float:
 
     base = 2.0 * ri / mono
 
+    # Period-2: unified carrier+network law (replaces the per-bond-order class routing).
+    # The two nested-WF carriers contact at `base`; each *open* (unsaturated) p-shell
+    # channel then pushes them apart by one informational-monogamy step `1 + strong/2`.
+    # The open-channel count is the antibonding-pair number — the SAME monogamy channel
+    # defect that stiffens the spectroscopy curvature (filled π* density): it adds well
+    # curvature *and* elongates the bond.  N₂ (triple, no open channel) sits at the bare
+    # carrier contact; O₂ (one π* pair) is one step out; F₂ (two π* pairs) is two.
+    if period == 2:
+        channel_cap = 3 if evs.valence_electron_count(z) >= 3 else 1
+        antibond_pairs = max(0, channel_cap - evs.homonuclear_bond_order(z))
+        return base * (1.0 + strong / 2.0) ** antibond_pairs
+
+    # Period ≥ 3: existing halogen / open-shell / bond-order routing (TUFT rung scale).
     if evs.is_homonuclear_halogen(z):
         phi_m = 2.0 * (float(m_s) + 1.0)
         r_phi = 2.0 * phi_m / float(z) / mono
         r = math.sqrt(base * r_phi)
         chart_denom = float(evs.ELECTRONIC_M_S_PERIOD2 + max(period, 2) - 2)
         r /= 1.0 + strong / chart_denom
-        if period >= 3:
-            r /= period3_hydride_bond_length_scale(z)
+        r /= period3_hydride_bond_length_scale(z)
         return r
 
     if evs.homonuclear_open_shell_dimer(z):

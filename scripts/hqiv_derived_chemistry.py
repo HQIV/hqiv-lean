@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import math
 
+import hqiv_atom_stable_chart as stable_chart
 import hqiv_electronic_valence_shells as evs
 import hqiv_lean_physics_primitives as lean
 import hqiv_nuclear_curvature_binding as ncb
@@ -22,8 +23,10 @@ MEV_PER_AMU = 931.49410242
 def derived_atomic_mass_amu(z: int, electrons: int | None = None) -> float:
     """Mass [amu] from nuclear cluster readout at stable A(Z)."""
     e = electrons if electrons is not None else z
-    a = ncb.stable_mass_number(z, e)
-    m_nuc = ncb.nucleus_curvature_shell(a)
+    a = stable_chart.stable_mass_number_for_charge(z)
+    if z not in stable_chart.STABLE_A_BY_Z and electrons is not None and e > 0:
+        a = max(z, e)
+    m_nuc = ncb.nucleus_curvature_shell(a) if a > 1 else lean.REFERENCE_M
     return ncb.cluster_mass_mev(m_nuc, a) / MEV_PER_AMU
 
 

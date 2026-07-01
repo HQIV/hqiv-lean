@@ -92,9 +92,9 @@
       "A": 2,
       "Z": 1,
       "reference_mass_mev": 1875.61294257,
-      "predicted_mass_mev": 1875.6510036533978,
-      "mass_error_mev": 0.038061083397678885,
-      "mass_error_pct": 0.0020292610769430328,
+      "predicted_mass_mev": 1875.6103678593227,
+      "mass_error_mev": -0.0025747106774360873,
+      "mass_error_pct": -0.0001372730278725935,
       "reference_stability": "stable",
       "predicted_structurally_shielded": true,
       "predicted_stable_qualified": false,
@@ -143,9 +143,9 @@
       "A": 4,
       "Z": 2,
       "reference_mass_mev": 3727.3794066,
-      "predicted_mass_mev": 3727.8859879115944,
-      "mass_error_mev": 0.5065813115943456,
-      "mass_error_pct": 0.013590816934207226,
+      "predicted_mass_mev": 3727.3743673523686,
+      "mass_error_mev": -0.005039247631430044,
+      "mass_error_pct": -0.00013519545722947182,
       "reference_stability": "stable",
       "predicted_structurally_shielded": true,
       "predicted_stable_qualified": false,
@@ -425,7 +425,7 @@
   "curvature_imprint_control": [],
   "summary": {
     "count": 6,
-    "mean_abs_mass_error_pct": 0.0030801927152898697,
-    "max_abs_mass_error_pct": 0.013590816934207226
+    "mean_abs_mass_error_pct": 0.0005222577942818376,
+    "max_abs_mass_error_pct": 0.0021127365199457566
   }
 }

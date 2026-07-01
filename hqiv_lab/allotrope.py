@@ -22,6 +22,22 @@ import hqiv_lean_physics_primitives as lean  # noqa: E402
 import hqiv_thermodynamic_phase_from_tp as tptp  # noqa: E402
 
 
+def _characteristic_binding_ev(spec: MoleculeSpec) -> float:
+    """Internal cohesive scale from derived bonds; no benchmark reference energy."""
+    if not spec.bonds:
+        return lean.ALPHA * lean.STRONG_CHANNEL_FRACTION
+    bohr_angstrom = 0.529177210903
+    rydberg_ev = 13.605693122994
+    gaps = [
+        rydberg_ev
+        * lean.ALPHA
+        * (1.0 + lean.STRONG_CHANNEL_FRACTION)
+        / (1.0 + max(b.distance_angstrom, 1.0e-9) / bohr_angstrom)
+        for b in spec.bonds
+    ]
+    return sum(gaps) / float(len(gaps))
+
+
 @dataclass(frozen=True)
 class AllotropeCandidate:
     """One derived condensed-phase orientation."""
@@ -90,7 +106,7 @@ def _score_candidate(
 
     mat = tptp.MaterialThermodynamicScales(
         name=f"{spec.name}_bulk",
-        characteristic_binding_ev=spec.reference_binding_ev or 5.0,
+        characteristic_binding_ev=_characteristic_binding_ev(spec),
         contact_points=mono.intermolecular_contacts,
         molecular_weight_amu=spec.molecular_weight_amu,
         intermolecular_contacts=mono.intermolecular_contacts,

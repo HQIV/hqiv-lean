@@ -1,0 +1,223 @@
+{
+  "lean_modules": [
+    "Hqiv.OctonionLeftMultiplication",
+    "Hqiv.Physics.BoundStates",
+    "Hqiv.Physics.QuarkMetaResonance"
+  ],
+  "inv_alpha_gut": 42.0,
+  "codata_inv_alpha": 137.035999177,
+  "reference_anchor_shell": 4,
+  "invariants": [
+    {
+      "species": "H-1",
+      "kind": "isotope",
+      "anchor_shell": 4,
+      "g_norm": 0.025795430606023625,
+      "inv_alpha_spectral_norm": 38.76655580102954,
+      "spectral_modes": [
+        0.0039568438062318545,
+        0.01485619869325094,
+        0.02976200467974734,
+        0.03937519183900692
+      ],
+      "quad_invariant": 0.0026725459074361663,
+      "quad_consistency": 1.092894683544501e-05,
+      "spectral_spread": 9.951161523483119,
+      "clifford_defect": 0.0017039481772600353
+    },
+    {
+      "species": "He-4",
+      "kind": "isotope",
+      "anchor_shell": 6,
+      "g_norm": 0.0239529474262719,
+      "inv_alpha_spectral_norm": 41.7485156295708,
+      "spectral_modes": [
+        0.0035699732239166675,
+        0.013785108066893929,
+        0.027610391016866673,
+        0.036548714577980826
+      ],
+      "quad_invariant": 0.0023009161426424058,
+      "quad_consistency": 5.94138101942367e-06,
+      "spectral_spread": 10.237811962601423,
+      "clifford_defect": 0.0014685133187792227
+    },
+    {
+      "species": "C-12",
+      "kind": "isotope",
+      "anchor_shell": 8,
+      "g_norm": 0.022726618868221242,
+      "inv_alpha_spectral_norm": 44.00126590754358,
+      "spectral_modes": [
+        0.0033388643466094356,
+        0.013079836075158077,
+        0.026183178318138094,
+        0.03467059347320011
+      ],
+      "quad_invariant": 0.0020698390055013892,
+      "quad_consistency": 3.842184775830048e-06,
+      "spectral_spread": 10.383947915825797,
+      "clifford_defect": 0.0013215550784408821
+    },
+    {
+      "species": "Fe-56",
+      "kind": "isotope",
+      "anchor_shell": 11,
+      "g_norm": 0.02145574736074338,
+      "inv_alpha_spectral_norm": 46.60755848708655,
+      "spectral_modes": [
+        0.0031158446163439568,
+        0.012351518230031137,
+        0.024707860421044572,
+        0.03272644413432638
+      ],
+      "quad_invariant": 0.0018437670025229973,
+      "quad_consistency": 2.3706232908111274e-06,
+      "spectral_spread": 10.503233685871875,
+      "clifford_defect": 0.0011775134926644277
+    },
+    {
+      "species": "U-238",
+      "kind": "isotope",
+      "anchor_shell": 11,
+      "g_norm": 0.02145574736074338,
+      "inv_alpha_spectral_norm": 46.60755848708655,
+      "spectral_modes": [
+        0.0031158446163439568,
+        0.012351518230031137,
+        0.024707860421044572,
+        0.03272644413432638
+      ],
+      "quad_invariant": 0.0018437670025229973,
+      "quad_consistency": 2.3706232908111274e-06,
+      "spectral_spread": 10.503233685871875,
+      "clifford_defect": 0.0011775134926644277
+    },
+    {
+      "species": "H",
+      "kind": "atom",
+      "anchor_shell": 1,
+      "g_norm": 0.03266922886533357,
+      "inv_alpha_spectral_norm": 30.609844025462568,
+      "spectral_modes": [
+        0.006200214031494786,
+        0.01931828710213964,
+        0.037870634258561034,
+        0.04997522372813399
+      ],
+      "quad_invariant": 0.004343346796419782,
+      "quad_consistency": 7.423273779760559e-05,
+      "spectral_spread": 8.060241706863408,
+      "clifford_defect": 0.0027278097582877276
+    },
+    {
+      "species": "C",
+      "kind": "atom",
+      "anchor_shell": 4,
+      "g_norm": 0.025795430606023625,
+      "inv_alpha_spectral_norm": 38.76655580102954,
+      "spectral_modes": [
+        0.0039568438062318545,
+        0.01485619869325094,
+        0.02976200467974734,
+        0.03937519183900692
+      ],
+      "quad_invariant": 0.0026725459074361663,
+      "quad_consistency": 1.092894683544501e-05,
+      "spectral_spread": 9.951161523483119,
+      "clifford_defect": 0.0017039481772600353
+    },
+    {
+      "species": "Fe",
+      "kind": "atom",
+      "anchor_shell": 4,
+      "g_norm": 0.025795430606023625,
+      "inv_alpha_spectral_norm": 38.76655580102954,
+      "spectral_modes": [
+        0.0039568438062318545,
+        0.01485619869325094,
+        0.02976200467974734,
+        0.03937519183900692
+      ],
+      "quad_invariant": 0.0026725459074361663,
+      "quad_consistency": 1.092894683544501e-05,
+      "spectral_spread": 9.951161523483119,
+      "clifford_defect": 0.0017039481772600353
+    },
+    {
+      "species": "H2",
+      "kind": "molecule",
+      "anchor_shell": 1,
+      "g_norm": 0.03266922886533357,
+      "inv_alpha_spectral_norm": 30.609844025462568,
+      "spectral_modes": [
+        0.006200214031494786,
+        0.01931828710213964,
+        0.037870634258561034,
+        0.04997522372813399
+      ],
+      "quad_invariant": 0.004343346796419782,
+      "quad_consistency": 7.423273779760559e-05,
+      "spectral_spread": 8.060241706863408,
+      "clifford_defect": 0.0027278097582877276
+    },
+    {
+      "species": "CH4 (C-H)",
+      "kind": "molecule",
+      "anchor_shell": 3,
+      "g_norm": 0.027170246408817583,
+      "inv_alpha_spectral_norm": 36.80496617341936,
+      "spectral_modes": [
+        0.004287006271089931,
+        0.015672815969520745,
+        0.03137351502154008,
+        0.041488467809699746
+      ],
+      "quad_invariant": 0.002969605989186122,
+      "quad_consistency": 1.6716829522663186e-05,
+      "spectral_spread": 9.677725010453901,
+      "clifford_defect": 0.0018909237052099825
+    },
+    {
+      "species": "C diamond",
+      "kind": "allotrope",
+      "anchor_shell": 4,
+      "g_norm": 0.025795430606023625,
+      "inv_alpha_spectral_norm": 38.76655580102954,
+      "spectral_modes": [
+        0.0039568438062318545,
+        0.01485619869325094,
+        0.02976200467974734,
+        0.03937519183900692
+      ],
+      "quad_invariant": 0.0026725459074361663,
+      "quad_consistency": 1.092894683544501e-05,
+      "spectral_spread": 9.951161523483119,
+      "clifford_defect": 0.0017039481772600353
+    },
+    {
+      "species": "C graphite",
+      "kind": "allotrope",
+      "anchor_shell": 3,
+      "g_norm": 0.027170246408817583,
+      "inv_alpha_spectral_norm": 36.80496617341936,
+      "spectral_modes": [
+        0.004287006271089931,
+        0.015672815969520745,
+        0.03137351502154008,
+        0.041488467809699746
+      ],
+      "quad_invariant": 0.002969605989186122,
+      "quad_consistency": 1.6716829522663186e-05,
+      "spectral_spread": 9.677725010453901,
+      "clifford_defect": 0.0018909237052099825
+    }
+  ],
+  "findings": [
+    "L_g = sum g_v L_v has a STRUCTURED 4-mode imaginary spectrum (4 distinct |eig|, conjugate pairs) \u2014 the species fingerprint is the DISTRIBUTION, not a single number.",
+    "Quadratic invariant is ~fixed: sum(mode^2) ~ 4|g|^2 (abs defect <= 7.4e-05) \u2014 the spectral 'energy' is pinned by |g|, only its split across modes is species-structural.",
+    "This Fano gate table is NOT a clean Clifford rep (||L_g^2+|g|^2 I||_F up to 2.7e-03), which is exactly why a single carrier already resolves channels.",
+    "Overall scale 1/|g| spans 30.6..46.6 \u2014 near the GUT coupling ~42, NOT 137. CODATA 1/137 is a dressed/run value, not an algebraic invariant of these matrices.",
+    "Frame-independent per-species readouts that DO emerge: 1/|g| (overall coupling, monotone with mass) and the spectral spread mode_max/mode_min (~10, weakly species-dep)."
+  ]
+}

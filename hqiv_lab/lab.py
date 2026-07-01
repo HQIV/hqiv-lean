@@ -20,7 +20,7 @@ class MaterialsLab:
     """
     HQIV chemistry and materials lab.
 
-    Input: molecular spec (fragments + bonds, or GMTKN55 name).
+    Input: formula/name resolved to HQIV atomic-chart fragments and derived bonds.
     Output: derived allotropes, unit cells, and downstream material readouts.
     """
 

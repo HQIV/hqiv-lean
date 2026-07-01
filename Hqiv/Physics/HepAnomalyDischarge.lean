@@ -79,15 +79,15 @@ theorem anomalyDischargeStatus_rareFCNC :
 
 theorem dischargedClasses_are_nine :
     (allHepAnomalyClasses.filter fun c => anomalyDischargeStatus c = .discharged).length = 9 := by
-  native_decide
+  decide
 
 theorem readoutOnlyClasses_are_zero :
     (allHepAnomalyClasses.filter fun c => anomalyDischargeStatus c = .readoutOnly).length = 0 := by
-  native_decide
+  decide
 
 theorem outOfScopeClasses_are_zero :
     (allHepAnomalyClasses.filter fun c => anomalyDischargeStatus c = .outOfScope).length = 0 := by
-  native_decide
+  decide
 
 /-! ## Discharged witnesses -/
 

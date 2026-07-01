@@ -5,6 +5,8 @@ HQIV solar dynamics readout — flux tubes, cycle oscillator, sunspot pins.
 Lean mirrors:
   • Hqiv.Physics.SolarDynamics
   • Hqiv.Physics.CoronalLongitudinalStress
+  • Hqiv.Physics.CoronalHeatingComparisonWitness
+  • Hqiv.Physics.FluxTubeStressDivergenceBridge
   • Hqiv.Physics.WeakFanoHopfBridge
 
 Composes existing Sun rotation / O-Maxwell helpers (no PDG mass injection):
@@ -69,6 +71,14 @@ PLANETARY_DIPOLE_WITNESSES = {
 LEAN_MODULES = [
     "Hqiv.Physics.SolarDynamics",
     "Hqiv.Physics.CoronalLongitudinalStress",
+    "Hqiv.Physics.CoronalHeatingComparisonWitness",
+    "Hqiv.Physics.FluxTubeStressDivergenceBridge",
+    "Hqiv.Physics.CoronalEstarSIAnchorWitness",
+    "Hqiv.Physics.StellarPhiShellProfile",
+    "Hqiv.Physics.LongitudinalStressActionDivergenceBridge",
+    "Hqiv.Physics.OMaxwellLongitudinalMomentumBridge",
+    "Hqiv.Physics.CoronalHeatedPlasmaBackReaction",
+    "Hqiv.Physics.PspHcsReconnectionWitness",
     "Hqiv.Physics.WeakFanoHopfBridge",
     "Hqiv.Physics.NuclearOutsideTemperatureDynamics",
     "Hqiv.Geometry.AuxiliaryField",
@@ -124,9 +134,77 @@ def heating_flux_boundary(
     e_star: float = 1.0,
     coupling_log: float = 1.0,
 ) -> float:
-    """Lean `coronalHeatingFluxBoundary` with α = 3/5 inlined."""
+    """Lean `coronalHeatingFluxBoundary` / `hqivBoundaryHeatingFluxDensity` with α = 3/5 inlined."""
     delta_phi = phi_corona - phi_photo
     return nq * v_parallel * e_star * (3.0 / (20.0 * math.pi)) * coupling_log * delta_phi
+
+
+def alfven_wave_heating_flux_density(rho: float, v_alfven: float, damping_fraction: float) -> float:
+    """Lean `alfvenWaveHeatingFluxDensity`: F_A = f_damp · ρ · v_A³."""
+    return damping_fraction * rho * v_alfven**3
+
+
+def nanoflare_heating_flux_density(event_energy: float, event_rate: float, cross_section: float) -> float:
+    """Lean `nanoflareHeatingFluxDensity`: F_N = (E_event · rate) / area."""
+    if cross_section == 0.0:
+        return 0.0
+    return event_energy * event_rate / cross_section
+
+
+def wave_heating_flux_with_length(
+    flux_ref: float,
+    loop_length: float,
+    length_ref: float,
+    length_exponent: float,
+) -> float:
+    """Lean `waveHeatingFluxWithLength`: F(L) = F_ref · (L / L_ref)^α."""
+    if length_ref == 0.0:
+        return 0.0
+    return flux_ref * (loop_length / length_ref) ** length_exponent
+
+
+def hqiv_to_alfven_flux_ratio(hqiv_flux: float, alfven_flux: float) -> float:
+    """Lean `hqivToAlfvenFluxRatio`."""
+    if alfven_flux == 0.0:
+        return 0.0
+    return hqiv_flux / alfven_flux
+
+
+def hqiv_to_nanoflare_flux_ratio(hqiv_flux: float, nanoflare_flux: float) -> float:
+    """Lean `hqivToNanoflareFluxRatio`."""
+    if nanoflare_flux == 0.0:
+        return 0.0
+    return hqiv_flux / nanoflare_flux
+
+
+def coronal_heating_flux_denominator(
+    nq: float,
+    v_parallel: float,
+    phi_photo: float,
+    phi_corona: float,
+    *,
+    coupling_log: float = 1.0,
+) -> float:
+    """Lean `coronalHeatingFluxDenominator`: nq v_∥ (3/20π) Λ_s Δφ."""
+    return nq * v_parallel * (3.0 / (20.0 * math.pi)) * coupling_log * (phi_corona - phi_photo)
+
+
+def estar_for_target_heating_flux(
+    target_flux: float,
+    nq: float,
+    v_parallel: float,
+    phi_photo: float,
+    phi_corona: float,
+    *,
+    coupling_log: float = 1.0,
+) -> float:
+    """Lean `estarForTargetHeatingFlux`: E_∗ = (Q/A) / denom when denom ≠ 0."""
+    denom = coronal_heating_flux_denominator(
+        nq, v_parallel, phi_photo, phi_corona, coupling_log=coupling_log
+    )
+    if denom == 0.0:
+        return 0.0
+    return target_flux / denom
 
 
 def solar_shear_gate(sin_colatitude: float) -> float:
@@ -744,6 +822,108 @@ def sunspot_pin_readout(
     )
 
 
+@dataclass(frozen=True)
+class CoronalHeatingComparisonRow:
+    """Lean `CoronalHeatingComparisonWitness` readout row (comparison layer only)."""
+
+    nq: float
+    e_star: float
+    coupling_log: float
+    v_parallel: float
+    phi_photo: float
+    phi_corona: float
+    rho: float
+    v_alfven: float
+    damping_fraction: float
+    event_energy: float
+    event_rate: float
+    cross_section: float
+    loop_length_1: float
+    loop_length_2: float
+    length_ref: float
+    length_exponent: float
+    hqiv_flux: float
+    alfven_flux: float
+    nanoflare_flux: float
+    hqiv_to_alfven: float
+    hqiv_to_nanoflare: float
+    hqiv_flux_loop_1: float
+    hqiv_flux_loop_2: float
+    wave_flux_loop_1: float
+    wave_flux_loop_2: float
+    hqiv_length_independent: bool
+    wave_length_fluxes_differ: bool
+    claim_status: str
+
+
+def coronal_heating_comparison_readout(
+    *,
+    m_photo: int = DEFAULT_M_PHOTO,
+    m_corona: int = DEFAULT_M_CORONA,
+    nq: float = 1.0e20,
+    v_parallel: float = 5.0e3,
+    e_star: float = 1.0,
+    rho: float = 1.0e-12,
+    v_alfven: float = 1.0e6,
+    damping_fraction: float = 0.1,
+    event_energy: float = 1.0e24,
+    event_rate: float = 1.0e-3,
+    cross_section: float = 1.0e6,
+    loop_length_1: float = 1.0e8,
+    loop_length_2: float = 2.0e8,
+    length_ref: float = 1.0e8,
+    length_exponent: float = 1.0,
+    wave_flux_ref: float | None = None,
+) -> CoronalHeatingComparisonRow:
+    """
+    HQIV vs Alfvén / nanoflare schematic comparison (Lean discharge via definitional equalities).
+
+    Plasma and wave/nanoflare slots are explicit readout inputs — not derived from HQIV shells.
+    """
+    p_ph = phi_of_shell(m_photo)
+    p_cor = phi_of_shell(m_corona)
+    lam = com.coupling_log_phi(p_cor)
+    hqiv = heating_flux_boundary(nq, v_parallel, p_ph, p_cor, e_star=e_star, coupling_log=lam)
+    alfven = alfven_wave_heating_flux_density(rho, v_alfven, damping_fraction)
+    nanoflare = nanoflare_heating_flux_density(event_energy, event_rate, cross_section)
+    wave_ref = alfven if wave_flux_ref is None else wave_flux_ref
+    hqiv_l1 = hqiv
+    hqiv_l2 = hqiv
+    wave_l1 = wave_heating_flux_with_length(wave_ref, loop_length_1, length_ref, length_exponent)
+    wave_l2 = wave_heating_flux_with_length(wave_ref, loop_length_2, length_ref, length_exponent)
+    lengths_distinct = loop_length_1 != loop_length_2
+    return CoronalHeatingComparisonRow(
+        nq=nq,
+        e_star=e_star,
+        coupling_log=lam,
+        v_parallel=v_parallel,
+        phi_photo=p_ph,
+        phi_corona=p_cor,
+        rho=rho,
+        v_alfven=v_alfven,
+        damping_fraction=damping_fraction,
+        event_energy=event_energy,
+        event_rate=event_rate,
+        cross_section=cross_section,
+        loop_length_1=loop_length_1,
+        loop_length_2=loop_length_2,
+        length_ref=length_ref,
+        length_exponent=length_exponent,
+        hqiv_flux=hqiv,
+        alfven_flux=alfven,
+        nanoflare_flux=nanoflare,
+        hqiv_to_alfven=hqiv_to_alfven_flux_ratio(hqiv, alfven),
+        hqiv_to_nanoflare=hqiv_to_nanoflare_flux_ratio(hqiv, nanoflare),
+        hqiv_flux_loop_1=hqiv_l1,
+        hqiv_flux_loop_2=hqiv_l2,
+        wave_flux_loop_1=wave_l1,
+        wave_flux_loop_2=wave_l2,
+        hqiv_length_independent=math.isclose(hqiv_l1, hqiv_l2),
+        wave_length_fluxes_differ=lengths_distinct and not math.isclose(wave_l1, wave_l2),
+        claim_status="comparison_witness",
+    )
+
+
 def build_readout_payload(
     *,
     m_photo: int = DEFAULT_M_PHOTO,
@@ -764,6 +944,7 @@ def build_readout_payload(
     belt = solar_active_belt_witness()
     peak_gate = max((r.rotation_current_gate for r in lat_rows), default=0.0)
     pin = sunspot_pin_readout(gate=peak_gate, threshold=discharge_threshold * 0.5)
+    heating_cmp = coronal_heating_comparison_readout(m_photo=m_photo, m_corona=m_corona)
 
     return {
         "source": "scripts/hqiv_solar_dynamics.py",
@@ -794,6 +975,10 @@ def build_readout_payload(
             "E_HQIV_formula": "E_star * (alpha/4pi) * Lambda_s * dphi_ds",
             "E_eff_formula": "J/sigma + E_HQIV",
             "heating_flux_boundary": "nq * v_parallel * E_star * (3/20pi) * Lambda_s * delta_phi",
+            "alfven_flux_proxy": "f_damp * rho * v_A^3",
+            "nanoflare_flux_proxy": "E_event * rate / cross_section",
+            "wave_flux_length_scaling": "F_ref * (L / L_ref)^alpha",
+            "hqiv_length_independent": "Q/A fixed at footpoints; bulk L does not enter boundary form",
             "galactic_modulator": "outsideGravityGeffModulator(epsilon_gal)",
             "whim_boundary_shape": "max(0, delta_phi) / phi(m_ism)",
             "planetary_coupling": "gamma * dipole_ratio * sin^2(alignment)",
@@ -807,12 +992,14 @@ def build_readout_payload(
             "sunspot_pin": asdict(pin),
         },
         "flux_tube": asdict(flux),
+        "heating_comparison": asdict(heating_cmp),
         "latitude_scan": [asdict(r) for r in lat_rows],
         "caveats": [
             "Photosphere/corona shell indices are explicit inputs, not derived from horizon shells.",
             "Estimated cycle period uses Jupiter orbital carrier + galactic WHIM gate (readout_model).",
             "Planetary magnetic coupling uses dimensionless dipole witnesses, not fitted B-tables.",
             "Galactic ε_gal = (v_c/c)^2 books outside curvature from the Milky-Way disk support.",
+            "Alfvén/nanoflare slots in heating_comparison are schematic proxies, not quadrature superposition.",
             "No full MHD dynamo PDE or plasma opacity theory is included.",
         ],
     }

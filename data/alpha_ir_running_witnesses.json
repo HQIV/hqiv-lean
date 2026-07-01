@@ -1,0 +1,97 @@
+{
+  "lean_modules": [
+    "Hqiv.Physics.EffectiveAlphaReadout",
+    "Hqiv.Physics.DoublePreferredAxisAlpha",
+    "Hqiv.Physics.SM_GR_Unification"
+  ],
+  "scale_witness": "proton_lockin",
+  "em_gauss_shell": 3,
+  "electroweak_shell": 5,
+  "scale_points": [
+    {
+      "name": "ew_structural_shell_bare",
+      "inv_alpha": 106.63672380803072,
+      "alpha": 0.009377632435522094,
+      "ladder_shell_equiv": 5.0,
+      "note": "bare ladder at structural EW shell m=5 (pre-brace)"
+    },
+    {
+      "name": "ew_brace_W",
+      "inv_alpha": 128.93162299176905,
+      "alpha": 0.00775604911189119,
+      "ladder_shell_equiv": 14.244961329154819,
+      "note": "Gauss->EW double-axis brace; W / alpha(M_Z) analogue"
+    },
+    {
+      "name": "paper_mz_witness",
+      "inv_alpha": 127.9,
+      "alpha": 0.007818608287724784,
+      "ladder_shell_equiv": 13.61341829708895,
+      "note": "legacy alpha(M_Z) = 1/127.9 witness"
+    },
+    {
+      "name": "thomson_codata",
+      "inv_alpha": 137.035999177,
+      "alpha": 0.0072973525643314245,
+      "ladder_shell_equiv": 20.217592101924275,
+      "note": "Thomson / alpha(0); hydrogen spectroscopy scale (comparison)"
+    }
+  ],
+  "w_to_thomson": {
+    "w_inv_alpha": 128.93162299176905,
+    "w_ladder_shell": 14.244961329154819,
+    "thomson_inv_alpha": 137.035999177,
+    "thomson_ladder_shell": 20.217592101924275,
+    "delta_inv_alpha": 8.104376185230961,
+    "pct_run": 6.285793971389264,
+    "note": "W (EW brace ~129) and Thomson (~137) are two evaluations of one monotone ladder; the IR shells between them are the (unproved) running segment"
+  },
+  "observable_policies": [
+    {
+      "observable": "atomic_mass",
+      "need": "none",
+      "rationale": "closed mass dominated by nuclear cluster + Z*m_e + proton lock-in; raw alpha decouples"
+    },
+    {
+      "observable": "nuclear_binding",
+      "need": "none",
+      "rationale": "inside/outside curvature network uses lattice alpha=3/5, not fine-structure alpha"
+    },
+    {
+      "observable": "bbn_abundances",
+      "need": "none",
+      "rationale": "network weights and freezeout use lattice/curvature couplings"
+    },
+    {
+      "observable": "tuft_sector_determinant",
+      "need": "global_brace",
+      "rationale": "exp(n*alpha/6) APS spurion needs EW-scale alpha (the W value ~129)"
+    },
+    {
+      "observable": "g_minus_2",
+      "need": "global_brace",
+      "rationale": "anomalous moment spurion uses global brace alpha at sector scale"
+    },
+    {
+      "observable": "outside_curvature_fight",
+      "need": "shell_local_ratio",
+      "rationale": "uses (alpha_eff(m_shell)/alpha_eff(lock))^2 ratio; absolute scale cancels"
+    },
+    {
+      "observable": "fine_structure_spectroscopy",
+      "need": "ir_thomson",
+      "rationale": "Rydberg / fine structure / Lamb shift live at q^2 -> 0; need alpha(0) ~= 1/137"
+    },
+    {
+      "observable": "ionization_precision",
+      "need": "ir_thomson",
+      "rationale": "precise ionization energies need Thomson-scale alpha, not structural shell"
+    },
+    {
+      "observable": "hydrogen_binding_precise",
+      "need": "ir_thomson",
+      "rationale": "H 1s binding uses alpha(0); structural shell m=1 (1/alpha~83) overbinds ~2.76x"
+    }
+  ],
+  "status_note": "Endpoints reproduced (W brace ~129, Thomson ~137 near ladder m~20). The running curve between them is a phenomenological bridge on the bare O-Maxwell ladder, NOT yet a proved RG theorem. Most HQIV observables do not need raw alpha; spectroscopy-class observables use the IR/Thomson value."
+}

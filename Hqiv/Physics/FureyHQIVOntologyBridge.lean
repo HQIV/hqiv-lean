@@ -21,8 +21,9 @@ remains **open** (the unconditional `Mat₈(ℝ)` generation chain from ordered 
 
 **Spinor Mat₈ / Gram (May 2026):** `spinorMonomialGramColumns` is the **closed-form** normalized
 Frobenius Gram `W` built from `spinorGammaMonomialMatZ` (`CliffordCl06SixSpinorMonomialMatrixData`).
-The mod-`101` certificate is the axiom `spinorMonomialGramColumnsZMod101_det` (script
-`scripts/spinor_monomial_gram_det_mod101.py`), yielding `spinorMonomialGramColumns_det_ne_zero`.
+`spinorMonomialGramColumns_eq_one` proves the closed form `W = I₆₄` (Kronecker mixed-product
+reduction of the Frobenius pairing), yielding `spinorMonomialGramColumns_det_ne_zero` as a theorem
+(the former `ZMod 101` script axiom has been discharged).
 `spinorGammaMonomialMatZ_map` identifies `spinorGammaMonomialMat` with `Matrix.map (algebraMap ℤ ℝ)` of
 that integral layer. The theorem `Hqiv.Algebra.spinorGammaMonomialMat_linearIndependent` packages the
 `ℝ^64` Gram / coordinate-matrix argument; use `hqivSpinorGammaMonomialLinearIndependent` below and then
@@ -261,9 +262,9 @@ The **linear independence** of the `64` ordered `γ` monomials implies `ρ_mat` 
 
 `spinorMonomialGramColumns` is the normalized Frobenius Gram `W` over `ℤ` (see module doc there).
 
-* `Hqiv.Algebra.spinorMonomialGramColumns_det_ne_zero` — from the mod-`101` axiom
-  `spinorMonomialGramColumnsZMod101_det` in the same module (script
-  `scripts/spinor_monomial_gram_det_mod101.py`).
+* `Hqiv.Algebra.spinorMonomialGramColumns_det_ne_zero` — a theorem, from the closed form
+  `spinorMonomialGramColumns_eq_one` (`W = I₆₄`) established by the Kronecker mixed-product
+  reduction; the former `ZMod 101` script axiom is gone.
 
 * `Hqiv.Algebra.spinorGammaMonomialMat_linearIndependent` — `ℝ^64` row-major Gram / `mulVec`
   argument in `CliffordCl06SixSpinorGammaMonomialLinearIndependent`.

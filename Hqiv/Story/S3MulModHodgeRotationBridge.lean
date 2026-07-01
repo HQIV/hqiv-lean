@@ -1,4 +1,5 @@
 import Hqiv.Algebra.MulModHodgeLift
+import Hqiv.Story.S3AlphaDimUnitSplitProjection
 import Hqiv.Story.S3MulModBSDConvergenceRotationBridge
 import Hqiv.Story.S3MulModBSDRotationDualCapstone
 
@@ -107,6 +108,110 @@ def MulModHodgeRotationDualCapstoneInhabited : Prop :=
 theorem mulMod_hodge_rotation_dual_capstone_inhabited :
     MulModHodgeRotationDualCapstoneInhabited :=
   ⟨mulMod_hodge_rotation_dual_capstone⟩
+
+/-! ## 4D fibre imprint row for the BSD-facing Hodge channel -/
+
+/--
+Four-dimensional fibre upgrade: the dimension-indexed imprint row `α₄ = 4/7`
+is packaged with the BSD-facing Hodge rotation bridge.  This records the clean
+4D/Hodge carrier without changing the physical 3D lattice row `α₃ = 3/5`.
+-/
+structure FourDimBSDHodgeImprintBridge where
+  four_dim_budget : TransverseDim.FourDimHodgeImprintBudgetWitness
+  hodge_rotation : MulModHodgeRotationBridge
+  alpha_four : TransverseDim.imprintAlpha ⟨4, by decide⟩ = 4 / 7
+  gamma_four : TransverseDim.overlapGamma ⟨4, by decide⟩ = 3 / 7
+  denom_four : TransverseDim.imprintDenom ⟨4, by decide⟩ = 7
+  so4_lie_dim_six : TransverseDim.soLieDim 4 = 6
+  fortyfive_filtration : projectionLine (Real.pi / 4) = (1 / 2 : ℝ)
+  ninety_weight_wall : projectionLine (Real.pi / 2) = (1 : ℝ)
+
+noncomputable def fourDim_bsd_hodge_imprint_bridge : FourDimBSDHodgeImprintBridge where
+  four_dim_budget := TransverseDim.fourDimHodgeImprintBudgetWitness_holds
+  hodge_rotation := mulMod_hodge_rotation_bridge
+  alpha_four := TransverseDim.imprintAlpha_four
+  gamma_four := TransverseDim.overlapGamma_four
+  denom_four := TransverseDim.imprintDenom_four
+  so4_lie_dim_six := TransverseDim.soLieDim_four
+  fortyfive_filtration := mulMod_hodge_fortyfive_pins_filtration
+  ninety_weight_wall := mulMod_hodge_ninety_pins_weight_wall
+
+theorem fourDim_bsd_hodge_alpha_four :
+    TransverseDim.imprintAlpha ⟨4, by decide⟩ = 4 / 7 :=
+  fourDim_bsd_hodge_imprint_bridge.alpha_four
+
+theorem fourDim_bsd_hodge_gamma_four :
+    TransverseDim.overlapGamma ⟨4, by decide⟩ = 3 / 7 :=
+  fourDim_bsd_hodge_imprint_bridge.gamma_four
+
+theorem fourDim_bsd_hodge_rotation_landmarks :
+    projectionLine (Real.pi / 4) = (1 / 2 : ℝ) ∧
+      projectionLine (Real.pi / 2) = (1 : ℝ) :=
+  ⟨fourDim_bsd_hodge_imprint_bridge.fortyfive_filtration,
+    fourDim_bsd_hodge_imprint_bridge.ninety_weight_wall⟩
+
+/--
+The bad Fano-shell normalized residue is not arbitrary in the 4D fibre reading:
+`6/7 = 2γ₄ = 1 - 1/7`.  This reinterprets the defect as the four-dimensional
+boundary complement; it does **not** make Ramanujan--Petersson true at `p = 7`.
+-/
+theorem fourDim_bad_shell_residue_eq_two_gamma_four :
+    mulModBSDLocalResidueCoeffReal 7 (by decide) =
+      (2 : ℝ) * (TransverseDim.overlapGamma ⟨4, by decide⟩ : ℝ) := by
+  rw [mulMod_hodge_lift_default.bad_shell_defect.normalized_residue,
+    TransverseDim.overlapGamma_four]
+  norm_num
+
+theorem fourDim_bad_shell_residue_eq_one_minus_denominator_skew :
+    mulModBSDLocalResidueCoeffReal 7 (by decide) =
+      1 - (1 : ℝ) / (TransverseDim.imprintDenom ⟨4, by decide⟩ : ℝ) := by
+  rw [mulMod_hodge_lift_default.bad_shell_defect.normalized_residue,
+    TransverseDim.imprintDenom_four]
+  norm_num
+
+theorem fourDim_bad_shell_trace_eq_denom_minus_one :
+    mulModBSDPrimeHolonomyTrace 7 Nat.prime_seven =
+      TransverseDim.imprintDenom ⟨4, by decide⟩ - 1 := by
+  rw [mulModBSDPrimeHolonomyTrace_seven, TransverseDim.imprintDenom_four]
+
+/--
+The 4D row resolves the *meaning* of the bad residue while preserving the proved
+RP failure.  This is the scoped answer to the BSD bad-shell audit: `α₄` organizes
+the defect but does not erase it.
+-/
+structure FourDimBadResidueResolution where
+  four_dim_bridge : FourDimBSDHodgeImprintBridge
+  residue_eq_two_gamma_four :
+    mulModBSDLocalResidueCoeffReal 7 (by decide) =
+      (2 : ℝ) * (TransverseDim.overlapGamma ⟨4, by decide⟩ : ℝ)
+  residue_eq_boundary_complement :
+    mulModBSDLocalResidueCoeffReal 7 (by decide) =
+      1 - (1 : ℝ) / (TransverseDim.imprintDenom ⟨4, by decide⟩ : ℝ)
+  trace_eq_denom_minus_one :
+    mulModBSDPrimeHolonomyTrace 7 Nat.prime_seven =
+      TransverseDim.imprintDenom ⟨4, by decide⟩ - 1
+  rp_still_fails : ¬ MulModBSDRamanujanPeterssonAt 7 Nat.prime_seven
+
+noncomputable def fourDim_bad_residue_resolution : FourDimBadResidueResolution where
+  four_dim_bridge := fourDim_bsd_hodge_imprint_bridge
+  residue_eq_two_gamma_four := fourDim_bad_shell_residue_eq_two_gamma_four
+  residue_eq_boundary_complement := fourDim_bad_shell_residue_eq_one_minus_denominator_skew
+  trace_eq_denom_minus_one := fourDim_bad_shell_trace_eq_denom_minus_one
+  rp_still_fails := mulMod_hodge_bad_shell_defect_fails_purity
+
+def FourDimBadResidueResolutionInhabited : Prop :=
+  Nonempty FourDimBadResidueResolution
+
+theorem fourDim_bad_residue_resolution_inhabited :
+    FourDimBadResidueResolutionInhabited :=
+  ⟨fourDim_bad_residue_resolution⟩
+
+def FourDimBSDHodgeImprintBridgeInhabited : Prop :=
+  Nonempty FourDimBSDHodgeImprintBridge
+
+theorem fourDim_bsd_hodge_imprint_bridge_inhabited :
+    FourDimBSDHodgeImprintBridgeInhabited :=
+  ⟨fourDim_bsd_hodge_imprint_bridge⟩
 
 end
 

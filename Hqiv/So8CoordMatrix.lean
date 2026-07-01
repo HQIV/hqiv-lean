@@ -55,9 +55,26 @@ theorem so8CoordMatrix_eq_coord (p k : Fin 28) :
 def coordVec (M : Matrix (Fin 8) (Fin 8) ℝ) (p : Fin 28) : ℝ :=
   M (upperTriangleIdx p).1 (upperTriangleIdx p).2
 
-/-- **Columns of so8CoordMatrix are orthonormal:** `Mᵀ * M = 1` (28×28 identity).
-This slot is currently treated as a CI bridge axiom because the direct fully-expanded
-`simp`/`norm_num` proof can hit tactic recursion limits on some Lean/mathlib snapshots. -/
+/-- **QUARANTINED NUMERICAL IDEALIZATION — do not use for structural claims.**
+
+Asserts that the columns of `so8CoordMatrix` are orthonormal (`Mᵀ * M = 1`). The
+generators in `Hqiv.Generators` are stored as 14–15 digit *decimal* literals from a
+numerical (Gram–Schmidt/SVD) orthonormalization. Interpreted as **exact rationals**,
+their off-diagonal overlaps are `O(10⁻¹⁴)`, not `0`, so this equality is in fact
+**false over `ℚ`**: it is an inconsistent axiom and must not be relied upon for any
+soundness-critical conclusion.
+
+It is retained *only* as a CI convenience that lets the legacy numeric closure build
+(`Hqiv.GeneratorsLieClosure`) typecheck for the specific octonionic seed used by the
+*conditional* forcing theorem. **All structural/dimensional facts are now proved
+genuinely and axiom-free elsewhere:**
+
+* `dim so(8) = 28` as real linear algebra — `Hqiv.Foundation.finrank_so8`;
+* an axiom-free `so(8)` Lie-closure certificate (antisymmetry + bracket-closure +
+  linear independence) — `Hqiv.Foundation.skewGen_so8_closure`.
+
+Nothing in the Foundation spine, and no dimension claim in the papers, depends on
+this axiom. -/
 axiom so8CoordMatrix_transpose_mul_self : so8CoordMatrixᵀ * so8CoordMatrix = 1
 
 end Hqiv

@@ -37,25 +37,8 @@ class MoleculeSpec:
 
     @classmethod
     def from_nested_wf(cls, name: str) -> MoleculeSpec:
-        """Geometry from nested shell wavefunctions; reference binding for witnesses only."""
-        import hqiv_dynamic_binding_chart as chart
-
-        key = name.strip().upper()
-        for bench in chart.ALL_MOLECULE_BENCHMARKS:
-            if bench.name.upper() == key:
-                derived = chart.benchmark_with_nested_wf_geometry(bench)
-                return cls(
-                    derived.name,
-                    derived.fragments,
-                    derived.bonds,
-                    reference_binding_ev=derived.reference_ev,
-                    reference_source=derived.reference_source,
-                )
-        from hqiv_lab.atomic_chart import monomer_spec_from_atomic_chart
-
-        if key == "H2":
-            return cls.from_atomic_chart(1, 2)
-        raise KeyError(f"unknown molecule for nested-WF geometry: {name}")
+        """Geometry from nested shell wavefunctions; no benchmark geometry enters."""
+        return resolve_spec(name)
 
     @classmethod
     def from_atomic_chart(cls, z_heavy: int, n_hydrogen: int, *, name: str | None = None) -> MoleculeSpec:
@@ -65,18 +48,8 @@ class MoleculeSpec:
 
     @classmethod
     def from_chart_name(cls, name: str) -> MoleculeSpec:
-        import hqiv_dynamic_binding_chart as chart
-
-        for bench in chart.GMTKN55_SUITE:
-            if bench.name.upper() == name.upper():
-                return cls(
-                    name=bench.name,
-                    fragments=bench.fragments,
-                    bonds=bench.bonds,
-                    reference_binding_ev=bench.reference_ev,
-                    reference_source=bench.reference_source,
-                )
-        raise KeyError(f"unknown GMTKN55 molecule: {name}")
+        """Compatibility name: resolve from HQIV-derived specs, not benchmark tables."""
+        return resolve_spec(name)
 
     @classmethod
     def from_formula(cls, formula: str) -> MoleculeSpec:
@@ -96,11 +69,28 @@ class MoleculeSpec:
 
 
 def resolve_spec(name: str) -> MoleculeSpec:
-    """GMTKN55 chart first, then foundation-tier builders."""
+    """Resolve names without using benchmark geometry or reference energies as inputs."""
+    key = _normalize_formula(name)
+    hydrides: dict[str, tuple[int, int]] = {
+        "H2": (1, 2),
+        "LIH": (3, 1),
+        "BH3": (5, 3),
+        "CH4": (6, 4),
+        "NH3": (7, 3),
+        "H2O": (8, 2),
+        "HF": (9, 1),
+        "HCL": (17, 1),
+    }
+    if key in hydrides:
+        z_heavy, n_h = hydrides[key]
+        return MoleculeSpec.from_atomic_chart(z_heavy, n_h, name=key)
     try:
-        return MoleculeSpec.from_chart_name(name)
-    except KeyError:
-        return MoleculeSpec.from_foundation_name(name)
+        return MoleculeSpec.from_foundation_name(key)
+    except KeyError as exc:
+        raise KeyError(
+            f"unknown derived HQIV molecule {name!r}; add an atomic-chart or "
+            "foundation spec instead of importing a benchmark table"
+        ) from exc
 
 
 def _normalize_formula(formula: str) -> str:

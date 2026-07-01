@@ -114,7 +114,7 @@ def infer_monomer_geometry(spec: MoleculeSpec) -> MonomerGeometry:
     """Derive coordination motif from fragment graph (no phase tables)."""
     frags = spec.fragments
     if len(frags) == 2 and all(f.z_nuclear == 1 for f in frags):
-        b = spec.bonds[0] if spec.bonds else BondGeometry(0, 1, 0.74)
+        b = spec.bonds[0] if spec.bonds else BondGeometry(0, 1, bond_length_angstrom("H", "H"))
         return MonomerGeometry(
             z_heavy=1,
             n_bonds_at_heavy=1,
