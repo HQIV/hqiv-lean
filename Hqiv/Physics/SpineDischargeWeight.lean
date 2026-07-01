@@ -170,37 +170,37 @@ private theorem dischargeObservables_Kplus_mu :
     dischargeObservables .K_plus .weak [.mu_plus] =
       { chargedIsospinOutlet := 0, neutralIsospinOutlet := 0, visibleLeptonWeak := 1,
         lightPseudoscalarTag := 0, monogamyCompetition := 0, semileptonicHadronicCompetition := 0,
-        hiddenStrangenessKk := 0, hiddenStrangenessLeak := 0 } := by native_decide
+        hiddenStrangenessKk := 0, hiddenStrangenessLeak := 0 } := by decide
 
 private theorem dischargeObservables_Kplus_piplus :
     dischargeObservables .K_plus .weak [.pi_plus] =
       { chargedIsospinOutlet := 1, neutralIsospinOutlet := 0, visibleLeptonWeak := 0,
         lightPseudoscalarTag := 1, monogamyCompetition := 1, semileptonicHadronicCompetition := 1,
-        hiddenStrangenessKk := 0, hiddenStrangenessLeak := 0 } := by native_decide
+        hiddenStrangenessKk := 0, hiddenStrangenessLeak := 0 } := by decide
 
 private theorem dischargeObservables_lambda_piminus :
     dischargeObservables .lambda .weak [.p, .pi_minus] =
       { chargedIsospinOutlet := 1, neutralIsospinOutlet := 0, visibleLeptonWeak := 0,
         lightPseudoscalarTag := 0, monogamyCompetition := 0, semileptonicHadronicCompetition := 0,
-        hiddenStrangenessKk := 0, hiddenStrangenessLeak := 0 } := by native_decide
+        hiddenStrangenessKk := 0, hiddenStrangenessLeak := 0 } := by decide
 
 private theorem dischargeObservables_lambda_npi0 :
     dischargeObservables .lambda .weak [.n, .pi_zero] =
       { chargedIsospinOutlet := 0, neutralIsospinOutlet := 1, visibleLeptonWeak := 0,
         lightPseudoscalarTag := 0, monogamyCompetition := 0, semileptonicHadronicCompetition := 0,
-        hiddenStrangenessKk := 0, hiddenStrangenessLeak := 0 } := by native_decide
+        hiddenStrangenessKk := 0, hiddenStrangenessLeak := 0 } := by decide
 
 private theorem dischargeObservables_phi_KK :
     dischargeObservables .phi .strong [.K_plus, .K_minus] =
       { chargedIsospinOutlet := 0, neutralIsospinOutlet := 0, visibleLeptonWeak := 0,
         lightPseudoscalarTag := 0, monogamyCompetition := 0, semileptonicHadronicCompetition := 0,
-        hiddenStrangenessKk := 1, hiddenStrangenessLeak := 0 } := by native_decide
+        hiddenStrangenessKk := 1, hiddenStrangenessLeak := 0 } := by decide
 
 private theorem dischargeObservables_phi_three_pion :
     dischargeObservables .phi .strong [.pi_plus, .pi_minus, .pi_zero] =
       { chargedIsospinOutlet := 0, neutralIsospinOutlet := 0, visibleLeptonWeak := 0,
         lightPseudoscalarTag := 0, monogamyCompetition := 0, semileptonicHadronicCompetition := 0,
-        hiddenStrangenessKk := 0, hiddenStrangenessLeak := 1 } := by native_decide
+        hiddenStrangenessKk := 0, hiddenStrangenessLeak := 1 } := by decide
 
 theorem spineDischargeWeight_eq_routing_Kplus_mu :
     spineDischargeWeight .K_plus .weak [.mu_plus] =
@@ -279,7 +279,7 @@ theorem spineDischargeWeight_eq_routing_B0 :
     spineDischargeWeight .B0 .weak [.D0, .pi_zero] =
       openFlavourContactWeight (openFlavourContactKind .B0 .weak [.D0, .pi_zero]) := by
   have hinact : lightSectorActive (dischargeObservables .B0 .weak [.D0, .pi_zero]) = false := by
-    native_decide
+    decide
   unfold spineDischargeWeight
   simp [hinact]
 
@@ -319,7 +319,7 @@ theorem spineDischargeWeight_eq_routing_Dplus_mu :
     spineDischargeWeight .D_plus .weak [.mu_plus] =
       openFlavourContactWeight (openFlavourContactKind .D_plus .weak [.mu_plus]) := by
   have hinact : lightSectorActive (dischargeObservables .D_plus .weak [.mu_plus]) = false := by
-    native_decide
+    decide
   unfold spineDischargeWeight
   simp [hinact]
 
@@ -329,7 +329,7 @@ theorem spineDischargeWeight_eq_routing_lambda_c_PKpi :
         (openFlavourContactKind .lambda_c .weak [.p, .K_minus, .pi_plus]) := by
   have hinact :
       lightSectorActive (dischargeObservables .lambda_c .weak [.p, .K_minus, .pi_plus]) = false := by
-    native_decide
+    decide
   unfold spineDischargeWeight
   simp [hinact]
 
@@ -337,7 +337,7 @@ theorem spineDischargeWeight_eq_routing_Bplus_D0piplus :
     spineDischargeWeight .B_plus .weak [.D0, .pi_plus] =
       openFlavourContactWeight (openFlavourContactKind .B_plus .weak [.D0, .pi_plus]) := by
   have hinact : lightSectorActive (dischargeObservables .B_plus .weak [.D0, .pi_plus]) = false := by
-    native_decide
+    decide
   unfold spineDischargeWeight
   simp [hinact]
 
@@ -345,7 +345,7 @@ theorem spineDischargeWeight_eq_routing_Bs_DsK :
     spineDischargeWeight .Bs .weak [.Ds_plus, .K_minus] =
       openFlavourContactWeight (openFlavourContactKind .Bs .weak [.Ds_plus, .K_minus]) := by
   have hinact : lightSectorActive (dischargeObservables .Bs .weak [.Ds_plus, .K_minus]) = false := by
-    native_decide
+    decide
   unfold spineDischargeWeight
   simp [hinact]
 
@@ -391,7 +391,7 @@ noncomputable def hepDecaySpineBenchmarkDischarged : HepDecaySpineBenchmarkDisch
 /-- On Λ weak hadronic rows the monogamy exponent vanishes: plain isospin slot. -/
 theorem dischargeObservables_lambda_piminus_monogamy_zero :
     (dischargeObservables .lambda .weak [.p, .pi_minus]).monogamyCompetition = 0 := by
-  native_decide
+  decide
 
 #check hepDecaySpineBenchmarkDischarged
 

@@ -414,6 +414,44 @@ theorem tuftLeptonGeometricScalarT8_heavy_eq_base :
   unfold tuftLeptonGeometricScalarT8
   simp [tuftLeptonT8GenerationFactor_heavy_eq_one]
 
+/-! ## T8 full anomalous magnetic moment `(g−2)/2`
+
+The magnetic spectral shift uses the same APS EM spurion as the mass ladder, dressed by the
+generation-indexed Ray–Singer / torsion subleading factor (normalized to the heavy shell).
+No SM loop integrals; no external PDG α.
+-/
+
+/-- Full T8 sector-determinant anomalous moment on Hopf winding `n ∈ {1,2,3}`. -/
+noncomputable def tuftAnomalousMomentFullT8 (n : ℕ) (h : n = 1 ∨ n = 2 ∨ n = 3) (c : ℝ := 1) : ℝ :=
+  tuftAnomalousMomentSpurionDerived n c *
+    tuftLeptonT8GenerationFactor n h /
+    tuftLeptonT8GenerationFactor 3 (Or.inr (Or.inr rfl))
+
+theorem tuftAnomalousMomentFullT8_eq_spurion_times_t8_ratio
+    (n : ℕ) (h : n = 1 ∨ n = 2 ∨ n = 3) (c : ℝ) :
+    tuftAnomalousMomentFullT8 n h c =
+      tuftAnomalousMomentSpurionDerived n c *
+        tuftLeptonT8GenerationFactor n h /
+        tuftLeptonT8GenerationFactor 3 (Or.inr (Or.inr rfl)) := rfl
+
+theorem tuftAnomalousMomentFullT8_heavy_eq_spurion :
+    tuftAnomalousMomentFullT8 3 (Or.inr (Or.inr rfl)) 1 = tuftAnomalousMomentSpurion 3 := by
+  unfold tuftAnomalousMomentFullT8 tuftAnomalousMomentSpurion tuftAnomalousMomentSpurionDerived
+  simp [tuftLeptonT8GenerationFactor_heavy_eq_one]
+
+/-- Primary `(a_e, a_μ)` readout at default Fano coefficient `c = 1`. -/
+noncomputable def chargedLeptonAnomalousMomentSpectrum (c : ℝ := 1) : ℝ × ℝ :=
+  ( tuftAnomalousMomentFullT8 1 (Or.inl rfl) c
+  , tuftAnomalousMomentFullT8 2 (Or.inr (Or.inl rfl)) c )
+
+theorem chargedLeptonAnomalousMomentSpectrum_fst_eq_electron
+    (c : ℝ) :
+    (chargedLeptonAnomalousMomentSpectrum c).1 = tuftAnomalousMomentFullT8 1 (Or.inl rfl) c := rfl
+
+theorem chargedLeptonAnomalousMomentSpectrum_snd_eq_muon
+    (c : ℝ) :
+    (chargedLeptonAnomalousMomentSpectrum c).2 = tuftAnomalousMomentFullT8 2 (Or.inr (Or.inl rfl)) c := rfl
+
 /-- Physical charged-lepton mass with full T8 sector determinant on the Hopf chart. -/
 noncomputable def tuftLeptonMassFromVevAtXi_T8_MeV
     (ξ : ℝ) (n : ℕ) (h : n = 1 ∨ n = 2 ∨ n = 3)
@@ -435,6 +473,21 @@ theorem leptonMassSpectrum_at_xi_from_vev_T8_tau_eq_baseline
       tuftLeptonMassFromVevAtXi_MeV ξ 3 vevLockin_MeV κ6 := by
   simp [leptonMassSpectrum_at_xi_from_vev_T8_MeV, tuftLeptonMassFromVevAtXi_T8_MeV,
     tuftLeptonMassFromVevAtXi_MeV, tuftLeptonGeometricScalarT8_heavy_eq_base]
+
+/-- Electron mass from the TUFT vev→T8 winding `n=1` chart at lock-in (PDG-free):
+the `e` entry of the full T8 lepton spectrum. -/
+noncomputable def derivedElectronMass_MeV : ℝ :=
+  (leptonMassSpectrum_at_xi_from_vev_T8_MeV xiLockin).2.2
+
+/-- CODATA proton/electron mass ratio — comparison guardrail only, never an input. -/
+def codataProtonToElectronMassRatio : ℝ := 1836.15267343
+
+/-- Proton/electron mass ratio as a DERIVED two-chart HQIV readout: the proton
+lock-in scale (`derivedProtonMass`) over the TUFT electron (`derivedElectronMass_MeV`,
+vev→T8 winding `n=1`).  No CODATA value is injected.  Python mirror:
+`scripts/hqiv_proton_electron_ratio.derived_proton_to_electron_ratio`. -/
+noncomputable def derivedProtonToElectronMassRatio : ℝ :=
+  derivedProtonMass / derivedElectronMass_MeV
 
 /-- Bundled T8 witness: leading term + torsion subleading + vev chart closure. -/
 structure TuftSectorZetaDetFullWitness where

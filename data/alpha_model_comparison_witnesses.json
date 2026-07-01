@@ -1,0 +1,906 @@
+{
+  "lean_modules": [
+    "Hqiv.Physics.EffectiveAlphaReadout",
+    "Hqiv.Physics.DoublePreferredAxisAlpha",
+    "Hqiv.Physics.BoundStates",
+    "Hqiv.QuantumChemistry.AtomOutsideCurvatureFight",
+    "Hqiv.QuantumChemistry.AtomNucleusCurvatureShell",
+    "Hqiv.QuantumChemistry.AtomElectronicDischarge"
+  ],
+  "scale_witness": "proton_lockin",
+  "codata_inv_alpha": 137.035999177,
+  "primary_global_inv_alpha": 128.93162299176905,
+  "primary_global_vs_codata_pct": -5.914049033760172,
+  "rows": [
+    {
+      "element": "H",
+      "z": 1,
+      "alpha_panel": {
+        "element": "H",
+        "z": 1,
+        "mass_number": 1,
+        "m_nuc": 4,
+        "electron_shells": [
+          1
+        ],
+        "global_brace": {
+          "model": "global_brace",
+          "inv_alpha": 128.93162299176905,
+          "alpha": 0.00775604911189119,
+          "shell_source": "one_over_alpha_EM_double_axis (m=3 -> m=5 brace)",
+          "shell_m": null,
+          "xi": null,
+          "note": "O\u2013Maxwell double-axis discrete brace (EW-scale prediction)",
+          "rel_error_vs_codata_inv": -0.059140490337601714
+        },
+        "nuclear_tracking": {
+          "model": "nuclear_tracking",
+          "inv_alpha": 102.42696087451893,
+          "alpha": 0.00976305448743206,
+          "shell_source": "alpha_eff_at_shell(m_nuc(A))",
+          "shell_m": 4,
+          "xi": 5.0,
+          "note": "inside-ratio argmin drum at A=1",
+          "rel_error_vs_codata_inv": -0.25255435440565477
+        },
+        "electronic_outermost": {
+          "model": "electronic_tracking",
+          "inv_alpha": 82.55783539333933,
+          "alpha": 0.012112720679213432,
+          "shell_source": "alpha_eff_at_shell(outermost discharge shell)",
+          "shell_m": 1,
+          "xi": 2.0,
+          "note": "discharge shell m=1",
+          "rel_error_vs_codata_inv": -0.3975463681867636
+        },
+        "electronic_occupancy_mean": {
+          "model": "electronic_tracking",
+          "inv_alpha": 82.55783539333933,
+          "alpha": 0.012112720679213432,
+          "shell_source": "occupancy_mean(all discharge shells)",
+          "shell_m": null,
+          "xi": null,
+          "note": "average 1/alpha_eff over all booked electrons",
+          "rel_error_vs_codata_inv": -0.3975463681867636
+        },
+        "alpha_eff_lockin": {
+          "model": "electronic_tracking",
+          "inv_alpha": 102.42696087451893,
+          "alpha": 0.00976305448743206,
+          "shell_source": "alpha_eff_at_shell(referenceM)",
+          "shell_m": 4,
+          "xi": 5.0,
+          "note": "lock-in shell for outside-fight ratio denominator",
+          "rel_error_vs_codata_inv": -0.25255435440565477
+        },
+        "codata_comparison": {
+          "model": "global_brace",
+          "inv_alpha": 137.035999177,
+          "alpha": 0.0072973525643314245,
+          "shell_source": "CODATA comparison tier",
+          "shell_m": null,
+          "xi": null,
+          "note": "never a proton_lockin solve input",
+          "rel_error_vs_codata_inv": 0.0
+        }
+      },
+      "fight": {
+        "canonical_mev": 0.0,
+        "nuclear_ratio_policy_mev": 0.0,
+        "global_unity_ratio_mev": 0.0,
+        "ratio_policy_note": "canonical uses (alpha_eff(m_shell)/alpha_eff(lock))^2; nuclear_policy uses (alpha_eff(m_nuc)/alpha_eff(lock))^2 for all electrons; global_unity uses ratio=1 (shows atom spine decoupling from alpha_EM_primary)"
+      },
+      "hydrogenic": {
+        "canonical_mev": 3.748636902628499e-05,
+        "global_brace_mev": 1.536990106830906e-05,
+        "nuclear_tracking_mev": 2.435350068236281e-05,
+        "electronic_outermost_mev": 3.748636902628499e-05
+      },
+      "closed_mass_canonical_mev": 938.7830734636979,
+      "closed_mass_nuclear_fight_mev": 938.7830734636979,
+      "closed_mass_global_fight_mev": 938.7830734636979,
+      "nist_mass_amu": 1.00782503223,
+      "relative_error_canonical_mass": -3.512989898979413e-10,
+      "relative_error_nuclear_fight_mass": -3.512989898979413e-10,
+      "first_ionization_ev_canonical": 13.598287264982266,
+      "nist_first_ionization_ev": 13.59843449,
+      "relative_error_ionization": -1.082661521389916e-05
+    },
+    {
+      "element": "He",
+      "z": 2,
+      "alpha_panel": {
+        "element": "He",
+        "z": 2,
+        "mass_number": 4,
+        "m_nuc": 6,
+        "electron_shells": [
+          1,
+          1
+        ],
+        "global_brace": {
+          "model": "global_brace",
+          "inv_alpha": 128.93162299176905,
+          "alpha": 0.00775604911189119,
+          "shell_source": "one_over_alpha_EM_double_axis (m=3 -> m=5 brace)",
+          "shell_m": null,
+          "xi": null,
+          "note": "O\u2013Maxwell double-axis discrete brace (EW-scale prediction)",
+          "rel_error_vs_codata_inv": -0.059140490337601714
+        },
+        "nuclear_tracking": {
+          "model": "nuclear_tracking",
+          "inv_alpha": 110.2428650677757,
+          "alpha": 0.009070881815210577,
+          "shell_source": "alpha_eff_at_shell(m_nuc(A))",
+          "shell_m": 6,
+          "xi": 7.0,
+          "note": "inside-ratio argmin drum at A=4",
+          "rel_error_vs_codata_inv": -0.19551894589842378
+        },
+        "electronic_outermost": {
+          "model": "electronic_tracking",
+          "inv_alpha": 82.55783539333933,
+          "alpha": 0.012112720679213432,
+          "shell_source": "alpha_eff_at_shell(outermost discharge shell)",
+          "shell_m": 1,
+          "xi": 2.0,
+          "note": "discharge shell m=1",
+          "rel_error_vs_codata_inv": -0.3975463681867636
+        },
+        "electronic_occupancy_mean": {
+          "model": "electronic_tracking",
+          "inv_alpha": 82.55783539333933,
+          "alpha": 0.012112720679213432,
+          "shell_source": "occupancy_mean(all discharge shells)",
+          "shell_m": null,
+          "xi": null,
+          "note": "average 1/alpha_eff over all booked electrons",
+          "rel_error_vs_codata_inv": -0.3975463681867636
+        },
+        "alpha_eff_lockin": {
+          "model": "electronic_tracking",
+          "inv_alpha": 102.42696087451893,
+          "alpha": 0.00976305448743206,
+          "shell_source": "alpha_eff_at_shell(referenceM)",
+          "shell_m": 4,
+          "xi": 5.0,
+          "note": "lock-in shell for outside-fight ratio denominator",
+          "rel_error_vs_codata_inv": -0.25255435440565477
+        },
+        "codata_comparison": {
+          "model": "global_brace",
+          "inv_alpha": 137.035999177,
+          "alpha": 0.0072973525643314245,
+          "shell_source": "CODATA comparison tier",
+          "shell_m": null,
+          "xi": null,
+          "note": "never a proton_lockin solve input",
+          "rel_error_vs_codata_inv": 0.0
+        }
+      },
+      "fight": {
+        "canonical_mev": 4.1186163125579505,
+        "nuclear_ratio_policy_mev": 2.309760486129142,
+        "global_unity_ratio_mev": 2.6757119396637106,
+        "ratio_policy_note": "canonical uses (alpha_eff(m_shell)/alpha_eff(lock))^2; nuclear_policy uses (alpha_eff(m_nuc)/alpha_eff(lock))^2 for all electrons; global_unity uses ratio=1 (shows atom spine decoupling from alpha_EM_primary)"
+      },
+      "hydrogenic": {
+        "canonical_mev": 0.00014994547610513995,
+        "global_brace_mev": 6.147960427323624e-05,
+        "nuclear_tracking_mev": 8.409089594616142e-05,
+        "electronic_outermost_mev": 0.00014994547610513995
+      },
+      "closed_mass_canonical_mev": 3714.763964348398,
+      "closed_mass_nuclear_fight_mev": 3712.955108521969,
+      "closed_mass_global_fight_mev": 3713.321059975504,
+      "nist_mass_amu": 4.00260325413,
+      "relative_error_canonical_mass": -0.003657696693579182,
+      "relative_error_nuclear_fight_mass": -0.004142852573670086,
+      "first_ionization_ev_canonical": 37.03639778077616,
+      "nist_first_ionization_ev": 24.587387366,
+      "relative_error_ionization": 0.5063169270270227
+    },
+    {
+      "element": "Li",
+      "z": 3,
+      "alpha_panel": {
+        "element": "Li",
+        "z": 3,
+        "mass_number": 7,
+        "m_nuc": 7,
+        "electron_shells": [
+          1,
+          1,
+          4
+        ],
+        "global_brace": {
+          "model": "global_brace",
+          "inv_alpha": 128.93162299176905,
+          "alpha": 0.00775604911189119,
+          "shell_source": "one_over_alpha_EM_double_axis (m=3 -> m=5 brace)",
+          "shell_m": null,
+          "xi": null,
+          "note": "O\u2013Maxwell double-axis discrete brace (EW-scale prediction)",
+          "rel_error_vs_codata_inv": -0.059140490337601714
+        },
+        "nuclear_tracking": {
+          "model": "nuclear_tracking",
+          "inv_alpha": 113.39697627021665,
+          "alpha": 0.008818577292723163,
+          "shell_source": "alpha_eff_at_shell(m_nuc(A))",
+          "shell_m": 7,
+          "xi": 8.0,
+          "note": "inside-ratio argmin drum at A=7",
+          "rel_error_vs_codata_inv": -0.1725022844271048
+        },
+        "electronic_outermost": {
+          "model": "electronic_tracking",
+          "inv_alpha": 102.42696087451893,
+          "alpha": 0.00976305448743206,
+          "shell_source": "alpha_eff_at_shell(outermost discharge shell)",
+          "shell_m": 4,
+          "xi": 5.0,
+          "note": "discharge shell m=4",
+          "rel_error_vs_codata_inv": -0.25255435440565477
+        },
+        "electronic_occupancy_mean": {
+          "model": "electronic_tracking",
+          "inv_alpha": 89.18087722039918,
+          "alpha": 0.01121316622092231,
+          "shell_source": "occupancy_mean(all discharge shells)",
+          "shell_m": null,
+          "xi": null,
+          "note": "average 1/alpha_eff over all booked electrons",
+          "rel_error_vs_codata_inv": -0.3492156969263941
+        },
+        "alpha_eff_lockin": {
+          "model": "electronic_tracking",
+          "inv_alpha": 102.42696087451893,
+          "alpha": 0.00976305448743206,
+          "shell_source": "alpha_eff_at_shell(referenceM)",
+          "shell_m": 4,
+          "xi": 5.0,
+          "note": "lock-in shell for outside-fight ratio denominator",
+          "rel_error_vs_codata_inv": -0.25255435440565477
+        },
+        "codata_comparison": {
+          "model": "global_brace",
+          "inv_alpha": 137.035999177,
+          "alpha": 0.0072973525643314245,
+          "shell_source": "CODATA comparison tier",
+          "shell_m": null,
+          "xi": null,
+          "note": "never a proton_lockin solve input",
+          "rel_error_vs_codata_inv": 0.0
+        },
+        "electronic_valence_mean": {
+          "model": "electronic_tracking",
+          "inv_alpha": 102.42696087451893,
+          "alpha": 0.00976305448743206,
+          "shell_source": "occupancy_mean(valence shells)",
+          "shell_m": null,
+          "xi": null,
+          "note": "average 1/alpha_eff on valence discharge shells",
+          "rel_error_vs_codata_inv": -0.25255435440565477
+        }
+      },
+      "fight": {
+        "canonical_mev": 3.1607265630608308,
+        "nuclear_ratio_policy_mev": 1.6753308002808323,
+        "global_unity_ratio_mev": 2.053406571767205,
+        "ratio_policy_note": "canonical uses (alpha_eff(m_shell)/alpha_eff(lock))^2; nuclear_policy uses (alpha_eff(m_nuc)/alpha_eff(lock))^2 for all electrons; global_unity uses ratio=1 (shows atom spine decoupling from alpha_EM_primary)"
+      },
+      "hydrogenic": {
+        "canonical_mev": 0.00033737732123656494,
+        "global_brace_mev": 0.00013832910961478152,
+        "nuclear_tracking_mev": 0.0001788255346696308,
+        "electronic_outermost_mev": 0.0002191815061412653
+      },
+      "closed_mass_canonical_mev": 6500.368965964414,
+      "closed_mass_nuclear_fight_mev": 6498.883570201634,
+      "closed_mass_global_fight_mev": 6499.261645973121,
+      "nist_mass_amu": 7.0160034366,
+      "relative_error_canonical_mass": -0.0053549959911577405,
+      "relative_error_nuclear_fight_mass": -0.005582281777881781,
+      "first_ionization_ev_canonical": 5.747953167038475,
+      "nist_first_ionization_ev": 5.391719966,
+      "relative_error_ionization": 0.06607041969628802
+    },
+    {
+      "element": "C",
+      "z": 6,
+      "alpha_panel": {
+        "element": "C",
+        "z": 6,
+        "mass_number": 12,
+        "m_nuc": 8,
+        "electron_shells": [
+          1,
+          1,
+          4,
+          4,
+          3,
+          3
+        ],
+        "global_brace": {
+          "model": "global_brace",
+          "inv_alpha": 128.93162299176905,
+          "alpha": 0.00775604911189119,
+          "shell_source": "one_over_alpha_EM_double_axis (m=3 -> m=5 brace)",
+          "shell_m": null,
+          "xi": null,
+          "note": "O\u2013Maxwell double-axis discrete brace (EW-scale prediction)",
+          "rel_error_vs_codata_inv": -0.059140490337601714
+        },
+        "nuclear_tracking": {
+          "model": "nuclear_tracking",
+          "inv_alpha": 116.19986227499429,
+          "alpha": 0.008605862179366763,
+          "shell_source": "alpha_eff_at_shell(m_nuc(A))",
+          "shell_m": 8,
+          "xi": 9.0,
+          "note": "inside-ratio argmin drum at A=12",
+          "rel_error_vs_codata_inv": -0.15204863705261207
+        },
+        "electronic_outermost": {
+          "model": "electronic_tracking",
+          "inv_alpha": 97.37005934887273,
+          "alpha": 0.010270097468227303,
+          "shell_source": "alpha_eff_at_shell(outermost discharge shell)",
+          "shell_m": 3,
+          "xi": 4.0,
+          "note": "discharge shell m=3",
+          "rel_error_vs_codata_inv": -0.2894563477214006
+        },
+        "electronic_occupancy_mean": {
+          "model": "electronic_tracking",
+          "inv_alpha": 94.11828520557701,
+          "alpha": 0.010624927959702614,
+          "shell_source": "occupancy_mean(all discharge shells)",
+          "shell_m": null,
+          "xi": null,
+          "note": "average 1/alpha_eff over all booked electrons",
+          "rel_error_vs_codata_inv": -0.3131856901046062
+        },
+        "alpha_eff_lockin": {
+          "model": "electronic_tracking",
+          "inv_alpha": 102.42696087451893,
+          "alpha": 0.00976305448743206,
+          "shell_source": "alpha_eff_at_shell(referenceM)",
+          "shell_m": 4,
+          "xi": 5.0,
+          "note": "lock-in shell for outside-fight ratio denominator",
+          "rel_error_vs_codata_inv": -0.25255435440565477
+        },
+        "codata_comparison": {
+          "model": "global_brace",
+          "inv_alpha": 137.035999177,
+          "alpha": 0.0072973525643314245,
+          "shell_source": "CODATA comparison tier",
+          "shell_m": null,
+          "xi": null,
+          "note": "never a proton_lockin solve input",
+          "rel_error_vs_codata_inv": 0.0
+        },
+        "electronic_valence_mean": {
+          "model": "electronic_tracking",
+          "inv_alpha": 99.89851011169583,
+          "alpha": 0.010010159299492125,
+          "shell_source": "occupancy_mean(valence shells)",
+          "shell_m": null,
+          "xi": null,
+          "note": "average 1/alpha_eff on valence discharge shells",
+          "rel_error_vs_codata_inv": -0.27100535106352774
+        }
+      },
+      "fight": {
+        "canonical_mev": 8.51537663618334,
+        "nuclear_ratio_policy_mev": 5.29573840026205,
+        "global_unity_ratio_mev": 6.815679758015859,
+        "ratio_policy_note": "canonical uses (alpha_eff(m_shell)/alpha_eff(lock))^2; nuclear_policy uses (alpha_eff(m_nuc)/alpha_eff(lock))^2 for all electrons; global_unity uses ratio=1 (shows atom spine decoupling from alpha_EM_primary)"
+      },
+      "hydrogenic": {
+        "canonical_mev": 0.0013495092849462598,
+        "global_brace_mev": 0.0005533164384591261,
+        "nuclear_tracking_mev": 0.0006812103619360634,
+        "electronic_outermost_mev": 0.0009701560640253852
+      },
+      "closed_mass_canonical_mev": 11149.913197320106,
+      "closed_mass_nuclear_fight_mev": 11146.693559084184,
+      "closed_mass_global_fight_mev": 11148.213500441938,
+      "nist_mass_amu": 12.0,
+      "relative_error_canonical_mass": -0.002506370468611352,
+      "relative_error_nuclear_fight_mass": -0.002794405771926578,
+      "first_ionization_ev_canonical": 35.925885212879244,
+      "nist_first_ionization_ev": 11.260288,
+      "relative_error_ionization": 2.1904943472919385
+    },
+    {
+      "element": "N",
+      "z": 7,
+      "alpha_panel": {
+        "element": "N",
+        "z": 7,
+        "mass_number": 14,
+        "m_nuc": 8,
+        "electron_shells": [
+          1,
+          1,
+          4,
+          4,
+          3,
+          3,
+          3
+        ],
+        "global_brace": {
+          "model": "global_brace",
+          "inv_alpha": 128.93162299176905,
+          "alpha": 0.00775604911189119,
+          "shell_source": "one_over_alpha_EM_double_axis (m=3 -> m=5 brace)",
+          "shell_m": null,
+          "xi": null,
+          "note": "O\u2013Maxwell double-axis discrete brace (EW-scale prediction)",
+          "rel_error_vs_codata_inv": -0.059140490337601714
+        },
+        "nuclear_tracking": {
+          "model": "nuclear_tracking",
+          "inv_alpha": 116.19986227499429,
+          "alpha": 0.008605862179366763,
+          "shell_source": "alpha_eff_at_shell(m_nuc(A))",
+          "shell_m": 8,
+          "xi": 9.0,
+          "note": "inside-ratio argmin drum at A=14",
+          "rel_error_vs_codata_inv": -0.15204863705261207
+        },
+        "electronic_outermost": {
+          "model": "electronic_tracking",
+          "inv_alpha": 97.37005934887273,
+          "alpha": 0.010270097468227303,
+          "shell_source": "alpha_eff_at_shell(outermost discharge shell)",
+          "shell_m": 3,
+          "xi": 4.0,
+          "note": "discharge shell m=3",
+          "rel_error_vs_codata_inv": -0.2894563477214006
+        },
+        "electronic_occupancy_mean": {
+          "model": "electronic_tracking",
+          "inv_alpha": 94.58282436890497,
+          "alpha": 0.010572744117892507,
+          "shell_source": "occupancy_mean(all discharge shells)",
+          "shell_m": null,
+          "xi": null,
+          "note": "average 1/alpha_eff over all booked electrons",
+          "rel_error_vs_codata_inv": -0.30979578404986263
+        },
+        "alpha_eff_lockin": {
+          "model": "electronic_tracking",
+          "inv_alpha": 102.42696087451893,
+          "alpha": 0.00976305448743206,
+          "shell_source": "alpha_eff_at_shell(referenceM)",
+          "shell_m": 4,
+          "xi": 5.0,
+          "note": "lock-in shell for outside-fight ratio denominator",
+          "rel_error_vs_codata_inv": -0.25255435440565477
+        },
+        "codata_comparison": {
+          "model": "global_brace",
+          "inv_alpha": 137.035999177,
+          "alpha": 0.0072973525643314245,
+          "shell_source": "CODATA comparison tier",
+          "shell_m": null,
+          "xi": null,
+          "note": "never a proton_lockin solve input",
+          "rel_error_vs_codata_inv": 0.0
+        },
+        "electronic_valence_mean": {
+          "model": "electronic_tracking",
+          "inv_alpha": 99.3928199591312,
+          "alpha": 0.010061088923839615,
+          "shell_source": "occupancy_mean(valence shells)",
+          "shell_m": null,
+          "xi": null,
+          "note": "average 1/alpha_eff on valence discharge shells",
+          "rel_error_vs_codata_inv": -0.2746955503951023
+        }
+      },
+      "fight": {
+        "canonical_mev": 10.324737553849182,
+        "nuclear_ratio_policy_mev": 6.6105906714162606,
+        "global_unity_ratio_mev": 8.507910629700056,
+        "ratio_policy_note": "canonical uses (alpha_eff(m_shell)/alpha_eff(lock))^2; nuclear_policy uses (alpha_eff(m_nuc)/alpha_eff(lock))^2 for all electrons; global_unity uses ratio=1 (shows atom spine decoupling from alpha_EM_primary)"
+      },
+      "hydrogenic": {
+        "canonical_mev": 0.0018368320822879647,
+        "global_brace_mev": 0.0007531251523471439,
+        "nuclear_tracking_mev": 0.0009272029926351974,
+        "electronic_outermost_mev": 0.0013204901982567742
+      },
+      "closed_mass_canonical_mev": 13017.783695043014,
+      "closed_mass_nuclear_fight_mev": 13014.069548160582,
+      "closed_mass_global_fight_mev": 13015.966868118865,
+      "nist_mass_amu": 14.00307400443,
+      "relative_error_canonical_mass": -0.001993069044286755,
+      "relative_error_nuclear_fight_mass": -0.0022778136996051135,
+      "first_ionization_ev_canonical": 51.73361518264664,
+      "nist_first_ionization_ev": 14.53413,
+      "relative_error_ionization": 2.559457303784034
+    },
+    {
+      "element": "O",
+      "z": 8,
+      "alpha_panel": {
+        "element": "O",
+        "z": 8,
+        "mass_number": 16,
+        "m_nuc": 8,
+        "electron_shells": [
+          1,
+          1,
+          4,
+          4,
+          3,
+          3,
+          3,
+          3
+        ],
+        "global_brace": {
+          "model": "global_brace",
+          "inv_alpha": 128.93162299176905,
+          "alpha": 0.00775604911189119,
+          "shell_source": "one_over_alpha_EM_double_axis (m=3 -> m=5 brace)",
+          "shell_m": null,
+          "xi": null,
+          "note": "O\u2013Maxwell double-axis discrete brace (EW-scale prediction)",
+          "rel_error_vs_codata_inv": -0.059140490337601714
+        },
+        "nuclear_tracking": {
+          "model": "nuclear_tracking",
+          "inv_alpha": 116.19986227499429,
+          "alpha": 0.008605862179366763,
+          "shell_source": "alpha_eff_at_shell(m_nuc(A))",
+          "shell_m": 8,
+          "xi": 9.0,
+          "note": "inside-ratio argmin drum at A=16",
+          "rel_error_vs_codata_inv": -0.15204863705261207
+        },
+        "electronic_outermost": {
+          "model": "electronic_tracking",
+          "inv_alpha": 97.37005934887273,
+          "alpha": 0.010270097468227303,
+          "shell_source": "alpha_eff_at_shell(outermost discharge shell)",
+          "shell_m": 3,
+          "xi": 4.0,
+          "note": "discharge shell m=3",
+          "rel_error_vs_codata_inv": -0.2894563477214006
+        },
+        "electronic_occupancy_mean": {
+          "model": "electronic_tracking",
+          "inv_alpha": 94.93122874140093,
+          "alpha": 0.010533941393764821,
+          "shell_source": "occupancy_mean(all discharge shells)",
+          "shell_m": null,
+          "xi": null,
+          "note": "average 1/alpha_eff over all booked electrons",
+          "rel_error_vs_codata_inv": -0.30725335450880487
+        },
+        "alpha_eff_lockin": {
+          "model": "electronic_tracking",
+          "inv_alpha": 102.42696087451893,
+          "alpha": 0.00976305448743206,
+          "shell_source": "alpha_eff_at_shell(referenceM)",
+          "shell_m": 4,
+          "xi": 5.0,
+          "note": "lock-in shell for outside-fight ratio denominator",
+          "rel_error_vs_codata_inv": -0.25255435440565477
+        },
+        "codata_comparison": {
+          "model": "global_brace",
+          "inv_alpha": 137.035999177,
+          "alpha": 0.0072973525643314245,
+          "shell_source": "CODATA comparison tier",
+          "shell_m": null,
+          "xi": null,
+          "note": "never a proton_lockin solve input",
+          "rel_error_vs_codata_inv": 0.0
+        },
+        "electronic_valence_mean": {
+          "model": "electronic_tracking",
+          "inv_alpha": 99.05569319075478,
+          "alpha": 0.010095330897076933,
+          "shell_source": "occupancy_mean(valence shells)",
+          "shell_m": null,
+          "xi": null,
+          "note": "average 1/alpha_eff on valence discharge shells",
+          "rel_error_vs_codata_inv": -0.2771556832828188
+        }
+      },
+      "fight": {
+        "canonical_mev": 12.026261412252332,
+        "nuclear_ratio_policy_mev": 7.838628202206511,
+        "global_unity_ratio_mev": 10.088409874201394,
+        "ratio_policy_note": "canonical uses (alpha_eff(m_shell)/alpha_eff(lock))^2; nuclear_policy uses (alpha_eff(m_nuc)/alpha_eff(lock))^2 for all electrons; global_unity uses ratio=1 (shows atom spine decoupling from alpha_EM_primary)"
+      },
+      "hydrogenic": {
+        "canonical_mev": 0.002399127617682239,
+        "global_brace_mev": 0.0009836736683717798,
+        "nuclear_tracking_mev": 0.0012110406434418905,
+        "electronic_outermost_mev": 0.0017247218916006848
+      },
+      "closed_mass_canonical_mev": 14885.546305621572,
+      "closed_mass_nuclear_fight_mev": 14881.358672411525,
+      "closed_mass_global_fight_mev": 14883.60845408352,
+      "nist_mass_amu": 15.999084904,
+      "relative_error_canonical_mass": -0.0011747207970419504,
+      "relative_error_nuclear_fight_mass": -0.0014557124263947507,
+      "first_ionization_ev_canonical": 70.41554558809581,
+      "nist_first_ionization_ev": 13.618055,
+      "relative_error_ionization": 4.170749096555698
+    },
+    {
+      "element": "Na",
+      "z": 11,
+      "alpha_panel": {
+        "element": "Na",
+        "z": 11,
+        "mass_number": 23,
+        "m_nuc": 9,
+        "electron_shells": [
+          1,
+          1,
+          5,
+          5,
+          4,
+          4,
+          4,
+          4,
+          4,
+          4,
+          4
+        ],
+        "global_brace": {
+          "model": "global_brace",
+          "inv_alpha": 128.93162299176905,
+          "alpha": 0.00775604911189119,
+          "shell_source": "one_over_alpha_EM_double_axis (m=3 -> m=5 brace)",
+          "shell_m": null,
+          "xi": null,
+          "note": "O\u2013Maxwell double-axis discrete brace (EW-scale prediction)",
+          "rel_error_vs_codata_inv": -0.059140490337601714
+        },
+        "nuclear_tracking": {
+          "model": "nuclear_tracking",
+          "inv_alpha": 118.72196543063025,
+          "alpha": 0.008423041148053636,
+          "shell_source": "alpha_eff_at_shell(m_nuc(A))",
+          "shell_m": 9,
+          "xi": 10.0,
+          "note": "inside-ratio argmin drum at A=23",
+          "rel_error_vs_codata_inv": -0.13364396112232357
+        },
+        "electronic_outermost": {
+          "model": "electronic_tracking",
+          "inv_alpha": 102.42696087451893,
+          "alpha": 0.00976305448743206,
+          "shell_source": "alpha_eff_at_shell(outermost discharge shell)",
+          "shell_m": 4,
+          "xi": 5.0,
+          "note": "discharge shell m=4",
+          "rel_error_vs_codata_inv": -0.25255435440565477
+        },
+        "electronic_occupancy_mean": {
+          "model": "electronic_tracking",
+          "inv_alpha": 99.57980404767024,
+          "alpha": 0.010042196904919457,
+          "shell_source": "occupancy_mean(all discharge shells)",
+          "shell_m": null,
+          "xi": null,
+          "note": "average 1/alpha_eff over all booked electrons",
+          "rel_error_vs_codata_inv": -0.27333106157711284
+        },
+        "alpha_eff_lockin": {
+          "model": "electronic_tracking",
+          "inv_alpha": 102.42696087451893,
+          "alpha": 0.00976305448743206,
+          "shell_source": "alpha_eff_at_shell(referenceM)",
+          "shell_m": 4,
+          "xi": 5.0,
+          "note": "lock-in shell for outside-fight ratio denominator",
+          "rel_error_vs_codata_inv": -0.25255435440565477
+        },
+        "codata_comparison": {
+          "model": "global_brace",
+          "inv_alpha": 137.035999177,
+          "alpha": 0.0072973525643314245,
+          "shell_source": "CODATA comparison tier",
+          "shell_m": null,
+          "xi": null,
+          "note": "never a proton_lockin solve input",
+          "rel_error_vs_codata_inv": 0.0
+        },
+        "electronic_valence_mean": {
+          "model": "electronic_tracking",
+          "inv_alpha": 103.36246374863266,
+          "alpha": 0.009674691989075468,
+          "shell_source": "occupancy_mean(valence shells)",
+          "shell_m": null,
+          "xi": null,
+          "note": "average 1/alpha_eff on valence discharge shells",
+          "rel_error_vs_codata_inv": -0.2457276601083015
+        }
+      },
+      "fight": {
+        "canonical_mev": 7.59500021852118,
+        "nuclear_ratio_policy_mev": 5.12350153176799,
+        "global_unity_ratio_mev": 6.883359496411019,
+        "ratio_policy_note": "canonical uses (alpha_eff(m_shell)/alpha_eff(lock))^2; nuclear_policy uses (alpha_eff(m_nuc)/alpha_eff(lock))^2 for all electrons; global_unity uses ratio=1 (shows atom spine decoupling from alpha_EM_primary)"
+      },
+      "hydrogenic": {
+        "canonical_mev": 0.004535850652180483,
+        "global_brace_mev": 0.0018597580292653963,
+        "nuclear_tracking_mev": 0.0021933765005186516,
+        "electronic_outermost_mev": 0.0029467735825659
+      },
+      "closed_mass_canonical_mev": 21370.1569552834,
+      "closed_mass_nuclear_fight_mev": 21367.68545659665,
+      "closed_mass_global_fight_mev": 21369.445314561293,
+      "nist_mass_amu": 22.989769282,
+      "relative_error_canonical_mass": -0.002086289618139725,
+      "relative_error_nuclear_fight_mass": -0.0022017002082379555,
+      "first_ionization_ev_canonical": 102.89059242110183,
+      "nist_first_ionization_ev": 5.13907696,
+      "relative_error_ionization": 19.021220390733717
+    },
+    {
+      "element": "Fe",
+      "z": 26,
+      "alpha_panel": {
+        "element": "Fe",
+        "z": 26,
+        "mass_number": 56,
+        "m_nuc": 11,
+        "electron_shells": [
+          1,
+          1,
+          6,
+          6,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5
+        ],
+        "global_brace": {
+          "model": "global_brace",
+          "inv_alpha": 128.93162299176905,
+          "alpha": 0.00775604911189119,
+          "shell_source": "one_over_alpha_EM_double_axis (m=3 -> m=5 brace)",
+          "shell_m": null,
+          "xi": null,
+          "note": "O\u2013Maxwell double-axis discrete brace (EW-scale prediction)",
+          "rel_error_vs_codata_inv": -0.059140490337601714
+        },
+        "nuclear_tracking": {
+          "model": "nuclear_tracking",
+          "inv_alpha": 123.11567078667866,
+          "alpha": 0.008122442850778032,
+          "shell_source": "alpha_eff_at_shell(m_nuc(A))",
+          "shell_m": 11,
+          "xi": 12.0,
+          "note": "inside-ratio argmin drum at A=56",
+          "rel_error_vs_codata_inv": -0.10158154407544695
+        },
+        "electronic_outermost": {
+          "model": "electronic_tracking",
+          "inv_alpha": 106.63672380803072,
+          "alpha": 0.009377632435522094,
+          "shell_source": "alpha_eff_at_shell(outermost discharge shell)",
+          "shell_m": 5,
+          "xi": 6.0,
+          "note": "discharge shell m=5",
+          "rel_error_vs_codata_inv": -0.22183423006756509
+        },
+        "electronic_occupancy_mean": {
+          "model": "electronic_tracking",
+          "inv_alpha": 105.06189710380407,
+          "alpha": 0.009518198581660602,
+          "shell_source": "occupancy_mean(all discharge shells)",
+          "shell_m": null,
+          "xi": null,
+          "note": "average 1/alpha_eff over all booked electrons",
+          "rel_error_vs_codata_inv": -0.23332629575603114
+        },
+        "alpha_eff_lockin": {
+          "model": "electronic_tracking",
+          "inv_alpha": 102.42696087451893,
+          "alpha": 0.00976305448743206,
+          "shell_source": "alpha_eff_at_shell(referenceM)",
+          "shell_m": 4,
+          "xi": 5.0,
+          "note": "lock-in shell for outside-fight ratio denominator",
+          "rel_error_vs_codata_inv": -0.25255435440565477
+        },
+        "codata_comparison": {
+          "model": "global_brace",
+          "inv_alpha": 137.035999177,
+          "alpha": 0.0072973525643314245,
+          "shell_source": "CODATA comparison tier",
+          "shell_m": null,
+          "xi": null,
+          "note": "never a proton_lockin solve input",
+          "rel_error_vs_codata_inv": 0.0
+        },
+        "electronic_valence_mean": {
+          "model": "electronic_tracking",
+          "inv_alpha": 106.93723557967614,
+          "alpha": 0.009351279697658971,
+          "shell_source": "occupancy_mean(valence shells)",
+          "shell_m": null,
+          "xi": null,
+          "note": "average 1/alpha_eff on valence discharge shells",
+          "rel_error_vs_codata_inv": -0.21964128972013663
+        }
+      },
+      "fight": {
+        "canonical_mev": 59.053113549623404,
+        "nuclear_ratio_policy_mev": 43.55500300738095,
+        "global_unity_ratio_mev": 62.92687220627848,
+        "ratio_policy_note": "canonical uses (alpha_eff(m_shell)/alpha_eff(lock))^2; nuclear_policy uses (alpha_eff(m_nuc)/alpha_eff(lock))^2 for all electrons; global_unity uses ratio=1 (shows atom spine decoupling from alpha_EM_primary)"
+      },
+      "hydrogenic": {
+        "canonical_mev": 0.025340785461768656,
+        "global_brace_mev": 0.010390053122176925,
+        "nuclear_tracking_mev": 0.01139488629564843,
+        "electronic_outermost_mev": 0.015188786572279301
+      },
+      "closed_mass_canonical_mev": 51996.616613232014,
+      "closed_mass_nuclear_fight_mev": 51981.11850268977,
+      "closed_mass_global_fight_mev": 52000.49037188867,
+      "nist_mass_amu": 55.845,
+      "relative_error_canonical_mass": -0.0004358294244178884,
+      "relative_error_nuclear_fight_mass": -0.000733759501770237,
+      "first_ionization_ev_canonical": 351.5714297616562,
+      "nist_first_ionization_ev": 7.9024,
+      "relative_error_ionization": 43.48919692266352
+    }
+  ],
+  "uniqueness_audit": {
+    "summary": "HQIV currently hosts multiple alpha roles (lattice alpha=3/5, global alpha_EM_primary, and shell-local alpha_eff(m)). No proved selector picks one routing for all sectors.",
+    "open_assumptions": [
+      "Global brace uses fixed chart roles emGaussShell=3 and electroweakPhiShell=5.",
+      "Nuclear drum m_nuc(A) comes from inside-ratio argmin, independent of EM brace.",
+      "Electronic discharge shells come from TUFT chart + Z period rule, not m_nuc(A).",
+      "Outside fight uses shell-local alpha_eff ratios; global alpha_EM_primary is not routed into atom mass.",
+      "Slater binding in the atom spine uses unit Coulomb Hartree scaling without alpha_eff."
+    ],
+    "why_not_unique": [
+      "Bare O-Maxwell ladder one_over_alpha_EM_derived(m) is monotone in m and crosses CODATA near m\u224820, while primary brace is fixed at m=3->5 (1/\u03b1\u2248128.93).",
+      "Nuclear-tracking and electronic-tracking are both valid shell-local evaluations of the same alpha_eff(m) formula on different shell indices.",
+      "Improving CODATA agreement on alpha can worsen atom mass or ionization because mass is dominated by nuclear cluster binding, not alpha_EM_primary.",
+      "No Lean theorem yet identifies a variational/modal functional whose unique minimizer selects the global brace chart pair or ties EM to m_nuc(A)."
+    ],
+    "candidate_routings": [
+      "global_brace: sector topology / TUFT APS exp(n alpha/6) slot",
+      "nuclear_tracking: alpha_eff(m_nuc(A)) for nucleus-linked dressing",
+      "electronic_tracking: alpha_eff(m_shell) for bound-state and outside-fight ratios"
+    ],
+    "recommendation": "Keep a split architecture: global_brace for TUFT/sector topology; electronic_tracking for atom outside-fight and hydrogenic diagnostics; nuclear_tracking only where nucleus coupling is explicit. Nuclear alpha-ratio policy shifts outside-fight by O(4.63) MeV on average \u2014 too large to silently merge with global brace. CODATA proximity scorecard (closer 1/alpha): nuclear=0, global=8, electronic=0 elements. Next Lean target: formal `alpha_EM_local` router distinguishing global vs shell-local roles, plus IR running lemma from brace to Thomson scale \u2014 not a single unified alpha."
+  }
+}

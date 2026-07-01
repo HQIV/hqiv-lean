@@ -22,6 +22,7 @@ import Hqiv.Geometry.HQVMetric
 import Hqiv.Topology.HopfShellComplex
 import Hqiv.Physics.DerivedGaugeAndLeptonSector
 import Hqiv.Physics.HadronMassReadout
+import Hqiv.Physics.EffectiveAlphaReadout
 
 /-!
 # Hopf-shell / Beltrami spectral bridge (TUFT mining → HQIV mass ladder)
@@ -547,8 +548,7 @@ than the legacy charged-lepton shell quotient.
 /-- Numerical Apéry constant `ζ(3)` used in the TUFT determinant term. -/
 noncomputable def tuftAperyZeta3 : ℝ := 1.2020569031595942
 
-/-- TUFT fine-structure correction in `φ_n = exp(n α_em / 6)`. -/
-noncomputable def tuftFineStructureAlpha : ℝ := 1 / 137.035999084
+/- CODATA α (comparison only). Primary derived α: `EffectiveAlphaReadout.tuftFineStructureAlpha`. -/
 
 /-- Electroweak vev from the Fermi constant, in MeV.  This is the dimensional
 input for physical TUFT mass charts; particle masses are downstream readouts. -/
@@ -786,11 +786,19 @@ noncomputable def tuftLeptonGeometricScalar (n : ℕ) : ℝ :=
     Real.exp (tuftHelicityCoefficient * (n : ℝ) - tuftAperyZeta3 * (n : ℝ) ^ 2) *
       Real.exp ((n : ℝ) * tuftFineStructureAlpha / 6)
 
+/-- Leading APS EM spurion with derived α and optional Fano coefficient `c`. -/
+noncomputable def tuftAnomalousMomentSpurionDerived (n : ℕ) (c : ℝ := 1) : ℝ :=
+  (Real.exp ((n : ℝ) * tuftFineStructureAlphaDerived c / 6) - 1) / max n 1
+
 /-- Leading APS electromagnetic spurion for anomalous magnetic moment in winding sector `n ≥ 1`.
-Inherited from the same `exp(n α_em/6)` knot-complement factor in `tuftLeptonGeometricScalar`
-(TUFT Sector Determinant Lemma; compare `(g−2)/2` at `n = 1` electron, `n = 2` muon). -/
+Inherited from the same `exp(n α_eff/6)` knot-complement factor in `tuftLeptonGeometricScalar`
+(TUFT Sector Determinant Lemma; `(g−2)/2` at `n = 1` electron, `n = 2` muon). Uses derived α. -/
 noncomputable def tuftAnomalousMomentSpurion (n : ℕ) : ℝ :=
-  (Real.exp ((n : ℝ) * tuftFineStructureAlpha / 6) - 1) / max n 1
+  tuftAnomalousMomentSpurionDerived n 1
+
+/-- Legacy leading spurion with CODATA α (comparison layer only). -/
+noncomputable def tuftAnomalousMomentSpurion_CODATA (n : ℕ) : ℝ :=
+  (Real.exp ((n : ℝ) * alpha_EM_at_tier .codataComparison / 6) - 1) / max n 1
 
 -- (The positivity for resonance_k_at_xi follows from the base geometric step being positive and the
 -- trapping factor being >1 by construction. Temporarily commented while the core readouts

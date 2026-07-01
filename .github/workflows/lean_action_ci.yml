@@ -66,8 +66,8 @@ jobs:
           build: false
           test: false
 
-      - name: lake build HQIVYangMills
-        run: lake build HQIVYangMills
+      - name: lake build Targets.HQIVYangMills
+        run: lake build Targets.HQIVYangMills
 
   # Docs and Pages in a separate job so only one artifact named "github-pages" is produced.
   # API HTML: scripts/build_api_docs.sh (doc-gen4 from Git; upstream docgen-action used Reservoir-only resolution).

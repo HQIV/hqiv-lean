@@ -344,7 +344,7 @@ Degenerate uniform-cost detector (Python):
 
 ## 12) Worst-case certified behavior envelope (Lean)
 
-Added module: `Hqiv/Geometry/ATSPWorstCaseCertified.lean` (imported in `HQIVLEAN.lean`).
+Added module: `Hqiv/Geometry/ATSPWorstCaseCertified.lean` (imported in `Targets/HQIVLEAN.lean`).
 
 Core certified statements:
 

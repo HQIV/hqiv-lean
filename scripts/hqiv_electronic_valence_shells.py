@@ -19,6 +19,7 @@ import math
 from typing import Any, Literal
 
 import hqiv_lean_physics_primitives as lean
+import hqiv_particle_shell_structure as pss
 from fragment_aware_bonded_horizon import FragmentConfig
 
 # Lean LiH / heavy-hydride Compton slots (`compare_quantum_chem_witnesses.py`).
@@ -33,33 +34,24 @@ _ALKALI_Z = frozenset({3, 11, 19, 37})
 
 
 def chemical_period(z: int) -> int:
-    """Principal period from nuclear charge (no fitted tables)."""
-    if z <= 2:
-        return 1
-    if z <= 10:
-        return 2
-    if z <= 18:
-        return 3
-    if z <= 36:
-        return 4
-    if z <= 54:
-        return 5
-    return 6 + (z - 54 - 1) // 18
+    """Principal period from nuclear charge.
+
+    Derived: period = 1 + (number of particle-derived noble-gas closures below z), where the
+    closures come from Madelung filling with the monogamy-pair × (2ℓ+1) capacities
+    (`hqiv_particle_shell_structure`).  Identical to the old hand-coded table for Z ≤ 86 and
+    correct beyond it (the old `6 + (z−55)//18` over-counted periods 6+).
+    """
+    return 1 + sum(1 for c in pss.noble_gas_closures() if c < z)
 
 
 def valence_electron_count(z: int) -> int:
-    """Valence electrons outside the previous noble-gas core."""
-    if z <= 2:
-        return z
-    if z <= 10:
-        return z - 2
-    if z <= 18:
-        return z - 10
-    if z <= 36:
-        return z - 18
-    if z <= 54:
-        return z - 36
-    return z - 54
+    """Valence electrons outside the previous noble-gas core.
+
+    Derived from the particle-first shell structure (`hqiv_particle_shell_structure`): the
+    capacities are monogamy-pair × (2ℓ+1) and the closures fall out of Madelung filling.  This
+    is the single source of truth; it reproduces the old hand-coded table for every Z ≤ 86.
+    """
+    return pss.valence_electron_count(z)
 
 
 def period2_valence_electron_count(z: int) -> int:
@@ -197,9 +189,13 @@ def chemistry_compton_triplet(
 
 
 def homonuclear_bond_order(z: int) -> int:
-    """σ-bond order from valence filling (N≡N → 3, O=O → 2, F−F → 1)."""
-    valence = valence_electron_count(z)
-    return max(1, min(3, 8 - valence))
+    """σ-bond order from valence filling (N≡N → 3, O=O → 2, F−F → 1, Li−Li → 1).
+
+    Special case of the unified geometric-mean rule: ``√(cap·cap) = cap`` with
+    ``cap = bonding_capacity(z)`` (bonds to the nearest closed shell), capped at the p-shell triple.
+    """
+    cap = pss.bonding_capacity(z)
+    return max(1, int(round(pss.geometric_bond_order(cap, cap))))
 
 
 def homonuclear_open_shell_dimer(z: int) -> bool:
@@ -212,26 +208,28 @@ def is_homonuclear_halogen(z: int) -> bool:
     return z in _HALOGEN_Z
 
 
-def heteronuclear_bond_order(z_light: int, z_heavy: int) -> int:
+def heteronuclear_bond_order(z_light: int, z_heavy: int) -> float:
     """
-    Heteronuclear σ+π bond order from valence bookkeeping (no tables).
+    Heteronuclear bond order = geometric mean of the two atoms' bonding capacities (no offsets).
 
-    Period-2 pairs: ``max(1, min(3, v_l + v_h − 6))`` (C≡N → 3, C≡O → 3).
-    General: ``max(1, min(3, v_h − v_l + 1))``.
+    ``√(cap_l·cap_h)`` capped at the p-shell triple, the same combiner used for resolved network
+    bonds: CO ``√(4·2)≈2.83``, CN ``√(4·3)→3``, NO ``√(3·2)≈2.45``, LiF ``√(1·1)=1``.
+    Replaces the legacy ``v_l+v_h−6`` / ``v_h−v_l+1`` valence offsets.
     """
-    v_l = valence_electron_count(z_light)
-    v_h = valence_electron_count(z_heavy)
-    if chemical_period(z_light) == chemical_period(z_heavy) == 2:
-        return max(1, min(3, v_l + v_h - 6))
-    return max(1, min(3, v_h - v_l + 1))
+    cap_l = pss.bonding_capacity(z_light)
+    cap_h = pss.bonding_capacity(z_heavy)
+    return pss.geometric_bond_order(cap_l, cap_h)
 
 
-def covalent_bond_order(z_i: int, z_j: int) -> int:
-    """Bond order on one covalent contact (homonuclear or heteronuclear)."""
+def covalent_bond_order(z_i: int, z_j: int) -> float:
+    """Bond order on one covalent contact (homonuclear or heteronuclear).
+
+    Hydrogen always commits exactly one bond (one electron), so any H contact is order 1.
+    """
     if z_i <= 1 or z_j <= 1:
-        return 1
+        return 1.0
     if z_i == z_j:
-        return homonuclear_bond_order(z_i)
+        return float(homonuclear_bond_order(z_i))
     z_light, z_heavy = (z_i, z_j) if z_i <= z_j else (z_j, z_i)
     return heteronuclear_bond_order(z_light, z_heavy)
 
@@ -252,9 +250,9 @@ def has_heavy_heavy_bond(
 def max_heavy_heavy_bond_order(
     fragments: tuple[FragmentConfig, ...],
     bonds: tuple[Any, ...],
-) -> int:
+) -> float:
     """Maximum covalent bond order among heavy–heavy contacts."""
-    order = 1
+    order = 1.0
     for bond in bonds:
         zi = fragments[bond.frag_i].z_nuclear
         zj = fragments[bond.frag_j].z_nuclear
@@ -398,8 +396,11 @@ def heteronuclear_atomization_bond_order(z_light: int, z_heavy: int) -> float:
     """
     v_l = valence_electron_count(z_light)
     v_h = valence_electron_count(z_heavy)
-    octet = max(1, min(3, v_l + v_h - 8))
-    conjugated = float(heteronuclear_bond_order(z_light, z_heavy))
+    # octet closure shortfall, capped at the derived p-shell triple (no bare 3/8 literals)
+    octet = max(1, min(pss.max_bond_order(), v_l + v_h - pss.octet_capacity()))
+    # Atomization breaks the *saturated* (closed-shell) σ+π count, i.e. the number of shared
+    # channels engaged = ⌈effective order⌉ (CO's dative π fills the third channel → 3).
+    conjugated = min(pss.max_bond_order(), math.ceil(heteronuclear_bond_order(z_light, z_heavy)))
     if conjugated > octet:
         return octet + (lean.STRONG_CHANNEL_FRACTION / 2.0) * (conjugated - octet)
     return float(octet)

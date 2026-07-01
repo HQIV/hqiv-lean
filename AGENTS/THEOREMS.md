@@ -2,6 +2,8 @@
 
 Lean names are given in **fully qualified** form where helpful; short names assume `open Hqiv` or the module namespace as documented. Use `#check` / `grep` in-repo for the exact type.
 
+**Clean spine:** for the Mathlib-only, `sorry`-free `HqivSpine/` rebuild (ethics contract + distilled theorem index + targets), see **[HQIVSPINE.md](./HQIVSPINE.md)**. The rows below index the legacy `Hqiv.*` corpus.
+
 **Status context:** this file is the **name index** for high-value lemmas; it is **not** exhaustive. For **what is still open** (ray theorems, classical Hodge, modularity, …), read [MANIFOLD_ZETA_ROADMAP.md](./MANIFOLD_ZETA_ROADMAP.md) and [HODGE_HQIV_NARRATIVE.md](./HODGE_HQIV_NARRATIVE.md) §5. When you add a row here, prefer **cross-cutting** results (see roadmap **Proof priority**).
 
 ## Clay Millennium (Lean Dojo) ↔ HQIV bridge
@@ -324,7 +326,7 @@ explicitly carry the full Furey Clifford claim).
 | `Hqiv.Algebra.imaginarySix_leftMul_matrix_mul_self` | On the six directions, `L(e_{j+1})² = -I₈` (specializes `octonionLeftMul_N_mul_self`). |
 | `Hqiv.Algebra.cliffordCl06Six_finrank` / `Hqiv.Algebra.finrank_extCl06` | **Furey claim supported — partial (abstract `Cl(0,6)` + concrete `8`-dim spinor `ρ`)**: `Module.finrank ℝ CliffordCl06Six = 64` via `CliffordAlgebra.equivExterior` and the `⋀^k ℝ⁶` grading (`Nat.sum_range_choose`). |
 | `Hqiv.Algebra.cl06StandardSpinorMatLift` / `Hqiv.Algebra.cl06StandardSpinorRho` / `Hqiv.Algebra.cl06StandardSpinorMatLift_ι` | Mathlib `CliffordAlgebra.lift` of `quadFormCl06Six` into `Matrix (Fin 8) (Fin 8) ℝ`, then `algEquivMatrix'` into `CliffordCl06Six →ₐ[ℝ] End(OctonionSpinorCarrier)`; six explicit `γ` Kronecker matrices (`cl06SpinorGammaMat`), **not** octonion left-mult on `e₁…e₆`. |
-| `Hqiv.Algebra.spinorMonomialGramColumns_det_ne_zero` / `spinorGammaMonomialMat_linearIndependent` | The spinor monomial LI chain is theorem-backed in Lean, with a declared trust boundary: Frobenius divisibility and the mod-`101` Gram determinant are axioms in `CliffordCl06SixSpinorMonomialMatrixData` backed by `scripts/verify_spinor_frob_sum_div8.py` and `scripts/spinor_monomial_gram_det_mod101.py`. |
+| `Hqiv.Algebra.spinorMonomialGramColumns_det_ne_zero` / `spinorGammaMonomialMat_linearIndependent` | The spinor monomial LI chain is theorem-backed in Lean. The Gram matrix is now **proved** to be the identity (`spinorMonomialGramColumns_eq_one`, `W = I₆₄`) via the Kronecker mixed-product factorization of the Frobenius pairing (`spinorKron3Z_mul`, `spinorMonomialGramFrobSum_eq_frob2_prod`), so Frobenius divisibility-by-`8` and `det ≠ 0` are theorems (the old `ZMod 101` / `eight_dvd` script axioms are removed). **Fully axiom-clean**: `[propext, Classical.choice, Quot.sound]` only — the residual `64×64` `2×2` check uses plain kernel `decide` (no `native_decide`/`ofReduceBool`), enabled by `maskFinset_sort_eq` rewriting `Finset.sort` to a `List.finRange` filter. |
 | `Hqiv.Algebra.cl06StandardSpinorRhoRange_finrank_le` | The `ℝ`-linear range of `ρ` sits in `End(ℝ⁸)` hence has `finrank ≤ 64` (ambient `8×8` real dimension). (A tight `8`-dimensional **minimal-ideal** image still needs further simple-module / surjectivity packaging.) |
 | `Hqiv.Algebra.cliffordCl06SixLeftIdealGenerated` / `cliffordCl06SixLeftIdealGenerated_one_eq_top` / `exists_nonzero_idempotent_cliffordCl06Six` | Abstract left-ideal packaging in `CliffordCl06Six`; `⟨1⟩_L = ⊤`; nontrivial idempotent `1`. |
 | `Hqiv.Algebra.cliffordCl06Six_leftIdeal_eq_top_of_one_mem` | Any left ideal containing `1` equals `⊤`. |

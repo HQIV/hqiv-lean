@@ -550,32 +550,32 @@ def lambdaCWeakModes : List (List HepDecaySpecies) := [
   [.p, .K_plus, .pi_minus], [.p, .K_minus, .pi_plus, .pi_zero]
 ]
 
-theorem lambdaCWeakModes_count_six : lambdaCWeakModes.length = 6 := by native_decide
+theorem lambdaCWeakModes_count_six : lambdaCWeakModes.length = 6 := by decide
 
 theorem weakChannelAllowed_lambdaC_modes :
     ∀ ds ∈ lambdaCWeakModes, weakChannelAllowed .lambda_c ds := by
-  native_decide
+  decide
 
 theorem weakChannelAllowed_Bs_DsK :
-    weakChannelAllowed .Bs [.Ds_plus, .K_minus] := by native_decide
+    weakChannelAllowed .Bs [.Ds_plus, .K_minus] := by decide
 
 theorem weakChannelAllowed_Bs_phi :
-    weakChannelAllowed .Bs [.phi, .phi] := by native_decide
+    weakChannelAllowed .Bs [.phi, .phi] := by decide
 
 theorem weakChannelAllowed_xi_c_lambda_pi0 :
-    weakChannelAllowed .xi_c [.lambda_c, .pi_zero] := by native_decide
+    weakChannelAllowed .xi_c [.lambda_c, .pi_zero] := by decide
 
 theorem weakChannelAllowed_ds_Kplus :
-    weakChannelAllowed .Ds_plus [.K_plus] := by native_decide
+    weakChannelAllowed .Ds_plus [.K_plus] := by decide
 
 theorem weakChannelAllowed_B0_D0pi0 :
-    weakChannelAllowed .B0 [.D0, .pi_zero] := by native_decide
+    weakChannelAllowed .B0 [.D0, .pi_zero] := by decide
 
 theorem weakChannelAllowed_Bplus_D0piplus :
-    weakChannelAllowed .B_plus [.D0, .pi_plus] := by native_decide
+    weakChannelAllowed .B_plus [.D0, .pi_plus] := by decide
 
 theorem weakChannelAllowed_lambda_c_PKpi_sibling :
-    weakChannelAllowed .lambda_c [.p, .K_plus, .pi_minus] := by native_decide
+    weakChannelAllowed .lambda_c [.p, .K_plus, .pi_minus] := by decide
 
 def isCharmPionOnlyWeak (parent : HepDecaySpecies) (ds : List HepDecaySpecies) : Bool :=
   (parent == .D_plus || parent == .D0) && !ds.any HepDecaySpecies.isKaon &&
@@ -805,47 +805,47 @@ def upsilonNeutralCascadeModes : List (List HepDecaySpecies) := [
 ]
 
 theorem strongChannelAllowed_deltaP_modes :
-    ∀ ds ∈ deltaPStrongModes, strongChannelAllowed .delta_p ds := by native_decide
+    ∀ ds ∈ deltaPStrongModes, strongChannelAllowed .delta_p ds := by decide
 
 theorem strongChannelAllowed_deltaPP_ppiplus :
-    strongChannelAllowed .delta_pp [.p, .pi_plus] := by native_decide
+    strongChannelAllowed .delta_pp [.p, .pi_plus] := by decide
 
 theorem strongChannelAllowed_rhoZero_pipi :
-    strongChannelAllowed .rho_zero [.pi_plus, .pi_minus] := by native_decide
+    strongChannelAllowed .rho_zero [.pi_plus, .pi_minus] := by decide
 
 theorem strongChannelAllowed_rhoZero_pi0pi0_forbidden :
-    ¬ strongChannelAllowed .rho_zero [.pi_zero, .pi_zero] := by native_decide
+    ¬ strongChannelAllowed .rho_zero [.pi_zero, .pi_zero] := by decide
 
 theorem strongChannelAllowed_sigmaPlus_modes :
-    ∀ ds ∈ sigmaPlusStrongModes, strongChannelAllowed .sigma_plus ds := by native_decide
+    ∀ ds ∈ sigmaPlusStrongModes, strongChannelAllowed .sigma_plus ds := by decide
 
 theorem strongChannelAllowed_sigmaZero_modes :
-    ∀ ds ∈ sigmaZeroStrongModes, strongChannelAllowed .sigma_zero ds := by native_decide
+    ∀ ds ∈ sigmaZeroStrongModes, strongChannelAllowed .sigma_zero ds := by decide
 
 theorem strongChannelAllowed_sigmaMinus_modes :
-    ∀ ds ∈ sigmaMinusStrongModes, strongChannelAllowed .sigma_minus ds := by native_decide
+    ∀ ds ∈ sigmaMinusStrongModes, strongChannelAllowed .sigma_minus ds := by decide
 
 theorem strongChannelAllowed_xiZero_modes :
-    ∀ ds ∈ xiZeroStrongModes, strongChannelAllowed .xi_zero ds := by native_decide
+    ∀ ds ∈ xiZeroStrongModes, strongChannelAllowed .xi_zero ds := by decide
 
 theorem strongChannelAllowed_xiMinus_modes :
-    ∀ ds ∈ xiMinusStrongModes, strongChannelAllowed .xi_minus ds := by native_decide
+    ∀ ds ∈ xiMinusStrongModes, strongChannelAllowed .xi_minus ds := by decide
 
 theorem upsilonNeutralCascade_Jpsi_pipi :
     let ds := [HepDecaySpecies.Jpsi, HepDecaySpecies.pi_plus, HepDecaySpecies.pi_minus]
     ds.head? = some HepDecaySpecies.Jpsi ∧ isNeutralLightCascade ds := by
-  native_decide
+  decide
 
 theorem upsilonNeutralCascade_Jpsi_pi0pi0 :
     let ds := [HepDecaySpecies.Jpsi, HepDecaySpecies.pi_zero, HepDecaySpecies.pi_zero]
     ds.head? = some HepDecaySpecies.Jpsi ∧ isNeutralLightCascade ds := by
-  native_decide
+  decide
 
 theorem weakChannelAllowed_lambda_modes :
-    ∀ ds ∈ lambdaWeakModes, weakChannelAllowed .lambda ds := by native_decide
+    ∀ ds ∈ lambdaWeakModes, weakChannelAllowed .lambda ds := by decide
 
 theorem weakChannelAllowed_Kplus_modes :
-    ∀ ds ∈ KplusWeakModes, weakChannelAllowed .K_plus ds := by native_decide
+    ∀ ds ∈ KplusWeakModes, weakChannelAllowed .K_plus ds := by decide
 
 def K0WeakModes : List (List HepDecaySpecies) := [
   [.pi_zero]
@@ -925,68 +925,68 @@ def B0WeakModes : List (List HepDecaySpecies) := [
   [.D0, .rho_plus], [.D0, .K_plus], [.D_plus, .K0], [.D0, .pi_plus, .pi_zero]
 ]
 
-theorem DplusWeakModes_count_fourteen : DplusWeakModes.length = 14 := by native_decide
+theorem DplusWeakModes_count_fourteen : DplusWeakModes.length = 14 := by decide
 
-theorem D0WeakModes_count_thirteen : D0WeakModes.length = 13 := by native_decide
+theorem D0WeakModes_count_thirteen : D0WeakModes.length = 13 := by decide
 
-theorem DplusSemileptonicWeakModes_count_two : DplusSemileptonicWeakModes.length = 2 := by native_decide
+theorem DplusSemileptonicWeakModes_count_two : DplusSemileptonicWeakModes.length = 2 := by decide
 
-theorem D0SemileptonicWeakModes_count_two : D0SemileptonicWeakModes.length = 2 := by native_decide
+theorem D0SemileptonicWeakModes_count_two : D0SemileptonicWeakModes.length = 2 := by decide
 
-theorem LambdaCSemileptonicWeakModes_count_two : LambdaCSemileptonicWeakModes.length = 2 := by native_decide
+theorem LambdaCSemileptonicWeakModes_count_two : LambdaCSemileptonicWeakModes.length = 2 := by decide
 
-theorem DplusFullWeakModes_count_sixteen : DplusFullWeakModes.length = 16 := by native_decide
+theorem DplusFullWeakModes_count_sixteen : DplusFullWeakModes.length = 16 := by decide
 
-theorem D0FullWeakModes_count_fifteen : D0FullWeakModes.length = 15 := by native_decide
+theorem D0FullWeakModes_count_fifteen : D0FullWeakModes.length = 15 := by decide
 
-theorem LambdaCFullWeakModes_count_eight : LambdaCFullWeakModes.length = 8 := by native_decide
+theorem LambdaCFullWeakModes_count_eight : LambdaCFullWeakModes.length = 8 := by decide
 
-theorem BsWeakModes_count_two : BsWeakModes.length = 2 := by native_decide
+theorem BsWeakModes_count_two : BsWeakModes.length = 2 := by decide
 
-theorem BplusWeakModes_count_thirteen : BplusWeakModes.length = 13 := by native_decide
+theorem BplusWeakModes_count_thirteen : BplusWeakModes.length = 13 := by decide
 
-theorem B0WeakModes_count_twenty : B0WeakModes.length = 20 := by native_decide
+theorem B0WeakModes_count_twenty : B0WeakModes.length = 20 := by decide
 
 theorem weakChannelAllowed_Dplus_modes :
-    ∀ ds ∈ DplusWeakModes, weakChannelAllowed .D_plus ds := by native_decide
+    ∀ ds ∈ DplusWeakModes, weakChannelAllowed .D_plus ds := by decide
 
 theorem weakChannelAllowed_D0_modes :
-    ∀ ds ∈ D0WeakModes, weakChannelAllowed .D0 ds := by native_decide
+    ∀ ds ∈ D0WeakModes, weakChannelAllowed .D0 ds := by decide
 
 theorem weakChannelAllowed_Dplus_semileptonic_modes :
-    ∀ ds ∈ DplusSemileptonicWeakModes, weakChannelAllowed .D_plus ds := by native_decide
+    ∀ ds ∈ DplusSemileptonicWeakModes, weakChannelAllowed .D_plus ds := by decide
 
 theorem weakChannelAllowed_D0_semileptonic_modes :
-    ∀ ds ∈ D0SemileptonicWeakModes, weakChannelAllowed .D0 ds := by native_decide
+    ∀ ds ∈ D0SemileptonicWeakModes, weakChannelAllowed .D0 ds := by decide
 
 theorem weakChannelAllowed_lambdaC_semileptonic_modes :
-    ∀ ds ∈ LambdaCSemileptonicWeakModes, weakChannelAllowed .lambda_c ds := by native_decide
+    ∀ ds ∈ LambdaCSemileptonicWeakModes, weakChannelAllowed .lambda_c ds := by decide
 
 theorem weakChannelAllowed_Dplus_full_modes :
-    ∀ ds ∈ DplusFullWeakModes, weakChannelAllowed .D_plus ds := by native_decide
+    ∀ ds ∈ DplusFullWeakModes, weakChannelAllowed .D_plus ds := by decide
 
 theorem weakChannelAllowed_D0_full_modes :
-    ∀ ds ∈ D0FullWeakModes, weakChannelAllowed .D0 ds := by native_decide
+    ∀ ds ∈ D0FullWeakModes, weakChannelAllowed .D0 ds := by decide
 
 theorem weakChannelAllowed_lambdaC_full_modes :
-    ∀ ds ∈ LambdaCFullWeakModes, weakChannelAllowed .lambda_c ds := by native_decide
+    ∀ ds ∈ LambdaCFullWeakModes, weakChannelAllowed .lambda_c ds := by decide
 
 theorem weakChannelAllowed_Bs_modes :
-    ∀ ds ∈ BsWeakModes, weakChannelAllowed .Bs ds := by native_decide
+    ∀ ds ∈ BsWeakModes, weakChannelAllowed .Bs ds := by decide
 
 theorem weakChannelAllowed_Bplus_modes :
-    ∀ ds ∈ BplusWeakModes, weakChannelAllowed .B_plus ds := by native_decide
+    ∀ ds ∈ BplusWeakModes, weakChannelAllowed .B_plus ds := by decide
 
 theorem weakChannelAllowed_B0_modes :
-    ∀ ds ∈ B0WeakModes, weakChannelAllowed .B0 ds := by native_decide
+    ∀ ds ∈ B0WeakModes, weakChannelAllowed .B0 ds := by decide
 
 theorem openFlavourContactKind_agrees_legacy_Dplus_Kpi :
     openFlavourContactKind .D_plus .weak [.K_minus, .pi_plus] =
-      openFlavourContactKind_legacy .D_plus .weak [.K_minus, .pi_plus] := by native_decide
+      openFlavourContactKind_legacy .D_plus .weak [.K_minus, .pi_plus] := by decide
 
 theorem openFlavourContactKind_agrees_legacy_Bplus_D0pi :
     openFlavourContactKind .B_plus .weak [.D0, .pi_plus] =
-      openFlavourContactKind_legacy .B_plus .weak [.D0, .pi_plus] := by native_decide
+      openFlavourContactKind_legacy .B_plus .weak [.D0, .pi_plus] := by decide
 
 theorem openFlavourContactKind_eq_from_classifyWeakOutlet_on_weak
     (parent : HepDecaySpecies) (ds : List HepDecaySpecies) :
@@ -996,10 +996,10 @@ theorem openFlavourContactKind_eq_from_classifyWeakOutlet_on_weak
 
 theorem classifyWeakOutlet_Dplus_Kpi :
     classifyWeakOutletProperty .D_plus [.K_minus, .pi_plus] = .charmKaonCabibboExclusion := by
-  native_decide
+  decide
 
 theorem classifyWeakOutlet_Bplus_D0pi :
-    classifyWeakOutletProperty .B_plus [.D0, .pi_plus] = .bottomExternalWeak := by native_decide
+    classifyWeakOutletProperty .B_plus [.D0, .pi_plus] = .bottomExternalWeak := by decide
 
 def rhoPlusStrongModes : List (List HepDecaySpecies) := [
   [.pi_plus, .pi_zero]
@@ -1015,56 +1015,56 @@ def isCertifiedStrongDischargeParent (s : HepDecaySpecies) : Bool :=
     s == .sigma_minus || s == .xi_zero || s == .xi_minus
 
 theorem weakChannelAllowed_K0_modes :
-    ∀ ds ∈ K0WeakModes, weakChannelAllowed .K0 ds := by native_decide
+    ∀ ds ∈ K0WeakModes, weakChannelAllowed .K0 ds := by decide
 
 theorem weakChannelAllowed_Kminus_modes :
-    ∀ ds ∈ KminusWeakModes, weakChannelAllowed .K_minus ds := by native_decide
+    ∀ ds ∈ KminusWeakModes, weakChannelAllowed .K_minus ds := by decide
 
 theorem kaonWeakStrangenessDelta_Kplus_piplus :
     let p := speciesLedger .K_plus
     let t := ledgerSum [.pi_plus]
-    (ledgerDelta p t).strangeness = -p.strangeness := by native_decide
+    (ledgerDelta p t).strangeness = -p.strangeness := by decide
 
 theorem kaonWeakStrangenessDelta_Kminus_piminus :
     let p := speciesLedger .K_minus
     let t := ledgerSum [.pi_minus]
-    (ledgerDelta p t).strangeness = -p.strangeness := by native_decide
+    (ledgerDelta p t).strangeness = -p.strangeness := by decide
 
 theorem kaonWeakStrangenessDelta_K0_pi0 :
     let p := speciesLedger .K0
     let t := ledgerSum [.pi_zero]
-    (ledgerDelta p t).strangeness = -p.strangeness := by native_decide
+    (ledgerDelta p t).strangeness = -p.strangeness := by decide
 
 theorem strongChannelAllowed_phi_modes :
-    ∀ ds ∈ phiStrongModes, strongChannelAllowed .phi ds := by native_decide
+    ∀ ds ∈ phiStrongModes, strongChannelAllowed .phi ds := by decide
 
 theorem strongChannelAllowed_rhoPlus_modes :
-    ∀ ds ∈ rhoPlusStrongModes, strongChannelAllowed .rho_plus ds := by native_decide
+    ∀ ds ∈ rhoPlusStrongModes, strongChannelAllowed .rho_plus ds := by decide
 
 theorem strongChannelAllowed_omegaMeson_modes :
-    ∀ ds ∈ omegaMesonStrongModes, strongChannelAllowed .omega_meson ds := by native_decide
+    ∀ ds ∈ omegaMesonStrongModes, strongChannelAllowed .omega_meson ds := by decide
 
 theorem strongChannelAllowed_deltaP_forbidden_p_piplus :
-    ¬ strongChannelAllowed .delta_p [.p, .pi_plus] := by native_decide
+    ¬ strongChannelAllowed .delta_p [.p, .pi_plus] := by decide
 
 theorem strongChannelAllowed_phi_pipi_forbidden :
-    ¬ strongChannelAllowed .phi [.pi_plus, .pi_minus] := by native_decide
+    ¬ strongChannelAllowed .phi [.pi_plus, .pi_minus] := by decide
 
 theorem strongChannelAllowed_omega_two_pion_forbidden :
-    ¬ strongChannelAllowed .omega_meson [.pi_plus, .pi_minus] := by native_decide
+    ¬ strongChannelAllowed .omega_meson [.pi_plus, .pi_minus] := by decide
 
 theorem strongChannelAllowed_rhoPlus_pi0pi0_forbidden :
-    ¬ strongChannelAllowed .rho_plus [.pi_zero, .pi_zero] := by native_decide
+    ¬ strongChannelAllowed .rho_plus [.pi_zero, .pi_zero] := by decide
 
 theorem weakChannelAllowed_sigma_plus_lambda_piplus :
-    weakChannelAllowed .sigma_plus [.lambda, .pi_plus] := by native_decide
+    weakChannelAllowed .sigma_plus [.lambda, .pi_plus] := by decide
 
 theorem routing_Ds_strong_phi_pole_discharge :
-    openFlavourContactKind .Ds_plus .strong [.phi] = .hiddenStrangenessPoleDischarge := by native_decide
+    openFlavourContactKind .Ds_plus .strong [.phi] = .hiddenStrangenessPoleDischarge := by decide
 
 theorem routing_Ds_strong_pipi_ozi_suppressed :
     openFlavourContactKind .Ds_plus .strong [.pi_plus, .pi_zero] = .oziSuppressedStrong := by
-  native_decide
+  decide
 
 theorem contactWeight_Ds_strong_pipi_ozi_eq_one_tenth :
     openFlavourContactWeight (openFlavourContactKind .Ds_plus .strong [.pi_plus, .pi_zero]) =
@@ -1075,19 +1075,19 @@ theorem contactWeight_Ds_strong_pipi_ozi_eq_one_tenth :
 
 theorem routing_B0_D0pi0_bottomNeutralSpectator :
     openFlavourContactKind .B0 .weak [.D0, .pi_zero] = .bottomNeutralSpectator := by
-  native_decide
+  decide
 
 theorem routing_Bplus_D0piplus_externalWeak :
     openFlavourContactKind .B_plus .weak [.D0, .pi_plus] = .bottomExternalWeak := by
-  native_decide
+  decide
 
 theorem routing_Bplus_DplusKminus_finiteOpenBottom :
     openFlavourContactKind .B_plus .weak [.D_plus, .K_minus] = .finiteOpenBottomCompletion := by
-  native_decide
+  decide
 
 theorem routing_Dplus_muplus_openCharmSemileptonic :
     openFlavourContactKind .D_plus .weak [.mu_plus] = .openCharmSemileptonicNeutrinoCompletion := by
-  native_decide
+  decide
 
 theorem contactWeight_Dplus_muplus_eq_two_ninths :
     openFlavourContactWeight (openFlavourContactKind .D_plus .weak [.mu_plus]) =
@@ -1097,11 +1097,11 @@ theorem contactWeight_Dplus_muplus_eq_two_ninths :
 
 theorem routing_D0_muminus_openCharmSemileptonic :
     openFlavourContactKind .D0 .weak [.mu_minus] = .openCharmSemileptonicNeutrinoCompletion := by
-  native_decide
+  decide
 
 theorem routing_lambda_c_muplus_openCharmSemileptonic :
     openFlavourContactKind .lambda_c .weak [.mu_plus] = .openCharmSemileptonicNeutrinoCompletion := by
-  native_decide
+  decide
 
 theorem contactWeight_lambda_c_muplus_eq_two_ninths :
     openFlavourContactWeight (openFlavourContactKind .lambda_c .weak [.mu_plus]) =
@@ -1112,95 +1112,95 @@ theorem contactWeight_lambda_c_muplus_eq_two_ninths :
 theorem routing_lambda_c_PKpi_semileptonicHadronic :
     openFlavourContactKind .lambda_c .weak [.p, .K_minus, .pi_plus] =
       .charmedBaryonSemileptonicHadronic := by
-  native_decide
+  decide
 
 theorem routing_lambda_c_PKpi_sibling_semileptonicHadronic :
     openFlavourContactKind .lambda_c .weak [.p, .K_minus, .pi_zero] =
       .charmedBaryonSemileptonicHadronic := by
-  native_decide
+  decide
 
 theorem routing_Dplus_Kminus_piplus_openCharmMonogamy :
     openFlavourContactKind .D_plus .weak [.K_minus, .pi_plus] = .openCharmHadronicMonogamyExclusion := by
-  native_decide
+  decide
 
 theorem routing_xi_c_charged_pion_exclusion :
     openFlavourContactKind .xi_c .weak [.lambda_c, .pi_plus] = .doubleMonogamyExclusion := by
-  native_decide
+  decide
 
 theorem routing_xi_c_sigma_pi0_neutralSpectator :
     openFlavourContactKind .xi_c .weak [.sigma_c, .pi_zero] = .neutralSpectatorComplement := by
-  native_decide
+  decide
 
 theorem routing_xi_c_lambda_pi0_cascadeLambdaGround :
     openFlavourContactKind .xi_c .weak [.lambda_c, .pi_zero] = .cascadeLambdaGround := by
-  native_decide
+  decide
 
 theorem routing_Bs_DsK_bottomStrangeSharedPole :
     openFlavourContactKind .Bs .weak [.Ds_plus, .K_minus] = .bottomStrangeDoubleMonogamy := by
-  native_decide
+  decide
 
 theorem routing_Bs_phi_bottomStrange :
     openFlavourContactKind .Bs .weak [.phi, .phi] = .bottomStrangeDoubleMonogamy := by
-  native_decide
+  decide
 
 theorem routing_lambda_c_wrong_sign_semileptonicHadronic :
     openFlavourContactKind .lambda_c .weak [.p, .K_plus, .pi_minus] =
       .charmedBaryonSemileptonicHadronic := by
-  native_decide
+  decide
 
 theorem routing_lambda_piminus_isospinHalfWeak :
     openFlavourContactKind .lambda .weak [.p, .pi_minus] = .isospinHalfWeak := by
-  native_decide
+  decide
 
 theorem routing_lambda_npi0_lightBaryonNeutralIsospinOutlet :
     openFlavourContactKind .lambda .weak [.n, .pi_zero] = .lightBaryonNeutralIsospinOutlet := by
-  native_decide
+  decide
 
 theorem routing_Kplus_piplus_semileptonicCompetition :
     openFlavourContactKind .K_plus .weak [.pi_plus] =
       .isospinHalfHadronicSemileptonicCompetition := by
-  native_decide
+  decide
 
 theorem routing_Kplus_pi0_semileptonicCompetition :
     openFlavourContactKind .K_plus .weak [.pi_zero] =
-      .isospinHalfNeutralHadronicSemileptonicCompetition := by native_decide
+      .isospinHalfNeutralHadronicSemileptonicCompetition := by decide
 
 theorem routing_Kplus_pipi0pi0_semileptonicCompetition :
     openFlavourContactKind .K_plus .weak [.pi_plus, .pi_zero, .pi_zero] =
-      .isospinHalfHadronicSemileptonicCompetition := by native_decide
+      .isospinHalfHadronicSemileptonicCompetition := by decide
 
 theorem routing_Kminus_piminus_semileptonicCompetition :
     openFlavourContactKind .K_minus .weak [.pi_minus] =
       .isospinHalfHadronicSemileptonicCompetition := by
-  native_decide
+  decide
 
 theorem routing_Kminus_pi0_semileptonicCompetition :
     openFlavourContactKind .K_minus .weak [.pi_zero] =
-      .isospinHalfNeutralHadronicSemileptonicCompetition := by native_decide
+      .isospinHalfNeutralHadronicSemileptonicCompetition := by decide
 
 theorem routing_Kminus_piminus_pi0pi0_semileptonicCompetition :
     openFlavourContactKind .K_minus .weak [.pi_minus, .pi_zero, .pi_zero] =
-      .isospinHalfHadronicSemileptonicCompetition := by native_decide
+      .isospinHalfHadronicSemileptonicCompetition := by decide
 
 theorem routing_K0_pi0_hadronicNeutralMonogamyExclusion :
     openFlavourContactKind .K0 .weak [.pi_zero] =
-      .isospinHalfNeutralHadronicMonogamyExclusion := by native_decide
+      .isospinHalfNeutralHadronicMonogamyExclusion := by decide
 
 theorem routing_Kplus_muplus_lightKaonSemileptonic :
     openFlavourContactKind .K_plus .weak [.mu_plus] =
-      .lightKaonSemileptonicNeutrinoCompletion := by native_decide
+      .lightKaonSemileptonicNeutrinoCompletion := by decide
 
 theorem routing_Kminus_muminus_lightKaonSemileptonic :
     openFlavourContactKind .K_minus .weak [.mu_minus] =
-      .lightKaonSemileptonicNeutrinoCompletion := by native_decide
+      .lightKaonSemileptonicNeutrinoCompletion := by decide
 
 theorem routing_phi_strong_KK_retention :
     openFlavourContactKind .phi .strong [.K_plus, .K_minus] = .hiddenStrangenessKkRetention := by
-  native_decide
+  decide
 
 theorem routing_phi_strong_three_pion_leak :
     openFlavourContactKind .phi .strong [.pi_plus, .pi_minus, .pi_zero] =
-      .hiddenStrangenessVectorLeak := by native_decide
+      .hiddenStrangenessVectorLeak := by decide
 
 theorem contactWeight_phi_KK_retention_eq_twentyone_twentyfive :
     openFlavourContactWeight (openFlavourContactKind .phi .strong [.K_plus, .K_minus]) =
@@ -1214,11 +1214,11 @@ theorem contactWeight_Kplus_muplus_eq_209_over_1800 :
     openFlavourContactWeight_lightKaonSemileptonicNeutrinoCompletion]
 
 theorem routing_rhoPlus_strong_pipi0_unit_seed :
-    openFlavourContactKind .rho_plus .strong [.pi_plus, .pi_zero] = .unitSeed := by native_decide
+    openFlavourContactKind .rho_plus .strong [.pi_plus, .pi_zero] = .unitSeed := by decide
 
 theorem routing_omega_strong_three_pion_unit_seed :
     openFlavourContactKind .omega_meson .strong [.pi_plus, .pi_minus, .pi_zero] = .unitSeed := by
-  native_decide
+  decide
 
 theorem contactWeight_Kplus_piplus_eq_30576_over_101250 :
     openFlavourContactWeight (openFlavourContactKind .K_plus .weak [.pi_plus]) =
@@ -1253,21 +1253,21 @@ theorem routing_forall_lambdaWeakModes :
     ∀ ds ∈ lambdaWeakModes,
       openFlavourContactKind .lambda .weak ds =
         (if isNeutralIsovectorPionOnlyOutlet ds then .lightBaryonNeutralIsospinOutlet else .isospinHalfWeak) := by
-  native_decide
+  decide
 
 theorem routing_forall_KplusWeakModes :
     ∀ ds ∈ KplusWeakModes,
       openFlavourContactKind .K_plus .weak ds =
         (if isNeutralIsovectorPionOnlyOutlet ds then .isospinHalfNeutralHadronicSemileptonicCompetition
          else .isospinHalfHadronicSemileptonicCompetition) := by
-  native_decide
+  decide
 
 theorem routing_forall_KminusWeakModes :
     ∀ ds ∈ KminusWeakModes,
       openFlavourContactKind .K_minus .weak ds =
         (if isNeutralIsovectorPionOnlyOutlet ds then .isospinHalfNeutralHadronicSemileptonicCompetition
          else .isospinHalfHadronicSemileptonicCompetition) := by
-  native_decide
+  decide
 
 theorem routing_from_weakChannel_lambda_modes :
     ∀ ds ∈ lambdaWeakModes, weakChannelAllowed .lambda ds →
@@ -1329,7 +1329,7 @@ theorem contactWeight_B0_D0pi0_eq_three_halves :
 
 theorem routing_Kplus_mu_lightKaonSemileptonic :
     openFlavourContactKind .K_plus .weak [.mu_plus] = .lightKaonSemileptonicNeutrinoCompletion := by
-  native_decide
+  decide
 
 theorem contactWeight_Kplus_mu_eq_209_over_1800 :
     openFlavourContactWeight (openFlavourContactKind .K_plus .weak [.mu_plus]) =
@@ -1394,7 +1394,7 @@ theorem singleWChargeLoad_B0_D0pi0 :
 #check contactWeight_xi_c_charged_pion_eq_twentyone_twentyfive
 theorem routing_Dplus_Kminus_rhoplus_vectorLeak :
     openFlavourContactKind .D_plus .weak [.K_minus, .rho_plus] = .hiddenStrangenessVectorLeak := by
-  native_decide
+  decide
 
 theorem contactWeight_Dplus_Kminus_rhoplus_eq_four_twentyfive :
     openFlavourContactWeight (openFlavourContactKind .D_plus .weak [.K_minus, .rho_plus]) =
@@ -1437,7 +1437,7 @@ theorem hepDecayGaugeCurvatureWidthFactor_Bplus_D0piplus_eq_one_seventyone_over_
 theorem hepDecayGaugeCurvatureWidthFactor_Dplus_muplus_eq_four_thirtyseven_over_12840 :
     hepDecayGaugeCurvatureWidthFactor .D_plus .weak [.mu_plus] = (437 : ℝ) / 12840 := by
   have hout : classifyWeakOutletProperty .D_plus [.mu_plus] = .semileptonicVisibleLepton := by
-    native_decide
+    decide
   unfold hepDecayGaugeCurvatureWidthFactor
   simp only [hout]
   exact weakGaugeSemileptonicCurvatureReadout_eq_four_thirtyseven_over_12840

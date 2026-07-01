@@ -31,7 +31,6 @@ if str(_SCRIPT_DIR) not in sys.path:
 if str(_REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(_REPO_ROOT))
 
-import hqiv_dynamic_binding_chart as chart
 import hqiv_homogeneous_curvature_feedback as hcf
 import hqiv_lean_physics_primitives as lean
 import hqiv_thermodynamic_phase_from_tp as tptp
@@ -124,10 +123,6 @@ def covalent_span_angstrom(name: str) -> float:
     try:
         spec = resolve_spec(name)
     except KeyError:
-        for bench in chart.GMTKN55_SUITE:
-            if bench.name.upper() == name.upper():
-                if bench.bonds:
-                    return sum(b.distance_angstrom for b in bench.bonds)
         return 1.0
     if spec.bonds:
         return sum(b.distance_angstrom for b in spec.bonds)

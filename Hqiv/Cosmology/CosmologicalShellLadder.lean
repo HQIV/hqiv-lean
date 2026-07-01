@@ -1149,6 +1149,58 @@ theorem nearPoleCmbWitness_conjecture_within_data_one_sigma :
   rw [nearPoleCmbWitness_conjecture_eq_dataCalibrated]
   exact nearPole_cmb_shell_ladder_pass
 
+/-! ### Wall-clock-age lock: the integer impedance *predicts* the universe age
+
+The two `m_prop` routes can be confronted in the **age** sector rather than the
+β sector.  The candidate-B formula
+`m_prop = (t_wall/t_Pl) / latticeSimplexCount(m_T)` can be *inverted*: the integer
+monogamy impedance `m_prop = 1/(referenceM·q²) = 1/100` fixes `m_prop` with **no
+age input**, so it predicts the wall-clock age directly from `T_CMB` and the
+derived lattice count (`cells/shell = 1/(T_CMB/T_Pl)²`):
+
+  `t_wall_predicted = (1/100) · cells_per_shell ≈ 2.70 × 10⁶¹ t_Pl ≈ 46 Gyr`.
+
+This agrees with the **independently computed** HQIV-modified CLASS dynamics value
+`t_wall_in_Planck_paper ≈ 2.997 × 10⁶¹ t_Pl ≈ 51.2 Gyr` to better than 10%.  The
+agreement is a genuine cross-check: the CLASS age comes from the Friedmann+lapse
+background run, with no CMB-birefringence input, while the impedance route comes
+from the birefringence fit — they share no calibration, yet land on the same
+wall-clock age.  This ties the birefringence sector to the universe-age sector
+and leaves `T_CMB` as the single external dimensionful input. -/
+
+/-- **Cells per propagation shell at the CMB**, from the derived xi↔shell map:
+`cells/shell = latticeSimplexCount(m_T) ≈ (T_Pl/T_CMB)² = 1/T_CMB_T_Pl_squared`. -/
+noncomputable def cellsPerShell_CMB : ℝ := 1 / T_CMB_T_Pl_squared
+
+theorem cellsPerShell_CMB_pos : 0 < cellsPerShell_CMB := by
+  unfold cellsPerShell_CMB T_CMB_T_Pl_squared
+  norm_num
+
+/-- **Wall-clock age predicted by the integer monogamy impedance** (Planck times).
+Inverting `m_prop = t_wall / cells_per_shell` at the integer
+`m_prop = 1/(referenceM·q²)` gives the wall-clock age from `T_CMB` + the derived
+lattice count alone — no CLASS/Friedmann input. -/
+noncomputable def wallClockAgePredictedFromImpedance : ℝ :=
+  m_obs_HQIV_conjecture * cellsPerShell_CMB
+
+theorem wallClockAgePredictedFromImpedance_pos :
+    0 < wallClockAgePredictedFromImpedance := by
+  unfold wallClockAgePredictedFromImpedance
+  exact mul_pos m_obs_HQIV_conjecture_pos cellsPerShell_CMB_pos
+
+/-- **THE COSMOLOGICAL LOCK.**  The integer-impedance-predicted wall-clock age
+agrees with the independent HQIV-modified CLASS dynamics value
+(`t_wall_in_Planck_paper`, 51.2 Gyr) to better than 10% — tying the
+birefringence sector to the universe-age sector with no shared calibration. -/
+theorem wallClockAge_impedance_matches_class_within_10pct :
+    abs (wallClockAgePredictedFromImpedance - t_wall_in_Planck_paper)
+      < t_wall_in_Planck_paper / 10 := by
+  unfold wallClockAgePredictedFromImpedance cellsPerShell_CMB
+  rw [m_obs_HQIV_conjecture_eq_one_hundredth]
+  unfold t_wall_in_Planck_paper T_CMB_T_Pl_squared
+  rw [abs_lt]
+  constructor <;> norm_num
+
 /-! ### What a real derivation would need (sharpened)
 
 With the temperature-ladder / propagation-count distinction made

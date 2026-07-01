@@ -41,16 +41,9 @@ PROTON_MEV = 938.27208816
 PHASE_THETA_RAD = PHASE_THETA
 
 # Stable main-isotope mass numbers (chemistry benchmark bookkeeping, not fitted parameters).
-STABLE_MASS_NUMBER: dict[int, int] = {
-    1: 1,   # H
-    3: 7,   # Li
-    6: 12,  # C
-    7: 14,  # N
-    8: 16,  # O
-    9: 19,  # F
-    11: 23,  # Na — main isotope pin (ionic panel)
-    17: 35,  # Cl
-}
+import hqiv_atom_stable_chart as _asc
+
+STABLE_MASS_NUMBER: dict[int, int] = _asc.STABLE_A_BY_Z
 
 
 @dataclass(frozen=True)
@@ -77,7 +70,7 @@ def stable_mass_number(z: int, electrons: int | None = None) -> int:
         return STABLE_MASS_NUMBER[z]
     if electrons is not None and electrons > 0:
         return max(z, electrons)
-    return max(z, 1)
+    return _asc.stable_mass_number_for_charge(z)
 
 
 def cluster_binding_mev_legacy(m: int, A: int, c: float = 1.0) -> float:

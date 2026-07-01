@@ -32,6 +32,8 @@ ENTRY_SCRIPTS = [
     "hqiv_isotope_pdg_benchmark.py",
     "hqiv_nuclear_outside_temperature_dynamics.py",
     "hqiv_bond_state_network.py",
+    "hqiv_molecular_spectroscopy.py",
+    "test_hqiv_molecular_spectroscopy.py",
     "hqiv_curvature_binding_program.py",
     "hqiv_binding_energy_program.py",
     "test_hqiv_curvature_binding_program.py",
@@ -67,6 +69,7 @@ DATA_MIRROR = [
     "curvature_binding_program.json",
     "binding_energy_program.json",
     "hqiv_lab_witnesses.json",
+    "molecular_spectroscopy_witnesses.json",
 ]
 
 EXTRA_MIRROR = [

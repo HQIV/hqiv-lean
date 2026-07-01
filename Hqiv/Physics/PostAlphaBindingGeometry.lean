@@ -6,7 +6,7 @@ import Hqiv.Physics.NuclearAndAtomicSpectra
 /-!
 # Post-α binding geometry program (`A > 4`)
 
-See `AGENTS/POST_ALPHA_BINDING_PROGRAM.md`.
+See `AGENTS/archive/POST_ALPHA_BINDING_PROGRAM.md`.
 
 ## Network + relaxation (user mechanism)
 

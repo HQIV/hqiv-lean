@@ -3,12 +3,12 @@
 ## Goal
 
 - **Clean:** reduce duplicate narrative, clarify what is “spine” vs “satellite” (SAT, CNF, proteins, etc.).
-- **One thread:** a **single** optional import chain that walks the physics in logical order, without replacing `HQIVLEAN.lean` overnight (it stays the build-all superset for CI).
+- **One thread:** a **single** optional import chain that walks the physics in logical order, without replacing `Targets/HQIVLEAN.lean` overnight (it stays the build-all superset for CI).
 
 ## Delivered in this pass
 
 - `Hqiv/Story/Chapter01_*` … `Chapter08_*` — **linear** imports; each chapter adds one layer.
-- `HQIVStory.lean` — one import of the last chapter (pulls the full spine).
+- `Targets/HQIVStory.lean` — one import of the last chapter (pulls the full spine).
 - `lake build HQIVStory` — dedicated target in `lakefile.toml`.
 
 ## Story order (chapters)
@@ -27,7 +27,7 @@
 ## Phased cleanup (not all done in one PR)
 
 1. **Spine only (done first):** Story modules + `HQIVStory` target. No file moves, no renames of existing theorems.
-2. **Triage `HQIVLEAN.lean`:** mark sections in comments (geometry / physics / QM / algebra / archive) or split into `HQIVLEAN/Parts/*.lean` re-exporting — *later*.
+2. **Triage `Targets/HQIVLEAN.lean`:** mark sections in comments (geometry / physics / QM / algebra / archive) or split into `HQIVLEAN/Parts/*.lean` re-exporting — *later*.
 3. **Deprecate duplicate paths:** where two modules prove the same lemma, keep one; use `@[deprecated]` or doc pointers — *later*.
 4. **NS / YM truth:** the Story ends at **formal problem statements** + your witness theorems; proving Fefferman or `QuantumYangMillsTheory` is still **out of band** to the Story imports (see `LeanDojoClayMillennium` module doc).
 5. **Default CI:** keep default targets as today; add optional `HQIVStory` in CI if desired (follow-up).

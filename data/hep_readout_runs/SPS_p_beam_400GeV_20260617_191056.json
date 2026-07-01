@@ -1,0 +1,276 @@
+{
+  "source": "scripts/hqiv_hep_readout_pipeline.py",
+  "generated_at": "2026-06-17T19:10:56.973150+00:00",
+  "collider_input": {
+    "facility": "SPS_p_beam_400GeV",
+    "beam_id": "p",
+    "beam_kinetic_energy_gev": 400.0,
+    "target_id": "p",
+    "target_kinetic_energy_gev": 0.0,
+    "beam_fraction": 1.0,
+    "collision_mode": "auto",
+    "beam_mix": null,
+    "environment": "lab",
+    "magnetic_field_tesla": 0.0,
+    "collider_reference_tesla": 4.0,
+    "comoving_stream_fraction": 0.0,
+    "lab_temperature_K": 293.15,
+    "trap_embedding": false
+  },
+  "kinematics": {
+    "sqrt_s_gev": 27.461592972252728,
+    "s_gev2": 754.1390885736804,
+    "xi_collision": 8.891691033609018e+17,
+    "beam_id": "p",
+    "target_id": "p",
+    "accessible_mass_gev": 13.456180556403837,
+    "collision_mode": "fixed_target"
+  },
+  "environment": {
+    "preset": "lab",
+    "weak_width_factor": 1.0,
+    "outside_support_factor": 0.9985538088039646,
+    "magnetic_field_tesla": 0.0,
+    "collider_reference_tesla": 4.0,
+    "comoving_stream_fraction": 0.0,
+    "lab_temperature_K": 293.15,
+    "gravity_tier": "earth",
+    "trap_embedding": false,
+    "molecular_host": null
+  },
+  "parent_discharge_tables": {
+    "B_plus": [
+      {
+        "parent": "B_plus",
+        "channel": "weak",
+        "daughters": [
+          "D0",
+          "pi_plus"
+        ],
+        "q_mev": 3218.115652057815,
+        "width_per_s": 1823526961918.7676,
+        "half_life_s": 3.801134806532259e-13,
+        "branching_ratio": 0.483272625168922,
+        "spine_discharge_weight": 3.5,
+        "channel_open": true
+      },
+      {
+        "parent": "B_plus",
+        "channel": "weak",
+        "daughters": [
+          "D_plus",
+          "pi_minus"
+        ],
+        "q_mev": 3218.115652057815,
+        "width_per_s": 1823526961918.7676,
+        "half_life_s": 3.801134806532259e-13,
+        "branching_ratio": 0.483272625168922,
+        "spine_discharge_weight": 3.5,
+        "channel_open": true
+      },
+      {
+        "parent": "B_plus",
+        "channel": "weak",
+        "daughters": [
+          "D0",
+          "K_plus"
+        ],
+        "q_mev": 2871.4762417098154,
+        "width_per_s": 1823526961918.7676,
+        "half_life_s": 3.801134806532259e-13,
+        "branching_ratio": 0.0030683976201201393,
+        "spine_discharge_weight": 0.022222222222222223,
+        "channel_open": true
+      },
+      {
+        "parent": "B_plus",
+        "channel": "weak",
+        "daughters": [
+          "D0",
+          "rho_plus"
+        ],
+        "q_mev": 2583.9132220978154,
+        "width_per_s": 1823526961918.7676,
+        "half_life_s": 3.801134806532259e-13,
+        "branching_ratio": 0.0030683976201201393,
+        "spine_discharge_weight": 0.022222222222222223,
+        "channel_open": true
+      },
+      {
+        "parent": "B_plus",
+        "channel": "weak",
+        "daughters": [
+          "D_plus",
+          "K0"
+        ],
+        "q_mev": 2871.4762417098154,
+        "width_per_s": 1823526961918.7676,
+        "half_life_s": 3.801134806532259e-13,
+        "branching_ratio": 0.0030683976201201393,
+        "spine_discharge_weight": 0.022222222222222223,
+        "channel_open": true
+      },
+      {
+        "parent": "B_plus",
+        "channel": "weak",
+        "daughters": [
+          "D_plus",
+          "K0"
+        ],
+        "q_mev": 2871.4762417098154,
+        "width_per_s": 1823526961918.7676,
+        "half_life_s": 3.801134806532259e-13,
+        "branching_ratio": 0.0030683976201201393,
+        "spine_discharge_weight": 0.022222222222222223,
+        "channel_open": true
+      },
+      {
+        "parent": "B_plus",
+        "channel": "weak",
+        "daughters": [
+          "D_plus",
+          "K_minus"
+        ],
+        "q_mev": 2871.4762417098154,
+        "width_per_s": 1823526961918.7676,
+        "half_life_s": 3.801134806532259e-13,
+        "branching_ratio": 0.0030683976201201393,
+        "spine_discharge_weight": 0.022222222222222223,
+        "channel_open": true
+      },
+      {
+        "parent": "B_plus",
+        "channel": "weak",
+        "daughters": [
+          "D_plus",
+          "eta"
+        ],
+        "q_mev": 2966.1722209778154,
+        "width_per_s": 1823526961918.7676,
+        "half_life_s": 3.801134806532259e-13,
+        "branching_ratio": 0.0030683976201201393,
+        "spine_discharge_weight": 0.022222222222222223,
+        "channel_open": true
+      },
+      {
+        "parent": "B_plus",
+        "channel": "weak",
+        "daughters": [
+          "D_plus",
+          "omega_meson"
+        ],
+        "q_mev": 2570.0128948658153,
+        "width_per_s": 1823526961918.7676,
+        "half_life_s": 3.801134806532259e-13,
+        "branching_ratio": 0.0030683976201201393,
+        "spine_discharge_weight": 0.022222222222222223,
+        "channel_open": true
+      },
+      {
+        "parent": "B_plus",
+        "channel": "weak",
+        "daughters": [
+          "D_plus",
+          "pi_zero"
+        ],
+        "q_mev": 3218.115652057815,
+        "width_per_s": 1823526961918.7676,
+        "half_life_s": 3.801134806532259e-13,
+        "branching_ratio": 0.0030683976201201393,
+        "spine_discharge_weight": 0.022222222222222223,
+        "channel_open": true
+      },
+      {
+        "parent": "B_plus",
+        "channel": "weak",
+        "daughters": [
+          "D_plus",
+          "rho_zero"
+        ],
+        "q_mev": 2583.9132220978154,
+        "width_per_s": 1823526961918.7676,
+        "half_life_s": 3.801134806532259e-13,
+        "branching_ratio": 0.0030683976201201393,
+        "spine_discharge_weight": 0.022222222222222223,
+        "channel_open": true
+      },
+      {
+        "parent": "B_plus",
+        "channel": "weak",
+        "daughters": [
+          "D0",
+          "pi_plus",
+          "pi_zero"
+        ],
+        "q_mev": 3079.1123797378154,
+        "width_per_s": 1823526961918.7676,
+        "half_life_s": 3.801134806532259e-13,
+        "branching_ratio": 0.002022278173373308,
+        "spine_discharge_weight": 0.022222222222222223,
+        "channel_open": true
+      },
+      {
+        "parent": "B_plus",
+        "channel": "weak",
+        "daughters": [
+          "D_plus",
+          "pi_minus",
+          "pi_zero"
+        ],
+        "q_mev": 3079.1123797378154,
+        "width_per_s": 1823526961918.7676,
+        "half_life_s": 3.801134806532259e-13,
+        "branching_ratio": 0.002022278173373308,
+        "spine_discharge_weight": 0.022222222222222223,
+        "channel_open": true
+      },
+      {
+        "parent": "B_plus",
+        "channel": "weak",
+        "daughters": [
+          "D_plus",
+          "K_minus",
+          "pi_zero"
+        ],
+        "q_mev": 2732.4729693898153,
+        "width_per_s": 1823526961918.7676,
+        "half_life_s": 3.801134806532259e-13,
+        "branching_ratio": 0.0017946147343281104,
+        "spine_discharge_weight": 0.022222222222222223,
+        "channel_open": true
+      }
+    ],
+    "phi": [
+      {
+        "parent": "phi",
+        "channel": "strong",
+        "daughters": [
+          "K_plus",
+          "K_minus"
+        ],
+        "q_mev": 35.53056754095917,
+        "width_per_s": 2.447396276710109e+20,
+        "half_life_s": 2.8321820505982883e-21,
+        "branching_ratio": 0.84,
+        "spine_discharge_weight": 0.84,
+        "channel_open": true
+      },
+      {
+        "parent": "phi",
+        "channel": "strong",
+        "daughters": [
+          "pi_plus",
+          "pi_minus",
+          "pi_zero"
+        ],
+        "q_mev": 589.806115916959,
+        "width_per_s": 2.447396276710109e+20,
+        "half_life_s": 2.8321820505982883e-21,
+        "branching_ratio": 0.16000000000000003,
+        "spine_discharge_weight": 0.16000000000000003,
+        "channel_open": true
+      }
+    ]
+  },
+  "decay_chain": null
+}

@@ -43,6 +43,43 @@ private theorem trappedPlanckShellSlice_pos (m : ℕ) :
   exact div_pos (mul_pos (shellModeMultiplicity_pos m) (shellOmega_pos m))
     (by norm_num : (0 : ℝ) < 2)
 
+/-- Each shell contributes a constant zero-point slice: `N_m · ω_m / 2 = 4`.
+
+This is the structural reason the trapped Planck budget ratio collapses to
+`(m_exc + 1) / (m_ref + 1)` in the inside-ratio readout. -/
+theorem trappedPlanckShellSlice_eq_four (m : ℕ) :
+    shellModeMultiplicity m * shellOmega m / 2 = 4 := by
+  unfold shellModeMultiplicity at *
+  cases m with
+  | zero =>
+      simp [new_modes_zero, available_modes_eq, shellOmega_eq, T_eq]
+  | succ k =>
+      simp [new_modes_succ, shellOmega_eq, T_eq]
+      field_simp
+      ring
+
+private theorem icc_zero_eq_range (m : ℕ) : Finset.Icc (0 : ℕ) m = Finset.range (m + 1) := by
+  ext x
+  constructor
+  · intro hx; simp [Finset.mem_range, Finset.mem_Icc] at hx ⊢; omega
+  · intro hx; simp [Finset.mem_range, Finset.mem_Icc] at hx ⊢; omega
+
+/-- Cumulative trapped Planck budget is exactly linear in the shell index. -/
+theorem trappedPlanckCumulativeBudget_eq_four_mul (m : ℕ) :
+    trappedPlanckCumulativeBudget m = 4 * (m + 1) := by
+  unfold trappedPlanckCumulativeBudget vacuumZeroPointEnergy
+  rw [show planckUVCutoff = 0 from rfl, icc_zero_eq_range]
+  have hslice : ∀ x ∈ Finset.range (m + 1),
+      shellModeMultiplicity x * shellOmega x / 2 = 4 := fun x _ =>
+    trappedPlanckShellSlice_eq_four x
+  calc
+    ∑ x ∈ Finset.range (m + 1), shellModeMultiplicity x * shellOmega x / 2
+        = ∑ x ∈ Finset.range (m + 1), 4 :=
+      Finset.sum_congr rfl fun x hx => hslice x hx
+    _ = 4 * (Finset.range (m + 1)).card := by
+      simpa [mul_comm] using (Finset.sum_const (4 : ℝ)).symm
+    _ = 4 * (m + 1) := by simp
+
 theorem trappedPlanckCumulativeBudget_nonneg (m : ℕ) :
     0 ≤ trappedPlanckCumulativeBudget m := by
   unfold trappedPlanckCumulativeBudget vacuumZeroPointEnergy
@@ -59,12 +96,6 @@ private theorem trappedPlanckCumulativeBudget_pos (m : ℕ) :
     simp [planckUVCutoff, Finset.mem_Icc]⟩
   refine Finset.sum_pos (fun k _ => ?_) hne
   exact trappedPlanckShellSlice_pos k
-
-private theorem icc_zero_eq_range (m : ℕ) : Finset.Icc (0 : ℕ) m = Finset.range (m + 1) := by
-  ext x
-  constructor
-  · intro hx; simp [Finset.mem_range, Finset.mem_Icc] at hx ⊢; omega
-  · intro hx; simp [Finset.mem_range, Finset.mem_Icc] at hx ⊢; omega
 
 private theorem trappedPlanckCumulativeBudget_lt_succ (m : ℕ) :
     trappedPlanckCumulativeBudget m < trappedPlanckCumulativeBudget (m + 1) := by
@@ -133,6 +164,18 @@ theorem metaHorizonTrappedInsideRatio_referenceM_ground :
   refine metaHorizonTrappedInsideRatio_self referenceM ?_ ?_
   · exact metaHorizonCurvatureVolumeThrough_referenceM_pos
   · exact trappedPlanckCumulativeBudget_referenceM_pos
+
+/-- Inside ratio factorizes: curvature volume ratio times shell-index ratio.
+
+The Planck budget contributes only `(m_exc + 1) / (m_ref + 1)` — proved, not pasted. -/
+theorem metaHorizonTrappedInsideRatio_eq_curvature_times_index
+    (m_exc m_ref : ℕ) :
+    metaHorizonTrappedInsideRatio m_exc m_ref =
+      (metaHorizonCurvatureVolumeThrough m_exc / metaHorizonCurvatureVolumeThrough m_ref) *
+        ((m_exc + 1 : ℝ) / (m_ref + 1)) := by
+  unfold metaHorizonTrappedInsideRatio
+  rw [trappedPlanckCumulativeBudget_eq_four_mul, trappedPlanckCumulativeBudget_eq_four_mul]
+  field_simp
 
 theorem metaHorizonTrappedInsideRatio_gt_one_of_shell_gt
     {m_exc m_ref : ℕ} (h : m_ref < m_exc) :

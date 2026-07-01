@@ -10,6 +10,38 @@ Formalisation of the HQIV (Horizon-Quantized Informational Vacuum) framework in 
 
 **Agent / contributor docs (versioned):** curated theorem index ([`AGENTS/THEOREMS.md`](AGENTS/THEOREMS.md)) and assumptions / trust boundary ([`AGENTS/ASSUMPTIONS.md`](AGENTS/ASSUMPTIONS.md)). Other notes under `AGENTS/` may exist locally but are not tracked.
 
+## Two postulates, no extra axioms, no knobs
+
+HQIV starts from **two physical postulates** and adds **no mathematical axioms** and **no tunable constants** on top of them. A note on the word *axiom*, since it is overloaded: HQIV's two starting assumptions are *physics postulates*, encoded in Lean as ordinary **definitions** (`def`) — **not** Lean `axiom` declarations. So "axiom-free" below means *no bespoke mathematical axioms beyond Lean's logical core*, not "no starting assumptions" (every physical theory has those).
+
+- **The two HQIV postulates (Lean definitions, not `axiom`s):**
+  1. the **discrete (null) light cone** — the shell counting law `latticeSimplexCount`/`new_modes` (new modes at shell `m` = `8 × stars-and-bars(m) = 4·(m+2)(m+1)`);
+  2. **informational-energy / monogamy** — the ADM lapse `HQVM_lapse = 1 + Φ + φ·t`.
+
+  These are the irreducible modeling inputs: you cannot *derive* a theory's own starting postulates. What **is** derived from them (plus the single combinatorial input `transverseDim = 3`) is the **octonion carrier itself** — dimension 8, the seven imaginary directions, Fano incidence, `dim 𝖘𝖔(8) = 28` — rather than postulated.
+- **Axiom-free (logic):** every *consequence* proved from those definitions reduces to nothing but Lean's standard logical core (`propext`, `Classical.choice`, `Quot.sound`) — no bespoke mathematical axioms smuggled in. The recently discharged slices — the general `dim 𝖘𝖔(n) = n(n-1)/2` skew-basis count (SO(4)/SO(8)), the genuine `𝖘𝖔(8)` Lie-closure certificate, the Clifford `Cl(0,6)` spinor Gram identity proved `W = I₆₄` by **plain `decide`**, and the entire HEP-decay readout spine — carry **zero `sorry`, zero bespoke axioms, and zero `native_decide`** (no `Lean.ofReduceBool` / compiler-trust). The `HQIVPhysics` foundation cone uses only the standard core. The genuine `axiom` declarations that *do* remain — the false float SO(8) orthogonality matrix `so8CoordMatrix_transpose_mul_self` (explicitly **quarantined**), the `so8_closure_theorem_symbolic` that depends on it, and a few optional `Hqiv/Story` scaffolds — sit **off** the physics spine and are routed around by the axiom-free dimension/closure proofs.
+- **Knob-free (parameters):** there are **no tunable constants**. The curvature-imprint exponent **α = 3/5** and monogamy split **γ = 2/5** are *forced* by the lattice (`latticeAlphaRatio_eq_alpha`, `gamma_eq_2_5`), not fit; the shell ladder `φ(m) = 2(m+1)` and `shell_shape` are derived; couplings, mass scales, baryogenesis η, BBN abundances, nucleon binding, and HEP branching ratios are **outputs**. A single dimensionful **scale witness** (the proton mass at `referenceM = 4`) fixes units; no PDG current masses, fitted potentials, or external lattice tables are injected.
+
+### Published paper series (Zenodo DOIs)
+
+All records live in the [Zenodo HQIV community](https://zenodo.org/communities/hqiv). Paper sources, bibliographies, and reproducer scripts are under [`papers/`](papers/README.md).
+
+| Tier | Paper | DOI |
+|---|---|---|
+| 0a | HQIV main preprint | [10.5281/zenodo.18899939](https://doi.org/10.5281/zenodo.18899939) (concept [18794889](https://doi.org/10.5281/zenodo.18794889)) |
+| 0b | Octonion light cone → OSH oracle | [10.5281/zenodo.19336553](https://doi.org/10.5281/zenodo.19336553) (concept [19227897](https://doi.org/10.5281/zenodo.19227897)) |
+| 0c | SO(8) closure | [10.5281/zenodo.20214211](https://doi.org/10.5281/zenodo.20214211) (concept [20214210](https://doi.org/10.5281/zenodo.20214210)) |
+| 1 | 3D causal growth & octonionic gauge | [10.5281/zenodo.20415586](https://doi.org/10.5281/zenodo.20415586) |
+| 2 | Octonionic action & uniqueness | [10.5281/zenodo.20416085](https://doi.org/10.5281/zenodo.20416085) |
+| 3 | Finite-mode Kirchhoff from lattice simplex | [10.5281/zenodo.20416564](https://doi.org/10.5281/zenodo.20416564) |
+| 4 | Thermodynamics & arrow of time | [10.5281/zenodo.20478826](https://doi.org/10.5281/zenodo.20478826) |
+| 5 | TUFT + SM Lagrangian synthesis | [10.5281/zenodo.20601215](https://doi.org/10.5281/zenodo.20601215) |
+| 6 | Baryogenesis curvature lock-in | [10.5281/zenodo.20711255](https://doi.org/10.5281/zenodo.20711255) |
+| 7 | Nucleon binding from composite trace | [10.5281/zenodo.20711453](https://doi.org/10.5281/zenodo.20711453) |
+| 8 | BBN light elements from network weights | [10.5281/zenodo.20723606](https://doi.org/10.5281/zenodo.20723606) |
+| 9 | Gluon as curvature artifact | [10.5281/zenodo.20724572](https://doi.org/10.5281/zenodo.20724572) |
+| 10 | HEP decay readout from multichannel rules | [10.5281/zenodo.20780430](https://doi.org/10.5281/zenodo.20780430) |
+
 ## CLASS numerical fork (Lean alignment)
 
 The modified **CLASS** tree lives in the separate **`HQIV/class_hqiv`** checkout (not inside this Lean package). After edits there, `make` from `class_hqiv/`. See **`HQIV/class_hqiv/LEAN_ALIGNMENT.md`** for which C equations match `HQVMetric.lean` / `HQVMCLASSBridge.lean` / `HQVMDiscretePoisson.lean` / `HQVMConsistency.lean` and what is still missing (e.g. exact `ρ_crit′` for `H′`, lapse `HQVM_lapse`, discrete lattice).
@@ -47,30 +79,30 @@ lake build
 ```  
 **HQIVLEAN** (full formal cone in `lakefile.toml`) adds the generator stack through `Generators` / `GeneratorsFromAxioms` and the abstract colour/triality algebra used in the main narrative, but **matrix** Lie-closure data lives under **`lake build HQIVSO8Closure`** (`GeneratorsLieClosureData*`, `LieBracketCell*`, `GeneratorsLieClosure`, `So8CoordMatrix`, `SO8Closure`, …). Scripts for regenerating numeric tables: `scripts/print_lie_bracket_closure.py --write`, `scripts/print_linear_independence.py [--write]`.
 
-**100 % PROVED** (zero sorrys, zero extra axioms, zero matrix edits). Full Spin(8) closure + proton-to-Higgs prediction derived purely from the two HQIV axioms + concrete octonion tables.
+**100 % PROVED** (zero sorrys, zero extra axioms, zero `native_decide`, zero matrix edits). Full Spin(8) closure + proton-to-Higgs prediction derived purely from the two HQIV postulates (Lean definitions, not `axiom`s) + concrete octonion tables. The foundation spine, the `𝖘𝖔(n)` dimension/closure proofs, the Clifford `Cl(0,6)` spinor Gram identity (`W = I₆₄`, plain `decide`), and the HEP-decay readout spine all reduce only to `propext` / `Classical.choice` / `Quot.sound` — see the *two postulates, no extra axioms* summary above.
 
-**What traces to the light cone (single axiom, no arbitrary defs)**  
-- **Single axiom:** New modes at shell m = 8 × stars-and-bars(m) = 4·(m+2)(m+1).  
+**What traces to the light cone (single postulate, a Lean `def`, no arbitrary defs)**  
+- **Single postulate (Lean `def`, not an `axiom`):** New modes at shell m = 8 × stars-and-bars(m) = 4·(m+2)(m+1).  
 - From that: `latticeSimplexCount`, `cumLatticeSimplexCount` (and closed form), `available_modes`, `new_modes`.  
 - Temperature ladder T(m) = T_Pl/(m+1) (with T_Pl = 1 in natural units) and φ(m) = 2/T(m) are the lattice division rule and the paper’s φ = 2/Θ.  
 - `shell_shape` is **proved** equal to (1/(m+1))(1 + α log(T_Pl/T(m))) so the curvature shape is derived from the temperature ladder, not an independent def.  
 - Curvature integral, its divergence, divisibility (3∣…, 2∣…), and **α = 3/5 as a lattice ratio valid for every n and as the limit** of the discrete ratio (n+1)(n+2)(n+3)/(5·cum n). **Ω_k is dynamic and horizon-dependent:** `omega_k_at_horizon n N` is the curvature ratio at horizon N; spatial curvature between different horizons (e.g. quarks vs CMB LSS) is different even at time "now" — no single Ω_k without specifying the horizon.  
 - **Analytic curvature:** The discrete curvature integral is proved to be sandwiched between the harmonic sum and (1+α log(n+1)) times the harmonic sum (`curvature_integral_ge_harmonic`, `curvature_integral_le_harmonic_mul_log`), so it grows like Θ(log n); no continuous integral axiom.  
 - **S² / spherical harmonics bridge:** `SphericalHarmonicsBridge` proves the cumulative Laplace–Beltrami degeneracy `∑_{ℓ≤L}(2ℓ+1) = (L+1)²`, the telescoping identity `∑_{i≤M} new_modes i = available_modes M`, and the minimal shell with `available_modes m ≥ 64` (`m = 3`, value `80`). Module doc relates the octonion factor `4·(m+2)(m+1)` to continuum `S²` mode growth and distinguishes this combinatorial threshold from the archived Planck-volume τ-shell index (`archive/abandoned/GenerationResonanceTauHighestShell.lean`).  
-- **Full SM symmetry and conservations from the same two axioms:** the octonionic generators close to Spin(8)/SO(8) and give the full Standard Model gauge structure; the HQVM metric + O-Maxwell action yield GR-from-Maxwell, varying G, and the SM couplings at "now" (α_EM, sin²θ_W, α_s, m_H, M_Z, M_GUT) **all as outputs** of the light-cone axiom plus the informational-energy/monogamy axiom (see `SM_GR_Unification`, `GRFromMaxwell`, `Conservations`, `Forces`). No extra field-theory parameters are assumed in Lean.
+- **Full SM symmetry and conservations from the same two postulates:** the octonionic generators close to Spin(8)/SO(8) and give the full Standard Model gauge structure; the HQVM metric + O-Maxwell action yield GR-from-Maxwell, varying G, and the SM couplings at "now" (α_EM, sin²θ_W, α_s, m_H, M_Z, M_GUT) **all as outputs** of the light-cone postulate plus the informational-energy/monogamy postulate (see `SM_GR_Unification`, `GRFromMaxwell`, `Conservations`, `Forces`). No extra field-theory parameters are assumed in Lean.
 - **Universe age from the ADM lapse:** Proper time (wall-clock) and coordinate time (apparent age) are related by dτ = N dt with N = 1 + Φ + φ t (`UniverseAge`). A **local scale witness** (e.g. proton mass) fixes the current scale and thus the geometry, yielding exact wall-clock and apparent age; the witness is **free from CMB phase** (no birefringence from propagated photons) and **free from accelerated motion** (Sun, galaxy), since ages are defined in the fundamental observer's rest frame. T_CMB’s phase component is quantified in Lean; paper witnesses: wall-clock ≈ 51.2 Gyr, apparent ≈ 13.8 Gyr.
 
 **Canonical HQIV constants (single α, single γ):** In the companion HQIV theory, **the** curvature-imprint exponent is **α = 3/5** and **the** monogamy split is **γ = 2/5** (with α + γ = 1 on the unit horizon split). Those are **not** a tunable pair of knobs in the formalism; their physical derivation is given in the companion HQIV manuscript and Brodie (2026), which this repo cites from the paper bibliography—not re-proved in Lean.
 
 **What is *not* “external” in Lean:** The numeric identities are **proved**, not postulated without proof: the lattice ratio `(n+1)(n+2)(n+3)/(5·cum n)` equals **α for every** `n` (hockey-stick; `OctonionicLightCone.latticeAlphaRatio_eq_alpha`). The metric sector sets **γ := 1 − α** (`HQVMetric.gamma_HQIV`); **γ = 2/5** is `gamma_eq_2_5`. So the **only** `alpha` and `gamma_HQIV` in the codebase are these canonical values, wired to the same ladder as curvature / `G_eff`.
 
-**Second HQIV axiom (metric; not stars-and-bars arithmetic):** The ADM lapse **N = 1 + Φ + φ t** and the HQVM line element are the **informational-energy / horizon-monogamy** specification in synchronous-comoving gauge (`HQVMetric.HQVM_lapse` and module doc). Lean **defines** N by that formula (the axiom’s ADM form) and proves consequences (Friedmann piece, spatial coefficients, perturbation calculus in `HQVMPerturbations`). **φ** is not a free knob: it is the lattice auxiliary field (e.g. φ(m) = 2/T(m) in `AuxiliaryField`). So the lapse is the second axiom made explicit in the metric — aligned with the paper — rather than an extra parameter beyond the two-axiom story.
+**Second HQIV postulate (metric; not stars-and-bars arithmetic):** The ADM lapse **N = 1 + Φ + φ t** and the HQVM line element are the **informational-energy / horizon-monogamy** specification in synchronous-comoving gauge (`HQVMetric.HQVM_lapse` and module doc). Lean **defines** N by that formula (the postulate's ADM form) and proves consequences (Friedmann piece, spatial coefficients, perturbation calculus in `HQVMPerturbations`). **φ** is not a free knob: it is the lattice auxiliary field (e.g. φ(m) = 2/T(m) in `AuxiliaryField`). So the lapse is the second postulate made explicit in the metric — aligned with the paper — rather than an extra parameter beyond the two-postulate story.
 
 **Conventions and pipeline splits**  
 - **referenceM** = lockin = qcdShell + stepsFromQCDToLockin; discrete steps through baryogenesis (a few steps after T_lockin). Implemented combinatorially in `OctonionicLightCone` and used in `Baryogenesis`; detailed QCD overlap integrals remain in the Python/paper pipeline.  
 - **Natural units:** T_Pl = 1, G₀ = H₀ = 1 (reference scale for dimensionless statements in Lean and CLASS alignment).
 
-So: the **combinatorics, T-ladder, φ on shells, curvature shape, α from the lattice, horizon-dependent Ω_k (curvature ratio from shell integral), full Spin(8)/SM gauge structure, conserved currents, the curvature norm \(6^7\sqrt{3}\), and the SM + GR field equations and couplings at "now"** are all derived inside Lean from the same two HQIV axioms (discrete light cone + informational-energy/monogamy), with no extra dynamical parameters. Spatial curvature is different between any two horizons (e.g. QCD vs CMB LSS) even at time "now". Matter fraction and η are downstream of the SM embedding to SO(8).
+So: the **combinatorics, T-ladder, φ on shells, curvature shape, α from the lattice, horizon-dependent Ω_k (curvature ratio from shell integral), full Spin(8)/SM gauge structure, conserved currents, the curvature norm \(6^7\sqrt{3}\), and the SM + GR field equations and couplings at "now"** are all derived inside Lean from the same two HQIV postulates (discrete light cone + informational-energy/monogamy), with no extra dynamical parameters. Spatial curvature is different between any two horizons (e.g. QCD vs CMB LSS) even at time "now". Matter fraction and η are downstream of the SM embedding to SO(8).
 
 ### Roadmap: plasmas, modified inertia, and fermion ladders (observer-centric)
 
@@ -98,6 +130,17 @@ To set up your new GitHub repository, follow these steps:
 * In the **Source** dropdown menu, select "GitHub Actions".
 
 After following the steps above, you can remove this section from the README file.
+
+## Acknowledgments and third-party references
+
+The octonion algebra layer (`Hqiv/Algebra/`) is re-implemented against current
+Mathlib but its Cayley–Dickson construction is modeled on, and indebted to, the
+**octonions formalization of Filippo A. E. Nuccio and Matthieu Piquerez**
+([plmlab.math.cnrs.fr/nuccio/octonions](https://plmlab.math.cnrs.fr/nuccio/octonions),
+Apache-2.0). That project targets an older Lean/Mathlib toolchain, so it is not
+vendored or built here — it is kept locally only as a porting reference (and is
+git-ignored). We re-derive the construction in our own toolchain and extend it
+toward the normed-division / alternativity properties the framework needs.
 
 **License note (March 2026)**  
 This project is released under the MIT License **with an explicit Government Use Restriction**.  

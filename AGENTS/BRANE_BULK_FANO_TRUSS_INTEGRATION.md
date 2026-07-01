@@ -10,7 +10,7 @@ This note is an **agent peg** for the optional Lake target `HQIVBraneBulkStrongS
 - **One heavy build at a time.** `HQIVYangMillsPackage` already pulls `SO8ClosureAbstract` and the Lie-closure graph; Lake will spawn many `lean` children. That is normal. **Starting a second** `lake build HQIVBraneBulkStrongSector` (or `HQIVSO8Closure`) while the first is running **doubles** RAM and CPU and looks like “30 Lean tasks.”
 - **Do not background long `lake build`** in the agent unless you are sure nothing else is compiling.
 - **Optional cap:** set `LEAN_NUM_THREADS` lower in the environment before `lake build` if each `lean` child is too heavy (trades wall time for RAM).
-- **Generated `G₂ ∪ {Δ}` Lie file** is *not* re-imported in `HQIVBraneBulkStrongSector.lean` on purpose (avoids an extra duplicate compile of the heaviest algebra). Build it when you need it: `lake build Hqiv.Algebra.G2DeltaGeneratedLie` or `lake build HQIVSO8Closure`.
+- **Generated `G₂ ∪ {Δ}` Lie file** is *not* re-imported in `Targets/HQIVBraneBulkStrongSector.lean` on purpose (avoids an extra duplicate compile of the heaviest algebra). Build it when you need it: `lake build Hqiv.Algebra.G2DeltaGeneratedLie` or `lake build HQIVSO8Closure`.
 
 ## Status matrix
 

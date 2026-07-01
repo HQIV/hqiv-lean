@@ -4,12 +4,34 @@
 **Lean:** `Hqiv.QuantumChemistry.PhaseAllotropeDerivation`  
 **CLI:** `hqiv-lab H2O`
 
+## Non-Negotiable Input Policy
+
+HQIV Lab prediction paths must not use external chemistry or materials data as
+inputs. Disallowed as inputs: W4-17/GMTKN55/NIST/CRC values, PDG/CODATA masses
+or couplings, tabulated bond lengths, tabulated bond angles, crystallographic
+cell constants, density tables, fitted potentials, hydration shells, mobility
+tables, or empirical phase constants.
+
+Allowed prediction inputs are only HQIV-derived primitives and exact unit
+conversions needed to express outputs in conventional units. In practice this
+means formulas/names resolve to atomic numbers, electron counts, HQIV nuclear
+mass readouts, TUFT/nested-wavefunction bond lengths, TUFT centre angles, the
+fixed lattice rationals α = 3/5 and γ = 2/5, and the proton-lockin witness at
+`referenceM = 4`.
+
+External data may appear only in quarantined comparison fields with names like
+`reference_*`, `benchmark_*`, or `comparison_*`. It must never be passed into
+`MoleculeSpec`, bond builders, packing, density, phase, binding, conductivity,
+or material-response formulas.
+
 ## Design
 
-Inputs are **molecular specs** (fragments + bonds), not allotrope names:
+Prediction specs are **HQIV-derived molecular specs** (atomic-chart fragments
+and derived bonds), not benchmark geometry:
 
 ```
-MoleculeSpec
+formula/name
+  → atomic-chart MoleculeSpec  # fragments + HQIV-derived bonds
   → infer_monomer_geometry()   # VSEPR, motif, n_inter
   → templates_for_motif()      # Ih, Ic, fcc, …
   → unit_cell_for_allotrope()  # a,b,c,Z from contact distance
@@ -17,8 +39,8 @@ MoleculeSpec
   → material_response()        # n, k_th, … (scripts mirror)
 ```
 
-Witness overrides (experimental cell constants) live in `hqiv_phase_geometry_density`
-only as optional calibration — default path is **derived**.
+Witness/literature values are comparison-only. Do not add experimental cell
+constant overrides to prediction paths.
 
 ## API
 

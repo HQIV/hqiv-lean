@@ -191,6 +191,50 @@ noncomputable def nuclearSpinMagneticResidualParticipation (m A Z : ℕ) : ℝ :
   gamma_HQIV * strongChannelFraction *
     (muProduct * valleyPart / r + spinStabilityParticipation A Z * isospinAsym * valleyPart)
 
+/-- Spin-statistics completeness: `1` when every nucleon sits in a closed spin pair.
+
+The deuteron (`A = 2, Z = 1`) is the unique odd-odd bound state — its proton and neutron lock
+into a single spin-triplet `np` pair — so it counts as saturated.  Otherwise saturation is the
+even-even condition (`Z` and `N = A − Z` both even and positive).  Odd-A nuclei carry one unpaired
+nucleon and odd-odd valence nuclei two, so they are not saturated. -/
+noncomputable def nuclearSpinSaturatedPairing (A Z : ℕ) : ℝ :=
+  if A = 2 ∧ Z = 1 then 1
+  else if Z % 2 = 0 ∧ (A - Z) % 2 = 0 ∧ 0 < Z ∧ 0 < A - Z then 1 else 0
+
+/-- Free-surface spin-alignment boundary lift: the second geometric channel of the magnetic
+coupling.  The spin–magnetic residual carries the dipole-product coupling `γ·(4/8)·γ²`
+(`μ_n μ_p ~ γ²`) on the *valley-contact* geometry `vc/(cap·R_m)`; spin-saturated nucleons aligned
+along the **free boundary** open the same coupling on a *surface* geometry `1/A^(1/3)` (boundary
+nucleons per nucleon), weighted by `nuclearSpinSaturatedPairing`.  No new constant enters — only the
+geometric factor (surface vs valley) differs:
+
+  `γ · (4/8) · γ² · nuclearSpinSaturatedPairing A Z / A^(1/3)`. -/
+noncomputable def nuclearSpinAlignmentBoundaryParticipation (A Z : ℕ) : ℝ :=
+  if A ≤ 1 then 0
+  else
+    gamma_HQIV * strongChannelFraction * (gamma_HQIV * gamma_HQIV) *
+      nuclearSpinSaturatedPairing A Z / (A : ℝ) ^ ((1 : ℝ) / 3)
+
+/-- The boundary lift shares the spin–magnetic residual's `γ³·(4/8)` dipole coupling exactly:
+its strength differs from the residual's `muProduct` channel only by the geometric factor
+(`1/A^(1/3)` boundary vs `vc/(cap·R_m)` valley). -/
+theorem nuclearSpinAlignmentBoundaryParticipation_coupling (A Z : ℕ) (hA : 2 ≤ A) :
+    nuclearSpinAlignmentBoundaryParticipation A Z =
+      gamma_HQIV * strongChannelFraction * (gamma_HQIV * gamma_HQIV) *
+        nuclearSpinSaturatedPairing A Z / (A : ℝ) ^ ((1 : ℝ) / 3) := by
+  unfold nuclearSpinAlignmentBoundaryParticipation
+  have : ¬ A ≤ 1 := by omega
+  simp [this]
+
+/-- Unpaired (odd-A or odd-odd, non-deuteron) clusters receive no alignment boundary lift. -/
+theorem nuclearSpinAlignmentBoundaryParticipation_unpaired (A Z : ℕ)
+    (h : nuclearSpinSaturatedPairing A Z = 0) :
+    nuclearSpinAlignmentBoundaryParticipation A Z = 0 := by
+  unfold nuclearSpinAlignmentBoundaryParticipation
+  split
+  · rfl
+  · rw [h]; ring
+
 /-- Incremental facet/far geometry only (no α-cap duplication). -/
 noncomputable def postAlphaIncrementalGeometricTouchEnergy (m A Z : ℕ) : ℝ :=
   if A ≤ 4 then 0
@@ -298,8 +342,12 @@ noncomputable def nuclearOutsideNetworkWithResidualAtShell
     (he4Out + inc * nuclearOutsideContactCoupling θ) *
       (1 + nuclearSpinMagneticResidualParticipation m A Z)
   else
+    -- Standalone constructive regime: the cluster's outer shell is free, so the spin-alignment
+    -- boundary lift applies (an α bonded inside a post-α lattice has no free surface and uses the
+    -- post-α branch above instead).
     nuclearOutsideNetworkBindingAtShell m A θ c *
-      (1 + nuclearSpinMagneticResidualParticipation m A Z)
+      (1 + nuclearSpinMagneticResidualParticipation m A Z) *
+      (1 + nuclearSpinAlignmentBoundaryParticipation A Z)
 
 /-- Total cluster binding: inside + networked outside + spin–magnetic residual. -/
 noncomputable def nuclearClusterBindingNetworkCurvature

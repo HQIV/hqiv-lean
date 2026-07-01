@@ -2,7 +2,7 @@
 
 This note is for **authors and reviewers**: it ties FLRW-minded claims in the HQIV **main manuscript** (`paper/main.tex` in the HQIV paper repo—**that file is not tracked in HQIV_LEAN**) to **proved** Lean equivalences in this repository, and lists **paper-side** wording edits that would increase academic defensibility.
 
-**Lean-only changes** for this pass live in `Hqiv/Geometry/HQVM_FLRW_PaperAlignment.lean` (imported from `HQIVLEAN.lean`). No edits were made to any `.tex` file here.
+**Lean-only changes** for this pass live in `Hqiv/Geometry/HQVM_FLRW_PaperAlignment.lean` (imported from `Targets/HQIVLEAN.lean`). No edits were made to any `.tex` file here.
 
 ---
 
@@ -66,4 +66,4 @@ with one-line scope: **single-node HQVM gravitational action stationarity ↔ Fr
 
 ## 5. Build
 
-`HQIVLEAN` uses an explicit `globs` list in `lakefile.toml`. New modules imported from `HQIVLEAN.lean` must be added there (e.g. `Hqiv.Geometry.HQVM_FLRW_PaperAlignment`); then `lake build HQIVLEAN` succeeds.
+`HQIVLEAN` uses an explicit `globs` list in `lakefile.toml`. New modules imported from `Targets/HQIVLEAN.lean` must be added there (e.g. `Hqiv.Geometry.HQVM_FLRW_PaperAlignment`); then `lake build HQIVLEAN` succeeds.

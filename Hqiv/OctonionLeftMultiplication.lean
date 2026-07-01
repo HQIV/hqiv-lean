@@ -8,10 +8,16 @@ namespace Hqiv
 /-!
 # Octonion left-multiplication matrices L(e_1) .. L(e_7)
 
-From the **first assumptions**: the algebra O = ℝ⁸ with Fano-plane multiplication;
-left multiplication by the imaginary unit e_i is a linear map, hence an 8×8 real
+**Witness layer (not a primitive).** The carrier dimension `8`, the seven imaginary
+directions, and the Fano incidence are *derived* upstream in the axiom-free spine
+`Hqiv.Foundation` (see `Hqiv.Foundation.OctonionForcing`) from the single input
+`transverseDim = 3`. The matrices below are the **concrete realization** that
+discharges that forced skeleton: the algebra O = ℝ⁸ with Fano-plane multiplication,
+where left multiplication by the imaginary unit e_i is a linear map, hence an 8×8 real
 matrix **L(e_i)**. Source: `HQVM/matrices.py` (`_build_left_multiplications`).
-L(e_7) is the colour-preferred axis (paper).
+L(e_7) is the colour-preferred axis (paper). They realize
+`Hqiv.Foundation.OctonionTableRealizable`; the open uniqueness step is
+`Hqiv.Foundation.OctonionTableUnique`.
 
 To regenerate: `PYTHONPATH=~/Repos/HQIV python3 scripts/print_lean_octonion_L.py`
 -/

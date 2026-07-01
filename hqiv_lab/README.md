@@ -1,7 +1,10 @@
-# HQIV Lab — chemistry and materials from inputs
+# HQIV Lab — chemistry and materials from HQIV readouts
 
 Derives **allotropes**, **unit cells**, and **material response** from molecular
-inputs (fragments + bonds, or GMTKN55 names). No fitted intermolecular potentials.
+formulas/names by resolving atomic-chart fragments and HQIV-derived bond
+geometry. Benchmark chemistry data is comparison-only; no fitted
+intermolecular potentials, tabulated bond lengths, or tabulated bond angles are
+prediction inputs.
 
 Requires the HQIV Lean repo layout: `scripts/` for physics mirrors.
 
@@ -40,7 +43,8 @@ hqiv-lab NH3 --allotropes-only
 ## Pipeline
 
 ```
-MoleculeSpec (bonds, fragments)
+formula/name
+  → MoleculeSpec (atomic-chart fragments + HQIV-derived bonds)
   → MonomerGeometry (VSEPR, motif, n_contacts)
   → Bravais topology (ice Ih, fcc, chain Z=4, …)
   → r_nn (intermolecular contact, distinct from covalent bond)

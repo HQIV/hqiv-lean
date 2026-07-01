@@ -148,6 +148,50 @@ def apply_outside_spin_magnetic_residual(
     return outside_mev * (1.0 + nuclear_spin_magnetic_residual_participation(m, A, Z))
 
 
+def spin_saturated_pairing(A: int, Z: int) -> float:
+    """
+    Spin-statistics completeness: 1 when every nucleon sits in a closed spin pair.
+
+    The deuteron is the unique odd-odd bound state — its proton and neutron lock into a
+    single spin-triplet (np) pair — so it counts as saturated.  Otherwise saturation is the
+    even-even condition (Z and N both even): every proton and neutron has a spin partner.
+    Odd-A nuclei carry one unpaired nucleon and odd-odd valence nuclei two, so they are not
+    saturated and receive no alignment boundary lift.
+    """
+    if A == 2 and Z == 1:
+        return 1.0
+    n = A - Z
+    return 1.0 if (Z % 2 == 0 and n % 2 == 0 and Z > 0 and n > 0) else 0.0
+
+
+def nuclear_spin_alignment_boundary_participation(A: int, Z: int) -> float:
+    """
+    Free-surface spin-alignment boundary lift (second channel of the magnetic coupling).
+
+    The spin-magnetic residual already carries a magnetic coupling ``γ·(4/8)·γ²`` (with the
+    ``|μ_n μ_p| ~ γ²`` dipole-product scale) on the *valley-contact* geometry ``vc/(cap·R_m)``.
+    Spin-saturated nucleons aligned along the **free boundary** open a second geometric channel
+    of the same coupling: a surface term scaling as ``1/A^(1/3)`` (boundary nucleons per nucleon),
+    weighted by :func:`spin_saturated_pairing`.  No new constant enters — the strength is the
+    identical ``γ³·(4/8)`` magnetic coupling; only the geometric factor (surface vs valley) differs.
+
+      ``γ · (4/8) · γ² · spin_saturated_pairing(A,Z) / A^(1/3)``
+    """
+    if A <= 1:
+        return 0.0
+    paired = spin_saturated_pairing(A, Z)
+    if paired <= 0.0:
+        return 0.0
+    mu_product = bbn.GAMMA_HQIV * bbn.GAMMA_HQIV
+    return (
+        bbn.GAMMA_HQIV
+        * bbn.STRONG_CHANNEL_FRACTION
+        * mu_product
+        * paired
+        / (float(A) ** (1.0 / 3.0))
+    )
+
+
 def proton_coulomb_outside_erosion_mev(
     m: int,
     A: int,
@@ -1052,6 +1096,10 @@ def cluster_binding_network_curvature_mev(
                 geff=geff,
                 apply_spin_magnetic=apply_spin_magnetic,
             )
+            if apply_spin_magnetic and outside > 0.0:
+                # Free-surface spin-alignment boundary (constructive regime only): the standalone
+                # cluster's outer shell is free, unlike an α bonded inside a post-α lattice.
+                outside *= 1.0 + nuclear_spin_alignment_boundary_participation(A, Z)
             total = inside + outside
         if xi is not None:
             mod = notd.outside_curvature_binding_modulator(xi, bonded=bonded)

@@ -37,7 +37,6 @@ if str(_REPO_ROOT) not in sys.path:
 
 import hqiv_chemistry_tuft_dynamics as ctd
 import hqiv_curvature_bond_state as cbs
-import hqiv_dynamic_binding_chart as chart
 import hqiv_electronic_valence_shells as evs
 import hqiv_homogeneous_curvature_feedback as hcf
 import hqiv_lean_physics_primitives as lean
@@ -174,12 +173,21 @@ def hqiv_polarizability_angstrom3(
 
 
 def binding_ev_per_covalent_bond(molecule: str) -> float:
-    """Characteristic covalent gap from GMTKN55 atomization / dissociation reference."""
-    for bench in chart.GMTKN55_SUITE:
-        if bench.name.upper() == molecule.upper():
-            n_bonds = max(len(bench.bonds), 1)
-            return bench.reference_ev / n_bonds
-    return 5.0
+    """Characteristic covalent gap from derived HQIV bond geometry."""
+    spec = _spec_for_molecule(molecule)
+    if not spec.bonds:
+        return RYDBERG_EV * lean.ALPHA * lean.STRONG_CHANNEL_FRACTION
+    gaps: list[float] = []
+    for bond in spec.bonds:
+        d = max(bond.distance_angstrom, 1.0e-9)
+        lattice_distance = d / BOHR_RADIUS_ANGSTROM
+        gaps.append(
+            RYDBERG_EV
+            * lean.ALPHA
+            * (1.0 + lean.STRONG_CHANNEL_FRACTION)
+            / (1.0 + lattice_distance)
+        )
+    return sum(gaps) / float(len(gaps))
 
 
 def intermolecular_binding_ev_per_contact(molecule: str) -> float:
@@ -218,10 +226,7 @@ def dielectric_constant_from_refractive_index(n: float) -> float:
 
 
 def fragment_atom_count(molecule: str) -> int:
-    for bench in chart.GMTKN55_SUITE:
-        if bench.name.upper() == molecule.upper():
-            return len(bench.fragments)
-    return 1
+    return max(len(_spec_for_molecule(molecule).fragments), 1)
 
 
 def phonon_thermal_conductivity_w_mk(

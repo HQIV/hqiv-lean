@@ -1,0 +1,1028 @@
+{
+  "lean_module": "Hqiv.QuantumChemistry.AtomFromCharge",
+  "discharge_lean_module": "Hqiv.QuantumChemistry.AtomElectronicDischarge",
+  "binding_lean_module": "Hqiv.QuantumChemistry.AtomElectronicBinding",
+  "nucleus_lean_module": "Hqiv.QuantumChemistry.AtomNucleusCurvatureShell",
+  "outside_fight_lean_module": "Hqiv.QuantumChemistry.AtomOutsideCurvatureFight",
+  "scale_witness": "proton_lockin",
+  "input_policy": "prediction_from_Z_only; NIST_in_comparison_layer_only",
+  "factorization_ok": true,
+  "rows": [
+    {
+      "element": "H",
+      "Z": 1,
+      "prediction": {
+        "nuclear_charge": 1,
+        "mass_number": 1,
+        "discharge": {
+          "nuclear_charge": 1,
+          "chemical_period": 1,
+          "valence_count": 1,
+          "period_offset": 0,
+          "p_shell_active": false
+        },
+        "compton": {
+          "m_h1s": 1,
+          "m_centre_s": 4,
+          "m_centre_p": 3,
+          "p_degeneracy": 1
+        },
+        "triplet": [
+          1,
+          1,
+          1
+        ],
+        "electron_shells": [
+          1
+        ],
+        "shell_xi_readouts": [
+          {
+            "m": 1,
+            "xi": 2.0,
+            "phi": 4.0,
+            "shell_shape": 0.7079441541679836,
+            "one_over_alpha_eff": 82.55783539333933,
+            "alpha_eff": 0.012112720679213432,
+            "detuned_surface": 5.0
+          }
+        ],
+        "nuclear_mass_mev": 938.27208816,
+        "electron_mass_total_mev": 0.5109989019852439,
+        "electronic_binding_mev": 1.3598287264982266e-05,
+        "electronic_outside_curvature_fight_mev": 0.0,
+        "closed_mass_mev": 938.7830734636979,
+        "site_energy_trace": 48.0,
+        "hydrogenic_binding_mev": 3.748636902628499e-05,
+        "nuclear_only_mass_amu": 1.0072764666167944,
+        "derived_atomic_mass_amu": 1.007825031875952,
+        "first_ionization_ev": 13.598287264982266,
+        "scale_witness": "proton_lockin"
+      },
+      "comparison": {
+        "nist_mass_amu": 1.00782503223,
+        "relative_error_vs_nist": -3.512989762950385e-10,
+        "nist_first_ionization_ev": 13.59843449,
+        "relative_error_ionization_vs_nist": -1.0826615213876917e-05
+      }
+    },
+    {
+      "element": "He",
+      "Z": 2,
+      "prediction": {
+        "nuclear_charge": 2,
+        "mass_number": 4,
+        "discharge": {
+          "nuclear_charge": 2,
+          "chemical_period": 1,
+          "valence_count": 2,
+          "period_offset": 0,
+          "p_shell_active": false
+        },
+        "compton": {
+          "m_h1s": 1,
+          "m_centre_s": 4,
+          "m_centre_p": 3,
+          "p_degeneracy": 1
+        },
+        "triplet": [
+          4,
+          3,
+          1
+        ],
+        "electron_shells": [
+          1,
+          1
+        ],
+        "shell_xi_readouts": [
+          {
+            "m": 1,
+            "xi": 2.0,
+            "phi": 4.0,
+            "shell_shape": 0.7079441541679836,
+            "one_over_alpha_eff": 82.55783539333933,
+            "alpha_eff": 0.012112720679213432,
+            "detuned_surface": 5.0
+          },
+          {
+            "m": 1,
+            "xi": 2.0,
+            "phi": 4.0,
+            "shell_shape": 0.7079441541679836,
+            "one_over_alpha_eff": 82.55783539333933,
+            "alpha_eff": 0.012112720679213432,
+            "detuned_surface": 5.0
+          }
+        ],
+        "nuclear_mass_mev": 3709.623424304665,
+        "electron_mass_total_mev": 1.0219978039704878,
+        "electronic_binding_mev": 7.407279556155232e-05,
+        "electronic_outside_curvature_fight_mev": 4.1186163125579505,
+        "closed_mass_mev": 3714.763964348398,
+        "site_energy_trace": 96.0,
+        "hydrogenic_binding_mev": 0.00014994547610513995,
+        "nuclear_only_mass_amu": 3.982444348994964,
+        "derived_atomic_mass_amu": 3.9879629454416596,
+        "first_ionization_ev": 37.03639778077616,
+        "scale_witness": "proton_lockin"
+      },
+      "comparison": {
+        "nist_mass_amu": 4.00260325413,
+        "relative_error_vs_nist": -0.0036576966935792012,
+        "nist_first_ionization_ev": 24.587387366,
+        "relative_error_ionization_vs_nist": 0.5063169270270227
+      }
+    },
+    {
+      "element": "Li",
+      "Z": 3,
+      "prediction": {
+        "nuclear_charge": 3,
+        "mass_number": 7,
+        "discharge": {
+          "nuclear_charge": 3,
+          "chemical_period": 2,
+          "valence_count": 1,
+          "period_offset": 0,
+          "p_shell_active": true
+        },
+        "compton": {
+          "m_h1s": 1,
+          "m_centre_s": 4,
+          "m_centre_p": 3,
+          "p_degeneracy": 3
+        },
+        "triplet": [
+          4,
+          3,
+          1
+        ],
+        "electron_shells": [
+          1,
+          1,
+          4
+        ],
+        "shell_xi_readouts": [
+          {
+            "m": 1,
+            "xi": 2.0,
+            "phi": 4.0,
+            "shell_shape": 0.7079441541679836,
+            "one_over_alpha_eff": 82.55783539333933,
+            "alpha_eff": 0.012112720679213432,
+            "detuned_surface": 5.0
+          },
+          {
+            "m": 1,
+            "xi": 2.0,
+            "phi": 4.0,
+            "shell_shape": 0.7079441541679836,
+            "one_over_alpha_eff": 82.55783539333933,
+            "alpha_eff": 0.012112720679213432,
+            "detuned_surface": 5.0
+          },
+          {
+            "m": 4,
+            "xi": 5.0,
+            "phi": 10.0,
+            "shell_shape": 0.3931325494920921,
+            "one_over_alpha_eff": 102.42696087451893,
+            "alpha_eff": 0.00976305448743206,
+            "detuned_surface": 16.666666666666668
+          }
+        ],
+        "nuclear_mass_mev": 6495.675336601306,
+        "electron_mass_total_mev": 1.5329967059557317,
+        "electronic_binding_mev": 9.390590943309603e-05,
+        "electronic_outside_curvature_fight_mev": 3.1607265630608308,
+        "closed_mass_mev": 6500.368965964414,
+        "site_energy_trace": 696.0,
+        "hydrogenic_binding_mev": 0.00033737732123656494,
+        "nuclear_only_mass_amu": 6.973393948201812,
+        "derived_atomic_mass_amu": 6.978432766323058,
+        "first_ionization_ev": 5.747953167038475,
+        "scale_witness": "proton_lockin"
+      },
+      "comparison": {
+        "nist_mass_amu": 7.0160034366,
+        "relative_error_vs_nist": -0.005354995991157758,
+        "nist_first_ionization_ev": 5.391719966,
+        "relative_error_ionization_vs_nist": 0.06607041969628792
+      }
+    },
+    {
+      "element": "C",
+      "Z": 6,
+      "prediction": {
+        "nuclear_charge": 6,
+        "mass_number": 12,
+        "discharge": {
+          "nuclear_charge": 6,
+          "chemical_period": 2,
+          "valence_count": 4,
+          "period_offset": 0,
+          "p_shell_active": true
+        },
+        "compton": {
+          "m_h1s": 1,
+          "m_centre_s": 4,
+          "m_centre_p": 3,
+          "p_degeneracy": 3
+        },
+        "triplet": [
+          4,
+          3,
+          1
+        ],
+        "electron_shells": [
+          1,
+          1,
+          4,
+          4,
+          3,
+          3
+        ],
+        "shell_xi_readouts": [
+          {
+            "m": 1,
+            "xi": 2.0,
+            "phi": 4.0,
+            "shell_shape": 0.7079441541679836,
+            "one_over_alpha_eff": 82.55783539333933,
+            "alpha_eff": 0.012112720679213432,
+            "detuned_surface": 5.0
+          },
+          {
+            "m": 1,
+            "xi": 2.0,
+            "phi": 4.0,
+            "shell_shape": 0.7079441541679836,
+            "one_over_alpha_eff": 82.55783539333933,
+            "alpha_eff": 0.012112720679213432,
+            "detuned_surface": 5.0
+          },
+          {
+            "m": 4,
+            "xi": 5.0,
+            "phi": 10.0,
+            "shell_shape": 0.3931325494920921,
+            "one_over_alpha_eff": 102.42696087451893,
+            "alpha_eff": 0.00976305448743206,
+            "detuned_surface": 16.666666666666668
+          },
+          {
+            "m": 4,
+            "xi": 5.0,
+            "phi": 10.0,
+            "shell_shape": 0.3931325494920921,
+            "one_over_alpha_eff": 102.42696087451893,
+            "alpha_eff": 0.00976305448743206,
+            "detuned_surface": 16.666666666666668
+          },
+          {
+            "m": 3,
+            "xi": 4.0,
+            "phi": 8.0,
+            "shell_shape": 0.4579441541679836,
+            "one_over_alpha_eff": 97.37005934887273,
+            "alpha_eff": 0.010270097468227303,
+            "detuned_surface": 12.5
+          },
+          {
+            "m": 3,
+            "xi": 4.0,
+            "phi": 8.0,
+            "shell_shape": 0.4579441541679836,
+            "one_over_alpha_eff": 97.37005934887273,
+            "alpha_eff": 0.010270097468227303,
+            "detuned_surface": 12.5
+          }
+        ],
+        "nuclear_mass_mev": 11138.332108726874,
+        "electron_mass_total_mev": 3.0659934119114634,
+        "electronic_binding_mev": 0.0002814548640346279,
+        "electronic_outside_curvature_fight_mev": 8.51537663618334,
+        "closed_mass_mev": 11149.913197320106,
+        "site_energy_trace": 1936.0,
+        "hydrogenic_binding_mev": 0.0013495092849462598,
+        "nuclear_only_mass_amu": 11.957490745018939,
+        "derived_atomic_mass_amu": 11.969923554376663,
+        "first_ionization_ev": 35.925885212879244,
+        "scale_witness": "proton_lockin"
+      },
+      "comparison": {
+        "nist_mass_amu": 12.0,
+        "relative_error_vs_nist": -0.002506370468611389,
+        "nist_first_ionization_ev": 11.260288,
+        "relative_error_ionization_vs_nist": 2.1904943472919385
+      }
+    },
+    {
+      "element": "N",
+      "Z": 7,
+      "prediction": {
+        "nuclear_charge": 7,
+        "mass_number": 14,
+        "discharge": {
+          "nuclear_charge": 7,
+          "chemical_period": 2,
+          "valence_count": 5,
+          "period_offset": 0,
+          "p_shell_active": true
+        },
+        "compton": {
+          "m_h1s": 1,
+          "m_centre_s": 4,
+          "m_centre_p": 3,
+          "p_degeneracy": 3
+        },
+        "triplet": [
+          4,
+          3,
+          1
+        ],
+        "electron_shells": [
+          1,
+          1,
+          4,
+          4,
+          3,
+          3,
+          3
+        ],
+        "shell_xi_readouts": [
+          {
+            "m": 1,
+            "xi": 2.0,
+            "phi": 4.0,
+            "shell_shape": 0.7079441541679836,
+            "one_over_alpha_eff": 82.55783539333933,
+            "alpha_eff": 0.012112720679213432,
+            "detuned_surface": 5.0
+          },
+          {
+            "m": 1,
+            "xi": 2.0,
+            "phi": 4.0,
+            "shell_shape": 0.7079441541679836,
+            "one_over_alpha_eff": 82.55783539333933,
+            "alpha_eff": 0.012112720679213432,
+            "detuned_surface": 5.0
+          },
+          {
+            "m": 4,
+            "xi": 5.0,
+            "phi": 10.0,
+            "shell_shape": 0.3931325494920921,
+            "one_over_alpha_eff": 102.42696087451893,
+            "alpha_eff": 0.00976305448743206,
+            "detuned_surface": 16.666666666666668
+          },
+          {
+            "m": 4,
+            "xi": 5.0,
+            "phi": 10.0,
+            "shell_shape": 0.3931325494920921,
+            "one_over_alpha_eff": 102.42696087451893,
+            "alpha_eff": 0.00976305448743206,
+            "detuned_surface": 16.666666666666668
+          },
+          {
+            "m": 3,
+            "xi": 4.0,
+            "phi": 8.0,
+            "shell_shape": 0.4579441541679836,
+            "one_over_alpha_eff": 97.37005934887273,
+            "alpha_eff": 0.010270097468227303,
+            "detuned_surface": 12.5
+          },
+          {
+            "m": 3,
+            "xi": 4.0,
+            "phi": 8.0,
+            "shell_shape": 0.4579441541679836,
+            "one_over_alpha_eff": 97.37005934887273,
+            "alpha_eff": 0.010270097468227303,
+            "detuned_surface": 12.5
+          },
+          {
+            "m": 3,
+            "xi": 4.0,
+            "phi": 8.0,
+            "shell_shape": 0.4579441541679836,
+            "one_over_alpha_eff": 97.37005934887273,
+            "alpha_eff": 0.010270097468227303,
+            "detuned_surface": 12.5
+          }
+        ],
+        "nuclear_mass_mev": 13003.88238057477,
+        "electron_mass_total_mev": 3.5769923138967075,
+        "electronic_binding_mev": 0.0004153995017920207,
+        "electronic_outside_curvature_fight_mev": 10.324737553849182,
+        "closed_mass_mev": 13017.783695043014,
+        "site_energy_trace": 2256.0,
+        "hydrogenic_binding_mev": 0.0018368320822879647,
+        "nuclear_only_mass_amu": 13.960241236945018,
+        "derived_atomic_mass_amu": 13.975164911106914,
+        "first_ionization_ev": 51.73361518264664,
+        "scale_witness": "proton_lockin"
+      },
+      "comparison": {
+        "nist_mass_amu": 14.00307400443,
+        "relative_error_vs_nist": -0.001993069044286715,
+        "nist_first_ionization_ev": 14.53413,
+        "relative_error_ionization_vs_nist": 2.559457303784034
+      }
+    },
+    {
+      "element": "O",
+      "Z": 8,
+      "prediction": {
+        "nuclear_charge": 8,
+        "mass_number": 16,
+        "discharge": {
+          "nuclear_charge": 8,
+          "chemical_period": 2,
+          "valence_count": 6,
+          "period_offset": 0,
+          "p_shell_active": true
+        },
+        "compton": {
+          "m_h1s": 1,
+          "m_centre_s": 4,
+          "m_centre_p": 3,
+          "p_degeneracy": 3
+        },
+        "triplet": [
+          4,
+          3,
+          1
+        ],
+        "electron_shells": [
+          1,
+          1,
+          4,
+          4,
+          3,
+          3,
+          3,
+          3
+        ],
+        "shell_xi_readouts": [
+          {
+            "m": 1,
+            "xi": 2.0,
+            "phi": 4.0,
+            "shell_shape": 0.7079441541679836,
+            "one_over_alpha_eff": 82.55783539333933,
+            "alpha_eff": 0.012112720679213432,
+            "detuned_surface": 5.0
+          },
+          {
+            "m": 1,
+            "xi": 2.0,
+            "phi": 4.0,
+            "shell_shape": 0.7079441541679836,
+            "one_over_alpha_eff": 82.55783539333933,
+            "alpha_eff": 0.012112720679213432,
+            "detuned_surface": 5.0
+          },
+          {
+            "m": 4,
+            "xi": 5.0,
+            "phi": 10.0,
+            "shell_shape": 0.3931325494920921,
+            "one_over_alpha_eff": 102.42696087451893,
+            "alpha_eff": 0.00976305448743206,
+            "detuned_surface": 16.666666666666668
+          },
+          {
+            "m": 4,
+            "xi": 5.0,
+            "phi": 10.0,
+            "shell_shape": 0.3931325494920921,
+            "one_over_alpha_eff": 102.42696087451893,
+            "alpha_eff": 0.00976305448743206,
+            "detuned_surface": 16.666666666666668
+          },
+          {
+            "m": 3,
+            "xi": 4.0,
+            "phi": 8.0,
+            "shell_shape": 0.4579441541679836,
+            "one_over_alpha_eff": 97.37005934887273,
+            "alpha_eff": 0.010270097468227303,
+            "detuned_surface": 12.5
+          },
+          {
+            "m": 3,
+            "xi": 4.0,
+            "phi": 8.0,
+            "shell_shape": 0.4579441541679836,
+            "one_over_alpha_eff": 97.37005934887273,
+            "alpha_eff": 0.010270097468227303,
+            "detuned_surface": 12.5
+          },
+          {
+            "m": 3,
+            "xi": 4.0,
+            "phi": 8.0,
+            "shell_shape": 0.4579441541679836,
+            "one_over_alpha_eff": 97.37005934887273,
+            "alpha_eff": 0.010270097468227303,
+            "detuned_surface": 12.5
+          },
+          {
+            "m": 3,
+            "xi": 4.0,
+            "phi": 8.0,
+            "shell_shape": 0.4579441541679836,
+            "one_over_alpha_eff": 97.37005934887273,
+            "alpha_eff": 0.010270097468227303,
+            "detuned_surface": 12.5
+          }
+        ],
+        "nuclear_mass_mev": 14869.432652422669,
+        "electron_mass_total_mev": 4.087991215881951,
+        "electronic_binding_mev": 0.0005994292320598028,
+        "electronic_outside_curvature_fight_mev": 12.026261412252332,
+        "closed_mass_mev": 14885.546305621572,
+        "site_energy_trace": 2576.0,
+        "hydrogenic_binding_mev": 0.002399127617682239,
+        "nuclear_only_mass_amu": 15.9629917288711,
+        "derived_atomic_mass_amu": 15.980290446229631,
+        "first_ionization_ev": 70.41554558809581,
+        "scale_witness": "proton_lockin"
+      },
+      "comparison": {
+        "nist_mass_amu": 15.999084904,
+        "relative_error_vs_nist": -0.0011747207970419632,
+        "nist_first_ionization_ev": 13.618055,
+        "relative_error_ionization_vs_nist": 4.170749096555698
+      }
+    },
+    {
+      "element": "Na",
+      "Z": 11,
+      "prediction": {
+        "nuclear_charge": 11,
+        "mass_number": 23,
+        "discharge": {
+          "nuclear_charge": 11,
+          "chemical_period": 3,
+          "valence_count": 1,
+          "period_offset": 1,
+          "p_shell_active": true
+        },
+        "compton": {
+          "m_h1s": 1,
+          "m_centre_s": 5,
+          "m_centre_p": 4,
+          "p_degeneracy": 3
+        },
+        "triplet": [
+          5,
+          4,
+          1
+        ],
+        "electron_shells": [
+          1,
+          1,
+          5,
+          5,
+          4,
+          4,
+          4,
+          4,
+          4,
+          4,
+          4
+        ],
+        "shell_xi_readouts": [
+          {
+            "m": 1,
+            "xi": 2.0,
+            "phi": 4.0,
+            "shell_shape": 0.7079441541679836,
+            "one_over_alpha_eff": 82.55783539333933,
+            "alpha_eff": 0.012112720679213432,
+            "detuned_surface": 5.0
+          },
+          {
+            "m": 1,
+            "xi": 2.0,
+            "phi": 4.0,
+            "shell_shape": 0.7079441541679836,
+            "one_over_alpha_eff": 82.55783539333933,
+            "alpha_eff": 0.012112720679213432,
+            "detuned_surface": 5.0
+          },
+          {
+            "m": 5,
+            "xi": 6.0,
+            "phi": 12.0,
+            "shell_shape": 0.34584261358947216,
+            "one_over_alpha_eff": 106.63672380803072,
+            "alpha_eff": 0.009377632435522094,
+            "detuned_surface": 21.0
+          },
+          {
+            "m": 5,
+            "xi": 6.0,
+            "phi": 12.0,
+            "shell_shape": 0.34584261358947216,
+            "one_over_alpha_eff": 106.63672380803072,
+            "alpha_eff": 0.009377632435522094,
+            "detuned_surface": 21.0
+          },
+          {
+            "m": 4,
+            "xi": 5.0,
+            "phi": 10.0,
+            "shell_shape": 0.3931325494920921,
+            "one_over_alpha_eff": 102.42696087451893,
+            "alpha_eff": 0.00976305448743206,
+            "detuned_surface": 16.666666666666668
+          },
+          {
+            "m": 4,
+            "xi": 5.0,
+            "phi": 10.0,
+            "shell_shape": 0.3931325494920921,
+            "one_over_alpha_eff": 102.42696087451893,
+            "alpha_eff": 0.00976305448743206,
+            "detuned_surface": 16.666666666666668
+          },
+          {
+            "m": 4,
+            "xi": 5.0,
+            "phi": 10.0,
+            "shell_shape": 0.3931325494920921,
+            "one_over_alpha_eff": 102.42696087451893,
+            "alpha_eff": 0.00976305448743206,
+            "detuned_surface": 16.666666666666668
+          },
+          {
+            "m": 4,
+            "xi": 5.0,
+            "phi": 10.0,
+            "shell_shape": 0.3931325494920921,
+            "one_over_alpha_eff": 102.42696087451893,
+            "alpha_eff": 0.00976305448743206,
+            "detuned_surface": 16.666666666666668
+          },
+          {
+            "m": 4,
+            "xi": 5.0,
+            "phi": 10.0,
+            "shell_shape": 0.3931325494920921,
+            "one_over_alpha_eff": 102.42696087451893,
+            "alpha_eff": 0.00976305448743206,
+            "detuned_surface": 16.666666666666668
+          },
+          {
+            "m": 4,
+            "xi": 5.0,
+            "phi": 10.0,
+            "shell_shape": 0.3931325494920921,
+            "one_over_alpha_eff": 102.42696087451893,
+            "alpha_eff": 0.00976305448743206,
+            "detuned_surface": 16.666666666666668
+          },
+          {
+            "m": 4,
+            "xi": 5.0,
+            "phi": 10.0,
+            "shell_shape": 0.3931325494920921,
+            "one_over_alpha_eff": 102.42696087451893,
+            "alpha_eff": 0.00976305448743206,
+            "detuned_surface": 16.666666666666668
+          }
+        ],
+        "nuclear_mass_mev": 21356.941959484542,
+        "electron_mass_total_mev": 5.620987921837683,
+        "electronic_binding_mev": 0.0009923414988051724,
+        "electronic_outside_curvature_fight_mev": 7.59500021852118,
+        "closed_mass_mev": 21370.1569552834,
+        "site_energy_trace": 6312.0,
+        "hydrogenic_binding_mev": 0.004535850652180483,
+        "nuclear_only_mass_amu": 22.927619084221472,
+        "derived_atomic_mass_amu": 22.941805965023537,
+        "first_ionization_ev": 102.89059242110183,
+        "scale_witness": "proton_lockin"
+      },
+      "comparison": {
+        "nist_mass_amu": 22.989769282,
+        "relative_error_vs_nist": -0.0020862896181397155,
+        "nist_first_ionization_ev": 5.13907696,
+        "relative_error_ionization_vs_nist": 19.021220390733717
+      }
+    },
+    {
+      "element": "Fe",
+      "Z": 26,
+      "prediction": {
+        "nuclear_charge": 26,
+        "mass_number": 56,
+        "discharge": {
+          "nuclear_charge": 26,
+          "chemical_period": 4,
+          "valence_count": 8,
+          "period_offset": 2,
+          "p_shell_active": true
+        },
+        "compton": {
+          "m_h1s": 1,
+          "m_centre_s": 6,
+          "m_centre_p": 5,
+          "p_degeneracy": 3
+        },
+        "triplet": [
+          6,
+          5,
+          1
+        ],
+        "electron_shells": [
+          1,
+          1,
+          6,
+          6,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5
+        ],
+        "shell_xi_readouts": [
+          {
+            "m": 1,
+            "xi": 2.0,
+            "phi": 4.0,
+            "shell_shape": 0.7079441541679836,
+            "one_over_alpha_eff": 82.55783539333933,
+            "alpha_eff": 0.012112720679213432,
+            "detuned_surface": 5.0
+          },
+          {
+            "m": 1,
+            "xi": 2.0,
+            "phi": 4.0,
+            "shell_shape": 0.7079441541679836,
+            "one_over_alpha_eff": 82.55783539333933,
+            "alpha_eff": 0.012112720679213432,
+            "detuned_surface": 5.0
+          },
+          {
+            "m": 6,
+            "xi": 7.0,
+            "phi": 14.0,
+            "shell_shape": 0.30964944134759825,
+            "one_over_alpha_eff": 110.2428650677757,
+            "alpha_eff": 0.009070881815210577,
+            "detuned_surface": 25.454545454545453
+          },
+          {
+            "m": 6,
+            "xi": 7.0,
+            "phi": 14.0,
+            "shell_shape": 0.30964944134759825,
+            "one_over_alpha_eff": 110.2428650677757,
+            "alpha_eff": 0.009070881815210577,
+            "detuned_surface": 25.454545454545453
+          },
+          {
+            "m": 5,
+            "xi": 6.0,
+            "phi": 12.0,
+            "shell_shape": 0.34584261358947216,
+            "one_over_alpha_eff": 106.63672380803072,
+            "alpha_eff": 0.009377632435522094,
+            "detuned_surface": 21.0
+          },
+          {
+            "m": 5,
+            "xi": 6.0,
+            "phi": 12.0,
+            "shell_shape": 0.34584261358947216,
+            "one_over_alpha_eff": 106.63672380803072,
+            "alpha_eff": 0.009377632435522094,
+            "detuned_surface": 21.0
+          },
+          {
+            "m": 5,
+            "xi": 6.0,
+            "phi": 12.0,
+            "shell_shape": 0.34584261358947216,
+            "one_over_alpha_eff": 106.63672380803072,
+            "alpha_eff": 0.009377632435522094,
+            "detuned_surface": 21.0
+          },
+          {
+            "m": 5,
+            "xi": 6.0,
+            "phi": 12.0,
+            "shell_shape": 0.34584261358947216,
+            "one_over_alpha_eff": 106.63672380803072,
+            "alpha_eff": 0.009377632435522094,
+            "detuned_surface": 21.0
+          },
+          {
+            "m": 5,
+            "xi": 6.0,
+            "phi": 12.0,
+            "shell_shape": 0.34584261358947216,
+            "one_over_alpha_eff": 106.63672380803072,
+            "alpha_eff": 0.009377632435522094,
+            "detuned_surface": 21.0
+          },
+          {
+            "m": 5,
+            "xi": 6.0,
+            "phi": 12.0,
+            "shell_shape": 0.34584261358947216,
+            "one_over_alpha_eff": 106.63672380803072,
+            "alpha_eff": 0.009377632435522094,
+            "detuned_surface": 21.0
+          },
+          {
+            "m": 5,
+            "xi": 6.0,
+            "phi": 12.0,
+            "shell_shape": 0.34584261358947216,
+            "one_over_alpha_eff": 106.63672380803072,
+            "alpha_eff": 0.009377632435522094,
+            "detuned_surface": 21.0
+          },
+          {
+            "m": 5,
+            "xi": 6.0,
+            "phi": 12.0,
+            "shell_shape": 0.34584261358947216,
+            "one_over_alpha_eff": 106.63672380803072,
+            "alpha_eff": 0.009377632435522094,
+            "detuned_surface": 21.0
+          },
+          {
+            "m": 5,
+            "xi": 6.0,
+            "phi": 12.0,
+            "shell_shape": 0.34584261358947216,
+            "one_over_alpha_eff": 106.63672380803072,
+            "alpha_eff": 0.009377632435522094,
+            "detuned_surface": 21.0
+          },
+          {
+            "m": 5,
+            "xi": 6.0,
+            "phi": 12.0,
+            "shell_shape": 0.34584261358947216,
+            "one_over_alpha_eff": 106.63672380803072,
+            "alpha_eff": 0.009377632435522094,
+            "detuned_surface": 21.0
+          },
+          {
+            "m": 5,
+            "xi": 6.0,
+            "phi": 12.0,
+            "shell_shape": 0.34584261358947216,
+            "one_over_alpha_eff": 106.63672380803072,
+            "alpha_eff": 0.009377632435522094,
+            "detuned_surface": 21.0
+          },
+          {
+            "m": 5,
+            "xi": 6.0,
+            "phi": 12.0,
+            "shell_shape": 0.34584261358947216,
+            "one_over_alpha_eff": 106.63672380803072,
+            "alpha_eff": 0.009377632435522094,
+            "detuned_surface": 21.0
+          },
+          {
+            "m": 5,
+            "xi": 6.0,
+            "phi": 12.0,
+            "shell_shape": 0.34584261358947216,
+            "one_over_alpha_eff": 106.63672380803072,
+            "alpha_eff": 0.009377632435522094,
+            "detuned_surface": 21.0
+          },
+          {
+            "m": 5,
+            "xi": 6.0,
+            "phi": 12.0,
+            "shell_shape": 0.34584261358947216,
+            "one_over_alpha_eff": 106.63672380803072,
+            "alpha_eff": 0.009377632435522094,
+            "detuned_surface": 21.0
+          },
+          {
+            "m": 5,
+            "xi": 6.0,
+            "phi": 12.0,
+            "shell_shape": 0.34584261358947216,
+            "one_over_alpha_eff": 106.63672380803072,
+            "alpha_eff": 0.009377632435522094,
+            "detuned_surface": 21.0
+          },
+          {
+            "m": 5,
+            "xi": 6.0,
+            "phi": 12.0,
+            "shell_shape": 0.34584261358947216,
+            "one_over_alpha_eff": 106.63672380803072,
+            "alpha_eff": 0.009377632435522094,
+            "detuned_surface": 21.0
+          },
+          {
+            "m": 5,
+            "xi": 6.0,
+            "phi": 12.0,
+            "shell_shape": 0.34584261358947216,
+            "one_over_alpha_eff": 106.63672380803072,
+            "alpha_eff": 0.009377632435522094,
+            "detuned_surface": 21.0
+          },
+          {
+            "m": 5,
+            "xi": 6.0,
+            "phi": 12.0,
+            "shell_shape": 0.34584261358947216,
+            "one_over_alpha_eff": 106.63672380803072,
+            "alpha_eff": 0.009377632435522094,
+            "detuned_surface": 21.0
+          },
+          {
+            "m": 5,
+            "xi": 6.0,
+            "phi": 12.0,
+            "shell_shape": 0.34584261358947216,
+            "one_over_alpha_eff": 106.63672380803072,
+            "alpha_eff": 0.009377632435522094,
+            "detuned_surface": 21.0
+          },
+          {
+            "m": 5,
+            "xi": 6.0,
+            "phi": 12.0,
+            "shell_shape": 0.34584261358947216,
+            "one_over_alpha_eff": 106.63672380803072,
+            "alpha_eff": 0.009377632435522094,
+            "detuned_surface": 21.0
+          },
+          {
+            "m": 5,
+            "xi": 6.0,
+            "phi": 12.0,
+            "shell_shape": 0.34584261358947216,
+            "one_over_alpha_eff": 106.63672380803072,
+            "alpha_eff": 0.009377632435522094,
+            "detuned_surface": 21.0
+          },
+          {
+            "m": 5,
+            "xi": 6.0,
+            "phi": 12.0,
+            "shell_shape": 0.34584261358947216,
+            "one_over_alpha_eff": 106.63672380803072,
+            "alpha_eff": 0.009377632435522094,
+            "detuned_surface": 21.0
+          }
+        ],
+        "nuclear_mass_mev": 51924.28605968409,
+        "electron_mass_total_mev": 13.28597145161634,
+        "electronic_binding_mev": 0.008531453310450745,
+        "electronic_outside_curvature_fight_mev": 59.053113549623404,
+        "closed_mass_mev": 51996.616613232014,
+        "site_energy_trace": 25408.0,
+        "hydrogenic_binding_mev": 0.025340785461768656,
+        "nuclear_only_mass_amu": 55.743011066614386,
+        "derived_atomic_mass_amu": 55.820661105793384,
+        "first_ionization_ev": 351.5714297616562,
+        "scale_witness": "proton_lockin"
+      },
+      "comparison": {
+        "nist_mass_amu": 55.845,
+        "relative_error_vs_nist": -0.0004358294244178481,
+        "nist_first_ionization_ev": 7.9024,
+        "relative_error_ionization_vs_nist": 43.48919692266352
+      }
+    }
+  ]
+}

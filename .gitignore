@@ -26,6 +26,17 @@ papers/*.fdb_latexmk
 papers/*.fls
 papers/*.synctex.gz
 
+# LaTeX auxiliary outputs accidentally produced at repo root (sources live under papers/)
+/*.aux
+/*.bbl
+/*.blg
+/*.log
+/*.out
+/*.toc
+/*.fdb_latexmk
+/*.fls
+/*.synctex.gz
+
 # Local Python virtual environments (not portable; keep out of git)
 .venv/
 
@@ -42,7 +53,14 @@ scripts/data/sparc_filament/raw/
 *.pyc
 *.pyo
 
+# Local build / audit logs
+logs/
+
 # SAIR Equational Theories Stage 2 (clone locally to run judge / harness against solver)
 external/equational-theories-lean-stage2/
+
+# Nuccio/Piquerez octonions (Apache-2.0): kept locally as a porting reference only.
+# We re-implement against current Mathlib in Hqiv/Algebra/; see README credit.
+external/octonions-nuccio/
 
 scripts/equational_stage2/__pycache__/
