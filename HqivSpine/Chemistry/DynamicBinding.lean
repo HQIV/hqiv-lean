@@ -35,6 +35,24 @@ def comptonTripletH2 : ComptonTriplet :=
 def comptonTripletHeavyHydride : ComptonTriplet :=
   { m0 := referenceM + 1, m1 := referenceM + 2, m2 := referenceM }
 
+/-- LiH uses the heavy-hydride Compton triplet `(5, 6, 4)` on the shell chart. -/
+def comptonTripletLiH : ComptonTriplet := comptonTripletHeavyHydride
+
+/-- H₂O readout triplet: oxygen on the heavy row, hydrogens on the proton anchor. -/
+def comptonTripletH2O : ComptonTriplet :=
+  { m0 := referenceM + 1, m1 := referenceM, m2 := referenceM }
+
+/-- Bond surplus scaffold for a heteronuclear diatomic on shell indices `(m_total, m₁, m₂)`. -/
+noncomputable def diatomicBondSurplus (m_total m₁ m₂ : ℕ) : ℝ :=
+  bondModeSurplus m_total m₁ m₂
+
+/-- LiH bond surplus on the `(6, 5, 4)` shell chart (structural input to dynamic binding). -/
+noncomputable def lihBondSurplus : ℝ := diatomicBondSurplus (referenceM + 2) (referenceM + 1) referenceM
+
+/-- H₂O bond surplus on `(6, 5, 4)` with oxygen + separated H fragments at lock-in. -/
+noncomputable def h2oBondSurplus : ℝ :=
+  bondModeSurplus (referenceM + 2) (referenceM + 1) referenceM
+
 /-- TUFT vev factor relative to lock-in: `φ(ξ)/φ(ξ_lock)`. -/
 noncomputable def tuftVevFactorAtXi (ξ : ℝ) : ℝ :=
   phiOfXi ξ / phiOfXi xiLockin
@@ -82,6 +100,20 @@ noncomputable def h2DynamicReadout (surplus : ℝ) : DynamicBindingReadout :=
   { eta := 1
     surplus := surplus
     vevGeomean := tuftVevGeometricMean comptonTripletH2
+    kappa := dynamicBindingCurvatureAtXi xiLockin }
+
+/-- LiH readout scaffold on the heavy-hydride triplet. -/
+noncomputable def lihDynamicReadout (surplus : ℝ) : DynamicBindingReadout :=
+  { eta := 1
+    surplus := surplus
+    vevGeomean := tuftVevGeometricMean comptonTripletLiH
+    kappa := dynamicBindingCurvatureAtXi xiLockin }
+
+/-- H₂O readout scaffold (oxygen + two lock-in hydrogens). -/
+noncomputable def h2oDynamicReadout (surplus : ℝ) : DynamicBindingReadout :=
+  { eta := 1
+    surplus := surplus
+    vevGeomean := tuftVevGeometricMean comptonTripletH2O
     kappa := dynamicBindingCurvatureAtXi xiLockin }
 
 theorem dynamicBinding_factorization (r : DynamicBindingReadout) :

@@ -2,7 +2,9 @@ import HqivSpine.Physics.Shell
 import HqivSpine.Physics.Binding
 import HqivSpine.Chemistry.Aufbau
 import Mathlib.Analysis.SpecialFunctions.Pow.Real
-import Mathlib.Algebra.BigOperators.Ring.Finset
+import Mathlib.Algebra.BigOperators.Group.Finset.Basic
+import Mathlib.Algebra.BigOperators.Fin
+import Mathlib.Data.Fintype.BigOperators
 
 /-!
 # `HqivSpine.Chemistry.Binding` — electronic binding energy, disentangled onto the spine
@@ -55,6 +57,9 @@ def slaterAdjacentShell : ℝ := 1 - screenPenetrationLeak
 /-- Deep-shell increment = full Gauss enclosure. -/
 def slaterDeepShell : ℝ := 1
 
+/-- The deep-shell increment is exactly `1.00`. -/
+theorem slaterDeepShell_eq : slaterDeepShell = 1 := rfl
+
 /-- The derived same-shell increment is exactly Slater's `0.35`. -/
 theorem slaterSameShell_eq : slaterSameShell = 0.35 := by
   unfold slaterSameShell; rw [screenPenetrationLeak_eq]; norm_num
@@ -104,6 +109,59 @@ theorem slaterShieldingIncrement_outer (nTarget nOther : ℕ) (h : nTarget < nOt
   unfold slaterShieldingIncrement
   rw [if_neg (by omega), if_neg (by omega), if_neg (by omega)]
 
+/-- Slater coefficient on shell `s` as seen by a target at principal shell `nT`. -/
+def slaterShieldCoeffAtShell (nT s : ℕ) : ℝ :=
+  if s = nT then slaterSameShell
+  else if s + 1 = nT then slaterAdjacentShell
+  else if s < nT then slaterDeepShell
+  else 0
+
+theorem slaterShieldingIncrement_eq_coeff (nT s : ℕ) :
+    slaterShieldingIncrement nT s = slaterShieldCoeffAtShell nT s := by
+  unfold slaterShieldCoeffAtShell slaterShieldingIncrement
+  split_ifs <;> try rfl <;> try simp [slaterSameShell, slaterAdjacentShell, slaterDeepShell]
+
+private theorem shellElectronCount_eq_zero_of_gt (Z s nT : ℕ) (hZ : Z ≤ 118)
+    (hle : ∀ j : Fin Z, Aufbau.principalBlock Z j ≤ nT) (hn : nT < s) :
+    Aufbau.shellElectronCount Z s = 0 := by
+  unfold Aufbau.shellElectronCount Aufbau.principalConfig
+  by_contra hne
+  have hpos : 0 < (Aufbau.principalList.take Z).count s := Nat.pos_iff_ne_zero.mpr hne
+  have hmem : s ∈ (Aufbau.principalList.take Z) := List.count_pos_iff.mp hpos
+  obtain ⟨i, hi, hs⟩ := List.mem_iff_getElem.mp hmem
+  have hi' : i < Z := by
+    rw [List.length_take] at hi
+    exact Nat.lt_of_lt_of_le hi (Nat.min_le_left _ _)
+  have hblock : Aufbau.principalBlock Z ⟨i, hi'⟩ = s := by
+    unfold Aufbau.principalBlock
+    grind [List.getElem_eq_getD, List.getElem_take]
+  have := hle ⟨i, hi'⟩
+  rw [hblock] at this
+  omega
+
+/-- Full indexed Aufbau shield sum equals the shell occupancy weighted coefficients. -/
+theorem slaterShieldFinFull_eq_shellWeighted (Z nT : ℕ) (hZ : Z ≤ 118) :
+    (∑ j : Fin Z, slaterShieldingIncrement nT (Aufbau.principalBlock Z j)) =
+      ∑ s ∈ Finset.range 8, (Aufbau.shellElectronCount Z s : ℝ) * slaterShieldCoeffAtShell nT s := by
+  calc
+    ∑ j : Fin Z, slaterShieldingIncrement nT (Aufbau.principalBlock Z j) =
+        ∑ s ∈ Finset.range 8, (Aufbau.shellElectronCount Z s : ℝ) *
+          slaterShieldingIncrement nT s :=
+      Aufbau.fin_sum_principalBlock Z hZ (fun s => slaterShieldingIncrement nT s)
+    _ = ∑ s ∈ Finset.range 8, (Aufbau.shellElectronCount Z s : ℝ) * slaterShieldCoeffAtShell nT s :=
+      Finset.sum_congr rfl fun s _ => by rw [slaterShieldingIncrement_eq_coeff]
+
+private theorem fin_sum_sub_target (Z : ℕ) (target : Fin Z) (g : Fin Z → ℝ) :
+    (∑ j : Fin Z, g j) - g target = ∑ j : Fin Z, if j = target then 0 else g j := by
+  have htarget :
+      (∑ j : Fin Z, if j = target then g j else 0) = g target := by
+    rw [Fintype.sum_eq_single (f := fun j => if j = target then g j else 0) target]
+    · simp
+    · intro j hj; simp [hj]
+  rw [sub_eq_iff_eq_add, ← htarget, ← Finset.sum_add_distrib]
+  apply Fintype.sum_congr
+  intro j
+  by_cases h : j = target <;> simp [h]
 /-! ## Hydrogenic binding magnitude and Slater effective charge -/
 
 /-- Hydrogenic binding magnitude in Hartree: `|E| = μ Z_eff² / (2 n²)`. -/
@@ -243,6 +301,278 @@ theorem slaterEffectiveChargeAufbau_carbon :
       show slaterShieldingIncrement 2 2 = slaterSameShell from
         slaterShieldingIncrement_same 2, slaterSameShell_eq]
   simp
+  norm_num
+
+/-! ## Shell-resolved Slater screening (mined from legacy `SlaterScaffold` bookkeeping)
+
+Instead of expanding `Fin.sum_univ` past `8`, aggregate the derived `slaterShieldingIncrement` by
+principal shell: inner `n ≤ nₜ−2` electrons are fully enclosed, `n = nₜ−1` is adjacent, co-radial
+electrons at `n = nₜ` screen by the same-shell increment, and outer shells contribute nothing. -/
+
+/-- Slater shielding on a valence electron at principal shell `nT`, from the derived shell
+occupancy counts (excluding the target electron itself at `nT`). -/
+def slaterShieldFromShellCounts (Z nT : ℕ) : ℝ :=
+  (Finset.range nT).sum (fun n =>
+    if n + 1 = nT then (Aufbau.shellElectronCount Z n : ℝ) * slaterAdjacentShell
+    else if n + 1 < nT then (Aufbau.shellElectronCount Z n : ℝ) * slaterDeepShell
+    else 0) +
+    max 0 ((Aufbau.shellElectronCount Z nT : ℝ) - 1) * slaterSameShell
+
+private theorem shellElectronCount_pos_of_block (Z nT : ℕ) (target : Fin Z)
+    (hT : Aufbau.principalBlock Z target = nT) (hZ : Z ≤ 118) :
+    0 < Aufbau.shellElectronCount Z nT := by
+  unfold Aufbau.shellElectronCount Aufbau.principalConfig Aufbau.principalBlock at *
+  rw [List.count_pos_iff, List.mem_iff_getElem]
+  refine ⟨target.val, ?_, ?_⟩
+  · rw [List.length_take, Nat.lt_min]
+    exact ⟨target.isLt, by rw [Aufbau.principalList_length]; omega⟩
+  · grind [List.getElem_eq_getD, List.getElem_take]
+
+theorem slaterShieldFromShellCounts_eq_weighted (Z nT : ℕ) (hZ : Z ≤ 118)
+    (hle : ∀ j : Fin Z, Aufbau.principalBlock Z j ≤ nT)
+    (hpos : 0 < Aufbau.shellElectronCount Z nT) (hnT : nT ≤ 7) :
+    slaterShieldFromShellCounts Z nT =
+      (∑ s ∈ Finset.range 8, (Aufbau.shellElectronCount Z s : ℝ) * slaterShieldCoeffAtShell nT s) -
+        slaterSameShell := by
+  unfold slaterShieldFromShellCounts
+  have houter (s : ℕ) (hs : nT < s) :
+      (Aufbau.shellElectronCount Z s : ℝ) * slaterShieldCoeffAtShell nT s = 0 := by
+    simp [shellElectronCount_eq_zero_of_gt Z s nT hZ hle hs]
+  have hsplit :
+      ∑ s ∈ Finset.range 8, (Aufbau.shellElectronCount Z s : ℝ) * slaterShieldCoeffAtShell nT s =
+        ∑ s ∈ Finset.range (nT + 1), (Aufbau.shellElectronCount Z s : ℝ) * slaterShieldCoeffAtShell nT s := by
+    have hico :
+        ∑ s ∈ Finset.Ico (nT + 1) 8,
+            (Aufbau.shellElectronCount Z s : ℝ) * slaterShieldCoeffAtShell nT s = 0 := by
+      apply Finset.sum_eq_zero
+      intro s hs
+      rcases Finset.mem_Ico.mp hs with ⟨hsle, _⟩
+      exact houter s (Nat.lt_of_lt_of_le (Nat.lt_succ_self nT) hsle)
+    have hle8 : nT + 1 ≤ 8 := Nat.succ_le_succ hnT
+    rw [← Finset.sum_range_add_sum_Ico (f := fun s =>
+      (Aufbau.shellElectronCount Z s : ℝ) * slaterShieldCoeffAtShell nT s) hle8, hico, add_zero]
+  have hinner :
+      (Finset.range nT).sum (fun n =>
+          if n + 1 = nT then (Aufbau.shellElectronCount Z n : ℝ) * slaterAdjacentShell
+          else if n + 1 < nT then (Aufbau.shellElectronCount Z n : ℝ) * slaterDeepShell
+          else 0) =
+        ∑ s ∈ Finset.range nT,
+          (Aufbau.shellElectronCount Z s : ℝ) * slaterShieldCoeffAtShell nT s := by
+    apply Finset.sum_congr rfl
+    intro s hs
+    have hs' : s < nT := Finset.mem_range.mp hs
+    have hterm :
+        (if s + 1 = nT then (Aufbau.shellElectronCount Z s : ℝ) * slaterAdjacentShell
+          else if s + 1 < nT then (Aufbau.shellElectronCount Z s : ℝ) * slaterDeepShell else 0) =
+          (Aufbau.shellElectronCount Z s : ℝ) * slaterShieldCoeffAtShell nT s := by
+      simp [slaterShieldCoeffAtShell, hs']
+      split_ifs <;> simp [slaterShieldCoeffAtShell, hs'] <;> try omega
+    simpa [hterm]
+  have hge : 1 ≤ Aufbau.shellElectronCount Z nT := Nat.one_le_iff_ne_zero.mpr (Nat.pos_iff_ne_zero.mp hpos)
+  have hone : (1 : ℝ) ≤ (Aufbau.shellElectronCount Z nT : ℝ) := by exact_mod_cast hge
+  have hsub : (0 : ℝ) ≤ (Aufbau.shellElectronCount Z nT : ℝ) - 1 := sub_nonneg.mpr hone
+  rw [hinner]
+  conv_rhs => rw [hsplit]
+  rw [Finset.sum_range_succ]
+  have hnt : slaterShieldCoeffAtShell nT nT = slaterSameShell := by
+    dsimp [slaterShieldCoeffAtShell]
+    simp [slaterSameShell_eq]
+  have hmax : max 0 ((Aufbau.shellElectronCount Z nT : ℝ) - 1) =
+      (Aufbau.shellElectronCount Z nT : ℝ) - 1 := by
+    rw [max_comm]
+    exact max_eq_left hsub
+  rw [hnt, slaterSameShell_eq, hmax]
+  ring
+
+/-- **Shield-sum lemma:** excluded indexed Aufbau sum equals `slaterShieldFromShellCounts`. -/
+theorem slaterShieldAufbauExcl_eq_shellCounts (Z nT : ℕ) (target : Fin Z)
+    (hT : Aufbau.principalBlock Z target = nT)
+    (hle : ∀ j : Fin Z, Aufbau.principalBlock Z j ≤ nT) (hZ : Z ≤ 118) (hnT : nT ≤ 7) :
+    (∑ j : Fin Z, if j = target then 0 else
+        slaterShieldingIncrement nT (Aufbau.principalBlock Z j)) =
+      slaterShieldFromShellCounts Z nT := by
+  have hfull := slaterShieldFinFull_eq_shellWeighted Z nT hZ
+  have hpos := shellElectronCount_pos_of_block Z nT target hT hZ
+  have hagg := slaterShieldFromShellCounts_eq_weighted Z nT hZ hle hpos hnT
+  have hsub :=
+      fin_sum_sub_target Z target (fun j => slaterShieldingIncrement nT (Aufbau.principalBlock Z j))
+  rw [← hsub, hT, slaterShieldingIncrement_same, hfull, hagg]
+
+/-- **Shell-resolved effective charge** at principal shell `nT` (valence electron convention). -/
+def slaterEffectiveChargeAtShell (Z nT : ℕ) : ℝ :=
+  max 1 ((Z : ℝ) - slaterShieldFromShellCounts Z nT)
+
+/-- **First-principles valence `Z_eff`:** Slater charge at the highest occupied principal shell,
+aggregated from derived shell occupancies — the primary route for `(Z) →` chemistry. -/
+def valenceSlaterEffectiveCharge (Z : ℕ) : ℝ :=
+  slaterEffectiveChargeAtShell Z (Aufbau.topPrincipal Z)
+
+/-- Index of the last Madelung-filled electron (`Z` electrons ⇒ index `Z − 1`). -/
+def valenceElectronIndex (Z : ℕ) (h : 0 < Z) : Fin Z := ⟨Z - 1, by omega⟩
+
+theorem valenceSlaterEffectiveCharge_ge_one (Z : ℕ) :
+    1 ≤ valenceSlaterEffectiveCharge Z := by
+  unfold valenceSlaterEffectiveCharge slaterEffectiveChargeAtShell
+  exact le_max_left _ _
+
+/-- Valence hydrogenic binding magnitude (Hartree) from `Z` and reduced mass `μ` alone. -/
+def valenceBindingHartree (Z : ℕ) (μ : ℝ) : ℝ :=
+  hydrogenicBindingHartree μ (valenceSlaterEffectiveCharge Z) (Aufbau.topPrincipal Z : ℝ)
+
+theorem valenceBindingHartree_nonneg (Z : ℕ) (μ : ℝ) (hμ : 0 ≤ μ) :
+    0 ≤ valenceBindingHartree Z μ := by
+  unfold valenceBindingHartree hydrogenicBindingHartree
+  have hz : 0 ≤ valenceSlaterEffectiveCharge Z := le_trans zero_le_one (valenceSlaterEffectiveCharge_ge_one Z)
+  positivity
+
+theorem slaterShieldFromShellCounts_sodium :
+    slaterShieldFromShellCounts 11 3 = 8.8 := by
+  unfold slaterShieldFromShellCounts
+  rw [slaterAdjacentShell_eq, slaterDeepShell_eq, slaterSameShell_eq]
+  have h0 : (Aufbau.shellElectronCount 11 0 : ℝ) = 0 := by
+    simp [Aufbau.shellElectronCount, Aufbau.principalConfig]
+  have h1 : (Aufbau.shellElectronCount 11 1 : ℝ) = 2 := by exact_mod_cast Aufbau.sodium_shell_counts.1
+  have h2 : (Aufbau.shellElectronCount 11 2 : ℝ) = 8 := by exact_mod_cast Aufbau.sodium_shell_counts.2.1
+  have h3 : (Aufbau.shellElectronCount 11 3 : ℝ) = 1 := by exact_mod_cast Aufbau.sodium_shell_counts.2.2
+  simp only [Finset.sum_range_succ, h0, h1, h2, h3]
+  norm_num
+
+theorem slaterEffectiveChargeAtShell_sodium :
+    slaterEffectiveChargeAtShell 11 3 = 2.2 := by
+  unfold slaterEffectiveChargeAtShell
+  rw [slaterShieldFromShellCounts_sodium]
+  norm_num
+
+/-- **Sodium's `3s` electron sees `Z_eff = 2.20`.** Two `1s`, eight `n = 2`, and no co-radial
+partner at `n = 3`: `Z_eff = 11 − (2·1 + 8·0.85) = 2.20`. -/
+theorem slaterEffectiveChargeAufbau_sodium :
+    slaterEffectiveChargeAufbau 11 (10 : Fin 11) = 2.2 := by
+  unfold slaterEffectiveChargeAufbau slaterEffectiveCharge
+  rw [Fin.sum_univ_succ, Fin.sum_univ_succ, Fin.sum_univ_succ, Fin.sum_univ_succ,
+      Fin.sum_univ_succ, Fin.sum_univ_succ, Fin.sum_univ_succ, Fin.sum_univ_succ,
+      Fin.sum_univ_succ, Fin.sum_univ_succ]
+  simp [Aufbau.principalBlock_eleven, slaterShieldingIncrement,
+    slaterAdjacentShell_eq, slaterDeepShell_eq, slaterSameShell_eq]
+  norm_num
+
+/-- **Witness: shell aggregate matches the indexed Aufbau sum** for sodium's `3s` electron. -/
+theorem valenceSlaterEffectiveCharge_eq_aufbau_sodium :
+    valenceSlaterEffectiveCharge 11 = slaterEffectiveChargeAufbau 11 (10 : Fin 11) := by
+  unfold valenceSlaterEffectiveCharge
+  rw [Aufbau.sodium_valence.1, slaterEffectiveChargeAtShell_sodium, slaterEffectiveChargeAufbau_sodium]
+
+/-- **Chlorine's `3p` valence electron sees `Z_eff = 6.10`.** `Z_eff = 17 − (2·1 + 8·0.85 + 6·0.35)
+= 6.10`. -/
+theorem slaterEffectiveChargeAufbau_chlorine :
+    slaterEffectiveChargeAufbau 17 (16 : Fin 17) = 6.1 := by
+  unfold slaterEffectiveChargeAufbau slaterEffectiveCharge
+  rw [Fin.sum_univ_succ, Fin.sum_univ_succ, Fin.sum_univ_succ, Fin.sum_univ_succ,
+      Fin.sum_univ_succ, Fin.sum_univ_succ, Fin.sum_univ_succ, Fin.sum_univ_succ,
+      Fin.sum_univ_succ, Fin.sum_univ_succ, Fin.sum_univ_succ, Fin.sum_univ_succ,
+      Fin.sum_univ_succ, Fin.sum_univ_succ, Fin.sum_univ_succ, Fin.sum_univ_succ]
+  simp [Aufbau.principalBlock_seventeen, slaterShieldingIncrement,
+    slaterAdjacentShell_eq, slaterDeepShell_eq, slaterSameShell_eq]
+  norm_num
+
+/-- **Nitrogen's `2p` electron sees `Z_eff = 3.90`.** Matches the shell-resolved aggregate. -/
+theorem slaterEffectiveChargeAufbau_nitrogen :
+    slaterEffectiveChargeAufbau 7 (6 : Fin 7) = 3.9 := by
+  unfold slaterEffectiveChargeAufbau slaterEffectiveCharge
+  rw [Fin.sum_univ_succ, Fin.sum_univ_succ, Fin.sum_univ_succ, Fin.sum_univ_succ,
+      Fin.sum_univ_succ, Fin.sum_univ_succ]
+  simp [Aufbau.principalBlock_seven, slaterShieldingIncrement,
+    slaterAdjacentShell_eq, slaterDeepShell_eq, slaterSameShell_eq]
+  norm_num
+
+/-- **Oxygen's `2p` electron sees `Z_eff = 4.55`.** Matches the shell-resolved aggregate. -/
+theorem slaterEffectiveChargeAufbau_oxygen :
+    slaterEffectiveChargeAufbau 8 (7 : Fin 8) = 4.55 := by
+  unfold slaterEffectiveChargeAufbau slaterEffectiveCharge
+  rw [Fin.sum_univ_succ, Fin.sum_univ_succ, Fin.sum_univ_succ, Fin.sum_univ_succ,
+      Fin.sum_univ_succ, Fin.sum_univ_succ, Fin.sum_univ_succ]
+  simp [Aufbau.principalBlock_eight, slaterShieldingIncrement,
+    slaterAdjacentShell_eq, slaterDeepShell_eq, slaterSameShell_eq]
+  norm_num
+
+/-- **Generic bridge:** indexed Aufbau Slater charge equals the shell-resolved aggregate. -/
+theorem slaterEffectiveChargeAtShell_eq_aufbau (Z nT : ℕ) (target : Fin Z)
+    (hT : Aufbau.principalBlock Z target = nT)
+    (hle : ∀ j : Fin Z, Aufbau.principalBlock Z j ≤ nT) (hZ : Z ≤ 118) (hnT : nT ≤ 7) :
+    slaterEffectiveChargeAufbau Z target = slaterEffectiveChargeAtShell Z nT := by
+  unfold slaterEffectiveChargeAufbau slaterEffectiveCharge slaterEffectiveChargeAtShell
+  rw [hT, slaterShieldAufbauExcl_eq_shellCounts Z nT target hT hle hZ hnT]
+
+private theorem principalBlock_le_topPrincipal (Z : ℕ) (hZ : Z ≤ 118) (j : Fin Z) :
+    Aufbau.principalBlock Z j ≤ Aufbau.topPrincipal Z := by
+  unfold Aufbau.topPrincipal Aufbau.principalConfig
+  have hj : j.val < (Aufbau.principalList.take Z).length := by
+    rw [List.length_take, Nat.lt_min]
+    exact ⟨j.isLt, by rw [Aufbau.principalList_length]; omega⟩
+  have hmem : Aufbau.principalBlock Z j ∈ Aufbau.principalList.take Z := by
+    rw [List.mem_iff_getElem]
+    refine ⟨j.val, hj, ?_⟩
+    unfold Aufbau.principalBlock
+    have hidx : j.val < Aufbau.principalList.length := by
+      rw [Aufbau.principalList_length]; omega
+    grind [List.getElem_eq_getD, List.getElem_take]
+  exact Aufbau.le_foldr_max_of_mem hmem
+
+/-- **Valence shell aggregate matches indexed Aufbau** when the last electron sits at the period. -/
+theorem valenceSlaterEffectiveCharge_eq_aufbau {w : ℕ} (h : Aufbau.lastElectronInTopShell (w + 1))
+    (hZ : w + 1 ≤ 118) :
+    valenceSlaterEffectiveCharge (w + 1) =
+      slaterEffectiveChargeAufbau (w + 1) ⟨w, by omega⟩ := by
+  unfold valenceSlaterEffectiveCharge
+  exact (slaterEffectiveChargeAtShell_eq_aufbau (w + 1) (Aufbau.topPrincipal (w + 1)) ⟨w, by omega⟩ h
+    (fun j => principalBlock_le_topPrincipal (w + 1) hZ j) hZ (Aufbau.topPrincipal_le_seven (w + 1))).symm
+
+theorem slaterEffectiveChargeAtShell_carbon :
+    slaterEffectiveChargeAtShell 6 2 = 3.25 := by
+  unfold slaterEffectiveChargeAtShell slaterShieldFromShellCounts
+  rw [slaterAdjacentShell_eq, slaterDeepShell_eq, slaterSameShell_eq]
+  obtain ⟨hc1, hc2⟩ := Aufbau.carbon_shell_counts
+  simp only [Finset.sum_range_succ, hc1, hc2]
+  norm_num
+
+theorem slaterEffectiveChargeAtShell_nitrogen :
+    slaterEffectiveChargeAtShell 7 2 = 3.9 := by
+  unfold slaterEffectiveChargeAtShell slaterShieldFromShellCounts
+  rw [slaterAdjacentShell_eq, slaterDeepShell_eq, slaterSameShell_eq]
+  obtain ⟨hn1, hn2⟩ := Aufbau.nitrogen_shell_counts
+  simp only [Finset.sum_range_succ, hn1, hn2]
+  norm_num
+
+theorem slaterEffectiveChargeAtShell_oxygen :
+    slaterEffectiveChargeAtShell 8 2 = 4.55 := by
+  unfold slaterEffectiveChargeAtShell slaterShieldFromShellCounts
+  rw [slaterAdjacentShell_eq, slaterDeepShell_eq, slaterSameShell_eq]
+  obtain ⟨ho1, ho2⟩ := Aufbau.oxygen_shell_counts
+  simp only [Finset.sum_range_succ, ho1, ho2]
+  norm_num
+
+theorem valenceSlaterEffectiveCharge_eq_aufbau_carbon :
+    valenceSlaterEffectiveCharge 6 = slaterEffectiveChargeAufbau 6 (5 : Fin 6) := by
+  unfold valenceSlaterEffectiveCharge
+  rw [Aufbau.carbon_valence.1, slaterEffectiveChargeAtShell_carbon, slaterEffectiveChargeAufbau_carbon]
+
+theorem valenceSlaterEffectiveCharge_eq_aufbau_nitrogen :
+    valenceSlaterEffectiveCharge 7 = slaterEffectiveChargeAufbau 7 (6 : Fin 7) := by
+  unfold valenceSlaterEffectiveCharge
+  rw [show Aufbau.topPrincipal 7 = 2 from by decide, slaterEffectiveChargeAtShell_nitrogen,
+    slaterEffectiveChargeAufbau_nitrogen]
+
+theorem valenceSlaterEffectiveCharge_eq_aufbau_oxygen :
+    valenceSlaterEffectiveCharge 8 = slaterEffectiveChargeAufbau 8 (7 : Fin 8) := by
+  unfold valenceSlaterEffectiveCharge
+  rw [Aufbau.oxygen_valence.1, slaterEffectiveChargeAtShell_oxygen, slaterEffectiveChargeAufbau_oxygen]
+
+theorem valenceSlaterEffectiveCharge_eq_aufbau_chlorine :
+    valenceSlaterEffectiveCharge 17 = slaterEffectiveChargeAufbau 17 (16 : Fin 17) := by
+  unfold valenceSlaterEffectiveCharge slaterEffectiveChargeAtShell slaterShieldFromShellCounts
+  rw [Aufbau.chlorine_valence.1, slaterEffectiveChargeAufbau_chlorine]
+  rw [slaterAdjacentShell_eq, slaterDeepShell_eq, slaterSameShell_eq]
+  obtain ⟨hc1, hc2, hc3⟩ := Aufbau.chlorine_shell_counts
+  simp only [Finset.sum_range_succ, hc1, hc2, hc3]
   norm_num
 
 /-! ## Outside curvature contact `G_eff(η) = η^α` -/

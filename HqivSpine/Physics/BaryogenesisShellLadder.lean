@@ -23,6 +23,7 @@ Mathlib + spine only; no legacy `Hqiv.*`, no `sorry`, no new `axiom`.
 namespace HqivSpine.Physics.BaryogenesisShellLadder
 
 open HqivSpine.Physics
+open HqivSpine.Physics.ContinuousHorizon
 open HqivSpine.Physics.CausalDiamond
 open HqivSpine.Physics.NowSliceFromLattice
 open scoped BigOperators
@@ -35,8 +36,13 @@ noncomputable def etaAtShell (m : ℕ) : ℝ := omegaKPartial m * deltaE m
 theorem etaAtShell_eq (m : ℕ) : etaAtShell m = omegaKPartial m * deltaE m := rfl
 
 theorem etaAtShell_zero : etaAtShell 0 = 0 := by
-  unfold etaAtShell omegaKPartial omegaKAtHorizon curvatureIntegral
-  simp [deltaE]
+  unfold etaAtShell
+  have hω : omegaKPartial 0 = 0 := by
+    unfold omegaKPartial
+    rw [omegaKChart_eq]
+    have hξ0 : xiOfShell 0 = 1 := by unfold xiOfShell; norm_num
+    rw [hξ0, continuousCurvaturePrimitive_one, zero_div]
+  rw [hω, zero_mul]
 
 theorem etaAtShell_lockin : etaAtShell referenceM = deltaE referenceM := by
   unfold etaAtShell

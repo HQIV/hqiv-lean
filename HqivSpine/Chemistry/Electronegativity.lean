@@ -1,5 +1,6 @@
 import HqivSpine.Chemistry.Binding
 import HqivSpine.Chemistry.Spectroscopy
+import Mathlib.Analysis.SpecialFunctions.Exp
 import Mathlib.Tactic
 
 /-!
@@ -159,6 +160,76 @@ theorem atomElectronegativityAufbau_ge_hydrogenFloor (Z : ℕ) (target : Fin Z) 
   rcases eq_or_lt_of_le (Binding.slaterEffectiveChargeAufbau_ge_one Z target) with h | h
   · rw [h]
   · exact (electronegativity_strictMono_in_zEff μ n 1 _ hμ hn (by norm_num) h).le
+
+/-! ## Period-2/3 ordering from derived Slater `Z_eff` -/
+
+/-- Valence electronegativity at the derived Aufbau effective charge and shell `n`. -/
+def atomElectronegativityAufbauAtShell (Z : ℕ) (target : Fin Z) (μ n : ℝ) : ℝ :=
+  atomElectronegativityAufbau Z target μ n
+
+/-- **Carbon is less electronegative than nitrogen** at the derived `2p` Slater charges
+(`3.25 < 3.90`). -/
+theorem carbon_lt_nitrogen_aufbau (μ n : ℝ) (hμ : 0 < μ) (hn : n ≠ 0) :
+    atomElectronegativityAufbau 6 (5 : Fin 6) μ n <
+      atomElectronegativityAufbau 7 (6 : Fin 7) μ n := by
+  have h := electronegativity_strictMono_in_zEff μ n 3.25 3.9 hμ hn (by norm_num) (by norm_num)
+  simpa [atomElectronegativityAufbau, atomElectronegativity,
+    Binding.slaterEffectiveChargeAufbau_carbon, Binding.slaterEffectiveChargeAufbau_nitrogen] using h
+
+/-- **Nitrogen is less electronegative than oxygen** (`3.90 < 4.55`). -/
+theorem nitrogen_lt_oxygen_aufbau (μ n : ℝ) (hμ : 0 < μ) (hn : n ≠ 0) :
+    atomElectronegativityAufbau 7 (6 : Fin 7) μ n <
+      atomElectronegativityAufbau 8 (7 : Fin 8) μ n := by
+  have h := electronegativity_strictMono_in_zEff μ n 3.9 4.55 hμ hn (by norm_num) (by norm_num)
+  simpa [atomElectronegativityAufbau, atomElectronegativity,
+    Binding.slaterEffectiveChargeAufbau_nitrogen, Binding.slaterEffectiveChargeAufbau_oxygen] using h
+
+/-- **Period-2 p-block ordering:** `χ(C) < χ(N) < χ(O)` from the spine Slater ladder alone. -/
+theorem electronegativity_period2_C_lt_N_lt_O (μ : ℝ) (hμ : 0 < μ) :
+    atomElectronegativityAufbau 6 (5 : Fin 6) μ 2 <
+      atomElectronegativityAufbau 7 (6 : Fin 7) μ 2 ∧
+      atomElectronegativityAufbau 7 (6 : Fin 7) μ 2 <
+        atomElectronegativityAufbau 8 (7 : Fin 8) μ 2 := by
+  refine ⟨carbon_lt_nitrogen_aufbau μ 2 hμ (by norm_num),
+    nitrogen_lt_oxygen_aufbau μ 2 hμ (by norm_num)⟩
+
+/-! ## Pauling-style ionic calibration from derived Δχ -/
+
+/-- Pauling's empirical functional form applied to **derived** Mulliken Δχ (not Pauling's table).
+Comparison percentages stay in docstrings only. -/
+def paulingIonicFraction (deltaChi : ℝ) : ℝ := 1 - Real.exp (-deltaChi ^ 2 / 4)
+
+theorem paulingIonicFraction_nonneg (deltaChi : ℝ) : 0 ≤ paulingIonicFraction deltaChi := by
+  unfold paulingIonicFraction
+  have hnonpos : -deltaChi ^ 2 / 4 ≤ 0 := by nlinarith
+  have hexp : Real.exp (-deltaChi ^ 2 / 4) ≤ 1 := by
+    calc Real.exp (-deltaChi ^ 2 / 4) ≤ Real.exp 0 := Real.exp_le_exp.mpr hnonpos
+      _ = 1 := Real.exp_zero
+  linarith
+
+theorem paulingIonicFraction_le_one (deltaChi : ℝ) : paulingIonicFraction deltaChi ≤ 1 := by
+  unfold paulingIonicFraction
+  linarith [Real.exp_pos (-deltaChi ^ 2 / 4)]
+
+theorem paulingIonicFraction_zero : paulingIonicFraction 0 = 0 := by
+  unfold paulingIonicFraction
+  simp
+
+theorem paulingIonicFraction_mono (a b : ℝ) (h : 0 ≤ a) (hle : a ≤ b) :
+    paulingIonicFraction a ≤ paulingIonicFraction b := by
+  unfold paulingIonicFraction
+  have hmono : Real.exp (-b ^ 2 / 4) ≤ Real.exp (-a ^ 2 / 4) :=
+    Real.exp_le_exp.mpr (by nlinarith)
+  linarith
+
+/-- Pauling ionic fraction from two derived Mulliken electronegativities. -/
+def bondPaulingIonicFraction (chi1 chi2 : ℝ) : ℝ :=
+  paulingIonicFraction |chi1 - chi2|
+
+theorem bondPaulingIonicFraction_homonuclear (chi : ℝ) :
+    bondPaulingIonicFraction chi chi = 0 := by
+  unfold bondPaulingIonicFraction paulingIonicFraction
+  simp
 
 end
 

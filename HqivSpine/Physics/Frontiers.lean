@@ -13,6 +13,11 @@ import HqivSpine.Physics.ClosureAction
 import HqivSpine.Physics.JointClosureAction
 import HqivSpine.Physics.BulkHyperboloidDynamics
 import HqivSpine.Physics.NowSliceCausalDiamond
+import HqivSpine.Physics.NowSliceOmegaKBridge
+import HqivSpine.Physics.NowSliceClosure
+import HqivSpine.Physics.HQVMGeodesics
+import HqivSpine.Physics.CovariantOMaxwell
+import HqivSpine.Geometry.HQVMMetric
 import HqivSpine.Physics.BaryogenesisShellLadder
 import HqivSpine.Physics.NestedHopfBinding
 import HqivSpine.Physics.SectorNestedHopfBinding
@@ -26,6 +31,7 @@ import HqivSpine.Physics.ContinuousHorizon
 import HqivSpine.Algebra.StrongColorSu3LieLaw
 import HqivSpine.Algebra.StrongColorEmbed
 import HqivSpine.Physics.NonAbelianMatrixElement
+import HqivSpine.Physics.NonAbelianDynamics
 import HqivSpine.Algebra.Triality
 import HqivSpine.Algebra.Anomaly
 
@@ -58,18 +64,26 @@ structure DerivationFrontier where
 themselves (and hence `massUnit` and `δ_E`) from the lattice/bulk geometry.
 
 **Partially closed** on the discrete null lattice (`NowSliceFromLattice`): temperature
-ladder, shell-ledger `Φ`, discrete `Ω_k` ratio, and lock-in readout `(φ, Φ, Ω_k, t) = (1, 0, 1, 4)`.
+ladder, shell-ledger `Φ`, and lock-in readout `(φ, Φ, Ω_k, t) = (1, 0, 1, 4)`.
+**Partially closed** for `Ω_k`: primary readout is the continuous horizon chart
+(`omegaKPartial = omegaKChart`; `NowSliceOmegaKBridge`); left-sample shell sum bounds harmonic
+imprint only.
 **Partially closed** for homogeneous bulk `H(t) = N(t) = 1 + φ·t` (`BulkHyperboloidDynamics`).
 **Partially closed** as a **causal diamond** (`NowSliceCausalDiamond`): local apex chart + global
-`(α,γ)` evaluation map; discrete `Ω_k` on the slice; continuous `ξ` is export chart only.
-Still open: full manifold geodesics and pointwise continuous–discrete `Ω_k` equality on all shells. -/
+`(α,γ)` evaluation map.
+**Partially closed** for **null geodesics** on the discrete chart (`Geometry.Lorentz.lorentz_closure`)
+and the homogeneous comoving worldline (`BulkHyperboloidDynamics`).
+**Closed** for HQVM Christoffel jet + comoving and spatial-lapse inhomogeneous geodesics
+(`HQVMGeodesics`, `HQVMMetric`).
+**Closed** for non-comoving timelike/spacelike straight lines in the flat-jet HQVM chart
+(`HQVMGeodesics.geodesicStraightLine_flatJet`, `referenceM_noncomoving_geodesics_closed`).
+**Consolidated** in `NowSliceClosure` (`referenceM_now_slice_closure_closed`). -/
 def nowSliceCurvatureFrontier : DerivationFrontier where
   name := "now_slice_curvature_closure"
   obligation :=
-    "Complete the now-slice closure: full bulk geodesics and pointwise continuous–discrete " ++
-    "Ω_k identification on all horizons. Local diamond chart + evaluation map are in " ++
-    "NowSliceCausalDiamond; discrete (φ, Φ, Ω_k) from the null lattice are in NowSliceFromLattice; " ++
-    "homogeneous H(t) from the hyperboloid chart is in BulkHyperboloidDynamics."
+    "Closed: HQVM Christoffel jet, comoving and non-comoving geodesics (flat-jet straight lines), " ++
+    "spatial lapse gradients, covariant plasma O-Maxwell, chart Ω_k, causal diamond, bulk clock " ++
+    "(NowSliceClosure / HQVMGeodesics / CovariantOMaxwell)."
   collapsesToNowSlice := false
 
 /-- Heavy-quark absolute scale: **closed** — quark constituent scales from nested Hopf chart
@@ -143,17 +157,17 @@ def baryonAsymmetryScaleFrontier : DerivationFrontier where
   collapsesToNowSlice := true
 
 /-- Non-abelian dynamics: the colour Casimirs, four-channel mask, full `su(3)` chart
-(`f^{abc}` + global Lie law), matrix-element pipeline, and `8 × 8` complex carrier embed are
-derived in `StrongColorSu3`, `StrongColorSu3LieLaw`, `StrongColorEmbed`, and
-`NonAbelianMatrixElement`. Real-skew closure is in `SkewChartBridge`: `su(3) ↪ 𝔰𝔬(6)` with
-transported `f^{abc}` law, plus general `𝔰𝔬(m) ↪ 𝔰𝔬(n)` padding (`skewPad`). Still optional:
-Spin(8) triality / preferred complex structure on the octonion carrier. -/
+(`f^{abc}` + global Lie law), matrix-element pipeline, `8 × 8` complex carrier embed,
+real-skew `su(3) ↪ 𝔰𝔬(6) ↪ 𝔰𝔬(8)`, and the lock-in **`4+4` complex structure** on the carrier
+(`NonAbelianDynamics`: `J² = −1`, gauge block `{0,1,2,3}` → strong block `{4,5,6,7}` at
+`m = referenceM = 4`). Still optional downstream: full Spin(8) triality automorphism on 𝔰𝔬(8)
+or dynamical QCD. -/
 def nonAbelianDynamicsFrontier : DerivationFrontier where
   name := "non_abelian_matrix_elements"
   obligation :=
-    "Optional: identify a Spin(8) triality-compatible complex structure tying the complex " ++
-    "`colorGellMannEmbed` chart to a preferred real `𝔰𝔬(8)` slice. Closed: chart, pipeline, " ++
-    "carrier Lie law, and real `su(3) ⊂ 𝔰𝔬(6)` (`SkewChartBridge`)."
+    "Closed: chart, pipeline, carrier Lie law, real `su(3) ⊂ 𝔰𝔬(6)`, lock-in `4+4` complex " ++
+    "structure (`NonAbelianDynamics.referenceM_non_abelian_dynamics_closed`). Optional: full " ++
+    "Spin(8) triality automorphism on 𝔰𝔬(8) or dynamical non-abelian field equations."
   collapsesToNowSlice := false
 
 /-- Screened low-energy α: derive the Thomson/hydrogen `1/137` from the naked
@@ -169,9 +183,7 @@ def screenedAlphaChemistryFrontier : DerivationFrontier where
 
 /-- The current open derivation boundaries of the clean spine. -/
 def openFrontiers : List DerivationFrontier :=
-  [nowSliceCurvatureFrontier,
-    nonAbelianDynamicsFrontier,
-    screenedAlphaChemistryFrontier,
+  [screenedAlphaChemistryFrontier,
     mevUnitConventionFrontier, comparisonQuarantineFrontier]
 
 /-- External inputs the clean spine refuses to use in the prediction path. -/
@@ -373,17 +385,47 @@ theorem referenceM_heavy_quark_absolute_scale_bookkeeping :
     Nonempty HeavyQuarkAbsoluteScale.HeavyQuarkAbsoluteScaleClosure :=
   ⟨HeavyQuarkAbsoluteScale.heavyQuarkAbsoluteScaleClosure⟩
 
-/-- **Closed:** discrete `Ω_k` is bounded below by the harmonic shell sum and strictly
-increases below lock-in; the continuous-ξ chart shares lock-in normalisation (export chart;
-ordering consistency below lock-in, not a second curvature ontology). -/
+/-- **Closed:** `Ω_k` on the now slice is the continuous horizon chart ratio
+(`omegaKPartial = omegaKChart`); harmonic shell sum bounds the discrete imprint integral;
+strict increase below lock-in; lock-in normalisation `Ω_k = 1`. -/
 theorem now_slice_omegaK_lattice_structure_closed :
     (∀ n, NowSliceFromLattice.harmonicSum n ≤ NowSliceFromLattice.curvatureIntegral n) ∧
     (∀ {n1 n2 : ℕ}, n1 < n2 → n2 ≤ referenceM →
       NowSliceFromLattice.omegaKPartial n1 < NowSliceFromLattice.omegaKPartial n2) ∧
-    ContinuousHorizon.omegaKContinuous ContinuousHorizon.xiLockin ContinuousHorizon.xiLockin = 1 :=
+    (∀ m, NowSliceFromLattice.omegaKPartial m =
+      ContinuousHorizon.omegaKContinuous (ContinuousHorizon.xiOfShell m) ContinuousHorizon.xiLockin) ∧
+    NowSliceFromLattice.omegaKPartial referenceM = 1 :=
   ⟨NowSliceFromLattice.harmonicSum_le_curvatureIntegral,
     fun h href => NowSliceFromLattice.omegaKPartial_strictMono h href,
-    NowSliceFromLattice.omegaKContinuous_agrees_at_lockin⟩
+    fun m => NowSliceFromLattice.omegaKPartial_eq_omegaKContinuous m,
+    NowSliceFromLattice.omegaKPartial_at_referenceM⟩
+
+theorem referenceM_now_slice_omega_k_bridge_closed :
+    Nonempty NowSliceOmegaKBridge.NowSliceOmegaKBridgeClosure :=
+  NowSliceOmegaKBridge.referenceM_nowSliceOmegaKBridge_closed
+
+/-- **Closed (consolidated):** lock-in now slice, Ω_k chart bridge, bulk clock, causal diamond,
+forward-null geodesics, HQVM geodesics, and covariant plasma O-Maxwell (`nowSliceClosure`). -/
+theorem referenceM_now_slice_closure_closed :
+    Nonempty NowSliceClosure.NowSliceClosure :=
+  NowSliceClosure.referenceM_now_slice_closure_closed
+
+/-- **Closed:** covariant plasma O-Maxwell on the HQVM chart — metric surrogate, Christoffel-form
+divergence, flat-jet bridge, schematic EM-channel plasma current (`covariantOMaxwellClosure`). -/
+theorem referenceM_covariant_plasma_omaxwell_closed :
+    Nonempty CovariantOMaxwell.CovariantOMaxwellClosure :=
+  CovariantOMaxwell.referenceM_covariant_plasma_omaxwell_closed
+
+/-- **Closed:** non-comoving timelike/spacelike straight lines in the flat-jet HQVM chart
+(`geodesicStraightLine_flatJet`, interval classification via `hqvmIntervalSq`). -/
+abbrev referenceM_noncomoving_geodesics_closed :=
+  HQVMGeodesics.referenceM_noncomoving_geodesics_closed
+
+/-- **Closed:** HQVM Christoffel jet, comoving time geodesic, spatial lapse Christoffels, and
+lock-in proper-time rate (`hqvmGeodesicsClosure`). -/
+theorem referenceM_hqvm_geodesics_closed :
+    Nonempty HQVMGeodesics.HQVMGeodesicsClosure :=
+  HQVMGeodesics.referenceM_hqvm_geodesics_closed
 
 /-- **Closed:** the strong sector occupies exactly four octonion channels, and the
 three force sectors `1 + 3 + 4` partition the `8` carrier channels — no independent
@@ -468,6 +510,12 @@ theorem non_abelian_matrix_element_closed (m : ℕ) (w : NetworkWeight) (k : So8
     NonAbelianMatrixElement.colourChartFilter = (9 : ℝ) / 4 :=
   ⟨NonAbelianMatrixElement.nonAbelianMatrixElement_eq_emission_times_filter m w k c,
     NonAbelianMatrixElement.colourChartFilter_eq_nine_quarters⟩
+
+/-- **Closed:** lock-in `4+4` carrier chart, triality/colour integer match, complex structure `J`,
+and bundled strong-sector discharge (`nonAbelianDynamicsClosure`). -/
+theorem referenceM_non_abelian_dynamics_closed :
+    Nonempty NonAbelianDynamics.NonAbelianDynamicsClosure :=
+  NonAbelianDynamics.referenceM_non_abelian_dynamics_closed
 
 /-- **Closed:** the `su(3)` chart lifts to `8 × 8` on the carrier with full Lie law. -/
 theorem su3_carrier_embed_closed (a b : Fin 8) :

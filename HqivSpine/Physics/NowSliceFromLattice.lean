@@ -19,13 +19,13 @@ null-lattice stack. The now-slice curvatures are **read off combinatorial geomet
   Friedmann `Gravity.hubble` anchor, not the shell-indexed auxiliary field);
 * **Weak-field potential** `Φ` = normalised shell-budget mismatch `−Δ/ latticeSimplexCount(m)` on
   the null-lattice 3-complex (zero on the reference template);
-* **Spatial curvature** `Ω_k(m) = (∑_{k<m} shellShape k) / (∑_{k<referenceM} shellShape k)` — the
-  discrete horizon ratio (`omega_k_partial` in legacy), normalised to `1` at lock-in.
+* **Spatial curvature** `Ω_k(m) = ω_K(ξ(m), ξ_lock)` on the continuous horizon chart
+  (`ContinuousHorizon.omegaKChart`); the left-sample shell sum `curvatureIntegral` remains for
+  harmonic/imprint bounds.
 
-Honest scope: the **discrete** null-lattice derivation. The continuous chart
-(`ContinuousHorizon.omegaKContinuous`) is a parallel readout on `ξ`; identifying the discrete sum
-with the analytic primitive on all shells is *not* claimed here. Bulk hyperboloid / dynamical
-`H(t)` closure remains in `Frontiers.nowSliceCurvatureFrontier`.
+Honest scope: discrete null-lattice `(φ, Φ)` and shell-sum bounds; **`Ω_k` is the chart ratio**
+(`omegaKPartial = omegaKChart`). Bulk hyperboloid / dynamical `H(t)` closure remains partially
+open in `Frontiers.nowSliceCurvatureFrontier` (geodesics).
 -/
 
 namespace HqivSpine.Physics.NowSliceFromLattice
@@ -114,25 +114,47 @@ theorem omegaKAtHorizon_le_one (n N : ℕ) (hN : 0 < N) (hn : n ≤ N) :
   rw [div_le_one (curvatureIntegral_pos hN)]
   exact curvatureIntegral_mono hn
 
-/-- **Partial spatial curvature** normalised to lock-in (`referenceM = 4`). -/
-noncomputable def omegaKPartial (n : ℕ) : ℝ := omegaKAtHorizon n referenceM
+/-- **Partial spatial curvature** on the continuous `ξ` chart, normalised at lock-in. -/
+noncomputable def omegaKPartial (n : ℕ) : ℝ := omegaKChart n
 
-theorem omegaKPartial_at_referenceM : omegaKPartial referenceM = 1 := by
-  unfold omegaKPartial referenceM
-  exact omegaKAtHorizon_self_of_pos 4 (by decide : 0 < 4)
+theorem omegaKPartial_eq_omegaKContinuous (n : ℕ) :
+    omegaKPartial n = omegaKContinuous (xiOfShell n) xiLockin := by
+  unfold omegaKPartial omegaKChart omegaKContinuous
+  have hpos : 0 < continuousCurvaturePrimitive xiLockin := by
+    rw [xiLockin_eq_five]
+    exact continuousCurvaturePrimitive_pos_for_gt_one (5 : ℝ) (by norm_num : (1 : ℝ) < 5)
+  simp [hpos.ne']
+
+theorem omegaKPartial_at_referenceM : omegaKPartial referenceM = 1 :=
+  omegaKChart_at_referenceM
 
 theorem omegaKPartial_nonneg (n : ℕ) : 0 ≤ omegaKPartial n := by
-  unfold omegaKPartial omegaKAtHorizon
-  exact div_nonneg (curvatureIntegral_nonneg n) (curvatureIntegral_nonneg referenceM)
+  unfold omegaKPartial
+  rw [omegaKChart_eq]
+  refine div_nonneg ?_ ?_
+  · by_cases hn : n = 0
+    · subst hn
+      have hξ0 : xiOfShell 0 = 1 := by unfold xiOfShell; norm_num
+      rw [hξ0, continuousCurvaturePrimitive_one]
+    · exact (continuousCurvaturePrimitive_pos_for_gt_one (xiOfShell n)
+        (xiOfShell_gt_one (Nat.pos_of_ne_zero hn))).le
+  · rw [xiLockin_eq_five]
+    exact (continuousCurvaturePrimitive_pos_for_gt_one (5 : ℝ) (by norm_num : (1 : ℝ) < 5)).le
 
 theorem omegaKPartial_pos {n : ℕ} (hn : 0 < n) : 0 < omegaKPartial n := by
-  unfold omegaKPartial omegaKAtHorizon
-  exact div_pos (curvatureIntegral_pos hn) curvatureIntegral_referenceM_pos
+  unfold omegaKPartial
+  rw [omegaKChart_eq]
+  refine div_pos (continuousCurvaturePrimitive_pos_for_gt_one (xiOfShell n) ?_) ?_
+  · exact xiOfShell_gt_one hn
+  · rw [xiLockin_eq_five]
+    exact continuousCurvaturePrimitive_pos_for_gt_one (5 : ℝ) (by norm_num : (1 : ℝ) < 5)
 
 theorem omegaKPartial_le_one (n : ℕ) (hn : n ≤ referenceM) :
-    omegaKPartial n ≤ 1 := by
-  unfold omegaKPartial referenceM
-  exact omegaKAtHorizon_le_one n 4 (by decide : 0 < 4) hn
+    omegaKPartial n ≤ 1 :=
+  omegaKChart_le_one hn
+
+/-- Legacy left-sample discrete ratio (harmonic/imprint layer only). -/
+noncomputable def omegaKDiscretePartial (n : ℕ) : ℝ := omegaKAtHorizon n referenceM
 
 /-- **Shape dominates the harmonic weight:** `1/(m+1) ≤ shellShape m`. -/
 theorem shellShape_ge_imprintWeight (m : ℕ) : imprintWeight m ≤ shellShape m := by
@@ -163,11 +185,9 @@ theorem curvatureIntegral_strictMono {n1 n2 : ℕ} (h : n1 < n2) :
   · intro m _ ih
     exact lt_trans ih (by rw [curvatureIntegral_succ]; linarith [shellShape_pos m])
 
-theorem omegaKPartial_strictMono {n1 n2 : ℕ} (h : n1 < n2) (_href : n2 ≤ referenceM) :
-    omegaKPartial n1 < omegaKPartial n2 := by
-  unfold omegaKPartial omegaKAtHorizon
-  refine div_lt_div_of_pos_right (curvatureIntegral_strictMono h) ?_
-  exact curvatureIntegral_referenceM_pos
+theorem omegaKPartial_strictMono {n1 n2 : ℕ} (h : n1 < n2) (href : n2 ≤ referenceM) :
+    omegaKPartial n1 < omegaKPartial n2 :=
+  omegaKChart_strictMono h href
 
 /-! ## Weak-field `Φ` from the signed shell ledger -/
 
@@ -246,7 +266,7 @@ theorem nowSliceOf_lockin_bigPhi :
 theorem nowSliceOf_lockin_omegaK :
     (nowSliceOf (lockinObserver referenceM)).omegaK = 1 := by
   unfold nowSliceOf lockinObserver omegaKPartial referenceM
-  exact omegaKAtHorizon_self_of_pos 4 (by decide : 0 < 4)
+  exact omegaKPartial_at_referenceM
 
 theorem nowSliceOf_lockin_apparentAge :
     (nowSliceOf (lockinObserver referenceM)).apparentAge = 4 := by
@@ -266,7 +286,7 @@ theorem lockinNowSlice_fields :
     rw [S3NullReference_shell_budget_zero 4 4 (Nat.le_refl 4)]
     simp
   · unfold lockinNowSlice nowSliceOf lockinObserver omegaKPartial referenceM
-    exact omegaKAtHorizon_self_of_pos 4 (by decide : 0 < 4)
+    exact omegaKPartial_at_referenceM
   · unfold lockinNowSlice nowSliceOf lockinObserver referenceM
     norm_num
 
@@ -293,22 +313,22 @@ theorem lockinNowSlice_ageRatio :
   rcases lockinNowSlice_fields with ⟨hphi, _, _, ht⟩
   rw [hphi, ht]; norm_num
 
-/-! ## Link to the continuous-ξ chart (export coordinate only) -/
+/-! ## Link to the continuous-ξ chart -/
 
-/-- **Export chart at lock-in:** `omegaKContinuous ξ_lock ξ_lock = 1` agrees with discrete
-`omegaKPartial referenceM = 1` — not a second curvature field. -/
 theorem omegaKContinuous_agrees_at_lockin :
     omegaKContinuous xiLockin xiLockin = 1 :=
   omegaKContinuous_lockin
 
-theorem xiOfShell_strictMono {m1 m2 : ℕ} (h : m1 < m2) :
-    xiOfShell m1 < xiOfShell m2 := by
-  unfold xiOfShell
-  exact_mod_cast Nat.add_lt_add_right h 1
+theorem omegaKPartial_eq_omegaKContinuous_at_shell (m : ℕ) :
+    omegaKPartial m = omegaKContinuous (xiOfShell m) xiLockin :=
+  omegaKPartial_eq_omegaKContinuous m
 
-theorem xiOfShell_gt_one {m : ℕ} (hm : 0 < m) : 1 < xiOfShell m := by
-  unfold xiOfShell
-  exact_mod_cast Nat.add_lt_add_right hm 1
+theorem xiOfShell_strictMono {m1 m2 : ℕ} (h : m1 < m2) :
+    xiOfShell m1 < xiOfShell m2 :=
+  ContinuousHorizon.xiOfShell_strictMono h
+
+theorem xiOfShell_gt_one {m : ℕ} (hm : 0 < m) : 1 < xiOfShell m :=
+  ContinuousHorizon.xiOfShell_gt_one hm
 
 private theorem continuousCurvaturePrimitive_xiLockin_pos :
     0 < continuousCurvaturePrimitive xiLockin := by
@@ -322,24 +342,14 @@ theorem omegaKContinuous_at_shell (m : ℕ) :
   simp [continuousCurvaturePrimitive_xiLockin_pos.ne']
 
 theorem omegaKContinuous_shell_strictMono {m1 m2 : ℕ}
-    (h : m1 < m2) (_hm2 : m2 ≤ referenceM) (hm1 : 0 < m1) :
+    (h : m1 < m2) (hm2 : m2 ≤ referenceM) :
     omegaKContinuous (xiOfShell m1) xiLockin < omegaKContinuous (xiOfShell m2) xiLockin := by
-  have hξ1 : 1 < xiOfShell m1 := xiOfShell_gt_one hm1
-  have hξ2 : xiOfShell m1 < xiOfShell m2 := xiOfShell_strictMono h
-  rw [omegaKContinuous_at_shell, omegaKContinuous_at_shell]
-  refine div_lt_div_of_pos_right
-    (continuousCurvaturePrimitive_strictMono_gt_one (xiOfShell m1) (xiOfShell m2) hξ1 hξ2) ?_
-  exact continuousCurvaturePrimitive_xiLockin_pos
+  simpa [omegaKPartial_eq_omegaKContinuous m1, omegaKPartial_eq_omegaKContinuous m2] using
+    omegaKPartial_strictMono h hm2
 
-/-- **Chart ordering consistency (weak):** below lock-in, discrete `omegaKPartial` and the
-continuous `ξ` export `omegaKContinuous` are both strictly increasing on shell index.
-This is **not** a pointwise identification theorem and must not be read as parallel
-curvature ontologies. -/
-theorem omegaK_readouts_strictMono_parallel {m1 m2 : ℕ}
-    (h : m1 < m2) (hm2 : m2 ≤ referenceM) (hm1 : 0 < m1) :
-    omegaKPartial m1 < omegaKPartial m2 ∧
-    omegaKContinuous (xiOfShell m1) xiLockin < omegaKContinuous (xiOfShell m2) xiLockin :=
-  ⟨omegaKPartial_strictMono h hm2, omegaKContinuous_shell_strictMono h hm2 hm1⟩
+theorem omegaK_chart_identification (m : ℕ) :
+    omegaKPartial m = omegaKContinuous (xiOfShell m) xiLockin :=
+  omegaKPartial_eq_omegaKContinuous m
 
 structure nowSliceFromLatticeDischarged : Prop where
   temperature_auxiliary : ∀ m, 2 / shellTemperature m = (phi m : ℝ)
@@ -348,6 +358,8 @@ structure nowSliceFromLatticeDischarged : Prop where
   harmonic_lower_bound : ∀ n, harmonicSum n ≤ curvatureIntegral n
   omegaK_strict_mono :
     ∀ {n1 n2 : ℕ}, n1 < n2 → n2 ≤ referenceM → omegaKPartial n1 < omegaKPartial n2
+  omegaK_chart :
+    ∀ m, omegaKPartial m = omegaKContinuous (xiOfShell m) xiLockin
   balanced_phi_zero : ∀ obs : BalancedLatticeObserver,
     (nowSliceOf ({ shell := obs.shell, complex := obs.complex } : LatticeObserver)).bigPhi = 0
   lockin_slice :
@@ -367,6 +379,7 @@ theorem nowSliceFromLatticeDischarged_holds : nowSliceFromLatticeDischarged wher
   hubble_now := hubbleReference_eq_one
   harmonic_lower_bound := harmonicSum_le_curvatureIntegral
   omegaK_strict_mono := fun h href => omegaKPartial_strictMono h href
+  omegaK_chart := fun m => omegaKPartial_eq_omegaKContinuous m
   balanced_phi_zero := balancedNowSlice_bigPhi_zero
   lockin_slice := lockinNowSlice_fields
   lockin_lapse := by rw [lockinNowSlice_massUnit, referenceM_add_one_eq_five]

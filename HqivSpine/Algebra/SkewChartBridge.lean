@@ -11,7 +11,8 @@ import Mathlib.Tactic
 * **`complexToReal6` / `su3RealGen`**: standard realification `su(3) ↪ 𝔰𝔬(6)`;
 * closure (`su3RealGen_mem`, `su3RealGen_lieBracket`) in `SkewChartBridgeSu3Closure`.
 
-We do **not** fix a Spin(8) triality-compatible complex structure on the octonion carrier.
+The lock-in **`4+4` complex structure** on the carrier lives in `Physics.NonAbelianDynamics`
+(not a full Spin(8) triality automorphism on 𝔰𝔬(8)).
 -/
 
 namespace HqivSpine.Algebra

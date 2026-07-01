@@ -22,8 +22,9 @@ hyperboloid — closes here in the **homogeneous HQVM chart** carried by the spi
 The tug-of-war fixed points `φ = 0` (horizon) and `φ = 1` (Planck pole) from `Gravity` anchor
 the bulk ends; lock-in sits at the positive fixed point with `G_eff = H`.
 
-Honest scope: **scalar synchronous-comoving bulk clock** — not full manifold geodesics.
-Discrete `Ω_k` on the slice is primary (`NowSliceCausalDiamond`); continuous `ξ` is export only.
+Honest scope: **scalar synchronous-comoving bulk clock** — not position-dependent HQVM geodesics.
+Spatial curvature on the slice is the continuous horizon chart (`omegaKPartial = omegaKChart`;
+`NowSliceOmegaKBridge`).
 -/
 
 namespace HqivSpine.Physics
