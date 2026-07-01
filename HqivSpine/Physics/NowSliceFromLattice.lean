@@ -125,6 +125,10 @@ theorem omegaKPartial_nonneg (n : ℕ) : 0 ≤ omegaKPartial n := by
   unfold omegaKPartial omegaKAtHorizon
   exact div_nonneg (curvatureIntegral_nonneg n) (curvatureIntegral_nonneg referenceM)
 
+theorem omegaKPartial_pos {n : ℕ} (hn : 0 < n) : 0 < omegaKPartial n := by
+  unfold omegaKPartial omegaKAtHorizon
+  exact div_pos (curvatureIntegral_pos hn) curvatureIntegral_referenceM_pos
+
 theorem omegaKPartial_le_one (n : ℕ) (hn : n ≤ referenceM) :
     omegaKPartial n ≤ 1 := by
   unfold omegaKPartial referenceM
@@ -289,8 +293,10 @@ theorem lockinNowSlice_ageRatio :
   rcases lockinNowSlice_fields with ⟨hphi, _, _, ht⟩
   rw [hphi, ht]; norm_num
 
-/-! ## Link to the continuous-ξ chart (lock-in normalisation) -/
+/-! ## Link to the continuous-ξ chart (export coordinate only) -/
 
+/-- **Export chart at lock-in:** `omegaKContinuous ξ_lock ξ_lock = 1` agrees with discrete
+`omegaKPartial referenceM = 1` — not a second curvature field. -/
 theorem omegaKContinuous_agrees_at_lockin :
     omegaKContinuous xiLockin xiLockin = 1 :=
   omegaKContinuous_lockin
@@ -325,8 +331,10 @@ theorem omegaKContinuous_shell_strictMono {m1 m2 : ℕ}
     (continuousCurvaturePrimitive_strictMono_gt_one (xiOfShell m1) (xiOfShell m2) hξ1 hξ2) ?_
   exact continuousCurvaturePrimitive_xiLockin_pos
 
-/-- **Parallel monotonicity:** discrete and continuous `Ω_k` readouts both increase strictly
-below lock-in (continuous chart on `ξ = m+1`, discrete on shell index `m`). -/
+/-- **Chart ordering consistency (weak):** below lock-in, discrete `omegaKPartial` and the
+continuous `ξ` export `omegaKContinuous` are both strictly increasing on shell index.
+This is **not** a pointwise identification theorem and must not be read as parallel
+curvature ontologies. -/
 theorem omegaK_readouts_strictMono_parallel {m1 m2 : ℕ}
     (h : m1 < m2) (hm2 : m2 ≤ referenceM) (hm1 : 0 < m1) :
     omegaKPartial m1 < omegaKPartial m2 ∧

@@ -1,4 +1,5 @@
 import HqivSpine.Foundation.Carrier
+import HqivSpine.Foundation.ThreeGrowth
 import Mathlib.Analysis.SpecialFunctions.Log.Basic
 
 /-!
@@ -36,6 +37,15 @@ theorem latticeSimplexCount_eq_shellNumer (m : ℕ) :
 theorem latticeSimplexCount_pos (m : ℕ) : 0 < latticeSimplexCount m :=
   shellNumer_pos m
 
+/-- The lattice simplex count strictly increases with shell index. -/
+theorem latticeSimplexCount_strictMono : StrictMono latticeSimplexCount := by
+  apply strictMono_nat_of_lt_succ
+  intro n
+  show latticeSimplexCount n < latticeSimplexCount (n + 1)
+  unfold latticeSimplexCount
+  rw [shellNumer_increment]
+  omega
+
 /-- **Curvature-imprint / EM exponent** `α = 3/5`, the `d = 3` row of the
 foundation family `alphaRat`. -/
 noncomputable def alphaEM : ℝ := (alphaRat transverseDim : ℝ)
@@ -50,6 +60,14 @@ noncomputable def gammaHQIV : ℝ := (gammaRat transverseDim : ℝ)
 theorem gammaHQIV_eq : gammaHQIV = 2 / 5 := by
   unfold gammaHQIV
   rw [show gammaRat transverseDim = 2 / 5 from gamma_three]; norm_num
+
+theorem gammaHQIV_eq_one_sub_alphaEM : gammaHQIV = 1 - alphaEM := by
+  have h : alphaRat transverseDim + gammaRat transverseDim = 1 :=
+    alpha_add_gamma transverseDim (by decide)
+  unfold gammaHQIV alphaEM
+  have hc : ((alphaRat transverseDim : ℝ)) + ((gammaRat transverseDim : ℝ)) = 1 := by
+    exact_mod_cast h
+  linarith
 
 /-- **Bare inverse coupling** `1/α_GUT = 42`. -/
 def oneOverAlphaBare : ℝ := 42

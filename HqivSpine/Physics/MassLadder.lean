@@ -1,4 +1,5 @@
 import HqivSpine.Physics.Proton
+import HqivSpine.Physics.TuftBeltramiAnchor
 
 /-!
 # `HqivSpine.Physics.MassLadder` — the proton-normalized mass ladder
@@ -11,9 +12,12 @@ classification, drives hadrons, leptons, nuclei, and atoms.
   triples; the squared count `l² ∈ {1, 4, 9}` is the intrinsic wave complexity.
 * **Hadrons:** baryon vs meson differ by the closure-rank ratio `4/9`; baryon
   ground mass is exactly the proton-style `constituent − network binding`.
-* **Leptons:** the generation ladder follows the `S³` Beltrami minimal-eigenvalue
-  spectrum `λ_min(n) = n + 1`, giving the dimensionless steps `4/3` (τ:μ) and
-  `3/2` (μ:e). The absolute lepton scale is an explicit frontier.
+* **Leptons:** generation ratios follow the **anchored** TUFT/Hopf Beltrami ladder
+  `λ_min(n) = d_n = n + 1` (`TuftBeltramiAnchor`); steps `4/3` (τ:μ) and `3/2` (μ:e).
+  Absolute mass `massUnit · λ_min(n)` is derived via `SectorNestedHopfBinding` / `LeptonAbsoluteScale`.
+* **Neutrinos:** one-slot trace; absolute mass = matched lepton anchor `/ 140` (`NeutrinoAbsoluteScale`).
+* **Quarks:** same Beltrami windings; cross-sector factor `l_q²/l_ℓ² = 9/4` derived in
+  `SectorNestedHopfBinding` / `HeavyQuarkAbsoluteScale`.
 * **Nuclei / atoms:** the same `constituents − binding` form, one level up.
 
 No top/bottom GeV anchors, no electroweak vev literal, no PDG tables.
@@ -120,10 +124,32 @@ theorem hadronGroundMassMeV_baryon_eq_network
   simp [hadronGroundMassMeV, hadronBindingMeV, valenceChannelFraction_baryon,
     hadronIntrinsicScale_baryon, M_composite_from_network, E_bind_from_composite_trace]
 
-/-! ## Leptons: generation ladder from the `S³` Beltrami spectrum -/
+/-! ## Leptons: generation ladder from the anchored TUFT/Hopf Beltrami spectrum -/
 
-/-- Minimal coexact Beltrami eigenvalue on `S³` at fiber winding `n`: `λ_min = n + 1`. -/
-def beltramiMinEigenvalue (n : ℕ) : ℝ := (n : ℝ) + 1
+open TuftBeltramiAnchor
+open HqivSpine.Geometry.MaxwellSpectral
+
+/-- Minimal coexact Beltrami eigenvalue at Hopf fiber winding `n` — anchored in
+`TuftBeltramiAnchor` (`λ_min = d_n = n + 1`). -/
+def beltramiMinEigenvalue (n : ℕ) : ℝ := tuftMinimalBeltramiEigenvalue n
+
+theorem beltramiMinEigenvalue_eq_tuft (n : ℕ) :
+    beltramiMinEigenvalue n = tuftMinimalBeltramiEigenvalue n := rfl
+
+theorem beltramiMinEigenvalue_eq_fiber_multiplicity (n : ℕ) :
+    beltramiMinEigenvalue n = (tuftFiberMultiplicity n : ℝ) := by
+  rw [beltramiMinEigenvalue_eq_tuft, tuftMinimalBeltrami_eq_multiplicity]
+
+theorem beltramiMinEigenvalue_eq_succ (n : ℕ) : beltramiMinEigenvalue n = (n : ℝ) + 1 :=
+  tuftMinimalBeltrami_eq_succ n
+
+theorem beltramiMinEigenvalue_sq_eq_harmonicDimS3 (n : ℕ) :
+    beltramiMinEigenvalue n ^ 2 = (harmonicDimS3 n : ℝ) :=
+  tuftMinimalBeltrami_sq_eq_harmonicDimS3 n
+
+theorem beltramiMinEigenvalue_pos (n : ℕ) : 0 < beltramiMinEigenvalue n := by
+  rw [beltramiMinEigenvalue_eq_succ]
+  positivity
 
 /-- Spectral resonance step between two windings (dimensionless). -/
 noncomputable def leptonSpectralRatio (nFrom nTo : ℕ) : ℝ :=
@@ -131,17 +157,20 @@ noncomputable def leptonSpectralRatio (nFrom nTo : ℕ) : ℝ :=
 
 /-- **τ:μ step = 4/3.** -/
 theorem leptonSpectralRatio_tau_mu : leptonSpectralRatio 3 2 = (4 : ℝ) / 3 := by
-  norm_num [leptonSpectralRatio, beltramiMinEigenvalue]
+  rw [leptonSpectralRatio, beltramiMinEigenvalue_eq_tuft]
+  exact tuftBeltramiResonanceRatio_tau_mu
 
 /-- **μ:e step = 3/2.** -/
 theorem leptonSpectralRatio_mu_e : leptonSpectralRatio 2 1 = (3 : ℝ) / 2 := by
-  norm_num [leptonSpectralRatio, beltramiMinEigenvalue]
+  rw [leptonSpectralRatio, beltramiMinEigenvalue_eq_tuft]
+  exact tuftBeltramiResonanceRatio_mu_e
 
 /-- The three integrable windings give a strictly increasing minimal-eigenvalue ladder. -/
 theorem beltramiMinEigenvalue_strict :
     beltramiMinEigenvalue 1 < beltramiMinEigenvalue 2 ∧
       beltramiMinEigenvalue 2 < beltramiMinEigenvalue 3 := by
-  constructor <;> norm_num [beltramiMinEigenvalue]
+  rw [beltramiMinEigenvalue_eq_tuft]
+  exact tuftMinimalBeltrami_strict_on_generations
 
 /-! ## Nuclei and atoms (one level up, same form) -/
 

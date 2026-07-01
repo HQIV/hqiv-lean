@@ -13,8 +13,9 @@ PDG-free ratios** between species. Every hadron ground mass factors as a positiv
   (`intrinsicScale_meson_over_baryon`, `meson_baryon_ratio`), and the baryon is always heavier at a
   positive shared core (`baryon_heavier_than_meson`) — colour confinement built into the network
   weights, never a fitted potential.
-* **Lepton generations compose.** The `S³` Beltrami steps multiply consistently:
-  `(τ:μ)·(μ:e) = 4/3 · 3/2 = 2 = (τ:e)` (`generation_steps_compose`, `leptonSpectralRatio_tau_e`).
+* **Lepton Beltrami ladder (chart spectral).** On bare `λ_min(n)=n+1`, `(τ:μ)·(μ:e) = 4/3 · 3/2 = 2`
+  (`generation_steps_compose`, `leptonSpectralRatio_tau_e`). Absolute fermion readouts use
+  `GenerationResonanceLadder` instead (`LeptonAbsoluteScale`).
 
 All ratios are ratios of the structural integers `{1,2,3}` — no top/bottom anchor, no electroweak
 vev, no PDG mass table.
@@ -74,12 +75,13 @@ theorem baryon_heavier_than_meson {core : ℝ} (hc : 0 < core) :
 
 /-- **τ : e step = 2.** -/
 theorem leptonSpectralRatio_tau_e : leptonSpectralRatio 3 1 = 2 := by
-  norm_num [leptonSpectralRatio, beltramiMinEigenvalue]
+  rw [leptonSpectralRatio, beltramiMinEigenvalue_eq_succ, beltramiMinEigenvalue_eq_succ]
+  norm_num
 
-/-- **The generation steps compose:** `(τ:μ)·(μ:e) = (τ:e)`. -/
 theorem generation_steps_compose :
     leptonSpectralRatio 3 2 * leptonSpectralRatio 2 1 = leptonSpectralRatio 3 1 := by
-  norm_num [leptonSpectralRatio, beltramiMinEigenvalue]
+  rw [leptonSpectralRatio_tau_e, leptonSpectralRatio_tau_mu, leptonSpectralRatio_mu_e]
+  norm_num
 
 /-! ## Closure -/
 
@@ -97,8 +99,8 @@ structure HadronSpectrumClosure : Prop where
     leptonSpectralRatio 3 2 * leptonSpectralRatio 2 1 = leptonSpectralRatio 3 1
 
 /-- **The hadron spectrum is discharged:** every mass is a core times a structural closure factor,
-the meson : baryon ratio is the PDG-free `4/9` with the baryon heavier, and the lepton-generation
-steps compose to the `τ:e = 2` ladder. -/
+the meson : baryon ratio is the PDG-free `4/9` with the baryon heavier, and the bare Beltrami
+lepton spectral steps compose `(τ:μ)·(μ:e) = (τ:e) = 2`. -/
 theorem hadron_spectrum_closure : HadronSpectrumClosure where
   mass_is_core_times_scale := hadronGroundMassMeV_eq_core
   meson_baryon_closure_ratio := intrinsicScale_meson_over_baryon

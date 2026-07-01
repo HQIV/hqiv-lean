@@ -28,6 +28,11 @@ import HqivSpine.Physics.Action
 import HqivSpine.Physics.Gravity
 import HqivSpine.Physics.Blackbody
 import HqivSpine.Physics.LockIn
+import HqivSpine.Physics.LockInMechanism
+import HqivSpine.Physics.ClosureAction
+import HqivSpine.Physics.CasimirClosureAction
+import HqivSpine.Physics.BulkHyperboloidDynamics
+import HqivSpine.Physics.JointClosureAction
 import HqivSpine.Physics.Exclusion
 import HqivSpine.Physics.SpinStatistics
 import HqivSpine.Physics.Uncertainty
@@ -47,9 +52,18 @@ import HqivSpine.Physics.ContinuousHorizon
 import HqivSpine.Physics.RindlerDetuning
 import HqivSpine.Physics.NowSliceHorizon
 import HqivSpine.Physics.NowSliceFromLattice
+import HqivSpine.Physics.NowSliceCausalDiamond
 import HqivSpine.Physics.ChartMaxwell
 import HqivSpine.Physics.Age
 import HqivSpine.Physics.Baryogenesis
+import HqivSpine.Physics.BaryogenesisShellLadder
+import HqivSpine.Physics.LeptonAbsoluteScale
+import HqivSpine.Physics.GenerationDetunedLadder
+import HqivSpine.Physics.GenerationResonanceLadder
+import HqivSpine.Physics.CarrierMonogamySuppression
+import HqivSpine.Physics.SpineMassDischarge
+import HqivSpine.Physics.HeavyQuarkAbsoluteScale
+import HqivSpine.Physics.NeutrinoAbsoluteScale
 import HqivSpine.Physics.AlphaRunning
 import HqivSpine.Physics.NeutrinoMixing
 import HqivSpine.Physics.Forces
@@ -58,6 +72,11 @@ import HqivSpine.Physics.TrappedCasimir
 import HqivSpine.Physics.NonAbelianMatrixElement
 import HqivSpine.Physics.CurvatureKernel
 import HqivSpine.Physics.Proton
+import HqivSpine.Physics.TuftBeltramiAnchor
+import HqivSpine.Physics.TuftBeltramiMassFunctional
+import HqivSpine.Physics.NestedHopfBinding
+import HqivSpine.Physics.ContentClassCompositeTrace
+import HqivSpine.Physics.SectorNestedHopfBinding
 import HqivSpine.Physics.MassLadder
 import HqivSpine.Physics.NucleonMoment
 import HqivSpine.Physics.PlaquetteHolonomy
@@ -262,6 +281,18 @@ proton mass.
      (`sectorClosureCapacity_eq_so8_carrier_base`, with `𝔰𝔬(8)` the genuine
      `finrank (skewMatrices 8)` and `28 = 14+7+7`), so `referenceM = 4` is pinned with
      **no posited integer** (`lockin_fully_closed`).
+   * `Physics.LockInMechanism`: **the three-layer lock-in mechanism** — bundles selector
+     (`lockInDrive` / `modeDeficit` restoring drive, `referenceMLockInMechanism`),
+     monogamy inward wall vs. Pauli floor at shell `2` (`monogamy_floor_below_lockin`),
+     blackbody stability (`proton_lockin_stable`), democratic `η_mode(4) = 1/3`, and the
+     continuous ⇄ discrete tug-of-war parallel (`lockin_continuous_discrete_parallel`).
+   * `Physics.ClosureAction`: **variational shell lock-in** — closure budget
+     `V(m)=(N(m)−C)²/(2C)` with unique minimum at `referenceM` (`closureBudgetPotential_eq_zero_iff`),
+     gradient `∂V/∂m = −8·modeDeficit/C` (`closureBudgetGradient_eq_neg_eight_modeDeficit`),
+     overdamped flow aligned with `lockInDrive` (`shellGradientDrive_eq_lockInDrive`), Hopf
+     chart `hopfLockinWinding+1 = referenceM`, phase lift `φ(m)/6` on `Δ`, and capstone
+     `referenceMClosureAction` (mechanism + action). No spring toward `4` — the last freeish
+     shell parameter is discharged as sector-closure stationarity.
    * `Physics.Exclusion`: **why it can't collapse to the Planck pole** — the inward wall is
      *spin-statistics*, the face of informational monogamy (`γ = 2/5`), not the capacity
      number. (1) **Degeneracy pressure**: monogamy = injective occupation, so pigeonhole
@@ -665,8 +696,8 @@ proton mass.
    * `Physics.HadronSpectrum`: **meson/baryon ratios off the mass ladder.** Every hadron mass factors
      as core × closure scale (`hadronGroundMassMeV_eq_core`); the meson : baryon ratio is the
      PDG-free `4/9` independent of the core (`meson_baryon_ratio`) with the baryon always heavier
-     (`baryon_heavier_than_meson`), and the `S³` lepton-generation steps compose `(τ:μ)·(μ:e) = (τ:e) = 2`
-     (`generation_steps_compose`). All ratios are ratios of the structural integers `{1,2,3}`.
+     (`baryon_heavier_than_meson`), and bare Beltrami spectral steps compose `(τ:μ)·(μ:e) = (τ:e) = 2`
+     (`generation_steps_compose`; absolute lepton readouts use `GenerationResonanceLadder`).
    * `Physics.GravitationalLensing`: light deflection off the same coupling. A ray grazing mass `M`
      at impact parameter `b` bends by `4·G_eff(φ)·M/b`, exactly **twice** the Newtonian value
      (`einstein_eq_two_newtonian`); positive (`einsteinDeflection_pos`), mass-linear
@@ -811,10 +842,14 @@ proton mass.
      seesaw but is not identical**
      (`neutrino_rhymes_seesaw`): `m_ν = m_χ²/M_eff` with `M_eff = m_χ·S(m)/γ` a *derived horizon scale*
      (`effectiveHeavyScale_gt_charged`: `M_eff > m_χ`), never a free `M_R` — HQIV *forces* the value the
-     seesaw inserts by hand. **Open frontier (not claimed solved):** the absolute normalization of `m_χ`
-     and the generation ordering (legacy `1/140`×`M_Z` overshoots `Σm_ν<0.12 eV` by ~`10⁸` and inverts
-     ordering). The *mechanism is native*; the *scale calibration is open*. Combined with `NeutrinoMixing`
-     (`θ=π/4`, `δ=π/5`, native numbers): native angle + phase + mass mechanism. No PMNS, no measured `m_ν`.
+     seesaw inserts by hand. **Absolute scale closed** in `NeutrinoAbsoluteScale`: one-slot nested
+     Hopf readout `= massUnit·λ_min/4`; physical mass `= m_ℓ/140` with charged anchor from the matched
+     lepton nested Hopf row and suppression at the closure shell. **Still open:** MeV labels and
+     cosmological `Σm_ν` comparison only. Combined with `NeutrinoMixing`
+     (`θ=π/4`, `δ=π/5`, native numbers): native angle + phase + mass scale. No PMNS, no measured `m_ν`.
+   * `Physics.NeutrinoAbsoluteScale`: neutrino one-slot nested Hopf trace wired to absolute mass —
+     readout `λ_min/4`, anchor = matched charged lepton, suppression `1/140` at closure shell;
+     lock-in `(m_ν,e, m_ν,μ, m_ν,τ) = (1/14, 3/28, 1/7)` in dimensionless spine units.
    * `Physics.Tunneling`: 3D quantum tunneling on the *same* 7-point stencil
      (`Geometry.DiscreteLaplacian`), spine-native (Planck units, `ħ ≡ 1`, lock-in step
      `1/(referenceM+1) = 1/5`). The evanescent slab mode `cosh(κx₀)cos(k₁x₁)cos(k₂x₂)` is a

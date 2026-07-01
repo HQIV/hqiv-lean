@@ -16,7 +16,8 @@ foundation ratios — no PMNS matrix is imported:
 * **CP phase `δ = π/5`.** The monogamy rapidity skew contributes `δ = (γ/2)·π` with
   `γ = 2/5`, giving exactly `π/5`.
 
-Both are dimensionless geometry; absolute neutrino masses remain a frontier.
+Both are dimensionless geometry; absolute scale is derived in `NeutrinoAbsoluteScale`
+(one-slot nested Hopf readout × horizon suppression); MeV calibration stays quarantined.
 -/
 
 namespace HqivSpine.Physics

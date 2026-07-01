@@ -8,6 +8,20 @@ import HqivSpine.Physics.TrappedCasimir
 import HqivSpine.Physics.CurvatureKernel
 import HqivSpine.Physics.NeutrinoMixing
 import HqivSpine.Physics.NowSliceFromLattice
+import HqivSpine.Physics.LockInMechanism
+import HqivSpine.Physics.ClosureAction
+import HqivSpine.Physics.JointClosureAction
+import HqivSpine.Physics.BulkHyperboloidDynamics
+import HqivSpine.Physics.NowSliceCausalDiamond
+import HqivSpine.Physics.BaryogenesisShellLadder
+import HqivSpine.Physics.NestedHopfBinding
+import HqivSpine.Physics.SectorNestedHopfBinding
+import HqivSpine.Physics.ContentClassCompositeTrace
+import HqivSpine.Physics.TuftBeltramiMassFunctional
+import HqivSpine.Physics.GenerationResonanceLadder
+import HqivSpine.Physics.LeptonAbsoluteScale
+import HqivSpine.Physics.HeavyQuarkAbsoluteScale
+import HqivSpine.Physics.NeutrinoAbsoluteScale
 import HqivSpine.Physics.ContinuousHorizon
 import HqivSpine.Algebra.StrongColorSu3LieLaw
 import HqivSpine.Algebra.StrongColorEmbed
@@ -45,32 +59,58 @@ themselves (and hence `massUnit` and `δ_E`) from the lattice/bulk geometry.
 
 **Partially closed** on the discrete null lattice (`NowSliceFromLattice`): temperature
 ladder, shell-ledger `Φ`, discrete `Ω_k` ratio, and lock-in readout `(φ, Φ, Ω_k, t) = (1, 0, 1, 4)`.
-Still open: dynamical `H(t)` from the bulk hyperboloid and continuous–discrete identification
-on all horizons. -/
+**Partially closed** for homogeneous bulk `H(t) = N(t) = 1 + φ·t` (`BulkHyperboloidDynamics`).
+**Partially closed** as a **causal diamond** (`NowSliceCausalDiamond`): local apex chart + global
+`(α,γ)` evaluation map; discrete `Ω_k` on the slice; continuous `ξ` is export chart only.
+Still open: full manifold geodesics and pointwise continuous–discrete `Ω_k` equality on all shells. -/
 def nowSliceCurvatureFrontier : DerivationFrontier where
   name := "now_slice_curvature_closure"
   obligation :=
-    "Complete the now-slice closure: dynamical H(t) from the bulk hyperboloid and " ++
-    "continuous–discrete Ω_k on all horizons. Discrete (φ, Φ, Ω_k) from the null " ++
-    "lattice are in NowSliceFromLattice."
+    "Complete the now-slice closure: full bulk geodesics and pointwise continuous–discrete " ++
+    "Ω_k identification on all horizons. Local diamond chart + evaluation map are in " ++
+    "NowSliceCausalDiamond; discrete (φ, Φ, Ω_k) from the null lattice are in NowSliceFromLattice; " ++
+    "homogeneous H(t) from the hyperboloid chart is in BulkHyperboloidDynamics."
   collapsesToNowSlice := false
 
-/-- Heavy-quark absolute scale: derive heavy-quark constituent inputs from the
-now-scale `massUnit` times dimensionless shell/Beltrami ratios, with no GeV literal. -/
+/-- Heavy-quark absolute scale: **closed** — quark constituent scales from nested Hopf chart
+binding with the three-slot content-class trace; cross-sector `9/4` from `(l_q/l_ℓ)² = C_A/C_F`
+(`SectorNestedHopfBinding`). -/
 def heavyQuarkScaleFrontier : DerivationFrontier where
   name := "heavy_quark_absolute_scale"
   obligation :=
-    "Derive heavy-quark constituent values from the now-scale and shell/Beltrami " ++
-    "ratios; top/bottom GeV literals are external (excluded from this spine)."
+    "Closed: quark nested Hopf binding + content-class trace + cross-sector Casimir ratio " ++
+    "(SectorNestedHopfBinding)."
   collapsesToNowSlice := true
 
-/-- Lepton absolute scale: the generation *ratios* are derived (Beltrami spectrum);
-the absolute lepton scale as a now-scale multiple is open. -/
+/-- Lepton absolute scale: **closed** — charged leptons use the two-slot content-class trace on
+nested Hopf rows; composite = Beltrami readout (`SectorNestedHopfBinding`). -/
 def leptonAbsoluteScaleFrontier : DerivationFrontier where
   name := "lepton_absolute_scale"
   obligation :=
-    "Fix the absolute charged-lepton scale as a now-scale multiple; ratios 4/3 " ++
-    "(τ:μ) and 3/2 (μ:e) are already derived from λ_min(n)=n+1."
+    "Closed: charged-fermion two-slot composite trace on nested Hopf rows, distinct from " ++
+    "nucleon reuse (SectorNestedHopfBinding)."
+  collapsesToNowSlice := true
+
+/-- Neutrino absolute scale: **closed** — one-slot trace on nested Hopf rows gives readout
+`λ_min/4`; physical mass = matched charged-lepton anchor × `γ/S(referenceM+2) = anchor/140`
+(`NeutrinoAbsoluteScale` + `CarrierMonogamySuppression`). Cosmological normalization remains
+comparison-only. -/
+def neutrinoAbsoluteScaleFrontier : DerivationFrontier where
+  name := "neutrino_absolute_scale"
+  obligation :=
+    "Closed: one-slot nested Hopf readout + carrier monogamy suppression γ/(7·8) " ++
+    "(NeutrinoAbsoluteScale). MeV calibration and Σm_ν comparison stay quarantined."
+  collapsesToNowSlice := true
+
+/-- Detuned generation resonance: **closed** on the now slice via outer shells `15 → 33 → 58`
+(`GenerationResonanceLadder`). Structural ratios `μ/e = 4484/2499`, `τ/μ = 175/76` mined from legacy
+charged-lepton resonance. PDG-scale absolute masses remain comparison-only (TUFT sector spectral / MeV
+discharge quarantined). -/
+def detunedGenerationResonanceFrontier : DerivationFrontier where
+  name := "detuned_generation_resonance"
+  obligation :=
+    "Closed: Hopf heavy anchor × outer-ladder descent on shells 15/33/58 (GenerationResonanceLadder). " ++
+    "Ratios μ/e and τ/μ match legacy structural targets. PDG MeV labels stay quarantined."
   collapsesToNowSlice := true
 
 /-- MeV unit convention: the now-scale is dimensionless; the MeV label is fixed by
@@ -91,15 +131,15 @@ def comparisonQuarantineFrontier : DerivationFrontier where
     "on the now slice and derived ratios."
   collapsesToNowSlice := false
 
-/-- Baryon-asymmetry absolute scale: at lock-in the lattice gives `η = δ_E(referenceM)`
-(`Ω_k = 1` from `NowSliceFromLattice`); sub-horizon shells still need the discrete
-`Ω_k(m)` ratio. Comparison to `η_observed` remains quarantined. -/
+/-- Baryon-asymmetry shell ladder: discrete `η(m) = Ω_k(m)·δ_E(m)` on every balanced-horizon
+shell via `BaryogenesisShellLadder` / `CausalDiamond.readoutAtShell`. Lock-in `η = δ_E(4)`
+recovers `BBN.baryonToPhoton`. Comparison to `η_observed` remains quarantined. -/
 def baryonAsymmetryScaleFrontier : DerivationFrontier where
   name := "baryon_asymmetry_absolute_scale"
   obligation :=
-    "Lock-in η = δ_E(referenceM) is closed from the lattice (Ω_k = 1); extend the " ++
-    "absolute scale to sub-lock-in shells via discrete Ω_k(m), and compare to η_observed " ++
-    "only in the comparison layer."
+    "Closed: sub-lock-in η(m) = omegaKPartial m · deltaE m on the discrete ladder " ++
+    "(BaryogenesisShellLadder); lock-in η = δ_E(referenceM). Compare to η_observed only in " ++
+    "the comparison layer."
   collapsesToNowSlice := true
 
 /-- Non-abelian dynamics: the colour Casimirs, four-channel mask, full `su(3)` chart
@@ -129,8 +169,8 @@ def screenedAlphaChemistryFrontier : DerivationFrontier where
 
 /-- The current open derivation boundaries of the clean spine. -/
 def openFrontiers : List DerivationFrontier :=
-  [nowSliceCurvatureFrontier, heavyQuarkScaleFrontier, leptonAbsoluteScaleFrontier,
-    baryonAsymmetryScaleFrontier, nonAbelianDynamicsFrontier,
+  [nowSliceCurvatureFrontier,
+    nonAbelianDynamicsFrontier,
     screenedAlphaChemistryFrontier,
     mevUnitConventionFrontier, comparisonQuarantineFrontier]
 
@@ -159,10 +199,16 @@ def oneOverAlpha_nakedW_comparison : ℝ := 127.95
 
 /-! ## Closed facts re-exported for contrast (these are proved) -/
 
-/-- **Closed:** the charged-lepton generation steps are pinned dimensionless ratios. -/
+/-- **Closed:** charged-lepton absolute readout ratios from outer-ladder resonance
+(`GenerationResonanceLadder`; mined legacy `175/76`, `4484/2499`). Bare Beltrami spectral steps
+`4/3`, `3/2` remain in `MassLadder` / `HadronSpectrum` for the TUFT chart ladder only. -/
 theorem lepton_generation_ratios_closed :
-    leptonSpectralRatio 3 2 = (4 : ℝ) / 3 ∧ leptonSpectralRatio 2 1 = (3 : ℝ) / 2 :=
-  ⟨leptonSpectralRatio_tau_mu, leptonSpectralRatio_mu_e⟩
+    GenerationResonanceLadder.generationResonanceMassFactor 3 /
+        GenerationResonanceLadder.generationResonanceMassFactor 2 = 175 / 76 ∧
+      GenerationResonanceLadder.generationResonanceMassFactor 2 /
+        GenerationResonanceLadder.generationResonanceMassFactor 1 = 4484 / 2499 :=
+  ⟨GenerationResonanceLadder.generationResonanceMassFactor_tau_over_muon,
+    GenerationResonanceLadder.generationResonanceMassFactor_mu_over_electron⟩
 
 /-- **Closed:** the meson/baryon intrinsic mass scale is the derived `4/9`. -/
 theorem meson_baryon_scale_closed :
@@ -224,9 +270,112 @@ theorem now_slice_lockin_ages_closed :
   ⟨NowSliceFromLattice.lockinNowSlice_wallClockAge,
     NowSliceFromLattice.lockinNowSlice_ageRatio⟩
 
+/-- **Closed:** the three-layer lock-in mechanism at `referenceM = 4` — sector-closure
+balance (`lockInDrive` / `modeDeficit`), monogamy inward wall with Pauli floor at shell `2`,
+blackbody stability, and `η_mode(4) = 1/3`. -/
+theorem referenceM_lockin_mechanism_closed : Nonempty ReferenceMLockInMechanism :=
+  ⟨referenceMLockInMechanism⟩
+
+/-- **Closed:** variational shell lock-in — closure budget `V(m)=(N(m)−C)²/(2C)` has unique
+minimum at `m = referenceM`, gradient `∂V/∂m = −8·modeDeficit/C`, and overdamped flow matches
+`lockInDrive`; Hopf chart `n+1 = 4` and `Δ ⊂ 𝔰𝔬(8)`. -/
+theorem referenceM_closure_action_closed : Nonempty ReferenceMClosureAction :=
+  ⟨referenceMClosureAction⟩
+
+/-- **Closed:** dynamic inner/outer Casimir balance `trapped·ξ·γ/S = C` uniquely at
+`m = referenceM`, hence `ξ_lock = xiOfShell referenceM = horizonCount referenceM = 5`
+and `massUnit = ξ_lock` at lock-in (`referenceMCasimirClosureAction`). -/
+theorem referenceM_casimir_closure_action_closed : Nonempty ReferenceMCasimirClosureAction :=
+  ⟨referenceMCasimirClosureAction⟩
+
+/-- **Closed:** homogeneous bulk `H(t) = N(t)` with `dτ/dt = N`; lock-in gives `H(4) = massUnit`
+and `gEff(φ) = φ` at the Planck pole (`bulkHyperboloidDynamics`). -/
+theorem referenceM_bulk_hyperboloid_dynamics_closed : Nonempty BulkHyperboloidDynamicsClosure :=
+  ⟨bulkHyperboloidDynamics⟩
+
+/-- **Closed:** joint sector + Casimir potential has unique minimum at `m = referenceM` and
+shell/Casimir gradient drives agree (`referenceMJointClosureAction`). -/
+theorem referenceM_joint_closure_action_closed : Nonempty ReferenceMJointClosureAction :=
+  ⟨referenceMJointClosureAction⟩
+
+/-- **Closed:** the now slice is a **causal diamond** apex chart; global `(α,γ)` glue is
+evaluated at the event (`causalDiamondClosure`); lock-in diamond `(H,Φ,Ω_k,t,N,ξ)=(1,0,1,4,5,5). -/
+theorem referenceM_causal_diamond_closed : Nonempty CausalDiamond.CausalDiamondClosure :=
+  ⟨CausalDiamond.causalDiamondClosure⟩
+
+/-- **Closed:** discrete shell-ladder baryogenesis `η(m) = Ω_k(m)·δ_E(m)` with strict climb to
+lock-in and causal-diamond readout agreement (`baryogenesisShellLadderClosure`). -/
+theorem referenceM_baryogenesis_shell_ladder_closed :
+    Nonempty BaryogenesisShellLadder.BaryogenesisShellLadderClosure :=
+  ⟨BaryogenesisShellLadder.baryogenesisShellLadderClosure⟩
+
+/-- **Closed:** TUFT/Hopf Beltrami anchor — `λ_min(n) = d_n = n+1`, chart `m = n+1`,
+heavy chart `= referenceM`, link to `S³` harmonic dimension (`tuftBeltramiAnchorClosure`). -/
+theorem referenceM_tuft_beltrami_anchor_closed :
+    Nonempty TuftBeltramiAnchor.TuftBeltramiAnchorClosure :=
+  ⟨TuftBeltramiAnchor.tuftBeltramiAnchorClosure⟩
+
+/-- **Closed:** TUFT chart row = Beltrami label on balanced diamond events; lock-in lapse
+`N = λ_min + 1`; lepton readout = heavy-hopf TUFT readout × resonance descent
+(`tuftBeltramiMassFunctionalClosure`). -/
+theorem referenceM_tuft_beltrami_mass_functional_closed :
+    Nonempty TuftBeltramiMassFunctional.TuftBeltramiMassFunctionalClosure :=
+  ⟨TuftBeltramiMassFunctional.tuftBeltramiMassFunctionalClosure⟩
+
+/-- **Closed:** extended detuned-shell resonance on outer ladder shells `15 → 33 → 58`;
+structural charged-lepton ratios `μ/e = 4484/2499`, `τ/μ = 175/76`
+(`generationResonanceLadderClosure`). -/
+theorem referenceM_generation_resonance_ladder_closed :
+    Nonempty GenerationResonanceLadder.GenerationResonanceLadderClosure :=
+  ⟨GenerationResonanceLadder.generationResonanceLadderClosure⟩
+
+/-- **Closed:** nested Hopf chart shells carry the 8×8 binding network with Hopf fiber weight
+`n/(n+2)` in the coupling cell; contact < ladder; composite mass = Beltrami readout; heavy row =
+proton lock-in binding `(3/5)·E_bind(4)` (`nestedHopfBindingClosure`). -/
+theorem referenceM_nested_hopf_binding_closed :
+    Nonempty NestedHopfBinding.NestedHopfBindingClosure :=
+  ⟨NestedHopfBinding.nestedHopfBindingClosure⟩
+
+/-- **Closed:** content-class composite traces (`l = 1/2/3` carrier slots) and binding
+`E_bind = l · count · α_eff` (`contentClassCompositeTraceClosure`). -/
+theorem referenceM_content_class_composite_trace_closed :
+    Nonempty ContentClassCompositeTrace.ContentClassCompositeTraceClosure :=
+  ⟨ContentClassCompositeTrace.contentClassCompositeTraceClosure⟩
+
+/-- **Closed:** sector-specific nested Hopf binding — lepton two-slot trace, quark three-slot,
+cross-sector `9/4` = `C_A/C_F` (`sectorNestedHopfBindingClosure`). -/
+theorem referenceM_sector_nested_hopf_binding_closed :
+    Nonempty SectorNestedHopfBinding.SectorNestedHopfBindingClosure :=
+  ⟨SectorNestedHopfBinding.sectorNestedHopfBindingClosure⟩
+
+/-- **Closed:** lepton absolute scale from sector nested Hopf binding. -/
+theorem referenceM_lepton_absolute_scale_closed :
+    Nonempty SectorNestedHopfBinding.SectorNestedHopfBindingClosure :=
+  referenceM_sector_nested_hopf_binding_closed
+
+/-- **Closed:** heavy-quark absolute scale from sector nested Hopf binding. -/
+theorem referenceM_heavy_quark_absolute_scale_closed :
+    Nonempty SectorNestedHopfBinding.SectorNestedHopfBindingClosure :=
+  referenceM_sector_nested_hopf_binding_closed
+
+/-- **Closed:** neutrino absolute scale — one-slot nested Hopf readout + horizon suppression. -/
+theorem referenceM_neutrino_absolute_scale_closed :
+    Nonempty NeutrinoAbsoluteScale.NeutrinoAbsoluteScaleClosure :=
+  ⟨NeutrinoAbsoluteScale.neutrinoAbsoluteScaleClosure⟩
+
+/-- **Bookkeeping (superseded):** lepton readout hypothesis at anchored `λ_min(n)`. -/
+theorem referenceM_lepton_absolute_scale_bookkeeping :
+    Nonempty LeptonAbsoluteScale.LeptonAbsoluteScaleClosure :=
+  ⟨LeptonAbsoluteScale.leptonAbsoluteScaleClosure⟩
+
+/-- **Bookkeeping (open frontier):** quark readout hypothesis with complexity prefactor. -/
+theorem referenceM_heavy_quark_absolute_scale_bookkeeping :
+    Nonempty HeavyQuarkAbsoluteScale.HeavyQuarkAbsoluteScaleClosure :=
+  ⟨HeavyQuarkAbsoluteScale.heavyQuarkAbsoluteScaleClosure⟩
+
 /-- **Closed:** discrete `Ω_k` is bounded below by the harmonic shell sum and strictly
-increases below lock-in; the continuous-ξ chart shares lock-in normalisation and parallel
-strict monotonicity on integer shells. -/
+increases below lock-in; the continuous-ξ chart shares lock-in normalisation (export chart;
+ordering consistency below lock-in, not a second curvature ontology). -/
 theorem now_slice_omegaK_lattice_structure_closed :
     (∀ n, NowSliceFromLattice.harmonicSum n ≤ NowSliceFromLattice.curvatureIntegral n) ∧
     (∀ {n1 n2 : ℕ}, n1 < n2 → n2 ≤ referenceM →

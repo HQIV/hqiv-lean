@@ -40,6 +40,9 @@ the legacy tree instead.
    carrier envelope came over).
 7. **Single physical anchor.** The observer's **now slice** (`Physics.NowSlice`) carries the
    curvatures (`φ`, `Φ`, `Ω_k`) explicitly rather than masking them inside a hard proton mass.
+   **Causal-diamond reading** (`Physics.NowSliceCausalDiamond`): the slice is the **local apex chart**
+   (time, place, lapse `N`, discrete `Ω_k`); global imprint glue `(α,γ)=(3/5,2/5)` is **not** on the
+   slice — it enters only through the **evaluation map** `evaluate` (`gEff`, `δ_E` via `shellShape`).
 
 ---
 
@@ -81,6 +84,24 @@ Fully-qualified under `HqivSpine.`. Use `#check` for exact types.
 - `Physics.Shell`: `referenceM = 4`, `phi(m)=2(m+1)`, `latticeSimplexCount`, `alphaEM_eq : α = 3/5`,
   `gammaHQIV_eq`, `oneOverAlphaBare = 42`, shell-running coupling.
 - `Physics.LockIn`: `referenceM = 4` is the **unique** discrete equilibrium (`referenceM_unique_balance`).
+- `Physics.LockInMechanism`: three-layer lock-in (`referenceMLockInMechanism`): mode-deficit
+  restoring drive (`lockInDrive`, `modeDeficit_restores_outward/inward`), monogamy floor at
+  shell `2` vs. sector closure at `4` (`monogamy_floor_below_lockin`), blackbody stability,
+  `η_mode(4) = 1/3`, continuous ⇄ discrete tug-of-war parallel.
+- `Physics.ClosureAction`: **variational closure** (`referenceMClosureAction`) —
+  budget potential `V(m)=(N(m)−C)²/(2C)` unique zero at `m=4` (`closureBudgetPotential_eq_zero_iff`),
+  gradient `∂V/∂m = −8·modeDeficit/C`, `shellGradientDrive` matches `lockInDrive`,
+  Hopf chart `hopfLockinWinding+1 = referenceM`, `phaseLiftCoeff = φ(m)/6`, `Δ ⊂ 𝔰𝔬(8)`.
+  Python coupled dynamics: `scripts/hqiv_hopf_delta_action.py`.
+- `Physics.CasimirClosureAction`: **dynamic Casimir closure** (`referenceMCasimirClosureAction`) —
+  inner/outer balance `trapped·ξ·γ/S(m) = 8(m+1)²/5` unique at `m=4` (`casimirBalanceRatio_eq_capacity_iff`),
+  budget potential parallel to `ClosureAction`, `casimirGradientDrive` matches `lockInDrive`,
+  emission chart `ξ_lock = xiOfShell referenceM = 5`, `lockinNowSlice.massUnit = ξ_lock`.
+- `Physics.BulkHyperboloidDynamics`: **homogeneous bulk `H(t)`** (`bulkHyperboloidDynamics`) —
+  `H(t) = N(t) = 1 + φ·t`, `dτ/dt = N`, lock-in `H(4) = massUnit = 5`, Planck-pole `gEff(φ) = φ`.
+- `Physics.JointClosureAction`: **coupled shell+ξ slow manifold** (`referenceMJointClosureAction`) —
+  `V_joint = V_closure + V_Casimir` unique at `m = 4`, shell/Casimir gradient drives parallel to `lockInDrive`.
+  Python: `scripts/hqiv_joint_closure_action.py`, `scripts/hqiv_casimir_closure_action.py`.
 - **QM stack**: `Exclusion`, `SpinStatistics`, `Uncertainty`, `CCR` (finite-dim obstruction);
   `VonNeumann` + `GleasonBorn` + `KochenSpecker` + `Measurement` (Born normalization
   `sum_bornProbN_eq_one`, Gleason frame-function additivity `frame_sum`/basis-independence
@@ -95,7 +116,35 @@ Fully-qualified under `HqivSpine.`. Use `#check` for exact types.
   `NowSliceHorizon` (now slice ↔ continuous chart ↔ detuning bridge),
   `NowSliceFromLattice` (discrete `(φ, Φ, Ω_k)` from temperature ladder, shell ledger,
   curvature integral + harmonic lower bound; lock-in `(1, 0, 1, 4)`, ages `(12, 3)`,
-  `massUnit = 5`; balanced-horizon `Φ = 0`; parallel discrete/continuous `Ω_k` monotonicity),
+  `massUnit = 5`; balanced-horizon `Φ = 0`; continuous `ξ` export agrees at lock-in only),
+  `NowSliceCausalDiamond` (`Event` + `ApexChart` + `imprintGlue` + `evaluate`; lock-in diamond
+  `(H,Φ,Ω_k,t,N,ξ)=(1,0,1,4,5,5)`; discrete `Ω_k` primary; `referenceM_causal_diamond_closed`),
+  `BaryogenesisShellLadder` (`etaAtShell m = omegaKPartial m · deltaE m`, `readoutAtShell`,
+  `referenceM_baryogenesis_shell_ladder_closed`; `baryonAsymmetryScaleFrontier` removed from open),
+  `TuftBeltramiAnchor` (`λ_min(n)=d_n=n+1`, chart `m=n+1`, heavy chart `=referenceM`;
+  `λ_min²=dim ℋ_n` on `S³`; `referenceM_tuft_beltrami_anchor_closed`),
+  `TuftBeltramiMassFunctional` (chart diamond `t=λ_min`, `N=λ_min+1`; `tuftBeltramiMassReadout`;
+  lepton readout = heavy-hopf TUFT × resonance descent; `referenceM_tuft_beltrami_mass_functional_closed`),
+  `GenerationDetunedLadder` (`generationMassFactor n = λ_min(n)·w(n)` on Hopf chart shells
+  `m=n+1`; lock-in hopf weights `(35/9, 4, 4)` — binding layer only; bare ratios `μ/e=36/35`, `τ/μ=1`),
+  `GenerationResonanceLadder` (outer shells `15 → 33 → 58`; standing-wave thresholds `9/4`, `16/9`;
+  resonance steps `175/76`, `4484/2499`; absolute readouts `generationResonanceMassFactor`;
+  `μ/e=4484/2499`, `τ/μ=175/76`; `referenceM_generation_resonance_ladder_closed`),
+  `CarrierMonogamySuppression` (`γ/(7·8)=1/140` on the octonionic carrier — not an outer-horizon
+  narrative; lattice shell `referenceM+2` is consistency bridge only),
+  `SpineMassDischarge` (capstone: hopf detuning + resonance ladder + carrier suppression;
+  structural generation ratios closed; `referenceM_spine_mass_discharge_closed`; PDG MeV quarantined),
+  `NestedHopfBinding` (nested Hopf windings `1/2/3` → chart shells `2/3/4`; 8×8 network
+  `E_bind_from_network` at chart shell with **`hopfFibrationShape n/(n+2)` in the coupling cell**
+  (`E_bind_at_hopf_shell`, `binding_hopf_shape`); heavy row = `(3/5)·E_bind(4)`;
+  `referenceM_nested_hopf_binding_closed`),
+  `ContentClassCompositeTrace` (carrier-slot traces from `conservedTripleCount`; `l = 1/2/3`;
+  cross-sector `(l_q/l_ℓ)² = 9/4`; `referenceM_content_class_composite_trace_closed`),
+  `SectorNestedHopfBinding` (lepton two-slot / quark three-slot / neutrino one-slot nested Hopf binding;
+  Hopf-weighted `E_bind_at_hopf_shell`; absolute readout = heavy-hopf composite × resonance descent;
+  lepton ≠ nucleon trace reuse; `9/4 = C_A/C_F`; `referenceM_sector_nested_hopf_binding_closed`),
+  `LeptonAbsoluteScale` / `HeavyQuarkAbsoluteScale` / `NeutrinoAbsoluteScale` (readout modules;
+  `generationResonanceMassFactor` for absolute scales; ν absolute via `CarrierMonogamySuppression`),
   `ChartMaxwell` (flat lock-in `∇φ`, `div J` on the continuum hook),
   `Age`, `Baryogenesis`, `AlphaRunning`, `NeutrinoMixing` (`θ = π/4`, `δ = π/5`), `Forces` (1+3+4),
   `ColorCasimir` (`C_A=3`, `C_F=4/3`), `TrappedCasimir`, `Proton`, `MassLadder`, `Frontiers`.
@@ -201,7 +250,7 @@ Fully-qualified under `HqivSpine.`. Use `#check` for exact types.
 - `Physics.NucleonLadder`: **one anchor → real nucleon masses.** Instantiates the abstract `Binding`
   network: concrete nucleon trace (three valence carriers), `∑ w=3` (`nucleonWeight_sum`), closing
   `E_bind=3·count(m)·α_eff(m)` (`E_bind_nucleon`), positive and `≤count/14` (sub-2.2 MeV shift). One scale
-  (proton readout): constituent `=readout+E_bind(4)`, ground reproduces anchor exactly
+  (proton readout): constituent `=readout+(3/5)·E_bind(4)` (`protonHopfBinding`), ground reproduces anchor exactly
   (`ground_reproduces_anchor`, no new number). Excited baryons at the **exact rational**
   `M(n)=m_p·(n+5)(n+6)/30` (`radialMass_ratio`): rungs `m_p,(7/5)m_p,(28/15)m_p,(12/5)m_p,…` strictly
   increasing. **Orbital axis** from the foundational Rindler detuning `1+(γ/2)m` (`γ=2/5`, slope `1/5` is
@@ -313,8 +362,9 @@ Fully-qualified under `HqivSpine.`. Use `#check` for exact types.
   with `K=Ω_k·N₆₇` it is the now-slice imprint (`stellarPressure_eq_curvatureImprint`).
 - `Physics.HadronSpectrum`: meson/baryon ratios off the mass ladder. Mass = core × closure scale
   (`hadronGroundMassMeV_eq_core`); meson : baryon `= 4/9` core-independently (`meson_baryon_ratio`),
-  baryon always heavier (`baryon_heavier_than_meson`); lepton generation steps compose
-  `(τ:μ)·(μ:e)=(τ:e)=2` (`generation_steps_compose`). All ratios use only `{1,2,3}`.
+  baryon always heavier (`baryon_heavier_than_meson`); bare Beltrami spectral steps compose
+  `(τ:μ)·(μ:e)=2` (`generation_steps_compose`). Absolute lepton readouts live in
+  `LeptonAbsoluteScale` / `GenerationResonanceLadder` (`μ/e=4484/2499`, `τ/μ=175/76`).
 - `Physics.GravitationalLensing`: deflection `4·G_eff(φ)·M/b`, exactly twice Newtonian
   (`einstein_eq_two_newtonian`); positive, mass-linear, `1/b`, curvature-increasing
   (`einsteinDeflection_pos/_strictMono_in_M/_antitone_in_b/_strictMono_in_phi`). Bundle
@@ -417,23 +467,35 @@ Fully-qualified under `HqivSpine.`. Use `#check` for exact types.
   (`seesaw_suppression`), below Dirac (`lightNeutrino_lt_dirac`), `→0` as `M_R→∞`
   (`lightNeutrino_lt_of_heavier_MR`). Bundle `neutrino_seesaw_closure`. **Scope:** `m_D, M_R` are free
   inputs (not HQIV-fixed) — this is the seesaw *relations* + texture-zero unification, NOT an absolute
-  `m_ν`. The textbook seesaw is a graft; native mechanism is `NeutrinoCurvatureSuppression`.
-- `Physics.NeutrinoCurvatureSuppression`: the **HQIV-native** ν-mass mechanism (the seesaw "pulled out
-  of the structure"). Native action has no mass term; mass = `M_constituent−E_bind` (a curvature well).
-  The neutrino is chargeless (`SMEmbedding` `ν_R`: `Y=Q=0`), minimal content (`l²=1`), the chirally-
-  protected would-be-zero mode ⇒ no inner well ⇒ `neutrinoTreeMass=0`. Mass = outer-horizon residual:
-  `m_ν = m_χ · γ/S(m)`, `S(m)=(m+1)(m+2)=latticeSimplexCount m`, `γ=2/5` the monogamy complement. The
-  factor `γ/S(m)` is **parameter-free**: `neutrinoSuppression_pos`, `_lt_one`, `_strictAnti` (deeper
-  horizon ⇒ lighter ν). **Uniquely derived** (`neutrinoSuppression_unique_from_foundations`): numerator
-  `γ = 1−α` is the unique chargeless complement of the unit split (`gammaHQIV_eq_one_sub_alphaEM`);
-  denominator is the area, strictly-monotone⇒injective (`latticeSimplexCount_strictMono`); closure shell
-  `referenceM+2` is the *unique* shell whose horizon area = octonionic carrier surface `7·8 =
-  imaginaryDim·carrierMultiplicity` (`outerHorizonArea_closure_eq_carrier`, `closureShell_radial_bracket`
-  = radial bracket `(7,8)`, `neutrinoClosureShell_unique`) ⇒ `1/140` forced (`= (1−α)/(7·8)`).
-  **Rhymes-not-identical** (`neutrino_rhymes_seesaw`): `m_ν = m_χ²/M_eff` with `M_eff = m_χ·S(m)/γ` a
-  *derived* horizon scale (`effectiveHeavyScale_gt_charged`: `>m_χ`), never a free `M_R`. Bundle
-  `NeutrinoCurvatureSuppressionClosure`. **Open:** absolute `m_χ` normalization + ordering (legacy
-  `1/140·M_Z` overshoots `Σm_ν<0.12 eV` ~`10⁸`, inverts ordering). Factor uniquely pinned; `m_χ` open.
+  `m_ν`. The textbook seesaw is a graft; native absolute scale is `CarrierMonogamySuppression`.
+- `Physics.NeutrinoAbsoluteScale`: **one-slot nested Hopf trace → absolute mass.** Generation windings
+  parallel charged leptons; `neutrinoGroundFactor n = generationMassFactor(n)/4`; `hopfShellSectorComposite`
+  on the one-slot trace; readout / matched lepton `= 1/4`. Physical mass `neutrinoAbsoluteMass = m_ℓ/140`
+  with charged anchor `= leptonMassReadout` and **carrier monogamy** `γ/(7·8)`. Lock-in readouts
+  `(3798480/3138800, 76/35, 5)`; lock-in absolute `(3798480/109858000, 304/4900, 1/7)`. Bundle
+  `neutrinoAbsoluteScaleClosure`; `referenceM_neutrino_absolute_scale_closed`.
+- `Physics.CarrierMonogamySuppression`: the **spine-native** ν-mass suppression. Chargeless mode has
+  no inner well (`neutrinoTreeMass=0`); residual mass spreads the monogamy complement `γ=2/5` over the
+  octonionic carrier budget `7·8=56` ⇒ `1/140` (`carrierMonogamySuppression_eq_inv_140`). Same numeric
+  factor as `γ/S(referenceM+2)` but **interpreted on the carrier**, not as an outer-horizon shell readout.
+  Bundle `carrierMonogamySuppressionClosure`.
+- `Physics.GenerationDetunedLadder`: **δ-corrected Hopf-chart weights** on rows `m=n+1`. Bare
+  `λ_min(n)=n+1` is necessary but insufficient for PDG ratios; `generationMassFactor = λ_min·w(n)` with
+  `w(n)=S̃(referenceM)/S̃(n+1)`. Lock-in hopf factors `(35/9, 4, 4)`; bare ratios `μ/e=36/35`, `τ/μ=1`.
+  Used for nested Hopf **binding** on chart shells — not absolute lepton readouts.
+- `Physics.GenerationResonanceLadder`: **extended detuned-shell resonance** mined from legacy
+  `ChargedLeptonResonance`. Outer shells `15 → 33 → 58`; steps `175/76` (τ/μ), `4484/2499` (μ/e).
+  Absolute factor `generationResonanceMassFactor n = generationMassFactor 3 / generationResonanceDescent n`.
+  Lock-in readouts `(759696/784700, 304/175, 4)` × `massUnit=5` ⇒ `(3798480/784700, 304/35, 20)`.
+  Bundle `generationResonanceLadderClosure`; `referenceM_generation_resonance_ladder_closed`.
+- `Physics.SpineMassDischarge`: capstone bundling hopf detuning + resonance ladder + carrier
+  suppression; records closed structural ratios. PDG MeV absolute scale stays `mevUnitConventionFrontier`.
+- `Physics.NeutrinoCurvatureSuppression`: **legacy lattice-bridge interpretation** of the same `1/140`
+  factor via outer shell `referenceM+2` (`γ/S(m)` narrative). Absolute-scale routing now goes through
+  `CarrierMonogamySuppression`; this module remains for the horizon-area uniqueness lemmas and seesaw
+  rhyme (`neutrino_rhymes_seesaw`). **Closed (structure):** one-slot nested Hopf readout
+  (`NeutrinoAbsoluteScale`: `m_ν,readout = massUnit·generationResonanceMassFactor/4`; absolute mass = matched
+  charged-lepton anchor `/ 140`). **Open:** MeV calibration and cosmological `Σm_ν` comparison only.
 
 ### Topology
 - `Topology.NullLatticeComplex`: finite closed 3-complexes; no finite complex satisfies quadratic
@@ -640,9 +702,13 @@ Ordered roughly by value × tractability. Keep the ethics in §1.
   `Physics.NowSliceHorizon` (lapse increment → global detuning; `gEffNow = φ^{3/5}`).
   **Discrete curvature closure landed** as `Physics.NowSliceFromLattice` (`lockinNowSlice`,
   `nowSliceFromLatticeDischarged_holds`; `Frontiers.now_slice_lockin_from_lattice_closed`,
+  `Frontiers.referenceM_lockin_mechanism_closed`,
   `now_slice_omegaK_lattice_structure_closed`, `now_slice_lockin_ages_closed`).
-  *Still open:* dynamical `H(t)` from bulk hyperboloid; full continuous–discrete `Ω_k` identification
-  on all horizons (parallel monotonicity + lock-in normalisation proved).
+  **Causal-diamond formalization landed** as `Physics.NowSliceCausalDiamond`
+  (`causalDiamondClosure`, `Frontiers.referenceM_causal_diamond_closed`).
+  **Bulk clock landed** as `Physics.BulkHyperboloidDynamics` (`dτ/dt = N`, lock-in `H(4)=5`).
+  *Still open:* full manifold geodesics; pointwise continuous–discrete `Ω_k` equality on all shells
+  (chart ordering consistency below lock-in proved; not a second curvature ontology).
 - [x] **`DiscreteHeat` generalized from `C₃` to `Cₙ`** — landed as `Physics.DiscreteHeatCycle` on the
   periodic mesh `ZMod n` (`[NeZero n]`), where the cyclic shift is a genuine `Fintype` bijection so
   the integration-by-parts reindexing holds for *every* mesh length: dissipation `⟨u,Δu⟩ = −‖∇u‖² ≤ 0`,
@@ -700,7 +766,10 @@ Ordered roughly by value × tractability. Keep the ethics in §1.
   (pipeline). *Still open:* real `𝔰𝔬(8)` / triality identification of embed image.
 - [ ] `QuantumChemistry/ParticleShellStructure` is now ported; next, the **noble-gas closures** and
   valence count as Lean theorems (currently computational in Python).
-- [ ] Lepton/quark mass-ratio readouts from `MassLadder` with explicit now-slice provenance.
+- [x] Lepton/quark mass-ratio readouts from `GenerationResonanceLadder` with explicit now-slice
+  provenance (`SpineMassDischarge` capstone; structural ratios `4484/2499`, `175/76` closed).
+  PDG MeV absolute scale remains comparison-only (`mevUnitConventionFrontier`).
+  Sanity: `python3 scripts/hqiv_spine_golden_check.py` + `hqiv_spine_sector_pdg_comparison.py`.
 
 **Hygiene / meta**
 - [ ] Keep this doc and the `HqivSpine.lean` narrative in sync when modules land.
