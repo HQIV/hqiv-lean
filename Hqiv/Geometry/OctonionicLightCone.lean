@@ -1185,7 +1185,13 @@ theorem new_modes_referenceM_numeric : new_modes referenceM = 40 := by
   rw [hr, new_modes_succ 3]
   norm_num
 
-/-- Root light-cone statement of the current programme pin: `referenceM = 4`. -/
+/-- Root light-cone statement of the current programme pin: `referenceM = 4`.
+
+This is a **stable lock-in**, not a free chart choice: it is the unique minimal
+shell whose newly unlocked mode budget reaches the sector capacity `40`
+(`referenceM_first_shell_with_sector_capacity`).  Chemistry and hadron mass
+charts use this shell as the proton-mass unit anchor; solar-system / SPARC
+Doppler readouts use the Kirchhoff propagation band (`ξ = 1`), not this index. -/
 theorem referenceM_eq_four_lightcone : referenceM = 4 := by
   unfold referenceM qcdShell stepsFromQCDToLockin latticeStepCount
   norm_num
@@ -1194,7 +1200,8 @@ theorem referenceM_eq_four_lightcone : referenceM = 4 := by
 is shell `4`.
 
 This is the theorem-level "why 4" statement available from the null-lattice mode
-count alone: the value is a minimal capacity threshold, not a proton-mass fit. -/
+count alone: the value is a minimal capacity threshold, not a proton-mass fit
+and not an adjustable parameter. -/
 theorem new_modes_ge_forty_iff_four_le (m : Nat) :
     40 ≤ new_modes m ↔ 4 ≤ m := by
   constructor
@@ -1210,7 +1217,7 @@ theorem new_modes_ge_forty_iff_four_le (m : Nat) :
     nlinarith
 
 /-- The reference shell is exactly the minimal shell reaching the `40`-mode sector
-capacity. -/
+capacity — the stable lock-in of the discrete null lattice. -/
 theorem referenceM_first_shell_with_sector_capacity :
     40 ≤ new_modes referenceM ∧ ∀ m : Nat, 40 ≤ new_modes m → referenceM ≤ m := by
   constructor

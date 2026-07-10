@@ -1,0 +1,111 @@
+{
+  "source": "scripts/hqiv_allotrope_contact_rank_readout.py",
+  "lean_modules": [
+    "Hqiv.QuantumChemistry.AllotropeNetwork",
+    "Hqiv.QuantumChemistry.PhaseElasticity"
+  ],
+  "formula": {
+    "bond_order": "p = cap(Z)/k",
+    "network_score": "w_c \u00b7 inc \u00b7 p \u00b7 (1 + \u03b3 \u00b7 (4/8) \u00b7 \u03b4)",
+    "periodic_increment": "1+\u03b1 (3D), 1+\u03b1\u03b3 (2D), 1+\u03b1\u03b3\u00b7(4/8) (1D)",
+    "contact_weight": "k/4"
+  },
+  "identity_checks": {
+    "carbon_has_three": true,
+    "diamond_outranks_graphite": true,
+    "graphite_outranks_carbyne": true,
+    "top_is_diamond": true,
+    "score_positive": true,
+    "homo_ionic_zero": true
+  },
+  "all_identity_checks_pass": true,
+  "carbon_ranking": [
+    {
+      "element_z": 6,
+      "name": "diamond (sp3)",
+      "coordination": 4,
+      "bond_order": 1.0,
+      "bond_angle_deg": 109.47122063449069,
+      "bond_length_angstrom": 1.2599457402452383,
+      "periodic_increment": 1.6,
+      "contact_weight": 1.0,
+      "ionic_character": 0.0,
+      "network_score": 1.6,
+      "hybridization": "sp3",
+      "rank": 1
+    },
+    {
+      "element_z": 6,
+      "name": "graphite/graphene (sp2)",
+      "coordination": 3,
+      "bond_order": 1.3333333333333333,
+      "bond_angle_deg": 120.00000000000001,
+      "bond_length_angstrom": 1.2095479106354288,
+      "periodic_increment": 1.24,
+      "contact_weight": 0.75,
+      "ionic_character": 0.0,
+      "network_score": 1.2399999999999998,
+      "hybridization": "sp2",
+      "rank": 2
+    },
+    {
+      "element_z": 6,
+      "name": "carbyne (sp)",
+      "coordination": 2,
+      "bond_order": 2.0,
+      "bond_angle_deg": 180.0,
+      "bond_length_angstrom": 1.1199517691068783,
+      "periodic_increment": 1.12,
+      "contact_weight": 0.5,
+      "ionic_character": 0.0,
+      "network_score": 1.12,
+      "hybridization": "sp",
+      "rank": 3
+    }
+  ],
+  "silicon_ranking": [
+    {
+      "element_z": 14,
+      "name": "silicon (diamond-cubic)",
+      "coordination": 4,
+      "bond_order": 1.0,
+      "bond_angle_deg": 109.47122063449069,
+      "bond_length_angstrom": 0.6479720949832652,
+      "periodic_increment": 1.6,
+      "contact_weight": 1.0,
+      "ionic_character": 0.0,
+      "network_score": 1.6,
+      "hybridization": "sp3",
+      "rank": 1
+    },
+    {
+      "element_z": 14,
+      "name": "silicene (sp2)",
+      "coordination": 3,
+      "bond_order": 1.3333333333333333,
+      "bond_angle_deg": 120.00000000000001,
+      "bond_length_angstrom": 0.6220532111839346,
+      "periodic_increment": 1.24,
+      "contact_weight": 0.75,
+      "ionic_character": 0.0,
+      "network_score": 1.2399999999999998,
+      "hybridization": "sp2",
+      "rank": 2
+    },
+    {
+      "element_z": 14,
+      "name": "Z14 k=2",
+      "coordination": 2,
+      "bond_order": 2.0,
+      "bond_angle_deg": 120.00000000000001,
+      "bond_length_angstrom": 0.5759751955406802,
+      "periodic_increment": 1.12,
+      "contact_weight": 0.5,
+      "ionic_character": 0.0,
+      "network_score": 1.12,
+      "hybridization": "sp2",
+      "rank": 3
+    }
+  ],
+  "comparison_policy": "NIST/CRC allotrope names are labels only; scores are derived"
+}

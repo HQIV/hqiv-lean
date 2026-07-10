@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-HQIV particle-first shell structure: the periodic table from two axiom-level multiplicities.
+HQIV particle-first shell structure: the periodic table from two foundation-level multiplicities.
 
 The chemistry engine had three injected literals — the octet ``8``, the subshell capacities
 ``{2,6,10,14}``, and the noble-gas valence subtraction.  All three are reconstructed here from
@@ -15,7 +15,7 @@ elsewhere.  Each generation holds ``2·⌈g/2⌉²`` electrons — the Janet lef
 pairing ``C(2k−1)=C(2k)=2k²``.  The only residual stated input is the within-generation tie-break
 (lower n first = marginal radial-over-angular cost).
 
-Two multiplicities, both axiom-level:
+Two multiplicities, both foundation-level:
 
   * **monogamy pairing  g_pair = 2** — informational monogamy makes a shared phase channel a
       *monogamous pair* of two opposite-phase carriers (this is the "spin doubling"); it is the
@@ -89,16 +89,68 @@ def max_bond_order() -> int:
     return angular_degeneracy(1)
 
 
+def electron_configuration_nl(z: int) -> list[tuple[int, int]]:
+    """Per-electron ``(n, ℓ)`` occupancy from Madelung fill + derived subshell capacities.
+
+    Same filling as ``hqiv_atom_construction.electron_configuration``, kept here so bonding
+    valence does not import the atom-construction layer (circular dependency).
+    """
+    if z <= 0:
+        return []
+    cfg: list[tuple[int, int]] = []
+    remaining = int(z)
+    for n, l in madelung_fill_order():
+        if remaining <= 0:
+            break
+        k = min(remaining, subshell_capacity(l))
+        cfg.extend([(n, l)] * k)
+        remaining -= k
+    return cfg
+
+
+def outer_principal_valence(z: int) -> int:
+    """Electrons in the highest Madelung principal shell with ℓ ∈ {0,1} (outer s+p).
+
+    Noble-gas residual ``valence_electron_count`` counts the whole post-core block
+    (e.g. Ge → 14 = 3d¹⁰4s²4p²).  Main-group bonding needs the outer principal
+    s+p count: C/Si/Ge → 4, Ga → 3, Br → 7.
+    """
+    cfg = electron_configuration_nl(z)
+    if not cfg:
+        return 0
+    top_n = max(n for n, _l in cfg)
+    return sum(1 for n, l in cfg if n == top_n and l in (0, 1))
+
+
+def bonding_valence_electron_count(z: int) -> int:
+    """Valence count for octet bonding capacity / crystal family keys.
+
+    * Closed or empty ``(n−1)d`` → outer principal s+p (post-d Ge/Ga/Sn, main group).
+    * Open ``(n−1)d`` (0 < d < 10) → noble-gas residual so mid-transition metals
+      keep ``bonding_capacity = 0`` (peel / Fermi spine), not a false p-block cap=2.
+    """
+    cfg = electron_configuration_nl(z)
+    if not cfg:
+        return 0
+    top_n = max(n for n, _l in cfg)
+    d_prev = sum(1 for n, l in cfg if n == top_n - 1 and l == 2)
+    d_cap = subshell_capacity(2)
+    if 0 < d_prev < d_cap:
+        return valence_electron_count(z)
+    return outer_principal_valence(z)
+
+
 def bonding_capacity(z: int) -> int:
     """Covalent bonds an atom commits = electrons to the *nearest* closed shell.
 
     An atom reaches closure either by sharing electrons up to the octet (right side: O→2, F→1) or
     by shedding its few valence electrons (left side: Li→1, Be→2, B→3), whichever is fewer:
-    ``cap = min(valence, target − valence)``, with the shell target the s+p octet (period ≥ 2) or
-    the 1s duet (period 1).  This is the single capacity behind every bond order — homonuclear,
-    heteronuclear, and networked.
+    ``cap = min(V_bond, target − V_bond)``, with ``V_bond = bonding_valence_electron_count``
+    (outer s+p past closed d; noble residual on open d) and shell target the s+p octet
+    (period ≥ 2) or the 1s duet (period 1).  This is the single capacity behind every
+    bond order — homonuclear, heteronuclear, and networked.
     """
-    v = valence_electron_count(z)
+    v = bonding_valence_electron_count(z)
     # period-1 closes at the 1s duet cap(0)=2 (H, He); period ≥ 2 at the s+p octet.
     duet = subshell_capacity(0)
     target = duet if z <= duet else octet_capacity()
@@ -122,11 +174,11 @@ def lone_pair_count(z: int, n_sigma_bonds: int | None = None) -> int:
 
     Budget over the valence pair-slots (each slot its own system, identical rules): the atom supplies
     1 e⁻ to each *shared* slot (σ-bond) and 2 e⁻ to each *unshared* slot (lone pair).  With ``B``
-    σ-bonds the remaining ``V − B`` valence electrons pair up: ``L = (V − B)/2``.  ``B`` defaults to
-    the derived :func:`bonding_capacity`; the leftover ``V − B`` is always even, so the budget
-    ``2L + B = V`` closes exactly.  Lean: ``LonePairPartition.electron_budget_closes``.
+    σ-bonds the remaining ``V − B`` bonding-valence electrons pair up: ``L = (V − B)/2``.
+    ``B`` defaults to the derived :func:`bonding_capacity`; the leftover ``V − B`` is always even,
+    so the budget ``2L + B = V`` closes exactly.  Lean: ``LonePairPartition.electron_budget_closes``.
     """
-    v = valence_electron_count(z)
+    v = bonding_valence_electron_count(z)
     b = bonding_capacity(z) if n_sigma_bonds is None else n_sigma_bonds
     if b >= v:
         return 0
@@ -139,7 +191,7 @@ def steric_domain_count(z: int, n_sigma_bonds: int | None = None) -> int:
     Right-side p-block atoms (V ≥ 4) all return 4 (tetrahedral electron geometry); electron-deficient
     left-side atoms (V ≤ 4) return V.  Lean: ``LonePairPartition.domains_right/​domains_left``.
     """
-    v = valence_electron_count(z)
+    v = bonding_valence_electron_count(z)
     b = bonding_capacity(z) if n_sigma_bonds is None else n_sigma_bonds
     return min(b, v) + lone_pair_count(z, b)
 
@@ -241,7 +293,7 @@ def main() -> None:
     caps = {("s", 0): subshell_capacity(0), ("p", 1): subshell_capacity(1),
             ("d", 2): subshell_capacity(2), ("f", 3): subshell_capacity(3)}
 
-    print("HQIV particle-first shell structure (two axiom-level multiplicities → periodic table)")
+    print("HQIV particle-first shell structure (two foundation-level multiplicities → periodic table)")
     print(f"  monogamy pairing g_pair = {MONOGAMY_PAIR_MULTIPLICITY}")
     print(f"  subshell capacity 2(2ℓ+1): " +
           ", ".join(f"{name}={c}" for (name, _l), c in caps.items()))

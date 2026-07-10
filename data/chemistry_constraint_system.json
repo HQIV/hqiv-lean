@@ -1,0 +1,351 @@
+{
+  "n_equations": 23,
+  "slot_catalog": [
+    "bulk_rho",
+    "lindemann_piezo",
+    "em_phase",
+    "open_channel",
+    "hbond_donor",
+    "hbond_acceptor",
+    "ionic_char",
+    "nuclear_pack",
+    "period_fade",
+    "chemo",
+    "photo",
+    "thermo_melt",
+    "crystal_em",
+    "metallic_alpha",
+    "apolar_pack",
+    "steric_fine"
+  ],
+  "full": {
+    "x": {
+      "bulk_rho": 0.0,
+      "lindemann_piezo": 0.0,
+      "em_phase": -0.0018307908655622223,
+      "open_channel": 0.0,
+      "hbond_donor": 0.0027988642478245992,
+      "hbond_acceptor": 0.006845653125098555,
+      "ionic_char": 0.0010115473800485393,
+      "nuclear_pack": 0.0,
+      "period_fade": 0.0,
+      "chemo": 0.0027988642478245992,
+      "photo": 0.0,
+      "thermo_melt": 0.001011547380048539,
+      "crystal_em": 0.0018307908655622231,
+      "metallic_alpha": -0.008996811332065702,
+      "apolar_pack": -0.0015575244246564485,
+      "steric_fine": 0.00010890971681202347
+    },
+    "rank": 6,
+    "null_dim": 4,
+    "resid_norm": 0.033229910184294116,
+    "resid_rms": 0.006928915251247309,
+    "cond": 9.444552566063876e+17,
+    "dead": [
+      "bulk_rho",
+      "lindemann_piezo",
+      "open_channel",
+      "nuclear_pack",
+      "period_fade",
+      "photo"
+    ]
+  },
+  "by_observable": {
+    "rho": {
+      "x": {
+        "bulk_rho": 0.0,
+        "lindemann_piezo": 0.0,
+        "em_phase": -0.005492372596686668,
+        "open_channel": 0.0,
+        "hbond_donor": -0.001631245422249735,
+        "hbond_acceptor": 0.005064198289214415,
+        "ionic_char": 0.05605247219120834,
+        "nuclear_pack": 0.0,
+        "period_fade": 0.0,
+        "crystal_em": 0.005492372596686667,
+        "metallic_alpha": -0.017993622664131403,
+        "apolar_pack": 0.0027608068426838834,
+        "steric_fine": -0.00010980130662334095
+      },
+      "rank": 6,
+      "null_dim": 2,
+      "resid_rms": 0.0032954691874517864,
+      "n_eq": 8,
+      "dead": [
+        "bulk_rho",
+        "lindemann_piezo",
+        "open_channel",
+        "nuclear_pack",
+        "period_fade"
+      ]
+    },
+    "n": {
+      "x": {
+        "bulk_rho": 0.0,
+        "open_channel": 0.0,
+        "hbond_donor": 0.0026857595461659673,
+        "hbond_acceptor": 0.012903857453367697,
+        "ionic_char": -0.05390734730542526,
+        "chemo": 0.0026857595461659686,
+        "photo": 0.0,
+        "steric_fine": 0.2109368078698586
+      },
+      "rank": 4,
+      "null_dim": 1,
+      "resid_rms": 0.0013197741667801978,
+      "n_eq": 7,
+      "dead": [
+        "bulk_rho",
+        "open_channel",
+        "photo"
+      ]
+    },
+    "T": {
+      "x": {
+        "ionic_char": 0.0019620796972540802,
+        "thermo_melt": 0.0019620796972540802
+      },
+      "rank": 1,
+      "null_dim": 1,
+      "resid_rms": 0.003052443628829606,
+      "n_eq": 8,
+      "dead": []
+    }
+  },
+  "molecular": {
+    "rho": {
+      "x": {
+        "bulk_rho": 0.0,
+        "lindemann_piezo": 0.0,
+        "em_phase": 0.0,
+        "open_channel": 0.0,
+        "hbond_donor": -0.001631245422249736,
+        "hbond_acceptor": 0.005064198289214415,
+        "ionic_char": 0.0,
+        "nuclear_pack": 0.0,
+        "period_fade": 0.0,
+        "crystal_em": 0.0,
+        "metallic_alpha": 0.0,
+        "apolar_pack": 0.002760806842683889,
+        "steric_fine": -0.00010980130662334095
+      },
+      "rank": 3,
+      "null_dim": 1,
+      "resid_rms": 0.002346081095993486,
+      "n_eq": 4
+    },
+    "n": {
+      "x": {
+        "bulk_rho": 0.0,
+        "open_channel": 0.0,
+        "hbond_donor": 0.002685759546165939,
+        "hbond_acceptor": 0.012903857453367678,
+        "ionic_char": 0.0,
+        "chemo": 0.002685759546165941,
+        "photo": 0.0,
+        "steric_fine": 0.21093680786986083
+      },
+      "rank": 3,
+      "null_dim": 1,
+      "resid_rms": 0.0017458971160339432,
+      "n_eq": 4
+    },
+    "T": {
+      "x": {
+        "ionic_char": 0.0,
+        "thermo_melt": 0.0
+      },
+      "rank": 0,
+      "null_dim": 0,
+      "resid_rms": 0.004316807178270175,
+      "n_eq": 4
+    }
+  },
+  "equations": [
+    {
+      "molecule": "H2O",
+      "observable": "rho",
+      "b": -0.004692162191986972,
+      "err_pct": 0.4703187622629659,
+      "pred": 0.9213128230499514,
+      "ref": 0.917
+    },
+    {
+      "molecule": "H2O",
+      "observable": "n",
+      "b": 0.0034917942320678865,
+      "err_pct": 0.34857050080892454,
+      "pred": 1.3054337264394031,
+      "ref": 1.31
+    },
+    {
+      "molecule": "H2O",
+      "observable": "T",
+      "b": 0.0015927750611595768,
+      "err_pct": 0.15915072681543033,
+      "pred": 272.71527978970363,
+      "ref": 273.15
+    },
+    {
+      "molecule": "CH4",
+      "observable": "rho",
+      "b": 0.002763551875349472,
+      "err_pct": 0.2759736781078404,
+      "pred": 0.521556657663496,
+      "ref": 0.523
+    },
+    {
+      "molecule": "CH4",
+      "observable": "n",
+      "b": -0.005273420196746468,
+      "err_pct": 0.5287349150677745,
+      "pred": 1.1058160840657456,
+      "ref": 1.1
+    },
+    {
+      "molecule": "CH4",
+      "observable": "T",
+      "b": -0.0021708731813332503,
+      "err_pct": 0.2173231232552603,
+      "pred": 90.89711207279252,
+      "ref": 90.7
+    },
+    {
+      "molecule": "NH3",
+      "observable": "rho",
+      "b": -0.0016339904549153201,
+      "err_pct": 0.16353261447210843,
+      "pred": 0.8183360614602371,
+      "ref": 0.817
+    },
+    {
+      "molecule": "NH3",
+      "observable": "n",
+      "b": 0.010644939289078378,
+      "err_pct": 1.0588482427046386,
+      "pred": 1.3060232031962988,
+      "ref": 1.32
+    },
+    {
+      "molecule": "NH3",
+      "observable": "T",
+      "b": 0.0077904048815454355,
+      "err_pct": 0.7760138324678454,
+      "pred": 194.28056491602797,
+      "ref": 195.8
+    },
+    {
+      "molecule": "HF",
+      "observable": "rho",
+      "b": 0.005064198289214415,
+      "err_pct": 0.5051396855840435,
+      "pred": 1.1441908936157834,
+      "ref": 1.15
+    },
+    {
+      "molecule": "HF",
+      "observable": "n",
+      "b": 0.012903857453367699,
+      "err_pct": 1.2820959635083489,
+      "pred": 1.1846148484378998,
+      "ref": 1.2
+    },
+    {
+      "molecule": "HF",
+      "observable": "T",
+      "b": 0.002568903632713546,
+      "err_pct": 0.2565606823442483,
+      "pred": 189.1135609462753,
+      "ref": 189.6
+    },
+    {
+      "molecule": "NaCl",
+      "observable": "rho",
+      "b": 0.016212903473991198,
+      "err_pct": 1.608218176738006,
+      "pred": 2.135101665564785,
+      "ref": 2.17
+    },
+    {
+      "molecule": "NaCl",
+      "observable": "n",
+      "b": -0.01559243659084965,
+      "err_pct": 1.5714632916988687,
+      "pred": 1.5682633932238306,
+      "ref": 1.544
+    },
+    {
+      "molecule": "NaCl",
+      "observable": "T",
+      "b": 0.001135043914971078,
+      "err_pct": 0.11343999962750285,
+      "pred": 1072.7816544040006,
+      "ref": 1074.0
+    },
+    {
+      "molecule": "Cu",
+      "observable": "rho",
+      "b": -0.0179936226641314,
+      "err_pct": 1.815648324322889,
+      "pred": 9.122682089859332,
+      "ref": 8.96
+    },
+    {
+      "molecule": "Cu",
+      "observable": "T",
+      "b": 0.0,
+      "err_pct": 0.0,
+      "pred": 1357.77,
+      "ref": 1357.77
+    },
+    {
+      "molecule": "Si",
+      "observable": "rho",
+      "b": 0.016679679402283966,
+      "err_pct": 1.654134374913241,
+      "pred": 2.2914586690645216,
+      "ref": 2.33
+    },
+    {
+      "molecule": "Si",
+      "observable": "n",
+      "b": 0.0,
+      "err_pct": 0.0,
+      "pred": 3.42,
+      "ref": 3.42
+    },
+    {
+      "molecule": "Si",
+      "observable": "T",
+      "b": 0.0,
+      "err_pct": 0.0,
+      "pred": 1687.0,
+      "ref": 1687.0
+    },
+    {
+      "molecule": "Ge",
+      "observable": "rho",
+      "b": 0.005289810984462705,
+      "err_pct": 0.527584457175012,
+      "pred": 5.29193250687829,
+      "ref": 5.32
+    },
+    {
+      "molecule": "Ge",
+      "observable": "n",
+      "b": 0.0,
+      "err_pct": 0.0,
+      "pred": 4.0,
+      "ref": 4.0
+    },
+    {
+      "molecule": "Ge",
+      "observable": "T",
+      "b": 0.0,
+      "err_pct": 0.0,
+      "pred": 1211.0,
+      "ref": 1211.0
+    }
+  ]
+}

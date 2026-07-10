@@ -3,7 +3,25 @@
 **Lean:** `Hqiv.QuantumChemistry.PhaseGeometryDensity`  
 **Homogeneous κ₆:** `Hqiv.Physics.HomogeneousCurvatureSecondOrder`  
 **Python:** `scripts/hqiv_phase_geometry_density.py`  
-**Paper:** `papers/nucleon_binding/hqiv_nucleon_binding_from_composite_trace.tex` §phase-geometry-density (v3)
+**Paper:** `papers/nucleon_binding/hqiv_nucleon_binding_from_composite_trace.tex` §phase-geometry-density (v3)  
+**Literature (bookmark):** [LITERATURE_WATER_TWO_STATE.md](../LITERATURE_WATER_TWO_STATE.md) — Li et al. 2026 two-state liquid water; Sciortino LLCP comparison quarantine.
+
+## Phase diagram mixture (generalized)
+
+**Lean:** `Hqiv.QuantumChemistry.PhaseDiagramMixture`  
+**Python:** `hqiv_lab/phase_diagram.py`, `scripts/hqiv_phase_diagram.py`  
+**Audit:** `data/phase_diagram_audit.json`
+
+```
+species or mixture (mole fractions)
+  → motif end members (ρ_LDL, ρ_HDL from geometry ladder)
+  → (T, P) → DerivedPhase (+ metastable_liquid below T_melt)
+  → f_LDL from cohesive-scale Boltzmann (HQIV only)
+  → ρ_curv = f·ρ_LDL + (1−f)·ρ_HDL
+  → material response / protein solvent hooks
+```
+
+External LLPT coordinates (Sciortino ~198 K / 1250 atm) grade HQIV readouts; never inputs.
 
 ## Pipeline
 

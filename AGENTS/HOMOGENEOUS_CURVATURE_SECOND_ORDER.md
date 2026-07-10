@@ -45,6 +45,7 @@ Python demo: `self_consistent_homogeneous_feedback()` (fixed small iteration cou
 
 | Module | Role |
 |--------|------|
+| `MacroRicciFlowDynamics` | **Macro Ricci** on contact η: contraction/expansion tug-of-war, ρ dress, stacked-line breathing, compound guard |
 | `DynamicBindingChart` | First/second-order κ at ξ (chart default) |
 | `HopfShellBeltramiMassBridge` | κ₆ = η·γ·C₂ matter fraction |
 | `NuclearOutsideTemperatureDynamics` | Outside G_eff(1+ε) at contacts |

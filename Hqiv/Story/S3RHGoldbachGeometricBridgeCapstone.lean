@@ -230,8 +230,12 @@ So `(r, s)` is a rigid integral coordinate system on the cell, more informative 
 **Surjectivity + divisor fibers.** Every `r ∈ ℕ⁺` is realized: `(m,n) = (r+1, r)` gives
 triple `(2r+1, 2r(r+1), 2r²+2r+1)` with inradius `r`. Fixing `r` reduces classification
 to a **divisor problem**: primitive triples of inradius `r` ↔ factorizations `r = n·g`
-with `gcd(n,g) = 1`, `g` odd. Prime `r` forces `g = 1` — i.e. primes sit on the
-gap-one boundary `m − n = 1` of this lattice.
+with `gcd(n,g) = 1`, `g` odd. Prime `r` has two boundary branches: `g = 1`
+(the gap-one edge `m − n = 1`) or `n = 1` (the axis edge). In the Goldbach-relevant
+non-axis range (`1 < n`, matching the nontrivial midpoint regime rather than the
+discarded small cases), prime `r` therefore forces `g = 1`. A Goldbach use of this
+lattice still needs the phase-cover argument that keeps the bridge on that
+non-axis branch.
 
 **Why this is relevant here, and where it is already touched.** The bridge's additive
 channel is the **square-midpoint / gap-one** vantage: §6's

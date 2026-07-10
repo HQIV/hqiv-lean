@@ -6,6 +6,9 @@ from hqiv_lab.derived_bond_geometry import (
     bond_length_angstrom,
     carbonyl_bond_length_angstrom,
     centre_bond_angle_rad,
+    peptide_bond_length_c_n,
+    peptide_bond_length_ca_c,
+    peptide_bond_length_n_ca,
 )
 from hqiv_lab.spec import MoleculeSpec
 
@@ -213,19 +216,20 @@ def spec_glycylglycine() -> MoleculeSpec:
         _h("HN2"),
         _h("HA2"),
     )
-    r_cn = bond_length_angstrom("C", "N", coord_i=2, coord_j=2)
-    r_cc = bond_length_angstrom("C", "C", coord_i=2, coord_j=2)
+    r_cn = peptide_bond_length_c_n()
+    r_n_ca = peptide_bond_length_n_ca()
+    r_ca_c = peptide_bond_length_ca_c()
     r_co = carbonyl_bond_length_angstrom()
     r_nh = bond_length_angstrom("N", "H", coord_i=2, coord_j=1)
     r_ch = bond_length_angstrom("C", "H", coord_i=2, coord_j=1)
     ang = centre_bond_angle_rad(6, 4)
     bonds = (
-        _BG(0, 1, r_cn, bond_angle_rad=ang),
-        _BG(1, 2, r_cc, bond_angle_rad=ang),
+        _BG(0, 1, r_n_ca, bond_angle_rad=ang),
+        _BG(1, 2, r_ca_c, bond_angle_rad=ang),
         _BG(2, 3, r_co),
         _BG(2, 4, r_cn, bond_angle_rad=ang),
-        _BG(4, 5, r_cn, bond_angle_rad=ang),
-        _BG(5, 6, r_cc, bond_angle_rad=ang),
+        _BG(4, 5, r_n_ca, bond_angle_rad=ang),
+        _BG(5, 6, r_ca_c, bond_angle_rad=ang),
         _BG(6, 7, r_co),
         _BG(0, 8, r_nh),
         _BG(1, 9, r_ch),

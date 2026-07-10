@@ -22,6 +22,72 @@ HQIV starts from **two physical postulates** and adds **no mathematical axioms**
 - **Axiom-free (logic):** every *consequence* proved from those definitions reduces to nothing but Lean's standard logical core (`propext`, `Classical.choice`, `Quot.sound`) — no bespoke mathematical axioms smuggled in. The recently discharged slices — the general `dim 𝖘𝖔(n) = n(n-1)/2` skew-basis count (SO(4)/SO(8)), the genuine `𝖘𝖔(8)` Lie-closure certificate, the Clifford `Cl(0,6)` spinor Gram identity proved `W = I₆₄` by **plain `decide`**, and the entire HEP-decay readout spine — carry **zero `sorry`, zero bespoke axioms, and zero `native_decide`** (no `Lean.ofReduceBool` / compiler-trust). The `HQIVPhysics` foundation cone uses only the standard core. The genuine `axiom` declarations that *do* remain — the false float SO(8) orthogonality matrix `so8CoordMatrix_transpose_mul_self` (explicitly **quarantined**), the `so8_closure_theorem_symbolic` that depends on it, and a few optional `Hqiv/Story` scaffolds — sit **off** the physics spine and are routed around by the axiom-free dimension/closure proofs.
 - **Knob-free (parameters):** there are **no tunable constants**. The curvature-imprint exponent **α = 3/5** and monogamy split **γ = 2/5** are *forced* by the lattice (`latticeAlphaRatio_eq_alpha`, `gamma_eq_2_5`), not fit; the shell ladder `φ(m) = 2(m+1)` and `shell_shape` are derived; couplings, mass scales, baryogenesis η, BBN abundances, nucleon binding, and HEP branching ratios are **outputs**. A single dimensionful **scale witness** (the proton mass at `referenceM = 4`) fixes units; no PDG current masses, fitted potentials, or external lattice tables are injected.
 
+## Inputs → outputs (the HQIV pipeline)
+
+Everything in the formal stack is one derivation chain. The **inputs** are small; the **middle layer** is forced combinatorics and algebra; the **stable configuration** is lock-in at shell **`m = 4`**; the **outputs** are couplings, masses, asymmetries, and ages.
+
+### Inputs (nothing tunable)
+
+| Input | Meaning | Lean anchor |
+|-------|---------|-------------|
+| **Discrete null light cone** | New modes at shell `m` follow the stars-and-bars law on a 3-transverse null lattice | `latticeSimplexCount`, `new_modes` |
+| **Informational monogamy / ADM lapse** | The bulk clock is `N = 1 + Φ + φ·t` — horizon information is conserved on the split | `NowSlice.lapse`, legacy `HQVMetric.HQVM_lapse` |
+| **`transverseDim = 3`** | The *only* combinatorial seed: **three-dimensional causal growth** on the null cone | `HqivSpine.Foundation.transverseDim` |
+
+These are physics postulates encoded as ordinary Lean `def`s — not bespoke `axiom`s.
+
+### Forced middle layer (derived, not injected)
+
+From **`d = 3`** growth alone:
+
+- **Shell arithmetic:** quadratic mode law `(m+2)(m+1)`, hockey-stick cumulative, discrete α ratio → **`α = 3/5`**, **`γ = 2/5`** (`alpha_transverseDim`, `gamma_three`).
+- **Octonion carrier:** `8 = 2³` signs per axis, seven imaginary units, Fano `PG(2,2)`, **`dim 𝔰𝔬(8) = 28`**, genuine division algebra — not postulated separately.
+- **Gauge split:** `1 + 3 + 4` over the eight carrier channels → EM + weak + strong without adding a gluon field.
+- **Temperature ladder:** `T(m) = 1/(m+1)`, auxiliary field **`φ(m) = 2(m+1)`**, curvature shape **`shellShape`** from the ladder (not an independent knob).
+
+### Stable configuration — lock-in at `referenceM = 4`
+
+Shell **`m = 4`** is the **unique discrete equilibrium** (variational closure + Casimir balance + joint potential). At lock-in the observer's **now slice** reads:
+
+| Field | Lock-in value | Role |
+|-------|---------------|------|
+| `φ` | `1` | Expansion-rate / Planck-pole Hubble anchor |
+| `Φ` | `0` | Balanced-horizon weak-field potential |
+| `Ω_k` | `1` | Spatial curvature normalised at lock-in (`omegaKChart`) |
+| `t` | `4` | Coordinate age on the shell ladder |
+| `N` | `5` | ADM lapse = `massUnit` = `ξ_lock = m+1` |
+| Wall-clock age | `12` | Proper-time integral; ratio `τ/t = 3` |
+
+The proton at **`referenceM = 4`** is the **scale witness** (MeV discharge is comparison-only in the spine quarantine). Masses downstream are `massUnit × (dimensionless ratio)` — curvatures stay explicit on the slice.
+
+### Outputs (readouts from the locked configuration)
+
+- **Couplings:** `1/α_GUT = 42`, running `1/α(ξ)`, brace readouts — no SM β-function injection.
+- **Fermion masses:** nested Hopf binding + content-class traces; lepton resonance ratios `μ/e = 4484/2499`, `τ/μ = 175/76`.
+- **Baryogenesis:** `η(m) = Ω_k(m)·δ_E(m)` on the shell ladder; lock-in `η = δ_E(4)`.
+- **Strong sector / Casimir:** `C_A/C_F = 9/4`, colour confinement via network weights.
+- **Universe ages:** wall-clock vs apparent from the lapse (`Age`, `UniverseAge`).
+- **Chemistry / HEP / BBN:** downstream of the same φ-ladder and carrier algebra (legacy tree + spine sectors).
+
+PDG numbers may appear **only** as comparison labels — never as derivation inputs.
+
+### Now-slice closure (`HqivSpine/`)
+
+The clean spine bundles the discharged now-slice chart in `Physics.NowSliceClosure` (`referenceM_now_slice_closure_closed`):
+
+| Layer | Status |
+|-------|--------|
+| Null-lattice `(φ, Φ)` + lock-in `(1, 0, 1, 4, 5)` | closed — `NowSliceFromLattice` |
+| `Ω_k = omegaKChart` on the continuous `ξ` chart | closed — `NowSliceOmegaKBridge` |
+| Homogeneous bulk clock `dτ/dt = N(t)` | closed — `BulkHyperboloidDynamics` |
+| Causal-diamond apex + `(α,γ)` evaluation | closed — `NowSliceCausalDiamond` |
+| Forward-null geodesics on the discrete chart | closed — `Geometry.Lorentz` |
+| HQVM Christoffel + comoving / inhomogeneous lapse geodesics | closed — `HQVMMetric`, `HQVMGeodesics` |
+| Covariant plasma O-Maxwell on HQVM chart | closed — `CovariantOMaxwell` |
+| Non-comoving timelike/spacelike geodesics (flat-jet straight lines) | closed — `HQVMGeodesics` |
+
+Build the spine: `lake build HqivSpine` (or `lake build HQIVCleanSpine`). Agent contract: [`AGENTS/HQIVSPINE.md`](AGENTS/HQIVSPINE.md).
+
 ### Published paper series (Zenodo DOIs)
 
 All records live in the [Zenodo HQIV community](https://zenodo.org/communities/hqiv). Paper sources, bibliographies, and reproducer scripts are under [`papers/`](papers/README.md).
@@ -57,6 +123,8 @@ The modified **CLASS** tree lives in the separate **`HQIV/class_hqiv`** checkout
 | `lake build HQIVPhysics` | Geometry + physics + conservations (no `GeneratorsLieClosureData*`) |
 | `lake build HQIVMeaningfulPhysics` | Curated physics surface used in CI (import closure of `HQIVMeaningfulPhysics.lean` + `HQIVPhysics.lean`; regenerate globs with `python3 scripts/physics_lib_globs.py`) |
 | `lake build HQIVLEAN` | Full library glob in `lakefile.toml` (includes strong-color **chart** modules; **excludes** matrix SO(8) certificate slices and the optional SU(3) simp certificate) |
+| `lake build HqivSpine` | Clean Mathlib-only spine (~130 modules, 0 `sorry`; now-slice + mass ladder + gauge) |
+| `lake build HQIVCleanSpine` | Same spine cone as `HqivSpine` (explicit target in `lakefile.toml`) |
 | `lake build HQIVSO8Closure` | Heavy \(\mathfrak{so}(8)\) matrix Lie-closure pack |
 | `lake build HQIVStrongColorSu3Certificate` | Optional \(\mathfrak{su}(3)\) `f^{abc}` `@[simp]` table + certificate entrypoint |
 | `lake build HQIVStory` | Linear narrative spine (`HQIVStory.lean`) |
@@ -86,7 +154,7 @@ lake build
 - From that: `latticeSimplexCount`, `cumLatticeSimplexCount` (and closed form), `available_modes`, `new_modes`.  
 - Temperature ladder T(m) = T_Pl/(m+1) (with T_Pl = 1 in natural units) and φ(m) = 2/T(m) are the lattice division rule and the paper’s φ = 2/Θ.  
 - `shell_shape` is **proved** equal to (1/(m+1))(1 + α log(T_Pl/T(m))) so the curvature shape is derived from the temperature ladder, not an independent def.  
-- Curvature integral, its divergence, divisibility (3∣…, 2∣…), and **α = 3/5 as a lattice ratio valid for every n and as the limit** of the discrete ratio (n+1)(n+2)(n+3)/(5·cum n). **Ω_k is dynamic and horizon-dependent:** `omega_k_at_horizon n N` is the curvature ratio at horizon N; spatial curvature between different horizons (e.g. quarks vs CMB LSS) is different even at time "now" — no single Ω_k without specifying the horizon.  
+- Curvature integral, its divergence, divisibility (3∣…, 2∣…), and **α = 3/5 as a lattice ratio valid for every n and as the limit** of the discrete ratio (n+1)(n+2)(n+3)/(5·cum n). **Ω_k** on the spine now slice is the **continuous horizon chart** ratio `omegaKChart(m)` normalised at lock-in (`HqivSpine.Physics.NowSliceOmegaKBridge`); the legacy left-sample sum ratio remains for harmonic/imprint bounds only. Horizon-dependent readouts still require specifying the shell index `m`.  
 - **Analytic curvature:** The discrete curvature integral is proved to be sandwiched between the harmonic sum and (1+α log(n+1)) times the harmonic sum (`curvature_integral_ge_harmonic`, `curvature_integral_le_harmonic_mul_log`), so it grows like Θ(log n); no continuous integral axiom.  
 - **S² / spherical harmonics bridge:** `SphericalHarmonicsBridge` proves the cumulative Laplace–Beltrami degeneracy `∑_{ℓ≤L}(2ℓ+1) = (L+1)²`, the telescoping identity `∑_{i≤M} new_modes i = available_modes M`, and the minimal shell with `available_modes m ≥ 64` (`m = 3`, value `80`). Module doc relates the octonion factor `4·(m+2)(m+1)` to continuum `S²` mode growth and distinguishes this combinatorial threshold from the archived Planck-volume τ-shell index (`archive/abandoned/GenerationResonanceTauHighestShell.lean`).  
 - **Full SM symmetry and conservations from the same two postulates:** the octonionic generators close to Spin(8)/SO(8) and give the full Standard Model gauge structure; the HQVM metric + O-Maxwell action yield GR-from-Maxwell, varying G, and the SM couplings at "now" (α_EM, sin²θ_W, α_s, m_H, M_Z, M_GUT) **all as outputs** of the light-cone postulate plus the informational-energy/monogamy postulate (see `SM_GR_Unification`, `GRFromMaxwell`, `Conservations`, `Forces`). No extra field-theory parameters are assumed in Lean.

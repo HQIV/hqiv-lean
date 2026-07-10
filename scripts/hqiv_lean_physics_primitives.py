@@ -311,9 +311,13 @@ def curvature_second_order_scaled_for_medium_density(
 
 
 def compton_p_shell_active(triplet: tuple[int, int, int]) -> bool:
-    """Lean ``dynamicComptonPShellActive``: middle p slot on (4,3,1)-type triplets."""
-    m0, m1, m2 = triplet
-    return m1 > 1 and m0 != m1
+    """Lean ``dynamicComptonPShellActive``: middle p slot on (4,3,1)-type triplets.
+
+    Algebraic: ``p_shell_activation > 1/2`` from the Compton slot spectrum.
+    """
+    import hqiv_selection_weights as sw
+
+    return sw.p_shell_activation(triplet) > 0.5
 
 
 def dynamic_compton_eta_second_order(
@@ -321,13 +325,14 @@ def dynamic_compton_eta_second_order(
     triplet: tuple[int, int, int],
 ) -> float:
     """
-    Second-order IR participation: η + (4/8)·η² when p shell active.
+    Second-order IR participation: η + (4/8)·g·η² with g = p-shell activation.
 
-    Lean: ``dynamicComptonEtaSecondOrder``; mines LiH ``η_p · 3 · E_p`` valence trace.
+    Lean: ``dynamicComptonEtaSecondOrder``; continuous in the Compton slot spectrum.
     """
-    if not compton_p_shell_active(triplet):
-        return eta_p
-    return eta_p + STRONG_CHANNEL_FRACTION * (eta_p**2)
+    import hqiv_selection_weights as sw
+
+    g = sw.p_shell_activation(triplet)
+    return eta_p + g * STRONG_CHANNEL_FRACTION * (eta_p**2)
 
 
 def xi_from_compton_triplet(triplet: tuple[int, int, int]) -> float:

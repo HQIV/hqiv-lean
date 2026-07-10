@@ -5,6 +5,8 @@ import Hqiv.Physics.NeutronBindingStabilityScaffold
 import Hqiv.Physics.ContinuousXiPath
 import Hqiv.Physics.HopfShellBeltramiMassBridge
 import Hqiv.Physics.DerivedGaugeAndLeptonSector
+import Hqiv.Physics.ComptonIRWindow
+import Hqiv.Geometry.AlphaGammaForcedByLattice
 import Hqiv.Physics.HQIVNuclei
 
 /-!
@@ -110,12 +112,6 @@ noncomputable def outsideGravityGeffModulator (g : OutsideGravityWitness) : ℝ 
   if g.phiEpsilon ≤ 0 then 1
   else 1 + gamma_HQIV * ((1 + g.phiEpsilon) ^ alpha - 1)
 
-/-- Combined temperature + gravity outside modulator (multiplicative on the temperature branch). -/
-noncomputable def outsideEnvironmentModulator
-    (ξ : ℝ) (bonded : Bool) (g : OutsideGravityWitness) : ℝ :=
-  -- Python supplies the full bonded/free temperature branch; this names the gravity slot.
-  outsideGravityGeffModulator g
-
 /-- β± channel tag (structural; weak widths separate). -/
 inductive BetaDecayChannel
   | betaMinus
@@ -214,6 +210,125 @@ def outsideCurvatureBindingModulatorLockinReadout : ℝ := 1
 
 theorem outsideCurvatureBindingModulatorLockinReadout_eq_one :
     outsideCurvatureBindingModulatorLockinReadout = 1 := rfl
+
+/-- Combined temperature + gravity outside modulator (Python ``outside_environment_modulator``). -/
+noncomputable def outsideEnvironmentModulator
+    (ξ : ℝ) (bonded : Bool) (g : OutsideGravityWitness) : ℝ :=
+  outsideCurvatureBindingModulatorChart ξ bonded * outsideGravityGeffModulator g
+
+theorem outsideEnvironmentModulator_gravity_identity
+    (ξ : ℝ) (bonded : Bool) :
+    outsideEnvironmentModulator ξ bonded ⟨0⟩ =
+      outsideCurvatureBindingModulatorChart ξ bonded := by
+  unfold outsideEnvironmentModulator outsideGravityGeffModulator
+  simp
+
+theorem outsideEnvironmentModulator_gravity_nonneg
+    (ξ : ℝ) (bonded : Bool) (g : OutsideGravityWitness)
+    (htemp : 0 ≤ outsideCurvatureBindingModulatorChart ξ bonded)
+    (hgrav : 0 ≤ outsideGravityGeffModulator g) :
+    0 ≤ outsideEnvironmentModulator ξ bonded g := by
+  unfold outsideEnvironmentModulator
+  exact mul_nonneg htemp hgrav
+
+/-!
+## Bond-corridor relic-ν dress (covalent monogamy axis)
+
+Interior nuclear wells shield bulk relic-bath catalysis; the shared bond axis leaks
+with aperture ``2η s`` where ``η = θ/phaseTheta`` and ``s = outerHorizonNeutrinoSuppression``.
+-/
+
+/-- Linear Compton IR participation clamped to the unit window. -/
+noncomputable def bondCorridorEtaLinear (η : ℝ) : ℝ := max 0 (min η 1)
+
+/-- Axial corridor aperture ``2η s`` on a covalent bond contact. -/
+noncomputable def bondCorridorAperture (η : ℝ) : ℝ :=
+  2 * bondCorridorEtaLinear η * outerHorizonNeutrinoSuppression
+
+theorem bondCorridorAperture_eq_two_eta_over_140
+    (η : ℝ) (hη : 0 ≤ η ∧ η ≤ 1) :
+    bondCorridorAperture η = 2 * η / 140 := by
+  unfold bondCorridorAperture bondCorridorEtaLinear
+  rw [outerHorizonNeutrinoSuppression_eq_inv_140]
+  simp [hη.1, hη.2]
+  ring
+
+theorem bondCorridorAperture_nonneg (η : ℝ) : 0 ≤ bondCorridorAperture η := by
+  unfold bondCorridorAperture bondCorridorEtaLinear
+  have hs : 0 ≤ outerHorizonNeutrinoSuppression := le_of_lt outerHorizonNeutrinoSuppression_pos
+  have hclamp : 0 ≤ max 0 (min η 1) := le_max_left 0 (min η 1)
+  nlinarith [hs, hclamp]
+
+theorem bondCorridorAperture_le_two_suppression (η : ℝ) :
+    bondCorridorAperture η ≤ 2 * outerHorizonNeutrinoSuppression := by
+  unfold bondCorridorAperture bondCorridorEtaLinear
+  have hs : 0 ≤ outerHorizonNeutrinoSuppression := le_of_lt outerHorizonNeutrinoSuppression_pos
+  have hclamp : 0 ≤ max 0 (min η 1) := le_max_left 0 (min η 1)
+  have hη : max 0 (min η 1) ≤ 1 := by
+    rw [max_le_iff]
+    constructor
+    · norm_num
+    · exact min_le_right η 1
+  nlinarith [hs, hclamp, hη]
+
+/-- Partial relic-bath dress on bonded covalent observables. -/
+noncomputable def bondCorridorNeutrinoDress (ξ φ η : ℝ) : ℝ :=
+  1 + localCurvatureWeakWidthCatalysis ξ φ * bondCorridorAperture η
+
+theorem bondCorridorNeutrinoDress_eq_one_when_eta_zero (ξ φ : ℝ) :
+    bondCorridorNeutrinoDress ξ φ 0 = 1 := by
+  unfold bondCorridorNeutrinoDress bondCorridorAperture bondCorridorEtaLinear
+  simp
+
+theorem localCurvatureWeakWidthCatalysis_nonneg (ξ φ : ℝ) :
+    0 ≤ localCurvatureWeakWidthCatalysis ξ φ := by
+  unfold localCurvatureWeakWidthCatalysis
+  have hlock :
+      0 <
+        gamma_HQIV ^ 2 * (1 - outerHorizonNeutrinoSuppression) * (1 - gamma_HQIV / 5) *
+          strongChannelFraction := by
+    rw [gamma_forced_two_fifths, outerHorizonNeutrinoSuppression_eq_inv_140]
+    unfold strongChannelFraction
+    norm_num
+  have hlock' :
+      0 ≤
+        gamma_HQIV ^ 2 * (1 - outerHorizonNeutrinoSuppression) * (1 - gamma_HQIV / 5) *
+          strongChannelFraction := le_of_lt hlock
+  have hbracket :
+      0 ≤
+        1 +
+          max 0 (tuftCurvatureBudgetAtXi ξ * outsideGravityGeffModulator { phiEpsilon := φ } - 1) /
+            max
+              (gamma_HQIV ^ 2 * (1 - outerHorizonNeutrinoSuppression) * (1 - gamma_HQIV / 5) *
+                strongChannelFraction)
+              1e-30 := by
+    have hden :
+        0 <
+          max
+            (gamma_HQIV ^ 2 * (1 - outerHorizonNeutrinoSuppression) * (1 - gamma_HQIV / 5) *
+              strongChannelFraction)
+            1e-30 := (lt_max_iff).mpr (Or.inl hlock)
+    have hone : (0 : ℝ) ≤ 1 := by norm_num
+    apply add_nonneg hone
+    apply div_nonneg (le_max_left _ _) (le_of_lt hden)
+  exact mul_nonneg hlock' hbracket
+
+theorem bondCorridorNeutrinoDress_ge_one (ξ φ η : ℝ) :
+    1 ≤ bondCorridorNeutrinoDress ξ φ η := by
+  unfold bondCorridorNeutrinoDress
+  linarith [mul_nonneg (localCurvatureWeakWidthCatalysis_nonneg ξ φ) (bondCorridorAperture_nonneg η)]
+
+/-- Compton θ maps to corridor aperture through ``phaseParticipationEta``. -/
+theorem bondCorridorAperture_from_theta
+    (θ : ℝ) (hθ : 0 ≤ θ) (hθb : θ ≤ phaseTheta) :
+    bondCorridorAperture (phaseParticipationEta θ) =
+      2 * (phaseParticipationEta θ) * outerHorizonNeutrinoSuppression := by
+  unfold bondCorridorAperture bondCorridorEtaLinear phaseParticipationEta
+  have hη : 0 ≤ θ / phaseTheta := div_nonneg hθ (le_of_lt phaseTheta_pos)
+  have hηb : θ / phaseTheta ≤ 1 := by
+    rw [div_le_one phaseTheta_pos]
+    exact hθb
+  simp [hη, hηb]
 
 end
 

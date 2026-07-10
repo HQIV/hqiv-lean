@@ -46,11 +46,18 @@ def unit_cell_for_allotrope(
     mono: MonomerGeometry | None = None,
     *,
     temperature_k: float = 273.15,
+    melt_k: float | None = None,
+    phonon_cage: float = 0.0,
 ) -> PhaseUnitCell:
     """Build unit cell from spec + packing template (derived geometry)."""
     mono = mono or infer_monomer_geometry(spec)
     a, b, c = lattice_constants_from_template(
-        mono, template, temperature_k=temperature_k, spec=spec
+        mono,
+        template,
+        temperature_k=temperature_k,
+        melt_k=melt_k,
+        phonon_cage=phonon_cage,
+        spec=spec,
     )
     return PhaseUnitCell(
         allotrope=template.label,

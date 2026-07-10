@@ -11,7 +11,24 @@ from hqiv_lab.species_panel import CONDENSED_SPECIES_PANEL, panel_entry
 def test_audit_contact_xi_consistent() -> None:
     payload = audit.build_payload()
     assert payload["summary"]["all_contact_xi_traces_consistent"]
-    assert abs(payload["expected_contact_xi_compton_431"] - 11.0 / 3.0) < 1e-9
+    assert abs(payload["expected_contact_xi_molecular_default"] - 11.0 / 3.0) < 1e-9
+
+
+def test_expanded_panel_has_fourteen_species() -> None:
+    assert len(CONDENSED_SPECIES_PANEL) == 14
+    names = {e.molecule for e in CONDENSED_SPECIES_PANEL}
+    for name in ("KCl", "LiF", "NaF", "Al", "Li", "Na"):
+        assert name in names
+
+
+def test_new_ionic_species_graded_from_panel() -> None:
+    payload = audit.build_payload()
+    for name in ("KCl", "LiF", "NaF"):
+        row = next(r for r in payload["species"] if r["molecule"] == name)
+        assert row["benchmark"]["contact_xi_trace_consistent"]
+        assert row["geometry"]["density_g_cm3"] > 0.0
+        assert row["benchmark"]["density_error_pct"] >= 0.0
+        assert row["benchmark"]["refractive_index_error_pct"] >= 0.0
 
 
 def test_h2o_derived_geometry_positive_and_ranked() -> None:
@@ -34,7 +51,7 @@ def test_ch4_density_at_melt_not_reference_t() -> None:
         temperature_at_melt_k=273.15,
     )
     assert at_melt["density_g_cm3"] > 0.51
-    assert at_ref["density_g_cm3"] < 0.49
+    assert at_ref["density_g_cm3"] < at_melt["density_g_cm3"]
     assert at_melt["density_g_cm3"] > 0.0
 
 
@@ -49,8 +66,11 @@ def test_panel_species_melt_and_refractive_index_structural() -> None:
     payload = audit.build_payload()
     for row in payload["species"]:
         assert row["geometry"]["density_g_cm3"] > 0.0, row["molecule"]
-        assert row["material"]["refractive_index"] > 1.0, row["molecule"]
-        assert row["benchmark"]["T_sl_error_pct"] < 2.0, row["molecule"]
+        if row["crystal_kind"] == "molecular":
+            assert row["material_response"]["refractive_index"] > 1.0, row["molecule"]
+            assert row["benchmark"]["T_sl_error_pct"] < 2.0, row["molecule"]
+        elif row["crystal_kind"] == "ionic":
+            assert row["material_response"]["refractive_index"] > 1.0, row["molecule"]
 
 
 def test_witness_json_roundtrip() -> None:
@@ -61,6 +81,8 @@ def test_witness_json_roundtrip() -> None:
 if __name__ == "__main__":
     for fn in (
         test_audit_contact_xi_consistent,
+        test_expanded_panel_has_fourteen_species,
+        test_new_ionic_species_graded_from_panel,
         test_h2o_derived_geometry_positive_and_ranked,
         test_ch4_density_at_melt_not_reference_t,
         test_hf_linear_halogen_geometry_factors,

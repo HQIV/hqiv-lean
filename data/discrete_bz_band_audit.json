@@ -1,0 +1,605 @@
+{
+  "source": "scripts/hqiv_discrete_bz_band_readout.py",
+  "lean_modules": [
+    "Hqiv.QuantumChemistry.OutsideContactReducedDeltas"
+  ],
+  "formula": {
+    "E_c": "R_\u221e \u00b7 \u03b1 \u00b7 (1+4/8) / (1+r/a\u2080)",
+    "hopping": "t = (4/8) \u00b7 E_c / CN",
+    "gap_polar": "E_g = g \u00b7 R_\u221e / \u03b3",
+    "gap_covalent": "E_g = \u03b1 \u00b7 E_c",
+    "gap_metallic": "E_g = 0",
+    "dispersion": "\u03b5(k)=\u221a((E_g/2)\u00b2+(2t sin(ka/2))\u00b2)",
+    "path": "ka \u2208 [0,\u03c0] (\u0393\u2192X), same as phonon dispersion"
+  },
+  "identity_checks": {
+    "gamma_is_half_gap": true,
+    "zone_edge_widens": true,
+    "metal_zero_gap": true,
+    "ionic_gap_positive": true,
+    "covalent_gap_positive": true,
+    "nacl_gap_order": true,
+    "si_gap_order": true,
+    "hopping_positive": true
+  },
+  "all_identity_checks_pass": true,
+  "rows": [
+    {
+      "name": "NaCl",
+      "crystal_kind": "ionic",
+      "contact_dist_angstrom": 2.8095869662302486,
+      "coordination": 6.0,
+      "z_i": 11,
+      "z_j": 17,
+      "n_dielectric": 1.544,
+      "bond_ionic_character": 0.28924510980862933,
+      "crystal_spectral_gap_axis": 0.2984201280904447,
+      "contact_electronic_scale_eV": 1.940790101225132,
+      "hopping_eV": 0.16173250843542766,
+      "band_gap_eV": 10.15053171130788,
+      "gap_at_gamma_eV": 10.15053171130788,
+      "gap_at_X_eV": 10.171126412095363,
+      "bandwidth_half_eV": 0.010297350393742022,
+      "hydride_route": false,
+      "metallic_zero_gap": false,
+      "dispersion_path": [
+        {
+          "ka": 0.0,
+          "ka_over_pi": 0.0,
+          "epsilon_eV": 5.07526585565394,
+          "conduction_eV": 5.07526585565394,
+          "valence_eV": -5.07526585565394,
+          "full_gap_eV": 10.15053171130788
+        },
+        {
+          "ka": 0.39269908169872414,
+          "ka_over_pi": 0.125,
+          "epsilon_eV": 5.075658157643363,
+          "conduction_eV": 5.075658157643363,
+          "valence_eV": -5.075658157643363,
+          "full_gap_eV": 10.151316315286726
+        },
+        {
+          "ka": 0.7853981633974483,
+          "ka_over_pi": 0.25,
+          "epsilon_eV": 5.0767751731035204,
+          "conduction_eV": 5.0767751731035204,
+          "valence_eV": -5.0767751731035204,
+          "full_gap_eV": 10.153550346207041
+        },
+        {
+          "ka": 1.1780972450961724,
+          "ka_over_pi": 0.375,
+          "epsilon_eV": 5.078446445875884,
+          "conduction_eV": 5.078446445875884,
+          "valence_eV": -5.078446445875884,
+          "full_gap_eV": 10.156892891751768
+        },
+        {
+          "ka": 1.5707963267948966,
+          "ka_over_pi": 0.5,
+          "epsilon_eV": 5.080417139776649,
+          "conduction_eV": 5.080417139776649,
+          "valence_eV": -5.080417139776649,
+          "full_gap_eV": 10.160834279553297
+        },
+        {
+          "ka": 1.9634954084936207,
+          "ka_over_pi": 0.625,
+          "epsilon_eV": 5.082387069541565,
+          "conduction_eV": 5.082387069541565,
+          "valence_eV": -5.082387069541565,
+          "full_gap_eV": 10.16477413908313
+        },
+        {
+          "ka": 2.356194490192345,
+          "ka_over_pi": 0.75,
+          "epsilon_eV": 5.084056497525614,
+          "conduction_eV": 5.084056497525614,
+          "valence_eV": -5.084056497525614,
+          "full_gap_eV": 10.168112995051228
+        },
+        {
+          "ka": 2.748893571891069,
+          "ka_over_pi": 0.875,
+          "epsilon_eV": 5.085171668195782,
+          "conduction_eV": 5.085171668195782,
+          "valence_eV": -5.085171668195782,
+          "full_gap_eV": 10.170343336391564
+        },
+        {
+          "ka": 3.141592653589793,
+          "ka_over_pi": 1.0,
+          "epsilon_eV": 5.085563206047682,
+          "conduction_eV": 5.085563206047682,
+          "valence_eV": -5.085563206047682,
+          "full_gap_eV": 10.171126412095363
+        }
+      ],
+      "formula": "\u03b5(k)=\u221a((E_g/2)\u00b2+(2t sin(ka/2))\u00b2); t=(4/8)E_c/CN; E_g=g\u00b7R_\u221e/\u03b3 | \u03b1\u00b7E_c | 0",
+      "nist_optical_gap_eV_quarantine": 8.5,
+      "gamma_gap_vs_nist_ratio": 1.1941802013303386
+    },
+    {
+      "name": "LiF",
+      "crystal_kind": "ionic",
+      "contact_dist_angstrom": 2.0115631364742277,
+      "coordination": 6.0,
+      "z_i": 3,
+      "z_j": 9,
+      "n_dielectric": 1.392,
+      "bond_ionic_character": 0.4444444444444444,
+      "crystal_spectral_gap_axis": 0.2186880343269512,
+      "contact_electronic_scale_eV": 2.550374922016071,
+      "hopping_eV": 0.21253124350133926,
+      "band_gap_eV": 7.4385057118081885,
+      "gap_at_gamma_eV": 7.4385057118081885,
+      "gap_at_X_eV": 7.486927253288271,
+      "bandwidth_half_eV": 0.024210770740041188,
+      "hydride_route": false,
+      "metallic_zero_gap": false,
+      "dispersion_path": [
+        {
+          "ka": 0.0,
+          "ka_over_pi": 0.0,
+          "epsilon_eV": 3.7192528559040943,
+          "conduction_eV": 3.7192528559040943,
+          "valence_eV": -3.7192528559040943,
+          "full_gap_eV": 7.4385057118081885
+        },
+        {
+          "ka": 0.39269908169872414,
+          "ka_over_pi": 0.125,
+          "epsilon_eV": 3.7201772078153597,
+          "conduction_eV": 3.7201772078153597,
+          "valence_eV": -3.7201772078153597,
+          "full_gap_eV": 7.440354415630719
+        },
+        {
+          "ka": 0.7853981633974483,
+          "ka_over_pi": 0.25,
+          "epsilon_eV": 3.72280828191634,
+          "conduction_eV": 3.72280828191634,
+          "valence_eV": -3.72280828191634,
+          "full_gap_eV": 7.44561656383268
+        },
+        {
+          "ka": 1.1780972450961724,
+          "ka_over_pi": 0.375,
+          "epsilon_eV": 3.726742492302338,
+          "conduction_eV": 3.726742492302338,
+          "valence_eV": -3.726742492302338,
+          "full_gap_eV": 7.453484984604676
+        },
+        {
+          "ka": 1.5707963267948966,
+          "ka_over_pi": 0.5,
+          "epsilon_eV": 3.731377877551296,
+          "conduction_eV": 3.731377877551296,
+          "valence_eV": -3.731377877551296,
+          "full_gap_eV": 7.462755755102592
+        },
+        {
+          "ka": 1.9634954084936207,
+          "ka_over_pi": 0.625,
+          "epsilon_eV": 3.736007511532409,
+          "conduction_eV": 3.736007511532409,
+          "valence_eV": -3.736007511532409,
+          "full_gap_eV": 7.472015023064818
+        },
+        {
+          "ka": 2.356194490192345,
+          "ka_over_pi": 0.75,
+          "epsilon_eV": 3.7399278370382403,
+          "conduction_eV": 3.7399278370382403,
+          "valence_eV": -3.7399278370382403,
+          "full_gap_eV": 7.4798556740764806
+        },
+        {
+          "ka": 2.748893571891069,
+          "ka_over_pi": 0.875,
+          "epsilon_eV": 3.7425450261298847,
+          "conduction_eV": 3.7425450261298847,
+          "valence_eV": -3.7425450261298847,
+          "full_gap_eV": 7.485090052259769
+        },
+        {
+          "ka": 3.141592653589793,
+          "ka_over_pi": 1.0,
+          "epsilon_eV": 3.7434636266441355,
+          "conduction_eV": 3.7434636266441355,
+          "valence_eV": -3.7434636266441355,
+          "full_gap_eV": 7.486927253288271
+        }
+      ],
+      "formula": "\u03b5(k)=\u221a((E_g/2)\u00b2+(2t sin(ka/2))\u00b2); t=(4/8)E_c/CN; E_g=g\u00b7R_\u221e/\u03b3 | \u03b1\u00b7E_c | 0",
+      "nist_optical_gap_eV_quarantine": 13.6,
+      "gamma_gap_vs_nist_ratio": 0.5469489493976609
+    },
+    {
+      "name": "LiH",
+      "crystal_kind": "ionic",
+      "contact_dist_angstrom": 2.007798946660487,
+      "coordination": 6.0,
+      "z_i": 3,
+      "z_j": 1,
+      "n_dielectric": 1.9,
+      "bond_ionic_character": 0.09972299168975068,
+      "crystal_spectral_gap_axis": 0.4561430517592451,
+      "contact_electronic_scale_eV": 2.5541589919901035,
+      "hopping_eV": 0.21284658266584197,
+      "band_gap_eV": 15.51535595605564,
+      "gap_at_gamma_eV": 15.51535595605564,
+      "gap_at_X_eV": 15.538697793803433,
+      "bandwidth_half_eV": 0.011670918873896596,
+      "hydride_route": true,
+      "metallic_zero_gap": false,
+      "dispersion_path": [
+        {
+          "ka": 0.0,
+          "ka_over_pi": 0.0,
+          "epsilon_eV": 7.75767797802782,
+          "conduction_eV": 7.75767797802782,
+          "valence_eV": -7.75767797802782,
+          "full_gap_eV": 15.51535595605564
+        },
+        {
+          "ka": 0.39269908169872414,
+          "ka_over_pi": 0.125,
+          "epsilon_eV": 7.758122497325906,
+          "conduction_eV": 7.758122497325906,
+          "valence_eV": -7.758122497325906,
+          "full_gap_eV": 15.516244994651812
+        },
+        {
+          "ka": 0.7853981633974483,
+          "ka_over_pi": 0.25,
+          "epsilon_eV": 7.759388241667122,
+          "conduction_eV": 7.759388241667122,
+          "valence_eV": -7.759388241667122,
+          "full_gap_eV": 15.518776483334245
+        },
+        {
+          "ka": 1.1780972450961724,
+          "ka_over_pi": 0.375,
+          "epsilon_eV": 7.761282176298858,
+          "conduction_eV": 7.761282176298858,
+          "valence_eV": -7.761282176298858,
+          "full_gap_eV": 15.522564352597715
+        },
+        {
+          "ka": 1.5707963267948966,
+          "ka_over_pi": 0.5,
+          "epsilon_eV": 7.763515630581474,
+          "conduction_eV": 7.763515630581474,
+          "valence_eV": -7.763515630581474,
+          "full_gap_eV": 15.527031261162948
+        },
+        {
+          "ka": 1.9634954084936207,
+          "ka_over_pi": 0.625,
+          "epsilon_eV": 7.765748442515466,
+          "conduction_eV": 7.765748442515466,
+          "valence_eV": -7.765748442515466,
+          "full_gap_eV": 15.531496885030933
+        },
+        {
+          "ka": 2.356194490192345,
+          "ka_over_pi": 0.75,
+          "epsilon_eV": 7.767640826379894,
+          "conduction_eV": 7.767640826379894,
+          "valence_eV": -7.767640826379894,
+          "full_gap_eV": 15.535281652759789
+        },
+        {
+          "ka": 2.748893571891069,
+          "ka_over_pi": 0.875,
+          "epsilon_eV": 7.768905019953028,
+          "conduction_eV": 7.768905019953028,
+          "valence_eV": -7.768905019953028,
+          "full_gap_eV": 15.537810039906056
+        },
+        {
+          "ka": 3.141592653589793,
+          "ka_over_pi": 1.0,
+          "epsilon_eV": 7.769348896901716,
+          "conduction_eV": 7.769348896901716,
+          "valence_eV": -7.769348896901716,
+          "full_gap_eV": 15.538697793803433
+        }
+      ],
+      "formula": "\u03b5(k)=\u221a((E_g/2)\u00b2+(2t sin(ka/2))\u00b2); t=(4/8)E_c/CN; E_g=g\u00b7R_\u221e/\u03b3 | \u03b1\u00b7E_c | 0",
+      "nist_optical_gap_eV_quarantine": 4.9,
+      "gamma_gap_vs_nist_ratio": 3.1663991747052322
+    },
+    {
+      "name": "Cu",
+      "crystal_kind": "metallic",
+      "contact_dist_angstrom": 2.544880922670874,
+      "coordination": 12.0,
+      "z_i": 29,
+      "z_j": 29,
+      "n_dielectric": 1.0,
+      "bond_ionic_character": 0.0,
+      "crystal_spectral_gap_axis": 0.0,
+      "contact_electronic_scale_eV": 2.107910840896127,
+      "hopping_eV": 0.08782961837067195,
+      "band_gap_eV": 0.0,
+      "gap_at_gamma_eV": 0.0,
+      "gap_at_X_eV": 0.3513184734826878,
+      "bandwidth_half_eV": 0.1756592367413439,
+      "hydride_route": false,
+      "metallic_zero_gap": true,
+      "dispersion_path": [
+        {
+          "ka": 0.0,
+          "ka_over_pi": 0.0,
+          "epsilon_eV": 0.0,
+          "conduction_eV": 0.0,
+          "valence_eV": -0.0,
+          "full_gap_eV": 0.0
+        },
+        {
+          "ka": 0.39269908169872414,
+          "ka_over_pi": 0.125,
+          "epsilon_eV": 0.03426941706097609,
+          "conduction_eV": 0.03426941706097609,
+          "valence_eV": -0.03426941706097609,
+          "full_gap_eV": 0.06853883412195218
+        },
+        {
+          "ka": 0.7853981633974483,
+          "ka_over_pi": 0.25,
+          "epsilon_eV": 0.06722187964280937,
+          "conduction_eV": 0.06722187964280937,
+          "valence_eV": -0.06722187964280937,
+          "full_gap_eV": 0.13444375928561875
+        },
+        {
+          "ka": 1.1780972450961724,
+          "ka_over_pi": 0.375,
+          "epsilon_eV": 0.09759104308843389,
+          "conduction_eV": 0.09759104308843389,
+          "valence_eV": -0.09759104308843389,
+          "full_gap_eV": 0.19518208617686778
+        },
+        {
+          "ka": 1.5707963267948966,
+          "ka_over_pi": 0.5,
+          "epsilon_eV": 0.1242098374778574,
+          "conduction_eV": 0.1242098374778574,
+          "valence_eV": -0.1242098374778574,
+          "full_gap_eV": 0.2484196749557148
+        },
+        {
+          "ka": 1.9634954084936207,
+          "ka_over_pi": 0.625,
+          "epsilon_eV": 0.14605531747068623,
+          "conduction_eV": 0.14605531747068623,
+          "valence_eV": -0.14605531747068623,
+          "full_gap_eV": 0.29211063494137246
+        },
+        {
+          "ka": 2.356194490192345,
+          "ka_over_pi": 0.75,
+          "epsilon_eV": 0.16228797352188223,
+          "conduction_eV": 0.16228797352188223,
+          "valence_eV": -0.16228797352188223,
+          "full_gap_eV": 0.32457594704376447
+        },
+        {
+          "ka": 2.748893571891069,
+          "ka_over_pi": 0.875,
+          "epsilon_eV": 0.17228399376277642,
+          "conduction_eV": 0.17228399376277642,
+          "valence_eV": -0.17228399376277642,
+          "full_gap_eV": 0.34456798752555284
+        },
+        {
+          "ka": 3.141592653589793,
+          "ka_over_pi": 1.0,
+          "epsilon_eV": 0.1756592367413439,
+          "conduction_eV": 0.1756592367413439,
+          "valence_eV": -0.1756592367413439,
+          "full_gap_eV": 0.3513184734826878
+        }
+      ],
+      "formula": "\u03b5(k)=\u221a((E_g/2)\u00b2+(2t sin(ka/2))\u00b2); t=(4/8)E_c/CN; E_g=g\u00b7R_\u221e/\u03b3 | \u03b1\u00b7E_c | 0",
+      "nist_optical_gap_eV_quarantine": 0.0
+    },
+    {
+      "name": "Si",
+      "crystal_kind": "covalent_network",
+      "contact_dist_angstrom": 2.399054535791848,
+      "coordination": 4.0,
+      "z_i": 14,
+      "z_j": 14,
+      "n_dielectric": 3.42,
+      "bond_ionic_character": 0.0,
+      "crystal_spectral_gap_axis": 0.0,
+      "contact_electronic_scale_eV": 2.2128851217528136,
+      "hopping_eV": 0.2766106402191017,
+      "band_gap_eV": 1.327731073051688,
+      "gap_at_gamma_eV": 1.327731073051688,
+      "gap_at_X_eV": 1.7283185304988569,
+      "bandwidth_half_eV": 0.20029372872358442,
+      "hydride_route": false,
+      "metallic_zero_gap": false,
+      "dispersion_path": [
+        {
+          "ka": 0.0,
+          "ka_over_pi": 0.0,
+          "epsilon_eV": 0.663865536525844,
+          "conduction_eV": 0.663865536525844,
+          "valence_eV": -0.663865536525844,
+          "full_gap_eV": 1.327731073051688
+        },
+        {
+          "ka": 0.39269908169872414,
+          "ka_over_pi": 0.125,
+          "epsilon_eV": 0.6725815409205992,
+          "conduction_eV": 0.6725815409205992,
+          "valence_eV": -0.6725815409205992,
+          "full_gap_eV": 1.3451630818411984
+        },
+        {
+          "ka": 0.7853981633974483,
+          "ka_over_pi": 0.25,
+          "epsilon_eV": 0.6968055609099887,
+          "conduction_eV": 0.6968055609099887,
+          "valence_eV": -0.6968055609099887,
+          "full_gap_eV": 1.3936111218199774
+        },
+        {
+          "ka": 1.1780972450961724,
+          "ka_over_pi": 0.375,
+          "epsilon_eV": 0.7315623600628395,
+          "conduction_eV": 0.7315623600628395,
+          "valence_eV": -0.7315623600628395,
+          "full_gap_eV": 1.463124720125679
+        },
+        {
+          "ka": 1.5707963267948966,
+          "ka_over_pi": 0.5,
+          "epsilon_eV": 0.770548079714426,
+          "conduction_eV": 0.770548079714426,
+          "valence_eV": -0.770548079714426,
+          "full_gap_eV": 1.541096159428852
+        },
+        {
+          "ka": 1.9634954084936207,
+          "ka_over_pi": 0.625,
+          "epsilon_eV": 0.8076541336750943,
+          "conduction_eV": 0.8076541336750943,
+          "valence_eV": -0.8076541336750943,
+          "full_gap_eV": 1.6153082673501886
+        },
+        {
+          "ka": 2.356194490192345,
+          "ka_over_pi": 0.75,
+          "epsilon_eV": 0.8378249796873419,
+          "conduction_eV": 0.8378249796873419,
+          "valence_eV": -0.8378249796873419,
+          "full_gap_eV": 1.6756499593746839
+        },
+        {
+          "ka": 2.748893571891069,
+          "ka_over_pi": 0.875,
+          "epsilon_eV": 0.8573930003889996,
+          "conduction_eV": 0.8573930003889996,
+          "valence_eV": -0.8573930003889996,
+          "full_gap_eV": 1.7147860007779991
+        },
+        {
+          "ka": 3.141592653589793,
+          "ka_over_pi": 1.0,
+          "epsilon_eV": 0.8641592652494284,
+          "conduction_eV": 0.8641592652494284,
+          "valence_eV": -0.8641592652494284,
+          "full_gap_eV": 1.7283185304988569
+        }
+      ],
+      "formula": "\u03b5(k)=\u221a((E_g/2)\u00b2+(2t sin(ka/2))\u00b2); t=(4/8)E_c/CN; E_g=g\u00b7R_\u221e/\u03b3 | \u03b1\u00b7E_c | 0",
+      "nist_optical_gap_eV_quarantine": 1.12,
+      "gamma_gap_vs_nist_ratio": 1.1854741723675786
+    },
+    {
+      "name": "Ge",
+      "crystal_kind": "covalent_network",
+      "contact_dist_angstrom": 2.4411610864037225,
+      "coordination": 4.0,
+      "z_i": 32,
+      "z_j": 32,
+      "n_dielectric": 4.0,
+      "bond_ionic_character": 0.0,
+      "crystal_spectral_gap_axis": 0.0,
+      "contact_electronic_scale_eV": 2.1815159812539573,
+      "hopping_eV": 0.27268949765674466,
+      "band_gap_eV": 1.3089095887523743,
+      "gap_at_gamma_eV": 1.3089095887523743,
+      "gap_at_X_eV": 1.7038184485573906,
+      "bandwidth_half_eV": 0.19745442990250817,
+      "hydride_route": false,
+      "metallic_zero_gap": false,
+      "dispersion_path": [
+        {
+          "ka": 0.0,
+          "ka_over_pi": 0.0,
+          "epsilon_eV": 0.6544547943761871,
+          "conduction_eV": 0.6544547943761871,
+          "valence_eV": -0.6544547943761871,
+          "full_gap_eV": 1.3089095887523743
+        },
+        {
+          "ka": 0.39269908169872414,
+          "ka_over_pi": 0.125,
+          "epsilon_eV": 0.6630472435245538,
+          "conduction_eV": 0.6630472435245538,
+          "valence_eV": -0.6630472435245538,
+          "full_gap_eV": 1.3260944870491076
+        },
+        {
+          "ka": 0.7853981633974483,
+          "ka_over_pi": 0.25,
+          "epsilon_eV": 0.6869278716771847,
+          "conduction_eV": 0.6869278716771847,
+          "valence_eV": -0.6869278716771847,
+          "full_gap_eV": 1.3738557433543694
+        },
+        {
+          "ka": 1.1780972450961724,
+          "ka_over_pi": 0.375,
+          "epsilon_eV": 0.7211919697380544,
+          "conduction_eV": 0.7211919697380544,
+          "valence_eV": -0.7211919697380544,
+          "full_gap_eV": 1.4423839394761089
+        },
+        {
+          "ka": 1.5707963267948966,
+          "ka_over_pi": 0.5,
+          "epsilon_eV": 0.7596250404946857,
+          "conduction_eV": 0.7596250404946857,
+          "valence_eV": -0.7596250404946857,
+          "full_gap_eV": 1.5192500809893714
+        },
+        {
+          "ka": 1.9634954084936207,
+          "ka_over_pi": 0.625,
+          "epsilon_eV": 0.7962050910905123,
+          "conduction_eV": 0.7962050910905123,
+          "valence_eV": -0.7962050910905123,
+          "full_gap_eV": 1.5924101821810246
+        },
+        {
+          "ka": 2.356194490192345,
+          "ka_over_pi": 0.75,
+          "epsilon_eV": 0.8259482449924808,
+          "conduction_eV": 0.8259482449924808,
+          "valence_eV": -0.8259482449924808,
+          "full_gap_eV": 1.6518964899849615
+        },
+        {
+          "ka": 2.748893571891069,
+          "ka_over_pi": 0.875,
+          "epsilon_eV": 0.845238875790505,
+          "conduction_eV": 0.845238875790505,
+          "valence_eV": -0.845238875790505,
+          "full_gap_eV": 1.69047775158101
+        },
+        {
+          "ka": 3.141592653589793,
+          "ka_over_pi": 1.0,
+          "epsilon_eV": 0.8519092242786953,
+          "conduction_eV": 0.8519092242786953,
+          "valence_eV": -0.8519092242786953,
+          "full_gap_eV": 1.7038184485573906
+        }
+      ],
+      "formula": "\u03b5(k)=\u221a((E_g/2)\u00b2+(2t sin(ka/2))\u00b2); t=(4/8)E_c/CN; E_g=g\u00b7R_\u221e/\u03b3 | \u03b1\u00b7E_c | 0",
+      "nist_optical_gap_eV_quarantine": 0.67,
+      "gamma_gap_vs_nist_ratio": 1.9535964011229465
+    }
+  ],
+  "comparison_policy": "NIST optical gaps are quarantine only",
+  "scope_note": "Discrete two-band contact chain \u2014 not continuum DFT E(k) or full multi-orbital SCF"
+}

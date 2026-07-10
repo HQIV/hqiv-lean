@@ -1,6 +1,15 @@
 #!/usr/bin/env python3
 """
-HQIV bond-state network model.
+HQIV bond-state network model — **structural / diagnostic layer only**.
+
+**Superseded for quantitative binding energies.** Use instead:
+  • Python: ``scripts/hqiv_dynamic_binding_chart.py`` (H₂ +0.38% vs NIST)
+  • Lean: ``Hqiv.QuantumChemistry.DynamicBindingChart``
+  • Doc: ``AGENTS/BINDING_ENERGY_STACK.md``
+
+This script retains inside/outside curvature decomposition for architecture debugging.
+It omits η_p, TUFT vev geomean, and curvature feedback — do **not** cite
+``data/bond_state_network_chart.json`` for GMTKN55 benchmarks.
 
 Binding energy lives in the same place as proton (or any hadron) mass:
 
@@ -13,7 +22,8 @@ The network layer still carries separated traces, edge contact closures, and opt
 graph hyperclosure; the eV readout is the projection of inside/outside surplus, not
 a scalar shortcut.
 
-Lean: `Hqiv.QuantumChemistry.BondStateNetwork`, `CurvatureBondContact`.
+Lean: `Hqiv.QuantumChemistry.BondStateNetwork` (trace identities);
+      `Hqiv.QuantumChemistry.DynamicBindingChart` (canonical eV readout).
 """
 
 from __future__ import annotations
@@ -477,6 +487,12 @@ def build_payload(cases: tuple[MoleculeCase, ...] = CASES) -> dict[str, Any]:
     return {
         "source": "scripts/hqiv_bond_state_network.py",
         "lean_module": "Hqiv.QuantumChemistry.BondStateNetwork",
+        "superseded_by": {
+            "python": "scripts/hqiv_dynamic_binding_chart.py",
+            "lean": "Hqiv.QuantumChemistry.DynamicBindingChart",
+            "doc": "AGENTS/BINDING_ENERGY_STACK.md",
+            "note": "diagnostic inside/outside decomposition only — not GMTKN55 eV readout",
+        },
         "parameter_policy": "no_fitted_coefficients",
         "formula": (
             "E_bind = −(inside_joint − inside_separated) + Σ G_eff(θ) contact "
@@ -517,10 +533,14 @@ def print_report(payload: dict[str, Any]) -> None:
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description="HQIV bond-state network chart")
+    parser = argparse.ArgumentParser(description="HQIV bond-state network chart (diagnostic)")
     parser.add_argument("--json-out", type=Path, default=DEFAULT_JSON)
     args = parser.parse_args()
 
+    print(
+        "NOTE: superseded for GMTKN55 binding — use scripts/hqiv_dynamic_binding_chart.py "
+        "(see AGENTS/BINDING_ENERGY_STACK.md)\n"
+    )
     payload = build_payload()
     args.json_out.parent.mkdir(parents=True, exist_ok=True)
     args.json_out.write_text(json.dumps(payload, indent=2) + "\n")

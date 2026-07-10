@@ -1,0 +1,63 @@
+{
+  "lean_module": "Hqiv.QuantumChemistry.CrystalContactGeometry",
+  "policy": "Lattice nn contacts derived upstream; NIST/CRC only in comparison audits",
+  "witnesses": [
+    {
+      "name": "NaCl",
+      "crystal_kind": "ionic",
+      "comparison_regime": "solid_lattice",
+      "z_cation": 11,
+      "z_anion": 17,
+      "coordination": 6,
+      "nearest_neighbor_angstrom": 2.8220013650376075,
+      "outside_contact_pair_angstrom": 1.487665673371873,
+      "ionic_rocksalt_lattice_dress": 1.9250000000000003,
+      "lattice_parameter_angstrom": 5.644002730075215,
+      "geometry_route": "ionic_lattice_contact"
+    },
+    {
+      "name": "Cu",
+      "crystal_kind": "metallic",
+      "comparison_regime": "solid_lattice",
+      "Z": 29,
+      "coordination": 12,
+      "nearest_neighbor_angstrom": 2.7099021609557084,
+      "nested_wf_nearest_neighbor_angstrom": 1.9806312902106404,
+      "phi_pack_nearest_neighbor_angstrom": 3.9612625804212804,
+      "network_nearest_neighbor_angstrom": 2.7099021609557084,
+      "expected_contact_xi": 7.0,
+      "lattice_parameter_angstrom": 3.832380388727721,
+      "geometry_route": "metallic_unified_fcc_contact"
+    },
+    {
+      "name": "Si",
+      "crystal_kind": "covalent_network",
+      "comparison_regime": "solid_lattice",
+      "Z": 14,
+      "coordination": 4,
+      "nearest_neighbor_angstrom": 2.2679023324414285,
+      "nearest_neighbor_bare_angstrom": 2.2679023324414285,
+      "lattice_parameter_angstrom": 5.237496088523356,
+      "length_reliable": false,
+      "em_feedback_applied": false,
+      "network_open_channel_packing_scale": 1.0,
+      "expected_contact_xi": 6.0,
+      "geometry_route": "diamond_cubic_allotrope_contact"
+    },
+    {
+      "name": "Ge",
+      "crystal_kind": "covalent_network",
+      "comparison_regime": "solid_lattice",
+      "Z": 32,
+      "coordination": 4,
+      "nearest_neighbor_angstrom": 2.6458860545149996,
+      "nearest_neighbor_bare_angstrom": 2.6458860545149996,
+      "lattice_parameter_angstrom": 6.110412103277247,
+      "length_reliable": false,
+      "em_feedback_applied": false,
+      "network_open_channel_packing_scale": 1.0,
+      "expected_contact_xi": 7.0,
+      "geometry_route": "diamond_cubic_allotrope_contact"
+    }
+  ]
+}

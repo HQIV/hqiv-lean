@@ -8,6 +8,7 @@ import HqivSpine.Geometry.SphericalHarmonics
 import HqivSpine.Geometry.MaxwellSpectral
 import HqivSpine.Geometry.ContinuumChart
 import HqivSpine.Geometry.MetricGradient
+import HqivSpine.Geometry.HQVMMetric
 import HqivSpine.Algebra.CayleyDickson
 import HqivSpine.Algebra.Octonion
 import HqivSpine.Algebra.So8
@@ -53,6 +54,10 @@ import HqivSpine.Physics.RindlerDetuning
 import HqivSpine.Physics.NowSliceHorizon
 import HqivSpine.Physics.NowSliceFromLattice
 import HqivSpine.Physics.NowSliceCausalDiamond
+import HqivSpine.Physics.NowSliceOmegaKBridge
+import HqivSpine.Physics.NowSliceClosure
+import HqivSpine.Physics.HQVMGeodesics
+import HqivSpine.Physics.CovariantOMaxwell
 import HqivSpine.Physics.ChartMaxwell
 import HqivSpine.Physics.Age
 import HqivSpine.Physics.Baryogenesis
@@ -70,6 +75,7 @@ import HqivSpine.Physics.Forces
 import HqivSpine.Physics.ColorCasimir
 import HqivSpine.Physics.TrappedCasimir
 import HqivSpine.Physics.NonAbelianMatrixElement
+import HqivSpine.Physics.NonAbelianDynamics
 import HqivSpine.Physics.CurvatureKernel
 import HqivSpine.Physics.Proton
 import HqivSpine.Physics.TuftBeltramiAnchor
@@ -155,6 +161,7 @@ import HqivSpine.Chemistry.Molecule
 import HqivSpine.Chemistry.BondedHorizon
 import HqivSpine.Chemistry.DynamicBinding
 import HqivSpine.Chemistry.AtomDischarge
+import HqivSpine.Chemistry.Atom
 
 /-!
 # HqivSpine — a clean, ground-up HQIV mass spine

@@ -1,0 +1,112 @@
+{
+  "policy": {
+    "derivation_spine": "discrete light-cone + informational monogamy",
+    "referenceM": 4,
+    "no_pdg_or_external_mass_tables": true,
+    "comparison_data_quarantined": true,
+    "fracture_outputs_are_scale_witnesses": true
+  },
+  "lean_proof_audit": [
+    {
+      "module": "Hqiv/QuantumChemistry/OutsideContactGeometry.lean",
+      "forbidden_token_hits": {
+        "sorry": [],
+        "admit": [],
+        "axiom": []
+      },
+      "passes": true
+    },
+    {
+      "module": "Hqiv/QuantumChemistry/CrystalContactGeometry.lean",
+      "forbidden_token_hits": {
+        "sorry": [],
+        "admit": [],
+        "axiom": []
+      },
+      "passes": true
+    },
+    {
+      "module": "Hqiv/QuantumChemistry/PhaseElasticity.lean",
+      "forbidden_token_hits": {
+        "sorry": [],
+        "admit": [],
+        "axiom": []
+      },
+      "passes": true
+    },
+    {
+      "module": "Hqiv/QuantumChemistry/AtomElectronicDischarge.lean",
+      "forbidden_token_hits": {
+        "sorry": [],
+        "admit": [],
+        "axiom": []
+      },
+      "passes": true
+    }
+  ],
+  "a_z_audit": [
+    {
+      "Z": 11,
+      "A": 23,
+      "coulomb_law_A": 23,
+      "uses_sparse_light_override": false,
+      "override_allowed": true,
+      "nuclear_packing_dress": 0.9823764389519918,
+      "policy": "mass-number bookkeeping only; not a measured atomic mass input"
+    },
+    {
+      "Z": 14,
+      "A": 30,
+      "coulomb_law_A": 30,
+      "uses_sparse_light_override": false,
+      "override_allowed": true,
+      "nuclear_packing_dress": 0.9727801737359201,
+      "policy": "mass-number bookkeeping only; not a measured atomic mass input"
+    },
+    {
+      "Z": 17,
+      "A": 35,
+      "coulomb_law_A": 35,
+      "uses_sparse_light_override": false,
+      "override_allowed": true,
+      "nuclear_packing_dress": 0.9884719483715414,
+      "policy": "mass-number bookkeeping only; not a measured atomic mass input"
+    },
+    {
+      "Z": 29,
+      "A": 63,
+      "coulomb_law_A": 63,
+      "uses_sparse_light_override": false,
+      "override_allowed": true,
+      "nuclear_packing_dress": 0.9674643654448544,
+      "policy": "mass-number bookkeeping only; not a measured atomic mass input"
+    },
+    {
+      "Z": 32,
+      "A": 72,
+      "coulomb_law_A": 72,
+      "uses_sparse_light_override": false,
+      "override_allowed": true,
+      "nuclear_packing_dress": 0.9539793874035036,
+      "policy": "mass-number bookkeeping only; not a measured atomic mass input"
+    }
+  ],
+  "regime_audit": [
+    {
+      "species": "NaCl",
+      "expected": "solid_lattice",
+      "actual": "solid_lattice"
+    },
+    {
+      "species": "H2",
+      "expected": "gas_vapor",
+      "actual": "gas_vapor"
+    },
+    {
+      "species": "Cu",
+      "expected": "solid_lattice",
+      "actual": "solid_lattice"
+    }
+  ],
+  "passes": true
+}

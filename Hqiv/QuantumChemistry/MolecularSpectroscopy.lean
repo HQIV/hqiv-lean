@@ -1,5 +1,6 @@
 import Mathlib.Analysis.SpecialFunctions.Pow.Real
 import Mathlib.Tactic
+import Hqiv.QuantumChemistry.CoupledRelaxation
 
 /-!
 # Molecular spectroscopy bridge identities
@@ -11,7 +12,7 @@ well the `nucleon_binding` chemistry engine already derives.  Given the three
 HQIV-derived anchors
 
 * equilibrium length `rₑ` (nested-WF covalent radii × monogamy `1 − α/2`),
-* well depth `Dₑ` (inside curvature surplus + outside `G_eff(θ)` contact),
+* well depth `Dₑ` (`DynamicBindingChart.dynamicBindingEnergyEv` — canonical binding chart),
 * reduced mass `μ` (cluster-mass spine + electron rest mass),
 
 this module records the closed-form maps to the rovibrational constants and proves

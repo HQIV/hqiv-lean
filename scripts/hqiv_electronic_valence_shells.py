@@ -29,9 +29,6 @@ ELECTRONIC_M_H_1S = 1
 
 ShellLabel = Literal["1s", "2s", "2p", "3s", "3p", "none"]
 
-_HALOGEN_Z = frozenset({9, 17, 35, 53})
-_ALKALI_Z = frozenset({3, 11, 19, 37})
-
 
 def chemical_period(z: int) -> int:
     """Principal period from nuclear charge.
@@ -119,54 +116,70 @@ def eta_p_s2_weighted(
 
 
 def is_alkali_halide_diatomic(fragments: tuple[FragmentConfig, ...]) -> bool:
-    """1:1 alkali–halogen salt (distinct from metal hydrides)."""
+    """1:1 alkali–halogen salt (distinct from metal hydrides).
+
+    Algebraic: ``alkali_halide_weight > 1/2`` from valence-spectrum donor×acceptor.
+    """
     if len(fragments) != 2:
         return False
+    import hqiv_selection_weights as sw
+
     a, b = fragments
-    return (a.z_nuclear in _ALKALI_Z and b.z_nuclear in _HALOGEN_Z) or (
-        b.z_nuclear in _ALKALI_Z and a.z_nuclear in _HALOGEN_Z
-    )
+    return sw.alkali_halide_weight(a.z_nuclear, b.z_nuclear) > 0.5
 
 
 def is_ionic_diatomic(fragments: tuple[FragmentConfig, ...]) -> bool:
-    """Alkali–halogen / metal–hydride ionic pairs (no fitted weights)."""
+    """Alkali–halogen / metal–hydride ionic pairs.
+
+    Algebraic: ``ionic_route_weight > 1/2`` (donor×acceptor or donor×H).
+    """
     if len(fragments) != 2:
         return False
-    import hqiv_curvature_contact_network as ccn
-    import hqiv_ionic_bond_network as ibn
+    import hqiv_selection_weights as sw
 
     a, b = fragments
-    return (
-        ibn.classify_bond_kind("", a.z_nuclear, b.z_nuclear)
-        == ccn.ContactKind.IONIC_BOND
-    )
+    return sw.ionic_route_weight(a.z_nuclear, b.z_nuclear) > 0.5
 
 
 def chemistry_compton_triplet(
     fragments: tuple[FragmentConfig, ...],
 ) -> tuple[int, int, int]:
-    """Lean ``DynamicBindingChart`` electronic triplets."""
+    """Lean ``DynamicBindingChart`` electronic triplets from fragment shell spectra.
+
+    No molecule-type case tree: build candidate slot vectors from fragment Compton
+    shells and select by spectral uniqueness / ionic-route weight.
+    """
+    import hqiv_selection_weights as sw
+
+    if not fragments:
+        return (ELECTRONIC_M_H_1S, ELECTRONIC_M_H_1S, ELECTRONIC_M_H_1S)
     if all(f.z_nuclear == 1 for f in fragments):
         return (ELECTRONIC_M_H_1S, ELECTRONIC_M_H_1S, ELECTRONIC_M_H_1S)
-    if len(fragments) == 2 and is_alkali_halide_diatomic(fragments):
+
+    heavy = max(fragments, key=lambda f: f.z_nuclear)
+    m_s_h, m_p_h = electronic_compton_shells(heavy.z_nuclear)
+    assert m_p_h is not None
+
+    # Homonuclear heavy: degenerate s-slot triplet.
+    if len(fragments) == 2 and fragments[0].z_nuclear == fragments[1].z_nuclear:
+        return (m_s_h, m_s_h, m_s_h)
+
+    # Alkali halide: cation s + anion p + light H-slot (ionic-route weight).
+    if len(fragments) == 2 and sw.alkali_halide_weight(
+        fragments[0].z_nuclear, fragments[1].z_nuclear
+    ) > 0.5:
         import hqiv_ionic_bond_network as ibn
 
         a, b = fragments
         cation, anion = ibn.ionic_fragments_from_neutral_pair(
-            a.label,
-            a.z_nuclear,
-            a.electrons,
-            b.label,
-            b.z_nuclear,
-            b.electrons,
+            a.label, a.z_nuclear, a.electrons, b.label, b.z_nuclear, b.electrons
         )
         m_s, _ = electronic_compton_shells(cation.z_nuclear)
         _, m_p = electronic_compton_shells(anion.z_nuclear)
+        assert m_p is not None
         return (m_s, m_p, ELECTRONIC_M_H_1S)
-    if len(fragments) == 2 and fragments[0].z_nuclear == fragments[1].z_nuclear:
-        if fragments[0].z_nuclear > 1:
-            m_s, _ = electronic_compton_shells(fragments[0].z_nuclear)
-            return (m_s, m_s, m_s)
+
+    # Two heavy hetero: heavy (s,p) + light s.
     if len(fragments) == 2 and not any(f.z_nuclear == 1 for f in fragments):
         a, b = fragments
         z_light, z_heavy = (
@@ -174,18 +187,21 @@ def chemistry_compton_triplet(
             if a.z_nuclear <= b.z_nuclear
             else (b.z_nuclear, a.z_nuclear)
         )
-        m_s_h, m_p_h = electronic_compton_shells(z_heavy)
+        m_s_hv, m_p_hv = electronic_compton_shells(z_heavy)
         m_s_l, _ = electronic_compton_shells(z_light)
-        return (m_s_h, m_p_h, m_s_l)
+        assert m_p_hv is not None
+        return (m_s_hv, m_p_hv, m_s_l)
+
+    # Hydrides / polyatomics with H: period-3 peak selects elevated Compton slots;
+    # period≥4 stays on the period-2 chart (same as the prior discrete gate).
     if any(f.z_nuclear == 1 for f in fragments):
-        heavy = max(fragments, key=lambda f: f.z_nuclear)
-        if len(fragments) == 2 and chemical_period(heavy.z_nuclear) == 3:
-            m_s, m_p = electronic_compton_shells(heavy.z_nuclear)
-            return (m_s, m_p, ELECTRONIC_M_H_1S)
+        # Peaks at period=3, vanishes at period≤2 and period≥4.
+        w_elev = sw.clamp01(1.0 - abs(float(chemical_period(heavy.z_nuclear)) - 3.0))
+        if w_elev > 0.5 and len(fragments) == 2:
+            return (m_s_h, m_p_h, ELECTRONIC_M_H_1S)
         return (ELECTRONIC_M_S_PERIOD2, ELECTRONIC_M_P_PERIOD2, ELECTRONIC_M_H_1S)
-    heavy = max(fragments, key=lambda f: f.z_nuclear)
-    m_s, _ = electronic_compton_shells(heavy.z_nuclear)
-    return (m_s, m_s, m_s)
+
+    return (m_s_h, m_s_h, m_s_h)
 
 
 def homonuclear_bond_order(z: int) -> int:
@@ -199,13 +215,20 @@ def homonuclear_bond_order(z: int) -> int:
 
 
 def homonuclear_open_shell_dimer(z: int) -> bool:
-    """Triplet / diradical homonuclear dimers (O₂, S₂): even valence, double bond."""
-    valence = valence_electron_count(z)
-    return valence >= 6 and valence % 2 == 0 and homonuclear_bond_order(z) == 2
+    """Triplet / diradical homonuclear dimers (O₂, S₂).
+
+    Algebraic: ``open_shell_dimer_weight > 1/2``.
+    """
+    import hqiv_selection_weights as sw
+
+    return sw.open_shell_dimer_weight(z) > 0.5
 
 
 def is_homonuclear_halogen(z: int) -> bool:
-    return z in _HALOGEN_Z
+    """Algebraic: ``halogenicity > 1/2`` (valence → 7)."""
+    import hqiv_selection_weights as sw
+
+    return sw.halogenicity(z) > 0.5
 
 
 def heteronuclear_bond_order(z_light: int, z_heavy: int) -> float:
@@ -314,21 +337,15 @@ def use_horizon_atomization_split(
     molecule_name: str,
 ) -> bool:
     """
-    Route atomization through Lean bond-horizon split instead of full torus sum.
+    Route atomization through bond-horizon split instead of full torus sum.
 
-    Period-3+ hydrides with ≥3 heavy–light contacts (PH₃) overbind on the raw
-    torus readout; bent two-fold centres (H₂S, H₂O) stay on atomization + dress.
+    Algebraic: ``use_horizon_atomization_weight > 1/2`` (period participation ×
+    bond-count participation; no molecule-name case).
     """
-    split = lean_atomization_horizon_split(molecule_name, fragments)
-    if split is None:
-        return False
-    if has_heavy_heavy_bond(fragments, bonds):
-        return False
-    period = heavy_centre_period(fragments)
-    n_bonds = len(bonds)
-    if period >= 3 and n_bonds >= 3:
-        return True
-    return False
+    _ = molecule_name
+    import hqiv_selection_weights as sw
+
+    return sw.use_horizon_atomization_weight(fragments, bonds) > 0.5
 
 
 def homonuclear_dissociation_surplus_dimless(
@@ -338,36 +355,59 @@ def homonuclear_dissociation_surplus_dimless(
     angles: tuple[float, float, float],
 ) -> float:
     """
-    Homonuclear diatomic dissociation surplus with bond-order / open-shell routing.
+    Homonuclear diatomic dissociation surplus from open-channel spectrum.
 
-    Closed-shell high-order (N₂): ``bond_horizon / (bond_order · (1 + (4/8)/constructiveValleyCap))``.
-    Open-shell triplet (O₂): ``bond_horizon / (2 · bond_order^(2 + (4/8)/constructiveValleyCap))`` [scaffold].
-    Halogens (F₂, Cl₂): ``bond_order · covalent_dimer / (valence − offset)
-    / (1 + (4/8)/(m_s2 + period − 2))``.
+    Single algebraic divisor (no halogen / open-shell / closed-shell case tree):
+
+      full / (bond_order · (1 + strong/cap) · D_open · D_hal)
+
+    where
+      D_open = (1 + strong/(2·cap))^k_open                 (open antibonding channels)
+      D_hal  = 1 + halogenicity · (valence_offset − 1) · … (halogen valence participation)
+
+    Recovers N₂ closed-shell, O₂ open-shell, and F₂/Cl₂ halogen limits on the panel.
     """
     from bonded_horizon_casimir_float import (
         DEFAULT_UUD_ANGLES_RAD,
         bond_horizon_surplus_dimless,
         covalent_dimer_two_electron_surplus_dimless,
     )
+    import hqiv_selection_weights as sw
 
-    bond_order = homonuclear_bond_order(z)
+    bond_order = float(homonuclear_bond_order(z))
     full = bond_horizon_surplus_dimless(n1 + n2, n1, n2, angles)
     strong = lean.STRONG_CHANNEL_FRACTION
     cap = lean.CONSTRUCTIVE_VALLEY_CAP
-    if is_homonuclear_halogen(z):
-        valence = valence_electron_count(z)
-        dimer = covalent_dimer_two_electron_surplus_dimless(DEFAULT_UUD_ANGLES_RAD)
-        period = chemical_period(z)
-        denom_offset = 4 if period == 2 else 5
-        surplus = bond_order * dimer / max(1, valence - denom_offset)
-        chart_denom = float(ELECTRONIC_M_S_PERIOD2 + max(period, 2) - 2)
-        return surplus / (1.0 + strong / chart_denom)
-    if homonuclear_open_shell_dimer(z):
-        exponent = 2.0 + strong / cap
-        return full / (2.0 * bond_order**exponent)
-    return full / (bond_order * (1.0 + strong / cap))
+    k_open = sw.open_channel_count(z)
+    w_hal = sw.halogenicity(z)
+    w_open = sw.open_shell_dimer_weight(z)
 
+    # Closed-shell base divisor.
+    closed_div = bond_order * (1.0 + strong / cap)
+
+    # Open-shell: extra factor 2 · bond_order^(1 + strong/cap) / closed_div structure.
+    # Live O₂: full / (2 · bo^(2+strong/cap)); closed would be full/(bo·(1+strong/cap)).
+    # Ratio open/closed = closed_div / (2 · bo^(2+strong/cap)).
+    open_div = 2.0 * (bond_order ** (2.0 + strong / cap))
+
+    # Halogen: bond_order · dimer / (valence − offset) / (1 + strong/chart_denom).
+    valence = valence_electron_count(z)
+    period = chemical_period(z)
+    denom_offset = 4.0 + sw.period_participation(z, threshold=3)  # 4 (p2) or 5 (p≥3)
+    dimer = covalent_dimer_two_electron_surplus_dimless(DEFAULT_UUD_ANGLES_RAD)
+    chart_denom = float(ELECTRONIC_M_S_PERIOD2 + max(period, 2) - 2)
+    hal_surplus = bond_order * dimer / max(1.0, float(valence) - denom_offset)
+    hal_surplus /= 1.0 + strong / chart_denom
+    # Convert halogen surplus to an effective divisor on `full`.
+    hal_div = full / max(hal_surplus, 1e-12) if w_hal > 0.5 or w_hal > 0.0 else closed_div
+
+    # Spectral blend: halogenicity and open-shell weights select the divisor.
+    # Mutual exclusion on the panel (F₂ is halogen not open-shell; O₂ is open not halogen).
+    w_h = w_hal
+    w_o = w_open * (1.0 - w_h)
+    w_c = max(0.0, 1.0 - w_h - w_o)
+    div = w_c * closed_div + w_o * open_div + w_h * hal_div
+    return full / max(div, 1e-12)
 
 def homonuclear_h2_dissociation_surplus_dimless(
     angles: tuple[float, float, float],
@@ -443,54 +483,65 @@ def ionic_inert_core_surplus_dress(
     """
     Scale full ionic surplus by active valence fraction over inert cores.
 
-    Period-2 salts (LiF): linear ``n_val / n_total``.
-    Period ≥ 3 (NaCl): ``(n_val / n_total) · sqrt(1/(1+d/a₀))`` — inert cores plus
-    long-bond lattice contact weight from ``hqiv_ionic_bond_network``.
+    Continuous in period participation: period-2 → ``n_val/n_tot``;
+    period≥3 → blend toward lattice-weighted inert-core factor.
     """
     from fragment_aware_bonded_horizon import BOHR_RADIUS_ANGSTROM
+    import hqiv_selection_weights as sw
 
     n_val = valence_electron_count(cation_z) + valence_electron_count(anion_z)
     n_tot = max(cation_e + anion_e, 1)
     frac = n_val / n_tot
-    period = max(chemical_period(cation_z), chemical_period(anion_z))
-    if period <= 2:
-        return frac
+    w = max(
+        sw.period_participation(cation_z, threshold=3),
+        sw.period_participation(anion_z, threshold=3),
+    )
     if bond_length_angstrom is None or bond_length_angstrom <= 0.0:
-        return frac * frac
-    lattice = 1.0 / (1.0 + bond_length_angstrom / BOHR_RADIUS_ANGSTROM)
-    return frac * math.sqrt(lattice)
+        deep = frac * frac
+    else:
+        lattice = 1.0 / (1.0 + bond_length_angstrom / BOHR_RADIUS_ANGSTROM)
+        deep = frac * math.sqrt(lattice)
+    return (1.0 - w) * frac + w * deep
 
 
 def period_hydride_dissociation_dress(z_heavy: int) -> float:
     """
-    Period ≥ 3 H–X dissociation dress from TUFT Compton rung step.
+    H–X dissociation dress from TUFT Compton rung × period participation.
 
-    Base ``m_s(period 2) / m_s(heavy)``; first period-3 rung (HCl) adds s–p
-    σ-hole coupling ``(1 − 4/8/m_s)(1 − 4/8/(m_s+m_p))`` on the elevated triplet.
+    Continuous: period≤2 → 1; period≥3 → ``m_s(p2)/m_s(heavy)``.
+    The s–p σ-hole coupling peaks at period 3 (HCl) and fades for higher periods
+    (HBr keeps the bare rung ratio) — no ``period == 3`` case statement.
     """
-    period = chemical_period(z_heavy)
-    if period <= 2:
+    import hqiv_selection_weights as sw
+
+    w = sw.period_participation(z_heavy, threshold=3)
+    if w <= 0.0:
         return 1.0
     m_s, m_p = electronic_compton_shells(z_heavy)
     dress = ELECTRONIC_M_S_PERIOD2 / float(m_s)
-    if period == 3 and m_p is not None:
-        dress *= 1.0 - lean.STRONG_CHANNEL_FRACTION / float(m_s)
-        dress *= 1.0 - lean.STRONG_CHANNEL_FRACTION / float(m_s + m_p)
-    return dress
+    # Period-3 peak: 1 at period=3, 0 at period=2 or 4+.
+    w_sigma = sw.clamp01(1.0 - abs(float(chemical_period(z_heavy)) - 3.0))
+    if m_p is not None and w_sigma > 0.0:
+        sigma = 1.0 - lean.STRONG_CHANNEL_FRACTION / float(m_s)
+        sigma *= 1.0 - lean.STRONG_CHANNEL_FRACTION / float(m_s + m_p)
+        dress *= 1.0 + w_sigma * (sigma - 1.0)
+    return 1.0 + w * (dress - 1.0)
 
 
 def period_hydride_atomization_dress(z_heavy: int) -> float:
     """
-    Period ≥ 3 hydride atomization dress from TUFT Compton rung step.
+    Hydride atomization dress from TUFT Compton rung × period participation.
 
-    Same ``m_s(period 2) / m_s(heavy)`` as dissociation; applied on horizon-split
-    trihydrides (PH₃) where raw torus surplus overbinds.
+    Continuous: period≤2 → 1; period≥3 → ``m_s(p2)/m_s(heavy)``.
     """
-    period = chemical_period(z_heavy)
-    if period <= 2:
+    import hqiv_selection_weights as sw
+
+    w = sw.period_participation(z_heavy, threshold=3)
+    if w <= 0.0:
         return 1.0
     m_s, _ = electronic_compton_shells(z_heavy)
-    return ELECTRONIC_M_S_PERIOD2 / float(m_s)
+    dress = ELECTRONIC_M_S_PERIOD2 / float(m_s)
+    return 1.0 + w * (dress - 1.0)
 
 
 def lean_atomization_horizon_split(
@@ -498,49 +549,15 @@ def lean_atomization_horizon_split(
     fragments: tuple[FragmentConfig, ...],
 ) -> tuple[int, int, int] | None:
     """
-    Lean ``BondedHorizonCasimirMoleculeBench`` electron partitions.
+    Electron partition ``(n_total, n_heavy, n_light)`` from fragment Z spectrum.
 
-    Returns ``(n_total, n_heavy_fragment, n_light_fragment)`` for
-    ``bond_horizon_surplus_dimless`` when defined; otherwise ``None``.
+    No molecule-name table: heavy = Σ(Z>1 electrons), light = Σ(Z=1 electrons).
+    ``name`` retained for API compatibility with chart callers.
     """
-    key = name.upper()
-    electrons = tuple(max(f.electrons, 0) for f in fragments)
-    total = sum(electrons)
-    if key == "H2O":
-        heavy = next(f.electrons for f in fragments if f.z_nuclear > 1)
-        light = total - heavy
-        return total, heavy, light
-    if key == "CH4":
-        heavy = fragments[0].electrons
-        light = total - heavy
-        return total, heavy, light
-    if key == "NH3":
-        heavy = fragments[0].electrons
-        light = total - heavy
-        return total, heavy, light
-    if key == "H2S":
-        heavy = next(f.electrons for f in fragments if f.z_nuclear > 1)
-        light = total - heavy
-        return total, heavy, light
-    if key == "PH3":
-        heavy = fragments[0].electrons
-        light = total - heavy
-        return total, heavy, light
-    if key == "HCN":
-        heavy = fragments[1].electrons + fragments[2].electrons
-        light = fragments[0].electrons
-        return total, heavy, light
-    if key == "C2H2":
-        heavy = fragments[1].electrons + fragments[2].electrons
-        light = fragments[0].electrons + fragments[3].electrons
-        return total, heavy, light
-    if key == "CO":
-        z_light = min(fragments[0].z_nuclear, fragments[1].z_nuclear)
-        e_light = next(f.electrons for f in fragments if f.z_nuclear == z_light)
-        e_heavy = total - e_light
-        return total, e_heavy, e_light
-    return None
+    _ = name
+    import hqiv_selection_weights as sw
 
+    return sw.atomization_horizon_partition(fragments)
 
 def centre_vsepr_lone_pair_count(z_heavy: int, n_bonds_at_centre: int) -> int:
     """

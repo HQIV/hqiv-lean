@@ -63,6 +63,58 @@ EXTRA_MIRROR = [
     "lih_derivation_scan.py",
 ]
 
+README = """# Reproducer scripts -- BBN light elements from network weights
+
+Self-contained bundle for `hqiv_bbn_light_elements_from_network_weights.tex`
+(Zenodo DOI 10.5281/zenodo.20723606).
+
+These scripts reproduce the BBN integrator witnesses, paper tables, and Lean-name
+audit cited in the paper.  Comparison PDG / observational abundances remain
+quarantined; lattice constants flow from `hqiv_lean_physics_primitives.py`
+($\\alpha=3/5$, $\\gamma=2/5$, `referenceM=4`).
+
+Regenerate from the repository root:
+
+```bash
+python3 scripts/bundle_bbn_scripts.py
+```
+
+This refreshes this directory, rewrites `MANIFEST.sha256`, and rebuilds
+`../scripts.zip`.
+
+## Entry scripts
+
+| Script | Purpose |
+| --- | --- |
+| `hqiv_bbn_integrator.py` | Faithful stoichiometric BBN at $\\eta_{\\mathrm{paper}}$. |
+| `hqiv_bbn_paper_tables.py` | LaTeX-ready BBN table fragments. |
+| `hqiv_bbn_abundances.py` | Abundance readout helpers. |
+| `hqiv_bbn_epoch_network.py` | Epoch-ladder network witnesses. |
+| `hqiv_bbn_condition_decay.py` | Condition-decay bookkeeping. |
+| `hqiv_dynamic_bulk_bbn.py` | Dynamic bulk / $C_2$ ladder witnesses. |
+| `hqiv_integrator_lean_audit.py` | Paper citation row + Lean-name audit. |
+| `test_hqiv_bbn_integrator.py` | Integrator unit tests. |
+| `test_hqiv_dynamic_c2_bbn.py` | Dynamic-$C_2$ unit tests. |
+| `test_hqiv_bbn_epoch_network.py` | Epoch-network unit tests. |
+
+## Quick start (extracted `scripts.zip`)
+
+```bash
+cd papers/bbn/scripts
+PYTHONPATH=. python3 hqiv_bbn_integrator.py --json data/bbn_integrator.json
+PYTHONPATH=. python3 hqiv_bbn_paper_tables.py
+PYTHONPATH=. python3 hqiv_integrator_lean_audit.py
+python3 -m unittest test_hqiv_bbn_integrator test_hqiv_dynamic_c2_bbn test_hqiv_bbn_epoch_network
+```
+
+From the full repository root, use `scripts/` paths and write JSON under `data/`.
+
+## Manifest
+
+`MANIFEST.sha256` gives a SHA-256 checksum for every bundled file.
+Verify with `sha256sum -c MANIFEST.sha256`.
+"""
+
 
 def module_to_script(name: str) -> str | None:
     if name.startswith("hqiv_") or name.startswith("test_hqiv_"):
@@ -144,6 +196,7 @@ def main() -> None:
         shutil.copy2(SCRIPTS_ROOT / rel, DEST / rel)
 
     shutil.copy2(REPO / "pyproject.toml", DEST / "pyproject.toml")
+    (DEST / "README.md").write_text(README, encoding="utf-8")
 
     data_dest = DEST / "data"
     data_dest.mkdir(exist_ok=True)

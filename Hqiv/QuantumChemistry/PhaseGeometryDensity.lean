@@ -69,6 +69,31 @@ noncomputable def massDensityGPerCm3 (cell : PhaseUnitCell) : ℝ :=
     (avogadroNumber * unitCellVolumeCm3 cell)
 
 /--
+Molecular number density [molecules/cm³] from crystallographic mass density.
+
+This is an **explicit unit-conversion readout**:
+`n = ρ_mass · N_A / M`.  The CODATA `avogadroNumber` witness is not derived on the
+spine path; shell-resolved counting uses `accessibleParticleBudget` in
+`HqivSpine.Physics.DiscreteDiffusion`.
+-/
+noncomputable def molecularNumberDensityPerCm3 (cell : PhaseUnitCell) : ℝ :=
+  massDensityGPerCm3 cell * avogadroNumber / cell.molecularWeightAmu
+
+/-- Number density from unit-cell occupancy: `Z / V_cell` [molecules/cm³]. -/
+noncomputable def numberDensityFromUnitCell (cell : PhaseUnitCell) : ℝ :=
+  (cell.moleculesPerCell : ℝ) / unitCellVolumeCm3 cell
+
+theorem molecularNumberDensity_eq_massDensity_times_avogadro_div_mw (cell : PhaseUnitCell) :
+    molecularNumberDensityPerCm3 cell =
+      massDensityGPerCm3 cell * avogadroNumber / cell.molecularWeightAmu := rfl
+
+theorem molecularNumberDensity_eq_numberDensityFromUnitCell (cell : PhaseUnitCell)
+    (hM : 0 < cell.molecularWeightAmu) :
+    molecularNumberDensityPerCm3 cell = numberDensityFromUnitCell cell := by
+  unfold molecularNumberDensityPerCm3 massDensityGPerCm3 numberDensityFromUnitCell
+  field_simp [ne_of_gt hM, ne_of_gt avogadroNumber_pos]
+
+/--
 Curvature-density fraction ρ ∈ [0,1]: solid geometry density relative to a liquid
 reference at the melt comparison (legacy ratio; prefer ``crystallineCurvatureDensityFraction``).
 -/
@@ -167,6 +192,19 @@ theorem massDensityH2OIceIh_pos : 0 < massDensityGPerCm3 phaseUnitCellH2OIceIh :
   exact massDensityGPerCm3_pos_of_pos_lattice _ (by decide) (by norm_num)
     (by norm_num) (by norm_num) (by norm_num)
 
+theorem molecularNumberDensityPerCm3_pos_of_pos_lattice (cell : PhaseUnitCell)
+    (hZ : 0 < cell.moleculesPerCell) (hM : 0 < cell.molecularWeightAmu)
+    (ha : 0 < cell.aAngstrom) (hb : 0 < cell.bAngstrom) (hc : 0 < cell.cAngstrom) :
+    0 < molecularNumberDensityPerCm3 cell := by
+  unfold molecularNumberDensityPerCm3
+  refine div_pos (mul_pos (massDensityGPerCm3_pos_of_pos_lattice cell hZ hM ha hb hc)
+    avogadroNumber_pos) hM
+
+theorem molecularNumberDensityH2OIceIh_pos : 0 < molecularNumberDensityPerCm3 phaseUnitCellH2OIceIh := by
+  unfold phaseUnitCellH2OIceIh
+  exact molecularNumberDensityPerCm3_pos_of_pos_lattice _ (by decide) (by norm_num)
+    (by norm_num) (by norm_num) (by norm_num)
+
 theorem liquidReferenceDensityH2O_pos : 0 < liquidReferenceDensityH2O := by
   unfold liquidReferenceDensityH2O; norm_num
 
@@ -216,7 +254,7 @@ theorem opticalCurvatureDensityFraction_dilute :
 theorem phaseCurvatureDensityFraction_geom_only (ρGeom : ℝ) :
     phaseCurvatureDensityFraction ρGeom 1 = clampMediumDensity ρGeom := by
   unfold phaseCurvatureDensityFraction opticalCurvatureDensityFraction
-  simp [opticalCurvatureDensityFraction_dilute]
+  simp
 
 /-- Tetrahedral ice reference melt ladder (= 1). -/
 noncomputable def meltMotifRelativeScaleTetrahedral : ℝ := 1

@@ -1,0 +1,349 @@
+{
+  "source": "scripts/hqiv_phonon_dispersion_readout.py",
+  "lean_modules": [
+    "Hqiv.QuantumChemistry.PhaseElasticity"
+  ],
+  "formula": {
+    "hessian": "k = 2 D / r\u00b2",
+    "optical_softener": "s = (4/8)\u00b7\u03b3 / CN_eff (ionic/hydride; CN_eff=1 for Z=1 anion)",
+    "omega_gamma": "\u221a(k\u00b7s/\u03bc) / (2\u03c0 c)",
+    "dispersion": "\u03c9(k) = 2 \u221a(k\u00b7s/\u03bc) |sin(ka/2)|",
+    "zone_boundary": "ka=\u03c0 \u2192 \u03c9 = 2 \u03c9_\u0393"
+  },
+  "identity_checks": {
+    "zone_boundary_is_2_gamma": true,
+    "gamma_positive": true,
+    "hydride_lih": true,
+    "ionic_softener_applied": true,
+    "covalent_metal_identity_softener": true
+  },
+  "all_identity_checks_pass": true,
+  "rows": [
+    {
+      "name": "NaCl",
+      "crystal_kind": "ionic",
+      "binding_ev": 220.42995286690268,
+      "contact_dist_angstrom": 2.8095869662302486,
+      "coordination": 6.0,
+      "hessian_raw_N_m": 894.8001292156619,
+      "optical_phonon_hessian_softener": 0.03333333333333333,
+      "hessian_N_m": 29.826670973855396,
+      "reduced_mass_amu": 13.835359530279062,
+      "omega_gamma_cm1": 191.2854984739156,
+      "omega_zone_boundary_cm1": 382.5709969478312,
+      "zone_boundary_over_gamma": 2.0,
+      "hydride_route": false,
+      "dispersion_path": [
+        {
+          "ka": 0.0,
+          "ka_over_pi": 0.0,
+          "omega_cm1": 0.0
+        },
+        {
+          "ka": 0.39269908169872414,
+          "ka_over_pi": 0.125,
+          "omega_cm1": 74.63589898858359
+        },
+        {
+          "ka": 0.7853981633974483,
+          "ka_over_pi": 0.25,
+          "omega_cm1": 146.4035822353303
+        },
+        {
+          "ka": 1.1780972450961724,
+          "ka_over_pi": 0.375,
+          "omega_cm1": 212.54505792084808
+        },
+        {
+          "ka": 1.5707963267948966,
+          "ka_over_pi": 0.5,
+          "omega_cm1": 270.51854622710937
+        },
+        {
+          "ka": 1.9634954084936207,
+          "ka_over_pi": 0.625,
+          "omega_cm1": 318.0961585104114
+        },
+        {
+          "ka": 2.356194490192345,
+          "ka_over_pi": 0.75,
+          "omega_cm1": 353.4495138125392
+        },
+        {
+          "ka": 2.748893571891069,
+          "ka_over_pi": 0.875,
+          "omega_cm1": 375.22000251562207
+        },
+        {
+          "ka": 3.141592653589793,
+          "ka_over_pi": 1.0,
+          "omega_cm1": 382.5709969478312
+        }
+      ],
+      "formula": "\u03c9(k)=2\u221a(k_eff/\u03bc)|sin(ka/2)|, k=2D/r\u00b2, k_eff=k\u00b7(4/8)\u00b7\u03b3/CN_eff (ionic/hydride)",
+      "nist_TO_cm1_quarantine": 164.0,
+      "gamma_vs_TO_ratio": 1.1663749906946073
+    },
+    {
+      "name": "LiF",
+      "crystal_kind": "ionic",
+      "binding_ev": 231.6797807248998,
+      "contact_dist_angstrom": 2.0115631364742277,
+      "coordination": 6.0,
+      "hessian_raw_N_m": 1834.68363190582,
+      "optical_phonon_hessian_softener": 0.03333333333333333,
+      "hessian_N_m": 61.15612106352733,
+      "reduced_mass_amu": 5.100025170025134,
+      "omega_gamma_cm1": 451.13724814798843,
+      "omega_zone_boundary_cm1": 902.2744962959769,
+      "zone_boundary_over_gamma": 2.0,
+      "hydride_route": false,
+      "dispersion_path": [
+        {
+          "ka": 0.0,
+          "ka_over_pi": 0.0,
+          "omega_cm1": 0.0
+        },
+        {
+          "ka": 0.39269908169872414,
+          "ka_over_pi": 0.125,
+          "omega_cm1": 176.02502202932203
+        },
+        {
+          "ka": 0.7853981633974483,
+          "ka_over_pi": 0.25,
+          "omega_cm1": 345.28550117802695
+        },
+        {
+          "ka": 1.1780972450961724,
+          "ka_over_pi": 0.375,
+          "omega_cm1": 501.27685215480005
+        },
+        {
+          "ka": 1.5707963267948966,
+          "ka_over_pi": 0.5,
+          "omega_cm1": 638.0044148225617
+        },
+        {
+          "ka": 1.9634954084936207,
+          "ka_over_pi": 0.625,
+          "omega_cm1": 750.2138256256901
+        },
+        {
+          "ka": 2.356194490192345,
+          "ka_over_pi": 0.75,
+          "omega_cm1": 833.5929398347838
+        },
+        {
+          "ka": 2.748893571891069,
+          "ka_over_pi": 0.875,
+          "omega_cm1": 884.9375448503331
+        },
+        {
+          "ka": 3.141592653589793,
+          "ka_over_pi": 1.0,
+          "omega_cm1": 902.2744962959769
+        }
+      ],
+      "formula": "\u03c9(k)=2\u221a(k_eff/\u03bc)|sin(ka/2)|, k=2D/r\u00b2, k_eff=k\u00b7(4/8)\u00b7\u03b3/CN_eff (ionic/hydride)",
+      "nist_TO_cm1_quarantine": 307.0,
+      "gamma_vs_TO_ratio": 1.4695024369641316
+    },
+    {
+      "name": "LiH",
+      "crystal_kind": "ionic",
+      "binding_ev": 19.792083924116856,
+      "contact_dist_angstrom": 2.007798946660487,
+      "coordination": 6.0,
+      "hessian_raw_N_m": 157.3227282086992,
+      "optical_phonon_hessian_softener": 0.2,
+      "hessian_N_m": 31.464545641739843,
+      "reduced_mass_amu": 0.8805886021892729,
+      "omega_gamma_cm1": 778.7518339265409,
+      "omega_zone_boundary_cm1": 1557.5036678530819,
+      "zone_boundary_over_gamma": 2.0,
+      "hydride_route": true,
+      "dispersion_path": [
+        {
+          "ka": 0.0,
+          "ka_over_pi": 0.0,
+          "omega_cm1": 0.0
+        },
+        {
+          "ka": 0.39269908169872414,
+          "ka_over_pi": 0.125,
+          "omega_cm1": 303.85389210275855
+        },
+        {
+          "ka": 0.7853981633974483,
+          "ka_over_pi": 0.25,
+          "omega_cm1": 596.0308495352341
+        },
+        {
+          "ka": 1.1780972450961724,
+          "ka_over_pi": 0.375,
+          "omega_cm1": 865.3026756780218
+        },
+        {
+          "ka": 1.5707963267948966,
+          "ka_over_pi": 0.5,
+          "omega_cm1": 1101.3214052618343
+        },
+        {
+          "ka": 1.9634954084936207,
+          "ka_over_pi": 0.625,
+          "omega_cm1": 1295.0169708695942
+        },
+        {
+          "ka": 2.356194490192345,
+          "ka_over_pi": 0.75,
+          "omega_cm1": 1438.9457605407197
+        },
+        {
+          "ka": 2.748893571891069,
+          "ka_over_pi": 0.875,
+          "omega_cm1": 1527.5766716043447
+        },
+        {
+          "ka": 3.141592653589793,
+          "ka_over_pi": 1.0,
+          "omega_cm1": 1557.5036678530819
+        }
+      ],
+      "formula": "\u03c9(k)=2\u221a(k_eff/\u03bc)|sin(ka/2)|, k=2D/r\u00b2, k_eff=k\u00b7(4/8)\u00b7\u03b3/CN_eff (ionic/hydride)",
+      "nist_TO_cm1_quarantine": 590.0,
+      "gamma_vs_TO_ratio": 1.3199183625873576
+    },
+    {
+      "name": "Cu",
+      "crystal_kind": "metallic",
+      "binding_ev": 0.24026509913592578,
+      "contact_dist_angstrom": 2.544880922670874,
+      "coordination": 12.0,
+      "hessian_raw_N_m": 1.1887653751759761,
+      "optical_phonon_hessian_softener": 1.0,
+      "hessian_N_m": 1.1887653751759761,
+      "reduced_mass_amu": 31.37122252111943,
+      "omega_gamma_cm1": 25.36046613976976,
+      "omega_zone_boundary_cm1": 50.72093227953952,
+      "zone_boundary_over_gamma": 2.0,
+      "hydride_route": false,
+      "dispersion_path": [
+        {
+          "ka": 0.0,
+          "ka_over_pi": 0.0,
+          "omega_cm1": 0.0
+        },
+        {
+          "ka": 0.39269908169872414,
+          "ka_over_pi": 0.125,
+          "omega_cm1": 9.895163011373599
+        },
+        {
+          "ka": 0.7853981633974483,
+          "ka_over_pi": 0.25,
+          "omega_cm1": 19.41006045749146
+        },
+        {
+          "ka": 1.1780972450961724,
+          "ka_over_pi": 0.375,
+          "omega_cm1": 28.179040165515232
+        },
+        {
+          "ka": 1.5707963267948966,
+          "ka_over_pi": 0.5,
+          "omega_cm1": 35.86511516296605
+        },
+        {
+          "ka": 1.9634954084936207,
+          "ka_over_pi": 0.625,
+          "omega_cm1": 42.172913898092375
+        },
+        {
+          "ka": 2.356194490192345,
+          "ka_over_pi": 0.75,
+          "omega_cm1": 46.8600312029576
+        },
+        {
+          "ka": 2.748893571891069,
+          "ka_over_pi": 0.875,
+          "omega_cm1": 49.74634378810143
+        },
+        {
+          "ka": 3.141592653589793,
+          "ka_over_pi": 1.0,
+          "omega_cm1": 50.72093227953952
+        }
+      ],
+      "formula": "\u03c9(k)=2\u221a(k_eff/\u03bc)|sin(ka/2)|, k=2D/r\u00b2, k_eff=k\u00b7(4/8)\u00b7\u03b3/CN_eff (ionic/hydride)",
+      "nist_TO_cm1_quarantine": 240.0,
+      "gamma_vs_TO_ratio": 0.10566860891570733
+    },
+    {
+      "name": "Si",
+      "crystal_kind": "covalent_network",
+      "binding_ev": 2.2128851217528136,
+      "contact_dist_angstrom": 2.399054535791848,
+      "coordination": 4.0,
+      "hessian_raw_N_m": 12.320235719452024,
+      "optical_phonon_hessian_softener": 1.0,
+      "hessian_N_m": 12.320235719452024,
+      "reduced_mass_amu": 14.968438153195523,
+      "omega_gamma_cm1": 118.19419440870475,
+      "omega_zone_boundary_cm1": 236.3883888174095,
+      "zone_boundary_over_gamma": 2.0,
+      "hydride_route": false,
+      "dispersion_path": [
+        {
+          "ka": 0.0,
+          "ka_over_pi": 0.0,
+          "omega_cm1": 0.0
+        },
+        {
+          "ka": 0.39269908169872414,
+          "ka_over_pi": 0.125,
+          "omega_cm1": 46.11708689526215
+        },
+        {
+          "ka": 0.7853981633974483,
+          "ka_over_pi": 0.25,
+          "omega_cm1": 90.46192000389968
+        },
+        {
+          "ka": 1.1780972450961724,
+          "ka_over_pi": 0.375,
+          "omega_cm1": 131.3303522584165
+        },
+        {
+          "ka": 1.5707963267948966,
+          "ka_over_pi": 0.5,
+          "omega_cm1": 167.15183272655247
+        },
+        {
+          "ka": 1.9634954084936207,
+          "ka_over_pi": 0.625,
+          "omega_cm1": 196.54976200283477
+        },
+        {
+          "ka": 2.356194490192345,
+          "ka_over_pi": 0.75,
+          "omega_cm1": 218.39439415172458
+        },
+        {
+          "ka": 2.748893571891069,
+          "ka_over_pi": 0.875,
+          "omega_cm1": 231.84625221035083
+        },
+        {
+          "ka": 3.141592653589793,
+          "ka_over_pi": 1.0,
+          "omega_cm1": 236.3883888174095
+        }
+      ],
+      "formula": "\u03c9(k)=2\u221a(k_eff/\u03bc)|sin(ka/2)|, k=2D/r\u00b2, k_eff=k\u00b7(4/8)\u00b7\u03b3/CN_eff (ionic/hydride)",
+      "nist_TO_cm1_quarantine": 520.0,
+      "gamma_vs_TO_ratio": 0.2272965277090476
+    }
+  ],
+  "comparison_policy": "NIST TO frequencies are quarantine only"
+}

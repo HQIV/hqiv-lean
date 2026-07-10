@@ -18,6 +18,7 @@ Mirrors:
   `Hqiv.Geometry.HQVMetric` (`G_eff`)
   `Hqiv.Physics.ComptonIRWindow` (`phaseTheta`, `phaseParticipationEta`)
   `Hqiv.Physics.HopfShellBeltramiMassBridge` (inner/outer Casimir split)
+  `Hqiv.QuantumChemistry.MacroRicciFlowDynamics` (macro Ricci on contact networks)
 """
 
 from __future__ import annotations
@@ -87,6 +88,9 @@ def scale_outside_coupling_for_medium_density(
 
       f_ρ = 1 + (f − 1) · ρ
 
+    Lean: ``scaleOutsideCouplingForMediumDensity`` in
+    ``Hqiv.QuantumChemistry.MacroRicciFlowDynamics``.
+
     ρ = 0: dilute / gas-phase assay (no outside closure boost above unity).
     ρ = 1: bulk condensed contact (full ``G_eff`` at the bond).
     """
@@ -103,6 +107,77 @@ def outside_contact_coupling_scaled(
         outside_contact_coupling(theta_rad),
         medium_density_fraction,
     )
+
+
+def bond_curvature_flatness_ratio(theta_rad: float) -> float:
+    """
+    Intrinsic covalent outside curvature vs saturated unity.
+
+    Lean ``outsideContactCoupling`` / ``bondCurvatureFlatnessRatio`` witness:
+    ``G_eff(θ/θ₀) = (θ/θ₀)^α`` with α = 3/5.  Gas-phase GMTKN assays use ρ = 0 medium
+    dress (``geff_theta = 1`` on the surplus row); protein folding uses this ratio on
+    Compton θ together with bulk ρ to interpolate ``1 + ρ(G_eff − 1)``.
+    """
+    return outside_contact_coupling(theta_rad)
+
+
+def covalent_bond_medium_geff(theta_rad: float, medium_density_fraction: float) -> float:
+    """Effective bond ``G_eff`` at bulk medium density ρ (Lean ``outsideContactCouplingAtMediumDensity``)."""
+    return outside_contact_coupling_scaled(theta_rad, medium_density_fraction)
+
+
+def protein_stacked_contact_breathing_scale(theta_rad: float) -> float:
+    """
+    γ/2 partial channel on open-register Cα contacts.
+
+    Lean ``stackedLineContactBreathingScale`` / Python ``dress_stacked_line_contact_distance``.
+    """
+    geff = outside_contact_coupling(theta_rad)
+    return 1.0 + lean.GAMMA / 2.0 * (geff - 1.0)
+
+
+def bond_curvature_quant_witness(
+    theta_rad: float,
+    *,
+    medium_density_fraction: float = 0.0,
+    surplus_dimless: float | None = None,
+) -> dict[str, float]:
+    """
+    Audit bundle for covalent bond curvature — bridges small-molecule chart and protein spine.
+
+    * ``eta_linear`` — θ/θ₀ (Compton IR participation, same slot as η_p input)
+    * ``g_eff_intrinsic`` — ``G_eff(η)`` (slightly flatter than saturated 1 when θ < θ₀)
+    * ``g_eff_medium`` — ``1 + ρ(G_eff − 1)`` (bulk protein / ice dress)
+    * ``flatness_ratio`` — alias of ``g_eff_intrinsic`` vs unity saturation
+    * ``protein_contact_breathing`` — γ/2 stacked-line dress on tertiary θ
+    * ``surplus_dress_contribution`` — ``(4/8)·G_eff / surplus`` when surplus given
+    """
+    theta0 = phase_theta()
+    eta = min(max(theta_rad / theta0, 0.0), 1.0) if theta0 > 0.0 else 0.0
+    g_intr = bond_curvature_flatness_ratio(theta_rad)
+    g_med = covalent_bond_medium_geff(theta_rad, medium_density_fraction)
+    out: dict[str, float] = {
+        "theta_rad": theta_rad,
+        "theta0_rad": theta0,
+        "eta_linear": eta,
+        "g_eff_intrinsic": g_intr,
+        "g_eff_medium": g_med,
+        "flatness_ratio": g_intr,
+        "flatness_ppm_vs_saturated": (g_intr - 1.0) * 1.0e6,
+        "protein_contact_breathing": protein_stacked_contact_breathing_scale(theta_rad),
+        "medium_density_fraction": medium_density_fraction,
+    }
+    if surplus_dimless is not None and abs(surplus_dimless) > 1e-12:
+        out["surplus_dress_contribution_gas_assay"] = (
+            lean.STRONG_CHANNEL_FRACTION * 1.0 / abs(surplus_dimless)
+        )
+        out["surplus_dress_contribution_intrinsic_geff"] = (
+            lean.STRONG_CHANNEL_FRACTION * g_intr / abs(surplus_dimless)
+        )
+        out["surplus_dress_contribution_medium_geff"] = (
+            lean.STRONG_CHANNEL_FRACTION * g_med / abs(surplus_dimless)
+        )
+    return out
 
 
 def outside_geff_surplus_factor(

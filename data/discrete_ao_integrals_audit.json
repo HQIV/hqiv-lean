@@ -1,0 +1,222 @@
+{
+  "source": "scripts/hqiv_discrete_ao_integrals_readout.py",
+  "lean_modules": [
+    "Hqiv.QuantumChemistry.OutsideContactReducedDeltas"
+  ],
+  "formula": {
+    "softener": "s=1/(1+r/a\u2080)",
+    "overlap": "S_ss=S_pp=1; S_sp=\u03b1 s",
+    "kinetic": "T_ss=E_c; T_pp=\u03b3 E_c; T_sp=(4/8)\u03b1 s E_c",
+    "nuclear": "V=\u2212(1+4/8) E_c S",
+    "two_e": "(ss|ss)=\u03b3 E_c; (ss|pp)=(4/8)\u03b3 E_c; (sp|sp)=\u03b1 E_c"
+  },
+  "identity_checks": {
+    "softener_at_zero": true,
+    "overlap_sp_at_zero": true,
+    "kinetic_pp_is_gamma_ss": true,
+    "coulomb_sspp_is_half_ss": true,
+    "exchange_is_alpha_ec": true
+  },
+  "all_identity_checks_pass": true,
+  "rows": [
+    {
+      "contact_dist_ang": 2.8095869662302486,
+      "contact_electronic_scale_eV": 1.940790101225132,
+      "softener": 0.1584949349005432,
+      "overlap": {
+        "S_ss": 1.0,
+        "S_pp": 1.0,
+        "S_sp": 0.09509696094032592
+      },
+      "kinetic_eV": {
+        "T_ss": 1.940790101225132,
+        "T_pp": 0.7763160404900529,
+        "T_sp": 0.0922816202247888
+      },
+      "nuclear_eV": {
+        "V_ss": -2.911185151837698,
+        "V_pp": -2.911185151837698,
+        "V_sp": -0.27684486067436637
+      },
+      "two_electron_eV": {
+        "ss_ss": 0.7763160404900529,
+        "pp_pp": 0.7763160404900529,
+        "ss_pp": 0.38815802024502644,
+        "sp_sp": 1.1644740607350792
+      },
+      "core_hamiltonian_eV": {
+        "H_ss": -0.970395050612566,
+        "H_pp": -2.134869111347645,
+        "H_sp": -0.18456324044957756
+      },
+      "name": "NaCl",
+      "crystal_kind": "ionic"
+    },
+    {
+      "contact_dist_ang": 2.0115631364742277,
+      "contact_electronic_scale_eV": 2.550374922016071,
+      "softener": 0.2082767770619546,
+      "overlap": {
+        "S_ss": 1.0,
+        "S_pp": 1.0,
+        "S_sp": 0.12496606623717275
+      },
+      "kinetic_eV": {
+        "T_ss": 2.550374922016071,
+        "T_pp": 1.0201499688064286,
+        "T_sp": 0.1593551607171423
+      },
+      "nuclear_eV": {
+        "V_ss": -3.825562383024107,
+        "V_pp": -3.825562383024107,
+        "V_sp": -0.47806548215142697
+      },
+      "two_electron_eV": {
+        "ss_ss": 1.0201499688064286,
+        "pp_pp": 1.0201499688064286,
+        "ss_pp": 0.5100749844032143,
+        "sp_sp": 1.5302249532096426
+      },
+      "core_hamiltonian_eV": {
+        "H_ss": -1.2751874610080356,
+        "H_pp": -2.8054124142176784,
+        "H_sp": -0.3187103214342847
+      },
+      "name": "LiF",
+      "crystal_kind": "ionic"
+    },
+    {
+      "contact_dist_ang": 2.007798946660487,
+      "contact_electronic_scale_eV": 2.5541589919901035,
+      "softener": 0.20858580374331226,
+      "overlap": {
+        "S_ss": 1.0,
+        "S_pp": 1.0,
+        "S_sp": 0.12515148224598735
+      },
+      "kinetic_eV": {
+        "T_ss": 2.5541589919901035,
+        "T_pp": 1.0216635967960415,
+        "T_sp": 0.15982839186973918
+      },
+      "nuclear_eV": {
+        "V_ss": -3.8312384879851553,
+        "V_pp": -3.8312384879851553,
+        "V_sp": -0.4794851756092176
+      },
+      "two_electron_eV": {
+        "ss_ss": 1.0216635967960415,
+        "pp_pp": 1.0216635967960415,
+        "ss_pp": 0.5108317983980207,
+        "sp_sp": 1.532495395194062
+      },
+      "core_hamiltonian_eV": {
+        "H_ss": -1.2770794959950518,
+        "H_pp": -2.809574891189114,
+        "H_sp": -0.3196567837394784
+      },
+      "name": "LiH",
+      "crystal_kind": "ionic"
+    },
+    {
+      "contact_dist_ang": 2.544880922670874,
+      "contact_electronic_scale_eV": 2.107910840896127,
+      "softener": 0.172142876910328,
+      "overlap": {
+        "S_ss": 1.0,
+        "S_pp": 1.0,
+        "S_sp": 0.1032857261461968
+      },
+      "kinetic_eV": {
+        "T_ss": 2.107910840896127,
+        "T_pp": 0.8431643363584508,
+        "T_sp": 0.10885855092669838
+      },
+      "nuclear_eV": {
+        "V_ss": -3.1618662613441906,
+        "V_pp": -3.1618662613441906,
+        "V_sp": -0.3265756527800952
+      },
+      "two_electron_eV": {
+        "ss_ss": 0.8431643363584508,
+        "pp_pp": 0.8431643363584508,
+        "ss_pp": 0.4215821681792254,
+        "sp_sp": 1.264746504537676
+      },
+      "core_hamiltonian_eV": {
+        "H_ss": -1.0539554204480637,
+        "H_pp": -2.31870192498574,
+        "H_sp": -0.21771710185339682
+      },
+      "name": "Cu",
+      "crystal_kind": "metallic"
+    },
+    {
+      "contact_dist_ang": 2.399054535791848,
+      "contact_electronic_scale_eV": 2.2128851217528136,
+      "softener": 0.18071561839335037,
+      "overlap": {
+        "S_ss": 1.0,
+        "S_pp": 1.0,
+        "S_sp": 0.10842937103601022
+      },
+      "kinetic_eV": {
+        "T_ss": 2.2128851217528136,
+        "T_pp": 0.8851540487011255,
+        "T_sp": 0.11997087096330124
+      },
+      "nuclear_eV": {
+        "V_ss": -3.31932768262922,
+        "V_pp": -3.31932768262922,
+        "V_sp": -0.35991261288990367
+      },
+      "two_electron_eV": {
+        "ss_ss": 0.8851540487011255,
+        "pp_pp": 0.8851540487011255,
+        "ss_pp": 0.44257702435056273,
+        "sp_sp": 1.327731073051688
+      },
+      "core_hamiltonian_eV": {
+        "H_ss": -1.1064425608764066,
+        "H_pp": -2.434173633928095,
+        "H_sp": -0.23994174192660245
+      },
+      "name": "Si",
+      "crystal_kind": "covalent_network"
+    },
+    {
+      "contact_dist_ang": 2.4411610864037225,
+      "contact_electronic_scale_eV": 2.1815159812539573,
+      "softener": 0.178153852503204,
+      "overlap": {
+        "S_ss": 1.0,
+        "S_pp": 1.0,
+        "S_sp": 0.1068923115019224
+      },
+      "kinetic_eV": {
+        "T_ss": 2.1815159812539573,
+        "T_pp": 0.872606392501583,
+        "T_sp": 0.11659364290730995
+      },
+      "nuclear_eV": {
+        "V_ss": -3.272273971880936,
+        "V_pp": -3.272273971880936,
+        "V_sp": -0.34978092872192984
+      },
+      "two_electron_eV": {
+        "ss_ss": 0.872606392501583,
+        "pp_pp": 0.872606392501583,
+        "ss_pp": 0.4363031962507915,
+        "sp_sp": 1.3089095887523743
+      },
+      "core_hamiltonian_eV": {
+        "H_ss": -1.0907579906269786,
+        "H_pp": -2.399667579379353,
+        "H_sp": -0.2331872858146199
+      },
+      "name": "Ge",
+      "crystal_kind": "covalent_network"
+    }
+  ],
+  "scope_note": "Discrete EH AO integrals \u2014 not continuum GTO/STO basis"
+}

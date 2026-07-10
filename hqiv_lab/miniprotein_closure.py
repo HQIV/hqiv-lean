@@ -105,6 +105,252 @@ def hydrophobic_step_fraction(structure_fraction: float | None = None) -> float:
     return base * (1.0 - lean.ALPHA / 3.0)
 
 
+def apply_nerf_contact_refinement(
+    sequence: str,
+    dihedrals: tuple[tuple[float, float], ...],
+    contacts: tuple[TertiaryContact, ...],
+    *,
+    rounds: int | None = None,
+    initial_delta_rad: float | None = None,
+    min_delta_rad: float = 0.012,
+    ss: list[str] | None = None,
+    curvature_weights: bool = False,
+    macro_ricci_soft: bool = False,
+    temperature_k: float | None = None,
+    atom_sites: bool = False,
+) -> tuple[list[Vec3], tuple[tuple[float, float], ...]]:
+    """
+    Contact closure via NeRF-consistent φ/ψ refinement (no unconstrained Cα Jacobi).
+
+    Minimizes squared tertiary contact violations by coordinate search on dihedrals.
+    """
+    from hqiv_lab.miniprotein_backbone import place_backbone_atom_state, place_ca_trace
+
+    if not contacts:
+        ca = place_ca_trace(sequence, dihedrals)
+        return ca, dihedrals
+
+    def _score_sse(trial_dihedrals: tuple[tuple[float, float], ...]) -> float:
+        if atom_sites:
+            from hqiv_lab.miniprotein_osh import (
+                atom_contact_sse,
+                prepare_atom_contacts,
+            )
+
+            state = place_backbone_atom_state(sequence, trial_dihedrals)
+            atom_c = prepare_atom_contacts(
+                contacts, state, temperature_k=temperature_k
+            )
+            return atom_contact_sse(state, atom_c)
+        ca = place_ca_trace(sequence, trial_dihedrals)
+        weights = _curvature_weights_for_sse(
+            sequence,
+            ca,
+            contacts,
+            ss,
+            curvature_weights,
+            temperature_k,
+            macro_ricci_soft=macro_ricci_soft,
+        )
+        return _contact_sse(
+            sequence,
+            ca,
+            contacts,
+            weights,
+            ss=ss,
+            macro_ricci_soft=macro_ricci_soft,
+        )
+
+    n = len(sequence)
+    if rounds is None:
+        rounds = 12 if n <= 8 else 6
+    if initial_delta_rad is None:
+        initial_delta_rad = 0.4 if n <= 8 else 0.25
+    # Register piezo: open/low-occupancy contacts get larger thermal step size.
+    from hqiv_lab.peptide_shell_dress import staged_pass_piezo_step_dress
+
+    initial_delta_rad = float(initial_delta_rad) * staged_pass_piezo_step_dress(
+        contacts, temperature_k=temperature_k
+    )
+
+    best = list(dihedrals)
+    best_ca = place_ca_trace(sequence, tuple(best))
+    best_sse = _score_sse(tuple(best))
+    delta = initial_delta_rad
+    indices = tuple(range(n))
+
+    for _ in range(rounds):
+        improved = False
+        for i in indices:
+            for dphi in (-delta, 0.0, delta):
+                for dpsi in (-delta, 0.0, delta):
+                    if dphi == 0.0 and dpsi == 0.0:
+                        continue
+                    trial = best[:]
+                    phi_i, psi_i = trial[i]
+                    trial[i] = (phi_i + dphi, psi_i + dpsi)
+                    sse = _score_sse(tuple(trial))
+                    if sse < best_sse:
+                        best_sse = sse
+                        best = trial
+                        best_ca = place_ca_trace(sequence, tuple(best))
+                        improved = True
+        if not improved:
+            delta *= 0.5
+        if delta < min_delta_rad:
+            break
+
+    return best_ca, tuple(best)
+
+
+def apply_staged_nerf_contact_refinement(
+    sequence: str,
+    dihedrals: tuple[tuple[float, float], ...],
+    contacts: tuple[TertiaryContact, ...],
+    *,
+    structure_rounds: int = 8,
+    hydrophobic_rounds: int = 8,
+    terminus_rounds: int = 10,
+    final_rounds: int = 10,
+    initial_delta_rad: float | None = None,
+    min_delta_rad: float = 0.012,
+    ss: list[str] | None = None,
+    curvature_weights: bool = False,
+    macro_ricci_soft: bool = False,
+    temperature_k: float | None = None,
+    atom_sites: bool = False,
+) -> tuple[list[Vec3], tuple[tuple[float, float], ...]]:
+    """
+    NeRF φ/ψ refinement in staged contact passes (Lean ``tertiaryContactPass`` order).
+
+    Structure register (helix/sheet packing) → hydrophobic burial → terminus cap →
+    full graph polish.  Intended for compact miniproteins (Trp-cage class) where
+    single-pass coordinate search stalls in local contact minima.
+    """
+    from hqiv_lab.miniprotein_contacts import partition_tertiary_contacts_staged
+    from hqiv_lab.miniprotein_backbone import place_ca_trace
+
+    if not contacts:
+        ca = place_ca_trace(sequence, dihedrals)
+        return ca, dihedrals
+
+    structure, hydrophobic, terminus = partition_tertiary_contacts_staged(contacts)
+    best = list(dihedrals)
+    best_ca = place_ca_trace(sequence, tuple(best))
+    kwargs: dict[str, float | bool | list[str] | None] = {
+        "min_delta_rad": min_delta_rad,
+        "ss": ss,
+        "curvature_weights": curvature_weights,
+        "macro_ricci_soft": macro_ricci_soft,
+        "temperature_k": temperature_k,
+        "atom_sites": atom_sites,
+    }
+    if initial_delta_rad is not None:
+        kwargs["initial_delta_rad"] = initial_delta_rad
+    kwargs.pop("temperature_k", None)
+    if temperature_k is not None:
+        kwargs["temperature_k"] = temperature_k
+    if atom_sites and len(sequence) >= 8:
+        kwargs["atom_sites"] = True
+
+    for stage, rounds in (
+        (structure, structure_rounds),
+        (hydrophobic, hydrophobic_rounds),
+        (terminus, terminus_rounds),
+        (contacts, final_rounds),
+    ):
+        if not stage or rounds <= 0:
+            continue
+        stage_kw = dict(kwargs)
+        # System Ricci dresses the whole graph on the final polish pass only.
+        if stage is not contacts:
+            stage_kw["macro_ricci_soft"] = False
+        best_ca, best = apply_nerf_contact_refinement(
+            sequence,
+            tuple(best),
+            stage,
+            rounds=rounds,
+            **stage_kw,
+        )
+
+    return best_ca, tuple(best)
+
+
+def _curvature_weights_for_sse(
+    sequence: str,
+    ca: list[Vec3],
+    contacts: tuple[TertiaryContact, ...],
+    ss: list[str] | None,
+    enabled: bool,
+    temperature_k: float | None = None,
+    *,
+    macro_ricci_soft: bool = False,
+) -> tuple[float, ...] | None:
+    from hqiv_lab.macro_ricci_flow import (
+        macro_ricci_contact_sse_multiplier,
+    )
+    from hqiv_lab.residue_site_physics import macro_ricci_system_dress_amplitude as _sys_amp
+
+    base: list[float] | None = None
+    if enabled and contacts:
+        from hqiv_lab.protein_solvent_phase import contact_curvature_weights
+
+        base = list(contact_curvature_weights(ca, contacts, ss, temperature_k=temperature_k))
+    elif macro_ricci_soft and contacts:
+        base = [1.0] * len(contacts)
+
+    if not macro_ricci_soft or not contacts or base is None:
+        return tuple(base) if base is not None else None
+
+    # Curvature weights already carry B_eff; macro Ricci acts via soft targets only.
+    if enabled:
+        return tuple(base)
+
+    system_amp = _sys_amp(sequence, contacts, ca, ss)
+    out = base[:]
+    for k, c in enumerate(contacts):
+        out[k] *= macro_ricci_contact_sse_multiplier(
+            sequence, ca, c, ss, contacts, system_amp=system_amp
+        )
+    return tuple(out)
+
+
+def _contact_sse(
+    sequence: str,
+    ca: list[Vec3],
+    contacts: tuple[TertiaryContact, ...],
+    weights: tuple[float, ...] | None = None,
+    *,
+    ss: list[str] | None = None,
+    macro_ricci_soft: bool = False,
+) -> float:
+    from hqiv_lab.macro_ricci_flow import macro_ricci_soft_contact_target
+    from hqiv_lab.residue_site_physics import macro_ricci_system_dress_amplitude
+
+    system_amp = (
+        macro_ricci_system_dress_amplitude(sequence, contacts, ca, ss)
+        if macro_ricci_soft
+        else 0.0
+    )
+    sse = 0.0
+    for k, c in enumerate(contacts):
+        vx = ca[c.j][0] - ca[c.i][0]
+        vy = ca[c.j][1] - ca[c.i][1]
+        vz = ca[c.j][2] - ca[c.i][2]
+        dist = math.sqrt(vx * vx + vy * vy + vz * vz)
+        target = (
+            macro_ricci_soft_contact_target(
+                c, sequence, ca, ss, contacts, system_amp=system_amp
+            )
+            if macro_ricci_soft
+            else c.target_angstrom
+        )
+        delta = dist - target
+        w = 1.0 if weights is None else weights[k]
+        sse += w * delta * delta
+    return sse
+
+
 def apply_staged_tertiary_contact_closure(
     ca: list[Vec3],
     contacts: tuple[TertiaryContact, ...],
@@ -116,11 +362,12 @@ def apply_staged_tertiary_contact_closure(
     tolerance_angstrom: float = 1e-4,
 ) -> list[Vec3]:
     """
-    Three-pass Jacobi closure — locality order:
+    Four-pass Jacobi closure — locality order:
 
     1. SS register (helix, sheet, helix–sheet packing)
-    2. Sequence hydrophobic pairs (gentler ``(1 − α/3)`` step)
-    3. Compact terminus cap alone (global end-to-end)
+    2. Sequence hydrophobic pairs (gentler ``(1 − α/3)`` step; no E↔H cross pairs)
+    3. SS register refresh (undo hydrophobic collapse of sheet–helix register)
+    4. Compact terminus cap alone (global end-to-end)
     """
     from hqiv_lab.miniprotein_contacts import partition_tertiary_contacts_staged
 
@@ -140,6 +387,13 @@ def apply_staged_tertiary_contact_closure(
             hydrophobic,
             steps=hydrophobic_steps,
             step_fraction=hf,
+            tolerance_angstrom=tolerance_angstrom,
+        )
+        out = apply_tertiary_contact_closure(
+            out,
+            structure,
+            steps=max(structure_steps // 2, 20),
+            step_fraction=sf,
             tolerance_angstrom=tolerance_angstrom,
         )
     if terminus:

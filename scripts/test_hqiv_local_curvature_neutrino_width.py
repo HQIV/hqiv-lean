@@ -23,6 +23,18 @@ def test_weak_width_catalysis_near_seven_percent_at_lab() -> None:
     assert 1.07 <= high <= 1.12
 
 
+def test_bond_corridor_partial_shield_not_unity() -> None:
+    xi = ish.xi_from_temperature_K(300.0)
+    gravity = notd.local_lab_gravity_phi_epsilon("full")
+    eta = 0.24
+    low, central, high = notd.local_curvature_weak_width_factor_band(
+        xi, gravity, A=2, bonded=True, eta_linear=eta
+    )
+    assert central > 1.0
+    assert central < notd.local_curvature_weak_width_factor(xi, gravity)
+    assert low < central < high
+
+
 def test_qualified_neutron_half_life_in_reference_band() -> None:
     row = ish.stability_readout(1, 0, label="n", em_tipping_qualified=True, lab_temperature_K=300.0)
     assert row.half_life_seconds is not None
@@ -36,5 +48,6 @@ def test_qualified_neutron_half_life_in_reference_band() -> None:
 if __name__ == "__main__":
     test_neutrino_opacity_barn_is_oom_140_pow_four_at_lockin()
     test_weak_width_catalysis_near_seven_percent_at_lab()
+    test_bond_corridor_partial_shield_not_unity()
     test_qualified_neutron_half_life_in_reference_band()
     print("test_hqiv_local_curvature_neutrino_width: OK")

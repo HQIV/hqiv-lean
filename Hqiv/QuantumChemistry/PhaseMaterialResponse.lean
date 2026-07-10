@@ -1,7 +1,9 @@
 import Hqiv.Algebra.PhaseLiftDelta
 import Hqiv.Physics.FanoResonance
 import Hqiv.QuantumChemistry.CurvatureBondContact
+import Hqiv.QuantumChemistry.CoupledRelaxation
 import Hqiv.QuantumChemistry.PhaseGeometryDensity
+import Hqiv.QuantumChemistry.PhaseDiagramMixture
 
 /-!
 # Phase geometry → material response (n, ε_r, k_th, σ slot)
@@ -186,6 +188,21 @@ theorem phononThermalConductivitySlot_pos
   unfold phononThermalConductivitySlot
   positivity
 
+/-- Driven thermal-conductivity assay: temperature-profile softener on ``k_th``.
+
+``k_driven = k_th / (1 + γ · |ΔT| / T_melt)`` — identity at ``ΔT = 0``.
+Gradient / Fourier slot without continuum PDE. -/
+noncomputable def drivenPhononThermalConductivity
+    (kTh deltaT meltK : ℝ) : ℝ :=
+  let denom := 1 + gamma_HQIV * (abs deltaT) / max meltK 1e-9
+  kTh / denom
+
+theorem drivenPhononThermalConductivity_zero_gradient
+    (kTh meltK : ℝ) :
+    drivenPhononThermalConductivity kTh 0 meltK = kTh / 1 := by
+  unfold drivenPhononThermalConductivity
+  simp [abs_zero]
+
 /--
 Ionic conductivity slot: zero without explicit carriers (pure-water limit).
 -/
@@ -248,6 +265,26 @@ noncomputable def dynamicViscositySlot (solid : Bool) (η_liquid : ℝ) : ℝ :=
 theorem dynamicViscositySlot_zero_of_solid (η_liquid : ℝ) :
     dynamicViscositySlot true η_liquid = 0 := by
   unfold dynamicViscositySlot
+  simp
+
+/-!
+## LDL/HDL mixture readouts (n, k_th, η)
+
+``materialResponseMixture`` from ``PhaseDiagramMixture`` weights end-member properties
+at local ``f_LDL``.  Python: ``material_response_mixture_readout``.
+-/
+
+noncomputable def materialResponseAtMixtureFraction (f propLow propHigh : ℝ) : ℝ :=
+  materialResponseMixture f propLow propHigh
+
+theorem materialResponseAtMixtureFraction_ldl (propLow propHigh : ℝ) :
+    materialResponseAtMixtureFraction 1 propLow propHigh = propLow := by
+  unfold materialResponseAtMixtureFraction materialResponseMixture
+  ring
+
+theorem materialResponseAtMixtureFraction_hdl (propLow propHigh : ℝ) :
+    materialResponseAtMixtureFraction 0 propLow propHigh = propHigh := by
+  unfold materialResponseAtMixtureFraction materialResponseMixture
   simp
 
 end

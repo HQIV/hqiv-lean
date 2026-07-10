@@ -70,6 +70,8 @@ Fully-qualified under `HqivSpine.`. Use `#check` for exact types.
   (`chart_dim : spacetimeDim = 4`); constants are flat.
 - `Geometry.MetricGradient`: contravariant `(∇φ)^ν = g^{νμ}∂_μφ`, coordinate `∂_μ J^μ`,
   flat Euclidean/Minkowski inverse metrics; `coordPartialDivergence_const` (flat hook wired).
+- `Geometry.HQVMMetric`: synchronous HQVM `g_{μν}`, inverse, Levi–Civita Christoffel jet
+  (`christoffelHQVM_000_eq`, `christoffelHQVM_00_succi_eq`, spatial components).
 
 ### Algebra — the octonions as a genuine division algebra
 - `Algebra.CayleyDickson`: `𝕆 = CayleyDickson³ ℝ`, dim 8.
@@ -78,7 +80,8 @@ Fully-qualified under `HqivSpine.`. Use `#check` for exact types.
   `G₂` automorphisms, the `1+3+4` gauge split, triality, finite SM anomaly traces.
 - `Algebra.StrongColor` / `StrongColorSu3` / `StrongColorSu3LieLaw` / `StrongColorEmbed`:
   Gell–Mann `λ₁–₈`, `f^{abc}`, global Lie law, `8×8` carrier embed (`colorGellMannEmbed`);
-  `NonAbelianMatrixElement`: abelian kinetic × `C_A/C_F` pipeline.
+  `NonAbelianMatrixElement`: abelian kinetic × `C_A/C_F` pipeline;
+  `NonAbelianDynamics`: lock-in `4+4` complex structure `J` at `m = 4` (gauge → strong block).
 
 ### Physics
 - `Physics.Shell`: `referenceM = 4`, `phi(m)=2(m+1)`, `latticeSimplexCount`, `alphaEM_eq : α = 3/5`,
@@ -114,11 +117,18 @@ Fully-qualified under `HqivSpine.`. Use `#check` for exact types.
   `ContinuousHorizon` (`ξ = m+1`, `sigmaXi`, brace readouts, `xiLockin = 5`),
   `RindlerDetuning` (δ-corrected surfaces, global detuning from lapse increment),
   `NowSliceHorizon` (now slice ↔ continuous chart ↔ detuning bridge),
-  `NowSliceFromLattice` (discrete `(φ, Φ, Ω_k)` from temperature ladder, shell ledger,
-  curvature integral + harmonic lower bound; lock-in `(1, 0, 1, 4)`, ages `(12, 3)`,
-  `massUnit = 5`; balanced-horizon `Φ = 0`; continuous `ξ` export agrees at lock-in only),
+  `NowSliceFromLattice` (discrete `(φ, Φ)` from temperature ladder + shell ledger; **`Ω_k =
+  omegaKChart`** on the continuous horizon chart; left-sample `curvatureIntegral` + harmonic bound
+  for imprint layer only; lock-in `(1, 0, 1, 4)`, ages `(12, 3)`, `massUnit = 5`;
+  balanced-horizon `Φ = 0`),
+  `NowSliceOmegaKBridge` (`omegaKPartial = omegaKContinuous (xiOfShell m) xiLockin`;
+  `referenceM_now_slice_omega_k_bridge_closed`),
+  `NowSliceClosure` (consolidated lock-in + Ω_k + bulk clock + causal diamond + Lorentz null chart +
+  HQVM geodesics; `referenceM_now_slice_closure_closed`),
+  `HQVMGeodesics` (comoving time geodesic, spatial lapse Christoffels, lock-in `dτ/dt = N`;
+  `referenceM_hqvm_geodesics_closed`),
   `NowSliceCausalDiamond` (`Event` + `ApexChart` + `imprintGlue` + `evaluate`; lock-in diamond
-  `(H,Φ,Ω_k,t,N,ξ)=(1,0,1,4,5,5)`; discrete `Ω_k` primary; `referenceM_causal_diamond_closed`),
+  `(H,Φ,Ω_k,t,N,ξ)=(1,0,1,4,5,5)`; chart `Ω_k` on slice; `referenceM_causal_diamond_closed`),
   `BaryogenesisShellLadder` (`etaAtShell m = omegaKPartial m · deltaE m`, `readoutAtShell`,
   `referenceM_baryogenesis_shell_ladder_closed`; `baryonAsymmetryScaleFrontier` removed from open),
   `TuftBeltramiAnchor` (`λ_min(n)=d_n=n+1`, chart `m=n+1`, heavy chart `=referenceM`;
@@ -605,6 +615,14 @@ Fully-qualified under `HqivSpine.`. Use `#check` for exact types.
   mean and curvature feedback `γ·(4/8)·σ(ξ)/σ(ξ_lock)`; H₂ readout scaffold at lock-in shells.
 - `Chemistry.AtomDischarge`: `(Z) →` discharge observables via derived `Aufbau` (C/N/Na witnesses,
   factorization uniqueness on the slot table — NIST masses comparison-only).
+- `Chemistry.Atom`: **first-principles neutral-atom and diatomic chemistry from `Z` alone** — the
+  capstone `(Z) →` pipeline: `atomSpec`, `valenceSlaterEffectiveCharge`/`valenceBindingHartree`,
+  `electronegativityFromCharge`, `bondIonicCharacterFromCharge`, `diatomicBondSpec`,
+  `comptonTripletFromCharge`/`comptonTripletFromDiatomic`, `dynamicReadoutFromCharge`/
+  `dynamicReadoutFromDiatomic` (LiH/H₂O witnesses). Proved: `topPrincipal_ge_one`,
+  `polar_bond_from_distinct_zeff`, `carbon_oxygen_bond_polar`, discharge↔binding bridge
+  (`bindingHartreeFromCharge_eq_discharge` + sodium witness). Honest scope: s/p main-group readout
+  through `Z = 118`; d/f IUPAC grouping not claimed.
 
 ---
 
@@ -618,9 +636,15 @@ Ordered roughly by value × tractability. Keep the ethics in §1.
   `principalBlock : Fin Z → ℕ`, and `Chemistry.Binding.slaterEffectiveChargeAufbau` now substitutes
   it for the abstract `block`. Period-3+ valence (`sodium_valence_n_three`) works; the per-element
   **valence count** is the function `valenceCount`/`topPrincipal`. The Slater rule was upgraded to
-  the correct three-level placement and now **reproduces textbook `Z_eff`** (H/He/Li/Be/C).
-  *Next:* numeric `Z_eff` for a worked period-3 atom (Na `2.2`, Cl) — needs `Fin 11+` sum expansion
-  (no `Fin.sum_univ_n` lemma past `eight`); and the IUPAC group-number map off `valenceCount`.
+  the correct three-level placement and now **reproduces textbook `Z_eff`** (H/He/Li/Be/C through
+  Na `2.2`, Cl `6.1`, N `3.9`, O `4.55`). Shell-resolved aggregate `slaterShieldFromShellCounts` avoids
+  `Fin.sum_univ_n` past eight; `Aufbau.iupacMainGroupNumber` maps valence→group (Na→1, Cl→17).
+  **`topPrincipal_ge_one`** now proved (`one_mem_principalConfig`). **`lastElectronInTopShell`** predicate +
+  witnesses (C/N/O/Na/Cl/Ar). Generic Slater bridge:
+  `slaterEffectiveChargeAtShell_eq_aufbau` + `valenceSlaterEffectiveCharge_eq_aufbau` — unconditional via
+  **`slaterShieldAufbauExcl_eq_shellCounts`** (Fin indexed sum = `slaterShieldFromShellCounts`, needs
+  `hle`, `hZ ≤ 118`, `hnT ≤ 7` from `topPrincipal_le_seven`); closed witnesses C/N/O/Cl/Na. *Next:*
+  see **Chemistry capability roadmap** Tier B (Pauling calibration).
 - [x] **Atomic line spectra** (Rydberg/Bohr) — landed as `Chemistry.LineSpectra`, built on
   `Binding.hydrogenicBindingHartree` (the heavy legacy `AtomicExcitations` rebuilt clean). Rydberg
   formula, series limit, Lyman/Balmer ordering, Moseley `z²`, numeric `13.6 eV`/Balmer-α/Lyman-α.
@@ -631,12 +655,20 @@ Ordered roughly by value × tractability. Keep the ethics in §1.
   (`availableModes_eq`, `4 = carrierMultiplicity/2`), per-mode zero point `φ(m)/2 = m+1`, single-site
   budget `4(m+2)(m+1)²` (`siteModeEnergy_closed_form`), additive molecular trace, and the
   proton-anchor numeric `1200` (`h2SiteEnergy_referenceM_numeric`, bundle
-  `moleculeH2Discharged_holds`). *Structural bonding layer landed* as `Chemistry.BondedHorizon`
+  `moleculeH2Discharged_holds`).   *Structural bonding layer landed* as `Chemistry.BondedHorizon`
   (mode surplus) + `Chemistry.DynamicBinding` (η·surplus·vev·κ factorization with H₂ scaffold).
-  *Next:* LiH/H₂O numeric surplus inputs and eV calibration — still comparison-only, not GMTKN55 fit.
+  *LiH/H₂O scaffolds landed:* `comptonTripletLiH`, `comptonTripletH2O`, `lihDynamicReadout`, `h2oDynamicReadout`,
+  `lihBondSurplus` / `h2oBondSurplus` on the `(6,5,4)` shell chart.
+  *First-principles `(Z₁,Z₂)` routing landed* in `Chemistry.Atom`: `diatomicBondSpec`,
+  `comptonTripletFromDiatomic`, `diatomicBondSurplusFromCharge`, `dynamicReadoutFromDiatomic`
+  (LiH witness `dynamicReadoutFromDiatomic_lih_eq`).
+  *Polyatomic water landed:* `waterBondSpec`, `comptonTripletFromTriatomic`, `dynamicReadoutFromWater`
+  (`dynamicReadoutFromWater_eq_scaffold` matches legacy H₂O readout).
+  *Pauling ionic fraction:* `Electronegativity.paulingIonicFraction` / `bondPaulingIonicFractionFromCharge`.
+  *Next:* Tier A LiH/H₂O eV discharge + Tier B absolute bond-depth unit — surplus inputs still
+  comparison-only, not GMTKN55 fit.
 
-  *Remaining clean ports identified in the legacy `Hqiv/QuantumChemistry` survey (Mathlib-only,
-  ethics-clean), ranked:*
+  *Closed ports from legacy `Hqiv/QuantumChemistry` survey (open items → **Chemistry capability roadmap** Tier C–E):*
 - [x] **Allotrope network** — landed as `Chemistry.Allotrope`: octet partition `p·k=cap`, bond order
   antitone in coordination, aromatic `3/2`, ozone bracket, triple-bond ceiling, ring-strain
   `(n−2)·180/n` (hexagon = sp², strict monotone), σ-angle = derived VSEPR cosine. Re-anchored to
@@ -645,8 +677,9 @@ Ordered roughly by value × tractability. Keep the ethics in §1.
   `χ = (IE+EA)/2` from the hydrogenic binding, closed form `μ(z_ion²+z_aff²)/(4n²)`, the periodic trend
   as a theorem (↑ in `Z_eff`, ↓ in shell), and it closes the formerly-abstract `pull` in
   `Spectroscopy.bondIonicCharacter` (pure covalent ⇔ equal χ; distinct `Z_eff` ⇒ polar), tied to the
-  derived `slaterEffectiveChargeAufbau`. *Next:* a concrete cross-period χ ordering (C<N<O numeric,
-  F blocked by the `Fin 9` Slater sum) and a Pauling `ΔEN`→ionic-% calibration.
+  derived `slaterEffectiveChargeAufbau`. **Period-2 ordering landed:**
+  `electronegativity_period2_C_lt_N_lt_O` from Slater `3.25 < 3.90 < 4.55`. *Next:* Tier B Pauling
+  wiring; F still blocked at `Fin 9` Slater sum.
 - [x] **Reaction stoichiometry + Hess's law** — landed as `Chemistry.Reaction`: element-balance
   conservation `apply_preserves_totalElementAtoms` + telescoping path energy via the state function
   `stateEnergy` (`hess_path_energy`/`hess_path_independent`/`hess_cycle_zero`); the empirical
@@ -656,6 +689,96 @@ Ordered roughly by value × tractability. Keep the ethics in §1.
   and **discharging** the water hypothesis (`water_exothermic_from_bondOrder`).
 - [x] **Watson–Crick H-bond counts** — landed as `Chemistry.Biomolecule`: A·T=2, G·C=3, GC stronger,
   donor/acceptor = monogamy two-valuedness, uniform helix width — Mathlib-only `decide`/`omega` wins.
+
+**Chemistry capability roadmap** (structure → reactions → bulk → materials)
+
+*Read tiers:* **Spine** = proved `HqivSpine/Chemistry/*` (compositional laws, no fitted kJ/mol);
+**Scripts** = `hqiv_lab/`, `scripts/hqiv_*`, legacy `Hqiv/QuantumChemistry/*` (numerics + NIST
+comparison quarantine); **Missing** = no module or roadmap-only.
+
+*Strong today:* `(Z) →` Aufbau/Slater/χ/ionic character/line spectra; compositional sterics (lone
+pairs, VSEPR law, dipole, bond order, allotrope graph); reaction stoichiometry + Hess + **ΔE sign**
+from bond order; H₂ site-energy discharge; catalog small molecules via `hqiv_lab` + TUFT geometry;
+condensed readouts (phase @ (T,P), ρ, n, σ) for water/ice/salt/simple metals in Python.
+
+| Area | Spine | Scripts | Missing |
+|------|-------|---------|---------|
+| Structure from input | `Z`, graph laws, H₂ budget | formula/name `MoleculeSpec`, TUFT bond geometry | SMILES/InChI, ab initio opt, general polyatomic builder |
+| Reactions / thermochem | Hess, bond-order exo/endo | dynamic-binding charts | barriers, 298 K H/S/G tables, general kinetics |
+| Phase transitions | allotrope topology only | `(T,P)` phase rank, unit-cell ρ | free-energy minimization proof, multi-component diagrams |
+| Refractivity / optical | α floor, Rydberg, rovibrational | Clausius–Mossotti → n, ice Δn | TD-DFT, dispersion, NMR/Raman |
+| Mixtures | — | aqueous electrolyte σ, ΔT_f | Raoult/Henry, general x_i / activity |
+| Conductivity | contact-slot bridges | ionic (aqueous) + metallic (Na, Cu, …) | spine module, semiconductors, alloys |
+| Alloys / mechanics | — | single-element metal network | phase diagrams, Young's modulus, stress–strain |
+
+*Tier A — structure from input (highest leverage)*
+- [ ] **SMILES/InChI → `MoleculeSpec` adapter** — even initial scope: main-group organics; document
+  in `hqiv_lab` (`AGENTS/HQIV_LAB.md` TODO). No XYZ/Gaussian/ORCA I/O until graph layer exists.
+- [ ] **Fragment graph + bond typing on spine** — explicit molecular graph feeding `BondOrder`,
+  `LonePairs`, `VSEPR`, `Dipole` (compositional laws already proved; input layer missing).
+- [ ] **Discharge LiH/H₂O binding eV on spine** — close `[~]` worked-molecule gap: surplus inputs +
+  single scale witness through `BondedHorizon`/`DynamicBinding`, not GMTKN55 fit.
+- [ ] **General `(Z₁,…,Z_k, stoichiometry) →` polyatomic spec** beyond fixed `MoleculeSpec` name table.
+
+*Tier B — reactions & thermochemistry*
+- [ ] **Absolute bond-depth unit** — tie `BondEnergy.depthUnit` to `siteModeEnergy` / dynamic binding
+  (one derived scale, not a kJ/mol table).
+- [ ] **Reaction network DSL** — extend `ReactionGate` beyond element vectors (multi-step, catalytic
+  gates with conserved slots).
+- [ ] **Barrier / rate proxy** — coarse Ea or KIE bracket from `Physics.Tunneling` + contact η (not
+  full transition-state theory initially).
+- [ ] **298 K correction layer** — rotational/vibrational contributions from `Spectroscopy` on top of
+  bond-order ΔE (derived ZPE, not NIST H/S/G inputs).
+- [~] **Pauling ΔEN → ionic-% calibration** — `Electronegativity.paulingIonicFraction` landed;
+  wire through `Atom`/`diatomicBondSpec` reports; F still blocked at `Fin 9` Slater sum.
+
+*Tier C — bulk phase & optical (port legacy → spine)*
+- [ ] **`Chemistry.Phase` on spine** — free-energy functional + `(T,P)` preferred phase theorem (replace
+  script-only `hqiv_thermodynamic_phase_from_tp.py` as the authoritative layer).
+- [ ] **Polarizability → n chain** — spine proof: `Polarizability` → local field → Clausius–Mossotti
+  → n for a closed witness set (H₂O, ice, SiO₂); scripts remain comparison panel.
+- [ ] **Mixture module** — mole fractions, ideal/non-ideal activity, colligative laws (generalise
+  `hqiv_electrolyte_solution.py` aqueous-only scope).
+- [ ] **`Chemistry.Conductivity` on spine** — ionic (Nernst–Einstein-style from contact surplus) +
+  metallic (delocalized peel); discharge script magnitudes as witnesses only.
+
+*Tier D — alloys & mechanical response*
+- [ ] **Binary alloy network** — two-component peel/bulk partition, ordered vs disordered limit.
+- [ ] **Elastic modulus from bond-graph stiffness** — start diamond vs graphite (graph Laplacian or
+  horizon contact count under strain).
+- [ ] **Stress as horizon-contact strain** — deformation of `BondedHorizon` surplus (link to
+  `BraneBulkFanoTruss` auxetic gap — elasticity not yet proved there).
+
+*Tier E — integration & QC parity*
+- [ ] **d/f-block Aufbau** — transition-metal occupancy before meaningful alloy/catalysis chemistry.
+- [x] **Extended Hückel / tight-binding on HQIV geometry** — discrete two-band +
+  multi-orbital s/pσ/pπ EH + discrete SCF + Fock + KS + AO integrals + core XPS
+  landed (`discreteBandDispersionEv`, `multiOrbitalInsulatorAtKa`,
+  `discreteScfStep`, `discreteFockMatrix`, `discreteKsMatrix`, `discreteAo*`,
+  `discreteCoreXpsEv` / audits under `data/discrete_{scf,fock,ks,ao_integrals,core_spectroscopy}_audit.json`;
+  dress matches SCF; δ=0 ⇒ EH core).
+  Continuum GTO/STO / continuum TD-DFT XAS remain optional comparison layers
+  toward `AGENTS/QUANTUM_CHEMISTRY_OUTPUTS.md`.
+- [ ] **Unified `hqiv-lab` report** — one CLI run → structure, ΔE sign, phase @ (T,P), n, σ,
+  comparison panel (NIST quarantined).
+- [ ] **Legacy QC port survey** — Mathlib-only discharge of remaining high-value
+  `Hqiv/QuantumChemistry/*` slices (phase, polarizability response, ionic/metallic slots) per ethics
+  in §1.
+
+*Tier F — protein folder (miniprotein → fold spine)*
+- [~] **Python protein package** — `hqiv_lab/protein/` re-exports miniprotein fold spine;
+  `scripts/hqiv_spine_chemistry.py` mirrors proved `Chemistry.Binding`/`Biomolecule`/`Molecule`
+  constants; `scripts/hqiv_protein_folder_audit.py` grades GG + Trp-cage vs PDB witnesses.
+  *Baseline (Jul 2026):* fold ladder **5/5 PASS** — GG **0.03 Å**; fragments **0.13–1.81 Å**;
+  Trp-cage **5.00 Å**. Strap basin (φ=γπ, ψ=απ/2) + NeRF contact dihedral refinement replace
+  unconstrained Cα Jacobi for tertiary closure. *Next:* Lean `ramachandranStrap` witness; C-terminal
+  helix-exit dress; sidechain-aware polar contacts.
+- [ ] **`Chemistry.Protein` on spine** — Ramachandran dress `(1+γ/6)`, helix i±3/i±4 targets, peptide
+  bond geometry from derived TUFT lengths (Lean parity with `hqiv_lab/miniprotein_backbone.py`).
+- [ ] **Peptide `MoleculeSpec` builder** — glycine repeat + sequence → fragment graph (Tier A input).
+- [x] **Solvent phase participation** — `ProteinSolventPhaseGeometry` + `MiniproteinChemistryDynamics` directional ρ; Python `hqiv_lab/protein_solvent_phase.py` wired to staged NeRF on Trp-cage. **Jul 2026:** local H–O–H mixture + torque-tree `aqueousHbPivotAtInterface` dress curvature weights and hydrophobic/terminus contact targets (full torque-tree equilibrium theorem still open — see `DynamicCentreGeometry` witness).
+- [x] **Fold ladder Lean spine** — `MiniproteinFoldLadder` pins 1L2Y fragment SS, register profiles, derived tertiary counts
+  `η` contact layer for folding @ cytosol (T,P).
 
 **Algebra / gauge**
 - [ ] `Algebra.OctonionAxisAngles` (carrier rotation geometry) — golf onto `Algebra.Octonion`.
@@ -704,11 +827,25 @@ Ordered roughly by value × tractability. Keep the ethics in §1.
   `nowSliceFromLatticeDischarged_holds`; `Frontiers.now_slice_lockin_from_lattice_closed`,
   `Frontiers.referenceM_lockin_mechanism_closed`,
   `now_slice_omegaK_lattice_structure_closed`, `now_slice_lockin_ages_closed`).
+  **Ω_k chart identification landed** as `Physics.NowSliceOmegaKBridge`
+  (`omegaKPartial = omegaKChart`; legacy discrete ratio `omegaKDiscretePartial` for harmonic/imprint
+  bounds only; `referenceM_now_slice_omega_k_bridge_closed`).
+  **Consolidated now-slice closure** as `Physics.NowSliceClosure`
+  (`referenceM_now_slice_closure_closed`: lock-in, Ω_k, bulk clock, causal diamond, Lorentz null chart,
+  HQVM geodesics, covariant plasma O-Maxwell).
+  **HQVM Christoffel + geodesics landed** as `Geometry.HQVMMetric` + `Physics.HQVMGeodesics`
+  (comoving time geodesic, spatial lapse Christoffels, lock-in proper-time rate;
+  `referenceM_hqvm_geodesics_closed`).
+  **Covariant plasma O-Maxwell landed** as `Physics.CovariantOMaxwell`
+  (metric surrogate, Christoffel-form divergence, flat-jet bridge, schematic EM-channel plasma;
+  `referenceM_covariant_plasma_omaxwell_closed`).
+  **Non-comoving HQVM geodesics landed** in `Physics.HQVMGeodesics`
+  (flat-jet Christoffels vanish ⇒ straight lines; timelike/spacelike via `hqvmIntervalSq`;
+  `referenceM_noncomoving_geodesics_closed`). Now-slice curvature closure is **fully discharged**
+  (`nowSliceCurvatureFrontier` removed from `openFrontiers`).
   **Causal-diamond formalization landed** as `Physics.NowSliceCausalDiamond`
   (`causalDiamondClosure`, `Frontiers.referenceM_causal_diamond_closed`).
   **Bulk clock landed** as `Physics.BulkHyperboloidDynamics` (`dτ/dt = N`, lock-in `H(4)=5`).
-  *Still open:* full manifold geodesics; pointwise continuous–discrete `Ω_k` equality on all shells
-  (chart ordering consistency below lock-in proved; not a second curvature ontology).
 - [x] **`DiscreteHeat` generalized from `C₃` to `Cₙ`** — landed as `Physics.DiscreteHeatCycle` on the
   periodic mesh `ZMod n` (`[NeZero n]`), where the cyclic shift is a genuine `Fintype` bijection so
   the integration-by-parts reindexing holds for *every* mesh length: dissipation `⟨u,Δu⟩ = −‖∇u‖² ≤ 0`,
@@ -761,9 +898,17 @@ Ordered roughly by value × tractability. Keep the ethics in §1.
   *Next:* isotope panels, post-α cooperative network numerics, MeV Q calibration (comparison-only).
 - [x] **Atom discharge pipeline** — landed as `Chemistry.AtomDischarge` (`(Z) →` observables via
   `Aufbau`; decay-uniqueness template on slot table).
-- [x] **Strong SU(3) chart closure** — `StrongColorSu3` + `StrongColorSu3LieLaw` (full `f^{abc}`,
-  64-pair Lie law), `StrongColorEmbed` (`8×8` carrier lift), `NonAbelianMatrixElement`
-  (pipeline). *Still open:* real `𝔰𝔬(8)` / triality identification of embed image.
+- [x] **First-principles chemistry from `Z`** — landed as `Chemistry.Atom`: neutral-atom spec,
+  Mulliken χ, ionic character, dynamic-binding readouts, and diatomic `(Z₁,Z₂)` surplus routing;
+  discharge binding bridges to `valenceBindingHartree` when Slater routes agree.
+  **`Electronegativity.paulingIonicFraction`** applies Pauling's `1 - exp(-Δχ²/4)` to derived Mulliken Δχ.
+- [x] **Strong SU(3) chart closure + lock-in non-abelian dynamics** — `StrongColorSu3` +
+  `StrongColorSu3LieLaw` (full `f^{abc}`, 64-pair Lie law), `StrongColorEmbed` (`8×8` carrier lift),
+  `NonAbelianMatrixElement` (pipeline), `SkewChartBridge` / `SkewChartBridgeSu3Closure`
+  (`su(3) ↪ 𝔰𝔬(6) ↪ 𝔰𝔬(8)`), and `Physics.NonAbelianDynamics` (lock-in `4+4` complex structure
+  `J`, `colourCount = generationCount = 3`, bundled plaquette/matrix-element discharge;
+  `Frontiers.referenceM_non_abelian_dynamics_closed`; removed from `openFrontiers`). *Still optional:*
+  full Spin(8) triality automorphism on 𝔰𝔬(8) or dynamical QCD Lagrangian.
 - [ ] `QuantumChemistry/ParticleShellStructure` is now ported; next, the **noble-gas closures** and
   valence count as Lean theorems (currently computational in Python).
 - [x] Lepton/quark mass-ratio readouts from `GenerationResonanceLadder` with explicit now-slice

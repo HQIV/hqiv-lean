@@ -36,6 +36,7 @@ if str(_REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(_REPO_ROOT))
 
 import hqiv_chemistry_tuft_dynamics as ctd
+import hqiv_chemistry_coupled_readout as ccr
 import hqiv_curvature_bond_state as cbs
 import hqiv_electronic_valence_shells as evs
 import hqiv_homogeneous_curvature_feedback as hcf
@@ -145,7 +146,8 @@ def hqiv_polarizability_angstrom3(
     """
     HQIV molecular polarizability volume [Å³].
 
-    α ∝ α_lattice · (r_span/a₀)³ · (E_Ryd / E_bond) · B_hom(ξ, ρ_curv) · G_eff(η).
+    α ∝ α_lattice · (r_span/a₀)³ · (E_Ryd / E_bond) · B_hom(ξ, ρ_curv) · G_eff(η)
+    · acceptor softener ``1/(1+γ·w_acc)``.
     """
     span = optical_molecular_span_angstrom(molecule)
     e_bond = binding_softness_ev(molecule)
@@ -169,6 +171,13 @@ def hqiv_polarizability_angstrom3(
         alpha_dim *= geff * (1.0 + lean.GAMMA / 4.0)
     else:
         alpha_dim *= geff / math.sqrt(max(steric_domain_count(molecule), 1))
+    try:
+        mono = infer_monomer_geometry(_spec_for_molecule(molecule))
+        alpha_dim *= acceptor_polarizability_softener(
+            mono.n_bonds_at_heavy, mono.lone_pair_count
+        )
+    except Exception:
+        pass
     return alpha_dim * (1.0 + rho_curv * lean.ALPHA) * (BOHR_RADIUS_ANGSTROM**3)
 
 
@@ -265,11 +274,14 @@ def ionic_conductivity_s_m(
     temperature_k: float,
     *,
     carrier_fraction: float = 0.0,
+    phonon_cage_fraction: float | None = None,
 ) -> float:
     """
-    σ_ionic ∝ n_carrier · exp(−E_a/kT) · ρ_curv · G_eff.
+    σ_ionic ∝ n_carrier · exp(−E_a/kT) · ρ_curv · G_eff · thermo_dress.
 
     Pure neutral media: carrier_fraction = 0 → σ ≈ 0 (ultra-pure limit).
+    With carriers, Joule/thermo dress ``carrier_thermo_conductivity_dress`` closes
+    the conductivity ↔ release ↔ thermo loop (identity at zero carriers).
     """
     if carrier_fraction <= 0.0 or temperature_k <= 0.0:
         return 0.0
@@ -278,7 +290,19 @@ def ionic_conductivity_s_m(
     mobility_scale = 1.0e-7  # geometry slot [m²/(V·s)] — not a half-life fit
     n_carrier = carrier_fraction * pgd.AVOGADRO * 1.0e3  # mol-scale placeholder
     boltz = math.exp(-e_a / (K_B * temperature_k))
-    return n_carrier * mobility_scale * boltz * rho_curv * geff
+    sigma0 = n_carrier * mobility_scale * boltz * rho_curv * geff
+    if phonon_cage_fraction is None:
+        import hqiv_homogeneous_curvature_feedback as hcf
+        import hqiv_thermodynamic_phase_from_tp as tptp
+
+        xi = tptp.material_scales_from_network_name(molecule).contact_xi
+        b_hom = hcf.homogeneous_curvature_budget_at_xi(xi, rho_curv)
+        phonon_cage_fraction = max(0.0, min(1.0, 1.0 - b_hom))
+    import hqiv_voltage_generation_ledger as vgl
+
+    return sigma0 * vgl.carrier_thermo_conductivity_dress(
+        carrier_fraction, phonon_cage_fraction=float(phonon_cage_fraction)
+    )
 
 
 def clausius_mossotti_local_field_divisor(
@@ -376,6 +400,68 @@ def phase_orientation_cm_factor(
     if motif == IntermolecularMotif.POLYOL_HBOND:
         return geff
     return geff
+
+
+def hbond_donor_excess_weight(n_bonds: int, n_lone_pairs: int) -> float:
+    """
+    Structural H-bond donor excess ``clamp01((n_σ − n_lp) / n_lp)``.
+
+    Zero when there are no lone pairs (apolar) or when acceptors dominate
+    (``n_lp ≥ n_σ``).  Full weight when donor legs outnumber lone-pair acceptors
+    by at least one full acceptor slot — recovers the pyramidal NH₃ optical slot
+    without a motif-name case.
+    """
+    if n_lone_pairs <= 0 or n_bonds <= 0:
+        return 0.0
+    return min(1.0, max(0.0, float(n_bonds - n_lone_pairs) / float(n_lone_pairs)))
+
+
+def hbond_acceptor_excess_weight(n_bonds: int, n_lone_pairs: int) -> float:
+    """
+    Structural H-bond acceptor excess ``clamp01((n_lp − n_σ) / n_σ)``.
+
+    Dual of donor excess: HF (1σ, 3 lp) → 1; H₂O/NH₃/CH₄ → 0. Softens
+    polarizability on acceptor-rich chains without a motif-name case.
+    """
+    if n_lone_pairs <= 0 or n_bonds <= 0:
+        return 0.0
+    return min(1.0, max(0.0, float(n_lone_pairs - n_bonds) / float(n_bonds)))
+
+
+def acceptor_polarizability_softener(n_bonds: int, n_lone_pairs: int) -> float:
+    """``1 / (1 + γ·α · w_acceptor)`` — EM-weighted monogamy softener on acceptors."""
+    w = hbond_acceptor_excess_weight(n_bonds, n_lone_pairs)
+    return 1.0 / (1.0 + lean.GAMMA * lean.ALPHA * w)
+
+
+def optical_voltage_dress(
+    rho_curv: float,
+    n_dielectric: float = 1.0,
+    *,
+    n_bonds: int = 0,
+    n_lone_pairs: int = 0,
+) -> float:
+    """
+    Post-CM refractive dress from voltage channels × donor-excess weight.
+
+    ``1 + (chemo(γ/2)·photo(γ·(1−ρ), n) − 1) · w_donor`` with
+    ``w_donor = hbond_donor_excess_weight``.  No motif / molecule case branch.
+    """
+    import hqiv_voltage_generation_ledger as vgl
+
+    chemo = vgl.chemo_voltage_channel(lean.GAMMA / 2.0)
+    photo = vgl.photo_voltage_channel(
+        max(0.0, 1.0 - rho_curv) * lean.GAMMA,
+        max(float(n_dielectric), 1.0),
+    )
+    full = chemo * photo
+    w = hbond_donor_excess_weight(n_bonds, n_lone_pairs)
+    return 1.0 + (full - 1.0) * w
+
+
+def pyramidal_optical_voltage_dress(rho_curv: float, n_dielectric: float = 1.0) -> float:
+    """Backward-compatible full-weight optical dress (donor-excess = 1)."""
+    return optical_voltage_dress(rho_curv, n_dielectric, n_bonds=2, n_lone_pairs=1)
 
 
 def coordination_local_field_divisor(molecule: str, phase: PhaseKind) -> float:
@@ -515,6 +601,7 @@ def material_response_readout(
     phase: PhaseKind = "solid",
     temperature_k: float = 273.15,
     carrier_fraction: float = 0.0,
+    rho_curv: float | None = None,
 ) -> dict[str, Any]:
     """Full response witness: n, ε_r, k_th, σ slot."""
     import hqiv_thermodynamic_phase_from_tp as tptp
@@ -524,30 +611,113 @@ def material_response_readout(
     cell = pgd.phase_unit_cell(molecule, allotrope, temperature_k=temperature_k)
     if phase == "liquid":
         rho_g = pgd.liquid_reference_density_g_cm3(molecule)
-        rho_curv = pgd.melt_comparison_curvature_density_fraction()
+        rho_curv_val = (
+            rho_curv
+            if rho_curv is not None
+            else pgd.melt_comparison_curvature_density_fraction()
+        )
     else:
         rho_g = pgd.density_g_cm3(cell)
-        rho_curv = pgd.curvature_density_fraction(rho_g, molecule)
+        rho_curv_val = (
+            rho_curv if rho_curv is not None else pgd.curvature_density_fraction(rho_g, molecule)
+        )
     xi = tptp.material_scales_from_network_name(molecule).contact_xi
     coord_div = coordination_local_field_divisor(molecule, phase)
-    alpha = hqiv_polarizability_angstrom3(molecule, rho_curv, xi)
+    alpha = hqiv_polarizability_angstrom3(molecule, rho_curv_val, xi)
+    # Split bulk_density vs bulk_optical: Lindemann expands the lattice (ρ), but
+    # Clausius–Mossotti uses the undressed electronic number density.
+    rho_cm = rho_g
+    density_dress = 1.0
+    thermal_cm_dress = 1.0
+    brownian_local_dress = 1.0
+    lindemann_eps = 0.0
+    if phase == "solid":
+        from hqiv_lab.packing import lindemann_density_scale
+        from hqiv_lab.species_panel import panel_entry
+        import hqiv_voltage_generation_ledger as vgl
+
+        try:
+            melt_k = float(panel_entry(molecule).nist_melt_k)
+        except Exception:
+            melt_k = temperature_k
+        mono = infer_monomer_geometry(MoleculeSpec.from_chart_name(molecule))
+        density_dress = lindemann_density_scale(
+            temperature_k,
+            melt_k,
+            motif=intermolecular_motif(molecule),
+            n_bonds=int(mono.n_bonds_at_heavy),
+            n_lone_pairs=int(mono.lone_pair_count),
+        )
+        rho_cm = rho_g * density_dress  # undo packing dress for optical channel
+        lindemann_eps = vgl.lindemann_thermal_strain(
+            temperature_k,
+            melt_k,
+            linear_chain=mono.motif == IntermolecularMotif.LINEAR_CHAIN,
+        )
+        # Mild T loader on optical CM; Brownian localDefect is booked separately
+        # (identity contribution to CM — avoids double-counting γ·strong·ε).
+        thermal_cm_dress = vgl.thermal_concentration_dress(lindemann_eps)
+        brownian_local_dress = vgl.brownian_local_defect_channel(lindemann_eps)
     cm_raw = clausius_mossotti_ratio(
-        rho_g, cell.molecular_weight_amu, alpha, coordination_divisor=coord_div
+        rho_cm, cell.molecular_weight_amu, alpha, coordination_divisor=coord_div
     )
-    cm = cm_raw * phase_orientation_cm_factor(molecule, phase, allotrope, rho_curv=rho_curv)
+    # First-class T channel on optical CM (identity at ε=0).
+    cm_raw *= thermal_cm_dress
+    cm_one_way = cm_raw * phase_orientation_cm_factor(
+        molecule, phase, allotrope, rho_curv=rho_curv_val
+    )
+    missing_optical_coupling = int(
+        phase == "solid" and intermolecular_motif(molecule) == IntermolecularMotif.LINEAR_CHAIN
+    )
+    cm_lam = ccr.structural_coupling_weight(float(missing_optical_coupling), 1.0)
+    cm = ccr.coupled_relaxation_step(cm_one_way, cm_raw, cm_lam)
+    n_one_way = refractive_index_from_clausius_mossotti(cm_one_way)
     n = refractive_index_from_clausius_mossotti(cm)
+    opt_voltage_dress = 1.0
+    if phase == "solid":
+        try:
+            mono = infer_monomer_geometry(MoleculeSpec.from_chart_name(molecule))
+            opt_voltage_dress = optical_voltage_dress(
+                rho_curv_val,
+                n,
+                n_bonds=mono.n_bonds_at_heavy,
+                n_lone_pairs=mono.lone_pair_count,
+            )
+        except Exception:
+            opt_voltage_dress = 1.0
+        if opt_voltage_dress != 1.0:
+            n_one_way *= opt_voltage_dress
+            n *= opt_voltage_dress
     eps_r = dielectric_constant_from_refractive_index(n)
-    k_th = phonon_thermal_conductivity_w_mk(
-        molecule, cell, rho_curv, xi, temperature_k=temperature_k
+    k_th_one_way = phonon_thermal_conductivity_w_mk(
+        molecule, cell, rho_curv_val, xi, temperature_k=temperature_k
+    )
+    b_hom = hcf.homogeneous_curvature_budget_at_xi(xi, rho_curv_val)
+    # Brownian localDefect raises effective phonon cage (scattering); identity at ε=0.
+    phonon_cage_fraction = ccr.clamp01(
+        (1.0 - b_hom) + lean.STRONG_CHANNEL_FRACTION * lindemann_eps
+    )
+    k_th = ccr.cage_limited_transport(k_th_one_way, phonon_cage_fraction)
+    rho_curv_network = ccr.network_propagation_step(
+        rho_curv_val, min(1.0, max(0.0, b_hom)), lean.GAMMA * lean.ALPHA
     )
     sigma = ionic_conductivity_s_m(
-        molecule, rho_curv, temperature_k, carrier_fraction=carrier_fraction
+        molecule,
+        rho_curv_val,
+        temperature_k,
+        carrier_fraction=carrier_fraction,
+        phonon_cage_fraction=phonon_cage_fraction,
     )
-    c_p = molar_heat_capacity_j_per_mol_k(molecule, rho_curv, xi, phase=phase)
+    import hqiv_voltage_generation_ledger as vgl
+
+    thermo_dress = vgl.carrier_thermo_conductivity_dress(
+        carrier_fraction, phonon_cage_fraction=phonon_cage_fraction
+    )
+    c_p = molar_heat_capacity_j_per_mol_k(molecule, rho_curv_val, xi, phase=phase)
     l_fusion = latent_heat_fusion_j_per_mol(molecule, allotrope=allotrope)
     eta = dynamic_viscosity_pas(
         molecule,
-        rho_curv,
+        rho_curv_val,
         phase=phase,
         temperature_k=temperature_k,
         allotrope=allotrope,
@@ -559,7 +729,7 @@ def material_response_readout(
         and cell.crystal_system == "hexagonal"
     ):
         n_o, n_e, delta_n = birefringent_refractive_indices(
-            molecule, cell, rho_curv, xi, allotrope=allotrope
+            molecule, cell, rho_curv_val, xi, allotrope=allotrope
         )
     return {
         "molecule": molecule,
@@ -567,7 +737,13 @@ def material_response_readout(
         "allotrope": cell.allotrope,
         "temperature_K": temperature_k,
         "density_g_cm3": rho_g,
-        "curvature_density_fraction": rho_curv,
+        "optical_number_density_g_cm3": rho_cm if phase == "solid" else rho_g,
+        "lindemann_density_dress": density_dress if phase == "solid" else 1.0,
+        "lindemann_thermal_strain": lindemann_eps,
+        "thermal_concentration_dress": thermal_cm_dress,
+        "brownian_local_defect_dress": brownian_local_dress,
+        "optical_voltage_dress": opt_voltage_dress,
+        "curvature_density_fraction": rho_curv_val,
         "contact_xi": xi,
         "optical_contact_theta_rad": optical_contact_theta_rad(molecule),
         "optical_phase_eta": optical_phase_eta(molecule),
@@ -575,22 +751,107 @@ def material_response_readout(
         "coordination_divisor": coord_div,
         "polarizability_angstrom3": alpha,
         "clausius_mossotti_ratio": cm,
+        "clausius_mossotti_ratio_one_way": cm_one_way,
         "clausius_mossotti_ratio_raw": cm_raw,
+        "optical_coupling_level": ccr.coupling_level_from_weight(cm_lam),
+        "missing_optical_coupled_relaxation_flag": missing_optical_coupling,
+        "optical_coupled_relaxation_weight": cm_lam,
         "phase_orientation_cm_factor": phase_orientation_cm_factor(
-            molecule, phase, allotrope, rho_curv=rho_curv
+            molecule, phase, allotrope, rho_curv=rho_curv_val
         ),
         "refractive_index": n,
+        "refractive_index_one_way": n_one_way,
         "dielectric_constant": eps_r,
         "thermal_conductivity_W_mK": k_th,
+        "thermal_conductivity_one_way_W_mK": k_th_one_way,
+        "phonon_cage_fraction": phonon_cage_fraction,
+        "network_propagated_curvature_density_fraction": rho_curv_network,
         "ionic_conductivity_S_m": sigma,
+        "carrier_thermo_dress": thermo_dress,
+        "joule_release_contrast": vgl.joule_release_contrast(
+            carrier_fraction, phonon_cage_fraction=phonon_cage_fraction
+        ),
         "molar_heat_capacity_J_per_mol_K": c_p,
         "latent_heat_fusion_J_per_mol": l_fusion,
         "dynamic_viscosity_Pa_s": eta,
         "refractive_index_ordinary": n_o,
         "refractive_index_extraordinary": n_e,
         "birefringence_delta_n": delta_n,
-        "B_hom": hcf.homogeneous_curvature_budget_at_xi(xi, rho_curv),
+        "B_hom": b_hom,
         "unit_cell": asdict(cell),
+    }
+
+
+def material_response_mixture(f_ldl: float, prop_low: float, prop_high: float) -> float:
+    """Lean ``materialResponseMixture`` — f·prop_LDL + (1−f)·prop_HDL."""
+    f = min(1.0, max(0.0, f_ldl))
+    return f * prop_low + (1.0 - f) * prop_high
+
+
+def material_response_mixture_readout(
+    molecule: str,
+    f_low_density: float,
+    *,
+    temperature_k: float = 273.15,
+    pressure_pa: float | None = None,
+) -> dict[str, Any]:
+    """
+    Mixture-weighted n, k_th, η from LDL/HDL end-member liquid readouts.
+
+    ``f_low_density`` from ``phase_diagram.low_density_liquid_fraction`` or interface dress.
+    """
+    from hqiv_lab.phase_diagram import end_members_for_molecule, liquid_mixture_curvature_fraction
+
+    low, high = end_members_for_molecule(molecule)
+    rho_mix = liquid_mixture_curvature_fraction(
+        f_low_density, low.rho_curv, high.rho_curv
+    )
+    low_out = material_response_readout(
+        molecule,
+        phase="liquid",
+        temperature_k=temperature_k,
+        rho_curv=low.rho_curv,
+    )
+    high_out = material_response_readout(
+        molecule,
+        phase="liquid",
+        temperature_k=temperature_k,
+        rho_curv=high.rho_curv,
+    )
+    f = min(1.0, max(0.0, f_low_density))
+
+    def _mix(key: str) -> float:
+        return material_response_mixture(f, float(low_out[key]), float(high_out[key]))
+
+    return {
+        "molecule": molecule,
+        "temperature_K": temperature_k,
+        "pressure_Pa": pressure_pa,
+        "f_low_density": f,
+        "rho_curv_mixture": rho_mix,
+        "end_members": {
+            "low_density": {"rho_curv": low.rho_curv, "label": low.label},
+            "high_density": {"rho_curv": high.rho_curv, "label": high.label},
+        },
+        "refractive_index": _mix("refractive_index"),
+        "dielectric_constant": _mix("dielectric_constant"),
+        "thermal_conductivity_W_mK": _mix("thermal_conductivity_W_mK"),
+        "thermal_conductivity_one_way_W_mK": _mix("thermal_conductivity_one_way_W_mK"),
+        "phonon_cage_fraction": _mix("phonon_cage_fraction"),
+        "network_propagated_curvature_density_fraction": _mix(
+            "network_propagated_curvature_density_fraction"
+        ),
+        "dynamic_viscosity_Pa_s": _mix("dynamic_viscosity_Pa_s"),
+        "low_density_branch": {
+            "refractive_index": low_out["refractive_index"],
+            "thermal_conductivity_W_mK": low_out["thermal_conductivity_W_mK"],
+            "dynamic_viscosity_Pa_s": low_out["dynamic_viscosity_Pa_s"],
+        },
+        "high_density_branch": {
+            "refractive_index": high_out["refractive_index"],
+            "thermal_conductivity_W_mK": high_out["thermal_conductivity_W_mK"],
+            "dynamic_viscosity_Pa_s": high_out["dynamic_viscosity_Pa_s"],
+        },
     }
 
 

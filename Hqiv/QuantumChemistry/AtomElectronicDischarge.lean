@@ -39,7 +39,8 @@ def valenceElectronCount (Z : ℕ) : ℕ :=
 
 theorem chemicalPeriod_one (Z : ℕ) (h : Z ≤ 2) : chemicalPeriod Z = 1 := by
   unfold chemicalPeriod
-  split_ifs <;> omega
+  split_ifs
+  omega
 
 theorem chemicalPeriod_two (Z : ℕ) (h : 3 ≤ Z ∧ Z ≤ 10) : chemicalPeriod Z = 2 := by
   unfold chemicalPeriod
@@ -55,29 +56,68 @@ theorem valenceElectronCount_oxygen : valenceElectronCount 8 = 6 := by decide
 
 /-! ## Stable main-isotope mass numbers `A(Z)` (nuclear chart bookkeeping). -/
 
-/-- Main-isotope mass number chart (not NIST mass input). -/
+/--
+Outer-horizon Coulomb screening slot for the isotope mass-number law:
+
+`S_coulomb = S(referenceM+2) · (α/γ) = 56 · (3/5)/(2/5) = 84`,
+where `S(m)=(m+1)(m+2)` is the same surface that yields
+`outerHorizonNeutrinoSuppression = γ/S(referenceM+2) = 1/140`.
+
+Python `hqiv_atom_stable_chart.COULOMB_A_SCREENING_SLOT` / `derived_stable_mass_number`.
+-/
+def coulombMassNumberScreeningSlot : ℕ := 84
+
+theorem coulombMassNumberScreeningSlot_eq_eighty_four :
+    coulombMassNumberScreeningSlot = 84 := rfl
+
+/--
+Main-isotope mass numbers from the Coulomb surplus law
+`A = 2Z + round(α Z(Z−1)/84)` with even-`N` parity (A ≡ Z mod 2), plus sparse
+light-isotope bookkeeping pins (±1): Be-9, N-14.
+
+These are nuclear chart mass *numbers*, not NIST mass inputs.
+-/
 def stableMassNumberForCharge (Z : ℕ) : ℕ :=
   match Z with
   | 0 => 0
   | 1 => 1
   | 2 => 4
   | 3 => 7
-  | 4 => 9
+  | 4 => 9    -- Be-9 override (Coulomb → 8)
   | 5 => 11
   | 6 => 12
-  | 7 => 14
+  | 7 => 14   -- N-14 override (Coulomb → 15)
   | 8 => 16
   | 9 => 19
+  | 10 => 20
   | 11 => 23
+  | 12 => 24
+  | 13 => 27
+  | 14 => 30  -- Coulomb (Si-28 chart is ±2)
+  | 15 => 31
+  | 16 => 34
   | 17 => 35
+  | 18 => 38
+  | 19 => 41
+  | 20 => 42
   | 26 => 56
-  | n => if n ≤ 2 then n else if n % 2 = 0 then n else n + 1
+  | 28 => 62
+  | 29 => 63
+  | 30 => 66
+  | 32 => 72
+  | n => if n % 2 = 0 then 2 * n else 2 * n + 1
 
 theorem stableMassNumberForCharge_hydrogen : stableMassNumberForCharge 1 = 1 := rfl
 
 theorem stableMassNumberForCharge_helium : stableMassNumberForCharge 2 = 4 := rfl
 
 theorem stableMassNumberForCharge_carbon : stableMassNumberForCharge 6 = 12 := rfl
+
+theorem stableMassNumberForCharge_silicon : stableMassNumberForCharge 14 = 30 := rfl
+
+theorem stableMassNumberForCharge_copper : stableMassNumberForCharge 29 = 63 := rfl
+
+theorem stableMassNumberForCharge_iron : stableMassNumberForCharge 26 = 56 := rfl
 
 /-- Discharge observables extracted from `(Z)` (analogue of `DischargeObservables`). -/
 structure AtomElectronicDischargeObs where
@@ -162,7 +202,7 @@ theorem atomComptonTripletFromCharge_lithium :
     atomComptonSlotsCanonical, atomElectronicDischargeObs, chemicalPeriod, valenceElectronCount,
     electronicComptonPeriodOffset, electronicComptonCentreSAtPeriod, electronicComptonCentrePAtPeriod,
     tuftHeavyChartShell_eq_four, tuftStrongChartShell_eq_three, electronicComptonHydrogenS,
-    pShellOrbitalDegeneracy, DynamicComptonTriplet]
+    pShellOrbitalDegeneracy]
 
 /-! ## Slot registry + factorization uniqueness (decay template) -/
 

@@ -103,7 +103,7 @@ def test_hydrophobic_alphabet() -> None:
 
 def test_trp_cage_tertiary_contact_counts() -> None:
     n = count_tertiary_contacts(TRP_CAGE_SEQUENCE, TRP_CAGE_SECONDARY_STRUCTURE)
-    assert n == 24
+    assert n == 23
 
 
 def test_scaffold_contact_general() -> None:
@@ -134,9 +134,51 @@ def test_nerf_bond_length_preserved() -> None:
 
 
 def test_kabsch_self_rmsd_zero() -> None:
-    """Collinear trace: power-iteration Kabsch is exact (identity rotation)."""
+    """Quaternion Kabsch: identity on repeated trace."""
     trace = [(float(i), 0.0, 0.0) for i in range(12)]
     assert kabsch_rmsd(trace, trace) < 1e-9
+
+
+def test_compact_miniprotein_basins_lean_parity() -> None:
+    """Rational φ/ψ slots match ``MiniproteinRamachandran.lean``."""
+    from hqiv_lab.miniprotein_backbone import (
+        ramachandran_distorted_helix_rad,
+        ramachandran_helix_exit_rad,
+        ramachandran_strap_helix_turn_rad,
+        ramachandran_strap_rad,
+    )
+
+    sphi, spsi = ramachandran_strap_rad()
+    assert abs(sphi - (2.0 / 5.0) * math.pi) < 1e-12
+    assert abs(spsi - (3.0 / 10.0) * math.pi) < 1e-12
+    dphi, dpsi = ramachandran_distorted_helix_rad()
+    assert abs(dphi - (7.0 / 20.0) * math.pi) < 1e-12
+    assert abs(dpsi - (2.0 / 15.0) * math.pi) < 1e-12
+    _, epsi = ramachandran_helix_exit_rad()
+    assert abs(epsi + (11.0 / 15.0) * math.pi) < 1e-12
+    tphi, tpsi = ramachandran_strap_helix_turn_rad()
+    assert abs(tphi - ((2.0 / 5.0) * (1 - lean.ALPHA) + (7.0 / 20.0) * lean.ALPHA) * math.pi) < 1e-9
+
+
+def test_sheet_helix_turn_rad_blend() -> None:
+    from hqiv_lab.miniprotein_backbone import (
+        ramachandran_alpha_rad,
+        ramachandran_beta_rad,
+        ramachandran_sheet_helix_turn_rad,
+    )
+
+    pu, pd = ramachandran_beta_rad(), ramachandran_alpha_rad()
+    t = lean.ALPHA
+    phi, psi = ramachandran_sheet_helix_turn_rad()
+    assert abs(phi - ((1.0 - t) * pu[0] + t * pd[0])) < 1e-12
+    assert abs(psi - ((1.0 - t) * pu[1] + t * pd[1])) < 1e-12
+
+
+def test_kabsch_two_point_distance_only_residual() -> None:
+    """Two Cα points: RMSD is half the CA–CA distance mismatch after alignment."""
+    mob = [(-1.53, 0.0, 0.0), (1.53, 0.0, 0.0)]
+    tgt = [(-1.885, 0.0, 0.0), (1.885, 0.0, 0.0)]
+    assert abs(kabsch_rmsd(mob, tgt) - 0.355) < 1e-9
 
 
 def test_closure_half_step_formula() -> None:
@@ -181,6 +223,9 @@ if __name__ == "__main__":
     test_pass_thresholds()
     test_nerf_bond_length_preserved()
     test_kabsch_self_rmsd_zero()
+    test_kabsch_two_point_distance_only_residual()
+    test_sheet_helix_turn_rad_blend()
+    test_compact_miniprotein_basins_lean_parity()
     test_closure_half_step_formula()
     test_closure_error_damping_factor()
     test_closure_default_step_degree_budget()

@@ -49,15 +49,23 @@ class SpectroscopyInvariantTests(unittest.TestCase):
             expected = row["omega_e_cm1"] ** 2 / (4.0 * d_e_cm1)
             self.assertAlmostEqual(row["omega_e_xe_cm1"], expected, places=6)
 
-    def test_headline_omega_e_is_the_resonance_dressed_generator(self) -> None:
-        # headline ω_e is the curvature-integral Morse generator dressed by the VB
-        # covalent↔ionic resonance; for homonuclear bonds (ionic character 0) the
-        # resonance is the bare covalent generator
+    def test_headline_omega_e_is_resonance_or_coupled_relaxed_generator(self) -> None:
+        # one-way ω_e is the curvature-integral Morse generator dressed by the VB
+        # covalent↔ionic resonance.  Structurally flagged rows then relax this value
+        # toward the already-derived concentration-flow target by the Lean
+        # CoupledRelaxation step.
         for row in self.rows.values():
             if row["omega_e_resonance_cm1"] > 0.0:
                 self.assertAlmostEqual(
-                    row["omega_e_cm1"], row["omega_e_resonance_cm1"], places=6
+                    row["omega_e_one_way_cm1"], row["omega_e_resonance_cm1"], places=6
                 )
+            if row["missing_coupled_relaxation_flag"]:
+                self.assertEqual(row["coupling_level"], "coupled_relaxed")
+                self.assertAlmostEqual(row["omega_e_cm1"], row["omega_e_coupled_cm1"], places=6)
+                self.assertAlmostEqual(row["omega_e_cm1"], row["omega_e_flow_cm1"], places=6)
+            else:
+                self.assertEqual(row["coupling_level"], "feed_forward")
+                self.assertAlmostEqual(row["omega_e_cm1"], row["omega_e_one_way_cm1"], places=6)
             if row["z_i"] == row["z_j"]:
                 self.assertEqual(row["bond_ionic_character"], 0.0)
                 self.assertAlmostEqual(
@@ -192,11 +200,46 @@ class SpectroscopyInvariantTests(unittest.TestCase):
                 self.assertLess(err, 0.05, f"F2 D_e drifted {err*100:.1f}%")
 
     def test_geometry_floor_flags_period3_ionic(self) -> None:
-        # NaCl / Cl2 expose the upstream sub-physical geometry; H2 / HF do not
-        self.assertFalse(self.rows["NaCl"]["geometry_reliable"])
-        self.assertFalse(self.rows["Cl2"]["geometry_reliable"])
+        # Gas ionic outside-contact (1+α) and valence-effective Cl2 are promoted.
+        self.assertTrue(self.rows["NaCl"]["geometry_reliable"])
+        self.assertTrue(self.rows["Cl2"]["geometry_reliable"])
         self.assertTrue(self.rows["H2"]["geometry_reliable"])
         self.assertTrue(self.rows["HF"]["geometry_reliable"])
+        nacl = self.rows["NaCl"]
+        self.assertGreater(nacl["r_e_angstrom"], 2.0)
+        self.assertAlmostEqual(
+            nacl["r_e_angstrom"],
+            nacl["r_e_outside_contact_target_angstrom"],
+            places=6,
+        )
+
+    def test_outside_contact_geometry_routes(self) -> None:
+        nacl = self.rows["NaCl"]
+        cl2 = self.rows["Cl2"]
+        self.assertEqual(nacl["geometry_route"], "ionic_outside_contact")
+        self.assertEqual(cl2["geometry_route"], "period3_halogen_open_channel")
+        self.assertTrue(nacl["geometry_outside_candidate_clears_floor"])
+        self.assertTrue(cl2["geometry_outside_candidate_clears_floor"])
+        self.assertGreater(
+            nacl["r_e_outside_contact_target_angstrom"],
+            nacl["r_e_one_way_angstrom"],
+        )
+        self.assertGreater(cl2["r_e_outside_contact_target_angstrom"], 0.70)
+
+    def test_nacl_solid_lattice_regime(self) -> None:
+        nacl = self.rows["NaCl"]
+        self.assertEqual(nacl["comparison_regime"], "solid_lattice")
+        self.assertGreater(nacl["r_e_lattice_target_angstrom"], 2.0)
+        self.assertGreater(
+            nacl["r_e_lattice_target_angstrom"],
+            nacl["r_e_outside_contact_target_angstrom"],
+        )
+
+    def test_lih_spectroscopy_stays_gas_vapor(self) -> None:
+        lih = self.rows["LiH"]
+        self.assertEqual(lih["comparison_regime"], "gas_vapor")
+        self.assertEqual(lih["r_e_lattice_target_angstrom"], 0.0)
+        self.assertGreater(lih["bond_ionic_character"], 0.0)
 
     def test_positive_physical_outputs(self) -> None:
         for row in self.rows.values():

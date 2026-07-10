@@ -6,7 +6,14 @@ Extends the LiH dynamic readout to diatomics and small polyatomics using the sam
 post-T12/T13 shell chart — no fitted coefficients:
 
   E_bind = η_p · surplus_dimless · geomean(tuft_vev_networked) · geometry_alignment ·
-           dynamicBindingCurvatureFeedbackAtXi(ξ_contact) · EV_per_λ
+           dynamicBindingCurvatureFeedbackAtXi(ξ_contact) ·
+           nBodyPromotedSecondOrderFactor(Σ G_eff, surplus, η, g) · EV_per_λ
+
+where nBodyPromotedSecondOrderFactor = outside_geff · preferred_axis_dress(η, g)
+and g = (p_max − p_second)/Σp is the preferred-axis spectral gap of bond
+polarities (quantum unique-channel selection; n-body ready).
+Optional C₂ / vev-Taylor / hyperclosure slots live in nBodySecondOrderEnvelope.
+See `hqiv_nbody_second_order.py`, `hqiv_preferred_axis_dress.py`.
 
 Per-nucleus curvature (not universal m = referenceM):
   • Nuclear readout shell m_nuc(A) from trapped inside-ratio vs A^(1/3)
@@ -475,6 +482,14 @@ def surplus_dimless_for_molecule(
     *,
     surplus_dress_factor: float = 1.0,
 ) -> float:
+    """Surplus router with continuous ionic / horizon selection weights.
+
+    Dissociation blends ionic and covalent channels by ``ionic_route_weight``.
+    Atomization blends horizon-split and torus channels by
+    ``use_horizon_atomization_weight``.  No molecule-name case tree.
+    """
+    import hqiv_selection_weights as sw
+
     frags = bench.fragments
     electrons = tuple(max(f.electrons, 0) for f in frags)
     ionic_dress = 1.0
@@ -483,39 +498,43 @@ def surplus_dimless_for_molecule(
     if bench.kind == "dissociation":
         if len(frags) != 2:
             raise ValueError(f"dissociation benchmark {bench.name} must have two fragments")
-        if evs.is_ionic_diatomic(frags):
-            import hqiv_ionic_bond_network as ibn
-            from bonded_horizon_casimir_float import ionic_bond_surplus_dimless
+        a, b = frags
+        n1, n2 = electrons
+        z1, z2 = a.z_nuclear, b.z_nuclear
+        w_ion = sw.ionic_route_weight(z1, z2)
 
-            a, b = frags
-            cation, anion = ibn.ionic_fragments_from_neutral_pair(
-                a.label,
-                a.z_nuclear,
-                a.electrons,
-                b.label,
-                b.z_nuclear,
-                b.electrons,
-            )
-            base = ionic_bond_surplus_dimless(cation.electrons, anion.electrons, angles)
-            if evs.is_alkali_halide_diatomic(frags):
-                ionic_dress = evs.ionic_inert_core_surplus_dress(
+        # Covalent channel.
+        if z1 == z2 == 1:
+            cov = evs.homonuclear_h2_dissociation_surplus_dimless(angles)
+        elif z1 == z2 and z1 > 1:
+            cov = evs.homonuclear_dissociation_surplus_dimless(n1, n2, z1, angles)
+        else:
+            cov = bond_horizon_surplus_dimless(n1 + n2, n1, n2, angles)
+
+        # Ionic channel (always defined; weight selects it).
+        import hqiv_ionic_bond_network as ibn
+        from bonded_horizon_casimir_float import ionic_bond_surplus_dimless
+
+        cation, anion = ibn.ionic_fragments_from_neutral_pair(
+            a.label, a.z_nuclear, a.electrons, b.label, b.z_nuclear, b.electrons
+        )
+        ion = ionic_bond_surplus_dimless(cation.electrons, anion.electrons, angles)
+        base = (1.0 - w_ion) * cov + w_ion * ion
+
+        w_halide = sw.alkali_halide_weight(z1, z2)
+        if w_halide > 0.0:
+            ionic_dress = 1.0 + w_halide * (
+                evs.ionic_inert_core_surplus_dress(
                     cation.z_nuclear,
                     anion.z_nuclear,
                     cation.electrons,
                     anion.electrons,
                     bond_length_angstrom=bond_length,
                 )
-        else:
-            n1, n2 = electrons
-            z1, z2 = frags[0].z_nuclear, frags[1].z_nuclear
-            if z1 == z2 == 1:
-                base = evs.homonuclear_h2_dissociation_surplus_dimless(angles)
-            elif z1 == z2 and z1 > 1:
-                base = evs.homonuclear_dissociation_surplus_dimless(n1, n2, z1, angles)
-            else:
-                base = bond_horizon_surplus_dimless(n1 + n2, n1, n2, angles)
-            if 1 in (z1, z2):
-                hydride_dress = evs.period_hydride_dissociation_dress(max(z1, z2))
+                - 1.0
+            )
+        if 1 in (z1, z2):
+            hydride_dress = evs.period_hydride_dissociation_dress(max(z1, z2))
     elif (
         len(frags) == 2
         and all(f.z_nuclear > 1 for f in frags)
@@ -524,22 +543,19 @@ def surplus_dimless_for_molecule(
         z1, z2 = frags[0].z_nuclear, frags[1].z_nuclear
         e1, e2 = electrons
         base = evs.heteronuclear_diatomic_atomization_surplus_dimless(z1, z2, e1, e2, angles)
-    elif evs.use_horizon_atomization_split(
-        frags,
-        bench.bonds,
-        molecule_name=bench.name,
-    ):
-        split = evs.lean_atomization_horizon_split(bench.name, frags)
-        if split is None:
-            base = atomization_surplus_dimless(electrons, angles)
-        else:
-            base = bond_horizon_surplus_dimless(*split, angles)
-        hydride_dress = evs.period_hydride_atomization_dress(
-            evs.heavy_centre_z(frags)
-        )
     else:
-        # Fragment-separated torus surplus; Lean ``(10,8,2)`` splits in shell readout.
-        base = atomization_surplus_dimless(electrons, angles)
+        w_hz = sw.use_horizon_atomization_weight(frags, bench.bonds)
+        torus = atomization_surplus_dimless(electrons, angles)
+        split = evs.lean_atomization_horizon_split(bench.name, frags)
+        if split is not None and w_hz > 0.0:
+            hz = bond_horizon_surplus_dimless(*split, angles)
+            base = (1.0 - w_hz) * torus + w_hz * hz
+        else:
+            base = torus
+        if w_hz > 0.0:
+            hydride_dress = 1.0 + w_hz * (
+                evs.period_hydride_atomization_dress(evs.heavy_centre_z(frags)) - 1.0
+            )
     conjugated = 1.0
     if bench.kind == "atomization":
         conjugated = evs.conjugated_heavy_heavy_surplus_dress(frags, bench.bonds)
@@ -570,6 +586,12 @@ class DynamicBindingResult:
     nuclei: list[dict[str, Any]]
     nuclear_binding_uniformity: dict[str, float]
     notes: str
+    binding_ev_chart: float = 0.0
+    binding_ev_lab: float = 0.0
+    error_pct_chart: float = 0.0
+    lab_outside_closure: dict[str, float] | None = None
+    bond_curvature_witness: dict[str, Any] | None = None
+    bond_corridor_neutrino: dict[str, float] | None = None
 
 
 def dynamic_binding_for_benchmark(
@@ -611,19 +633,77 @@ def dynamic_binding_for_benchmark(
     geom_align = net_fb.geometry_alignment_factor
     feedback = net_fb.curvature_feedback_at_xi
     outside_geff = ccn.outside_geff_contact_dress(net, surplus)
-    dimless_core = eta_p * surplus * net_fb.dimless_prefactor * outside_geff
-    binding_ev = dimless_core * EV_PER_LAMBDA_UNIT
-    err = (binding_ev - bench.reference_ev) / bench.reference_ev * 100.0
+    import hqiv_nbody_second_order as nso
+    import hqiv_preferred_axis_dress as pad
+
+    geoms = ccn.covalent_bond_geometries(net)
+    nbody = nso.factors_from_network(
+        geff_thetas=[g.geff_theta for g in geoms],
+        surplus=surplus,
+        eta=eta_p,
+        fragments=bench.fragments,
+        bonds=bench.bonds,
+        contact_xi=shell.contact_xi,
+        vev=vev_g,
+        vev_bare=vev_bare,
+    )
+    # Live chart = promoted n-body second-order factor (outside_geff × preferred-axis).
+    # Optional C₂ / vev-Taylor / hyperclosure slots stay in `nbody.full_envelope` for audit.
+    axis = pad.preferred_axis_dress_for_molecule(eta_p, bench.fragments, bench.bonds)
+    axis_dress = nbody.preferred_axis_dress
+    outside_geff = nbody.outside_geff
+    dimless_core = eta_p * surplus * net_fb.dimless_prefactor * nbody.promoted_factor
+    binding_ev_chart = dimless_core * EV_PER_LAMBDA_UNIT
+    import hqiv_nuclear_outside_temperature_dynamics as notd
+
+    lab_audit = notd.lab_gmtkn_binding_audit()
+    eta_linear = ccn.mean_covalent_eta_linear(net)
+    phi_grav = notd.local_lab_gravity_phi_epsilon("full")
+    corridor = ccn.bond_corridor_neutrino_witness(
+        net,
+        xi=shell.contact_xi,
+        phi_gravity_epsilon=phi_grav,
+    )
+    binding_ev_lab_closure = notd.apply_lab_gmtkn_binding_correction(binding_ev_chart)
+    corridor_dress = corridor["bond_corridor_neutrino_dress"]
+    binding_ev_lab = binding_ev_lab_closure * corridor_dress
+    err_chart = (binding_ev_chart - bench.reference_ev) / bench.reference_ev * 100.0
+    err = (binding_ev_lab - bench.reference_ev) / bench.reference_ev * 100.0
+    bond_curv = ccn.bond_curvature_witness_for_network(
+        net,
+        medium_density_fraction=0.0,
+        surplus_dimless=surplus,
+    )
     shell_dict = shell.to_dict()
     shell_dict["outside_geff_contact_dress"] = outside_geff
+    shell_dict["preferred_axis_dress"] = axis
+    shell_dict["nbody_second_order"] = nbody.to_dict()
+    shell_dict["outside_contact_ledger"] = nbody.outside_ledger
+    import hqiv_voltage_generation_ledger as vgl
+
+    # GMTKN gas assay: unstressed voltage ledger (identity).  Stress piezo/chemo/…
+    # by building a non-identity VoltageGenerationLedger for condensed/interface work.
+    voltage = vgl.unstressed_voltage_generation_ledger()
+    shell_dict["voltage_generation_ledger"] = voltage.to_dict()
+    shell_dict["electro_contact_dress"] = (
+        float(nbody.outside_ledger["dress"]) * voltage.dress
+        if nbody.outside_ledger
+        else outside_geff * voltage.dress
+    )
+    shell_dict["bond_curvature_witness"] = bond_curv
+    shell_dict["bond_corridor_neutrino"] = corridor
     notes = (
         f"{bench.kind}: shell={shell.compton_triplet_class}; surplus={shell.surplus_angle_policy}; "
-        f"η₂·surplus·vev·geom·G_eff·κ(ξ={shell.contact_xi:.2f},w={shell.curvature_feedback_weight:.2f})"
+        f"η₂·surplus·vev·geom·nbody(g={nbody.preferred_axis_spectral_gap:.3f},"
+        f"G_eff={nbody.outside_geff:.4f})·"
+        f"κ(ξ={shell.contact_xi:.2f},w={shell.curvature_feedback_weight:.2f}); "
+        f"lab_scale={lab_audit['lab_binding_scale_factor']:.9f}; "
+        f"ν_corridor={corridor_dress:.9f}(η={eta_linear:.4f})"
     )
     return DynamicBindingResult(
         name=bench.name,
         kind=bench.kind,
-        binding_ev=binding_ev,
+        binding_ev=binding_ev_lab,
         reference_ev=bench.reference_ev,
         error_pct=err,
         dimless_core=dimless_core,
@@ -648,6 +728,12 @@ def dynamic_binding_for_benchmark(
         nuclei=nuclei,
         nuclear_binding_uniformity=uniformity,
         notes=notes,
+        binding_ev_chart=binding_ev_chart,
+        binding_ev_lab=binding_ev_lab,
+        error_pct_chart=err_chart,
+        lab_outside_closure=lab_audit,
+        bond_curvature_witness=bond_curv,
+        bond_corridor_neutrino=corridor,
     )
 
 
@@ -739,6 +825,8 @@ def build_chart_payload(
         "lean_modules": [
             "Hqiv.QuantumChemistry.CurvatureContactNetwork",
             "Hqiv.QuantumChemistry.DynamicBindingChart",
+            "Hqiv.QuantumChemistry.MolecularEnergyBridge",
+            "Hqiv.QuantumChemistry.MacroRicciFlowDynamics",
             "Hqiv.QuantumChemistry.LiHDynamicBinding",
             "Hqiv.Physics.HopfShellBeltramiMassBridge",
             "Hqiv.Physics.BaryogenesisCore",
@@ -757,10 +845,51 @@ def build_chart_payload(
             lean.XI_LOCKIN
         ),
         "baryogenesis_binding_curvature_correction_mev": lean.baryogenesis_binding_curvature_correction(),
+        "lab_outside_closure": __import__(
+            "hqiv_nuclear_outside_temperature_dynamics", fromlist=["lab_gmtkn_binding_audit"]
+        ).lab_gmtkn_binding_audit(),
+        "binding_ev_policy": (
+            "binding_ev / error_pct use Earth-lab scale support_ratio/K_mass_chart; "
+            "binding_ev_chart / error_pct_chart are dilute ρ=0 chart rows"
+        ),
+        "bond_curvature_witness_policy": (
+            "per-covalent-bond η, G_eff(η), medium dress 1+ρ(G−1), γ/2 stacked-line breathing; "
+            "gas-phase surplus dress uses geff_theta=1 at ρ=0 (Lean scaleOutsideCouplingForMediumDensity_unity)"
+        ),
+        "bond_corridor_neutrino_policy": (
+            "bonded covalent dress 1 + localCurvatureWeakWidthCatalysis × (2η/140) after lab closure; "
+            "free branch keeps full weak-width catalysis; A>1 beta without eta_linear stays unity-shielded"
+        ),
         "formula": (
             "E_bind = eta_2 * surplus_dimless * geomean(tuftVevFactorNetworkedAtCluster) * "
             "geometry_alignment_factor * dynamicBindingCurvatureFeedbackAtXi(xi_contact) * "
-            "EV_per_lambda; eta_2 = eta + (4/8)*eta^2 on p-shell triplets"
+            "nBodyPromotedSecondOrderFactor(geff_sum, surplus, eta, g) * EV_per_lambda; "
+            "eta_2 = eta + (4/8)*eta^2 on p-shell triplets; "
+            "nBodyPromoted = outside_geff * preferred_axis_dress; "
+            "g = (p_max-p_second)/Σp spectral gap of bond polarities"
+        ),
+        "preferred_axis_dress_policy": (
+            "Lean preferredAxisPlaneLocalDress: 1 + (1/2)*t*(9/4-1)*g with t=eta*(4/8); "
+            "g=preferredAxisSpectralGap of |ΔZ|/(Z_i+Z_j); unique-channel projector; "
+            "n-body ready via nBodyPromotedSecondOrderFactor / nBodySecondOrderEnvelope"
+        ),
+        "nbody_second_order_policy": (
+            "Lean nBodyPromotedSecondOrderFactor = outsideContactLedgerDress * preferredAxisDress; "
+            "ledger = grav·em·bulk·local·contact (dilute gas: first four = 1); "
+            "full nBodySecondOrderEnvelope adds optional C2/vevTaylor/hyperclosure (audit only)"
+        ),
+        "outside_contact_ledger_policy": (
+            "Lean OutsideContactLedger: grav=outsideGravityGeffModulator (Ricci/G_eff); "
+            "em=1+(4/8)·curvatureConcentrationWeight; "
+            "bulk=scaleOutsideCouplingForMediumDensity(target, ρ); "
+            "local=1+localCurvatureDefectExcess(δ_coord); "
+            "contact=outsideGeffSurplus(Σ G_eff, surplus). "
+            "GMTKN dilute-gas assay keeps grav=em=bulk=local=1."
+        ),
+        "voltage_generation_ledger_policy": (
+            "Lean VoltageGenerationLedger: chemo/thermo/photo/piezo/tribo/faraday; "
+            "each 1+(4/8)·stress·response, identity when unstressed; "
+            "electroContactDress = outside×voltage; GMTKN gas assay uses unstressed identity"
         ),
         "network_aggregation": (
             "arithmetic_product: eta_p * surplus * geomean(tuftVev_slots) * feedback * geomean(valley_align); "

@@ -31,7 +31,8 @@ noncomputable def centreAngleRadFromDomains (n_domains : ℕ) : ℝ :=
 
 noncomputable def centreAngleBentDress (θ_tet : ℝ) (n_lp n_domains : ℕ) : ℝ :=
   if n_domains = 0 then θ_tet
-  else θ_tet - strongChannelFraction * (n_lp : ℝ) / (n_domains : ℝ) * (Real.pi / 6)
+  else θ_tet - strongChannelFraction * (n_lp : ℝ) /
+    ((n_domains + (n_domains - n_lp) : ℕ) : ℝ) * (Real.pi / 6)
 
 noncomputable def dynamicCentreAngleRad (z n_bonds : ℕ) : ℝ :=
   let n_lp := centreLonePairCount z n_bonds
@@ -63,7 +64,39 @@ private theorem pi_div_two_lt_arccos_neg_one_third : Real.pi / 2 < Real.arccos (
 theorem dynamicCentreAngleRad_water_pos : 0 < dynamicCentreAngleRad 8 2 := by
   rw [dynamicCentreAngleRad_water_eq_bent]
   dsimp [centreAngleBentDress, centreAngleRadFromDomains]
-  have hsep : (1 / 4 : ℝ) * (Real.pi / 6) < Real.arccos (-1 / 3) :=
+  have hsep : (1 / 6 : ℝ) * (Real.pi / 6) < Real.arccos (-1 / 3) :=
+    lt_trans (by nlinarith [Real.pi_pos]) pi_div_two_lt_arccos_neg_one_third
+  rw [strongChannelFraction_eq_four_eighths]
+  linarith [hsep]
+
+/-- Torque-tree screening: bent dress uses ``n_domains + n_bonds``, not ``n_domains`` alone. -/
+theorem centreAngleBentDress_torque_denominator (θ_tet : ℝ) (n_lp n_domains : ℕ) :
+    centreAngleBentDress θ_tet n_lp n_domains =
+      θ_tet - strongChannelFraction * (n_lp : ℝ) /
+        ((n_domains + (n_domains - n_lp) : ℕ) : ℝ) * (Real.pi / 6) := by
+  unfold centreAngleBentDress
+  by_cases h : n_domains = 0
+  · simp [h]
+  · simp [h]
+
+theorem centreAngleBentDress_water_eq :
+    centreAngleBentDress (centreAngleRadFromDomains 4) 2 4 =
+      dynamicCentreAngleRad 8 2 := by
+  rw [dynamicCentreAngleRad_water_eq_bent]
+
+theorem centreLonePairCount_nitrogen_peptide : centreLonePairCount 7 3 = 1 := by decide
+
+theorem dynamicCentreAngleRad_n_peptide_eq_bent :
+    dynamicCentreAngleRad 7 3 =
+      centreAngleBentDress (centreAngleRadFromDomains 4) 1 4 := by
+  dsimp [dynamicCentreAngleRad, centreLonePairCount, stericDomainCount, period2ValenceElectronCount,
+    centreAngleBentDress, centreAngleRadFromDomains]
+  norm_num
+
+theorem dynamicCentreAngleRad_n_peptide_pos : 0 < dynamicCentreAngleRad 7 3 := by
+  rw [dynamicCentreAngleRad_n_peptide_eq_bent]
+  dsimp [centreAngleBentDress, centreAngleRadFromDomains]
+  have hsep : (1 / 2 : ℝ) * (1 / 7) * (Real.pi / 6) < Real.arccos (-1 / 3) :=
     lt_trans (by nlinarith [Real.pi_pos]) pi_div_two_lt_arccos_neg_one_third
   rw [strongChannelFraction_eq_four_eighths]
   linarith [hsep]

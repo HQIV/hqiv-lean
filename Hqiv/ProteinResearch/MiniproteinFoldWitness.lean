@@ -29,15 +29,24 @@ noncomputable def ramachandranBetaPhi : ℝ := -2 * Real.pi / 3
 
 noncomputable def ramachandranBetaPsi : ℝ := 2 * Real.pi / 3
 
-/-- Trp-cage (1L2Y) fold pass threshold [Å] from foundation panel. -/
-noncomputable def trpCageCaRmsdPassAngstrom : ℝ := 5
+/-- Competitive Cα RMSD gate [Å] for every fold length (AlphaFold-class bar).
+Pass requires strict RMSD < threshold; length-dependent soft gates are retired. -/
+noncomputable def competitiveCaRmsdPassAngstrom : ℝ := 2
 
-/-- Gly–Gly dipeptide crystal gate [Å]. -/
-noncomputable def glyGlyCaRmsdPassAngstrom : ℝ := 2
+/-- Trp-cage (1L2Y) fold pass threshold [Å] — same competitive gate. -/
+noncomputable def trpCageCaRmsdPassAngstrom : ℝ := competitiveCaRmsdPassAngstrom
 
-theorem trp_cage_ca_rmsd_pass_eq_five : trpCageCaRmsdPassAngstrom = 5 := rfl
+/-- Gly–Gly dipeptide crystal gate [Å] — same competitive gate. -/
+noncomputable def glyGlyCaRmsdPassAngstrom : ℝ := competitiveCaRmsdPassAngstrom
+
+theorem competitive_ca_rmsd_pass_eq_two : competitiveCaRmsdPassAngstrom = 2 := rfl
+
+theorem trp_cage_ca_rmsd_pass_eq_two : trpCageCaRmsdPassAngstrom = 2 := rfl
 
 theorem gly_gly_ca_rmsd_pass_eq_two : glyGlyCaRmsdPassAngstrom = 2 := rfl
+
+theorem trp_cage_uses_competitive_gate :
+    trpCageCaRmsdPassAngstrom = competitiveCaRmsdPassAngstrom := rfl
 
 /-- Helix Cα_i–Cα_{i+3} pitch scale (alias of ``helixCaIi3DistanceScale``). -/
 noncomputable def helixCaIi3DistanceScale : ℝ := Hqiv.QuantumChemistry.helixCaIi3DistanceScale

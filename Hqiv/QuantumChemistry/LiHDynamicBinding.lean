@@ -146,14 +146,12 @@ noncomputable def lihBindingCurvatureFeedbackFactor : ℝ :=
   dynamicBindingCurvatureFeedbackAtXi lihComptonXiMean
 
 theorem lihBindingCurvatureFeedbackFactor_eq :
-    lihBindingCurvatureFeedbackFactor = 1 + lihBindingCurvatureCorrection := by
-  unfold lihBindingCurvatureFeedbackFactor lihBindingCurvatureCorrection
-    dynamicBindingCurvatureFeedbackAtXi
+    lihBindingCurvatureFeedbackFactor = 1 + lihBindingCurvatureCorrection := rfl
 
 theorem lihBindingCurvatureFeedbackFactor_one_le
     (h : 0 ≤ lihBindingCurvatureCorrection) :
     1 ≤ lihBindingCurvatureFeedbackFactor := by
-  unfold lihBindingCurvatureFeedbackFactor
+  rw [lihBindingCurvatureFeedbackFactor_eq]
   linarith
 
 /--
@@ -233,16 +231,16 @@ theorem dynamicComptonTuftVevGeometricMean_eq_lih :
       lihComptonTuftVevGeometricMean := by
   unfold dynamicComptonTuftVevGeometricMean lihComptonTuftVevGeometricMean
   simp [dynamicComptonTripletHeavyHydride, DynamicComptonTriplet.xiAt, DynamicComptonTriplet.shellAt,
-    xiOfShell, lihComptonLiSShell, lihComptonLiPShell, lihComptonHSShell, Fin.isValue]
+    xiOfShell, lihComptonLiSShell, lihComptonLiPShell, lihComptonHSShell,
+    tuftHeavyChartShell_eq_four, tuftStrongChartShell_eq_three]
 
 theorem lihDynamicBindingCoreDimless_eq_dynamicBindingCoreDimlessAtXi
     (ηp : ℝ) (cfg : NuclearTorusConfig) :
     lihDynamicBindingCoreDimless ηp cfg =
       dynamicBindingCoreDimlessAtXi ηp (lihBondedSurplusDimless cfg) lihComptonTuftVevGeometricMean
         (dynamicComptonXiMean dynamicComptonTripletHeavyHydride) := by
-  unfold lihDynamicBindingCoreDimless dynamicBindingCoreDimlessAtXi dynamicComptonXiMean
-    dynamicComptonTripletHeavyHydride DynamicComptonTriplet.xiAt lihComptonLiSShell lihComptonLiPShell
-    lihComptonHSShell xiOfShell
+  unfold lihDynamicBindingCoreDimless dynamicBindingCoreDimlessAtXi
+    lihBindingCurvatureFeedbackFactor lihComptonXiMean
   ring
 
 theorem dynamicBindingEnergyEv_eq_lih

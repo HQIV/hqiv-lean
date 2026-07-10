@@ -1,0 +1,277 @@
+{
+  "source": "scripts/hqiv_system_matrix_functor_audit.py",
+  "policy": "continuous SO(8)/Beltrami-contact functors on the system matrix; no fitted coefficients; \u03b1=3/5, referenceM=4, carrier 8",
+  "lean_modules": [
+    "HqivSpine/Physics/SystemMatrixFunctors.lean",
+    "Hqiv/QuantumChemistry/SystemMatrixFunctors.lean"
+  ],
+  "rows": [
+    {
+      "name": "H2",
+      "base_pred_ev": 4.495071236876558,
+      "reference_ev": 4.478,
+      "base_error_pct": 0.3812245841125052,
+      "factors": {
+        "contact_winding": 1.2000000000000002,
+        "off_lattice": 0.18741039721877722,
+        "so8_participation": 0.03535728425709483,
+        "hopf_shape": 0.37500000000000006,
+        "contact_kernel": 1.2187858681527455,
+        "ladder_kernel": 2.438737163679022,
+        "combined": 0.9922768751787099,
+        "dress_relative": 0.563138120839107,
+        "contact_relative": 0.9010209933425709,
+        "hopf_relative": 0.6250000000000001,
+        "cont_ladder_relative": 1.1178689653443294
+      },
+      "errors_pct": {
+        "base": 0.3812245841125052,
+        "off_lattice_abs": -81.18751482738419,
+        "hopf_abs": -62.3570407809578,
+        "dress_relative": -43.47150582017452,
+        "contact_relative": -9.554409312279253,
+        "hopf_relative": -37.261734634929674,
+        "cont_ladder_relative": 12.213055665838604,
+        "so8_blend_relative": -0.39403214306455653,
+        "half_dress_rel": -21.545140618031,
+        "half_contact_rel": -4.586592364083374,
+        "half_cont_ladder_rel": 6.297140124975555
+      }
+    },
+    {
+      "name": "LiH",
+      "base_pred_ev": 2.444087763215554,
+      "reference_ev": 2.515,
+      "base_error_pct": -2.8195720391429875,
+      "factors": {
+        "contact_winding": 2.1999999999999997,
+        "off_lattice": 0.2785398507253192,
+        "so8_participation": 0.011604791481857463,
+        "hopf_shape": 0.5238095238095238,
+        "contact_kernel": 1.2968177451016643,
+        "ladder_kernel": 2.438737163679022,
+        "combined": 0.9990540208074483,
+        "dress_relative": 0.8369674812286547,
+        "contact_relative": 0.9587082057710044,
+        "hopf_relative": 0.8730158730158731,
+        "cont_ladder_relative": 1.0289941127723354
+      },
+      "errors_pct": {
+        "base": -2.8195720391429875,
+        "off_lattice_abs": -72.93137810236024,
+        "hopf_abs": -49.095966306217754,
+        "dress_relative": -18.66314198487878,
+        "contact_relative": -6.832326273588434,
+        "hopf_relative": -15.159943843696247,
+        "cont_ladder_relative": -0.0019117515820807663,
+        "so8_blend_relative": -2.911502701917229,
+        "half_dress_rel": -10.741357012010884,
+        "half_contact_rel": -4.825949156365702,
+        "half_cont_ladder_rel": -1.4107418953625253
+      }
+    },
+    {
+      "name": "HF",
+      "base_pred_ev": 5.6232887645973975,
+      "reference_ev": 5.87,
+      "base_error_pct": -4.202917127812651,
+      "factors": {
+        "contact_winding": 2.1999999999999997,
+        "off_lattice": 0.2785398507253192,
+        "so8_participation": 0.011604791481857463,
+        "hopf_shape": 0.5238095238095238,
+        "contact_kernel": 1.2968177451016643,
+        "ladder_kernel": 2.438737163679022,
+        "combined": 0.9990540208074483,
+        "dress_relative": 0.8369674812286547,
+        "contact_relative": 0.9587082057710044,
+        "hopf_relative": 0.8730158730158731,
+        "cont_ladder_relative": 1.0289941127723354
+      },
+      "errors_pct": {
+        "base": -4.202917127812651,
+        "off_lattice_abs": -73.31669483685991,
+        "hopf_abs": -49.82057563837805,
+        "dress_relative": -19.82095683941265,
+        "contact_relative": -8.158550561509056,
+        "hopf_relative": -16.367626063963414,
+        "cont_ladder_relative": -1.4253657037556842,
+        "so8_blend_relative": -4.293539174916894,
+        "half_dress_rel": -12.011936983612657,
+        "half_contact_rel": -6.180733844660854,
+        "half_cont_ladder_rel": -2.8141414157841753
+      }
+    },
+    {
+      "name": "H2O",
+      "base_pred_ev": 9.796012709823492,
+      "reference_ev": 9.51,
+      "base_error_pct": 3.0074943199105353,
+      "factors": {
+        "contact_winding": 2.1999999999999997,
+        "off_lattice": 0.2785398507253192,
+        "so8_participation": 0.011604791481857463,
+        "hopf_shape": 0.5238095238095238,
+        "contact_kernel": 1.2968177451016643,
+        "ladder_kernel": 2.438737163679022,
+        "combined": 0.9990540208074483,
+        "dress_relative": 0.8369674812286547,
+        "contact_relative": 0.9587082057710044,
+        "hopf_relative": 0.8730158730158731,
+        "cont_ladder_relative": 1.0289941127723354
+      },
+      "errors_pct": {
+        "base": 3.0074943199105353,
+        "off_lattice_abs": -71.30830790854294,
+        "hopf_abs": -46.04369345147543,
+        "dress_relative": -13.786076931389529,
+        "contact_relative": -1.2458699395916544,
+        "hopf_relative": -10.072822419125718,
+        "cont_ladder_relative": 5.994105226617719,
+        "so8_blend_relative": 2.9100513736070055,
+        "half_dress_rel": -5.389291305739488,
+        "half_contact_rel": 0.8808121901594499,
+        "half_cont_ladder_rel": 4.500799773264137
+      }
+    },
+    {
+      "name": "CH4",
+      "base_pred_ev": 16.895409397299357,
+      "reference_ev": 17.0,
+      "base_error_pct": -0.6152388394155478,
+      "factors": {
+        "contact_winding": 2.1999999999999997,
+        "off_lattice": 0.2785398507253192,
+        "so8_participation": 0.011604791481857463,
+        "hopf_shape": 0.5238095238095238,
+        "contact_kernel": 1.2968177451016643,
+        "ladder_kernel": 2.438737163679022,
+        "combined": 0.9990540208074483,
+        "dress_relative": 0.8369674812286547,
+        "contact_relative": 0.9587082057710044,
+        "hopf_relative": 0.8730158730158731,
+        "cont_ladder_relative": 1.0289941127723354
+      },
+      "errors_pct": {
+        "base": -0.6152388394155478,
+        "off_lattice_abs": -72.31738346195931,
+        "hopf_abs": -47.941315582551006,
+        "dress_relative": -16.818186778914203,
+        "contact_relative": -4.719013946756272,
+        "hopf_relative": -13.235525970918324,
+        "cont_ladder_relative": 2.2663341335260574,
+        "so8_blend_relative": -0.7092547555301695,
+        "half_dress_rel": -8.716712809164871,
+        "half_contact_rel": -2.66712639308592,
+        "half_cont_ladder_rel": 0.8255476470552652
+      }
+    },
+    {
+      "name": "NH3",
+      "base_pred_ev": 10.488013975680058,
+      "reference_ev": 10.07,
+      "base_error_pct": 4.151082181529869,
+      "factors": {
+        "contact_winding": 2.1999999999999997,
+        "off_lattice": 0.2785398507253192,
+        "so8_participation": 0.011604791481857463,
+        "hopf_shape": 0.5238095238095238,
+        "contact_kernel": 1.2968177451016643,
+        "ladder_kernel": 2.438737163679022,
+        "combined": 0.9990540208074483,
+        "dress_relative": 0.8369674812286547,
+        "contact_relative": 0.9587082057710044,
+        "hopf_relative": 0.8730158730158731,
+        "cont_ladder_relative": 1.0289941127723354
+      },
+      "errors_pct": {
+        "base": 4.151082181529869,
+        "off_lattice_abs": -70.98977311627621,
+        "hopf_abs": -45.44467123824625,
+        "dress_relative": -12.828931079286315,
+        "contact_relative": -0.14950287263708298,
+        "hopf_relative": -9.074452063743745,
+        "cont_ladder_relative": 7.170850403661914,
+        "so8_blend_relative": 4.052557424904393,
+        "half_dress_rel": -4.338924448878224,
+        "half_contact_rel": 2.000789654446402,
+        "half_cont_ladder_rel": 5.660966292595892
+      }
+    }
+  ],
+  "summary": {
+    "base": {
+      "mean_abs_error_pct": 2.5295881819873496,
+      "max_abs_error_pct": 4.202917127812651,
+      "within_5pct": 6,
+      "within_15pct": 6
+    },
+    "off_lattice_abs": {
+      "mean_abs_error_pct": 73.6751753755638,
+      "max_abs_error_pct": 81.18751482738419,
+      "within_5pct": 0,
+      "within_15pct": 0
+    },
+    "hopf_abs": {
+      "mean_abs_error_pct": 50.117210499637714,
+      "max_abs_error_pct": 62.3570407809578,
+      "within_5pct": 0,
+      "within_15pct": 0
+    },
+    "dress_relative": {
+      "mean_abs_error_pct": 20.898133239009333,
+      "max_abs_error_pct": 43.47150582017452,
+      "within_5pct": 0,
+      "within_15pct": 2
+    },
+    "contact_relative": {
+      "mean_abs_error_pct": 5.109945484393625,
+      "max_abs_error_pct": 9.554409312279253,
+      "within_5pct": 3,
+      "within_15pct": 6
+    },
+    "hopf_relative": {
+      "mean_abs_error_pct": 16.862017499396188,
+      "max_abs_error_pct": 37.261734634929674,
+      "within_5pct": 0,
+      "within_15pct": 3
+    },
+    "cont_ladder_relative": {
+      "mean_abs_error_pct": 4.845270480830343,
+      "max_abs_error_pct": 12.213055665838604,
+      "within_5pct": 3,
+      "within_15pct": 6
+    },
+    "so8_blend_relative": {
+      "mean_abs_error_pct": 2.5451562623233746,
+      "max_abs_error_pct": 4.293539174916894,
+      "within_5pct": 6,
+      "within_15pct": 6
+    },
+    "half_dress_rel": {
+      "mean_abs_error_pct": 10.45722719623952,
+      "max_abs_error_pct": 21.545140618031,
+      "within_5pct": 1,
+      "within_15pct": 5
+    },
+    "half_contact_rel": {
+      "mean_abs_error_pct": 3.5236672671336167,
+      "max_abs_error_pct": 6.180733844660854,
+      "within_5pct": 5,
+      "within_15pct": 6
+    },
+    "half_cont_ladder_rel": {
+      "mean_abs_error_pct": 3.5848895248395913,
+      "max_abs_error_pct": 6.297140124975555,
+      "within_5pct": 4,
+      "within_15pct": 6
+    }
+  },
+  "recommendation": {
+    "best_mean_variant": "base",
+    "best_mean_abs_error_pct": 2.5295881819873496,
+    "base_mean_abs_error_pct": 2.5295881819873496,
+    "improved": false,
+    "structural_finding": "Continuous SO(8) weight redistribution is a no-op on E_bind_from_network while bindingCouplingAtShell is generator-independent (proved as shellProject_eq_of_weight_sum). Contact \u03be already equals the continuous Compton-shell mean, so lattice discreteness is not the residual on this panel. Absolute off-lattice dresses over-correct; lock-in-relative contact/ladder moves stay within ~5% but do not beat the base mean. Next derivation: generator-dependent coupling cells (colour-filtered / plane-local emission) so matrix functors can move the binding readout."
+  }
+}

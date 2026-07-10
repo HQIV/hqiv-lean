@@ -37,9 +37,9 @@ The **evaluation map** `evaluate` applies this glue at a local event: the slice 
 chart; `imprintGlue` is the fixed light-cone geometry; readouts are `massUnit × ratio` and
 `Ω_k · δ_E(k)`.
 
-**Ω_k ontology:** the slice carries the **discrete** horizon ratio `omegaKPartial m` from the
-null-lattice sum. The continuous `ξ` chart is an export coordinate for coupling readouts — not a
-second curvature field (no parallel superposition of charts).
+**Ω_k ontology:** the slice carries the **continuous horizon chart** ratio
+`omegaKPartial m = omegaKChart m = omegaKContinuous (xiOfShell m) xiLockin`. The left-sample shell
+sum `omegaKDiscretePartial` remains for harmonic/imprint bounds only.
 
 Mathlib + spine only; no legacy `Hqiv.*`, no `sorry`, no new `axiom`.
 -/

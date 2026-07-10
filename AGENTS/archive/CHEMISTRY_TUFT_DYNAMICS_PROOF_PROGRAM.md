@@ -148,7 +148,7 @@ Centre angle = **stationary phase** of peripheral bonds on a `TorqueTree.branch`
 |----|---------|---------|
 | **A-TUFT-1** | Promote `groundStateEigenpairAtShellTarget` → theorem (radial 1D lemma first) | `Schrodinger.lean` |
 | **A-TUFT-2** | `foldEnergyWithDihedral κ θ` global minimum at **θ* = θ_VSEPR(n_bonds, n_lp)** for 2-leaf water tree | `TorqueTreeEquilibrium` |
-| **A-TUFT-3** | `θ_VSEPR` matches **104.5°** from HQIV-only inputs (witness bound, replace `waterBondAngleDeg` anchor) | `HQIVMolecules` refactor |
+| **A-TUFT-3** | `θ_H2O` matches **104.478°** gas comparison (Hoy & Bunker / NIST CCCBDB span) from HQIV torque-tree screening denominator `(n_domains + n_bonds)`; residual ~0.007° vs ref | `DynamicCentreGeometry` + `ProteinSolventPhaseGeometry` interface pivot landed; **full torque-tree equilibrium theorem still open** |
 | **A-TUFT-4** | `idealCentreAngle` = argmin **Σᵢ κ · (1 - cos(θᵢ))** subject to `Σ ℓᵢ = 1` on p subspace | `CentreGeometryFromTuft.lean` |
 | **A-TUFT-5** | Link `axisAngle k = π/(2k)` to **p₁/p₂** splitting when `Ω m = k` on `tuftStrongChartShell` | `OctonionSphereFourierPatch` → chemistry |
 | **A-TUFT-6** | `valleyAlignmentWeight θ θ* = 1` at stationary `θ*` (already `valleyAlignmentWeight_at_ideal`; need `θ*` derived) | `S2BindingGeometry` |
@@ -194,7 +194,7 @@ BondedHorizonCasimirMoleculeBench.lean [surplus splits with proved geometry]
 
 1. **`ElectronicValenceFromTuftChart.lean`** — defs + `lihCompton_eq_tuftChart` + `h2oOrbitalSiteEnergyTrace`
 2. **`TorqueTreeEquilibrium.lean`** — state `minimizesFoldEnergy` + prove `allowed_binding_angles_minimize_budget` is 1D subcase
-3. Refactor **`water_bond_angle_from_minimization`** to implication `θ_VSEPR_water = 104.5` **from** `minimizesFoldEnergy`, deprecate raw anchor def
+3. Refactor **`water_bond_angle_from_minimization`** to implication `θ_H2O ≈ 104.5` **from** `minimizesFoldEnergy`; current witness uses `n_lp/(n_domains+n_bonds)` torque denominator and keeps 104.5 as comparison only
 4. Wire **`dynamicBindingCurvatureFeedbackSecondOrderAtXi`** into chart docstring as default for bulk; chemistry uses first-order at `ξ_contact` + H₂ `C₂` dress (already Python)
 
 ---
@@ -203,7 +203,8 @@ BondedHorizonCasimirMoleculeBench.lean [surplus splits with proved geometry]
 
 - [ ] **Site energy:** LiH / H₂O traces proved from `latticeFullModeEnergy` on TUFT-chart shells; Python matches closed form with **zero** geometry imports for energy terms.
 - [ ] **Bond length:** H₂ and O–H `r*` from `foldEnergy` stationary point; GMTKN55 comparison column only.
-- [ ] **Angle:** H₂O `θ*` from `foldEnergyWithDihedral` on 2-leaf tree; within agreed witness band of 104.5° without `rfl` on the definition.
+- [x] **Angle witness:** H₂O `dynamicCentreAngleRad 8 2` within agreed comparison band of 104.5° without `rfl` on the definition.
+- [ ] **Angle theorem:** H₂O `θ*` from `foldEnergyWithDihedral` on 2-leaf tree implies the torque-denominator witness.
 - [ ] **Binding chart:** GMTKN55 errors unchanged or better with **derived** `r, θ`; no new scalar parameters.
 - [ ] **Docs:** `CURVATURE_CONTACT_NETWORK.md` points here; TUFT papers cite **electronic** chart, not nuclear drum.
 

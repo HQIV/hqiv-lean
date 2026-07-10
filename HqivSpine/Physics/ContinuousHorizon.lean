@@ -39,6 +39,15 @@ theorem phiOfXi_xiOfShell (m : ℕ) : phiOfXi (xiOfShell m) = (phi m : ℝ) := b
   push_cast
   ring
 
+theorem xiOfShell_gt_one {m : ℕ} (hm : 0 < m) : 1 < xiOfShell m := by
+  unfold xiOfShell
+  exact_mod_cast Nat.add_lt_add_right hm 1
+
+theorem xiOfShell_strictMono {m1 m2 : ℕ} (h : m1 < m2) :
+    xiOfShell m1 < xiOfShell m2 := by
+  unfold xiOfShell
+  exact_mod_cast Nat.add_lt_add_right h 1
+
 /-- **Per-shell curvature shape** on the continuous coordinate:
 `(1/ξ)(1 + α·log ξ)` with `α = 3/5`. -/
 noncomputable def sigmaXi (ξ : ℝ) : ℝ := (1 / ξ) * (1 + alphaEM * Real.log ξ)
@@ -120,6 +129,84 @@ theorem continuousCurvaturePrimitive_strictMono_gt_one (ξ1 ξ2 : ℝ)
   have hdiff_pos : 0 < y2 + a * y2 ^ 2 - (y1 + a * y1 ^ 2) := by rwa [hfactor_eq]
   have hmain : y1 + a * y1 ^ 2 < y2 + a * y2 ^ 2 := sub_pos.mp hdiff_pos
   simpa [y1, y2, a] using hmain
+
+/-- **Chart-integrated curvature** to shell horizon coordinate `ξ = m + 1`. -/
+noncomputable def curvatureIntegralChart (m : ℕ) : ℝ :=
+  continuousCurvaturePrimitive (xiOfShell m)
+
+theorem curvatureIntegralChart_zero :
+    curvatureIntegralChart 0 = 0 := by
+  unfold curvatureIntegralChart xiOfShell continuousCurvaturePrimitive
+  norm_num
+
+theorem curvatureIntegralChart_pos {m : ℕ} (hm : 0 < m) :
+    0 < curvatureIntegralChart m := by
+  unfold curvatureIntegralChart
+  exact continuousCurvaturePrimitive_pos_for_gt_one (xiOfShell m) (xiOfShell_gt_one hm)
+
+theorem curvatureIntegralChart_referenceM :
+    curvatureIntegralChart referenceM = continuousCurvaturePrimitive xiLockin := by
+  unfold curvatureIntegralChart xiLockin
+  rfl
+
+theorem curvatureIntegralChart_le_lockin {m : ℕ} (hm : m ≤ referenceM) :
+    curvatureIntegralChart m ≤ continuousCurvaturePrimitive xiLockin := by
+  unfold curvatureIntegralChart
+  by_cases hm0 : m = 0
+  · subst hm0
+    have hξ0 : xiOfShell 0 = 1 := by unfold xiOfShell; norm_num
+    rw [hξ0, continuousCurvaturePrimitive_one, xiLockin_eq_five]
+    exact (continuousCurvaturePrimitive_pos_for_gt_one (5 : ℝ) (by norm_num : (1 : ℝ) < 5)).le
+  · have hmpos : 0 < m := Nat.pos_of_ne_zero hm0
+    have hξ1 : 1 < xiOfShell m := xiOfShell_gt_one hmpos
+    have hξ2 : xiOfShell m ≤ xiLockin := by
+      unfold xiLockin xiOfShell
+      exact_mod_cast Nat.add_le_add_right hm 1
+    by_cases hξeq : xiOfShell m = xiLockin
+    · rw [hξeq]
+    · have hξlt : xiOfShell m < xiLockin := lt_of_le_of_ne hξ2 hξeq
+      exact (continuousCurvaturePrimitive_strictMono_gt_one (xiOfShell m) xiLockin hξ1 hξlt).le
+
+noncomputable def omegaKChart (m : ℕ) : ℝ :=
+  omegaKContinuous (xiOfShell m) xiLockin
+
+private theorem continuousCurvaturePrimitive_xiLockin_pos :
+    0 < continuousCurvaturePrimitive xiLockin := by
+  rw [xiLockin_eq_five]
+  exact continuousCurvaturePrimitive_pos_for_gt_one (5 : ℝ) (by norm_num : (1 : ℝ) < 5)
+
+theorem omegaKChart_eq (m : ℕ) :
+    omegaKChart m = continuousCurvaturePrimitive (xiOfShell m) / continuousCurvaturePrimitive xiLockin := by
+  unfold omegaKChart omegaKContinuous
+  simp [continuousCurvaturePrimitive_xiLockin_pos.ne']
+
+theorem omegaKChart_at_referenceM : omegaKChart referenceM = 1 := by
+  unfold omegaKChart
+  rw [xiOfShell_referenceM, xiLockin_eq_five, omegaKContinuous_self]
+
+theorem omegaKChart_strictMono {m1 m2 : ℕ} (h : m1 < m2) (_hm2 : m2 ≤ referenceM) :
+    omegaKChart m1 < omegaKChart m2 := by
+  rw [omegaKChart_eq, omegaKChart_eq]
+  by_cases hm1 : m1 = 0
+  · subst hm1
+    have hξ0 : xiOfShell 0 = 1 := by unfold xiOfShell; norm_num
+    have hξ2 : 1 < xiOfShell m2 := xiOfShell_gt_one h
+    have hpos : 0 < continuousCurvaturePrimitive (xiOfShell m2) :=
+      continuousCurvaturePrimitive_pos_for_gt_one (xiOfShell m2) hξ2
+    rw [hξ0, continuousCurvaturePrimitive_one, zero_div]
+    exact div_pos hpos continuousCurvaturePrimitive_xiLockin_pos
+  · have hmpos : 0 < m1 := Nat.pos_of_ne_zero hm1
+    have hξ1 : 1 < xiOfShell m1 := xiOfShell_gt_one hmpos
+    have hξ12 : xiOfShell m1 < xiOfShell m2 := xiOfShell_strictMono h
+    refine div_lt_div_of_pos_right
+      (continuousCurvaturePrimitive_strictMono_gt_one (xiOfShell m1) (xiOfShell m2) hξ1 hξ12) ?_
+    exact continuousCurvaturePrimitive_xiLockin_pos
+
+theorem omegaKChart_le_one {m : ℕ} (hm : m ≤ referenceM) :
+    omegaKChart m ≤ 1 := by
+  rw [omegaKChart_eq]
+  rw [div_le_one continuousCurvaturePrimitive_xiLockin_pos]
+  exact curvatureIntegralChart_le_lockin hm
 
 /-- Preferred half-step on the continuous axis (`7/2`): early-closed-shell anchor. -/
 noncomputable def xiHalfStep : ℝ := (imaginaryDim : ℝ) / 2

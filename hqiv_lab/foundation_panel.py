@@ -287,7 +287,7 @@ PEPTIDE_FOLD_REFERENCES: tuple[PeptideFoldReference, ...] = (
         tier="tier3_peptide_fold",
         structure_source="OpenMM/ParmEd test conformation",
         structure_id="openmm:alanine-dipeptide-implicit.pdb",
-        ca_rmsd_pass_angstrom=1.5,
+        ca_rmsd_pass_angstrom=2.0,
         reference_source="OpenMM test systems",
         reference_citation=(
             "Ace-Ala-Nme capped dipeptide model geometry "
@@ -302,7 +302,7 @@ PEPTIDE_FOLD_REFERENCES: tuple[PeptideFoldReference, ...] = (
         tier="tier3_peptide_fold",
         structure_source="pending",
         structure_id=None,
-        ca_rmsd_pass_angstrom=2.5,
+        ca_rmsd_pass_angstrom=2.0,
         reference_source="TBD",
         reference_citation="Tripeptide crystal or high-quality model structure not yet pinned",
         notes="Placeholder witness; assign PDB/COD when structure source selected.",
@@ -313,7 +313,7 @@ PEPTIDE_FOLD_REFERENCES: tuple[PeptideFoldReference, ...] = (
         tier="tier3_peptide_fold",
         structure_source="extended_chain_control",
         structure_id=None,
-        ca_rmsd_pass_angstrom=3.0,
+        ca_rmsd_pass_angstrom=2.0,
         reference_source="HQIV extended-chain geometry witness",
         reference_citation=(
             "Four-residue extended control: no tertiary contacts; "
@@ -327,10 +327,10 @@ PEPTIDE_FOLD_REFERENCES: tuple[PeptideFoldReference, ...] = (
         tier="tier3_peptide_fold",
         structure_source="wwPDB",
         structure_id="1L2Y",
-        ca_rmsd_pass_angstrom=5.0,
+        ca_rmsd_pass_angstrom=2.0,
         reference_source="Protein Data Bank",
         reference_citation="Neidigh JW et al., PNAS 2008; PDB 1L2Y (Trp-cage miniprotein)",
-        notes="Tier-4 gate after di/tri-peptide foundation passes.",
+        notes="Competitive Cα RMSD < 2 Å gate (AlphaFold-class); same bar as every ladder length.",
     ),
 )
 

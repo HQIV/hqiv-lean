@@ -9,8 +9,8 @@ Mined from legacy `ModifiedMaxwell` / `ContinuumOmaxwellClosure`: the lock-in ch
 `∇φ` and `div J` on the flat `Fin 4` continuum hook. The φ-ladder field is anchored to
 `phi(m) = 2(m+1)` at the lock-in shell.
 
-Honest scope: **flat-chart** Maxwell identities (constant-φ limit, constant-source divergence)
-— not the full inhomogeneous HQVM jet or plasma `J_O` layer.
+Honest scope: flat-chart Maxwell identities (constant-φ limit, constant-source divergence)
+— HQVM covariant O-Maxwell discharge is in `CovariantOMaxwell`.
 -/
 
 namespace HqivSpine.Physics.ChartMaxwell
