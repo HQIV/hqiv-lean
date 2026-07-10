@@ -29,4 +29,25 @@ theorem ionicBondSurplus_eV_eq_scale (N₁ N₂ : ℕ) (cfg : NuclearTorusConfig
       ionicBondSurplusDimless N₁ N₂ cfg * eVPerLambdaUnit_S7HydrogenAnchor := by
   rfl
 
+/--
+Light-cation Casimir promotion on alkali–halide routes:
+``N_cation_eff = max(N_cation, Z_anion)``.
+
+Li⁺ (N=2) is lifted to the partner nuclear-charge floor so surplus sits on the
+same plateau as Na⁺/K⁺ salts.  Python: ``ionic_surplus_electron_counts``.
+-/
+def ionicSurplusCationElectronCount (nCation zAnion : ℕ) : ℕ :=
+  max nCation zAnion
+
+theorem ionicSurplusCationElectronCount_ge_cation (nCation zAnion : ℕ) :
+    nCation ≤ ionicSurplusCationElectronCount nCation zAnion :=
+  Nat.le_max_left _ _
+
+theorem ionicSurplusCationElectronCount_ge_anion_Z (nCation zAnion : ℕ) :
+    zAnion ≤ ionicSurplusCationElectronCount nCation zAnion :=
+  Nat.le_max_right _ _
+
+theorem ionicSurplusCationElectronCount_LiF :
+    ionicSurplusCationElectronCount 2 9 = 9 := rfl
+
 end Hqiv.QuantumChemistry

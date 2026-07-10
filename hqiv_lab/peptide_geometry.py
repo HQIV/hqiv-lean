@@ -124,11 +124,67 @@ def helix_ca_i_i4_distance_angstrom() -> float:
 
 
 @lru_cache(maxsize=1)
+def helix_ca_i_i3_distorted_distance_angstrom() -> float:
+    """Helix Cα_i–Cα_{i+3} from distorted-helix basin (compact miniprotein)."""
+    from hqiv_lab.miniprotein_backbone import place_ca_trace, ramachandran_distorted_helix_rad
+
+    d = ramachandran_distorted_helix_rad()
+    ca = place_ca_trace("AAAA", (d,) * 4)
+    return math.dist(ca[0], ca[3])
+
+
+@lru_cache(maxsize=1)
+def helix_ca_i_i4_distorted_distance_angstrom() -> float:
+    """Helix Cα_i–Cα_{i+4} from distorted-helix basin."""
+    from hqiv_lab.miniprotein_backbone import place_ca_trace, ramachandran_distorted_helix_rad
+
+    d = ramachandran_distorted_helix_rad()
+    ca = place_ca_trace("AAAAA", (d,) * 5)
+    return math.dist(ca[0], ca[4])
+
+
+@lru_cache(maxsize=1)
+def helix_sheet_hairpin_compact_distance_angstrom() -> float:
+    """Sheet–helix register from compact spine (strap₃–turn–distorted-helix₁)."""
+    from hqiv_lab.miniprotein_backbone import (
+        place_ca_trace,
+        ramachandran_distorted_helix_rad,
+        ramachandran_strap_helix_turn_rad,
+        ramachandran_strap_rad,
+    )
+
+    ca = place_ca_trace(
+        "LYIQWL",
+        (
+            ramachandran_strap_rad(),
+            ramachandran_strap_rad(),
+            ramachandran_strap_rad(),
+            ramachandran_strap_helix_turn_rad(),
+            ramachandran_strap_helix_turn_rad(),
+            ramachandran_distorted_helix_rad(),
+        ),
+    )
+    return math.dist(ca[2], ca[5])
+
+
+@lru_cache(maxsize=1)
 def sheet_ca_i_i2_distance_angstrom() -> float:
     """In-strand β Cα_i–Cα_{i+2} from β-Ramachandran NeRF spine."""
     from hqiv_lab.miniprotein_backbone import place_ca_trace, ramachandran_beta_rad
 
     ca = place_ca_trace("AAA", (ramachandran_beta_rad(),) * 3)
+    dx = ca[0][0] - ca[2][0]
+    dy = ca[0][1] - ca[2][1]
+    dz = ca[0][2] - ca[2][2]
+    return math.sqrt(dx * dx + dy * dy + dz * dz)
+
+
+@lru_cache(maxsize=1)
+def sheet_ca_i_i2_strap_distance_angstrom() -> float:
+    """Hairpin strap Cα_i–Cα_{i+2} (φ = γπ, ψ = (α/2)π)."""
+    from hqiv_lab.miniprotein_backbone import place_ca_trace, ramachandran_strap_rad
+
+    ca = place_ca_trace("AAA", (ramachandran_strap_rad(),) * 3)
     dx = ca[0][0] - ca[2][0]
     dy = ca[0][1] - ca[2][1]
     dz = ca[0][2] - ca[2][2]
@@ -155,12 +211,150 @@ def compact_terminus_ca_distance_angstrom(n_residues: int, *, contact_angstrom: 
 
 @lru_cache(maxsize=1)
 def helix_sheet_ca_packing_distance_angstrom() -> float:
-    """
-    Cross-register Cα distance between adjacent β-strand and α-helix segments.
-
-    Mean of spine-measured helix i+3 and sheet i+2 slots, dressed by the 3.6-turn
-    ψ channel ``(1 + γ/6)`` (same factor as Ramachandran α ψ dress).
-    """
+    """Cross-register Cα distance (canonical β + α basins, dressed by ``1 + γ/6``)."""
     h3 = helix_ca_i_i3_distance_angstrom()
     s2 = sheet_ca_i_i2_distance_angstrom()
     return (h3 + s2) / 2.0 * (1.0 + lean.GAMMA / 6.0)
+
+
+def covalent_backbone_curvature_at_site(
+    theta_rad: float,
+    *,
+    medium_density_fraction: float,
+) -> dict[str, float]:
+    """
+    Covalent bond curvature witness at a protein site with bulk ρ from solvent phase.
+
+    Bridges ``bond_curvature_quant_witness`` (small-molecule Compton θ) to
+    ``contact_curvature_weight`` tertiary dress on the same spine constants.
+    """
+    from hqiv_lab._scripts import ensure_scripts_on_path
+
+    ensure_scripts_on_path()
+    import hqiv_curvature_bond_state as cbs
+
+    return cbs.bond_curvature_quant_witness(
+        theta_rad,
+        medium_density_fraction=medium_density_fraction,
+    )
+
+
+def stacked_line_outside_curvature_scale(theta_rad: float) -> float:
+    """
+    Lean ``outsideContactCoupling`` / ``stackedLineOutsideCurvatureScale``.
+
+    Stacked in-register Cα contacts shorten by ``(θ/θ₀)^α`` with α = 3/5
+  (``G_eff`` on the Compton IR-window contact angle).
+    """
+    from hqiv_lab._scripts import ensure_scripts_on_path
+
+    ensure_scripts_on_path()
+    import hqiv_curvature_bond_state as cbs
+
+    theta0 = cbs.phase_theta()
+    theta = min(max(theta_rad, 1e-12), theta0)
+    return cbs.outside_contact_coupling(theta)
+
+
+def backbone_stacking_angle_rad(
+    ca: list[tuple[float, float, float]],
+    i: int,
+    j: int,
+) -> float:
+    """
+    Backbone flow angle at site ``i`` toward partner ``j``.
+
+    For in-register sheet i+2 slots prefer ``strand_register_stacking_angle_rad``.
+    """
+    n = len(ca)
+    if n < 2 or i < 0 or j < 0 or i >= n or j >= n or i == j:
+        return math.pi / 2.0
+    if i > 0:
+        vin = (ca[i][0] - ca[i - 1][0], ca[i][1] - ca[i - 1][1], ca[i][2] - ca[i - 1][2])
+    elif i + 1 < n:
+        vin = (ca[i + 1][0] - ca[i][0], ca[i + 1][1] - ca[i][1], ca[i + 1][2] - ca[i][2])
+    else:
+        return math.pi / 2.0
+    vout = (ca[j][0] - ca[i][0], ca[j][1] - ca[i][1], ca[j][2] - ca[i][2])
+    mag_in = math.sqrt(vin[0] ** 2 + vin[1] ** 2 + vin[2] ** 2)
+    mag_out = math.sqrt(vout[0] ** 2 + vout[1] ** 2 + vout[2] ** 2)
+    if mag_in < 1e-12 or mag_out < 1e-12:
+        return math.pi / 2.0
+    cosang = max(-1.0, min(1.0, (vin[0] * vout[0] + vin[1] * vout[1] + vin[2] * vout[2]) / (mag_in * mag_out)))
+    return math.acos(cosang)
+
+
+def strand_register_stacking_angle_rad(
+    ca: list[tuple[float, float, float]],
+    i: int,
+    j: int,
+) -> float:
+    """Interior strand bend at ``i+1`` for in-register sheet i+2 (stacked-line θ)."""
+    if j != i + 2 or i + 2 >= len(ca):
+        return math.pi / 2.0
+    v1 = (ca[i + 1][0] - ca[i][0], ca[i + 1][1] - ca[i][1], ca[i + 1][2] - ca[i][2])
+    v2 = (ca[j][0] - ca[i + 1][0], ca[j][1] - ca[i + 1][1], ca[j][2] - ca[i + 1][2])
+    mag1 = math.sqrt(v1[0] ** 2 + v1[1] ** 2 + v1[2] ** 2)
+    mag2 = math.sqrt(v2[0] ** 2 + v2[1] ** 2 + v2[2] ** 2)
+    if mag1 < 1e-12 or mag2 < 1e-12:
+        return math.pi / 2.0
+    cosang = max(-1.0, min(1.0, (v1[0] * v2[0] + v1[1] * v2[1] + v1[2] * v2[2]) / (mag1 * mag2)))
+    return math.acos(cosang)
+
+
+@lru_cache(maxsize=1)
+def beta_strand_stacking_angle_rad() -> float:
+    """Open β-basin strand bend on the proved i+2 NeRF prototype (dress θ source)."""
+    from hqiv_lab.miniprotein_backbone import place_ca_trace, ramachandran_beta_rad
+
+    ca = place_ca_trace("AAA", (ramachandran_beta_rad(),) * 3)
+    return strand_register_stacking_angle_rad(ca, 0, 2)
+
+
+def dress_stacked_line_contact_distance(
+    base_angstrom: float,
+    ca: list[tuple[float, float, float]],
+    i: int,
+    j: int,
+    *,
+    open_beta_spine: bool = False,
+) -> float:
+    """
+    Apply outside ``G_eff(θ)`` shortening to an open-register stacked Cα target.
+
+    Open canonical β i+2 uses the β-spine bend (not the fold register trace) so the
+    contraction factor matches ``outsideContactCoupling`` on the proved β prototype.
+    Only the γ lattice channel participates in contact breathing (sheet i+2 scale uses
+    ``1 + γ/4``): ``1 + (γ/2)·(G_eff − 1)`` rather than full ``G_eff``.
+    """
+    if open_beta_spine:
+        theta = beta_strand_stacking_angle_rad()
+    else:
+        theta = strand_register_stacking_angle_rad(ca, i, j)
+    geff = stacked_line_outside_curvature_scale(theta)
+    channel = lean.GAMMA / 2.0
+    partial = 1.0 + channel * (geff - 1.0)
+    return base_angstrom * partial
+
+
+@lru_cache(maxsize=1)
+def helix_sheet_hairpin_distance_angstrom() -> float:
+    """Sheet–helix register from strap hairpin prototype (E₃–βα-turn–strap cap)."""
+    from hqiv_lab.miniprotein_backbone import (
+        place_ca_trace,
+        ramachandran_sheet_helix_turn_rad,
+        ramachandran_strap_rad,
+    )
+
+    ca = place_ca_trace(
+        "LYIQWL",
+        (
+            ramachandran_strap_rad(),
+            ramachandran_strap_rad(),
+            ramachandran_strap_rad(),
+            ramachandran_sheet_helix_turn_rad(),
+            ramachandran_sheet_helix_turn_rad(),
+            ramachandran_strap_rad(),
+        ),
+    )
+    return math.dist(ca[2], ca[5])

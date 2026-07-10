@@ -283,6 +283,48 @@ def earth_outside_closure_k(
     )
 
 
+def lab_gmtkn_binding_scale_factor(
+    env: LabOutsideEnvironment | None = None,
+) -> float:
+    """
+    Earth-lab correction for gas-phase GMTKN / W4-17 dissociation assays.
+
+    ``binding_lab = binding_chart × support_ratio_vs_cmb / K_mass_chart``
+
+    CMB dipole proper motion dominates (~296 ppm on ``K_mass``); gravity slots are negligible.
+    """
+    env = env or LabOutsideEnvironment()
+    k = earth_outside_closure_k(env)
+    if k.K_mass_chart <= 0.0:
+        return 1.0
+    return k.support_ratio_vs_cmb / k.K_mass_chart
+
+
+def apply_lab_gmtkn_binding_correction(
+    binding_ev_chart: float,
+    *,
+    env: LabOutsideEnvironment | None = None,
+) -> float:
+    """Scale chart binding energy (eV) to Earth-surface laboratory assay."""
+    return binding_ev_chart * lab_gmtkn_binding_scale_factor(env)
+
+
+def lab_gmtkn_binding_audit(
+    env: LabOutsideEnvironment | None = None,
+) -> dict[str, float]:
+    """Ppm-scale witness for dynamic binding chart lab closure."""
+    env = env or LabOutsideEnvironment()
+    k = earth_outside_closure_k(env)
+    scale = lab_gmtkn_binding_scale_factor(env)
+    return {
+        "K_mass_chart": k.K_mass_chart,
+        "support_ratio_vs_cmb": k.support_ratio_vs_cmb,
+        "increment_vs_anchor_ppm": k.increment_vs_anchor * 1.0e6,
+        "lab_binding_scale_factor": scale,
+        "lab_binding_scale_ppm": (scale - 1.0) * 1.0e6,
+    }
+
+
 def apply_outside_closure_k_to_outside_binding(
     outside_binding_mev: float,
     *,
@@ -668,21 +710,68 @@ def local_curvature_weak_width_factor(
     return 1.0 + local_curvature_weak_width_catalysis(xi, phi_gravity_epsilon)
 
 
+def bond_corridor_aperture(eta_linear: float) -> float:
+    """
+    Axial relic-ν leak between two covalent nuclear wells: ``2η × s``.
+
+    Lean ``bondCorridorAperture``: each nucleus contributes Compton IR participation η = θ/θ₀
+    on the monogamy bond axis; ``s = outerHorizonNeutrinoSuppression = 1/140``.
+    """
+    eta = min(max(float(eta_linear), 0.0), 1.0)
+    return 2.0 * eta * OUTER_NEUTRINO_SUPPRESSION
+
+
+def bonded_bond_corridor_neutrino_dress(
+    xi: float,
+    phi_gravity_epsilon: float,
+    eta_linear: float,
+) -> float:
+    """
+    Partial relic-bath catalysis on bonded covalent observables.
+
+    ``1 + catalysis(ξ,ε) × (2η/140)`` — interior wells shield bulk; bond corridor leaks.
+    """
+    catalysis = local_curvature_weak_width_catalysis(xi, phi_gravity_epsilon)
+    return 1.0 + catalysis * bond_corridor_aperture(eta_linear)
+
+
+def bonded_bond_corridor_neutrino_dress_band(
+    xi: float,
+    phi_gravity_epsilon: float,
+    eta_linear: float,
+) -> tuple[float, float, float]:
+    """Monogamy envelope ``±γ/5`` on corridor catalysis (low, central, high)."""
+    central = bonded_bond_corridor_neutrino_dress(xi, phi_gravity_epsilon, eta_linear)
+    catalysis = central - 1.0
+    envelope = 1.0 + GAMMA / 5.0
+    return (
+        1.0 + catalysis / envelope,
+        central,
+        1.0 + catalysis * envelope,
+    )
+
+
 def local_curvature_weak_width_factor_band(
     xi: float,
     phi_gravity_epsilon: float = 0.0,
     *,
     A: int = 1,
     bonded: bool = False,
+    eta_linear: float | None = None,
 ) -> tuple[float, float, float]:
     """
     ``(low, central, high)`` width factors — monogamy envelope ``±γ/5`` on catalysis.
 
-    Bonded valence decays (``A > 1``): interior well shields the relic-bath catalysis
-    (same exterior/interior split as valley width geometry).
+    Free branch (``A = 1`` or not bonded): full relic-bath catalysis.
+
+    Bonded cluster (``A > 1``, ``bonded=True``): interior well shields bulk; when
+    ``eta_linear`` is supplied, axial corridor dress ``1 + catalysis × 2η/140`` applies.
+    Without ``eta_linear``, legacy unity shield (no corridor geometry).
     """
     if bonded and A > 1:
-        return (1.0, 1.0, 1.0)
+        if eta_linear is None:
+            return (1.0, 1.0, 1.0)
+        return bonded_bond_corridor_neutrino_dress_band(xi, phi_gravity_epsilon, eta_linear)
     low, central, high = _local_curvature_weak_width_factor_band_raw(xi, phi_gravity_epsilon)
     return low, central, high
 
@@ -755,7 +844,11 @@ def local_curvature_neutrino_width_witness(
             "width_factor_band": {"low": lab_low, "central": lab_central, "high": lab_high},
         },
         "bbn_epochs": epoch_rows,
-        "bonded_cluster_policy": "A>1 interior well shields relic-bath catalysis (valley width ledger)",
+        "bonded_cluster_policy": (
+            "A>1 interior well shields bulk relic-bath catalysis; bond corridor "
+            "1 + catalysis × 2η/140 when eta_linear supplied (Compton IR participation)"
+        ),
+        "bond_corridor_aperture_formula": "2 * eta_linear * outer_neutrino_suppression",
     }
 
 

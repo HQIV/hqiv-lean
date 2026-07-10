@@ -80,7 +80,18 @@ class IonicSalt:
     name: str
     cation: IonicFragment
     anion: IonicFragment
-    lattice_bond_angstrom: float
+    coordination: int = 6
+
+    @property
+    def lattice_bond_angstrom(self) -> float:
+        """Derived rocksalt nn contact (``ionicLatticeNearestNeighborTarget``)."""
+        from hqiv_lab.crystal_geometry import ionic_lattice_nearest_neighbor_angstrom
+
+        return ionic_lattice_nearest_neighbor_angstrom(
+            self.cation.z_nuclear,
+            self.anion.z_nuclear,
+            n_coord=self.coordination,
+        )
 
     @property
     def formula_mass_amu(self) -> float:
@@ -103,9 +114,128 @@ def alkali_halide_fragments(
     return cation, anion
 
 
+def ionic_surplus_electron_counts(
+    cation: IonicFragment,
+    anion: IonicFragment,
+) -> tuple[int, int]:
+    """
+    Casimir electron counts for ionic lattice surplus.
+
+    On alkali–halide routes, promote the light cation's mode count to the
+    partner nuclear-charge floor ``max(N_cation, Z_anion)`` so Li⁺ (2e⁻)
+    participates at the same surplus plateau as Na⁺/K⁺ salts.  No salt-name
+    cases — gated by ``alkali_halide_weight``.
+    """
+    import hqiv_selection_weights as sw
+
+    n_c = int(cation.electrons)
+    n_a = int(anion.electrons)
+    if sw.alkali_halide_weight(cation.z_nuclear, anion.z_nuclear) > 0.5:
+        n_c = max(n_c, int(anion.z_nuclear))
+    return n_c, n_a
+
+
+def ionic_period_channel_weight(z: int) -> float:
+    """
+    ``min(1, (2/P)^{constructiveValleyCap})`` — period-2 → 1; deeper → fade.
+
+    Period-1 (H⁻) would otherwise give ``(2/1)^cap ≫ 1``; the channel weight
+    is a participation fraction, so it is capped at unity (Lean
+    ``ionicPeriodChannelWeight``).
+    """
+    import hqiv_electronic_valence_shells as evs
+
+    period = max(evs.chemical_period(int(z)), 1)
+    raw = (2.0 / float(period)) ** float(lean.CONSTRUCTIVE_VALLEY_CAP)
+    return min(1.0, float(raw))
+
+
+def ionic_anion_period_melt_dress(z_cation: int, z_anion: int) -> float:
+    """
+    Mixed-period ionic melt dress: ``1 + (4/8)·γ·w_a·(1−w_c)``.
+
+    Period-2 anions (F⁻, ``w_a=1``) with deeper cations (Na⁺, ``w_c≪1``) raise
+    melt cohesive; same-period pairs (LiF, NaCl) stay near identity.  No salt names.
+    Softened by deep-cation fade ``1 / (1 + (4/8)·(γ/8)·excess·(1−w_a))`` so
+    KCl (period-4×3) does not over-bind melt while NaF (``w_a=1``) is untouched.
+    Fluoride mixed-period residual ``1 + (4/8)·(γ/8)·w_a·excess`` raises NaF
+    melt (pred was soft) without touching LiF (excess=0).
+    """
+    w_a = ionic_period_channel_weight(z_anion)
+    w_c = ionic_period_channel_weight(z_cation)
+    boost = 1.0 + lean.STRONG_CHANNEL_FRACTION * lean.GAMMA * w_a * (1.0 - w_c)
+    import hqiv_electronic_valence_shells as evs
+
+    p_c = float(max(evs.chemical_period(int(z_cation)), 1))
+    p_a = float(max(evs.chemical_period(int(z_anion)), 1))
+    excess = max(0.0, p_c / p_a - 1.0)
+    soft = 1.0 / (
+        1.0
+        + lean.STRONG_CHANNEL_FRACTION
+        * (lean.GAMMA / 8.0)
+        * excess
+        * (1.0 - w_a)
+    )
+    # Lean ``ionicFluoridePeriodMeltResidual``: period-2 anion × cation-deeper.
+    fluoride_residual = 1.0 + lean.STRONG_CHANNEL_FRACTION * (lean.GAMMA / 8.0) * w_a * excess
+    return boost * soft * fluoride_residual
+
+
+def ionic_anion_period_polarizability_softener(z_anion: int) -> float:
+    """
+    Fluoride / period-2 anion optical softener: ``1 / (1 + (4/8)·γ·w_a)``.
+
+    Tight period-2 acceptors suppress CM polarizability (lower solid n).
+    """
+    w_a = ionic_period_channel_weight(z_anion)
+    return 1.0 / (1.0 + lean.STRONG_CHANNEL_FRACTION * lean.GAMMA * w_a)
+
+
+def ionic_cation_period_polarizability_softener(z_cation: int, z_anion: int) -> float:
+    """
+    Cation-period optical softener: ``1 / (1 + (4/8)·γ·max(0, P_c/P_a − 1))``.
+
+    Deeper cations than the anion (KCl: P_c=4, P_a=3) suppress CM polarizability;
+    same-or-shallower cations (NaCl, LiF) stay at identity.  Lean:
+    ``ionicCationPeriodPolarizabilitySoftener``.
+    """
+    import hqiv_electronic_valence_shells as evs
+
+    p_c = float(max(evs.chemical_period(int(z_cation)), 1))
+    p_a = float(max(evs.chemical_period(int(z_anion)), 1))
+    excess = max(0.0, p_c / p_a - 1.0)
+    return 1.0 / (1.0 + lean.STRONG_CHANNEL_FRACTION * lean.GAMMA * excess)
+
+
+def ionic_period_polarizability_softener(z_cation: int, z_anion: int) -> float:
+    """
+    Combined anion × cation × period-channel optical softener for ionic CM α.
+
+    Includes the EM×monogamy period-channel term ``1/(1+(4/8)·α·γ·w_a·w_c)``
+    so LiF optical follows the same period-2×2 spine as the steric nn dress
+    (stronger optical amp than the nn steric ``/8``).
+    """
+    w_a = ionic_period_channel_weight(z_anion)
+    w_c = ionic_period_channel_weight(z_cation)
+    channel = 1.0 / (
+        1.0
+        + lean.STRONG_CHANNEL_FRACTION
+        * lean.ALPHA
+        * lean.GAMMA
+        * w_a
+        * w_c
+    )
+    return (
+        ionic_anion_period_polarizability_softener(z_anion)
+        * ionic_cation_period_polarizability_softener(z_cation, z_anion)
+        * channel
+    )
+
+
 def ionic_bond_surplus_ev(cation: IonicFragment, anion: IonicFragment) -> float:
-    """``ionicBondSurplus`` on separated electron seas."""
-    return bhc.ionic_bond_surplus_ev(cation.electrons, anion.electrons)
+    """``ionicBondSurplus`` on separated electron seas (ionic-route promotion)."""
+    n_c, n_a = ionic_surplus_electron_counts(cation, anion)
+    return bhc.ionic_bond_surplus_ev(n_c, n_a)
 
 
 def ionic_lattice_binding_ev_per_contact(
@@ -115,7 +245,7 @@ def ionic_lattice_binding_ev_per_contact(
     distance_angstrom: float,
 ) -> float:
     """
-    Contact binding from horizon surplus × bond lattice factor (same slot as covalent d/a₀).
+    Contact binding from horizon surplus × bond lattice factor × anion-period melt dress.
     """
     surplus = abs(ionic_bond_surplus_ev(cation, anion))
     d_lat = distance_angstrom / BOHR_RADIUS_ANGSTROM
@@ -124,7 +254,8 @@ def ionic_lattice_binding_ev_per_contact(
     delta_z = max(z_vals) - min(z_vals)
     z_total = sum(z_vals)
     ionic_dress = 1.0 + (delta_z / max(z_total, 1)) * lattice_factor
-    return surplus * ionic_dress
+    period_dress = ionic_anion_period_melt_dress(cation.z_nuclear, anion.z_nuclear)
+    return surplus * ionic_dress * period_dress
 
 
 def ionic_lattice_contact_weight(salt: IonicSalt) -> float:
@@ -167,10 +298,6 @@ def ionic_melt_density_ratio(
     return max(lean.GAMMA / 4.0, 1.0 - motif_scale * contact_lock * (1.0 - dw))
 
 
-_ALKALI_Z = frozenset({3, 11, 19})
-_HALOGEN_Z = frozenset({9, 17, 35, 53})
-
-
 def ionic_fragments_from_neutral_pair(
     label_i: str,
     z_i: int,
@@ -179,17 +306,22 @@ def ionic_fragments_from_neutral_pair(
     z_j: int,
     e_j: int,
 ) -> tuple[IonicFragment, IonicFragment]:
-    """Promote neutral GMTKN55 fragments to M⁺ / X⁻ electron counts for surplus."""
+    """Promote neutral GMTKN55 fragments to M⁺ / X⁻ electron counts for surplus.
+
+    Algebraic donor/acceptor weights select orientation (no alkali/halogen frozenset).
+    """
     _ = (e_i, e_j)
+    import hqiv_selection_weights as sw
+
     # Metal hydride (LiH): metal cation, H⁻ anion.
-    if z_i == 1 and z_j > 1:
+    if z_i == 1 and sw.donor_weight(z_j) > 0.5:
         return IonicFragment(label_j, z_j, z_j - 1), IonicFragment(label_i, 1, 2)
-    if z_j == 1 and z_i > 1:
+    if z_j == 1 and sw.donor_weight(z_i) > 0.5:
         return IonicFragment(label_i, z_i, z_i - 1), IonicFragment(label_j, 1, 2)
     # Alkali halide.
-    if z_i in _ALKALI_Z and z_j in _HALOGEN_Z:
+    if sw.donor_weight(z_i) > 0.5 and sw.acceptor_weight(z_j) > 0.5:
         return IonicFragment(label_i, z_i, z_i - 1), IonicFragment(label_j, z_j, z_j + 1)
-    if z_j in _ALKALI_Z and z_i in _HALOGEN_Z:
+    if sw.donor_weight(z_j) > 0.5 and sw.acceptor_weight(z_i) > 0.5:
         return IonicFragment(label_j, z_j, z_j - 1), IonicFragment(label_i, z_i, z_i + 1)
     # Fallback: lower Z cation, higher Z anion (diagnostic only).
     if z_i <= z_j:
@@ -202,19 +334,17 @@ def classify_bond_kind(
     z_i: int,
     z_j: int,
 ) -> ccn.ContactKind:
-    """Ionic vs covalent edge from named salts and alkali–halogen / metal–H pairs."""
-    key = name.upper()
-    if key in ("LIH", "NACL", "NACL_LATTICE"):
-        return ccn.ContactKind.IONIC_BOND
-    pair = frozenset((z_i, z_j))
-    if pair & _ALKALI_Z and pair & _HALOGEN_Z:
-        return ccn.ContactKind.IONIC_BOND
-    if (z_i == 1) ^ (z_j == 1):
-        metal_z = z_j if z_i == 1 else z_i
-        if metal_z in _ALKALI_Z:
-            return ccn.ContactKind.IONIC_BOND
-    return ccn.ContactKind.COVALENT_BOND
+    """Ionic vs covalent edge from valence-spectrum ionic-route weight.
 
+    Algebraic: ``ionic_route_weight > 1/2`` (donor×acceptor or donor×H).
+    ``name`` retained for API compatibility; no name-table gate.
+    """
+    _ = name
+    import hqiv_selection_weights as sw
+
+    if sw.ionic_route_weight(z_i, z_j) > 0.5:
+        return ccn.ContactKind.IONIC_BOND
+    return ccn.ContactKind.COVALENT_BOND
 
 def _node_from_ionic_fragment(index: int, frag: IonicFragment) -> ccn.NetworkNode:
     fc = frag.to_fragment_config()
@@ -409,18 +539,25 @@ LIH_SALT = IonicSalt(
     name="LiH",
     cation=IonicFragment("Li", 3, 2),
     anion=IonicFragment("H", 1, 2),
-    lattice_bond_angstrom=1.5956,
 )
 NACL_SALT = IonicSalt(
     name="NaCl",
     cation=alkali_halide_fragments("Na", 11, "Cl", 17)[0],
     anion=alkali_halide_fragments("Na", 11, "Cl", 17)[1],
-    lattice_bond_angstrom=2.82,
 )
+_k_cl = alkali_halide_fragments("K", 19, "Cl", 17)
+KCL_SALT = IonicSalt(name="KCl", cation=_k_cl[0], anion=_k_cl[1])
+_lif = alkali_halide_fragments("Li", 3, "F", 9)
+LIF_SALT = IonicSalt(name="LiF", cation=_lif[0], anion=_lif[1])
+_naf = alkali_halide_fragments("Na", 11, "F", 9)
+NAF_SALT = IonicSalt(name="NaF", cation=_naf[0], anion=_naf[1])
 
 SALTS: dict[str, IonicSalt] = {
     "LIH": LIH_SALT,
     "NACL": NACL_SALT,
+    "KCL": KCL_SALT,
+    "LIF": LIF_SALT,
+    "NAF": NAF_SALT,
 }
 
 
@@ -460,7 +597,11 @@ def salt_witness(salt: IonicSalt) -> dict[str, Any]:
 
 def main() -> None:
     parser = argparse.ArgumentParser(description="Ionic bond network witnesses.")
-    parser.add_argument("--salt", default="NaCl", choices=("LiH", "NaCl", "all"))
+    parser.add_argument(
+        "--salt",
+        default="NaCl",
+        choices=("LiH", "NaCl", "KCl", "LiF", "NaF", "all"),
+    )
     parser.add_argument("--json-out", type=Path, default=None)
     args = parser.parse_args()
     keys = list(SALTS) if args.salt.lower() == "all" else [args.salt.upper()]

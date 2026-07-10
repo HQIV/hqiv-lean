@@ -31,6 +31,7 @@ from dataclasses import asdict, dataclass
 
 import hqiv_allotrope_network as aln
 import hqiv_lean_physics_primitives as lean
+import hqiv_spine_chemistry as sc
 
 # --------------------------------------------------------------------------------------------------
 # Hydrogen bond = half-monogamy spectator contact
@@ -39,9 +40,8 @@ import hqiv_lean_physics_primitives as lean
 HBOND_DONOR = "donor"
 HBOND_ACCEPTOR = "acceptor"
 
-# A hydrogen bond is a *spectator* half-monogamy contact: not a full shared pair, only the
-# 1 + γ/2 = 6/5 half-contact the monogamy ledger leaves open (see SKILL / readout matrices).
-SPECTATOR_HALF_MONOGAMY_CONTACT = 1.0 + lean.GAMMA / 2.0
+# A hydrogen bond is a *spectator* half-monogamy contact (Biomolecule + Spectroscopy.lean).
+SPECTATOR_HALF_MONOGAMY_CONTACT = sc.MONOGAMY_SPECTATOR_CONTACT
 
 
 @dataclass(frozen=True)

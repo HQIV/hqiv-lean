@@ -124,18 +124,39 @@ noncomputable def dynamicBindingCurvatureCorrectionAtXi (xi : ℝ) : ℝ :=
 noncomputable def dynamicBindingCurvatureFeedbackAtXi (xi : ℝ) : ℝ :=
   1 + dynamicBindingCurvatureCorrectionAtXi xi
 
-/-- p-slot active on a Compton triplet (heavy-centre hydride / polyatomic pattern). -/
+/-- p-slot activation weight on a Compton triplet ∈ {0,1} for current chart rows.
+
+Algebraic: distinct middle slot with ``m1 > 1`` (heavy-centre hydride / polyatomic).
+Degenerate ``(1,1,1)`` / ``(4,4,4)`` → 0.  Replaces a molecule-type Bool with a
+slot-spectrum projector; the Bool form is ``pShellActivation > 0``. -/
+noncomputable def pShellActivation (t : DynamicComptonTriplet) : ℝ :=
+  if t.m1 > 1 ∧ t.m0 ≠ t.m1 then 1 else 0
+
+/-- Legacy Bool mask = ``pShellActivation > 0``. -/
 def dynamicComptonPShellActive (t : DynamicComptonTriplet) : Bool :=
-  t.m1 > 1 ∧ t.m0 ≠ t.m1
+  decide (t.m1 > 1 ∧ t.m0 ≠ t.m1)
 
 /--
 Second-order Compton participation on the p shell:
 
-`η → η + (4/8) · η²` when the p slot is active (LiH valence trace / shared-p channel).
-Inactive for `(1,1,1)` homonuclear H₂.
+`η → η + (4/8) · g · η²` with `g = pShellActivation` (LiH valence trace / shared-p).
+Inactive (`g = 0`) for `(1,1,1)` homonuclear H₂.
 -/
 noncomputable def dynamicComptonEtaSecondOrder (ηp : ℝ) (hasPShell : Bool) : ℝ :=
   if hasPShell then ηp + strongChannelFraction * ηp ^ 2 else ηp
+
+/-- Continuous form: ``η + (4/8)·g·η²`` with ``g = pShellActivation t``. -/
+noncomputable def dynamicComptonEtaSecondOrderCont (ηp : ℝ) (t : DynamicComptonTriplet) : ℝ :=
+  ηp + strongChannelFraction * pShellActivation t * ηp ^ 2
+
+theorem dynamicComptonEtaSecondOrderCont_eq_bool (ηp : ℝ) (t : DynamicComptonTriplet) :
+    dynamicComptonEtaSecondOrderCont ηp t =
+      dynamicComptonEtaSecondOrder ηp (dynamicComptonPShellActive t) := by
+  unfold dynamicComptonEtaSecondOrderCont dynamicComptonEtaSecondOrder
+    pShellActivation dynamicComptonPShellActive
+  by_cases h : t.m1 > 1 ∧ t.m0 ≠ t.m1
+  · simp [h]
+  · simp [h]
 
 /--
 Second-order binding feedback: first-order κ(ξ) contrast times lapse concentration

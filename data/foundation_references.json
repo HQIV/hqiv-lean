@@ -91,6 +91,50 @@
         "reference_melt_k": 189.6,
         "reference_source": "NIST/CRC condensed panel",
         "hqiv_spec_available": true
+      },
+      {
+        "name": "NaCl",
+        "allotrope": "B1",
+        "motif_label": "ionic rocksalt / B1",
+        "witness_temperature_k": 1074.0,
+        "reference_density_g_cm3": 2.17,
+        "reference_refractive_index": 1.544,
+        "reference_melt_k": 1074.0,
+        "reference_source": "NIST/CRC condensed panel",
+        "hqiv_spec_available": true
+      },
+      {
+        "name": "Cu",
+        "allotrope": "fcc",
+        "motif_label": "metallic fcc / CN=12",
+        "witness_temperature_k": 1357.77,
+        "reference_density_g_cm3": 8.96,
+        "reference_refractive_index": 0.0,
+        "reference_melt_k": 1357.77,
+        "reference_source": "NIST/CRC condensed panel",
+        "hqiv_spec_available": true
+      },
+      {
+        "name": "Si",
+        "allotrope": "diamond",
+        "motif_label": "covalent diamond-cubic / k=4",
+        "witness_temperature_k": 1687.0,
+        "reference_density_g_cm3": 2.33,
+        "reference_refractive_index": 3.42,
+        "reference_melt_k": 1687.0,
+        "reference_source": "NIST/CRC condensed panel",
+        "hqiv_spec_available": true
+      },
+      {
+        "name": "Ge",
+        "allotrope": "diamond",
+        "motif_label": "covalent diamond-cubic / k=4",
+        "witness_temperature_k": 1211.0,
+        "reference_density_g_cm3": 5.32,
+        "reference_refractive_index": 4.0,
+        "reference_melt_k": 1211.0,
+        "reference_source": "NIST/CRC condensed panel",
+        "hqiv_spec_available": true
       }
     ],
     "tier1_polyols": [
@@ -269,7 +313,7 @@
         "tier": "tier3_peptide_fold",
         "structure_source": "OpenMM/ParmEd test conformation",
         "structure_id": "openmm:alanine-dipeptide-implicit.pdb",
-        "ca_rmsd_pass_angstrom": 1.5,
+        "ca_rmsd_pass_angstrom": 2.0,
         "reference_source": "OpenMM test systems",
         "reference_citation": "Ace-Ala-Nme capped dipeptide model geometry (OpenMM wrappers/python/tests/systems/alanine-dipeptide-implicit.pdb); not an experimental crystal \u2014 conformational reference only",
         "notes": "Capped dipeptide; grade backbone internal geometry before tertiary contacts."
@@ -280,7 +324,7 @@
         "tier": "tier3_peptide_fold",
         "structure_source": "pending",
         "structure_id": null,
-        "ca_rmsd_pass_angstrom": 2.5,
+        "ca_rmsd_pass_angstrom": 2.0,
         "reference_source": "TBD",
         "reference_citation": "Tripeptide crystal or high-quality model structure not yet pinned",
         "notes": "Placeholder witness; assign PDB/COD when structure source selected."
@@ -291,7 +335,7 @@
         "tier": "tier3_peptide_fold",
         "structure_source": "extended_chain_control",
         "structure_id": null,
-        "ca_rmsd_pass_angstrom": 3.0,
+        "ca_rmsd_pass_angstrom": 2.0,
         "reference_source": "HQIV extended-chain geometry witness",
         "reference_citation": "Four-residue extended control: no tertiary contacts; validates backbone placement before hairpin closure",
         "notes": "No experimental gold PDB in suite yet; extended phi/psi control."
@@ -302,16 +346,16 @@
         "tier": "tier3_peptide_fold",
         "structure_source": "wwPDB",
         "structure_id": "1L2Y",
-        "ca_rmsd_pass_angstrom": 5.0,
+        "ca_rmsd_pass_angstrom": 2.0,
         "reference_source": "Protein Data Bank",
         "reference_citation": "Neidigh JW et al., PNAS 2008; PDB 1L2Y (Trp-cage miniprotein)",
-        "notes": "Tier-4 gate after di/tri-peptide foundation passes."
+        "notes": "Competitive C\u03b1 RMSD < 2 \u00c5 gate (AlphaFold-class); same bar as every ladder length."
       }
     ]
   },
   "summary": {
     "tier0_binding_count": 6,
-    "tier0_condensed_count": 4,
+    "tier0_condensed_count": 8,
     "tier1_polyol_count": 2,
     "tier1_sugar_count": 3,
     "tier2_peptide_crystal_count": 1,

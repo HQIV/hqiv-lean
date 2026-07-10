@@ -3,17 +3,163 @@
   "lean_modules": [
     "Hqiv.QuantumChemistry.CurvatureContactNetwork",
     "Hqiv.QuantumChemistry.DynamicBindingChart",
+    "Hqiv.QuantumChemistry.MolecularEnergyBridge",
+    "Hqiv.QuantumChemistry.MacroRicciFlowDynamics",
     "Hqiv.QuantumChemistry.LiHDynamicBinding",
     "Hqiv.Physics.HopfShellBeltramiMassBridge",
     "Hqiv.Physics.BaryogenesisCore"
   ],
-  "parameter_policy": "no_fitted_coefficients",
+  "parameter_policy": "chart-derived rationals only; see binding_route_provenance.scaffold_routes for Python witnesses not yet in Lean",
+  "binding_route_provenance": {
+    "parameter_policy": "no_fitted_coefficients; chart-derived rationals (4/8, \u03b3, constructiveValleyCap, TUFT Compton shells) only. Routes marked python_scaffold are audit witnesses not yet discharged in Lean.",
+    "lean_certified_constants": {
+      "strongChannelFraction": "4/8",
+      "gamma_HQIV": "2/5",
+      "constructiveValleyCap": "6"
+    },
+    "scaffold_route_count": 7,
+    "scaffold_routes": [
+      "bent_hyperclosure_period3_channel",
+      "period_hydride_sp_coupling_dissociation",
+      "homonuclear_open_shell_exponent",
+      "heteronuclear_atomization_bond_order",
+      "conjugated_heavy_heavy_dress",
+      "horizon_atomization_split_gate",
+      "centre_vsepr_period3"
+    ],
+    "route_registry": {
+      "lone_pair_surplus_dress": {
+        "status": "lean_certified",
+        "lean": "Hqiv.QuantumChemistry.CentreGeometryFromTuft.dynamicLonePairSurplusDress",
+        "formula": "1 + (4/8) \u00b7 n_LP \u00b7 \u03b7_p"
+      },
+      "bent_hyperclosure_dress": {
+        "status": "lean_certified",
+        "lean": "Hqiv.QuantumChemistry.CentreGeometryFromTuft.dynamicBentHyperclosureDress",
+        "formula": "1 + (4/8)/4 when n_centre_bonds = 2"
+      },
+      "bent_hyperclosure_period3_channel": {
+        "status": "python_scaffold",
+        "lean": null,
+        "formula": "1 + (4/8)/2 for period \u2265 3 bent dihydrides (H\u2082S); pending CentreGeometryFromTuft",
+        "note": "Lean certifies only (4/8)/4; period-3 extension not yet in Lean"
+      },
+      "centre_coordination_graph_dress": {
+        "status": "chart_derived",
+        "lean": "Hqiv.Physics.NuclearContactClosure.constructiveValleyCap",
+        "formula": "1 \u00b1 2\u00b7(4/8) / (constructiveValleyCap \u00b7 n) for n = 3, 4",
+        "note": "Increment class strong/constructiveValleyCap; sign by coordination"
+      },
+      "period_hydride_rung_dress": {
+        "status": "chart_derived",
+        "lean": "Hqiv.QuantumChemistry.ElectronicValenceFromTuftChart",
+        "formula": "m_s(period 2) / m_s(heavy)"
+      },
+      "period_hydride_sp_coupling_dissociation": {
+        "status": "python_scaffold",
+        "lean": "Hqiv.QuantumChemistry.ElectronicValenceFromTuftChart",
+        "formula": "(1 \u2212 4/8/m_s)(1 \u2212 4/8/(m_s+m_p)) on period-3 H\u2013X dissociation only",
+        "note": "Slots from TUFT chart; coupling exponents mirror halogen \u03c3-hole pattern \u2014 pending Lean"
+      },
+      "homonuclear_closed_shell_divisor": {
+        "status": "chart_derived",
+        "lean": "Hqiv.Physics.NuclearContactClosure.constructiveValleyCap",
+        "formula": "bond_horizon / (bond_order \u00b7 (1 + (4/8)/constructiveValleyCap))",
+        "note": "bond_order from valence; divisor increment matches NuclearCurvatureBinding valley step"
+      },
+      "homonuclear_open_shell_exponent": {
+        "status": "python_scaffold",
+        "lean": null,
+        "formula": "bond_horizon / (2 \u00b7 bond_order^(2 + (4/8)/constructiveValleyCap))",
+        "note": "Open-shell O\u2082 routing; exponent scaffold pending BondedHorizonCasimir extension"
+      },
+      "homonuclear_halogen_dimer": {
+        "status": "chart_derived",
+        "lean": "Hqiv.QuantumChemistry.PhaseAllotropeDerivation.halogenStrongHbondLegFactor",
+        "formula": "bond_order \u00b7 covalent_dimer / (v \u2212 offset); / (1 + (4/8)/(m_s2 + period \u2212 2))",
+        "note": "offset 4 (period 2) or 5 (period \u2265 3) from valence \u03c3-hole bookkeeping"
+      },
+      "h2_ladder_closure": {
+        "status": "chart_derived",
+        "lean": "Hqiv.Geometry.BondedHorizonCasimir.covalentDimerTwoElectronSurplusDimless",
+        "formula": "covalentDimer / (1 + (4/8)/(2\u00b7(m_H + m_s2)))"
+      },
+      "heteronuclear_atomization_bond_order": {
+        "status": "python_scaffold",
+        "lean": null,
+        "formula": "octet + (4/8)/2 \u00b7 (conjugated \u2212 octet) for CO",
+        "note": "Pending Lean heteronuclear atomization divisor"
+      },
+      "conjugated_heavy_heavy_dress": {
+        "status": "python_scaffold",
+        "lean": "Hqiv.QuantumChemistry.BondStateNetwork.hyperWeight",
+        "formula": "1/\u221a(bond_order); homonuclear alkynyl dual-centre boost",
+        "note": "Graph hyperclosure mirror; homonuclear C\u2082H\u2082 boost pending Lean"
+      },
+      "ionic_inert_core_dress": {
+        "status": "chart_derived",
+        "lean": "Hqiv.QuantumChemistry.CentreGeometryFromTuft.dynamicBondDistanceWeight",
+        "formula": "n_val/n_tot \u00b7 \u221a(R_m/(R_m+d)) period \u2265 3 salts"
+      },
+      "metallic_peel_lattice_binding": {
+        "status": "lean_certified",
+        "lean": "Hqiv.Geometry.BondedHorizonCasimir.metallicPeelSurplusDimless",
+        "formula": "max(|peel|, |merge|/2) \u00b7 1/(1+d/a\u2080) \u00b7 (1+(4/8)/n_coord) \u00b7 n_val/n_tot",
+        "note": "peel = metallicPeelSurplus(n_val,n_core); merge = bondHorizonSurplus(2n,n,n)"
+      },
+      "metallic_melt_density_ratio": {
+        "status": "lean_certified",
+        "lean": "Hqiv.QuantumChemistry.PhaseGeometryDensity.metallicMeltDensityRatio",
+        "formula": "max(\u03b3/4, 1 \u2212 (\u03b3/\u03b1)/n_coord \u00b7 contactLock \u00b7 (1 \u2212 1/(1+d/a\u2080)))"
+      },
+      "horizon_atomization_split_gate": {
+        "status": "python_scaffold",
+        "lean": "Hqiv.Geometry.BondedHorizonCasimirMoleculeBench",
+        "formula": "bond_horizon split when period \u2265 3 and n_bonds \u2265 3",
+        "note": "Split tuples certified per molecule; gate rule is Python witness policy"
+      },
+      "centre_vsepr_period3": {
+        "status": "python_scaffold",
+        "lean": "Hqiv.Physics.DynamicCentreGeometry.centreLonePairCount",
+        "formula": "Period \u2265 3 uses (V \u2212 X)/2; period 2 uses Lean (V \u2212 2X)/2",
+        "note": "Lean centreLonePairCount uses (V \u2212 n_bonds)/2 \u2014 Python period split diverges"
+      },
+      "nested_wf_bond_equilibrium": {
+        "status": "lean_certified",
+        "lean": "Hqiv.QuantumChemistry.CentreGeometryFromTuft.dynamicContactRadiusDimless",
+        "formula": "r_cov = R_m/Z; r_eq from monogamy (1\u2212\u03b1/2) + homonuclear/open-shell/halogen routing"
+      },
+      "nested_wf_centre_angle": {
+        "status": "lean_certified",
+        "lean": "Hqiv.Physics.DynamicCentreGeometry.dynamicCentreAngleRad",
+        "formula": "dynamicCentreAngleRad(Z, n_bonds) \u2014 steric domains + bent dress"
+      },
+      "nested_wf_bond_order_contraction": {
+        "status": "chart_derived",
+        "lean": "Hqiv.Physics.HQIVNuclei.strongChannelFraction",
+        "formula": "r \u00d7 1/(1 + (bond_order\u22121)\u00b7(4/8)/4) for explicit \u03c0 bonds (C\u2261C, C\u2261N)"
+      }
+    }
+  },
   "referenceM": 4,
   "ev_per_lambda_unit": 1.9428571428571428,
   "dynamic_binding_curvature_coupling": "kappa(xi) = gamma_HQIV * strongChannelFraction * B_curv(xi)",
   "binding_curvature_feedback_at_xi_lockin": 1.150373233316249,
   "baryogenesis_binding_curvature_correction_mev": 1.0570334906288699,
-  "formula": "E_bind = eta_2 * surplus_dimless * geomean(tuftVevFactorNetworkedAtCluster) * geometry_alignment_factor * dynamicBindingCurvatureFeedbackAtXi(xi_contact) * EV_per_lambda; eta_2 = eta + (4/8)*eta^2 on p-shell triplets",
+  "lab_outside_closure": {
+    "K_mass_chart": 1.000296135249801,
+    "support_ratio_vs_cmb": 0.9982506429209693,
+    "increment_vs_anchor_ppm": 296.1352498009884,
+    "lab_binding_scale_factor": 0.9979551132342215,
+    "lab_binding_scale_ppm": -2044.8867657785197
+  },
+  "binding_ev_policy": "binding_ev / error_pct use Earth-lab scale support_ratio/K_mass_chart; binding_ev_chart / error_pct_chart are dilute \u03c1=0 chart rows",
+  "bond_curvature_witness_policy": "per-covalent-bond \u03b7, G_eff(\u03b7), medium dress 1+\u03c1(G\u22121), \u03b3/2 stacked-line breathing; gas-phase surplus dress uses geff_theta=1 at \u03c1=0 (Lean scaleOutsideCouplingForMediumDensity_unity)",
+  "bond_corridor_neutrino_policy": "bonded covalent dress 1 + localCurvatureWeakWidthCatalysis \u00d7 (2\u03b7/140) after lab closure; free branch keeps full weak-width catalysis; A>1 beta without eta_linear stays unity-shielded",
+  "formula": "E_bind = eta_2 * surplus_dimless * geomean(tuftVevFactorNetworkedAtCluster) * geometry_alignment_factor * dynamicBindingCurvatureFeedbackAtXi(xi_contact) * nBodyPromotedSecondOrderFactor(geff_sum, surplus, eta, g) * EV_per_lambda; eta_2 = eta + (4/8)*eta^2 on p-shell triplets; nBodyPromoted = outside_geff * preferred_axis_dress; g = (p_max-p_second)/\u03a3p spectral gap of bond polarities",
+  "preferred_axis_dress_policy": "Lean preferredAxisPlaneLocalDress: 1 + (1/2)*t*(9/4-1)*g with t=eta*(4/8); g=preferredAxisSpectralGap of |\u0394Z|/(Z_i+Z_j); unique-channel projector; n-body ready via nBodyPromotedSecondOrderFactor / nBodySecondOrderEnvelope",
+  "nbody_second_order_policy": "Lean nBodyPromotedSecondOrderFactor = outsideContactLedgerDress * preferredAxisDress; ledger = grav\u00b7em\u00b7bulk\u00b7local\u00b7contact (dilute gas: first four = 1); full nBodySecondOrderEnvelope adds optional C2/vevTaylor/hyperclosure (audit only)",
+  "outside_contact_ledger_policy": "Lean OutsideContactLedger: grav=outsideGravityGeffModulator (Ricci/G_eff); em=1+(4/8)\u00b7curvatureConcentrationWeight; bulk=scaleOutsideCouplingForMediumDensity(target, \u03c1); local=1+localCurvatureDefectExcess(\u03b4_coord); contact=outsideGeffSurplus(\u03a3 G_eff, surplus). GMTKN dilute-gas assay keeps grav=em=bulk=local=1.",
   "network_aggregation": "arithmetic_product: eta_p * surplus * geomean(tuftVev_slots) * feedback * geomean(valley_align); NOT geomean(eta_i*vev_i) over Compton legs",
   "vev_geometric_mean_policy": "geomean(tuft_vev_networked_at_compton_shell) per (4,3,1) slot; then * steric * phase_geomean(nodes); eta_p from mean Compton angle (not geomean(slot_eta) nor fragment nuclear geomean)",
   "compton_triplet_rules": {
@@ -33,15 +179,275 @@
     "bond_averaged_compton": "heavy hydrides + atomization \u2014 relaxed bond geometry",
     "curvature_feedback_weight": "1.0 if heavy; else 1-(4/8)(1-C2(\u03be)/C2(\u03be_lock)) (Hopf lapse dress)"
   },
+  "nested_wf_geometry": {
+    "input_policy": "no_tabulated_angstrom_or_degrees",
+    "ionic_diatomic_exception": "LiF/NaCl retain tabulated lattice bond until ionic nested-WF closure",
+    "lean_modules": [
+      "Hqiv.QuantumChemistry.CentreGeometryFromTuft",
+      "Hqiv.QuantumChemistry.TorqueTreeEquilibrium",
+      "Hqiv.QuantumMechanics.Schrodinger"
+    ],
+    "formula": "r_cov = R_m/Z from hydrogenGroundStateOfShell; r_eq from monogamy (1\u2212\u03b1/2), homonuclear/open-shell/halogen routing; \u03b8 from dynamicCentreAngleRad",
+    "bond_witness": [
+      {
+        "molecule": "H2",
+        "bond_index": 0,
+        "derived_angstrom": 0.7408480952641998,
+        "reference_angstrom": 0.7414,
+        "error_pct": -0.07444088694363839,
+        "angle_rad": null
+      },
+      {
+        "molecule": "LIH",
+        "bond_index": 0,
+        "derived_angstrom": 1.234746825440333,
+        "reference_angstrom": 1.5956,
+        "error_pct": -22.61551607919697,
+        "angle_rad": null
+      },
+      {
+        "molecule": "HF",
+        "bond_index": 0,
+        "derived_angstrom": 0.9054810053229109,
+        "reference_angstrom": 0.9168,
+        "error_pct": -1.2346198382514266,
+        "angle_rad": null
+      },
+      {
+        "molecule": "H2O",
+        "bond_index": 0,
+        "derived_angstrom": 0.92606011908025,
+        "reference_angstrom": 0.9572,
+        "error_pct": -3.2532261721427145,
+        "angle_rad": 1.8233667736493022
+      },
+      {
+        "molecule": "H2O",
+        "bond_index": 1,
+        "derived_angstrom": 0.92606011908025,
+        "reference_angstrom": 0.9572,
+        "error_pct": -3.2532261721427145,
+        "angle_rad": 1.8233667736493022
+      },
+      {
+        "molecule": "CH4",
+        "bond_index": 0,
+        "derived_angstrom": 0.9877974603522665,
+        "reference_angstrom": 1.09,
+        "error_pct": -9.376379784195745,
+        "angle_rad": 1.9106332362490186
+      },
+      {
+        "molecule": "CH4",
+        "bond_index": 1,
+        "derived_angstrom": 0.9877974603522665,
+        "reference_angstrom": 1.09,
+        "error_pct": -9.376379784195745,
+        "angle_rad": 1.9106332362490186
+      },
+      {
+        "molecule": "CH4",
+        "bond_index": 2,
+        "derived_angstrom": 0.9877974603522665,
+        "reference_angstrom": 1.09,
+        "error_pct": -9.376379784195745,
+        "angle_rad": 1.9106332362490186
+      },
+      {
+        "molecule": "CH4",
+        "bond_index": 3,
+        "derived_angstrom": 0.9877974603522665,
+        "reference_angstrom": 1.09,
+        "error_pct": -9.376379784195745,
+        "angle_rad": 1.9106332362490186
+      },
+      {
+        "molecule": "NH3",
+        "bond_index": 0,
+        "derived_angstrom": 0.9525189796253997,
+        "reference_angstrom": 1.012,
+        "error_pct": -5.877571183260904,
+        "angle_rad": 1.873233323706283
+      },
+      {
+        "molecule": "NH3",
+        "bond_index": 1,
+        "derived_angstrom": 0.9525189796253997,
+        "reference_angstrom": 1.012,
+        "error_pct": -5.877571183260904,
+        "angle_rad": 1.873233323706283
+      },
+      {
+        "molecule": "NH3",
+        "bond_index": 2,
+        "derived_angstrom": 0.9525189796253997,
+        "reference_angstrom": 1.012,
+        "error_pct": -5.877571183260904,
+        "angle_rad": 1.873233323706283
+      },
+      {
+        "molecule": "LIF",
+        "bond_index": 0,
+        "derived_angstrom": 1.454860024589821,
+        "reference_angstrom": 1.5636,
+        "error_pct": -6.954462484662253,
+        "angle_rad": null
+      },
+      {
+        "molecule": "NACL",
+        "bond_index": 0,
+        "derived_angstrom": 0.6633817745312068,
+        "reference_angstrom": 2.3609,
+        "error_pct": -71.90131837302694,
+        "angle_rad": null
+      },
+      {
+        "molecule": "HCL",
+        "bond_index": 0,
+        "derived_angstrom": 1.2817441094536328,
+        "reference_angstrom": 1.2746,
+        "error_pct": 0.560498152646545,
+        "angle_rad": null
+      },
+      {
+        "molecule": "HBR",
+        "bond_index": 0,
+        "derived_angstrom": 1.3970278367839197,
+        "reference_angstrom": 1.4145,
+        "error_pct": -1.2352183256331113,
+        "angle_rad": null
+      },
+      {
+        "molecule": "H2S",
+        "bond_index": 0,
+        "derived_angstrom": 1.2937604604797608,
+        "reference_angstrom": 1.336,
+        "error_pct": -3.1616421796586294,
+        "angle_rad": 1.8233667736493022
+      },
+      {
+        "molecule": "H2S",
+        "bond_index": 1,
+        "derived_angstrom": 1.2937604604797608,
+        "reference_angstrom": 1.336,
+        "error_pct": -3.1616421796586294,
+        "angle_rad": 1.8233667736493022
+      },
+      {
+        "molecule": "HCN",
+        "bond_index": 0,
+        "derived_angstrom": 0.9877974603522665,
+        "reference_angstrom": 1.0626,
+        "error_pct": -7.039576477294705,
+        "angle_rad": null
+      },
+      {
+        "molecule": "HCN",
+        "bond_index": 1,
+        "derived_angstrom": 0.9331864727534781,
+        "reference_angstrom": 1.153,
+        "error_pct": -19.064486317998433,
+        "angle_rad": null
+      },
+      {
+        "molecule": "C2H2",
+        "bond_index": 0,
+        "derived_angstrom": 0.9877974603522665,
+        "reference_angstrom": 1.062,
+        "error_pct": -6.987056464005048,
+        "angle_rad": null
+      },
+      {
+        "molecule": "C2H2",
+        "bond_index": 1,
+        "derived_angstrom": 1.0079565921961906,
+        "reference_angstrom": 1.203,
+        "error_pct": -16.213084605470446,
+        "angle_rad": null
+      },
+      {
+        "molecule": "C2H2",
+        "bond_index": 2,
+        "derived_angstrom": 0.9877974603522665,
+        "reference_angstrom": 1.062,
+        "error_pct": -6.987056464005048,
+        "angle_rad": null
+      },
+      {
+        "molecule": "PH3",
+        "bond_index": 0,
+        "derived_angstrom": 1.3073789916427057,
+        "reference_angstrom": 1.414,
+        "error_pct": -7.5403824863715885,
+        "angle_rad": 1.873233323706283
+      },
+      {
+        "molecule": "PH3",
+        "bond_index": 1,
+        "derived_angstrom": 1.3073789916427057,
+        "reference_angstrom": 1.414,
+        "error_pct": -7.5403824863715885,
+        "angle_rad": 1.873233323706283
+      },
+      {
+        "molecule": "PH3",
+        "bond_index": 2,
+        "derived_angstrom": 1.3073789916427057,
+        "reference_angstrom": 1.414,
+        "error_pct": -7.5403824863715885,
+        "angle_rad": 1.873233323706283
+      },
+      {
+        "molecule": "CO",
+        "bond_index": 0,
+        "derived_angstrom": 1.0911450184423659,
+        "reference_angstrom": 1.128,
+        "error_pct": -3.267285599081029,
+        "angle_rad": null
+      },
+      {
+        "molecule": "N2",
+        "bond_index": 0,
+        "derived_angstrom": 1.0799534916387754,
+        "reference_angstrom": 1.098,
+        "error_pct": -1.6435799964685498,
+        "angle_rad": null
+      },
+      {
+        "molecule": "O2",
+        "bond_index": 0,
+        "derived_angstrom": 1.1811991314799108,
+        "reference_angstrom": 1.208,
+        "error_pct": -2.2186149437159863,
+        "angle_rad": null
+      },
+      {
+        "molecule": "F2",
+        "bond_index": 0,
+        "derived_angstrom": 1.312443479422123,
+        "reference_angstrom": 1.412,
+        "error_pct": -7.050745083419052,
+        "angle_rad": null
+      },
+      {
+        "molecule": "CL2",
+        "bond_index": 0,
+        "derived_angstrom": 0.8337876222211136,
+        "reference_angstrom": 1.988,
+        "error_pct": -58.058972725296094,
+        "angle_rad": null
+      }
+    ]
+  },
   "molecules": [
     {
       "name": "H2",
       "kind": "dissociation",
-      "binding_ev": 4.707436807122694,
+      "binding_ev": 4.487007189311841,
       "reference_ev": 4.478,
-      "error_pct": 5.123644643204436,
-      "dimless_core": 2.4229454154307986,
-      "surplus_dimless": 8.999999999999998,
+      "error_pct": 0.201143128893285,
+      "dimless_core": 2.313639607215875,
+      "surplus_dimless": 8.57142857142857,
       "eta_p": 0.2408477842003854,
       "vev_geometric_mean": 0.9471601008835248,
       "vev_geometric_mean_bare": 0.9471601008835248,
@@ -90,7 +496,96 @@
           "1s"
         ],
         "surplus_dress_factor": 1.0,
-        "outside_geff_contact_dress": 1.0555555555555556
+        "outside_geff_contact_dress": 1.0583333333333333,
+        "preferred_axis_dress": {
+          "bond_polarities": [
+            0.0
+          ],
+          "preferred_axis_spectral_gap": 0.0,
+          "preferred_axis_selection_weight": 0.0,
+          "preferred_axis_purity": 0.0,
+          "promotion_t": 0.1204238921001927,
+          "preferred_axis_plane_local_dress": 1.0,
+          "colour_filter": 2.25,
+          "colour_excess": 1.25
+        },
+        "nbody_second_order": {
+          "outside_geff": 1.0583333333333333,
+          "preferred_axis_dress": 1.0,
+          "preferred_axis_spectral_gap": 0.0,
+          "c2_lapse": 0.7375,
+          "vev_cluster_taylor": 1.0,
+          "graph_hyperclosure_weak": 1.0,
+          "promoted_factor": 1.0583333333333333,
+          "full_envelope": 0.7805208333333334,
+          "n_bonds": 1,
+          "outside_ledger": {
+            "grav": 1.0,
+            "em": 1.0,
+            "bulk": 1.0,
+            "local_defect": 1.0,
+            "contact": 1.0583333333333333,
+            "dress": 1.0583333333333333,
+            "channels": {
+              "grav": "outsideGravityGeffModulator (Ricci / gravitational G_eff)",
+              "em": "1+(4/8)\u00b7curvatureConcentrationWeight (electric / dielectric)",
+              "bulk": "scaleOutsideCouplingForMediumDensity (medium density \u03c1)",
+              "local_defect": "1+localCurvatureDefectExcess (nucleation / wall / interface)",
+              "contact": "outsideGeffSurplus (bond-summed G_eff participation)"
+            }
+          }
+        },
+        "outside_contact_ledger": {
+          "grav": 1.0,
+          "em": 1.0,
+          "bulk": 1.0,
+          "local_defect": 1.0,
+          "contact": 1.0583333333333333,
+          "dress": 1.0583333333333333,
+          "channels": {
+            "grav": "outsideGravityGeffModulator (Ricci / gravitational G_eff)",
+            "em": "1+(4/8)\u00b7curvatureConcentrationWeight (electric / dielectric)",
+            "bulk": "scaleOutsideCouplingForMediumDensity (medium density \u03c1)",
+            "local_defect": "1+localCurvatureDefectExcess (nucleation / wall / interface)",
+            "contact": "outsideGeffSurplus (bond-summed G_eff participation)"
+          }
+        },
+        "bond_curvature_witness": {
+          "bond_count": 1,
+          "medium_density_fraction": 0.0,
+          "mean_eta_linear": 0.2408477842003854,
+          "mean_g_eff_intrinsic": 0.42564309564434993,
+          "mean_g_eff_medium": 1.0,
+          "mean_flatness_ratio": 0.42564309564434993,
+          "mean_protein_contact_breathing": 0.88512861912887,
+          "mean_geff_theta_gas_assay": 1.0,
+          "bonds": [
+            {
+              "theta_rad": 0.3783228147386553,
+              "theta0_rad": 1.5707963267948966,
+              "eta_linear": 0.2408477842003854,
+              "g_eff_intrinsic": 0.42564309564434993,
+              "g_eff_medium": 1.0,
+              "flatness_ratio": 0.42564309564434993,
+              "flatness_ppm_vs_saturated": -574356.90435565,
+              "protein_contact_breathing": 0.88512861912887,
+              "medium_density_fraction": 0.0,
+              "surplus_dress_contribution_gas_assay": 0.05833333333333335,
+              "surplus_dress_contribution_intrinsic_geff": 0.024829180579253752,
+              "surplus_dress_contribution_medium_geff": 0.05833333333333335,
+              "geff_theta_gas_assay": 1.0,
+              "geff_combined": 0.41666666666666674
+            }
+          ]
+        },
+        "bond_corridor_neutrino": {
+          "mean_eta_linear": 0.2408477842003854,
+          "bond_corridor_aperture": 0.0034406826314340774,
+          "bond_corridor_neutrino_dress": 1.0002514254256616,
+          "bond_corridor_neutrino_dress_low": 1.000232801320057,
+          "bond_corridor_neutrino_dress_high": 1.0002715394597146,
+          "outer_neutrino_suppression": 0.007142857142857143
+        }
       },
       "nuclei": [
         {
@@ -133,7 +628,53 @@
         "cluster_mean_mev_per_A": 0.0,
         "cluster_spread_pct": 0.0
       },
-      "notes": "dissociation: shell=dynamicComptonTripletH2; surplus=covalent_dimer_uud; \u03b7\u2082\u00b7surplus\u00b7vev\u00b7geom\u00b7G_eff\u00b7\u03ba(\u03be=2.00,w=0.87)",
+      "notes": "dissociation: shell=dynamicComptonTripletH2; surplus=covalent_dimer_uud; \u03b7\u2082\u00b7surplus\u00b7vev\u00b7geom\u00b7nbody(g=0.000,G_eff=1.0583)\u00b7\u03ba(\u03be=2.00,w=0.87); lab_scale=0.997955113; \u03bd_corridor=1.000251425(\u03b7=0.2408)",
+      "binding_ev_chart": 4.495071236876558,
+      "binding_ev_lab": 4.487007189311841,
+      "error_pct_chart": 0.3812245841125052,
+      "lab_outside_closure": {
+        "K_mass_chart": 1.000296135249801,
+        "support_ratio_vs_cmb": 0.9982506429209693,
+        "increment_vs_anchor_ppm": 296.1352498009884,
+        "lab_binding_scale_factor": 0.9979551132342215,
+        "lab_binding_scale_ppm": -2044.8867657785197
+      },
+      "bond_curvature_witness": {
+        "bond_count": 1,
+        "medium_density_fraction": 0.0,
+        "mean_eta_linear": 0.2408477842003854,
+        "mean_g_eff_intrinsic": 0.42564309564434993,
+        "mean_g_eff_medium": 1.0,
+        "mean_flatness_ratio": 0.42564309564434993,
+        "mean_protein_contact_breathing": 0.88512861912887,
+        "mean_geff_theta_gas_assay": 1.0,
+        "bonds": [
+          {
+            "theta_rad": 0.3783228147386553,
+            "theta0_rad": 1.5707963267948966,
+            "eta_linear": 0.2408477842003854,
+            "g_eff_intrinsic": 0.42564309564434993,
+            "g_eff_medium": 1.0,
+            "flatness_ratio": 0.42564309564434993,
+            "flatness_ppm_vs_saturated": -574356.90435565,
+            "protein_contact_breathing": 0.88512861912887,
+            "medium_density_fraction": 0.0,
+            "surplus_dress_contribution_gas_assay": 0.05833333333333335,
+            "surplus_dress_contribution_intrinsic_geff": 0.024829180579253752,
+            "surplus_dress_contribution_medium_geff": 0.05833333333333335,
+            "geff_theta_gas_assay": 1.0,
+            "geff_combined": 0.41666666666666674
+          }
+        ]
+      },
+      "bond_corridor_neutrino": {
+        "mean_eta_linear": 0.2408477842003854,
+        "bond_corridor_aperture": 0.0034406826314340774,
+        "bond_corridor_neutrino_dress": 1.0002514254256616,
+        "bond_corridor_neutrino_dress_low": 1.000232801320057,
+        "bond_corridor_neutrino_dress_high": 1.0002715394597146,
+        "outer_neutrino_suppression": 0.007142857142857143
+      },
       "network_binding_feedback": {
         "contact_xi": 2.0,
         "bare_vev_geometric_mean": 0.9471601008835248,
@@ -177,10 +718,10 @@
     {
       "name": "LiH",
       "kind": "dissociation",
-      "binding_ev": 2.444087763215554,
+      "binding_ev": 2.5438389552154295,
       "reference_ev": 2.515,
-      "error_pct": -2.8195720391429875,
-      "dimless_core": 1.257986348713888,
+      "error_pct": 1.1466781397785026,
+      "dimless_core": 1.3120117895529437,
       "surplus_dimless": 8.34137221978927,
       "eta_p": 0.1374270959790021,
       "vev_geometric_mean": 0.9554405494725902,
@@ -230,7 +771,72 @@
           "1s"
         ],
         "surplus_dress_factor": 1.0,
-        "outside_geff_contact_dress": 1.0
+        "outside_geff_contact_dress": 1.0,
+        "preferred_axis_dress": {
+          "bond_polarities": [
+            0.5
+          ],
+          "preferred_axis_spectral_gap": 1.0,
+          "preferred_axis_selection_weight": 1.0,
+          "preferred_axis_purity": 1.0,
+          "promotion_t": 0.06871354798950105,
+          "preferred_axis_plane_local_dress": 1.0429459674934383,
+          "colour_filter": 2.25,
+          "colour_excess": 1.25
+        },
+        "nbody_second_order": {
+          "outside_geff": 1.0,
+          "preferred_axis_dress": 1.0429459674934383,
+          "preferred_axis_spectral_gap": 1.0,
+          "c2_lapse": 0.8833333333333334,
+          "vev_cluster_taylor": 1.0,
+          "graph_hyperclosure_weak": 1.0,
+          "promoted_factor": 1.0429459674934383,
+          "full_envelope": 0.9212689379525372,
+          "n_bonds": 0,
+          "outside_ledger": {
+            "grav": 1.0,
+            "em": 1.0,
+            "bulk": 1.0,
+            "local_defect": 1.0,
+            "contact": 1.0,
+            "dress": 1.0,
+            "channels": {
+              "grav": "outsideGravityGeffModulator (Ricci / gravitational G_eff)",
+              "em": "1+(4/8)\u00b7curvatureConcentrationWeight (electric / dielectric)",
+              "bulk": "scaleOutsideCouplingForMediumDensity (medium density \u03c1)",
+              "local_defect": "1+localCurvatureDefectExcess (nucleation / wall / interface)",
+              "contact": "outsideGeffSurplus (bond-summed G_eff participation)"
+            }
+          }
+        },
+        "outside_contact_ledger": {
+          "grav": 1.0,
+          "em": 1.0,
+          "bulk": 1.0,
+          "local_defect": 1.0,
+          "contact": 1.0,
+          "dress": 1.0,
+          "channels": {
+            "grav": "outsideGravityGeffModulator (Ricci / gravitational G_eff)",
+            "em": "1+(4/8)\u00b7curvatureConcentrationWeight (electric / dielectric)",
+            "bulk": "scaleOutsideCouplingForMediumDensity (medium density \u03c1)",
+            "local_defect": "1+localCurvatureDefectExcess (nucleation / wall / interface)",
+            "contact": "outsideGeffSurplus (bond-summed G_eff participation)"
+          }
+        },
+        "bond_curvature_witness": {
+          "bond_count": 0,
+          "bonds": []
+        },
+        "bond_corridor_neutrino": {
+          "mean_eta_linear": 0.0,
+          "bond_corridor_aperture": 0.0,
+          "bond_corridor_neutrino_dress": 1.0,
+          "bond_corridor_neutrino_dress_low": 1.0,
+          "bond_corridor_neutrino_dress_high": 1.0,
+          "outer_neutrino_suppression": 0.007142857142857143
+        }
       },
       "nuclei": [
         {
@@ -273,7 +879,29 @@
         "cluster_mean_mev_per_A": 5.159234322763848,
         "cluster_spread_pct": 200.0
       },
-      "notes": "dissociation: shell=dynamicComptonTripletHeavyHydride; surplus=bond_averaged_compton; \u03b7\u2082\u00b7surplus\u00b7vev\u00b7geom\u00b7G_eff\u00b7\u03ba(\u03be=3.67,w=1.00)",
+      "notes": "dissociation: shell=dynamicComptonTripletHeavyHydride; surplus=bond_averaged_compton; \u03b7\u2082\u00b7surplus\u00b7vev\u00b7geom\u00b7nbody(g=1.000,G_eff=1.0000)\u00b7\u03ba(\u03be=3.67,w=1.00); lab_scale=0.997955113; \u03bd_corridor=1.000000000(\u03b7=0.0000)",
+      "binding_ev_chart": 2.5490514768457193,
+      "binding_ev_lab": 2.5438389552154295,
+      "error_pct_chart": 1.353935461062393,
+      "lab_outside_closure": {
+        "K_mass_chart": 1.000296135249801,
+        "support_ratio_vs_cmb": 0.9982506429209693,
+        "increment_vs_anchor_ppm": 296.1352498009884,
+        "lab_binding_scale_factor": 0.9979551132342215,
+        "lab_binding_scale_ppm": -2044.8867657785197
+      },
+      "bond_curvature_witness": {
+        "bond_count": 0,
+        "bonds": []
+      },
+      "bond_corridor_neutrino": {
+        "mean_eta_linear": 0.0,
+        "bond_corridor_aperture": 0.0,
+        "bond_corridor_neutrino_dress": 1.0,
+        "bond_corridor_neutrino_dress_low": 1.0,
+        "bond_corridor_neutrino_dress_high": 1.0,
+        "outer_neutrino_suppression": 0.007142857142857143
+      },
       "network_binding_feedback": {
         "contact_xi": 3.6666666666666665,
         "bare_vev_geometric_mean": 0.9554405494725902,
@@ -317,10 +945,10 @@
     {
       "name": "HF",
       "kind": "dissociation",
-      "binding_ev": 5.6232887645973975,
+      "binding_ev": 5.853584879218396,
       "reference_ev": 5.87,
-      "error_pct": -4.202917127812651,
-      "dimless_core": 2.894339805307484,
+      "error_pct": -0.27964430633055665,
+      "dimless_core": 3.018640028501183,
       "surplus_dimless": 18.682744439578542,
       "eta_p": 0.1374270959790021,
       "vev_geometric_mean": 0.9558814165223269,
@@ -370,7 +998,96 @@
           "1s"
         ],
         "surplus_dress_factor": 1.0,
-        "outside_geff_contact_dress": 1.0267626633558598
+        "outside_geff_contact_dress": 1.0267626633558598,
+        "preferred_axis_dress": {
+          "bond_polarities": [
+            0.8
+          ],
+          "preferred_axis_spectral_gap": 1.0,
+          "preferred_axis_selection_weight": 1.0,
+          "preferred_axis_purity": 1.0,
+          "promotion_t": 0.06871354798950105,
+          "preferred_axis_plane_local_dress": 1.0429459674934383,
+          "colour_filter": 2.25,
+          "colour_excess": 1.25
+        },
+        "nbody_second_order": {
+          "outside_geff": 1.0267626633558598,
+          "preferred_axis_dress": 1.0429459674934383,
+          "preferred_axis_spectral_gap": 1.0,
+          "c2_lapse": 0.8833333333333334,
+          "vev_cluster_taylor": 1.0,
+          "graph_hyperclosure_weak": 1.0,
+          "promoted_factor": 1.0708579793198165,
+          "full_envelope": 0.9459245483991715,
+          "n_bonds": 1,
+          "outside_ledger": {
+            "grav": 1.0,
+            "em": 1.0,
+            "bulk": 1.0,
+            "local_defect": 1.0,
+            "contact": 1.0267626633558598,
+            "dress": 1.0267626633558598,
+            "channels": {
+              "grav": "outsideGravityGeffModulator (Ricci / gravitational G_eff)",
+              "em": "1+(4/8)\u00b7curvatureConcentrationWeight (electric / dielectric)",
+              "bulk": "scaleOutsideCouplingForMediumDensity (medium density \u03c1)",
+              "local_defect": "1+localCurvatureDefectExcess (nucleation / wall / interface)",
+              "contact": "outsideGeffSurplus (bond-summed G_eff participation)"
+            }
+          }
+        },
+        "outside_contact_ledger": {
+          "grav": 1.0,
+          "em": 1.0,
+          "bulk": 1.0,
+          "local_defect": 1.0,
+          "contact": 1.0267626633558598,
+          "dress": 1.0267626633558598,
+          "channels": {
+            "grav": "outsideGravityGeffModulator (Ricci / gravitational G_eff)",
+            "em": "1+(4/8)\u00b7curvatureConcentrationWeight (electric / dielectric)",
+            "bulk": "scaleOutsideCouplingForMediumDensity (medium density \u03c1)",
+            "local_defect": "1+localCurvatureDefectExcess (nucleation / wall / interface)",
+            "contact": "outsideGeffSurplus (bond-summed G_eff participation)"
+          }
+        },
+        "bond_curvature_witness": {
+          "bond_count": 1,
+          "medium_density_fraction": 0.0,
+          "mean_eta_linear": 0.129522586169985,
+          "mean_g_eff_intrinsic": 0.2933643281880113,
+          "mean_g_eff_medium": 1.0,
+          "mean_flatness_ratio": 0.2933643281880113,
+          "mean_protein_contact_breathing": 0.8586728656376023,
+          "mean_geff_theta_gas_assay": 1.0,
+          "bonds": [
+            {
+              "theta_rad": 0.20345360259278789,
+              "theta0_rad": 1.5707963267948966,
+              "eta_linear": 0.129522586169985,
+              "g_eff_intrinsic": 0.2933643281880113,
+              "g_eff_medium": 1.0,
+              "flatness_ratio": 0.2933643281880113,
+              "flatness_ppm_vs_saturated": -706635.6718119887,
+              "protein_contact_breathing": 0.8586728656376023,
+              "medium_density_fraction": 0.0,
+              "surplus_dress_contribution_gas_assay": 0.026762663355859688,
+              "surplus_dress_contribution_intrinsic_geff": 0.007851210755913685,
+              "surplus_dress_contribution_medium_geff": 0.026762663355859688,
+              "geff_theta_gas_assay": 1.0,
+              "geff_combined": 0.36885245901639346
+            }
+          ]
+        },
+        "bond_corridor_neutrino": {
+          "mean_eta_linear": 0.129522586169985,
+          "bond_corridor_aperture": 0.0018503226595712142,
+          "bond_corridor_neutrino_dress": 1.0001352110066892,
+          "bond_corridor_neutrino_dress_low": 1.0001251953765642,
+          "bond_corridor_neutrino_dress_high": 1.0001460278872243,
+          "outer_neutrino_suppression": 0.007142857142857143
+        }
       },
       "nuclei": [
         {
@@ -413,7 +1130,53 @@
         "cluster_mean_mev_per_A": 4.195042495933809,
         "cluster_spread_pct": 200.0
       },
-      "notes": "dissociation: shell=dynamicComptonTripletHeavyHydride; surplus=bond_averaged_compton; \u03b7\u2082\u00b7surplus\u00b7vev\u00b7geom\u00b7G_eff\u00b7\u03ba(\u03be=3.67,w=1.00)",
+      "notes": "dissociation: shell=dynamicComptonTripletHeavyHydride; surplus=bond_averaged_compton; \u03b7\u2082\u00b7surplus\u00b7vev\u00b7geom\u00b7nbody(g=1.000,G_eff=1.0268)\u00b7\u03ba(\u03be=3.67,w=1.00); lab_scale=0.997955113; \u03bd_corridor=1.000135211(\u03b7=0.1295)",
+      "binding_ev_chart": 5.8647863410880126,
+      "binding_ev_lab": 5.853584879218396,
+      "error_pct_chart": -0.08881872081750512,
+      "lab_outside_closure": {
+        "K_mass_chart": 1.000296135249801,
+        "support_ratio_vs_cmb": 0.9982506429209693,
+        "increment_vs_anchor_ppm": 296.1352498009884,
+        "lab_binding_scale_factor": 0.9979551132342215,
+        "lab_binding_scale_ppm": -2044.8867657785197
+      },
+      "bond_curvature_witness": {
+        "bond_count": 1,
+        "medium_density_fraction": 0.0,
+        "mean_eta_linear": 0.129522586169985,
+        "mean_g_eff_intrinsic": 0.2933643281880113,
+        "mean_g_eff_medium": 1.0,
+        "mean_flatness_ratio": 0.2933643281880113,
+        "mean_protein_contact_breathing": 0.8586728656376023,
+        "mean_geff_theta_gas_assay": 1.0,
+        "bonds": [
+          {
+            "theta_rad": 0.20345360259278789,
+            "theta0_rad": 1.5707963267948966,
+            "eta_linear": 0.129522586169985,
+            "g_eff_intrinsic": 0.2933643281880113,
+            "g_eff_medium": 1.0,
+            "flatness_ratio": 0.2933643281880113,
+            "flatness_ppm_vs_saturated": -706635.6718119887,
+            "protein_contact_breathing": 0.8586728656376023,
+            "medium_density_fraction": 0.0,
+            "surplus_dress_contribution_gas_assay": 0.026762663355859688,
+            "surplus_dress_contribution_intrinsic_geff": 0.007851210755913685,
+            "surplus_dress_contribution_medium_geff": 0.026762663355859688,
+            "geff_theta_gas_assay": 1.0,
+            "geff_combined": 0.36885245901639346
+          }
+        ]
+      },
+      "bond_corridor_neutrino": {
+        "mean_eta_linear": 0.129522586169985,
+        "bond_corridor_aperture": 0.0018503226595712142,
+        "bond_corridor_neutrino_dress": 1.0001352110066892,
+        "bond_corridor_neutrino_dress_low": 1.0001251953765642,
+        "bond_corridor_neutrino_dress_high": 1.0001460278872243,
+        "outer_neutrino_suppression": 0.007142857142857143
+      },
       "network_binding_feedback": {
         "contact_xi": 3.6666666666666665,
         "bare_vev_geometric_mean": 0.9558814165223269,
@@ -457,15 +1220,15 @@
     {
       "name": "H2O",
       "kind": "atomization",
-      "binding_ev": 9.713995140658158,
+      "binding_ev": 9.77730279330452,
       "reference_ev": 9.51,
-      "error_pct": 2.145059312914384,
-      "dimless_core": 4.99985044004464,
+      "error_pct": 2.8107549243377474,
+      "dimless_core": 5.042065365350327,
       "surplus_dimless": 32.364503874929305,
       "eta_p": 0.1374270959790021,
       "vev_geometric_mean": 0.9624865317936523,
       "vev_geometric_mean_bare": 0.9557574707135476,
-      "geometry_alignment_factor": 0.9916274537819773,
+      "geometry_alignment_factor": 1.0,
       "contact_xi": 3.6666666666666665,
       "dynamic_binding_curvature_coupling": 0.19761896274869428,
       "dynamic_binding_curvature_feedback": 1.1485830119656228,
@@ -510,7 +1273,113 @@
           "1s"
         ],
         "surplus_dress_factor": 1.197615606936416,
-        "outside_geff_contact_dress": 1.0254396324204058
+        "outside_geff_contact_dress": 1.0254396324204058,
+        "preferred_axis_dress": {
+          "bond_polarities": [
+            0.7777777777777778,
+            0.7777777777777778
+          ],
+          "preferred_axis_spectral_gap": 0.0,
+          "preferred_axis_selection_weight": 0.0,
+          "preferred_axis_purity": 0.5,
+          "promotion_t": 0.06871354798950105,
+          "preferred_axis_plane_local_dress": 1.0,
+          "colour_filter": 2.25,
+          "colour_excess": 1.25
+        },
+        "nbody_second_order": {
+          "outside_geff": 1.0254396324204058,
+          "preferred_axis_dress": 1.0,
+          "preferred_axis_spectral_gap": 0.0,
+          "c2_lapse": 0.8833333333333334,
+          "vev_cluster_taylor": 1.0042184029054202,
+          "graph_hyperclosure_weak": 1.1464466094067263,
+          "promoted_factor": 1.0254396324204058,
+          "full_envelope": 1.0428377113040719,
+          "n_bonds": 2,
+          "outside_ledger": {
+            "grav": 1.0,
+            "em": 1.0,
+            "bulk": 1.0,
+            "local_defect": 1.0,
+            "contact": 1.0254396324204058,
+            "dress": 1.0254396324204058,
+            "channels": {
+              "grav": "outsideGravityGeffModulator (Ricci / gravitational G_eff)",
+              "em": "1+(4/8)\u00b7curvatureConcentrationWeight (electric / dielectric)",
+              "bulk": "scaleOutsideCouplingForMediumDensity (medium density \u03c1)",
+              "local_defect": "1+localCurvatureDefectExcess (nucleation / wall / interface)",
+              "contact": "outsideGeffSurplus (bond-summed G_eff participation)"
+            }
+          }
+        },
+        "outside_contact_ledger": {
+          "grav": 1.0,
+          "em": 1.0,
+          "bulk": 1.0,
+          "local_defect": 1.0,
+          "contact": 1.0254396324204058,
+          "dress": 1.0254396324204058,
+          "channels": {
+            "grav": "outsideGravityGeffModulator (Ricci / gravitational G_eff)",
+            "em": "1+(4/8)\u00b7curvatureConcentrationWeight (electric / dielectric)",
+            "bulk": "scaleOutsideCouplingForMediumDensity (medium density \u03c1)",
+            "local_defect": "1+localCurvatureDefectExcess (nucleation / wall / interface)",
+            "contact": "outsideGeffSurplus (bond-summed G_eff participation)"
+          }
+        },
+        "bond_curvature_witness": {
+          "bond_count": 2,
+          "medium_density_fraction": 0.0,
+          "mean_eta_linear": 0.129522586169985,
+          "mean_g_eff_intrinsic": 0.2933643281880113,
+          "mean_g_eff_medium": 1.0,
+          "mean_flatness_ratio": 0.2933643281880113,
+          "mean_protein_contact_breathing": 0.8586728656376023,
+          "mean_geff_theta_gas_assay": 0.8233410820470028,
+          "bonds": [
+            {
+              "theta_rad": 0.20345360259278789,
+              "theta0_rad": 1.5707963267948966,
+              "eta_linear": 0.129522586169985,
+              "g_eff_intrinsic": 0.2933643281880113,
+              "g_eff_medium": 1.0,
+              "flatness_ratio": 0.2933643281880113,
+              "flatness_ppm_vs_saturated": -706635.6718119887,
+              "protein_contact_breathing": 0.8586728656376023,
+              "medium_density_fraction": 0.0,
+              "surplus_dress_contribution_gas_assay": 0.0154490240892374,
+              "surplus_dress_contribution_intrinsic_geff": 0.004532192573099532,
+              "surplus_dress_contribution_medium_geff": 0.0154490240892374,
+              "geff_theta_gas_assay": 0.8233410820470028,
+              "geff_combined": 0.29939675710800107
+            },
+            {
+              "theta_rad": 0.20345360259278789,
+              "theta0_rad": 1.5707963267948966,
+              "eta_linear": 0.129522586169985,
+              "g_eff_intrinsic": 0.2933643281880113,
+              "g_eff_medium": 1.0,
+              "flatness_ratio": 0.2933643281880113,
+              "flatness_ppm_vs_saturated": -706635.6718119887,
+              "protein_contact_breathing": 0.8586728656376023,
+              "medium_density_fraction": 0.0,
+              "surplus_dress_contribution_gas_assay": 0.0154490240892374,
+              "surplus_dress_contribution_intrinsic_geff": 0.004532192573099532,
+              "surplus_dress_contribution_medium_geff": 0.0154490240892374,
+              "geff_theta_gas_assay": 0.8233410820470028,
+              "geff_combined": 0.29939675710800107
+            }
+          ]
+        },
+        "bond_corridor_neutrino": {
+          "mean_eta_linear": 0.129522586169985,
+          "bond_corridor_aperture": 0.0018503226595712142,
+          "bond_corridor_neutrino_dress": 1.0001352110066892,
+          "bond_corridor_neutrino_dress_low": 1.0001251953765642,
+          "bond_corridor_neutrino_dress_high": 1.0001460278872243,
+          "outer_neutrino_suppression": 0.007142857142857143
+        }
       },
       "nuclei": [
         {
@@ -568,7 +1437,69 @@
         "cluster_mean_mev_per_A": 2.9775157945277324,
         "cluster_spread_pct": 300.0
       },
-      "notes": "atomization: shell=dynamicComptonTripletHeavyHydride; surplus=electronic_compton_triplet; \u03b7\u2082\u00b7surplus\u00b7vev\u00b7geom\u00b7G_eff\u00b7\u03ba(\u03be=3.67,w=1.00)",
+      "notes": "atomization: shell=dynamicComptonTripletHeavyHydride; surplus=electronic_compton_triplet; \u03b7\u2082\u00b7surplus\u00b7vev\u00b7geom\u00b7nbody(g=0.000,G_eff=1.0254)\u00b7\u03ba(\u03be=3.67,w=1.00); lab_scale=0.997955113; \u03bd_corridor=1.000135211(\u03b7=0.1295)",
+      "binding_ev_chart": 9.796012709823492,
+      "binding_ev_lab": 9.77730279330452,
+      "error_pct_chart": 3.0074943199105353,
+      "lab_outside_closure": {
+        "K_mass_chart": 1.000296135249801,
+        "support_ratio_vs_cmb": 0.9982506429209693,
+        "increment_vs_anchor_ppm": 296.1352498009884,
+        "lab_binding_scale_factor": 0.9979551132342215,
+        "lab_binding_scale_ppm": -2044.8867657785197
+      },
+      "bond_curvature_witness": {
+        "bond_count": 2,
+        "medium_density_fraction": 0.0,
+        "mean_eta_linear": 0.129522586169985,
+        "mean_g_eff_intrinsic": 0.2933643281880113,
+        "mean_g_eff_medium": 1.0,
+        "mean_flatness_ratio": 0.2933643281880113,
+        "mean_protein_contact_breathing": 0.8586728656376023,
+        "mean_geff_theta_gas_assay": 0.8233410820470028,
+        "bonds": [
+          {
+            "theta_rad": 0.20345360259278789,
+            "theta0_rad": 1.5707963267948966,
+            "eta_linear": 0.129522586169985,
+            "g_eff_intrinsic": 0.2933643281880113,
+            "g_eff_medium": 1.0,
+            "flatness_ratio": 0.2933643281880113,
+            "flatness_ppm_vs_saturated": -706635.6718119887,
+            "protein_contact_breathing": 0.8586728656376023,
+            "medium_density_fraction": 0.0,
+            "surplus_dress_contribution_gas_assay": 0.0154490240892374,
+            "surplus_dress_contribution_intrinsic_geff": 0.004532192573099532,
+            "surplus_dress_contribution_medium_geff": 0.0154490240892374,
+            "geff_theta_gas_assay": 0.8233410820470028,
+            "geff_combined": 0.29939675710800107
+          },
+          {
+            "theta_rad": 0.20345360259278789,
+            "theta0_rad": 1.5707963267948966,
+            "eta_linear": 0.129522586169985,
+            "g_eff_intrinsic": 0.2933643281880113,
+            "g_eff_medium": 1.0,
+            "flatness_ratio": 0.2933643281880113,
+            "flatness_ppm_vs_saturated": -706635.6718119887,
+            "protein_contact_breathing": 0.8586728656376023,
+            "medium_density_fraction": 0.0,
+            "surplus_dress_contribution_gas_assay": 0.0154490240892374,
+            "surplus_dress_contribution_intrinsic_geff": 0.004532192573099532,
+            "surplus_dress_contribution_medium_geff": 0.0154490240892374,
+            "geff_theta_gas_assay": 0.8233410820470028,
+            "geff_combined": 0.29939675710800107
+          }
+        ]
+      },
+      "bond_corridor_neutrino": {
+        "mean_eta_linear": 0.129522586169985,
+        "bond_corridor_aperture": 0.0018503226595712142,
+        "bond_corridor_neutrino_dress": 1.0001352110066892,
+        "bond_corridor_neutrino_dress_low": 1.0001251953765642,
+        "bond_corridor_neutrino_dress_high": 1.0001460278872243,
+        "outer_neutrino_suppression": 0.007142857142857143
+      },
       "network_binding_feedback": {
         "contact_xi": 3.6666666666666665,
         "bare_vev_geometric_mean": 0.9557574707135476,
@@ -576,9 +1507,9 @@
         "vev_network_dress": 1.0070405529501967,
         "steric_multiplier": 1.0070405529501967,
         "phase_multiplier": 1.0,
-        "geometry_alignment_factor": 0.9916274537819773,
+        "geometry_alignment_factor": 0.9999999369250138,
         "curvature_feedback_at_xi": 1.1485830119656228,
-        "dimless_prefactor": 1.096239865992089,
+        "dimless_prefactor": 1.1054956099347746,
         "peripheral_hydrogen_count": 2,
         "h_h_repulsive_contact_points": 1
       },
@@ -592,7 +1523,7 @@
         "vev_compton_slot_geomean": 0.9557574707135476,
         "vev_networked_readout": 0.9624865317936523,
         "vev_bare_triplet_geomean": 0.9577913207792554,
-        "geometry_bond_geomean": 0.9916274537819773,
+        "geometry_bond_geomean": 1.0,
         "participation_vev_product": 0.1322717289833031,
         "geomean_eta_times_vev_per_leg": 0.08556838269554033,
         "ratio_leg_geomean_over_product": 0.6469136175451504,
@@ -612,15 +1543,15 @@
     {
       "name": "CH4",
       "kind": "atomization",
-      "binding_ev": 16.228191595661595,
+      "binding_ev": 16.863139972101454,
       "reference_ev": 17.0,
-      "error_pct": -4.540049437284733,
-      "dimless_core": 8.352745674237585,
-      "surplus_dimless": 43.70686109894636,
+      "error_pct": -0.8050589876385066,
+      "dimless_core": 8.69616660155114,
+      "surplus_dimless": 45.527980311402466,
       "eta_p": 0.1374270959790021,
       "vev_geometric_mean": 1.1946855788251365,
       "vev_geometric_mean_bare": 0.9554956224360736,
-      "geometry_alignment_factor": 0.9999999998865339,
+      "geometry_alignment_factor": 1.0,
       "contact_xi": 3.6666666666666665,
       "dynamic_binding_curvature_coupling": 0.19761896274869428,
       "dynamic_binding_curvature_feedback": 1.1485830119656228,
@@ -664,8 +1595,148 @@
           "2p",
           "1s"
         ],
-        "surplus_dress_factor": 1.0,
-        "outside_geff_contact_dress": 1.0134241773859658
+        "surplus_dress_factor": 1.0416666666666667,
+        "outside_geff_contact_dress": 1.012887210290527,
+        "preferred_axis_dress": {
+          "bond_polarities": [
+            0.7142857142857143,
+            0.7142857142857143,
+            0.7142857142857143,
+            0.7142857142857143
+          ],
+          "preferred_axis_spectral_gap": 0.0,
+          "preferred_axis_selection_weight": 0.0,
+          "preferred_axis_purity": 0.25,
+          "promotion_t": 0.06871354798950105,
+          "preferred_axis_plane_local_dress": 1.0,
+          "colour_filter": 2.25,
+          "colour_excess": 1.25
+        },
+        "nbody_second_order": {
+          "outside_geff": 1.012887210290527,
+          "preferred_axis_dress": 1.0,
+          "preferred_axis_spectral_gap": 0.0,
+          "c2_lapse": 0.8833333333333334,
+          "vev_cluster_taylor": 1.1434441364209447,
+          "graph_hyperclosure_weak": 1.25,
+          "promoted_factor": 1.012887210290527,
+          "full_envelope": 1.2788236853648125,
+          "n_bonds": 4,
+          "outside_ledger": {
+            "grav": 1.0,
+            "em": 1.0,
+            "bulk": 1.0,
+            "local_defect": 1.0,
+            "contact": 1.012887210290527,
+            "dress": 1.012887210290527,
+            "channels": {
+              "grav": "outsideGravityGeffModulator (Ricci / gravitational G_eff)",
+              "em": "1+(4/8)\u00b7curvatureConcentrationWeight (electric / dielectric)",
+              "bulk": "scaleOutsideCouplingForMediumDensity (medium density \u03c1)",
+              "local_defect": "1+localCurvatureDefectExcess (nucleation / wall / interface)",
+              "contact": "outsideGeffSurplus (bond-summed G_eff participation)"
+            }
+          }
+        },
+        "outside_contact_ledger": {
+          "grav": 1.0,
+          "em": 1.0,
+          "bulk": 1.0,
+          "local_defect": 1.0,
+          "contact": 1.012887210290527,
+          "dress": 1.012887210290527,
+          "channels": {
+            "grav": "outsideGravityGeffModulator (Ricci / gravitational G_eff)",
+            "em": "1+(4/8)\u00b7curvatureConcentrationWeight (electric / dielectric)",
+            "bulk": "scaleOutsideCouplingForMediumDensity (medium density \u03c1)",
+            "local_defect": "1+localCurvatureDefectExcess (nucleation / wall / interface)",
+            "contact": "outsideGeffSurplus (bond-summed G_eff participation)"
+          }
+        },
+        "bond_curvature_witness": {
+          "bond_count": 4,
+          "medium_density_fraction": 0.0,
+          "mean_eta_linear": 0.129522586169985,
+          "mean_g_eff_intrinsic": 0.2933643281880113,
+          "mean_g_eff_medium": 1.0,
+          "mean_flatness_ratio": 0.2933643281880113,
+          "mean_protein_contact_breathing": 0.8586728656376023,
+          "mean_geff_theta_gas_assay": 0.2933643281880113,
+          "bonds": [
+            {
+              "theta_rad": 0.20345360259278789,
+              "theta0_rad": 1.5707963267948966,
+              "eta_linear": 0.129522586169985,
+              "g_eff_intrinsic": 0.2933643281880113,
+              "g_eff_medium": 1.0,
+              "flatness_ratio": 0.2933643281880113,
+              "flatness_ppm_vs_saturated": -706635.6718119887,
+              "protein_contact_breathing": 0.8586728656376023,
+              "medium_density_fraction": 0.0,
+              "surplus_dress_contribution_gas_assay": 0.01098225742895024,
+              "surplus_dress_contribution_intrinsic_geff": 0.0032218025726317833,
+              "surplus_dress_contribution_medium_geff": 0.01098225742895024,
+              "geff_theta_gas_assay": 0.2933643281880113,
+              "geff_combined": 0.10233639355395745
+            },
+            {
+              "theta_rad": 0.20345360259278789,
+              "theta0_rad": 1.5707963267948966,
+              "eta_linear": 0.129522586169985,
+              "g_eff_intrinsic": 0.2933643281880113,
+              "g_eff_medium": 1.0,
+              "flatness_ratio": 0.2933643281880113,
+              "flatness_ppm_vs_saturated": -706635.6718119887,
+              "protein_contact_breathing": 0.8586728656376023,
+              "medium_density_fraction": 0.0,
+              "surplus_dress_contribution_gas_assay": 0.01098225742895024,
+              "surplus_dress_contribution_intrinsic_geff": 0.0032218025726317833,
+              "surplus_dress_contribution_medium_geff": 0.01098225742895024,
+              "geff_theta_gas_assay": 0.2933643281880113,
+              "geff_combined": 0.10233639355395745
+            },
+            {
+              "theta_rad": 0.20345360259278789,
+              "theta0_rad": 1.5707963267948966,
+              "eta_linear": 0.129522586169985,
+              "g_eff_intrinsic": 0.2933643281880113,
+              "g_eff_medium": 1.0,
+              "flatness_ratio": 0.2933643281880113,
+              "flatness_ppm_vs_saturated": -706635.6718119887,
+              "protein_contact_breathing": 0.8586728656376023,
+              "medium_density_fraction": 0.0,
+              "surplus_dress_contribution_gas_assay": 0.01098225742895024,
+              "surplus_dress_contribution_intrinsic_geff": 0.0032218025726317833,
+              "surplus_dress_contribution_medium_geff": 0.01098225742895024,
+              "geff_theta_gas_assay": 0.2933643281880113,
+              "geff_combined": 0.10233639355395745
+            },
+            {
+              "theta_rad": 0.20345360259278789,
+              "theta0_rad": 1.5707963267948966,
+              "eta_linear": 0.129522586169985,
+              "g_eff_intrinsic": 0.2933643281880113,
+              "g_eff_medium": 1.0,
+              "flatness_ratio": 0.2933643281880113,
+              "flatness_ppm_vs_saturated": -706635.6718119887,
+              "protein_contact_breathing": 0.8586728656376023,
+              "medium_density_fraction": 0.0,
+              "surplus_dress_contribution_gas_assay": 0.01098225742895024,
+              "surplus_dress_contribution_intrinsic_geff": 0.0032218025726317833,
+              "surplus_dress_contribution_medium_geff": 0.01098225742895024,
+              "geff_theta_gas_assay": 0.2933643281880113,
+              "geff_combined": 0.10233639355395745
+            }
+          ]
+        },
+        "bond_corridor_neutrino": {
+          "mean_eta_linear": 0.129522586169985,
+          "bond_corridor_aperture": 0.0018503226595712142,
+          "bond_corridor_neutrino_dress": 1.0001352110066892,
+          "bond_corridor_neutrino_dress_low": 1.0001251953765642,
+          "bond_corridor_neutrino_dress_high": 1.0001460278872243,
+          "outer_neutrino_suppression": 0.007142857142857143
+        }
       },
       "nuclei": [
         {
@@ -753,7 +1824,101 @@
         "cluster_mean_mev_per_A": 2.0155491532187724,
         "cluster_spread_pct": 500.0
       },
-      "notes": "atomization: shell=dynamicComptonTripletHeavyHydride; surplus=electronic_compton_triplet; \u03b7\u2082\u00b7surplus\u00b7vev\u00b7geom\u00b7G_eff\u00b7\u03ba(\u03be=3.67,w=1.00)",
+      "notes": "atomization: shell=dynamicComptonTripletHeavyHydride; surplus=electronic_compton_triplet; \u03b7\u2082\u00b7surplus\u00b7vev\u00b7geom\u00b7nbody(g=0.000,G_eff=1.0129)\u00b7\u03ba(\u03be=3.67,w=1.00); lab_scale=0.997955113; \u03bd_corridor=1.000135211(\u03b7=0.1295)",
+      "binding_ev_chart": 16.895409397299357,
+      "binding_ev_lab": 16.863139972101454,
+      "error_pct_chart": -0.6152388394155478,
+      "lab_outside_closure": {
+        "K_mass_chart": 1.000296135249801,
+        "support_ratio_vs_cmb": 0.9982506429209693,
+        "increment_vs_anchor_ppm": 296.1352498009884,
+        "lab_binding_scale_factor": 0.9979551132342215,
+        "lab_binding_scale_ppm": -2044.8867657785197
+      },
+      "bond_curvature_witness": {
+        "bond_count": 4,
+        "medium_density_fraction": 0.0,
+        "mean_eta_linear": 0.129522586169985,
+        "mean_g_eff_intrinsic": 0.2933643281880113,
+        "mean_g_eff_medium": 1.0,
+        "mean_flatness_ratio": 0.2933643281880113,
+        "mean_protein_contact_breathing": 0.8586728656376023,
+        "mean_geff_theta_gas_assay": 0.2933643281880113,
+        "bonds": [
+          {
+            "theta_rad": 0.20345360259278789,
+            "theta0_rad": 1.5707963267948966,
+            "eta_linear": 0.129522586169985,
+            "g_eff_intrinsic": 0.2933643281880113,
+            "g_eff_medium": 1.0,
+            "flatness_ratio": 0.2933643281880113,
+            "flatness_ppm_vs_saturated": -706635.6718119887,
+            "protein_contact_breathing": 0.8586728656376023,
+            "medium_density_fraction": 0.0,
+            "surplus_dress_contribution_gas_assay": 0.01098225742895024,
+            "surplus_dress_contribution_intrinsic_geff": 0.0032218025726317833,
+            "surplus_dress_contribution_medium_geff": 0.01098225742895024,
+            "geff_theta_gas_assay": 0.2933643281880113,
+            "geff_combined": 0.10233639355395745
+          },
+          {
+            "theta_rad": 0.20345360259278789,
+            "theta0_rad": 1.5707963267948966,
+            "eta_linear": 0.129522586169985,
+            "g_eff_intrinsic": 0.2933643281880113,
+            "g_eff_medium": 1.0,
+            "flatness_ratio": 0.2933643281880113,
+            "flatness_ppm_vs_saturated": -706635.6718119887,
+            "protein_contact_breathing": 0.8586728656376023,
+            "medium_density_fraction": 0.0,
+            "surplus_dress_contribution_gas_assay": 0.01098225742895024,
+            "surplus_dress_contribution_intrinsic_geff": 0.0032218025726317833,
+            "surplus_dress_contribution_medium_geff": 0.01098225742895024,
+            "geff_theta_gas_assay": 0.2933643281880113,
+            "geff_combined": 0.10233639355395745
+          },
+          {
+            "theta_rad": 0.20345360259278789,
+            "theta0_rad": 1.5707963267948966,
+            "eta_linear": 0.129522586169985,
+            "g_eff_intrinsic": 0.2933643281880113,
+            "g_eff_medium": 1.0,
+            "flatness_ratio": 0.2933643281880113,
+            "flatness_ppm_vs_saturated": -706635.6718119887,
+            "protein_contact_breathing": 0.8586728656376023,
+            "medium_density_fraction": 0.0,
+            "surplus_dress_contribution_gas_assay": 0.01098225742895024,
+            "surplus_dress_contribution_intrinsic_geff": 0.0032218025726317833,
+            "surplus_dress_contribution_medium_geff": 0.01098225742895024,
+            "geff_theta_gas_assay": 0.2933643281880113,
+            "geff_combined": 0.10233639355395745
+          },
+          {
+            "theta_rad": 0.20345360259278789,
+            "theta0_rad": 1.5707963267948966,
+            "eta_linear": 0.129522586169985,
+            "g_eff_intrinsic": 0.2933643281880113,
+            "g_eff_medium": 1.0,
+            "flatness_ratio": 0.2933643281880113,
+            "flatness_ppm_vs_saturated": -706635.6718119887,
+            "protein_contact_breathing": 0.8586728656376023,
+            "medium_density_fraction": 0.0,
+            "surplus_dress_contribution_gas_assay": 0.01098225742895024,
+            "surplus_dress_contribution_intrinsic_geff": 0.0032218025726317833,
+            "surplus_dress_contribution_medium_geff": 0.01098225742895024,
+            "geff_theta_gas_assay": 0.2933643281880113,
+            "geff_combined": 0.10233639355395745
+          }
+        ]
+      },
+      "bond_corridor_neutrino": {
+        "mean_eta_linear": 0.129522586169985,
+        "bond_corridor_aperture": 0.0018503226595712142,
+        "bond_corridor_neutrino_dress": 1.0001352110066892,
+        "bond_corridor_neutrino_dress_low": 1.0001251953765642,
+        "bond_corridor_neutrino_dress_high": 1.0001460278872243,
+        "outer_neutrino_suppression": 0.007142857142857143
+      },
       "network_binding_feedback": {
         "contact_xi": 3.6666666666666665,
         "bare_vev_geometric_mean": 0.9554956224360736,
@@ -777,7 +1942,7 @@
         "vev_compton_slot_geomean": 0.9554956224360736,
         "vev_networked_readout": 1.1946855788251365,
         "vev_bare_triplet_geomean": 0.9577913207792554,
-        "geometry_bond_geomean": 0.9999999998865339,
+        "geometry_bond_geomean": 1.0,
         "participation_vev_product": 0.16418216970593172,
         "geomean_eta_times_vev_per_leg": 0.08554493957916236,
         "ratio_leg_geomean_over_product": 0.5210367223942937,
@@ -797,15 +1962,15 @@
     {
       "name": "NH3",
       "kind": "atomization",
-      "binding_ev": 10.950056327507616,
+      "binding_ev": 10.467982369786162,
       "reference_ev": 10.07,
-      "error_pct": 8.739387562141165,
-      "dimless_core": 5.636058403864214,
-      "surplus_dimless": 35.36548887915709,
+      "error_pct": 3.9521585877473835,
+      "dimless_core": 5.398242487482383,
+      "surplus_dimless": 33.40073949698169,
       "eta_p": 0.1374270959790021,
       "vev_geometric_mean": 1.0027431791769492,
       "vev_geometric_mean_bare": 0.9556452807708399,
-      "geometry_alignment_factor": 0.9871850323926176,
+      "geometry_alignment_factor": 1.0,
       "contact_xi": 3.6666666666666665,
       "dynamic_binding_curvature_coupling": 0.19761896274869428,
       "dynamic_binding_curvature_feedback": 1.1485830119656228,
@@ -849,8 +2014,131 @@
           "2p",
           "1s"
         ],
-        "surplus_dress_factor": 1.0,
-        "outside_geff_contact_dress": 1.0199356743411805
+        "surplus_dress_factor": 0.9444444444444444,
+        "outside_geff_contact_dress": 1.021108361067132,
+        "preferred_axis_dress": {
+          "bond_polarities": [
+            0.75,
+            0.75,
+            0.75
+          ],
+          "preferred_axis_spectral_gap": 0.0,
+          "preferred_axis_selection_weight": 0.0,
+          "preferred_axis_purity": 0.3333333333333333,
+          "promotion_t": 0.06871354798950105,
+          "preferred_axis_plane_local_dress": 1.0,
+          "colour_filter": 2.25,
+          "colour_excess": 1.25
+        },
+        "nbody_second_order": {
+          "outside_geff": 1.021108361067132,
+          "preferred_axis_dress": 1.0,
+          "preferred_axis_spectral_gap": 0.0,
+          "c2_lapse": 0.8833333333333334,
+          "vev_cluster_taylor": 1.0292853661018062,
+          "graph_hyperclosure_weak": 1.2113248654051871,
+          "promoted_factor": 1.021108361067132,
+          "full_envelope": 1.124586542115745,
+          "n_bonds": 3,
+          "outside_ledger": {
+            "grav": 1.0,
+            "em": 1.0,
+            "bulk": 1.0,
+            "local_defect": 1.0,
+            "contact": 1.021108361067132,
+            "dress": 1.021108361067132,
+            "channels": {
+              "grav": "outsideGravityGeffModulator (Ricci / gravitational G_eff)",
+              "em": "1+(4/8)\u00b7curvatureConcentrationWeight (electric / dielectric)",
+              "bulk": "scaleOutsideCouplingForMediumDensity (medium density \u03c1)",
+              "local_defect": "1+localCurvatureDefectExcess (nucleation / wall / interface)",
+              "contact": "outsideGeffSurplus (bond-summed G_eff participation)"
+            }
+          }
+        },
+        "outside_contact_ledger": {
+          "grav": 1.0,
+          "em": 1.0,
+          "bulk": 1.0,
+          "local_defect": 1.0,
+          "contact": 1.021108361067132,
+          "dress": 1.021108361067132,
+          "channels": {
+            "grav": "outsideGravityGeffModulator (Ricci / gravitational G_eff)",
+            "em": "1+(4/8)\u00b7curvatureConcentrationWeight (electric / dielectric)",
+            "bulk": "scaleOutsideCouplingForMediumDensity (medium density \u03c1)",
+            "local_defect": "1+localCurvatureDefectExcess (nucleation / wall / interface)",
+            "contact": "outsideGeffSurplus (bond-summed G_eff participation)"
+          }
+        },
+        "bond_curvature_witness": {
+          "bond_count": 3,
+          "medium_density_fraction": 0.0,
+          "mean_eta_linear": 0.129522586169985,
+          "mean_g_eff_intrinsic": 0.2933643281880113,
+          "mean_g_eff_medium": 1.0,
+          "mean_flatness_ratio": 0.2933643281880113,
+          "mean_protein_contact_breathing": 0.8586728656376023,
+          "mean_geff_theta_gas_assay": 0.4700232461410085,
+          "bonds": [
+            {
+              "theta_rad": 0.20345360259278789,
+              "theta0_rad": 1.5707963267948966,
+              "eta_linear": 0.129522586169985,
+              "g_eff_intrinsic": 0.2933643281880113,
+              "g_eff_medium": 1.0,
+              "flatness_ratio": 0.2933643281880113,
+              "flatness_ppm_vs_saturated": -706635.6718119887,
+              "protein_contact_breathing": 0.8586728656376023,
+              "medium_density_fraction": 0.0,
+              "surplus_dress_contribution_gas_assay": 0.014969728441047936,
+              "surplus_dress_contribution_intrinsic_geff": 0.004391584327264993,
+              "surplus_dress_contribution_medium_geff": 0.014969728441047936,
+              "geff_theta_gas_assay": 0.47002324614100843,
+              "geff_combined": 0.16786544505036016
+            },
+            {
+              "theta_rad": 0.20345360259278789,
+              "theta0_rad": 1.5707963267948966,
+              "eta_linear": 0.129522586169985,
+              "g_eff_intrinsic": 0.2933643281880113,
+              "g_eff_medium": 1.0,
+              "flatness_ratio": 0.2933643281880113,
+              "flatness_ppm_vs_saturated": -706635.6718119887,
+              "protein_contact_breathing": 0.8586728656376023,
+              "medium_density_fraction": 0.0,
+              "surplus_dress_contribution_gas_assay": 0.014969728441047936,
+              "surplus_dress_contribution_intrinsic_geff": 0.004391584327264993,
+              "surplus_dress_contribution_medium_geff": 0.014969728441047936,
+              "geff_theta_gas_assay": 0.47002324614100843,
+              "geff_combined": 0.16786544505036016
+            },
+            {
+              "theta_rad": 0.20345360259278789,
+              "theta0_rad": 1.5707963267948966,
+              "eta_linear": 0.129522586169985,
+              "g_eff_intrinsic": 0.2933643281880113,
+              "g_eff_medium": 1.0,
+              "flatness_ratio": 0.2933643281880113,
+              "flatness_ppm_vs_saturated": -706635.6718119887,
+              "protein_contact_breathing": 0.8586728656376023,
+              "medium_density_fraction": 0.0,
+              "surplus_dress_contribution_gas_assay": 0.014969728441047936,
+              "surplus_dress_contribution_intrinsic_geff": 0.004391584327264993,
+              "surplus_dress_contribution_medium_geff": 0.014969728441047936,
+              "geff_theta_gas_assay": 0.47002324614100843,
+              "geff_combined": 0.16786544505036016
+            }
+          ]
+        },
+        "bond_corridor_neutrino": {
+          "mean_eta_linear": 0.129522586169985,
+          "bond_corridor_aperture": 0.0018503226595712142,
+          "bond_corridor_neutrino_dress": 1.0001352110066892,
+          "bond_corridor_neutrino_dress_low": 1.0001251953765642,
+          "bond_corridor_neutrino_dress_high": 1.0001460278872243,
+          "outer_neutrino_suppression": 0.007142857142857143
+        }
       },
       "nuclei": [
         {
@@ -923,7 +2211,85 @@
         "cluster_mean_mev_per_A": 2.3558366725933704,
         "cluster_spread_pct": 400.0
       },
-      "notes": "atomization: shell=dynamicComptonTripletHeavyHydride; surplus=electronic_compton_triplet; \u03b7\u2082\u00b7surplus\u00b7vev\u00b7geom\u00b7G_eff\u00b7\u03ba(\u03be=3.67,w=1.00)",
+      "notes": "atomization: shell=dynamicComptonTripletHeavyHydride; surplus=electronic_compton_triplet; \u03b7\u2082\u00b7surplus\u00b7vev\u00b7geom\u00b7nbody(g=0.000,G_eff=1.0211)\u00b7\u03ba(\u03be=3.67,w=1.00); lab_scale=0.997955113; \u03bd_corridor=1.000135211(\u03b7=0.1295)",
+      "binding_ev_chart": 10.488013975680058,
+      "binding_ev_lab": 10.467982369786162,
+      "error_pct_chart": 4.151082181529869,
+      "lab_outside_closure": {
+        "K_mass_chart": 1.000296135249801,
+        "support_ratio_vs_cmb": 0.9982506429209693,
+        "increment_vs_anchor_ppm": 296.1352498009884,
+        "lab_binding_scale_factor": 0.9979551132342215,
+        "lab_binding_scale_ppm": -2044.8867657785197
+      },
+      "bond_curvature_witness": {
+        "bond_count": 3,
+        "medium_density_fraction": 0.0,
+        "mean_eta_linear": 0.129522586169985,
+        "mean_g_eff_intrinsic": 0.2933643281880113,
+        "mean_g_eff_medium": 1.0,
+        "mean_flatness_ratio": 0.2933643281880113,
+        "mean_protein_contact_breathing": 0.8586728656376023,
+        "mean_geff_theta_gas_assay": 0.4700232461410085,
+        "bonds": [
+          {
+            "theta_rad": 0.20345360259278789,
+            "theta0_rad": 1.5707963267948966,
+            "eta_linear": 0.129522586169985,
+            "g_eff_intrinsic": 0.2933643281880113,
+            "g_eff_medium": 1.0,
+            "flatness_ratio": 0.2933643281880113,
+            "flatness_ppm_vs_saturated": -706635.6718119887,
+            "protein_contact_breathing": 0.8586728656376023,
+            "medium_density_fraction": 0.0,
+            "surplus_dress_contribution_gas_assay": 0.014969728441047936,
+            "surplus_dress_contribution_intrinsic_geff": 0.004391584327264993,
+            "surplus_dress_contribution_medium_geff": 0.014969728441047936,
+            "geff_theta_gas_assay": 0.47002324614100843,
+            "geff_combined": 0.16786544505036016
+          },
+          {
+            "theta_rad": 0.20345360259278789,
+            "theta0_rad": 1.5707963267948966,
+            "eta_linear": 0.129522586169985,
+            "g_eff_intrinsic": 0.2933643281880113,
+            "g_eff_medium": 1.0,
+            "flatness_ratio": 0.2933643281880113,
+            "flatness_ppm_vs_saturated": -706635.6718119887,
+            "protein_contact_breathing": 0.8586728656376023,
+            "medium_density_fraction": 0.0,
+            "surplus_dress_contribution_gas_assay": 0.014969728441047936,
+            "surplus_dress_contribution_intrinsic_geff": 0.004391584327264993,
+            "surplus_dress_contribution_medium_geff": 0.014969728441047936,
+            "geff_theta_gas_assay": 0.47002324614100843,
+            "geff_combined": 0.16786544505036016
+          },
+          {
+            "theta_rad": 0.20345360259278789,
+            "theta0_rad": 1.5707963267948966,
+            "eta_linear": 0.129522586169985,
+            "g_eff_intrinsic": 0.2933643281880113,
+            "g_eff_medium": 1.0,
+            "flatness_ratio": 0.2933643281880113,
+            "flatness_ppm_vs_saturated": -706635.6718119887,
+            "protein_contact_breathing": 0.8586728656376023,
+            "medium_density_fraction": 0.0,
+            "surplus_dress_contribution_gas_assay": 0.014969728441047936,
+            "surplus_dress_contribution_intrinsic_geff": 0.004391584327264993,
+            "surplus_dress_contribution_medium_geff": 0.014969728441047936,
+            "geff_theta_gas_assay": 0.47002324614100843,
+            "geff_combined": 0.16786544505036016
+          }
+        ]
+      },
+      "bond_corridor_neutrino": {
+        "mean_eta_linear": 0.129522586169985,
+        "bond_corridor_aperture": 0.0018503226595712142,
+        "bond_corridor_neutrino_dress": 1.0001352110066892,
+        "bond_corridor_neutrino_dress_low": 1.0001251953765642,
+        "bond_corridor_neutrino_dress_high": 1.0001460278872243,
+        "outer_neutrino_suppression": 0.007142857142857143
+      },
       "network_binding_feedback": {
         "contact_xi": 3.6666666666666665,
         "bare_vev_geometric_mean": 0.9556452807708399,
@@ -931,9 +2297,9 @@
         "vev_network_dress": 1.0492838706513774,
         "steric_multiplier": 1.0492838706513774,
         "phase_multiplier": 1.0,
-        "geometry_alignment_factor": 0.9871850323926176,
+        "geometry_alignment_factor": 0.9999917888632449,
         "curvature_feedback_at_xi": 1.1485830119656228,
-        "dimless_prefactor": 1.1369743498716238,
+        "dimless_prefactor": 1.1517243239234636,
         "peripheral_hydrogen_count": 3,
         "h_h_repulsive_contact_points": 3
       },
@@ -947,7 +2313,7 @@
         "vev_compton_slot_geomean": 0.9556452807708399,
         "vev_networked_readout": 1.0027431791769492,
         "vev_bare_triplet_geomean": 0.9577913207792554,
-        "geometry_bond_geomean": 0.9871850323926176,
+        "geometry_bond_geomean": 1.0,
         "participation_vev_product": 0.1378040831270403,
         "geomean_eta_times_vev_per_leg": 0.08555833839848134,
         "ratio_leg_geomean_over_product": 0.6208693999263136,
@@ -969,10 +2335,10 @@
     {
       "name": "LiF",
       "kind": "dissociation",
-      "binding_ev": 5.66518090447404,
+      "binding_ev": 5.89639541183393,
       "reference_ev": 5.991,
-      "error_pct": -5.438475972725083,
-      "dimless_core": 2.9159019361263443,
+      "error_pct": -1.5791118038068768,
+      "dimless_core": 3.04112816588928,
       "surplus_dimless": 19.349411106245203,
       "eta_p": 0.1374270959790021,
       "vev_geometric_mean": 0.9547076540184657,
@@ -1022,7 +2388,72 @@
           "1s"
         ],
         "surplus_dress_factor": 1.0,
-        "outside_geff_contact_dress": 1.0
+        "outside_geff_contact_dress": 1.0,
+        "preferred_axis_dress": {
+          "bond_polarities": [
+            0.5
+          ],
+          "preferred_axis_spectral_gap": 1.0,
+          "preferred_axis_selection_weight": 1.0,
+          "preferred_axis_purity": 1.0,
+          "promotion_t": 0.06871354798950105,
+          "preferred_axis_plane_local_dress": 1.0429459674934383,
+          "colour_filter": 2.25,
+          "colour_excess": 1.25
+        },
+        "nbody_second_order": {
+          "outside_geff": 1.0,
+          "preferred_axis_dress": 1.0429459674934383,
+          "preferred_axis_spectral_gap": 1.0,
+          "c2_lapse": 0.8833333333333334,
+          "vev_cluster_taylor": 1.0,
+          "graph_hyperclosure_weak": 1.0,
+          "promoted_factor": 1.0429459674934383,
+          "full_envelope": 0.9212689379525372,
+          "n_bonds": 0,
+          "outside_ledger": {
+            "grav": 1.0,
+            "em": 1.0,
+            "bulk": 1.0,
+            "local_defect": 1.0,
+            "contact": 1.0,
+            "dress": 1.0,
+            "channels": {
+              "grav": "outsideGravityGeffModulator (Ricci / gravitational G_eff)",
+              "em": "1+(4/8)\u00b7curvatureConcentrationWeight (electric / dielectric)",
+              "bulk": "scaleOutsideCouplingForMediumDensity (medium density \u03c1)",
+              "local_defect": "1+localCurvatureDefectExcess (nucleation / wall / interface)",
+              "contact": "outsideGeffSurplus (bond-summed G_eff participation)"
+            }
+          }
+        },
+        "outside_contact_ledger": {
+          "grav": 1.0,
+          "em": 1.0,
+          "bulk": 1.0,
+          "local_defect": 1.0,
+          "contact": 1.0,
+          "dress": 1.0,
+          "channels": {
+            "grav": "outsideGravityGeffModulator (Ricci / gravitational G_eff)",
+            "em": "1+(4/8)\u00b7curvatureConcentrationWeight (electric / dielectric)",
+            "bulk": "scaleOutsideCouplingForMediumDensity (medium density \u03c1)",
+            "local_defect": "1+localCurvatureDefectExcess (nucleation / wall / interface)",
+            "contact": "outsideGeffSurplus (bond-summed G_eff participation)"
+          }
+        },
+        "bond_curvature_witness": {
+          "bond_count": 0,
+          "bonds": []
+        },
+        "bond_corridor_neutrino": {
+          "mean_eta_linear": 0.0,
+          "bond_corridor_aperture": 0.0,
+          "bond_corridor_neutrino_dress": 1.0,
+          "bond_corridor_neutrino_dress_low": 1.0,
+          "bond_corridor_neutrino_dress_high": 1.0,
+          "outer_neutrino_suppression": 0.007142857142857143
+        }
       },
       "nuclei": [
         {
@@ -1065,7 +2496,29 @@
         "cluster_mean_mev_per_A": 9.354276818697656,
         "cluster_spread_pct": 20.61499452106825
       },
-      "notes": "dissociation: shell=dynamicComptonTripletHeavyHydride; surplus=bond_averaged_compton; \u03b7\u2082\u00b7surplus\u00b7vev\u00b7geom\u00b7G_eff\u00b7\u03ba(\u03be=3.67,w=1.00)",
+      "notes": "dissociation: shell=dynamicComptonTripletHeavyHydride; surplus=bond_averaged_compton; \u03b7\u2082\u00b7surplus\u00b7vev\u00b7geom\u00b7nbody(g=1.000,G_eff=1.0000)\u00b7\u03ba(\u03be=3.67,w=1.00); lab_scale=0.997955113; \u03bd_corridor=1.000000000(\u03b7=0.0000)",
+      "binding_ev_chart": 5.90847757944203,
+      "binding_ev_lab": 5.89639541183393,
+      "error_pct_chart": -1.3774398357197424,
+      "lab_outside_closure": {
+        "K_mass_chart": 1.000296135249801,
+        "support_ratio_vs_cmb": 0.9982506429209693,
+        "increment_vs_anchor_ppm": 296.1352498009884,
+        "lab_binding_scale_factor": 0.9979551132342215,
+        "lab_binding_scale_ppm": -2044.8867657785197
+      },
+      "bond_curvature_witness": {
+        "bond_count": 0,
+        "bonds": []
+      },
+      "bond_corridor_neutrino": {
+        "mean_eta_linear": 0.0,
+        "bond_corridor_aperture": 0.0,
+        "bond_corridor_neutrino_dress": 1.0,
+        "bond_corridor_neutrino_dress_low": 1.0,
+        "bond_corridor_neutrino_dress_high": 1.0,
+        "outer_neutrino_suppression": 0.007142857142857143
+      },
       "network_binding_feedback": {
         "contact_xi": 3.6666666666666665,
         "bare_vev_geometric_mean": 0.9547076540184657,
@@ -1109,11 +2562,11 @@
     {
       "name": "NaCl",
       "kind": "dissociation",
-      "binding_ev": 4.057667646667213,
+      "binding_ev": 4.2338618376718395,
       "reference_ev": 4.259,
-      "error_pct": -4.727221256933264,
-      "dimless_core": 2.08850540637283,
-      "surplus_dimless": 12.402529993305695,
+      "error_pct": -0.590236260346579,
+      "dimless_core": 2.183658928162503,
+      "surplus_dimless": 12.402529993305698,
       "eta_p": 0.14579386234664837,
       "vev_geometric_mean": 1.0043667767065083,
       "vev_geometric_mean_bare": 1.0043667767065083,
@@ -1162,7 +2615,72 @@
           "1s"
         ],
         "surplus_dress_factor": 1.0,
-        "outside_geff_contact_dress": 1.0
+        "outside_geff_contact_dress": 1.0,
+        "preferred_axis_dress": {
+          "bond_polarities": [
+            0.21428571428571427
+          ],
+          "preferred_axis_spectral_gap": 1.0,
+          "preferred_axis_selection_weight": 1.0,
+          "preferred_axis_purity": 1.0,
+          "promotion_t": 0.07289693117332419,
+          "preferred_axis_plane_local_dress": 1.0455605819833276,
+          "colour_filter": 2.25,
+          "colour_excess": 1.25
+        },
+        "nbody_second_order": {
+          "outside_geff": 1.0,
+          "preferred_axis_dress": 1.0455605819833276,
+          "preferred_axis_spectral_gap": 1.0,
+          "c2_lapse": 0.9416666666666667,
+          "vev_cluster_taylor": 1.0,
+          "graph_hyperclosure_weak": 1.0,
+          "promoted_factor": 1.0455605819833276,
+          "full_envelope": 0.9845695480343001,
+          "n_bonds": 0,
+          "outside_ledger": {
+            "grav": 1.0,
+            "em": 1.0,
+            "bulk": 1.0,
+            "local_defect": 1.0,
+            "contact": 1.0,
+            "dress": 1.0,
+            "channels": {
+              "grav": "outsideGravityGeffModulator (Ricci / gravitational G_eff)",
+              "em": "1+(4/8)\u00b7curvatureConcentrationWeight (electric / dielectric)",
+              "bulk": "scaleOutsideCouplingForMediumDensity (medium density \u03c1)",
+              "local_defect": "1+localCurvatureDefectExcess (nucleation / wall / interface)",
+              "contact": "outsideGeffSurplus (bond-summed G_eff participation)"
+            }
+          }
+        },
+        "outside_contact_ledger": {
+          "grav": 1.0,
+          "em": 1.0,
+          "bulk": 1.0,
+          "local_defect": 1.0,
+          "contact": 1.0,
+          "dress": 1.0,
+          "channels": {
+            "grav": "outsideGravityGeffModulator (Ricci / gravitational G_eff)",
+            "em": "1+(4/8)\u00b7curvatureConcentrationWeight (electric / dielectric)",
+            "bulk": "scaleOutsideCouplingForMediumDensity (medium density \u03c1)",
+            "local_defect": "1+localCurvatureDefectExcess (nucleation / wall / interface)",
+            "contact": "outsideGeffSurplus (bond-summed G_eff participation)"
+          }
+        },
+        "bond_curvature_witness": {
+          "bond_count": 0,
+          "bonds": []
+        },
+        "bond_corridor_neutrino": {
+          "mean_eta_linear": 0.0,
+          "bond_corridor_aperture": 0.0,
+          "bond_corridor_neutrino_dress": 1.0,
+          "bond_corridor_neutrino_dress_low": 1.0,
+          "bond_corridor_neutrino_dress_high": 1.0,
+          "outer_neutrino_suppression": 0.007142857142857143
+        }
       },
       "nuclei": [
         {
@@ -1205,7 +2723,29 @@
         "cluster_mean_mev_per_A": 10.042375360593994,
         "cluster_spread_pct": 6.631520517205633
       },
-      "notes": "dissociation: shell=general; surplus=detuning_compton_triplet; \u03b7\u2082\u00b7surplus\u00b7vev\u00b7geom\u00b7G_eff\u00b7\u03ba(\u03be=4.33,w=1.00)",
+      "notes": "dissociation: shell=general; surplus=detuning_compton_triplet; \u03b7\u2082\u00b7surplus\u00b7vev\u00b7geom\u00b7nbody(g=1.000,G_eff=1.0000)\u00b7\u03ba(\u03be=4.33,w=1.00); lab_scale=0.997955113; \u03bd_corridor=1.000000000(\u03b7=0.0000)",
+      "binding_ev_chart": 4.2425373461442915,
+      "binding_ev_lab": 4.2338618376718395,
+      "error_pct_chart": -0.3865380102303096,
+      "lab_outside_closure": {
+        "K_mass_chart": 1.000296135249801,
+        "support_ratio_vs_cmb": 0.9982506429209693,
+        "increment_vs_anchor_ppm": 296.1352498009884,
+        "lab_binding_scale_factor": 0.9979551132342215,
+        "lab_binding_scale_ppm": -2044.8867657785197
+      },
+      "bond_curvature_witness": {
+        "bond_count": 0,
+        "bonds": []
+      },
+      "bond_corridor_neutrino": {
+        "mean_eta_linear": 0.0,
+        "bond_corridor_aperture": 0.0,
+        "bond_corridor_neutrino_dress": 1.0,
+        "bond_corridor_neutrino_dress_low": 1.0,
+        "bond_corridor_neutrino_dress_high": 1.0,
+        "outer_neutrino_suppression": 0.007142857142857143
+      },
       "network_binding_feedback": {
         "contact_xi": 4.333333333333333,
         "bare_vev_geometric_mean": 1.0043667767065083,
@@ -1249,11 +2789,11 @@
     {
       "name": "HCl",
       "kind": "dissociation",
-      "binding_ev": 5.060952777141083,
+      "binding_ev": 4.514859288364617,
       "reference_ev": 4.434,
-      "error_pct": 14.139665700069534,
-      "dimless_core": 2.6049021647049693,
-      "surplus_dimless": 14.951268771291485,
+      "error_pct": 1.823619494014814,
+      "dimless_core": 2.3282657609932036,
+      "surplus_dimless": 12.708578455597761,
       "eta_p": 0.14579386234664837,
       "vev_geometric_mean": 1.0055282814654403,
       "vev_geometric_mean_bare": 1.0055282814654403,
@@ -1302,7 +2842,96 @@
           "1s"
         ],
         "surplus_dress_factor": 1.0,
-        "outside_geff_contact_dress": 1.033441977911605
+        "outside_geff_contact_dress": 1.0393435034254177,
+        "preferred_axis_dress": {
+          "bond_polarities": [
+            0.8888888888888888
+          ],
+          "preferred_axis_spectral_gap": 1.0,
+          "preferred_axis_selection_weight": 1.0,
+          "preferred_axis_purity": 1.0,
+          "promotion_t": 0.07289693117332419,
+          "preferred_axis_plane_local_dress": 1.0455605819833276,
+          "colour_filter": 2.25,
+          "colour_excess": 1.25
+        },
+        "nbody_second_order": {
+          "outside_geff": 1.0393435034254177,
+          "preferred_axis_dress": 1.0455605819833276,
+          "preferred_axis_spectral_gap": 1.0,
+          "c2_lapse": 0.9416666666666667,
+          "vev_cluster_taylor": 1.0,
+          "graph_hyperclosure_weak": 1.0,
+          "promoted_factor": 1.0866965983220704,
+          "full_envelope": 1.0233059634199497,
+          "n_bonds": 1,
+          "outside_ledger": {
+            "grav": 1.0,
+            "em": 1.0,
+            "bulk": 1.0,
+            "local_defect": 1.0,
+            "contact": 1.0393435034254177,
+            "dress": 1.0393435034254177,
+            "channels": {
+              "grav": "outsideGravityGeffModulator (Ricci / gravitational G_eff)",
+              "em": "1+(4/8)\u00b7curvatureConcentrationWeight (electric / dielectric)",
+              "bulk": "scaleOutsideCouplingForMediumDensity (medium density \u03c1)",
+              "local_defect": "1+localCurvatureDefectExcess (nucleation / wall / interface)",
+              "contact": "outsideGeffSurplus (bond-summed G_eff participation)"
+            }
+          }
+        },
+        "outside_contact_ledger": {
+          "grav": 1.0,
+          "em": 1.0,
+          "bulk": 1.0,
+          "local_defect": 1.0,
+          "contact": 1.0393435034254177,
+          "dress": 1.0393435034254177,
+          "channels": {
+            "grav": "outsideGravityGeffModulator (Ricci / gravitational G_eff)",
+            "em": "1+(4/8)\u00b7curvatureConcentrationWeight (electric / dielectric)",
+            "bulk": "scaleOutsideCouplingForMediumDensity (medium density \u03c1)",
+            "local_defect": "1+localCurvatureDefectExcess (nucleation / wall / interface)",
+            "contact": "outsideGeffSurplus (bond-summed G_eff participation)"
+          }
+        },
+        "bond_curvature_witness": {
+          "bond_count": 1,
+          "medium_density_fraction": 0.0,
+          "mean_eta_linear": 0.13189283420497291,
+          "mean_g_eff_intrinsic": 0.29657375809605896,
+          "mean_g_eff_medium": 1.0,
+          "mean_flatness_ratio": 0.29657375809605896,
+          "mean_protein_contact_breathing": 0.8593147516192118,
+          "mean_geff_theta_gas_assay": 1.0,
+          "bonds": [
+            {
+              "theta_rad": 0.20717677949973975,
+              "theta0_rad": 1.5707963267948966,
+              "eta_linear": 0.13189283420497291,
+              "g_eff_intrinsic": 0.29657375809605896,
+              "g_eff_medium": 1.0,
+              "flatness_ratio": 0.29657375809605896,
+              "flatness_ppm_vs_saturated": -703426.241903941,
+              "protein_contact_breathing": 0.8593147516192118,
+              "medium_density_fraction": 0.0,
+              "surplus_dress_contribution_gas_assay": 0.03934350342541769,
+              "surplus_dress_contribution_intrinsic_geff": 0.011668250667541293,
+              "surplus_dress_contribution_medium_geff": 0.03934350342541769,
+              "geff_theta_gas_assay": 1.0,
+              "geff_combined": 0.2922143579373105
+            }
+          ]
+        },
+        "bond_corridor_neutrino": {
+          "mean_eta_linear": 0.13189283420497291,
+          "bond_corridor_aperture": 0.0018841833457853272,
+          "bond_corridor_neutrino_dress": 1.000137685352148,
+          "bond_corridor_neutrino_dress_low": 1.000127486437174,
+          "bond_corridor_neutrino_dress_high": 1.0001487001803198,
+          "outer_neutrino_suppression": 0.007142857142857143
+        }
       },
       "nuclei": [
         {
@@ -1345,7 +2974,53 @@
         "cluster_mean_mev_per_A": 5.187678225910146,
         "cluster_spread_pct": 200.0
       },
-      "notes": "dissociation: shell=general; surplus=detuning_compton_triplet; \u03b7\u2082\u00b7surplus\u00b7vev\u00b7geom\u00b7G_eff\u00b7\u03ba(\u03be=4.33,w=1.00)",
+      "notes": "dissociation: shell=general; surplus=detuning_compton_triplet; \u03b7\u2082\u00b7surplus\u00b7vev\u00b7geom\u00b7nbody(g=1.000,G_eff=1.0393)\u00b7\u03ba(\u03be=4.33,w=1.00); lab_scale=0.997955113; \u03bd_corridor=1.000137685(\u03b7=0.1319)",
+      "binding_ev_chart": 4.523487764215367,
+      "binding_ev_lab": 4.514859288364617,
+      "error_pct_chart": 2.0182175059848135,
+      "lab_outside_closure": {
+        "K_mass_chart": 1.000296135249801,
+        "support_ratio_vs_cmb": 0.9982506429209693,
+        "increment_vs_anchor_ppm": 296.1352498009884,
+        "lab_binding_scale_factor": 0.9979551132342215,
+        "lab_binding_scale_ppm": -2044.8867657785197
+      },
+      "bond_curvature_witness": {
+        "bond_count": 1,
+        "medium_density_fraction": 0.0,
+        "mean_eta_linear": 0.13189283420497291,
+        "mean_g_eff_intrinsic": 0.29657375809605896,
+        "mean_g_eff_medium": 1.0,
+        "mean_flatness_ratio": 0.29657375809605896,
+        "mean_protein_contact_breathing": 0.8593147516192118,
+        "mean_geff_theta_gas_assay": 1.0,
+        "bonds": [
+          {
+            "theta_rad": 0.20717677949973975,
+            "theta0_rad": 1.5707963267948966,
+            "eta_linear": 0.13189283420497291,
+            "g_eff_intrinsic": 0.29657375809605896,
+            "g_eff_medium": 1.0,
+            "flatness_ratio": 0.29657375809605896,
+            "flatness_ppm_vs_saturated": -703426.241903941,
+            "protein_contact_breathing": 0.8593147516192118,
+            "medium_density_fraction": 0.0,
+            "surplus_dress_contribution_gas_assay": 0.03934350342541769,
+            "surplus_dress_contribution_intrinsic_geff": 0.011668250667541293,
+            "surplus_dress_contribution_medium_geff": 0.03934350342541769,
+            "geff_theta_gas_assay": 1.0,
+            "geff_combined": 0.2922143579373105
+          }
+        ]
+      },
+      "bond_corridor_neutrino": {
+        "mean_eta_linear": 0.13189283420497291,
+        "bond_corridor_aperture": 0.0018841833457853272,
+        "bond_corridor_neutrino_dress": 1.000137685352148,
+        "bond_corridor_neutrino_dress_low": 1.000127486437174,
+        "bond_corridor_neutrino_dress_high": 1.0001487001803198,
+        "outer_neutrino_suppression": 0.007142857142857143
+      },
       "network_binding_feedback": {
         "contact_xi": 4.333333333333333,
         "bare_vev_geometric_mean": 1.0055282814654403,
@@ -1389,10 +3064,10 @@
     {
       "name": "HBr",
       "kind": "dissociation",
-      "binding_ev": 3.7974046850140515,
+      "binding_ev": 3.952943480082866,
       "reference_ev": 3.758,
-      "error_pct": 1.0485546837161117,
-      "dimless_core": 1.95454652905135,
+      "error_pct": 5.187426292785145,
+      "dimless_core": 2.0384864207524016,
       "surplus_dimless": 12.460253704310162,
       "eta_p": 0.1374270959790021,
       "vev_geometric_mean": 0.9554275329664926,
@@ -1442,7 +3117,96 @@
           "1s"
         ],
         "surplus_dress_factor": 1.0,
-        "outside_geff_contact_dress": 1.0401275938568606
+        "outside_geff_contact_dress": 1.0401275938568606,
+        "preferred_axis_dress": {
+          "bond_polarities": [
+            0.9444444444444444
+          ],
+          "preferred_axis_spectral_gap": 1.0,
+          "preferred_axis_selection_weight": 1.0,
+          "preferred_axis_purity": 1.0,
+          "promotion_t": 0.06871354798950105,
+          "preferred_axis_plane_local_dress": 1.0429459674934383,
+          "colour_filter": 2.25,
+          "colour_excess": 1.25
+        },
+        "nbody_second_order": {
+          "outside_geff": 1.0401275938568606,
+          "preferred_axis_dress": 1.0429459674934383,
+          "preferred_axis_spectral_gap": 1.0,
+          "c2_lapse": 0.8833333333333334,
+          "vev_cluster_taylor": 1.0,
+          "graph_hyperclosure_weak": 1.0,
+          "promoted_factor": 1.0847968796916654,
+          "full_envelope": 0.958237243727638,
+          "n_bonds": 1,
+          "outside_ledger": {
+            "grav": 1.0,
+            "em": 1.0,
+            "bulk": 1.0,
+            "local_defect": 1.0,
+            "contact": 1.0401275938568606,
+            "dress": 1.0401275938568606,
+            "channels": {
+              "grav": "outsideGravityGeffModulator (Ricci / gravitational G_eff)",
+              "em": "1+(4/8)\u00b7curvatureConcentrationWeight (electric / dielectric)",
+              "bulk": "scaleOutsideCouplingForMediumDensity (medium density \u03c1)",
+              "local_defect": "1+localCurvatureDefectExcess (nucleation / wall / interface)",
+              "contact": "outsideGeffSurplus (bond-summed G_eff participation)"
+            }
+          }
+        },
+        "outside_contact_ledger": {
+          "grav": 1.0,
+          "em": 1.0,
+          "bulk": 1.0,
+          "local_defect": 1.0,
+          "contact": 1.0401275938568606,
+          "dress": 1.0401275938568606,
+          "channels": {
+            "grav": "outsideGravityGeffModulator (Ricci / gravitational G_eff)",
+            "em": "1+(4/8)\u00b7curvatureConcentrationWeight (electric / dielectric)",
+            "bulk": "scaleOutsideCouplingForMediumDensity (medium density \u03c1)",
+            "local_defect": "1+localCurvatureDefectExcess (nucleation / wall / interface)",
+            "contact": "outsideGeffSurplus (bond-summed G_eff participation)"
+          }
+        },
+        "bond_curvature_witness": {
+          "bond_count": 1,
+          "medium_density_fraction": 0.0,
+          "mean_eta_linear": 0.13435046465599726,
+          "mean_g_eff_intrinsic": 0.2998772390536654,
+          "mean_g_eff_medium": 1.0,
+          "mean_flatness_ratio": 0.2998772390536654,
+          "mean_protein_contact_breathing": 0.8599754478107331,
+          "mean_geff_theta_gas_assay": 1.0,
+          "bonds": [
+            {
+              "theta_rad": 0.21103721638482809,
+              "theta0_rad": 1.5707963267948966,
+              "eta_linear": 0.13435046465599726,
+              "g_eff_intrinsic": 0.2998772390536654,
+              "g_eff_medium": 1.0,
+              "flatness_ratio": 0.2998772390536654,
+              "flatness_ppm_vs_saturated": -700122.7609463346,
+              "protein_contact_breathing": 0.8599754478107331,
+              "medium_density_fraction": 0.0,
+              "surplus_dress_contribution_gas_assay": 0.04012759385686052,
+              "surplus_dress_contribution_intrinsic_geff": 0.012033352055662158,
+              "surplus_dress_contribution_medium_geff": 0.04012759385686052,
+              "geff_theta_gas_assay": 1.0,
+              "geff_combined": 0.27472527472527475
+            }
+          ]
+        },
+        "bond_corridor_neutrino": {
+          "mean_eta_linear": 0.13435046465599726,
+          "bond_corridor_aperture": 0.001919292352228532,
+          "bond_corridor_neutrino_dress": 1.000140250917716,
+          "bond_corridor_neutrino_dress_low": 1.000129861960848,
+          "bond_corridor_neutrino_dress_high": 1.0001514709911332,
+          "outer_neutrino_suppression": 0.007142857142857143
+        }
       },
       "nuclei": [
         {
@@ -1485,7 +3249,53 @@
         "cluster_mean_mev_per_A": 5.187678225910146,
         "cluster_spread_pct": 200.0
       },
-      "notes": "dissociation: shell=dynamicComptonTripletHeavyHydride; surplus=bond_averaged_compton; \u03b7\u2082\u00b7surplus\u00b7vev\u00b7geom\u00b7G_eff\u00b7\u03ba(\u03be=3.67,w=1.00)",
+      "notes": "dissociation: shell=dynamicComptonTripletHeavyHydride; surplus=bond_averaged_compton; \u03b7\u2082\u00b7surplus\u00b7vev\u00b7geom\u00b7nbody(g=1.000,G_eff=1.0401)\u00b7\u03ba(\u03be=3.67,w=1.00); lab_scale=0.997955113; \u03bd_corridor=1.000140251(\u03b7=0.1344)",
+      "binding_ev_chart": 3.9604879031760944,
+      "binding_ev_lab": 3.952943480082866,
+      "error_pct_chart": 5.388182628421885,
+      "lab_outside_closure": {
+        "K_mass_chart": 1.000296135249801,
+        "support_ratio_vs_cmb": 0.9982506429209693,
+        "increment_vs_anchor_ppm": 296.1352498009884,
+        "lab_binding_scale_factor": 0.9979551132342215,
+        "lab_binding_scale_ppm": -2044.8867657785197
+      },
+      "bond_curvature_witness": {
+        "bond_count": 1,
+        "medium_density_fraction": 0.0,
+        "mean_eta_linear": 0.13435046465599726,
+        "mean_g_eff_intrinsic": 0.2998772390536654,
+        "mean_g_eff_medium": 1.0,
+        "mean_flatness_ratio": 0.2998772390536654,
+        "mean_protein_contact_breathing": 0.8599754478107331,
+        "mean_geff_theta_gas_assay": 1.0,
+        "bonds": [
+          {
+            "theta_rad": 0.21103721638482809,
+            "theta0_rad": 1.5707963267948966,
+            "eta_linear": 0.13435046465599726,
+            "g_eff_intrinsic": 0.2998772390536654,
+            "g_eff_medium": 1.0,
+            "flatness_ratio": 0.2998772390536654,
+            "flatness_ppm_vs_saturated": -700122.7609463346,
+            "protein_contact_breathing": 0.8599754478107331,
+            "medium_density_fraction": 0.0,
+            "surplus_dress_contribution_gas_assay": 0.04012759385686052,
+            "surplus_dress_contribution_intrinsic_geff": 0.012033352055662158,
+            "surplus_dress_contribution_medium_geff": 0.04012759385686052,
+            "geff_theta_gas_assay": 1.0,
+            "geff_combined": 0.27472527472527475
+          }
+        ]
+      },
+      "bond_corridor_neutrino": {
+        "mean_eta_linear": 0.13435046465599726,
+        "bond_corridor_aperture": 0.001919292352228532,
+        "bond_corridor_neutrino_dress": 1.000140250917716,
+        "bond_corridor_neutrino_dress_low": 1.000129861960848,
+        "bond_corridor_neutrino_dress_high": 1.0001514709911332,
+        "outer_neutrino_suppression": 0.007142857142857143
+      },
       "network_binding_feedback": {
         "contact_xi": 3.6666666666666665,
         "bare_vev_geometric_mean": 0.9554275329664926,
@@ -1529,15 +3339,15 @@
     {
       "name": "H2S",
       "kind": "atomization",
-      "binding_ev": 6.973592275997065,
+      "binding_ev": 9.861195987883221,
       "reference_ev": 8.714,
-      "error_pct": -19.97254675238622,
-      "dimless_core": 3.589348965586725,
-      "surplus_dimless": 44.74949264248765,
+      "error_pct": 13.164975761799639,
+      "dimless_core": 5.085315735133018,
+      "surplus_dimless": 52.736455884359515,
       "eta_p": 0.1374270959790021,
       "vev_geometric_mean": 0.9624865317936523,
       "vev_geometric_mean_bare": 0.9557574707135476,
-      "geometry_alignment_factor": 0.5184090619276781,
+      "geometry_alignment_factor": 0.6249468385378115,
       "contact_xi": 3.6666666666666665,
       "dynamic_binding_curvature_coupling": 0.19761896274869428,
       "dynamic_binding_curvature_feedback": 1.1485830119656228,
@@ -1581,8 +3391,114 @@
           "3p",
           "1s"
         ],
-        "surplus_dress_factor": 1.197615606936416,
-        "outside_geff_contact_dress": 1.0184168219762457
+        "surplus_dress_factor": 1.4113680154142583,
+        "outside_geff_contact_dress": 1.0156275848595362,
+        "preferred_axis_dress": {
+          "bond_polarities": [
+            0.8823529411764706,
+            0.8823529411764706
+          ],
+          "preferred_axis_spectral_gap": 0.0,
+          "preferred_axis_selection_weight": 0.0,
+          "preferred_axis_purity": 0.5,
+          "promotion_t": 0.06871354798950105,
+          "preferred_axis_plane_local_dress": 1.0,
+          "colour_filter": 2.25,
+          "colour_excess": 1.25
+        },
+        "nbody_second_order": {
+          "outside_geff": 1.0156275848595362,
+          "preferred_axis_dress": 1.0,
+          "preferred_axis_spectral_gap": 0.0,
+          "c2_lapse": 0.8833333333333334,
+          "vev_cluster_taylor": 1.0042184029054202,
+          "graph_hyperclosure_weak": 1.1464466094067263,
+          "promoted_factor": 1.0156275848595362,
+          "full_envelope": 1.0328591880462652,
+          "n_bonds": 2,
+          "outside_ledger": {
+            "grav": 1.0,
+            "em": 1.0,
+            "bulk": 1.0,
+            "local_defect": 1.0,
+            "contact": 1.0156275848595362,
+            "dress": 1.0156275848595362,
+            "channels": {
+              "grav": "outsideGravityGeffModulator (Ricci / gravitational G_eff)",
+              "em": "1+(4/8)\u00b7curvatureConcentrationWeight (electric / dielectric)",
+              "bulk": "scaleOutsideCouplingForMediumDensity (medium density \u03c1)",
+              "local_defect": "1+localCurvatureDefectExcess (nucleation / wall / interface)",
+              "contact": "outsideGeffSurplus (bond-summed G_eff participation)"
+            }
+          }
+        },
+        "outside_contact_ledger": {
+          "grav": 1.0,
+          "em": 1.0,
+          "bulk": 1.0,
+          "local_defect": 1.0,
+          "contact": 1.0156275848595362,
+          "dress": 1.0156275848595362,
+          "channels": {
+            "grav": "outsideGravityGeffModulator (Ricci / gravitational G_eff)",
+            "em": "1+(4/8)\u00b7curvatureConcentrationWeight (electric / dielectric)",
+            "bulk": "scaleOutsideCouplingForMediumDensity (medium density \u03c1)",
+            "local_defect": "1+localCurvatureDefectExcess (nucleation / wall / interface)",
+            "contact": "outsideGeffSurplus (bond-summed G_eff participation)"
+          }
+        },
+        "bond_curvature_witness": {
+          "bond_count": 2,
+          "medium_density_fraction": 0.0,
+          "mean_eta_linear": 0.13189283420497291,
+          "mean_g_eff_intrinsic": 0.29657375809605896,
+          "mean_g_eff_medium": 1.0,
+          "mean_flatness_ratio": 0.29657375809605896,
+          "mean_protein_contact_breathing": 0.8593147516192118,
+          "mean_geff_theta_gas_assay": 0.8241434395240148,
+          "bonds": [
+            {
+              "theta_rad": 0.20717677949973975,
+              "theta0_rad": 1.5707963267948966,
+              "eta_linear": 0.13189283420497291,
+              "g_eff_intrinsic": 0.29657375809605896,
+              "g_eff_medium": 1.0,
+              "flatness_ratio": 0.29657375809605896,
+              "flatness_ppm_vs_saturated": -703426.241903941,
+              "protein_contact_breathing": 0.8593147516192118,
+              "medium_density_fraction": 0.0,
+              "surplus_dress_contribution_gas_assay": 0.009481107359516154,
+              "surplus_dress_contribution_intrinsic_geff": 0.0028118476405239083,
+              "surplus_dress_contribution_medium_geff": 0.009481107359516154,
+              "geff_theta_gas_assay": 0.8241434395240148,
+              "geff_combined": 0.14951170509366216
+            },
+            {
+              "theta_rad": 0.20717677949973975,
+              "theta0_rad": 1.5707963267948966,
+              "eta_linear": 0.13189283420497291,
+              "g_eff_intrinsic": 0.29657375809605896,
+              "g_eff_medium": 1.0,
+              "flatness_ratio": 0.29657375809605896,
+              "flatness_ppm_vs_saturated": -703426.241903941,
+              "protein_contact_breathing": 0.8593147516192118,
+              "medium_density_fraction": 0.0,
+              "surplus_dress_contribution_gas_assay": 0.009481107359516154,
+              "surplus_dress_contribution_intrinsic_geff": 0.0028118476405239083,
+              "surplus_dress_contribution_medium_geff": 0.009481107359516154,
+              "geff_theta_gas_assay": 0.8241434395240148,
+              "geff_combined": 0.14951170509366216
+            }
+          ]
+        },
+        "bond_corridor_neutrino": {
+          "mean_eta_linear": 0.13189283420497291,
+          "bond_corridor_aperture": 0.0018841833457853272,
+          "bond_corridor_neutrino_dress": 1.000137685352148,
+          "bond_corridor_neutrino_dress_low": 1.000127486437174,
+          "bond_corridor_neutrino_dress_high": 1.0001487001803198,
+          "outer_neutrino_suppression": 0.007142857142857143
+        }
       },
       "nuclei": [
         {
@@ -1640,7 +3556,69 @@
         "cluster_mean_mev_per_A": 2.9775157945277324,
         "cluster_spread_pct": 300.0
       },
-      "notes": "atomization: shell=dynamicComptonTripletHeavyHydride; surplus=electronic_compton_triplet; \u03b7\u2082\u00b7surplus\u00b7vev\u00b7geom\u00b7G_eff\u00b7\u03ba(\u03be=3.67,w=1.00)",
+      "notes": "atomization: shell=dynamicComptonTripletHeavyHydride; surplus=electronic_compton_triplet; \u03b7\u2082\u00b7surplus\u00b7vev\u00b7geom\u00b7nbody(g=0.000,G_eff=1.0156)\u00b7\u03ba(\u03be=3.67,w=1.00); lab_scale=0.997955113; \u03bd_corridor=1.000137685(\u03b7=0.1319)",
+      "binding_ev_chart": 9.880041999687007,
+      "binding_ev_lab": 9.861195987883221,
+      "error_pct_chart": 13.381248561934894,
+      "lab_outside_closure": {
+        "K_mass_chart": 1.000296135249801,
+        "support_ratio_vs_cmb": 0.9982506429209693,
+        "increment_vs_anchor_ppm": 296.1352498009884,
+        "lab_binding_scale_factor": 0.9979551132342215,
+        "lab_binding_scale_ppm": -2044.8867657785197
+      },
+      "bond_curvature_witness": {
+        "bond_count": 2,
+        "medium_density_fraction": 0.0,
+        "mean_eta_linear": 0.13189283420497291,
+        "mean_g_eff_intrinsic": 0.29657375809605896,
+        "mean_g_eff_medium": 1.0,
+        "mean_flatness_ratio": 0.29657375809605896,
+        "mean_protein_contact_breathing": 0.8593147516192118,
+        "mean_geff_theta_gas_assay": 0.8241434395240148,
+        "bonds": [
+          {
+            "theta_rad": 0.20717677949973975,
+            "theta0_rad": 1.5707963267948966,
+            "eta_linear": 0.13189283420497291,
+            "g_eff_intrinsic": 0.29657375809605896,
+            "g_eff_medium": 1.0,
+            "flatness_ratio": 0.29657375809605896,
+            "flatness_ppm_vs_saturated": -703426.241903941,
+            "protein_contact_breathing": 0.8593147516192118,
+            "medium_density_fraction": 0.0,
+            "surplus_dress_contribution_gas_assay": 0.009481107359516154,
+            "surplus_dress_contribution_intrinsic_geff": 0.0028118476405239083,
+            "surplus_dress_contribution_medium_geff": 0.009481107359516154,
+            "geff_theta_gas_assay": 0.8241434395240148,
+            "geff_combined": 0.14951170509366216
+          },
+          {
+            "theta_rad": 0.20717677949973975,
+            "theta0_rad": 1.5707963267948966,
+            "eta_linear": 0.13189283420497291,
+            "g_eff_intrinsic": 0.29657375809605896,
+            "g_eff_medium": 1.0,
+            "flatness_ratio": 0.29657375809605896,
+            "flatness_ppm_vs_saturated": -703426.241903941,
+            "protein_contact_breathing": 0.8593147516192118,
+            "medium_density_fraction": 0.0,
+            "surplus_dress_contribution_gas_assay": 0.009481107359516154,
+            "surplus_dress_contribution_intrinsic_geff": 0.0028118476405239083,
+            "surplus_dress_contribution_medium_geff": 0.009481107359516154,
+            "geff_theta_gas_assay": 0.8241434395240148,
+            "geff_combined": 0.14951170509366216
+          }
+        ]
+      },
+      "bond_corridor_neutrino": {
+        "mean_eta_linear": 0.13189283420497291,
+        "bond_corridor_aperture": 0.0018841833457853272,
+        "bond_corridor_neutrino_dress": 1.000137685352148,
+        "bond_corridor_neutrino_dress_low": 1.000127486437174,
+        "bond_corridor_neutrino_dress_high": 1.0001487001803198,
+        "outer_neutrino_suppression": 0.007142857142857143
+      },
       "network_binding_feedback": {
         "contact_xi": 3.6666666666666665,
         "bare_vev_geometric_mean": 0.9557574707135476,
@@ -1664,7 +3642,7 @@
         "vev_compton_slot_geomean": 0.9557574707135476,
         "vev_networked_readout": 0.9624865317936523,
         "vev_bare_triplet_geomean": 0.9577913207792554,
-        "geometry_bond_geomean": 0.5184090619276781,
+        "geometry_bond_geomean": 0.6249468385378115,
         "participation_vev_product": 0.1322717289833031,
         "geomean_eta_times_vev_per_leg": 0.08556838269554033,
         "ratio_leg_geomean_over_product": 0.6469136175451504,
@@ -1684,10 +3662,10 @@
     {
       "name": "HCN",
       "kind": "atomization",
-      "binding_ev": 13.311372588448053,
+      "binding_ev": 13.746110556306148,
       "reference_ev": 13.6,
-      "error_pct": -2.1222603790584285,
-      "dimless_core": 6.85144177346591,
+      "error_pct": 1.0743423257805,
+      "dimless_core": 7.088469886657773,
       "surplus_dimless": 44.420351813369635,
       "eta_p": 0.1374270959790021,
       "vev_geometric_mean": 0.9556452807708399,
@@ -1737,7 +3715,113 @@
           "1s"
         ],
         "surplus_dress_factor": 1.125,
-        "outside_geff_contact_dress": 1.0225122035098115
+        "outside_geff_contact_dress": 1.0225122035098115,
+        "preferred_axis_dress": {
+          "bond_polarities": [
+            0.7142857142857143,
+            0.07692307692307693
+          ],
+          "preferred_axis_spectral_gap": 0.8055555555555555,
+          "preferred_axis_selection_weight": 0.8055555555555555,
+          "preferred_axis_purity": 0.8244598765432096,
+          "promotion_t": 0.06871354798950105,
+          "preferred_axis_plane_local_dress": 1.0345953627030473,
+          "colour_filter": 2.25,
+          "colour_excess": 1.25
+        },
+        "nbody_second_order": {
+          "outside_geff": 1.0225122035098115,
+          "preferred_axis_dress": 1.0345953627030473,
+          "preferred_axis_spectral_gap": 0.8055555555555555,
+          "c2_lapse": 0.8833333333333334,
+          "vev_cluster_taylor": 1.0,
+          "graph_hyperclosure_weak": 1.1464466094067263,
+          "promoted_factor": 1.0578863840585255,
+          "full_envelope": 1.0713157280249375,
+          "n_bonds": 2,
+          "outside_ledger": {
+            "grav": 1.0,
+            "em": 1.0,
+            "bulk": 1.0,
+            "local_defect": 1.0,
+            "contact": 1.0225122035098115,
+            "dress": 1.0225122035098115,
+            "channels": {
+              "grav": "outsideGravityGeffModulator (Ricci / gravitational G_eff)",
+              "em": "1+(4/8)\u00b7curvatureConcentrationWeight (electric / dielectric)",
+              "bulk": "scaleOutsideCouplingForMediumDensity (medium density \u03c1)",
+              "local_defect": "1+localCurvatureDefectExcess (nucleation / wall / interface)",
+              "contact": "outsideGeffSurplus (bond-summed G_eff participation)"
+            }
+          }
+        },
+        "outside_contact_ledger": {
+          "grav": 1.0,
+          "em": 1.0,
+          "bulk": 1.0,
+          "local_defect": 1.0,
+          "contact": 1.0225122035098115,
+          "dress": 1.0225122035098115,
+          "channels": {
+            "grav": "outsideGravityGeffModulator (Ricci / gravitational G_eff)",
+            "em": "1+(4/8)\u00b7curvatureConcentrationWeight (electric / dielectric)",
+            "bulk": "scaleOutsideCouplingForMediumDensity (medium density \u03c1)",
+            "local_defect": "1+localCurvatureDefectExcess (nucleation / wall / interface)",
+            "contact": "outsideGeffSurplus (bond-summed G_eff participation)"
+          }
+        },
+        "bond_curvature_witness": {
+          "bond_count": 2,
+          "medium_density_fraction": 0.0,
+          "mean_eta_linear": 0.1664525797473774,
+          "mean_g_eff_intrinsic": 0.3389728493620192,
+          "mean_g_eff_medium": 1.0,
+          "mean_flatness_ratio": 0.3389728493620192,
+          "mean_protein_contact_breathing": 0.8677945698724039,
+          "mean_geff_theta_gas_assay": 1.0,
+          "bonds": [
+            {
+              "theta_rad": 0.20345360259278789,
+              "theta0_rad": 1.5707963267948966,
+              "eta_linear": 0.129522586169985,
+              "g_eff_intrinsic": 0.2933643281880113,
+              "g_eff_medium": 1.0,
+              "flatness_ratio": 0.2933643281880113,
+              "flatness_ppm_vs_saturated": -706635.6718119887,
+              "protein_contact_breathing": 0.8586728656376023,
+              "medium_density_fraction": 0.0,
+              "surplus_dress_contribution_gas_assay": 0.011256101754905733,
+              "surplus_dress_contribution_intrinsic_geff": 0.003302138729343815,
+              "surplus_dress_contribution_medium_geff": 0.011256101754905733,
+              "geff_theta_gas_assay": 1.0,
+              "geff_combined": 0.34883720930232565
+            },
+            {
+              "theta_rad": 0.31947259911264214,
+              "theta0_rad": 1.5707963267948966,
+              "eta_linear": 0.2033825733247698,
+              "g_eff_intrinsic": 0.38458137053602715,
+              "g_eff_medium": 1.0,
+              "flatness_ratio": 0.38458137053602715,
+              "flatness_ppm_vs_saturated": -615418.6294639729,
+              "protein_contact_breathing": 0.8769162741072054,
+              "medium_density_fraction": 0.0,
+              "surplus_dress_contribution_gas_assay": 0.011256101754905733,
+              "surplus_dress_contribution_intrinsic_geff": 0.004328887039794627,
+              "surplus_dress_contribution_medium_geff": 0.011256101754905733,
+              "geff_theta_gas_assay": 1.0,
+              "geff_combined": 0.36186430011708925
+            }
+          ]
+        },
+        "bond_corridor_neutrino": {
+          "mean_eta_linear": 0.1664525797473774,
+          "bond_corridor_aperture": 0.0023778939963911058,
+          "bond_corridor_neutrino_dress": 1.0001737629052905,
+          "bond_corridor_neutrino_dress_low": 1.0001608915789726,
+          "bond_corridor_neutrino_dress_high": 1.0001876639377136,
+          "outer_neutrino_suppression": 0.007142857142857143
+        }
       },
       "nuclei": [
         {
@@ -1795,7 +3879,69 @@
         "cluster_mean_mev_per_A": 6.500364152155782,
         "cluster_spread_pct": 155.03355704697987
       },
-      "notes": "atomization: shell=dynamicComptonTripletHeavyHydride; surplus=electronic_compton_triplet; \u03b7\u2082\u00b7surplus\u00b7vev\u00b7geom\u00b7G_eff\u00b7\u03ba(\u03be=3.67,w=1.00)",
+      "notes": "atomization: shell=dynamicComptonTripletHeavyHydride; surplus=electronic_compton_triplet; \u03b7\u2082\u00b7surplus\u00b7vev\u00b7geom\u00b7nbody(g=0.806,G_eff=1.0225)\u00b7\u03ba(\u03be=3.67,w=1.00); lab_scale=0.997955113; \u03bd_corridor=1.000173763(\u03b7=0.1665)",
+      "binding_ev_chart": 13.771884351220816,
+      "binding_ev_lab": 13.746110556306148,
+      "error_pct_chart": 1.2638555236824733,
+      "lab_outside_closure": {
+        "K_mass_chart": 1.000296135249801,
+        "support_ratio_vs_cmb": 0.9982506429209693,
+        "increment_vs_anchor_ppm": 296.1352498009884,
+        "lab_binding_scale_factor": 0.9979551132342215,
+        "lab_binding_scale_ppm": -2044.8867657785197
+      },
+      "bond_curvature_witness": {
+        "bond_count": 2,
+        "medium_density_fraction": 0.0,
+        "mean_eta_linear": 0.1664525797473774,
+        "mean_g_eff_intrinsic": 0.3389728493620192,
+        "mean_g_eff_medium": 1.0,
+        "mean_flatness_ratio": 0.3389728493620192,
+        "mean_protein_contact_breathing": 0.8677945698724039,
+        "mean_geff_theta_gas_assay": 1.0,
+        "bonds": [
+          {
+            "theta_rad": 0.20345360259278789,
+            "theta0_rad": 1.5707963267948966,
+            "eta_linear": 0.129522586169985,
+            "g_eff_intrinsic": 0.2933643281880113,
+            "g_eff_medium": 1.0,
+            "flatness_ratio": 0.2933643281880113,
+            "flatness_ppm_vs_saturated": -706635.6718119887,
+            "protein_contact_breathing": 0.8586728656376023,
+            "medium_density_fraction": 0.0,
+            "surplus_dress_contribution_gas_assay": 0.011256101754905733,
+            "surplus_dress_contribution_intrinsic_geff": 0.003302138729343815,
+            "surplus_dress_contribution_medium_geff": 0.011256101754905733,
+            "geff_theta_gas_assay": 1.0,
+            "geff_combined": 0.34883720930232565
+          },
+          {
+            "theta_rad": 0.31947259911264214,
+            "theta0_rad": 1.5707963267948966,
+            "eta_linear": 0.2033825733247698,
+            "g_eff_intrinsic": 0.38458137053602715,
+            "g_eff_medium": 1.0,
+            "flatness_ratio": 0.38458137053602715,
+            "flatness_ppm_vs_saturated": -615418.6294639729,
+            "protein_contact_breathing": 0.8769162741072054,
+            "medium_density_fraction": 0.0,
+            "surplus_dress_contribution_gas_assay": 0.011256101754905733,
+            "surplus_dress_contribution_intrinsic_geff": 0.004328887039794627,
+            "surplus_dress_contribution_medium_geff": 0.011256101754905733,
+            "geff_theta_gas_assay": 1.0,
+            "geff_combined": 0.36186430011708925
+          }
+        ]
+      },
+      "bond_corridor_neutrino": {
+        "mean_eta_linear": 0.1664525797473774,
+        "bond_corridor_aperture": 0.0023778939963911058,
+        "bond_corridor_neutrino_dress": 1.0001737629052905,
+        "bond_corridor_neutrino_dress_low": 1.0001608915789726,
+        "bond_corridor_neutrino_dress_high": 1.0001876639377136,
+        "outer_neutrino_suppression": 0.007142857142857143
+      },
       "network_binding_feedback": {
         "contact_xi": 3.6666666666666665,
         "bare_vev_geometric_mean": 0.9556452807708399,
@@ -1839,11 +3985,11 @@
     {
       "name": "C2H2",
       "kind": "atomization",
-      "binding_ev": 15.074456878435536,
+      "binding_ev": 17.316892496798935,
       "reference_ev": 17.406,
-      "error_pct": -13.39505412825729,
-      "dimless_core": 7.758911628606525,
-      "surplus_dimless": 49.83823199693911,
+      "error_pct": -0.5119355578597226,
+      "dimless_core": 8.929933136804097,
+      "surplus_dimless": 57.548233318735626,
       "eta_p": 0.1374270959790021,
       "vev_geometric_mean": 0.9622228399595159,
       "vev_geometric_mean_bare": 0.9554956224360736,
@@ -1892,7 +4038,130 @@
           "1s"
         ],
         "surplus_dress_factor": 1.125,
-        "outside_geff_contact_dress": 1.0250091887978803
+        "outside_geff_contact_dress": 1.0216585928270054,
+        "preferred_axis_dress": {
+          "bond_polarities": [
+            0.7142857142857143,
+            0.0,
+            0.7142857142857143
+          ],
+          "preferred_axis_spectral_gap": 0.0,
+          "preferred_axis_selection_weight": 0.0,
+          "preferred_axis_purity": 0.5,
+          "promotion_t": 0.06871354798950105,
+          "preferred_axis_plane_local_dress": 1.0,
+          "colour_filter": 2.25,
+          "colour_excess": 1.25
+        },
+        "nbody_second_order": {
+          "outside_geff": 1.0216585928270054,
+          "preferred_axis_dress": 1.0,
+          "preferred_axis_spectral_gap": 0.0,
+          "c2_lapse": 0.8833333333333334,
+          "vev_cluster_taylor": 1.0042184029054202,
+          "graph_hyperclosure_weak": 1.2113248654051871,
+          "promoted_factor": 1.0216585928270054,
+          "full_envelope": 1.0977898710334022,
+          "n_bonds": 3,
+          "outside_ledger": {
+            "grav": 1.0,
+            "em": 1.0,
+            "bulk": 1.0,
+            "local_defect": 1.0,
+            "contact": 1.0216585928270054,
+            "dress": 1.0216585928270054,
+            "channels": {
+              "grav": "outsideGravityGeffModulator (Ricci / gravitational G_eff)",
+              "em": "1+(4/8)\u00b7curvatureConcentrationWeight (electric / dielectric)",
+              "bulk": "scaleOutsideCouplingForMediumDensity (medium density \u03c1)",
+              "local_defect": "1+localCurvatureDefectExcess (nucleation / wall / interface)",
+              "contact": "outsideGeffSurplus (bond-summed G_eff participation)"
+            }
+          }
+        },
+        "outside_contact_ledger": {
+          "grav": 1.0,
+          "em": 1.0,
+          "bulk": 1.0,
+          "local_defect": 1.0,
+          "contact": 1.0216585928270054,
+          "dress": 1.0216585928270054,
+          "channels": {
+            "grav": "outsideGravityGeffModulator (Ricci / gravitational G_eff)",
+            "em": "1+(4/8)\u00b7curvatureConcentrationWeight (electric / dielectric)",
+            "bulk": "scaleOutsideCouplingForMediumDensity (medium density \u03c1)",
+            "local_defect": "1+localCurvatureDefectExcess (nucleation / wall / interface)",
+            "contact": "outsideGeffSurplus (bond-summed G_eff participation)"
+          }
+        },
+        "bond_curvature_witness": {
+          "bond_count": 3,
+          "medium_density_fraction": 0.0,
+          "mean_eta_linear": 0.1541425818882466,
+          "mean_g_eff_intrinsic": 0.32377000897068325,
+          "mean_g_eff_medium": 1.0,
+          "mean_flatness_ratio": 0.32377000897068325,
+          "mean_protein_contact_breathing": 0.8647540017941365,
+          "mean_geff_theta_gas_assay": 0.8309425022426709,
+          "bonds": [
+            {
+              "theta_rad": 0.20345360259278789,
+              "theta0_rad": 1.5707963267948966,
+              "eta_linear": 0.129522586169985,
+              "g_eff_intrinsic": 0.2933643281880113,
+              "g_eff_medium": 1.0,
+              "flatness_ratio": 0.2933643281880113,
+              "flatness_ppm_vs_saturated": -706635.6718119887,
+              "protein_contact_breathing": 0.8586728656376023,
+              "medium_density_fraction": 0.0,
+              "surplus_dress_contribution_gas_assay": 0.008688364023804325,
+              "surplus_dress_contribution_intrinsic_geff": 0.0025488560748962424,
+              "surplus_dress_contribution_medium_geff": 0.008688364023804325,
+              "geff_theta_gas_assay": 0.8233410820470028,
+              "geff_combined": 0.2872120053652336
+            },
+            {
+              "theta_rad": 0.31947259911264214,
+              "theta0_rad": 1.5707963267948966,
+              "eta_linear": 0.2033825733247698,
+              "g_eff_intrinsic": 0.38458137053602715,
+              "g_eff_medium": 1.0,
+              "flatness_ratio": 0.38458137053602715,
+              "flatness_ppm_vs_saturated": -615418.6294639729,
+              "protein_contact_breathing": 0.8769162741072054,
+              "medium_density_fraction": 0.0,
+              "surplus_dress_contribution_gas_assay": 0.008688364023804325,
+              "surplus_dress_contribution_intrinsic_geff": 0.003341382943990579,
+              "surplus_dress_contribution_medium_geff": 0.008688364023804325,
+              "geff_theta_gas_assay": 0.8461453426340068,
+              "geff_combined": 0.29129593762810063
+            },
+            {
+              "theta_rad": 0.20345360259278789,
+              "theta0_rad": 1.5707963267948966,
+              "eta_linear": 0.129522586169985,
+              "g_eff_intrinsic": 0.2933643281880113,
+              "g_eff_medium": 1.0,
+              "flatness_ratio": 0.2933643281880113,
+              "flatness_ppm_vs_saturated": -706635.6718119887,
+              "protein_contact_breathing": 0.8586728656376023,
+              "medium_density_fraction": 0.0,
+              "surplus_dress_contribution_gas_assay": 0.008688364023804325,
+              "surplus_dress_contribution_intrinsic_geff": 0.0025488560748962424,
+              "surplus_dress_contribution_medium_geff": 0.008688364023804325,
+              "geff_theta_gas_assay": 0.8233410820470028,
+              "geff_combined": 0.2872120053652336
+            }
+          ]
+        },
+        "bond_corridor_neutrino": {
+          "mean_eta_linear": 0.1541425818882466,
+          "bond_corridor_aperture": 0.002202036884117808,
+          "bond_corridor_neutrino_dress": 1.0001609122724233,
+          "bond_corridor_neutrino_dress_low": 1.0001489928448364,
+          "bond_corridor_neutrino_dress_high": 1.0001737852542172,
+          "outer_neutrino_suppression": 0.007142857142857143
+        }
       },
       "nuclei": [
         {
@@ -1965,7 +4234,85 @@
         "cluster_mean_mev_per_A": 5.038872883046931,
         "cluster_spread_pct": 200.0
       },
-      "notes": "atomization: shell=dynamicComptonTripletHeavyHydride; surplus=electronic_compton_triplet; \u03b7\u2082\u00b7surplus\u00b7vev\u00b7geom\u00b7G_eff\u00b7\u03ba(\u03be=3.67,w=1.00)",
+      "notes": "atomization: shell=dynamicComptonTripletHeavyHydride; surplus=electronic_compton_triplet; \u03b7\u2082\u00b7surplus\u00b7vev\u00b7geom\u00b7nbody(g=0.000,G_eff=1.0217)\u00b7\u03ba(\u03be=3.67,w=1.00); lab_scale=0.997955113; \u03bd_corridor=1.000160912(\u03b7=0.1541)",
+      "binding_ev_chart": 17.349584380076532,
+      "binding_ev_lab": 17.316892496798935,
+      "error_pct_chart": -0.3241159365935118,
+      "lab_outside_closure": {
+        "K_mass_chart": 1.000296135249801,
+        "support_ratio_vs_cmb": 0.9982506429209693,
+        "increment_vs_anchor_ppm": 296.1352498009884,
+        "lab_binding_scale_factor": 0.9979551132342215,
+        "lab_binding_scale_ppm": -2044.8867657785197
+      },
+      "bond_curvature_witness": {
+        "bond_count": 3,
+        "medium_density_fraction": 0.0,
+        "mean_eta_linear": 0.1541425818882466,
+        "mean_g_eff_intrinsic": 0.32377000897068325,
+        "mean_g_eff_medium": 1.0,
+        "mean_flatness_ratio": 0.32377000897068325,
+        "mean_protein_contact_breathing": 0.8647540017941365,
+        "mean_geff_theta_gas_assay": 0.8309425022426709,
+        "bonds": [
+          {
+            "theta_rad": 0.20345360259278789,
+            "theta0_rad": 1.5707963267948966,
+            "eta_linear": 0.129522586169985,
+            "g_eff_intrinsic": 0.2933643281880113,
+            "g_eff_medium": 1.0,
+            "flatness_ratio": 0.2933643281880113,
+            "flatness_ppm_vs_saturated": -706635.6718119887,
+            "protein_contact_breathing": 0.8586728656376023,
+            "medium_density_fraction": 0.0,
+            "surplus_dress_contribution_gas_assay": 0.008688364023804325,
+            "surplus_dress_contribution_intrinsic_geff": 0.0025488560748962424,
+            "surplus_dress_contribution_medium_geff": 0.008688364023804325,
+            "geff_theta_gas_assay": 0.8233410820470028,
+            "geff_combined": 0.2872120053652336
+          },
+          {
+            "theta_rad": 0.31947259911264214,
+            "theta0_rad": 1.5707963267948966,
+            "eta_linear": 0.2033825733247698,
+            "g_eff_intrinsic": 0.38458137053602715,
+            "g_eff_medium": 1.0,
+            "flatness_ratio": 0.38458137053602715,
+            "flatness_ppm_vs_saturated": -615418.6294639729,
+            "protein_contact_breathing": 0.8769162741072054,
+            "medium_density_fraction": 0.0,
+            "surplus_dress_contribution_gas_assay": 0.008688364023804325,
+            "surplus_dress_contribution_intrinsic_geff": 0.003341382943990579,
+            "surplus_dress_contribution_medium_geff": 0.008688364023804325,
+            "geff_theta_gas_assay": 0.8461453426340068,
+            "geff_combined": 0.29129593762810063
+          },
+          {
+            "theta_rad": 0.20345360259278789,
+            "theta0_rad": 1.5707963267948966,
+            "eta_linear": 0.129522586169985,
+            "g_eff_intrinsic": 0.2933643281880113,
+            "g_eff_medium": 1.0,
+            "flatness_ratio": 0.2933643281880113,
+            "flatness_ppm_vs_saturated": -706635.6718119887,
+            "protein_contact_breathing": 0.8586728656376023,
+            "medium_density_fraction": 0.0,
+            "surplus_dress_contribution_gas_assay": 0.008688364023804325,
+            "surplus_dress_contribution_intrinsic_geff": 0.0025488560748962424,
+            "surplus_dress_contribution_medium_geff": 0.008688364023804325,
+            "geff_theta_gas_assay": 0.8233410820470028,
+            "geff_combined": 0.2872120053652336
+          }
+        ]
+      },
+      "bond_corridor_neutrino": {
+        "mean_eta_linear": 0.1541425818882466,
+        "bond_corridor_aperture": 0.002202036884117808,
+        "bond_corridor_neutrino_dress": 1.0001609122724233,
+        "bond_corridor_neutrino_dress_low": 1.0001489928448364,
+        "bond_corridor_neutrino_dress_high": 1.0001737852542172,
+        "outer_neutrino_suppression": 0.007142857142857143
+      },
       "network_binding_feedback": {
         "contact_xi": 3.6666666666666665,
         "bare_vev_geometric_mean": 0.9554956224360736,
@@ -2009,15 +4356,15 @@
     {
       "name": "PH3",
       "kind": "atomization",
-      "binding_ev": 12.432320301510085,
+      "binding_ev": 9.815256869930263,
       "reference_ev": 9.32,
-      "error_pct": 33.39399465139576,
-      "dimless_core": 6.398988390483132,
-      "surplus_dimless": 41.90642120565375,
+      "error_pct": 5.313914913414833,
+      "dimless_core": 5.061625412004733,
+      "surplus_dimless": 31.662629355382837,
       "eta_p": 0.1374270959790021,
       "vev_geometric_mean": 1.002805968714434,
       "vev_geometric_mean_bare": 0.9557051211431556,
-      "geometry_alignment_factor": 0.9486291848371642,
+      "geometry_alignment_factor": 0.9878216281319354,
       "contact_xi": 3.6666666666666665,
       "dynamic_binding_curvature_coupling": 0.19761896274869428,
       "dynamic_binding_curvature_feedback": 1.1485830119656228,
@@ -2061,8 +4408,131 @@
           "3p",
           "1s"
         ],
-        "surplus_dress_factor": 1.0645472061657033,
-        "outside_geff_contact_dress": 1.0169101884024032
+        "surplus_dress_factor": 1.005405694712053,
+        "outside_geff_contact_dress": 1.022381131709063,
+        "preferred_axis_dress": {
+          "bond_polarities": [
+            0.875,
+            0.875,
+            0.875
+          ],
+          "preferred_axis_spectral_gap": 0.0,
+          "preferred_axis_selection_weight": 0.0,
+          "preferred_axis_purity": 0.3333333333333333,
+          "promotion_t": 0.06871354798950105,
+          "preferred_axis_plane_local_dress": 1.0,
+          "colour_filter": 2.25,
+          "colour_excess": 1.25
+        },
+        "nbody_second_order": {
+          "outside_geff": 1.022381131709063,
+          "preferred_axis_dress": 1.0,
+          "preferred_axis_spectral_gap": 0.0,
+          "c2_lapse": 0.8833333333333334,
+          "vev_cluster_taylor": 1.0292853661018062,
+          "graph_hyperclosure_weak": 1.2113248654051871,
+          "promoted_factor": 1.022381131709063,
+          "full_envelope": 1.1259882941625303,
+          "n_bonds": 3,
+          "outside_ledger": {
+            "grav": 1.0,
+            "em": 1.0,
+            "bulk": 1.0,
+            "local_defect": 1.0,
+            "contact": 1.022381131709063,
+            "dress": 1.022381131709063,
+            "channels": {
+              "grav": "outsideGravityGeffModulator (Ricci / gravitational G_eff)",
+              "em": "1+(4/8)\u00b7curvatureConcentrationWeight (electric / dielectric)",
+              "bulk": "scaleOutsideCouplingForMediumDensity (medium density \u03c1)",
+              "local_defect": "1+localCurvatureDefectExcess (nucleation / wall / interface)",
+              "contact": "outsideGeffSurplus (bond-summed G_eff participation)"
+            }
+          }
+        },
+        "outside_contact_ledger": {
+          "grav": 1.0,
+          "em": 1.0,
+          "bulk": 1.0,
+          "local_defect": 1.0,
+          "contact": 1.022381131709063,
+          "dress": 1.022381131709063,
+          "channels": {
+            "grav": "outsideGravityGeffModulator (Ricci / gravitational G_eff)",
+            "em": "1+(4/8)\u00b7curvatureConcentrationWeight (electric / dielectric)",
+            "bulk": "scaleOutsideCouplingForMediumDensity (medium density \u03c1)",
+            "local_defect": "1+localCurvatureDefectExcess (nucleation / wall / interface)",
+            "contact": "outsideGeffSurplus (bond-summed G_eff participation)"
+          }
+        },
+        "bond_curvature_witness": {
+          "bond_count": 3,
+          "medium_density_fraction": 0.0,
+          "mean_eta_linear": 0.13189283420497291,
+          "mean_g_eff_intrinsic": 0.29657375809605896,
+          "mean_g_eff_medium": 1.0,
+          "mean_flatness_ratio": 0.29657375809605896,
+          "mean_protein_contact_breathing": 0.8593147516192118,
+          "mean_geff_theta_gas_assay": 0.4724303185720442,
+          "bonds": [
+            {
+              "theta_rad": 0.20717677949973975,
+              "theta0_rad": 1.5707963267948966,
+              "eta_linear": 0.13189283420497291,
+              "g_eff_intrinsic": 0.29657375809605896,
+              "g_eff_medium": 1.0,
+              "flatness_ratio": 0.29657375809605896,
+              "flatness_ppm_vs_saturated": -703426.241903941,
+              "protein_contact_breathing": 0.8593147516192118,
+              "medium_density_fraction": 0.0,
+              "surplus_dress_contribution_gas_assay": 0.01579148700469492,
+              "surplus_dress_contribution_intrinsic_geff": 0.004683340646907451,
+              "surplus_dress_contribution_medium_geff": 0.01579148700469492,
+              "geff_theta_gas_assay": 0.4724303185720442,
+              "geff_combined": 0.13446622152546334
+            },
+            {
+              "theta_rad": 0.20717677949973975,
+              "theta0_rad": 1.5707963267948966,
+              "eta_linear": 0.13189283420497291,
+              "g_eff_intrinsic": 0.29657375809605896,
+              "g_eff_medium": 1.0,
+              "flatness_ratio": 0.29657375809605896,
+              "flatness_ppm_vs_saturated": -703426.241903941,
+              "protein_contact_breathing": 0.8593147516192118,
+              "medium_density_fraction": 0.0,
+              "surplus_dress_contribution_gas_assay": 0.01579148700469492,
+              "surplus_dress_contribution_intrinsic_geff": 0.004683340646907451,
+              "surplus_dress_contribution_medium_geff": 0.01579148700469492,
+              "geff_theta_gas_assay": 0.4724303185720442,
+              "geff_combined": 0.13446622152546334
+            },
+            {
+              "theta_rad": 0.20717677949973975,
+              "theta0_rad": 1.5707963267948966,
+              "eta_linear": 0.13189283420497291,
+              "g_eff_intrinsic": 0.29657375809605896,
+              "g_eff_medium": 1.0,
+              "flatness_ratio": 0.29657375809605896,
+              "flatness_ppm_vs_saturated": -703426.241903941,
+              "protein_contact_breathing": 0.8593147516192118,
+              "medium_density_fraction": 0.0,
+              "surplus_dress_contribution_gas_assay": 0.01579148700469492,
+              "surplus_dress_contribution_intrinsic_geff": 0.004683340646907451,
+              "surplus_dress_contribution_medium_geff": 0.01579148700469492,
+              "geff_theta_gas_assay": 0.4724303185720442,
+              "geff_combined": 0.13446622152546334
+            }
+          ]
+        },
+        "bond_corridor_neutrino": {
+          "mean_eta_linear": 0.13189283420497291,
+          "bond_corridor_aperture": 0.0018841833457853272,
+          "bond_corridor_neutrino_dress": 1.000137685352148,
+          "bond_corridor_neutrino_dress_low": 1.000127486437174,
+          "bond_corridor_neutrino_dress_high": 1.0001487001803198,
+          "outer_neutrino_suppression": 0.007142857142857143
+        }
       },
       "nuclei": [
         {
@@ -2135,7 +4605,85 @@
         "cluster_mean_mev_per_A": 2.2903967650213324,
         "cluster_spread_pct": 400.0
       },
-      "notes": "atomization: shell=dynamicComptonTripletHeavyHydride; surplus=electronic_compton_triplet; \u03b7\u2082\u00b7surplus\u00b7vev\u00b7geom\u00b7G_eff\u00b7\u03ba(\u03be=3.67,w=1.00)",
+      "notes": "atomization: shell=dynamicComptonTripletHeavyHydride; surplus=electronic_compton_triplet; \u03b7\u2082\u00b7surplus\u00b7vev\u00b7geom\u00b7nbody(g=0.000,G_eff=1.0224)\u00b7\u03ba(\u03be=3.67,w=1.00); lab_scale=0.997955113; \u03bd_corridor=1.000137685(\u03b7=0.1319)",
+      "binding_ev_chart": 9.834015086180624,
+      "binding_ev_lab": 9.815256869930263,
+      "error_pct_chart": 5.515183328118284,
+      "lab_outside_closure": {
+        "K_mass_chart": 1.000296135249801,
+        "support_ratio_vs_cmb": 0.9982506429209693,
+        "increment_vs_anchor_ppm": 296.1352498009884,
+        "lab_binding_scale_factor": 0.9979551132342215,
+        "lab_binding_scale_ppm": -2044.8867657785197
+      },
+      "bond_curvature_witness": {
+        "bond_count": 3,
+        "medium_density_fraction": 0.0,
+        "mean_eta_linear": 0.13189283420497291,
+        "mean_g_eff_intrinsic": 0.29657375809605896,
+        "mean_g_eff_medium": 1.0,
+        "mean_flatness_ratio": 0.29657375809605896,
+        "mean_protein_contact_breathing": 0.8593147516192118,
+        "mean_geff_theta_gas_assay": 0.4724303185720442,
+        "bonds": [
+          {
+            "theta_rad": 0.20717677949973975,
+            "theta0_rad": 1.5707963267948966,
+            "eta_linear": 0.13189283420497291,
+            "g_eff_intrinsic": 0.29657375809605896,
+            "g_eff_medium": 1.0,
+            "flatness_ratio": 0.29657375809605896,
+            "flatness_ppm_vs_saturated": -703426.241903941,
+            "protein_contact_breathing": 0.8593147516192118,
+            "medium_density_fraction": 0.0,
+            "surplus_dress_contribution_gas_assay": 0.01579148700469492,
+            "surplus_dress_contribution_intrinsic_geff": 0.004683340646907451,
+            "surplus_dress_contribution_medium_geff": 0.01579148700469492,
+            "geff_theta_gas_assay": 0.4724303185720442,
+            "geff_combined": 0.13446622152546334
+          },
+          {
+            "theta_rad": 0.20717677949973975,
+            "theta0_rad": 1.5707963267948966,
+            "eta_linear": 0.13189283420497291,
+            "g_eff_intrinsic": 0.29657375809605896,
+            "g_eff_medium": 1.0,
+            "flatness_ratio": 0.29657375809605896,
+            "flatness_ppm_vs_saturated": -703426.241903941,
+            "protein_contact_breathing": 0.8593147516192118,
+            "medium_density_fraction": 0.0,
+            "surplus_dress_contribution_gas_assay": 0.01579148700469492,
+            "surplus_dress_contribution_intrinsic_geff": 0.004683340646907451,
+            "surplus_dress_contribution_medium_geff": 0.01579148700469492,
+            "geff_theta_gas_assay": 0.4724303185720442,
+            "geff_combined": 0.13446622152546334
+          },
+          {
+            "theta_rad": 0.20717677949973975,
+            "theta0_rad": 1.5707963267948966,
+            "eta_linear": 0.13189283420497291,
+            "g_eff_intrinsic": 0.29657375809605896,
+            "g_eff_medium": 1.0,
+            "flatness_ratio": 0.29657375809605896,
+            "flatness_ppm_vs_saturated": -703426.241903941,
+            "protein_contact_breathing": 0.8593147516192118,
+            "medium_density_fraction": 0.0,
+            "surplus_dress_contribution_gas_assay": 0.01579148700469492,
+            "surplus_dress_contribution_intrinsic_geff": 0.004683340646907451,
+            "surplus_dress_contribution_medium_geff": 0.01579148700469492,
+            "geff_theta_gas_assay": 0.4724303185720442,
+            "geff_combined": 0.13446622152546334
+          }
+        ]
+      },
+      "bond_corridor_neutrino": {
+        "mean_eta_linear": 0.13189283420497291,
+        "bond_corridor_aperture": 0.0018841833457853272,
+        "bond_corridor_neutrino_dress": 1.000137685352148,
+        "bond_corridor_neutrino_dress_low": 1.000127486437174,
+        "bond_corridor_neutrino_dress_high": 1.0001487001803198,
+        "outer_neutrino_suppression": 0.007142857142857143
+      },
       "network_binding_feedback": {
         "contact_xi": 3.6666666666666665,
         "bare_vev_geometric_mean": 0.9557051211431556,
@@ -2159,7 +4707,7 @@
         "vev_compton_slot_geomean": 0.9557051211431556,
         "vev_networked_readout": 1.002805968714434,
         "vev_bare_triplet_geomean": 0.9577913207792554,
-        "geometry_bond_geomean": 0.9486291848371642,
+        "geometry_bond_geomean": 0.9878216281319354,
         "participation_vev_product": 0.13781271211083468,
         "geomean_eta_times_vev_per_leg": 0.08556369587047173,
         "ratio_leg_geomean_over_product": 0.6208693999263135,
@@ -2181,11 +4729,11 @@
     {
       "name": "CO",
       "kind": "atomization",
-      "binding_ev": 12.509916637833069,
+      "binding_ev": 11.777226186382636,
       "reference_ev": 11.24,
-      "error_pct": 11.29819072805221,
-      "dimless_core": 6.438927681237609,
-      "surplus_dimless": 30.058791286187304,
+      "error_pct": 4.779592405539466,
+      "dimless_core": 6.072939330902004,
+      "surplus_dimless": 26.718925587722048,
       "eta_p": 0.18844598884025524,
       "vev_geometric_mean": 0.9720429882957672,
       "vev_geometric_mean_bare": 0.9720429882957672,
@@ -2224,9 +4772,8 @@
         "curvature_feedback_weight": 1.0,
         "has_heavy_nucleus": true,
         "electron_split": [
-          14,
-          8,
-          6
+          6,
+          8
         ],
         "electronic_shell_slots": [
           "2s",
@@ -2234,7 +4781,96 @@
           "1s"
         ],
         "surplus_dress_factor": 1.0,
-        "outside_geff_contact_dress": 1.0166340687235071
+        "outside_geff_contact_dress": 1.0187133273139457,
+        "preferred_axis_dress": {
+          "bond_polarities": [
+            0.14285714285714285
+          ],
+          "preferred_axis_spectral_gap": 1.0,
+          "preferred_axis_selection_weight": 1.0,
+          "preferred_axis_purity": 1.0,
+          "promotion_t": 0.09422299442012762,
+          "preferred_axis_plane_local_dress": 1.0588893715125798,
+          "colour_filter": 2.25,
+          "colour_excess": 1.25
+        },
+        "nbody_second_order": {
+          "outside_geff": 1.0187133273139457,
+          "preferred_axis_dress": 1.0588893715125798,
+          "preferred_axis_spectral_gap": 1.0,
+          "c2_lapse": 0.9708333333333333,
+          "vev_cluster_taylor": 1.0,
+          "graph_hyperclosure_weak": 1.0,
+          "promoted_factor": 1.078704714910953,
+          "full_envelope": 1.0472424940593834,
+          "n_bonds": 1,
+          "outside_ledger": {
+            "grav": 1.0,
+            "em": 1.0,
+            "bulk": 1.0,
+            "local_defect": 1.0,
+            "contact": 1.0187133273139457,
+            "dress": 1.0187133273139457,
+            "channels": {
+              "grav": "outsideGravityGeffModulator (Ricci / gravitational G_eff)",
+              "em": "1+(4/8)\u00b7curvatureConcentrationWeight (electric / dielectric)",
+              "bulk": "scaleOutsideCouplingForMediumDensity (medium density \u03c1)",
+              "local_defect": "1+localCurvatureDefectExcess (nucleation / wall / interface)",
+              "contact": "outsideGeffSurplus (bond-summed G_eff participation)"
+            }
+          }
+        },
+        "outside_contact_ledger": {
+          "grav": 1.0,
+          "em": 1.0,
+          "bulk": 1.0,
+          "local_defect": 1.0,
+          "contact": 1.0187133273139457,
+          "dress": 1.0187133273139457,
+          "channels": {
+            "grav": "outsideGravityGeffModulator (Ricci / gravitational G_eff)",
+            "em": "1+(4/8)\u00b7curvatureConcentrationWeight (electric / dielectric)",
+            "bulk": "scaleOutsideCouplingForMediumDensity (medium density \u03c1)",
+            "local_defect": "1+localCurvatureDefectExcess (nucleation / wall / interface)",
+            "contact": "outsideGeffSurplus (bond-summed G_eff participation)"
+          }
+        },
+        "bond_curvature_witness": {
+          "bond_count": 1,
+          "medium_density_fraction": 0.0,
+          "mean_eta_linear": 0.2033825733247698,
+          "mean_g_eff_intrinsic": 0.38458137053602715,
+          "mean_g_eff_medium": 1.0,
+          "mean_flatness_ratio": 0.38458137053602715,
+          "mean_protein_contact_breathing": 0.8769162741072054,
+          "mean_geff_theta_gas_assay": 1.0,
+          "bonds": [
+            {
+              "theta_rad": 0.31947259911264214,
+              "theta0_rad": 1.5707963267948966,
+              "eta_linear": 0.2033825733247698,
+              "g_eff_intrinsic": 0.38458137053602715,
+              "g_eff_medium": 1.0,
+              "flatness_ratio": 0.38458137053602715,
+              "flatness_ppm_vs_saturated": -615418.6294639729,
+              "protein_contact_breathing": 0.8769162741072054,
+              "medium_density_fraction": 0.0,
+              "surplus_dress_contribution_gas_assay": 0.01871332731394564,
+              "surplus_dress_contribution_intrinsic_geff": 0.007196797065686485,
+              "surplus_dress_contribution_medium_geff": 0.01871332731394564,
+              "geff_theta_gas_assay": 1.0,
+              "geff_combined": 0.32658763875429603
+            }
+          ]
+        },
+        "bond_corridor_neutrino": {
+          "mean_eta_linear": 0.2033825733247698,
+          "bond_corridor_aperture": 0.0029054653332109973,
+          "bond_corridor_neutrino_dress": 1.000212314803892,
+          "bond_corridor_neutrino_dress_low": 1.0001965877813814,
+          "bond_corridor_neutrino_dress_high": 1.0002292999882032,
+          "outer_neutrino_suppression": 0.007142857142857143
+        }
       },
       "nuclei": [
         {
@@ -2277,7 +4913,53 @@
         "cluster_mean_mev_per_A": 9.50514657483853,
         "cluster_spread_pct": 12.048192771084329
       },
-      "notes": "atomization: shell=general; surplus=electronic_compton_triplet; \u03b7\u2082\u00b7surplus\u00b7vev\u00b7geom\u00b7G_eff\u00b7\u03ba(\u03be=4.67,w=1.00)",
+      "notes": "atomization: shell=general; surplus=electronic_compton_triplet; \u03b7\u2082\u00b7surplus\u00b7vev\u00b7geom\u00b7nbody(g=1.000,G_eff=1.0187)\u00b7\u03ba(\u03be=4.67,w=1.00); lab_scale=0.997955113; \u03bd_corridor=1.000212315(\u03b7=0.2034)",
+      "binding_ev_chart": 11.798853557181037,
+      "binding_ev_lab": 11.777226186382636,
+      "error_pct_chart": 4.972006736486089,
+      "lab_outside_closure": {
+        "K_mass_chart": 1.000296135249801,
+        "support_ratio_vs_cmb": 0.9982506429209693,
+        "increment_vs_anchor_ppm": 296.1352498009884,
+        "lab_binding_scale_factor": 0.9979551132342215,
+        "lab_binding_scale_ppm": -2044.8867657785197
+      },
+      "bond_curvature_witness": {
+        "bond_count": 1,
+        "medium_density_fraction": 0.0,
+        "mean_eta_linear": 0.2033825733247698,
+        "mean_g_eff_intrinsic": 0.38458137053602715,
+        "mean_g_eff_medium": 1.0,
+        "mean_flatness_ratio": 0.38458137053602715,
+        "mean_protein_contact_breathing": 0.8769162741072054,
+        "mean_geff_theta_gas_assay": 1.0,
+        "bonds": [
+          {
+            "theta_rad": 0.31947259911264214,
+            "theta0_rad": 1.5707963267948966,
+            "eta_linear": 0.2033825733247698,
+            "g_eff_intrinsic": 0.38458137053602715,
+            "g_eff_medium": 1.0,
+            "flatness_ratio": 0.38458137053602715,
+            "flatness_ppm_vs_saturated": -615418.6294639729,
+            "protein_contact_breathing": 0.8769162741072054,
+            "medium_density_fraction": 0.0,
+            "surplus_dress_contribution_gas_assay": 0.01871332731394564,
+            "surplus_dress_contribution_intrinsic_geff": 0.007196797065686485,
+            "surplus_dress_contribution_medium_geff": 0.01871332731394564,
+            "geff_theta_gas_assay": 1.0,
+            "geff_combined": 0.32658763875429603
+          }
+        ]
+      },
+      "bond_corridor_neutrino": {
+        "mean_eta_linear": 0.2033825733247698,
+        "bond_corridor_aperture": 0.0029054653332109973,
+        "bond_corridor_neutrino_dress": 1.000212314803892,
+        "bond_corridor_neutrino_dress_low": 1.0001965877813814,
+        "bond_corridor_neutrino_dress_high": 1.0002292999882032,
+        "outer_neutrino_suppression": 0.007142857142857143
+      },
       "network_binding_feedback": {
         "contact_xi": 4.666666666666667,
         "bare_vev_geometric_mean": 0.9720429882957672,
@@ -2321,11 +5003,11 @@
     {
       "name": "N2",
       "kind": "dissociation",
-      "binding_ev": 10.97607203339288,
+      "binding_ev": 10.133782310007758,
       "reference_ev": 9.91,
-      "error_pct": 10.757538177526536,
-      "dimless_core": 5.649448840716923,
-      "surplus_dimless": 19.960360922689727,
+      "error_pct": 2.2581464178381236,
+      "dimless_core": 5.225495728869738,
+      "surplus_dimless": 18.424948544021284,
       "eta_p": 0.24084778420038533,
       "vev_geometric_mean": 0.9965781626204909,
       "vev_geometric_mean_bare": 0.9965781626204909,
@@ -2374,7 +5056,96 @@
           "1s"
         ],
         "surplus_dress_factor": 1.0,
-        "outside_geff_contact_dress": 1.0250496472451873
+        "outside_geff_contact_dress": 1.027137117848953,
+        "preferred_axis_dress": {
+          "bond_polarities": [
+            0.0
+          ],
+          "preferred_axis_spectral_gap": 0.0,
+          "preferred_axis_selection_weight": 0.0,
+          "preferred_axis_purity": 0.0,
+          "promotion_t": 0.12042389210019266,
+          "preferred_axis_plane_local_dress": 1.0,
+          "colour_filter": 2.25,
+          "colour_excess": 1.25
+        },
+        "nbody_second_order": {
+          "outside_geff": 1.027137117848953,
+          "preferred_axis_dress": 1.0,
+          "preferred_axis_spectral_gap": 0.0,
+          "c2_lapse": 1.0,
+          "vev_cluster_taylor": 1.0,
+          "graph_hyperclosure_weak": 1.0,
+          "promoted_factor": 1.027137117848953,
+          "full_envelope": 1.027137117848953,
+          "n_bonds": 1,
+          "outside_ledger": {
+            "grav": 1.0,
+            "em": 1.0,
+            "bulk": 1.0,
+            "local_defect": 1.0,
+            "contact": 1.027137117848953,
+            "dress": 1.027137117848953,
+            "channels": {
+              "grav": "outsideGravityGeffModulator (Ricci / gravitational G_eff)",
+              "em": "1+(4/8)\u00b7curvatureConcentrationWeight (electric / dielectric)",
+              "bulk": "scaleOutsideCouplingForMediumDensity (medium density \u03c1)",
+              "local_defect": "1+localCurvatureDefectExcess (nucleation / wall / interface)",
+              "contact": "outsideGeffSurplus (bond-summed G_eff participation)"
+            }
+          }
+        },
+        "outside_contact_ledger": {
+          "grav": 1.0,
+          "em": 1.0,
+          "bulk": 1.0,
+          "local_defect": 1.0,
+          "contact": 1.027137117848953,
+          "dress": 1.027137117848953,
+          "channels": {
+            "grav": "outsideGravityGeffModulator (Ricci / gravitational G_eff)",
+            "em": "1+(4/8)\u00b7curvatureConcentrationWeight (electric / dielectric)",
+            "bulk": "scaleOutsideCouplingForMediumDensity (medium density \u03c1)",
+            "local_defect": "1+localCurvatureDefectExcess (nucleation / wall / interface)",
+            "contact": "outsideGeffSurplus (bond-summed G_eff participation)"
+          }
+        },
+        "bond_curvature_witness": {
+          "bond_count": 1,
+          "medium_density_fraction": 0.0,
+          "mean_eta_linear": 0.2033825733247698,
+          "mean_g_eff_intrinsic": 0.38458137053602715,
+          "mean_g_eff_medium": 1.0,
+          "mean_flatness_ratio": 0.38458137053602715,
+          "mean_protein_contact_breathing": 0.8769162741072054,
+          "mean_geff_theta_gas_assay": 1.0,
+          "bonds": [
+            {
+              "theta_rad": 0.31947259911264214,
+              "theta0_rad": 1.5707963267948966,
+              "eta_linear": 0.2033825733247698,
+              "g_eff_intrinsic": 0.38458137053602715,
+              "g_eff_medium": 1.0,
+              "flatness_ratio": 0.38458137053602715,
+              "flatness_ppm_vs_saturated": -615418.6294639729,
+              "protein_contact_breathing": 0.8769162741072054,
+              "medium_density_fraction": 0.0,
+              "surplus_dress_contribution_gas_assay": 0.02713711784895297,
+              "surplus_dress_contribution_intrinsic_geff": 0.010436429974748017,
+              "surplus_dress_contribution_medium_geff": 0.02713711784895297,
+              "geff_theta_gas_assay": 1.0,
+              "geff_combined": 0.32885906040268453
+            }
+          ]
+        },
+        "bond_corridor_neutrino": {
+          "mean_eta_linear": 0.2033825733247698,
+          "bond_corridor_aperture": 0.0029054653332109973,
+          "bond_corridor_neutrino_dress": 1.0002123152324685,
+          "bond_corridor_neutrino_dress_low": 1.0001965881782116,
+          "bond_corridor_neutrino_dress_high": 1.0002293004510658,
+          "outer_neutrino_suppression": 0.007142857142857143
+        }
       },
       "nuclei": [
         {
@@ -2417,7 +5188,53 @@
         "cluster_mean_mev_per_A": 9.423346690373481,
         "cluster_spread_pct": 0.0
       },
-      "notes": "dissociation: shell=dynamicComptonTripletHomonuclearPeriod2; surplus=detuning_compton_triplet; \u03b7\u2082\u00b7surplus\u00b7vev\u00b7geom\u00b7G_eff\u00b7\u03ba(\u03be=5.00,w=1.00)",
+      "notes": "dissociation: shell=dynamicComptonTripletHomonuclearPeriod2; surplus=detuning_compton_triplet; \u03b7\u2082\u00b7surplus\u00b7vev\u00b7geom\u00b7nbody(g=0.000,G_eff=1.0271)\u00b7\u03ba(\u03be=5.00,w=1.00); lab_scale=0.997955113; \u03bd_corridor=1.000212315(\u03b7=0.2034)",
+      "binding_ev_chart": 10.152391701804063,
+      "binding_ev_lab": 10.133782310007758,
+      "error_pct_chart": 2.4459303915647155,
+      "lab_outside_closure": {
+        "K_mass_chart": 1.000296135249801,
+        "support_ratio_vs_cmb": 0.9982506429209693,
+        "increment_vs_anchor_ppm": 296.1352498009884,
+        "lab_binding_scale_factor": 0.9979551132342215,
+        "lab_binding_scale_ppm": -2044.8867657785197
+      },
+      "bond_curvature_witness": {
+        "bond_count": 1,
+        "medium_density_fraction": 0.0,
+        "mean_eta_linear": 0.2033825733247698,
+        "mean_g_eff_intrinsic": 0.38458137053602715,
+        "mean_g_eff_medium": 1.0,
+        "mean_flatness_ratio": 0.38458137053602715,
+        "mean_protein_contact_breathing": 0.8769162741072054,
+        "mean_geff_theta_gas_assay": 1.0,
+        "bonds": [
+          {
+            "theta_rad": 0.31947259911264214,
+            "theta0_rad": 1.5707963267948966,
+            "eta_linear": 0.2033825733247698,
+            "g_eff_intrinsic": 0.38458137053602715,
+            "g_eff_medium": 1.0,
+            "flatness_ratio": 0.38458137053602715,
+            "flatness_ppm_vs_saturated": -615418.6294639729,
+            "protein_contact_breathing": 0.8769162741072054,
+            "medium_density_fraction": 0.0,
+            "surplus_dress_contribution_gas_assay": 0.02713711784895297,
+            "surplus_dress_contribution_intrinsic_geff": 0.010436429974748017,
+            "surplus_dress_contribution_medium_geff": 0.02713711784895297,
+            "geff_theta_gas_assay": 1.0,
+            "geff_combined": 0.32885906040268453
+          }
+        ]
+      },
+      "bond_corridor_neutrino": {
+        "mean_eta_linear": 0.2033825733247698,
+        "bond_corridor_aperture": 0.0029054653332109973,
+        "bond_corridor_neutrino_dress": 1.0002123152324685,
+        "bond_corridor_neutrino_dress_low": 1.0001965881782116,
+        "bond_corridor_neutrino_dress_high": 1.0002293004510658,
+        "outer_neutrino_suppression": 0.007142857142857143
+      },
       "network_binding_feedback": {
         "contact_xi": 5.0,
         "bare_vev_geometric_mean": 0.9965781626204909,
@@ -2461,11 +5278,11 @@
     {
       "name": "O2",
       "kind": "dissociation",
-      "binding_ev": 5.666613246415511,
+      "binding_ev": 5.3537929533214115,
       "reference_ev": 5.213,
-      "error_pct": 8.701577717542891,
-      "dimless_core": 2.91663917094916,
-      "surplus_dimless": 10.063513794678194,
+      "error_pct": 2.7008047826858124,
+      "dimless_core": 2.7606890847858083,
+      "surplus_dimless": 9.49869216611462,
       "eta_p": 0.24084778420038533,
       "vev_geometric_mean": 0.996535735806632,
       "vev_geometric_mean_bare": 0.996535735806632,
@@ -2514,7 +5331,96 @@
           "1s"
         ],
         "surplus_dress_factor": 1.0,
-        "outside_geff_contact_dress": 1.0496844352977794
+        "outside_geff_contact_dress": 1.0526388255620795,
+        "preferred_axis_dress": {
+          "bond_polarities": [
+            0.0
+          ],
+          "preferred_axis_spectral_gap": 0.0,
+          "preferred_axis_selection_weight": 0.0,
+          "preferred_axis_purity": 0.0,
+          "promotion_t": 0.12042389210019266,
+          "preferred_axis_plane_local_dress": 1.0,
+          "colour_filter": 2.25,
+          "colour_excess": 1.25
+        },
+        "nbody_second_order": {
+          "outside_geff": 1.0526388255620795,
+          "preferred_axis_dress": 1.0,
+          "preferred_axis_spectral_gap": 0.0,
+          "c2_lapse": 1.0,
+          "vev_cluster_taylor": 1.0,
+          "graph_hyperclosure_weak": 1.0,
+          "promoted_factor": 1.0526388255620795,
+          "full_envelope": 1.0526388255620795,
+          "n_bonds": 1,
+          "outside_ledger": {
+            "grav": 1.0,
+            "em": 1.0,
+            "bulk": 1.0,
+            "local_defect": 1.0,
+            "contact": 1.0526388255620795,
+            "dress": 1.0526388255620795,
+            "channels": {
+              "grav": "outsideGravityGeffModulator (Ricci / gravitational G_eff)",
+              "em": "1+(4/8)\u00b7curvatureConcentrationWeight (electric / dielectric)",
+              "bulk": "scaleOutsideCouplingForMediumDensity (medium density \u03c1)",
+              "local_defect": "1+localCurvatureDefectExcess (nucleation / wall / interface)",
+              "contact": "outsideGeffSurplus (bond-summed G_eff participation)"
+            }
+          }
+        },
+        "outside_contact_ledger": {
+          "grav": 1.0,
+          "em": 1.0,
+          "bulk": 1.0,
+          "local_defect": 1.0,
+          "contact": 1.0526388255620795,
+          "dress": 1.0526388255620795,
+          "channels": {
+            "grav": "outsideGravityGeffModulator (Ricci / gravitational G_eff)",
+            "em": "1+(4/8)\u00b7curvatureConcentrationWeight (electric / dielectric)",
+            "bulk": "scaleOutsideCouplingForMediumDensity (medium density \u03c1)",
+            "local_defect": "1+localCurvatureDefectExcess (nucleation / wall / interface)",
+            "contact": "outsideGeffSurplus (bond-summed G_eff participation)"
+          }
+        },
+        "bond_curvature_witness": {
+          "bond_count": 1,
+          "medium_density_fraction": 0.0,
+          "mean_eta_linear": 0.2033825733247698,
+          "mean_g_eff_intrinsic": 0.38458137053602715,
+          "mean_g_eff_medium": 1.0,
+          "mean_flatness_ratio": 0.38458137053602715,
+          "mean_protein_contact_breathing": 0.8769162741072054,
+          "mean_geff_theta_gas_assay": 1.0,
+          "bonds": [
+            {
+              "theta_rad": 0.31947259911264214,
+              "theta0_rad": 1.5707963267948966,
+              "eta_linear": 0.2033825733247698,
+              "g_eff_intrinsic": 0.38458137053602715,
+              "g_eff_medium": 1.0,
+              "flatness_ratio": 0.38458137053602715,
+              "flatness_ppm_vs_saturated": -615418.6294639729,
+              "protein_contact_breathing": 0.8769162741072054,
+              "medium_density_fraction": 0.0,
+              "surplus_dress_contribution_gas_assay": 0.05263882556207965,
+              "surplus_dress_contribution_intrinsic_geff": 0.02024391167807145,
+              "surplus_dress_contribution_medium_geff": 0.05263882556207965,
+              "geff_theta_gas_assay": 1.0,
+              "geff_combined": 0.3093922651933701
+            }
+          ]
+        },
+        "bond_corridor_neutrino": {
+          "mean_eta_linear": 0.2033825733247698,
+          "bond_corridor_aperture": 0.0029054653332109973,
+          "bond_corridor_neutrino_dress": 1.0002123152324685,
+          "bond_corridor_neutrino_dress_low": 1.0001965881782116,
+          "bond_corridor_neutrino_dress_high": 1.0002293004510658,
+          "outer_neutrino_suppression": 0.007142857142857143
+        }
       },
       "nuclei": [
         {
@@ -2557,7 +5463,53 @@
         "cluster_mean_mev_per_A": 8.932547383583197,
         "cluster_spread_pct": 0.0
       },
-      "notes": "dissociation: shell=dynamicComptonTripletHomonuclearPeriod2; surplus=detuning_compton_triplet; \u03b7\u2082\u00b7surplus\u00b7vev\u00b7geom\u00b7G_eff\u00b7\u03ba(\u03be=5.00,w=1.00)",
+      "notes": "dissociation: shell=dynamicComptonTripletHomonuclearPeriod2; surplus=detuning_compton_triplet; \u03b7\u2082\u00b7surplus\u00b7vev\u00b7geom\u00b7nbody(g=0.000,G_eff=1.0526)\u00b7\u03ba(\u03be=5.00,w=1.00); lab_scale=0.997955113; \u03bd_corridor=1.000212315(\u03b7=0.2034)",
+      "binding_ev_chart": 5.3636245075838564,
+      "binding_ev_lab": 5.3537929533214115,
+      "error_pct_chart": 2.889401641739044,
+      "lab_outside_closure": {
+        "K_mass_chart": 1.000296135249801,
+        "support_ratio_vs_cmb": 0.9982506429209693,
+        "increment_vs_anchor_ppm": 296.1352498009884,
+        "lab_binding_scale_factor": 0.9979551132342215,
+        "lab_binding_scale_ppm": -2044.8867657785197
+      },
+      "bond_curvature_witness": {
+        "bond_count": 1,
+        "medium_density_fraction": 0.0,
+        "mean_eta_linear": 0.2033825733247698,
+        "mean_g_eff_intrinsic": 0.38458137053602715,
+        "mean_g_eff_medium": 1.0,
+        "mean_flatness_ratio": 0.38458137053602715,
+        "mean_protein_contact_breathing": 0.8769162741072054,
+        "mean_geff_theta_gas_assay": 1.0,
+        "bonds": [
+          {
+            "theta_rad": 0.31947259911264214,
+            "theta0_rad": 1.5707963267948966,
+            "eta_linear": 0.2033825733247698,
+            "g_eff_intrinsic": 0.38458137053602715,
+            "g_eff_medium": 1.0,
+            "flatness_ratio": 0.38458137053602715,
+            "flatness_ppm_vs_saturated": -615418.6294639729,
+            "protein_contact_breathing": 0.8769162741072054,
+            "medium_density_fraction": 0.0,
+            "surplus_dress_contribution_gas_assay": 0.05263882556207965,
+            "surplus_dress_contribution_intrinsic_geff": 0.02024391167807145,
+            "surplus_dress_contribution_medium_geff": 0.05263882556207965,
+            "geff_theta_gas_assay": 1.0,
+            "geff_combined": 0.3093922651933701
+          }
+        ]
+      },
+      "bond_corridor_neutrino": {
+        "mean_eta_linear": 0.2033825733247698,
+        "bond_corridor_aperture": 0.0029054653332109973,
+        "bond_corridor_neutrino_dress": 1.0002123152324685,
+        "bond_corridor_neutrino_dress_low": 1.0001965881782116,
+        "bond_corridor_neutrino_dress_high": 1.0002293004510658,
+        "outer_neutrino_suppression": 0.007142857142857143
+      },
       "network_binding_feedback": {
         "contact_xi": 5.0,
         "bare_vev_geometric_mean": 0.996535735806632,
@@ -2601,11 +5553,11 @@
     {
       "name": "F2",
       "kind": "dissociation",
-      "binding_ev": 1.8774862333379054,
+      "binding_ev": 1.6955643341550903,
       "reference_ev": 1.638,
-      "error_pct": 14.620649165928299,
-      "dimless_core": 0.9663532083356866,
-      "surplus_dimless": 2.9999999999999996,
+      "error_pct": 3.514306114474386,
+      "dimless_core": 0.8743195694465734,
+      "surplus_dimless": 2.666666666666666,
       "eta_p": 0.24084778420038533,
       "vev_geometric_mean": 0.9965209314702848,
       "vev_geometric_mean_bare": 0.9965209314702848,
@@ -2654,7 +5606,96 @@
           "1s"
         ],
         "surplus_dress_factor": 1.0,
-        "outside_geff_contact_dress": 1.1666666666666667
+        "outside_geff_contact_dress": 1.1875,
+        "preferred_axis_dress": {
+          "bond_polarities": [
+            0.0
+          ],
+          "preferred_axis_spectral_gap": 0.0,
+          "preferred_axis_selection_weight": 0.0,
+          "preferred_axis_purity": 0.0,
+          "promotion_t": 0.12042389210019266,
+          "preferred_axis_plane_local_dress": 1.0,
+          "colour_filter": 2.25,
+          "colour_excess": 1.25
+        },
+        "nbody_second_order": {
+          "outside_geff": 1.1875,
+          "preferred_axis_dress": 1.0,
+          "preferred_axis_spectral_gap": 0.0,
+          "c2_lapse": 1.0,
+          "vev_cluster_taylor": 1.0,
+          "graph_hyperclosure_weak": 1.0,
+          "promoted_factor": 1.1875,
+          "full_envelope": 1.1875,
+          "n_bonds": 1,
+          "outside_ledger": {
+            "grav": 1.0,
+            "em": 1.0,
+            "bulk": 1.0,
+            "local_defect": 1.0,
+            "contact": 1.1875,
+            "dress": 1.1875,
+            "channels": {
+              "grav": "outsideGravityGeffModulator (Ricci / gravitational G_eff)",
+              "em": "1+(4/8)\u00b7curvatureConcentrationWeight (electric / dielectric)",
+              "bulk": "scaleOutsideCouplingForMediumDensity (medium density \u03c1)",
+              "local_defect": "1+localCurvatureDefectExcess (nucleation / wall / interface)",
+              "contact": "outsideGeffSurplus (bond-summed G_eff participation)"
+            }
+          }
+        },
+        "outside_contact_ledger": {
+          "grav": 1.0,
+          "em": 1.0,
+          "bulk": 1.0,
+          "local_defect": 1.0,
+          "contact": 1.1875,
+          "dress": 1.1875,
+          "channels": {
+            "grav": "outsideGravityGeffModulator (Ricci / gravitational G_eff)",
+            "em": "1+(4/8)\u00b7curvatureConcentrationWeight (electric / dielectric)",
+            "bulk": "scaleOutsideCouplingForMediumDensity (medium density \u03c1)",
+            "local_defect": "1+localCurvatureDefectExcess (nucleation / wall / interface)",
+            "contact": "outsideGeffSurplus (bond-summed G_eff participation)"
+          }
+        },
+        "bond_curvature_witness": {
+          "bond_count": 1,
+          "medium_density_fraction": 0.0,
+          "mean_eta_linear": 0.2033825733247698,
+          "mean_g_eff_intrinsic": 0.38458137053602715,
+          "mean_g_eff_medium": 1.0,
+          "mean_flatness_ratio": 0.38458137053602715,
+          "mean_protein_contact_breathing": 0.8769162741072054,
+          "mean_geff_theta_gas_assay": 1.0,
+          "bonds": [
+            {
+              "theta_rad": 0.31947259911264214,
+              "theta0_rad": 1.5707963267948966,
+              "eta_linear": 0.2033825733247698,
+              "g_eff_intrinsic": 0.38458137053602715,
+              "g_eff_medium": 1.0,
+              "flatness_ratio": 0.38458137053602715,
+              "flatness_ppm_vs_saturated": -615418.6294639729,
+              "protein_contact_breathing": 0.8769162741072054,
+              "medium_density_fraction": 0.0,
+              "surplus_dress_contribution_gas_assay": 0.18750000000000006,
+              "surplus_dress_contribution_intrinsic_geff": 0.07210900697550511,
+              "surplus_dress_contribution_medium_geff": 0.18750000000000006,
+              "geff_theta_gas_assay": 1.0,
+              "geff_combined": 0.2873432155074116
+            }
+          ]
+        },
+        "bond_corridor_neutrino": {
+          "mean_eta_linear": 0.2033825733247698,
+          "bond_corridor_aperture": 0.0029054653332109973,
+          "bond_corridor_neutrino_dress": 1.0002123152324685,
+          "bond_corridor_neutrino_dress_low": 1.0001965881782116,
+          "bond_corridor_neutrino_dress_high": 1.0002293004510658,
+          "outer_neutrino_suppression": 0.007142857142857143
+        }
       },
       "nuclei": [
         {
@@ -2697,7 +5738,53 @@
         "cluster_mean_mev_per_A": 8.390084991867617,
         "cluster_spread_pct": 0.0
       },
-      "notes": "dissociation: shell=dynamicComptonTripletHomonuclearPeriod2; surplus=detuning_compton_triplet; \u03b7\u2082\u00b7surplus\u00b7vev\u00b7geom\u00b7G_eff\u00b7\u03ba(\u03be=5.00,w=1.00)",
+      "notes": "dissociation: shell=dynamicComptonTripletHomonuclearPeriod2; surplus=detuning_compton_triplet; \u03b7\u2082\u00b7surplus\u00b7vev\u00b7geom\u00b7nbody(g=0.000,G_eff=1.1875)\u00b7\u03ba(\u03be=5.00,w=1.00); lab_scale=0.997955113; \u03bd_corridor=1.000212315(\u03b7=0.2034)",
+      "binding_ev_chart": 1.6986780206390568,
+      "binding_ev_lab": 1.6955643341550903,
+      "error_pct_chart": 3.7043968644112892,
+      "lab_outside_closure": {
+        "K_mass_chart": 1.000296135249801,
+        "support_ratio_vs_cmb": 0.9982506429209693,
+        "increment_vs_anchor_ppm": 296.1352498009884,
+        "lab_binding_scale_factor": 0.9979551132342215,
+        "lab_binding_scale_ppm": -2044.8867657785197
+      },
+      "bond_curvature_witness": {
+        "bond_count": 1,
+        "medium_density_fraction": 0.0,
+        "mean_eta_linear": 0.2033825733247698,
+        "mean_g_eff_intrinsic": 0.38458137053602715,
+        "mean_g_eff_medium": 1.0,
+        "mean_flatness_ratio": 0.38458137053602715,
+        "mean_protein_contact_breathing": 0.8769162741072054,
+        "mean_geff_theta_gas_assay": 1.0,
+        "bonds": [
+          {
+            "theta_rad": 0.31947259911264214,
+            "theta0_rad": 1.5707963267948966,
+            "eta_linear": 0.2033825733247698,
+            "g_eff_intrinsic": 0.38458137053602715,
+            "g_eff_medium": 1.0,
+            "flatness_ratio": 0.38458137053602715,
+            "flatness_ppm_vs_saturated": -615418.6294639729,
+            "protein_contact_breathing": 0.8769162741072054,
+            "medium_density_fraction": 0.0,
+            "surplus_dress_contribution_gas_assay": 0.18750000000000006,
+            "surplus_dress_contribution_intrinsic_geff": 0.07210900697550511,
+            "surplus_dress_contribution_medium_geff": 0.18750000000000006,
+            "geff_theta_gas_assay": 1.0,
+            "geff_combined": 0.2873432155074116
+          }
+        ]
+      },
+      "bond_corridor_neutrino": {
+        "mean_eta_linear": 0.2033825733247698,
+        "bond_corridor_aperture": 0.0029054653332109973,
+        "bond_corridor_neutrino_dress": 1.0002123152324685,
+        "bond_corridor_neutrino_dress_low": 1.0001965881782116,
+        "bond_corridor_neutrino_dress_high": 1.0002293004510658,
+        "outer_neutrino_suppression": 0.007142857142857143
+      },
       "network_binding_feedback": {
         "contact_xi": 5.0,
         "bare_vev_geometric_mean": 0.9965209314702848,
@@ -2741,11 +5828,11 @@
     {
       "name": "Cl2",
       "kind": "dissociation",
-      "binding_ev": 2.67998358287155,
+      "binding_ev": 2.4562144387168416,
       "reference_ev": 2.479,
-      "error_pct": 8.107445860086731,
-      "dimless_core": 1.3794033147132978,
-      "surplus_dimless": 4.499999999999999,
+      "error_pct": -0.9191432546655285,
+      "dimless_core": 1.266543043509482,
+      "surplus_dimless": 4.09090909090909,
       "eta_p": 0.24084778420038533,
       "vev_geometric_mean": 0.9962652294033185,
       "vev_geometric_mean_bare": 0.9962652294033185,
@@ -2794,7 +5881,96 @@
           "1s"
         ],
         "surplus_dress_factor": 1.0,
-        "outside_geff_contact_dress": 1.1111111111111112
+        "outside_geff_contact_dress": 1.1222222222222222,
+        "preferred_axis_dress": {
+          "bond_polarities": [
+            0.0
+          ],
+          "preferred_axis_spectral_gap": 0.0,
+          "preferred_axis_selection_weight": 0.0,
+          "preferred_axis_purity": 0.0,
+          "promotion_t": 0.12042389210019266,
+          "preferred_axis_plane_local_dress": 1.0,
+          "colour_filter": 2.25,
+          "colour_excess": 1.25
+        },
+        "nbody_second_order": {
+          "outside_geff": 1.1222222222222222,
+          "preferred_axis_dress": 1.0,
+          "preferred_axis_spectral_gap": 0.0,
+          "c2_lapse": 1.0875,
+          "vev_cluster_taylor": 1.0,
+          "graph_hyperclosure_weak": 1.0,
+          "promoted_factor": 1.1222222222222222,
+          "full_envelope": 1.2204166666666665,
+          "n_bonds": 1,
+          "outside_ledger": {
+            "grav": 1.0,
+            "em": 1.0,
+            "bulk": 1.0,
+            "local_defect": 1.0,
+            "contact": 1.1222222222222222,
+            "dress": 1.1222222222222222,
+            "channels": {
+              "grav": "outsideGravityGeffModulator (Ricci / gravitational G_eff)",
+              "em": "1+(4/8)\u00b7curvatureConcentrationWeight (electric / dielectric)",
+              "bulk": "scaleOutsideCouplingForMediumDensity (medium density \u03c1)",
+              "local_defect": "1+localCurvatureDefectExcess (nucleation / wall / interface)",
+              "contact": "outsideGeffSurplus (bond-summed G_eff participation)"
+            }
+          }
+        },
+        "outside_contact_ledger": {
+          "grav": 1.0,
+          "em": 1.0,
+          "bulk": 1.0,
+          "local_defect": 1.0,
+          "contact": 1.1222222222222222,
+          "dress": 1.1222222222222222,
+          "channels": {
+            "grav": "outsideGravityGeffModulator (Ricci / gravitational G_eff)",
+            "em": "1+(4/8)\u00b7curvatureConcentrationWeight (electric / dielectric)",
+            "bulk": "scaleOutsideCouplingForMediumDensity (medium density \u03c1)",
+            "local_defect": "1+localCurvatureDefectExcess (nucleation / wall / interface)",
+            "contact": "outsideGeffSurplus (bond-summed G_eff participation)"
+          }
+        },
+        "bond_curvature_witness": {
+          "bond_count": 1,
+          "medium_density_fraction": 0.0,
+          "mean_eta_linear": 0.2083524482368413,
+          "mean_g_eff_intrinsic": 0.3901927222297729,
+          "mean_g_eff_medium": 1.0,
+          "mean_flatness_ratio": 0.3901927222297729,
+          "mean_protein_contact_breathing": 0.8780385444459546,
+          "mean_geff_theta_gas_assay": 1.0,
+          "bonds": [
+            {
+              "theta_rad": 0.3272792603691541,
+              "theta0_rad": 1.5707963267948966,
+              "eta_linear": 0.2083524482368413,
+              "g_eff_intrinsic": 0.3901927222297729,
+              "g_eff_medium": 1.0,
+              "flatness_ratio": 0.3901927222297729,
+              "flatness_ppm_vs_saturated": -609807.277770227,
+              "protein_contact_breathing": 0.8780385444459546,
+              "medium_density_fraction": 0.0,
+              "surplus_dress_contribution_gas_assay": 0.12222222222222225,
+              "surplus_dress_contribution_intrinsic_geff": 0.047690221605861144,
+              "surplus_dress_contribution_medium_geff": 0.12222222222222225,
+              "geff_theta_gas_assay": 1.0,
+              "geff_combined": 0.3882544861337683
+            }
+          ]
+        },
+        "bond_corridor_neutrino": {
+          "mean_eta_linear": 0.2083524482368413,
+          "bond_corridor_aperture": 0.0029764635462405896,
+          "bond_corridor_neutrino_dress": 1.0002175029475961,
+          "bond_corridor_neutrino_dress_low": 1.0002013916181445,
+          "bond_corridor_neutrino_dress_high": 1.000234903183404,
+          "outer_neutrino_suppression": 0.007142857142857143
+        }
       },
       "nuclei": [
         {
@@ -2837,7 +6013,53 @@
         "cluster_mean_mev_per_A": 10.375356451820291,
         "cluster_spread_pct": 0.0
       },
-      "notes": "dissociation: shell=dynamicComptonTripletHomonuclearPeriod2; surplus=detuning_compton_triplet; \u03b7\u2082\u00b7surplus\u00b7vev\u00b7geom\u00b7G_eff\u00b7\u03ba(\u03be=6.00,w=1.00)",
+      "notes": "dissociation: shell=dynamicComptonTripletHomonuclearPeriod2; surplus=detuning_compton_triplet; \u03b7\u2082\u00b7surplus\u00b7vev\u00b7geom\u00b7nbody(g=0.000,G_eff=1.1222)\u00b7\u03ba(\u03be=6.00,w=1.00); lab_scale=0.997955113; \u03bd_corridor=1.000217503(\u03b7=0.2084)",
+      "binding_ev_chart": 2.460712198818422,
+      "binding_ev_lab": 2.4562144387168416,
+      "error_pct_chart": -0.7377088011931388,
+      "lab_outside_closure": {
+        "K_mass_chart": 1.000296135249801,
+        "support_ratio_vs_cmb": 0.9982506429209693,
+        "increment_vs_anchor_ppm": 296.1352498009884,
+        "lab_binding_scale_factor": 0.9979551132342215,
+        "lab_binding_scale_ppm": -2044.8867657785197
+      },
+      "bond_curvature_witness": {
+        "bond_count": 1,
+        "medium_density_fraction": 0.0,
+        "mean_eta_linear": 0.2083524482368413,
+        "mean_g_eff_intrinsic": 0.3901927222297729,
+        "mean_g_eff_medium": 1.0,
+        "mean_flatness_ratio": 0.3901927222297729,
+        "mean_protein_contact_breathing": 0.8780385444459546,
+        "mean_geff_theta_gas_assay": 1.0,
+        "bonds": [
+          {
+            "theta_rad": 0.3272792603691541,
+            "theta0_rad": 1.5707963267948966,
+            "eta_linear": 0.2083524482368413,
+            "g_eff_intrinsic": 0.3901927222297729,
+            "g_eff_medium": 1.0,
+            "flatness_ratio": 0.3901927222297729,
+            "flatness_ppm_vs_saturated": -609807.277770227,
+            "protein_contact_breathing": 0.8780385444459546,
+            "medium_density_fraction": 0.0,
+            "surplus_dress_contribution_gas_assay": 0.12222222222222225,
+            "surplus_dress_contribution_intrinsic_geff": 0.047690221605861144,
+            "surplus_dress_contribution_medium_geff": 0.12222222222222225,
+            "geff_theta_gas_assay": 1.0,
+            "geff_combined": 0.3882544861337683
+          }
+        ]
+      },
+      "bond_corridor_neutrino": {
+        "mean_eta_linear": 0.2083524482368413,
+        "bond_corridor_aperture": 0.0029764635462405896,
+        "bond_corridor_neutrino_dress": 1.0002175029475961,
+        "bond_corridor_neutrino_dress_low": 1.0002013916181445,
+        "bond_corridor_neutrino_dress_high": 1.000234903183404,
+        "outer_neutrino_suppression": 0.007142857142857143
+      },
       "network_binding_feedback": {
         "contact_xi": 6.0,
         "bare_vev_geometric_mean": 0.9962652294033185,
@@ -2883,11 +6105,11 @@
     {
       "name": "CO",
       "kind": "atomization",
-      "binding_ev": 12.509916637833069,
+      "binding_ev": 11.777226186382636,
       "reference_ev": 11.24,
-      "error_pct": 11.29819072805221,
-      "dimless_core": 6.438927681237609,
-      "surplus_dimless": 30.058791286187304,
+      "error_pct": 4.779592405539466,
+      "dimless_core": 6.072939330902004,
+      "surplus_dimless": 26.718925587722048,
       "eta_p": 0.18844598884025524,
       "vev_geometric_mean": 0.9720429882957672,
       "vev_geometric_mean_bare": 0.9720429882957672,
@@ -2926,9 +6148,8 @@
         "curvature_feedback_weight": 1.0,
         "has_heavy_nucleus": true,
         "electron_split": [
-          14,
-          8,
-          6
+          6,
+          8
         ],
         "electronic_shell_slots": [
           "2s",
@@ -2936,7 +6157,96 @@
           "1s"
         ],
         "surplus_dress_factor": 1.0,
-        "outside_geff_contact_dress": 1.0166340687235071
+        "outside_geff_contact_dress": 1.0187133273139457,
+        "preferred_axis_dress": {
+          "bond_polarities": [
+            0.14285714285714285
+          ],
+          "preferred_axis_spectral_gap": 1.0,
+          "preferred_axis_selection_weight": 1.0,
+          "preferred_axis_purity": 1.0,
+          "promotion_t": 0.09422299442012762,
+          "preferred_axis_plane_local_dress": 1.0588893715125798,
+          "colour_filter": 2.25,
+          "colour_excess": 1.25
+        },
+        "nbody_second_order": {
+          "outside_geff": 1.0187133273139457,
+          "preferred_axis_dress": 1.0588893715125798,
+          "preferred_axis_spectral_gap": 1.0,
+          "c2_lapse": 0.9708333333333333,
+          "vev_cluster_taylor": 1.0,
+          "graph_hyperclosure_weak": 1.0,
+          "promoted_factor": 1.078704714910953,
+          "full_envelope": 1.0472424940593834,
+          "n_bonds": 1,
+          "outside_ledger": {
+            "grav": 1.0,
+            "em": 1.0,
+            "bulk": 1.0,
+            "local_defect": 1.0,
+            "contact": 1.0187133273139457,
+            "dress": 1.0187133273139457,
+            "channels": {
+              "grav": "outsideGravityGeffModulator (Ricci / gravitational G_eff)",
+              "em": "1+(4/8)\u00b7curvatureConcentrationWeight (electric / dielectric)",
+              "bulk": "scaleOutsideCouplingForMediumDensity (medium density \u03c1)",
+              "local_defect": "1+localCurvatureDefectExcess (nucleation / wall / interface)",
+              "contact": "outsideGeffSurplus (bond-summed G_eff participation)"
+            }
+          }
+        },
+        "outside_contact_ledger": {
+          "grav": 1.0,
+          "em": 1.0,
+          "bulk": 1.0,
+          "local_defect": 1.0,
+          "contact": 1.0187133273139457,
+          "dress": 1.0187133273139457,
+          "channels": {
+            "grav": "outsideGravityGeffModulator (Ricci / gravitational G_eff)",
+            "em": "1+(4/8)\u00b7curvatureConcentrationWeight (electric / dielectric)",
+            "bulk": "scaleOutsideCouplingForMediumDensity (medium density \u03c1)",
+            "local_defect": "1+localCurvatureDefectExcess (nucleation / wall / interface)",
+            "contact": "outsideGeffSurplus (bond-summed G_eff participation)"
+          }
+        },
+        "bond_curvature_witness": {
+          "bond_count": 1,
+          "medium_density_fraction": 0.0,
+          "mean_eta_linear": 0.2033825733247698,
+          "mean_g_eff_intrinsic": 0.38458137053602715,
+          "mean_g_eff_medium": 1.0,
+          "mean_flatness_ratio": 0.38458137053602715,
+          "mean_protein_contact_breathing": 0.8769162741072054,
+          "mean_geff_theta_gas_assay": 1.0,
+          "bonds": [
+            {
+              "theta_rad": 0.31947259911264214,
+              "theta0_rad": 1.5707963267948966,
+              "eta_linear": 0.2033825733247698,
+              "g_eff_intrinsic": 0.38458137053602715,
+              "g_eff_medium": 1.0,
+              "flatness_ratio": 0.38458137053602715,
+              "flatness_ppm_vs_saturated": -615418.6294639729,
+              "protein_contact_breathing": 0.8769162741072054,
+              "medium_density_fraction": 0.0,
+              "surplus_dress_contribution_gas_assay": 0.01871332731394564,
+              "surplus_dress_contribution_intrinsic_geff": 0.007196797065686485,
+              "surplus_dress_contribution_medium_geff": 0.01871332731394564,
+              "geff_theta_gas_assay": 1.0,
+              "geff_combined": 0.32658763875429603
+            }
+          ]
+        },
+        "bond_corridor_neutrino": {
+          "mean_eta_linear": 0.2033825733247698,
+          "bond_corridor_aperture": 0.0029054653332109973,
+          "bond_corridor_neutrino_dress": 1.000212314803892,
+          "bond_corridor_neutrino_dress_low": 1.0001965877813814,
+          "bond_corridor_neutrino_dress_high": 1.0002292999882032,
+          "outer_neutrino_suppression": 0.007142857142857143
+        }
       },
       "nuclei": [
         {
@@ -2979,7 +6289,53 @@
         "cluster_mean_mev_per_A": 9.50514657483853,
         "cluster_spread_pct": 12.048192771084329
       },
-      "notes": "atomization: shell=general; surplus=electronic_compton_triplet; \u03b7\u2082\u00b7surplus\u00b7vev\u00b7geom\u00b7G_eff\u00b7\u03ba(\u03be=4.67,w=1.00)",
+      "notes": "atomization: shell=general; surplus=electronic_compton_triplet; \u03b7\u2082\u00b7surplus\u00b7vev\u00b7geom\u00b7nbody(g=1.000,G_eff=1.0187)\u00b7\u03ba(\u03be=4.67,w=1.00); lab_scale=0.997955113; \u03bd_corridor=1.000212315(\u03b7=0.2034)",
+      "binding_ev_chart": 11.798853557181037,
+      "binding_ev_lab": 11.777226186382636,
+      "error_pct_chart": 4.972006736486089,
+      "lab_outside_closure": {
+        "K_mass_chart": 1.000296135249801,
+        "support_ratio_vs_cmb": 0.9982506429209693,
+        "increment_vs_anchor_ppm": 296.1352498009884,
+        "lab_binding_scale_factor": 0.9979551132342215,
+        "lab_binding_scale_ppm": -2044.8867657785197
+      },
+      "bond_curvature_witness": {
+        "bond_count": 1,
+        "medium_density_fraction": 0.0,
+        "mean_eta_linear": 0.2033825733247698,
+        "mean_g_eff_intrinsic": 0.38458137053602715,
+        "mean_g_eff_medium": 1.0,
+        "mean_flatness_ratio": 0.38458137053602715,
+        "mean_protein_contact_breathing": 0.8769162741072054,
+        "mean_geff_theta_gas_assay": 1.0,
+        "bonds": [
+          {
+            "theta_rad": 0.31947259911264214,
+            "theta0_rad": 1.5707963267948966,
+            "eta_linear": 0.2033825733247698,
+            "g_eff_intrinsic": 0.38458137053602715,
+            "g_eff_medium": 1.0,
+            "flatness_ratio": 0.38458137053602715,
+            "flatness_ppm_vs_saturated": -615418.6294639729,
+            "protein_contact_breathing": 0.8769162741072054,
+            "medium_density_fraction": 0.0,
+            "surplus_dress_contribution_gas_assay": 0.01871332731394564,
+            "surplus_dress_contribution_intrinsic_geff": 0.007196797065686485,
+            "surplus_dress_contribution_medium_geff": 0.01871332731394564,
+            "geff_theta_gas_assay": 1.0,
+            "geff_combined": 0.32658763875429603
+          }
+        ]
+      },
+      "bond_corridor_neutrino": {
+        "mean_eta_linear": 0.2033825733247698,
+        "bond_corridor_aperture": 0.0029054653332109973,
+        "bond_corridor_neutrino_dress": 1.000212314803892,
+        "bond_corridor_neutrino_dress_low": 1.0001965877813814,
+        "bond_corridor_neutrino_dress_high": 1.0002292999882032,
+        "outer_neutrino_suppression": 0.007142857142857143
+      },
       "network_binding_feedback": {
         "contact_xi": 4.666666666666667,
         "bare_vev_geometric_mean": 0.9720429882957672,
@@ -3023,11 +6379,11 @@
     {
       "name": "N2",
       "kind": "dissociation",
-      "binding_ev": 10.97607203339288,
+      "binding_ev": 10.133782310007758,
       "reference_ev": 9.91,
-      "error_pct": 10.757538177526536,
-      "dimless_core": 5.649448840716923,
-      "surplus_dimless": 19.960360922689727,
+      "error_pct": 2.2581464178381236,
+      "dimless_core": 5.225495728869738,
+      "surplus_dimless": 18.424948544021284,
       "eta_p": 0.24084778420038533,
       "vev_geometric_mean": 0.9965781626204909,
       "vev_geometric_mean_bare": 0.9965781626204909,
@@ -3076,7 +6432,96 @@
           "1s"
         ],
         "surplus_dress_factor": 1.0,
-        "outside_geff_contact_dress": 1.0250496472451873
+        "outside_geff_contact_dress": 1.027137117848953,
+        "preferred_axis_dress": {
+          "bond_polarities": [
+            0.0
+          ],
+          "preferred_axis_spectral_gap": 0.0,
+          "preferred_axis_selection_weight": 0.0,
+          "preferred_axis_purity": 0.0,
+          "promotion_t": 0.12042389210019266,
+          "preferred_axis_plane_local_dress": 1.0,
+          "colour_filter": 2.25,
+          "colour_excess": 1.25
+        },
+        "nbody_second_order": {
+          "outside_geff": 1.027137117848953,
+          "preferred_axis_dress": 1.0,
+          "preferred_axis_spectral_gap": 0.0,
+          "c2_lapse": 1.0,
+          "vev_cluster_taylor": 1.0,
+          "graph_hyperclosure_weak": 1.0,
+          "promoted_factor": 1.027137117848953,
+          "full_envelope": 1.027137117848953,
+          "n_bonds": 1,
+          "outside_ledger": {
+            "grav": 1.0,
+            "em": 1.0,
+            "bulk": 1.0,
+            "local_defect": 1.0,
+            "contact": 1.027137117848953,
+            "dress": 1.027137117848953,
+            "channels": {
+              "grav": "outsideGravityGeffModulator (Ricci / gravitational G_eff)",
+              "em": "1+(4/8)\u00b7curvatureConcentrationWeight (electric / dielectric)",
+              "bulk": "scaleOutsideCouplingForMediumDensity (medium density \u03c1)",
+              "local_defect": "1+localCurvatureDefectExcess (nucleation / wall / interface)",
+              "contact": "outsideGeffSurplus (bond-summed G_eff participation)"
+            }
+          }
+        },
+        "outside_contact_ledger": {
+          "grav": 1.0,
+          "em": 1.0,
+          "bulk": 1.0,
+          "local_defect": 1.0,
+          "contact": 1.027137117848953,
+          "dress": 1.027137117848953,
+          "channels": {
+            "grav": "outsideGravityGeffModulator (Ricci / gravitational G_eff)",
+            "em": "1+(4/8)\u00b7curvatureConcentrationWeight (electric / dielectric)",
+            "bulk": "scaleOutsideCouplingForMediumDensity (medium density \u03c1)",
+            "local_defect": "1+localCurvatureDefectExcess (nucleation / wall / interface)",
+            "contact": "outsideGeffSurplus (bond-summed G_eff participation)"
+          }
+        },
+        "bond_curvature_witness": {
+          "bond_count": 1,
+          "medium_density_fraction": 0.0,
+          "mean_eta_linear": 0.2033825733247698,
+          "mean_g_eff_intrinsic": 0.38458137053602715,
+          "mean_g_eff_medium": 1.0,
+          "mean_flatness_ratio": 0.38458137053602715,
+          "mean_protein_contact_breathing": 0.8769162741072054,
+          "mean_geff_theta_gas_assay": 1.0,
+          "bonds": [
+            {
+              "theta_rad": 0.31947259911264214,
+              "theta0_rad": 1.5707963267948966,
+              "eta_linear": 0.2033825733247698,
+              "g_eff_intrinsic": 0.38458137053602715,
+              "g_eff_medium": 1.0,
+              "flatness_ratio": 0.38458137053602715,
+              "flatness_ppm_vs_saturated": -615418.6294639729,
+              "protein_contact_breathing": 0.8769162741072054,
+              "medium_density_fraction": 0.0,
+              "surplus_dress_contribution_gas_assay": 0.02713711784895297,
+              "surplus_dress_contribution_intrinsic_geff": 0.010436429974748017,
+              "surplus_dress_contribution_medium_geff": 0.02713711784895297,
+              "geff_theta_gas_assay": 1.0,
+              "geff_combined": 0.32885906040268453
+            }
+          ]
+        },
+        "bond_corridor_neutrino": {
+          "mean_eta_linear": 0.2033825733247698,
+          "bond_corridor_aperture": 0.0029054653332109973,
+          "bond_corridor_neutrino_dress": 1.0002123152324685,
+          "bond_corridor_neutrino_dress_low": 1.0001965881782116,
+          "bond_corridor_neutrino_dress_high": 1.0002293004510658,
+          "outer_neutrino_suppression": 0.007142857142857143
+        }
       },
       "nuclei": [
         {
@@ -3119,7 +6564,53 @@
         "cluster_mean_mev_per_A": 9.423346690373481,
         "cluster_spread_pct": 0.0
       },
-      "notes": "dissociation: shell=dynamicComptonTripletHomonuclearPeriod2; surplus=detuning_compton_triplet; \u03b7\u2082\u00b7surplus\u00b7vev\u00b7geom\u00b7G_eff\u00b7\u03ba(\u03be=5.00,w=1.00)",
+      "notes": "dissociation: shell=dynamicComptonTripletHomonuclearPeriod2; surplus=detuning_compton_triplet; \u03b7\u2082\u00b7surplus\u00b7vev\u00b7geom\u00b7nbody(g=0.000,G_eff=1.0271)\u00b7\u03ba(\u03be=5.00,w=1.00); lab_scale=0.997955113; \u03bd_corridor=1.000212315(\u03b7=0.2034)",
+      "binding_ev_chart": 10.152391701804063,
+      "binding_ev_lab": 10.133782310007758,
+      "error_pct_chart": 2.4459303915647155,
+      "lab_outside_closure": {
+        "K_mass_chart": 1.000296135249801,
+        "support_ratio_vs_cmb": 0.9982506429209693,
+        "increment_vs_anchor_ppm": 296.1352498009884,
+        "lab_binding_scale_factor": 0.9979551132342215,
+        "lab_binding_scale_ppm": -2044.8867657785197
+      },
+      "bond_curvature_witness": {
+        "bond_count": 1,
+        "medium_density_fraction": 0.0,
+        "mean_eta_linear": 0.2033825733247698,
+        "mean_g_eff_intrinsic": 0.38458137053602715,
+        "mean_g_eff_medium": 1.0,
+        "mean_flatness_ratio": 0.38458137053602715,
+        "mean_protein_contact_breathing": 0.8769162741072054,
+        "mean_geff_theta_gas_assay": 1.0,
+        "bonds": [
+          {
+            "theta_rad": 0.31947259911264214,
+            "theta0_rad": 1.5707963267948966,
+            "eta_linear": 0.2033825733247698,
+            "g_eff_intrinsic": 0.38458137053602715,
+            "g_eff_medium": 1.0,
+            "flatness_ratio": 0.38458137053602715,
+            "flatness_ppm_vs_saturated": -615418.6294639729,
+            "protein_contact_breathing": 0.8769162741072054,
+            "medium_density_fraction": 0.0,
+            "surplus_dress_contribution_gas_assay": 0.02713711784895297,
+            "surplus_dress_contribution_intrinsic_geff": 0.010436429974748017,
+            "surplus_dress_contribution_medium_geff": 0.02713711784895297,
+            "geff_theta_gas_assay": 1.0,
+            "geff_combined": 0.32885906040268453
+          }
+        ]
+      },
+      "bond_corridor_neutrino": {
+        "mean_eta_linear": 0.2033825733247698,
+        "bond_corridor_aperture": 0.0029054653332109973,
+        "bond_corridor_neutrino_dress": 1.0002123152324685,
+        "bond_corridor_neutrino_dress_low": 1.0001965881782116,
+        "bond_corridor_neutrino_dress_high": 1.0002293004510658,
+        "outer_neutrino_suppression": 0.007142857142857143
+      },
       "network_binding_feedback": {
         "contact_xi": 5.0,
         "bare_vev_geometric_mean": 0.9965781626204909,
@@ -3163,30 +6654,30 @@
   ],
   "summary": {
     "count": 6,
-    "mean_abs_error_pct": 4.595105020416725,
-    "max_abs_error_pct": 8.739387562141165,
-    "within_5pct": 4,
+    "mean_abs_error_pct": 1.5325730124543302,
+    "max_abs_error_pct": 3.9521585877473835,
+    "within_5pct": 6,
     "within_15pct": 6
   },
   "expanded_summary": {
     "count": 8,
-    "mean_abs_error_pct": 11.77972169056771,
-    "max_abs_error_pct": 33.39399465139576,
-    "within_5pct": 3,
-    "within_15pct": 6
+    "mean_abs_error_pct": 3.6556953012260136,
+    "max_abs_error_pct": 13.164975761799639,
+    "within_5pct": 5,
+    "within_15pct": 8
   },
   "open_shell_summary": {
     "count": 5,
-    "mean_abs_error_pct": 10.697080329827333,
-    "max_abs_error_pct": 14.620649165928299,
-    "within_5pct": 0,
+    "mean_abs_error_pct": 2.834398595040663,
+    "max_abs_error_pct": 4.779592405539466,
+    "within_5pct": 5,
     "within_15pct": 5
   },
   "all_molecules_summary": {
     "count": 14,
-    "mean_abs_error_pct": 8.700600260503004,
-    "max_abs_error_pct": 33.39399465139576,
-    "within_5pct": 7,
-    "within_15pct": 12
+    "mean_abs_error_pct": 2.7457857488952926,
+    "max_abs_error_pct": 13.164975761799639,
+    "within_5pct": 11,
+    "within_15pct": 14
   }
 }

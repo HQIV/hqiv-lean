@@ -751,13 +751,34 @@ condensed readouts (phase @ (T,P), ρ, n, σ) for water/ice/salt/simple metals i
 
 *Tier E — integration & QC parity*
 - [ ] **d/f-block Aufbau** — transition-metal occupancy before meaningful alloy/catalysis chemistry.
-- [ ] **Extended Hückel / tight-binding on HQIV geometry** — first step toward
-  `AGENTS/QUANTUM_CHEMISTRY_OUTPUTS.md` (full SCF/DFT deferred).
+- [x] **Extended Hückel / tight-binding on HQIV geometry** — discrete two-band +
+  multi-orbital s/pσ/pπ EH + discrete SCF + Fock + KS + AO integrals + core XPS
+  landed (`discreteBandDispersionEv`, `multiOrbitalInsulatorAtKa`,
+  `discreteScfStep`, `discreteFockMatrix`, `discreteKsMatrix`, `discreteAo*`,
+  `discreteCoreXpsEv` / audits under `data/discrete_{scf,fock,ks,ao_integrals,core_spectroscopy}_audit.json`;
+  dress matches SCF; δ=0 ⇒ EH core).
+  Continuum GTO/STO / continuum TD-DFT XAS remain optional comparison layers
+  toward `AGENTS/QUANTUM_CHEMISTRY_OUTPUTS.md`.
 - [ ] **Unified `hqiv-lab` report** — one CLI run → structure, ΔE sign, phase @ (T,P), n, σ,
   comparison panel (NIST quarantined).
 - [ ] **Legacy QC port survey** — Mathlib-only discharge of remaining high-value
   `Hqiv/QuantumChemistry/*` slices (phase, polarizability response, ionic/metallic slots) per ethics
   in §1.
+
+*Tier F — protein folder (miniprotein → fold spine)*
+- [~] **Python protein package** — `hqiv_lab/protein/` re-exports miniprotein fold spine;
+  `scripts/hqiv_spine_chemistry.py` mirrors proved `Chemistry.Binding`/`Biomolecule`/`Molecule`
+  constants; `scripts/hqiv_protein_folder_audit.py` grades GG + Trp-cage vs PDB witnesses.
+  *Baseline (Jul 2026):* fold ladder **5/5 PASS** — GG **0.03 Å**; fragments **0.13–1.81 Å**;
+  Trp-cage **5.00 Å**. Strap basin (φ=γπ, ψ=απ/2) + NeRF contact dihedral refinement replace
+  unconstrained Cα Jacobi for tertiary closure. *Next:* Lean `ramachandranStrap` witness; C-terminal
+  helix-exit dress; sidechain-aware polar contacts.
+- [ ] **`Chemistry.Protein` on spine** — Ramachandran dress `(1+γ/6)`, helix i±3/i±4 targets, peptide
+  bond geometry from derived TUFT lengths (Lean parity with `hqiv_lab/miniprotein_backbone.py`).
+- [ ] **Peptide `MoleculeSpec` builder** — glycine repeat + sequence → fragment graph (Tier A input).
+- [x] **Solvent phase participation** — `ProteinSolventPhaseGeometry` + `MiniproteinChemistryDynamics` directional ρ; Python `hqiv_lab/protein_solvent_phase.py` wired to staged NeRF on Trp-cage. **Jul 2026:** local H–O–H mixture + torque-tree `aqueousHbPivotAtInterface` dress curvature weights and hydrophobic/terminus contact targets (full torque-tree equilibrium theorem still open — see `DynamicCentreGeometry` witness).
+- [x] **Fold ladder Lean spine** — `MiniproteinFoldLadder` pins 1L2Y fragment SS, register profiles, derived tertiary counts
+  `η` contact layer for folding @ cytosol (T,P).
 
 **Algebra / gauge**
 - [ ] `Algebra.OctonionAxisAngles` (carrier rotation geometry) — golf onto `Algebra.Octonion`.

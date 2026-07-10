@@ -1,0 +1,310 @@
+{
+  "anchors": {
+    "alpha": 0.6,
+    "gamma": 0.4,
+    "ionic_gas_em_dress": 1.6,
+    "nacl_inert_core_elongation": 3.5,
+    "strong": 0.5
+  },
+  "halogen_dimers": [
+    {
+      "gas_error_pct_quarantine": -4.773860330899172,
+      "geometry_route": "period3_halogen_open_channel",
+      "name": "Cl2",
+      "nist_gas_r_e_angstrom_quarantine": 1.9879,
+      "open_channel_factor": 1.5625,
+      "period": 3,
+      "r_gas_angstrom": 1.8930004304820554,
+      "z": 17
+    },
+    {
+      "gas_error_pct_quarantine": -29.71828549906912,
+      "geometry_route": "period3_halogen_open_channel",
+      "name": "Br2",
+      "nist_gas_r_e_angstrom_quarantine": 2.2811,
+      "open_channel_factor": 1.5625,
+      "period": 4,
+      "r_gas_angstrom": 1.6031961894807343,
+      "z": 35
+    }
+  ],
+  "identity_checks": {
+    "gas_dress_is_eight_fifths": true,
+    "licl_route_is_covalent": true,
+    "nacl_elongation_is_seven_halves": true,
+    "nacl_hierarchy": true,
+    "nacl_route_is_ionic": true
+  },
+  "ionic_period_n": [
+    {
+      "formula": "r_core = (r_i+r_j)\u00b7(1\u2212\u03b1/2)\u00b7dress\u00b7\u221a(1+4/8)\u00b7((Z_i+Z_j)/n_val); r_gas = r_core\u00b7(1+\u03b1); r_xtal = r_core\u00b7rocksalt(CN)",
+      "gas_error_pct_quarantine": 0.8202413230122712,
+      "geometry_route": "ionic_outside_contact",
+      "hierarchy_core_lt_gas_lt_lattice": true,
+      "inert_core_elongation": 3.5,
+      "ionic_gas_em_dress": 1.6,
+      "lean_period3_ionic_outside_route": true,
+      "name": "NaCl",
+      "nist_gas_r_e_angstrom_quarantine": 2.3609,
+      "period_i": 3,
+      "period_j": 3,
+      "r_core_angstrom": 1.487665673371873,
+      "r_gas_angstrom": 2.3802650773949967,
+      "r_lattice_angstrom": 2.8095869662302486,
+      "route_weights": {
+        "covalent_nested_wf": 0.0,
+        "ionic_outside_contact": 1.0,
+        "period3_halogen_open_channel": 0.0
+      },
+      "z_i": 11,
+      "z_j": 17
+    },
+    {
+      "formula": "r_core = (r_i+r_j)\u00b7(1\u2212\u03b1/2)\u00b7dress\u00b7\u221a(1+4/8)\u00b7((Z_i+Z_j)/n_val); r_gas = r_core\u00b7(1+\u03b1); r_xtal = r_core\u00b7rocksalt(CN)",
+      "gas_error_pct_quarantine": -10.658051577748529,
+      "geometry_route": "ionic_outside_contact",
+      "hierarchy_core_lt_gas_lt_lattice": true,
+      "inert_core_elongation": 4.5,
+      "ionic_gas_em_dress": 1.6,
+      "lean_period3_ionic_outside_route": true,
+      "name": "KCl",
+      "nist_gas_r_e_angstrom_quarantine": 2.6667,
+      "period_i": 4,
+      "period_j": 3,
+      "r_core_angstrom": 1.4890510866101125,
+      "r_gas_angstrom": 2.38248173857618,
+      "r_lattice_angstrom": 2.815374249805146,
+      "route_weights": {
+        "covalent_nested_wf": 0.0,
+        "ionic_outside_contact": 1.0,
+        "period3_halogen_open_channel": 0.0
+      },
+      "z_i": 19,
+      "z_j": 17
+    },
+    {
+      "formula": "r_core = (r_i+r_j)\u00b7(1\u2212\u03b1/2)\u00b7dress\u00b7\u221a(1+4/8)\u00b7((Z_i+Z_j)/n_val); r_gas = r_core\u00b7(1+\u03b1); r_xtal = r_core\u00b7rocksalt(CN)",
+      "gas_error_pct_quarantine": 7.484280919420506,
+      "geometry_route": "ionic_outside_contact",
+      "hierarchy_core_lt_gas_lt_lattice": true,
+      "inert_core_elongation": 6.75,
+      "ionic_gas_em_dress": 1.6,
+      "lean_period3_ionic_outside_route": true,
+      "name": "RbCl",
+      "nist_gas_r_e_angstrom_quarantine": 2.7867,
+      "period_i": 5,
+      "period_j": 3,
+      "r_core_angstrom": 1.8720402852384321,
+      "r_gas_angstrom": 2.9952644563814914,
+      "r_lattice_angstrom": 3.539548337866643,
+      "route_weights": {
+        "covalent_nested_wf": 0.0,
+        "ionic_outside_contact": 1.0,
+        "period3_halogen_open_channel": 0.0
+      },
+      "z_i": 37,
+      "z_j": 17
+    },
+    {
+      "formula": "r_core = (r_i+r_j)\u00b7(1\u2212\u03b1/2)\u00b7dress\u00b7\u221a(1+4/8)\u00b7((Z_i+Z_j)/n_val); r_gas = r_core\u00b7(1+\u03b1); r_xtal = r_core\u00b7rocksalt(CN)",
+      "gas_error_pct_quarantine": 28.388988055380228,
+      "geometry_route": "ionic_outside_contact",
+      "hierarchy_core_lt_gas_lt_lattice": true,
+      "inert_core_elongation": 9.0,
+      "ionic_gas_em_dress": 1.6,
+      "lean_period3_ionic_outside_route": true,
+      "name": "CsCl",
+      "nist_gas_r_e_angstrom_quarantine": 2.906,
+      "period_i": 6,
+      "period_j": 3,
+      "r_core_angstrom": 2.331864995555843,
+      "r_gas_angstrom": 3.7309839928893496,
+      "r_lattice_angstrom": 4.394352760346579,
+      "route_weights": {
+        "covalent_nested_wf": 0.0,
+        "ionic_outside_contact": 1.0,
+        "period3_halogen_open_channel": 0.0
+      },
+      "z_i": 55,
+      "z_j": 17
+    },
+    {
+      "formula": "r_core = (r_i+r_j)\u00b7(1\u2212\u03b1/2)\u00b7dress\u00b7\u221a(1+4/8)\u00b7((Z_i+Z_j)/n_val); r_gas = r_core\u00b7(1+\u03b1); r_xtal = r_core\u00b7rocksalt(CN)",
+      "gas_error_pct_quarantine": -38.963467368910486,
+      "geometry_route": "ionic_outside_contact",
+      "hierarchy_core_lt_gas_lt_lattice": true,
+      "inert_core_elongation": 2.5555555555555554,
+      "ionic_gas_em_dress": 1.6,
+      "lean_period3_ionic_outside_route": true,
+      "name": "NaBr",
+      "nist_gas_r_e_angstrom_quarantine": 2.502,
+      "period_i": 3,
+      "period_j": 4,
+      "r_core_angstrom": 0.954458779018662,
+      "r_gas_angstrom": 1.5271340464298595,
+      "r_lattice_angstrom": 1.7756004065476305,
+      "route_weights": {
+        "covalent_nested_wf": 0.0,
+        "ionic_outside_contact": 1.0,
+        "period3_halogen_open_channel": 0.0
+      },
+      "z_i": 11,
+      "z_j": 35
+    },
+    {
+      "formula": "r_core = (r_i+r_j)\u00b7(1\u2212\u03b1/2)\u00b7dress\u00b7\u221a(1+4/8)\u00b7((Z_i+Z_j)/n_val); r_gas = r_core\u00b7(1+\u03b1); r_xtal = r_core\u00b7rocksalt(CN)",
+      "gas_error_pct_quarantine": -53.51620632441514,
+      "geometry_route": "ionic_outside_contact",
+      "hierarchy_core_lt_gas_lt_lattice": true,
+      "inert_core_elongation": 3.0,
+      "ionic_gas_em_dress": 1.6,
+      "lean_period3_ionic_outside_route": true,
+      "name": "KBr",
+      "nist_gas_r_e_angstrom_quarantine": 2.8207,
+      "period_i": 4,
+      "period_j": 4,
+      "r_core_angstrom": 0.819480230129514,
+      "r_gas_angstrom": 1.3111683682072224,
+      "r_lattice_angstrom": 1.5145415830145461,
+      "route_weights": {
+        "covalent_nested_wf": 0.0,
+        "ionic_outside_contact": 1.0,
+        "period3_halogen_open_channel": 0.0
+      },
+      "z_i": 19,
+      "z_j": 35
+    },
+    {
+      "formula": "r_core = (r_i+r_j)\u00b7(1\u2212\u03b1/2)\u00b7dress\u00b7\u221a(1+4/8)\u00b7((Z_i+Z_j)/n_val); r_gas = r_core\u00b7(1+\u03b1); r_xtal = r_core\u00b7rocksalt(CN)",
+      "gas_error_pct_quarantine": -25.01425402321756,
+      "geometry_route": "ionic_outside_contact",
+      "hierarchy_core_lt_gas_lt_lattice": true,
+      "inert_core_elongation": 3.5555555555555554,
+      "ionic_gas_em_dress": 1.6,
+      "lean_period3_ionic_outside_route": true,
+      "name": "NaI",
+      "nist_gas_r_e_angstrom_quarantine": 2.7115,
+      "period_i": 3,
+      "period_j": 5,
+      "r_core_angstrom": 1.270774063850285,
+      "r_gas_angstrom": 2.0332385021604558,
+      "r_lattice_angstrom": 2.3507614995439186,
+      "route_weights": {
+        "covalent_nested_wf": 0.0,
+        "ionic_outside_contact": 1.0,
+        "period3_halogen_open_channel": 0.0
+      },
+      "z_i": 11,
+      "z_j": 53
+    },
+    {
+      "formula": "r_core = (r_i+r_j)\u00b7(1\u2212\u03b1/2)\u00b7dress\u00b7\u221a(1+4/8)\u00b7((Z_i+Z_j)/n_val); r_gas = r_core\u00b7(1+\u03b1); r_xtal = r_core\u00b7rocksalt(CN)",
+      "gas_error_pct_quarantine": -45.84927804699627,
+      "geometry_route": "ionic_outside_contact",
+      "hierarchy_core_lt_gas_lt_lattice": true,
+      "inert_core_elongation": 4.0,
+      "ionic_gas_em_dress": 1.6,
+      "lean_period3_ionic_outside_route": true,
+      "name": "KI",
+      "nist_gas_r_e_angstrom_quarantine": 3.0478,
+      "period_i": 4,
+      "period_j": 5,
+      "r_core_angstrom": 1.0315035648022797,
+      "r_gas_angstrom": 1.6504057036836477,
+      "r_lattice_angstrom": 1.8956666494659955,
+      "route_weights": {
+        "covalent_nested_wf": 0.0,
+        "ionic_outside_contact": 1.0,
+        "period3_halogen_open_channel": 0.0
+      },
+      "z_i": 19,
+      "z_j": 53
+    }
+  ],
+  "mixed_period_holdouts": [
+    {
+      "formula": "r_core = (r_i+r_j)\u00b7(1\u2212\u03b1/2)\u00b7dress\u00b7\u221a(1+4/8)\u00b7((Z_i+Z_j)/n_val); r_gas = r_core\u00b7(1+\u03b1); r_xtal = r_core\u00b7rocksalt(CN)",
+      "gas_error_pct_quarantine": 106.76396524075172,
+      "geometry_route": "covalent_nested_wf",
+      "hierarchy_core_lt_gas_lt_lattice": true,
+      "inert_core_elongation": 2.5,
+      "ionic_gas_em_dress": 1.6,
+      "lean_period3_ionic_outside_route": false,
+      "name": "LiCl",
+      "nist_gas_r_e_angstrom_quarantine": 2.0207,
+      "period_i": 2,
+      "period_j": 3,
+      "r_core_angstrom": 2.6112996535124187,
+      "r_gas_angstrom": 4.17807944561987,
+      "r_lattice_angstrom": 4.823664570254225,
+      "route_weights": {
+        "covalent_nested_wf": 1.0,
+        "ionic_outside_contact": 0.0,
+        "period3_halogen_open_channel": 0.0
+      },
+      "z_i": 3,
+      "z_j": 17
+    },
+    {
+      "formula": "r_core = (r_i+r_j)\u00b7(1\u2212\u03b1/2)\u00b7dress\u00b7\u221a(1+4/8)\u00b7((Z_i+Z_j)/n_val); r_gas = r_core\u00b7(1+\u03b1); r_xtal = r_core\u00b7rocksalt(CN)",
+      "gas_error_pct_quarantine": 5.818727757495138,
+      "geometry_route": "covalent_nested_wf",
+      "hierarchy_core_lt_gas_lt_lattice": true,
+      "inert_core_elongation": 2.5,
+      "ionic_gas_em_dress": 1.6,
+      "lean_period3_ionic_outside_route": false,
+      "name": "NaF",
+      "nist_gas_r_e_angstrom_quarantine": 1.9259,
+      "period_i": 3,
+      "period_j": 2,
+      "r_core_angstrom": 1.2737267986759992,
+      "r_gas_angstrom": 2.037962877881599,
+      "r_lattice_angstrom": 2.391542185445649,
+      "route_weights": {
+        "covalent_nested_wf": 1.0,
+        "ionic_outside_contact": 0.0,
+        "period3_halogen_open_channel": 0.0
+      },
+      "z_i": 11,
+      "z_j": 9
+    },
+    {
+      "formula": "r_core = (r_i+r_j)\u00b7(1\u2212\u03b1/2)\u00b7dress\u00b7\u221a(1+4/8)\u00b7((Z_i+Z_j)/n_val); r_gas = r_core\u00b7(1+\u03b1); r_xtal = r_core\u00b7rocksalt(CN)",
+      "gas_error_pct_quarantine": 13.45822289524755,
+      "geometry_route": "covalent_nested_wf",
+      "hierarchy_core_lt_gas_lt_lattice": true,
+      "inert_core_elongation": 1.0,
+      "ionic_gas_em_dress": 1.6,
+      "lean_period3_ionic_outside_route": false,
+      "name": "LiF",
+      "nist_gas_r_e_angstrom_quarantine": 1.5639,
+      "period_i": 2,
+      "period_j": 2,
+      "r_core_angstrom": 1.1089832174117353,
+      "r_gas_angstrom": 1.7743731478587765,
+      "r_lattice_angstrom": 2.0115631364742277,
+      "route_weights": {
+        "covalent_nested_wf": 1.0,
+        "ionic_outside_contact": 0.0,
+        "period3_halogen_open_channel": 0.0
+      },
+      "z_i": 3,
+      "z_j": 9
+    }
+  ],
+  "role": "Period-3/n ionic outside-contact + halogen open-channel geometry suite; NIST lengths are comparison quarantine only",
+  "source": "scripts/hqiv_period_n_outside_contact_suite.py",
+  "summary": {
+    "all_period_n_ionic_mean_abs_gas_err_pct": 26.33684595488762,
+    "heavy_halogen_mean_abs_gas_err_pct": 40.835801440884865,
+    "hierarchy_ok_count": 8,
+    "hierarchy_ok_total": 8,
+    "nacl_gas_error_pct": 0.8202413230122712,
+    "notes": [
+      "Primary scored panel: alkali\u2013Cl with both periods \u2265 3 (NaCl, KCl, RbCl, CsCl).",
+      "Br/I rows expose nested-WF 1/Z radius collapse \u2014 next derivation target, not a fit.",
+      "Mixed period-2/3 holdouts keep covalent nested-WF (Lean period3IonicOutsideRoute false)."
+    ],
+    "primary_cl_anion_mean_abs_gas_err_pct": 11.837890468890384
+  }
+}

@@ -116,9 +116,9 @@
     "GG": {
       "name": "GG",
       "sequence": "GG",
-      "reference_source": "HQIV beta-strand dihedral spine (pending COD C\u03b1 extraction)",
-      "reference_citation": "Moggach et al. Acta Cryst. B62, 310 (2006) COD:2100438 \u2014 crystal C\u03b1 witness to be wired",
-      "notes": "Interim witness from same derived spine for pipeline gate; replace with COD C\u03b1 when parsed",
+      "reference_source": "COD:2100438 C\u03b1 atoms C1, C3 (Moggach gly\u2013gly crystal)",
+      "reference_citation": "Moggach et al. Acta Cryst. B62, 310 (2006) COD:2100438",
+      "notes": "Extended dihedral + diamond-node peptide bonds; grade witness only",
       "ca_angstrom": [
         [
           4.1874870373954325,
@@ -132,6 +132,439 @@
         ]
       ],
       "structure_id": "COD:2100438"
+    },
+    "beta_strand_3": {
+      "name": "beta_strand_3",
+      "sequence": "LYI",
+      "pdb_id": "1L2Y",
+      "residue_range": [
+        2,
+        4
+      ],
+      "parent": "trp_cage",
+      "ca_angstrom": [
+        [
+          -4.923,
+          4.002,
+          -2.452
+        ],
+        [
+          -3.69,
+          2.738,
+          0.981
+        ],
+        [
+          -5.857,
+          -0.449,
+          0.613
+        ]
+      ]
+    },
+    "alpha_helix_4": {
+      "name": "alpha_helix_4",
+      "sequence": "LKDG",
+      "pdb_id": "1L2Y",
+      "residue_range": [
+        7,
+        10
+      ],
+      "parent": "trp_cage",
+      "ca_angstrom": [
+        [
+          -1.641,
+          -2.932,
+          1.963
+        ],
+        [
+          -3.024,
+          -5.791,
+          -0.269
+        ],
+        [
+          0.466,
+          -6.016,
+          -1.905
+        ],
+        [
+          2.06,
+          -6.618,
+          1.593
+        ]
+      ]
+    },
+    "sheet_helix_6": {
+      "name": "sheet_helix_6",
+      "sequence": "LYIQWL",
+      "pdb_id": "1L2Y",
+      "residue_range": [
+        2,
+        7
+      ],
+      "parent": "trp_cage",
+      "ca_angstrom": [
+        [
+          -4.923,
+          4.002,
+          -2.452
+        ],
+        [
+          -3.69,
+          2.738,
+          0.981
+        ],
+        [
+          -5.857,
+          -0.449,
+          0.613
+        ],
+        [
+          -4.122,
+          -1.167,
+          -2.743
+        ],
+        [
+          -0.716,
+          -0.631,
+          -0.993
+        ],
+        [
+          -1.641,
+          -2.932,
+          1.963
+        ]
+      ]
+    },
+    "hairpin_turn_5": {
+      "name": "hairpin_turn_5",
+      "sequence": "LYIQW",
+      "pdb_id": "1L2Y",
+      "residue_range": [
+        2,
+        6
+      ],
+      "parent": "trp_cage",
+      "ca_angstrom": [
+        [
+          -4.923,
+          4.002,
+          -2.452
+        ],
+        [
+          -3.69,
+          2.738,
+          0.981
+        ],
+        [
+          -5.857,
+          -0.449,
+          0.613
+        ],
+        [
+          -4.122,
+          -1.167,
+          -2.743
+        ],
+        [
+          -0.716,
+          -0.631,
+          -0.993
+        ]
+      ]
+    },
+    "helix_6": {
+      "name": "helix_6",
+      "sequence": "LKDGGP",
+      "pdb_id": "1L2Y",
+      "residue_range": [
+        7,
+        12
+      ],
+      "parent": "trp_cage",
+      "ca_angstrom": [
+        [
+          -1.641,
+          -2.932,
+          1.963
+        ],
+        [
+          -3.024,
+          -5.791,
+          -0.269
+        ],
+        [
+          0.466,
+          -6.016,
+          -1.905
+        ],
+        [
+          2.06,
+          -6.618,
+          1.593
+        ],
+        [
+          2.626,
+          -2.967,
+          2.723
+        ],
+        [
+          6.333,
+          -2.533,
+          3.806
+        ]
+      ]
+    },
+    "sheet_helix_8": {
+      "name": "sheet_helix_8",
+      "sequence": "LYIQWLKD",
+      "pdb_id": "1L2Y",
+      "residue_range": [
+        2,
+        9
+      ],
+      "parent": "trp_cage",
+      "ca_angstrom": [
+        [
+          -4.923,
+          4.002,
+          -2.452
+        ],
+        [
+          -3.69,
+          2.738,
+          0.981
+        ],
+        [
+          -5.857,
+          -0.449,
+          0.613
+        ],
+        [
+          -4.122,
+          -1.167,
+          -2.743
+        ],
+        [
+          -0.716,
+          -0.631,
+          -0.993
+        ],
+        [
+          -1.641,
+          -2.932,
+          1.963
+        ],
+        [
+          -3.024,
+          -5.791,
+          -0.269
+        ],
+        [
+          0.466,
+          -6.016,
+          -1.905
+        ]
+      ]
+    },
+    "helix_8": {
+      "name": "helix_8",
+      "sequence": "LKDGGPSS",
+      "pdb_id": "1L2Y",
+      "residue_range": [
+        7,
+        14
+      ],
+      "parent": "trp_cage",
+      "ca_angstrom": [
+        [
+          -1.641,
+          -2.932,
+          1.963
+        ],
+        [
+          -3.024,
+          -5.791,
+          -0.269
+        ],
+        [
+          0.466,
+          -6.016,
+          -1.905
+        ],
+        [
+          2.06,
+          -6.618,
+          1.593
+        ],
+        [
+          2.626,
+          -2.967,
+          2.723
+        ],
+        [
+          6.333,
+          -2.533,
+          3.806
+        ],
+        [
+          7.049,
+          -6.179,
+          2.704
+        ],
+        [
+          6.389,
+          -5.315,
+          -1.015
+        ]
+      ]
+    },
+    "sheet_helix_10": {
+      "name": "sheet_helix_10",
+      "sequence": "LYIQWLKDGGP",
+      "pdb_id": "1L2Y",
+      "residue_range": [
+        2,
+        12
+      ],
+      "parent": "trp_cage",
+      "ca_angstrom": [
+        [
+          -4.923,
+          4.002,
+          -2.452
+        ],
+        [
+          -3.69,
+          2.738,
+          0.981
+        ],
+        [
+          -5.857,
+          -0.449,
+          0.613
+        ],
+        [
+          -4.122,
+          -1.167,
+          -2.743
+        ],
+        [
+          -0.716,
+          -0.631,
+          -0.993
+        ],
+        [
+          -1.641,
+          -2.932,
+          1.963
+        ],
+        [
+          -3.024,
+          -5.791,
+          -0.269
+        ],
+        [
+          0.466,
+          -6.016,
+          -1.905
+        ],
+        [
+          2.06,
+          -6.618,
+          1.593
+        ],
+        [
+          2.626,
+          -2.967,
+          2.723
+        ],
+        [
+          6.333,
+          -2.533,
+          3.806
+        ]
+      ]
+    },
+    "cage_core_14": {
+      "name": "cage_core_14",
+      "sequence": "LYIQWLKDGGPSSG",
+      "pdb_id": "1L2Y",
+      "residue_range": [
+        2,
+        15
+      ],
+      "parent": "trp_cage",
+      "ca_angstrom": [
+        [
+          -4.923,
+          4.002,
+          -2.452
+        ],
+        [
+          -3.69,
+          2.738,
+          0.981
+        ],
+        [
+          -5.857,
+          -0.449,
+          0.613
+        ],
+        [
+          -4.122,
+          -1.167,
+          -2.743
+        ],
+        [
+          -0.716,
+          -0.631,
+          -0.993
+        ],
+        [
+          -1.641,
+          -2.932,
+          1.963
+        ],
+        [
+          -3.024,
+          -5.791,
+          -0.269
+        ],
+        [
+          0.466,
+          -6.016,
+          -1.905
+        ],
+        [
+          2.06,
+          -6.618,
+          1.593
+        ],
+        [
+          2.626,
+          -2.967,
+          2.723
+        ],
+        [
+          6.333,
+          -2.533,
+          3.806
+        ],
+        [
+          7.049,
+          -6.179,
+          2.704
+        ],
+        [
+          6.389,
+          -5.315,
+          -1.015
+        ],
+        [
+          9.451,
+          -3.116,
+          -1.87
+        ]
+      ]
     }
   }
 }

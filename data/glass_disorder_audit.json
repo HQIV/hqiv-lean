@@ -1,0 +1,159 @@
+{
+  "source": "scripts/hqiv_glass_disorder_readout.py",
+  "lean_modules": [
+    "Hqiv.QuantumChemistry.PhaseElasticity"
+  ],
+  "formula": {
+    "disorder_score": "S = \u03b3 \u00b7 [(1\u2212w_periodic) + Var(CN)/\u27e8CN\u27e9 + open\u00b2]",
+    "amorphous_gate": "prefer amorphous template when S > \u03b1"
+  },
+  "identity_checks": {
+    "ordered_below_alpha": true,
+    "disordered_above_alpha": true,
+    "score_nonneg": true,
+    "h2o_has_amorphous_template": true,
+    "gamma_prefactor": true
+  },
+  "all_identity_checks_pass": true,
+  "rows": [
+    {
+      "name": "H2O",
+      "motif": "tetrahedral_hbond",
+      "intermolecular_contacts": 4,
+      "temperature_k": 273.15,
+      "mean_coordination": 4.0,
+      "templates": [
+        {
+          "label": "Ih",
+          "topology": "hex_ice_ih",
+          "open_fraction": 0.0,
+          "periodic_weight_used": 1.0,
+          "coordination_variance_used": 0.0,
+          "disorder_score": 0.0,
+          "prefer_amorphous_gate": false
+        },
+        {
+          "label": "Ic",
+          "topology": "cubic_z2",
+          "open_fraction": 0.16568542494923807,
+          "periodic_weight_used": 1.0,
+          "coordination_variance_used": 0.0,
+          "disorder_score": 0.01098066401624384,
+          "prefer_amorphous_gate": false
+        },
+        {
+          "label": "amorphous",
+          "topology": "generic_cubic",
+          "open_fraction": 1.0,
+          "periodic_weight_used": 0.4,
+          "coordination_variance_used": 2.0,
+          "disorder_score": 0.8400000000000001,
+          "prefer_amorphous_gate": true
+        }
+      ],
+      "preferred_allotrope": "Ih",
+      "preferred_score": 1.4380482794857983,
+      "disorder_ordered_reference": 0.0,
+      "disorder_fully_disordered_reference": 1.0,
+      "amorphous_gate_alpha": 0.6,
+      "formula": "S=\u03b3\u00b7[(1\u2212w_per)+Var(CN)/\u27e8CN\u27e9+open\u00b2]; prefer amorphous if S>\u03b1",
+      "nist_comparison_quarantine": {
+        "notes": "LDA/HDA ice; amorphous preferred only under high disorder"
+      }
+    },
+    {
+      "name": "H2O",
+      "motif": "tetrahedral_hbond",
+      "intermolecular_contacts": 4,
+      "temperature_k": 140.0,
+      "mean_coordination": 4.0,
+      "templates": [
+        {
+          "label": "Ih",
+          "topology": "hex_ice_ih",
+          "open_fraction": 0.0,
+          "periodic_weight_used": 0.0,
+          "coordination_variance_used": 2.0,
+          "disorder_score": 0.6000000000000001,
+          "prefer_amorphous_gate": true
+        },
+        {
+          "label": "Ic",
+          "topology": "cubic_z2",
+          "open_fraction": 0.16568542494923807,
+          "periodic_weight_used": 0.0,
+          "coordination_variance_used": 2.0,
+          "disorder_score": 0.6109806640162438,
+          "prefer_amorphous_gate": true
+        },
+        {
+          "label": "amorphous",
+          "topology": "generic_cubic",
+          "open_fraction": 1.0,
+          "periodic_weight_used": 0.0,
+          "coordination_variance_used": 2.0,
+          "disorder_score": 1.0,
+          "prefer_amorphous_gate": true
+        }
+      ],
+      "preferred_allotrope": "Ih",
+      "preferred_score": 1.0370914501414408,
+      "disorder_ordered_reference": 0.0,
+      "disorder_fully_disordered_reference": 1.0,
+      "amorphous_gate_alpha": 0.6,
+      "formula": "S=\u03b3\u00b7[(1\u2212w_per)+Var(CN)/\u27e8CN\u27e9+open\u00b2]; prefer amorphous if S>\u03b1",
+      "nist_comparison_quarantine": {
+        "notes": "LDA/HDA ice; amorphous preferred only under high disorder"
+      }
+    },
+    {
+      "name": "CH4",
+      "motif": "apolar_close_pack",
+      "intermolecular_contacts": 4,
+      "temperature_k": 90.0,
+      "mean_coordination": 12.0,
+      "templates": [
+        {
+          "label": "solid_I",
+          "topology": "fcc_z4",
+          "open_fraction": 0.0,
+          "periodic_weight_used": 1.0,
+          "coordination_variance_used": 0.0,
+          "disorder_score": 0.0,
+          "prefer_amorphous_gate": false
+        }
+      ],
+      "preferred_allotrope": "solid_I",
+      "preferred_score": 3.478830926936757,
+      "disorder_ordered_reference": 0.0,
+      "disorder_fully_disordered_reference": 1.0,
+      "amorphous_gate_alpha": 0.6,
+      "formula": "S=\u03b3\u00b7[(1\u2212w_per)+Var(CN)/\u27e8CN\u27e9+open\u00b2]; prefer amorphous if S>\u03b1"
+    },
+    {
+      "name": "NH3",
+      "motif": "pyramidal_hbond",
+      "intermolecular_contacts": 4,
+      "temperature_k": 195.8,
+      "mean_coordination": 6.0,
+      "templates": [
+        {
+          "label": "solid",
+          "topology": "fcc_z4",
+          "open_fraction": 0.0,
+          "periodic_weight_used": 1.0,
+          "coordination_variance_used": 0.0,
+          "disorder_score": 0.0,
+          "prefer_amorphous_gate": false
+        }
+      ],
+      "preferred_allotrope": "solid",
+      "preferred_score": 1.2868791480342656,
+      "disorder_ordered_reference": 0.0,
+      "disorder_fully_disordered_reference": 1.0,
+      "amorphous_gate_alpha": 0.6,
+      "formula": "S=\u03b3\u00b7[(1\u2212w_per)+Var(CN)/\u27e8CN\u27e9+open\u00b2]; prefer amorphous if S>\u03b1"
+    }
+  ],
+  "comparison_policy": "NIST/handbook glass markers are quarantine only"
+}

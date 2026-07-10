@@ -1,0 +1,1247 @@
+{
+  "source": "scripts/hqiv_spectral_scale_anchor_feedback.py",
+  "loop": "spectral scale anchor -> em -> contact length -> BE / density / transport",
+  "lean_module": "Hqiv.QuantumChemistry.OutsideContactReducedDeltas",
+  "input_policy": "omega_e may be injected as an in-situ spectral anchor; other NIST/CRC values remain comparison quarantine",
+  "contact_share_policy": "spectral anchors use shell-equation geometric/log-space activation; base contact_share = gamma * strongChannelFraction is projected through capacity, occupancy, open-channel fraction, polarity, and phase contact",
+  "contact_share": 0.2,
+  "rows": [
+    {
+      "name": "LiH",
+      "geometry_reliable": true,
+      "comparison_regime": "gas_vapor",
+      "geometry_route": "covalent_nested_wf",
+      "pin": {
+        "observable": "omega_e_cm1",
+        "omega_pin_cm1": 1405.65,
+        "omega_diffuse_cm1": 1329.8289657208643,
+        "omega_concentrated_cm1": 3067.0053524176783,
+        "s_star": 0.06635482159003232,
+        "em_star": 1.0331774107950162,
+        "contact_share": 0.2,
+        "closure": "geometric_log_space",
+        "shell_projection": {
+          "capacity": 1.0,
+          "bond_order": 1.0,
+          "ionic_character": 0.09972299168975068,
+          "phase_contact_weight": 0.0,
+          "ionic_route_weight": 1.0,
+          "gas_alkali_halide_weight": 0.0,
+          "metal_hydride_weight": 1.0,
+          "hydrogen_acceptor_weight": 0.0,
+          "halogen_open_channel_weight": 0.0,
+          "period3_weight": 0.0,
+          "anchor_share": 0.2,
+          "gamma": 0.4,
+          "strong": 0.5,
+          "occupancy": 1.0,
+          "open_channel_fraction": 0.0,
+          "polarity": 0.09972299168975068,
+          "polarity_amplitude": 0.3157894736842105,
+          "base_share": 0.2,
+          "length_share": 0.25003644846187495,
+          "gas_polar_separation_scale": 1.0,
+          "gas_metal_hydride_length_scale": 1.2842105263157895,
+          "halogen_open_channel_length_scale": 1.0,
+          "period3_hydrogen_acceptor_length_soft": 1.0,
+          "network_open_channel_packing_scale": 1.0,
+          "contact_length_dress_scale": 1.2842105263157895,
+          "energy_share": 0.21994459833795013,
+          "hydrogen_acceptor_energy_scale": 1.0,
+          "energy_exponent_share": -0.023157894736842113,
+          "stiffness_share": 0.23450835001507866
+        },
+        "spectroscopy_route_weights": {
+          "ionic_outside_contact": 0.0,
+          "period3_halogen_open_channel": 0.0,
+          "covalent_nested_wf": 1.0
+        },
+        "feedback_scales": {
+          "em": 1.0331774107950162,
+          "alpha": 0.15002186907712498,
+          "length_scale": 1.0049085592812765,
+          "volumetric_density_scale": 0.9854177118637801,
+          "areal_density_scale": 0.9902546931192834,
+          "inverse_length_binding_scale": 0.9951154169840217,
+          "stiffness_scale": 0.9806043572447661
+        },
+        "length_feedback_scales": {
+          "em": 1.0331774107950162,
+          "alpha": 0.15002186907712498,
+          "length_scale": 1.0049085592812765,
+          "volumetric_density_scale": 0.9854177118637801,
+          "areal_density_scale": 0.9902546931192834,
+          "inverse_length_binding_scale": 0.9951154169840217,
+          "stiffness_scale": 0.9806043572447661
+        },
+        "energy_feedback_scales": {
+          "em": 1.0331774107950162,
+          "energy_exponent_share": -0.023157894736842113,
+          "hydrogen_acceptor_energy_scale": 1.0,
+          "energy_scale": 0.999546593634176
+        }
+      },
+      "unpinned_outputs": {
+        "r_e_angstrom": 1.5934582496684815,
+        "r_e_one_way_anchor_angstrom": 1.240807653430375,
+        "r_e_route_geometric_angstrom": 1.234746825440333,
+        "r_e_route_geometric_dressed_angstrom": 1.5856748705654804,
+        "r_e_route_geometric_anchor_angstrom": 1.5934582496684815,
+        "D_e_ev_inverse_length_proxy": 2.5426855624395035,
+        "B_e_cm1": 7.539491545321292
+      },
+      "baseline_outputs": {
+        "r_e_angstrom": 1.234746825440333,
+        "r_e_route_geometric_angstrom": 1.234746825440333,
+        "r_e_route_geometric_dressed_angstrom": 1.5856748705654804,
+        "D_e_ev": 2.5438389552154295,
+        "B_e_cm1": 12.556471058324322
+      },
+      "comparison_quarantine": {
+        "r_e_error_pct_baseline": -22.62036564264378,
+        "r_e_error_pct_anchor": -0.1404869544098772,
+        "r_e_route_geometric_error_pct": -22.62036564264378,
+        "r_e_route_geometric_anchor_error_pct": -0.1404869544098772,
+        "D_e_error_pct_baseline": 1.138635305956956,
+        "D_e_error_pct_anchor": 1.0927784048784748,
+        "B_e_error_pct_baseline": 67.12769773228524,
+        "B_e_error_pct_anchor": 0.351273712865427,
+        "multiplicative": {
+          "r_e": {
+            "factor_baseline": 1.292329704456575,
+            "factor_anchor": 1.001406845979168,
+            "pct_baseline": 29.232970445657493,
+            "pct_anchor": 0.14068459791680699
+          },
+          "r_e_route_geometric": {
+            "factor_baseline": 1.006322310847333,
+            "factor_anchor": 1.001406845979168,
+            "pct_baseline": 0.6322310847332924,
+            "pct_anchor": 0.14068459791680699
+          },
+          "D_e": {
+            "factor_baseline": 1.0113863530595695,
+            "factor_anchor": 1.0109277840487847,
+            "pct_baseline": 1.1386353059569476,
+            "pct_anchor": 1.0927784048784694
+          },
+          "B_e": {
+            "factor_baseline": 1.6712769773228524,
+            "factor_anchor": 1.0035127371286543,
+            "pct_baseline": 67.12769773228524,
+            "pct_anchor": 0.35127371286542974
+          }
+        }
+      },
+      "policy": "omega_e is the single spectral scale anchor here; r_e, D_e, and B_e are scored as unpinned downstream outputs"
+    },
+    {
+      "name": "HF",
+      "geometry_reliable": true,
+      "comparison_regime": "gas_vapor",
+      "geometry_route": "covalent_nested_wf",
+      "pin": {
+        "observable": "omega_e_cm1",
+        "omega_pin_cm1": 4138.32,
+        "omega_diffuse_cm1": 1935.6227903357233,
+        "omega_concentrated_cm1": 13054.631957105848,
+        "s_star": 0.39810093394562124,
+        "em_star": 1.1990504669728106,
+        "contact_share": 0.2,
+        "closure": "geometric_log_space",
+        "shell_projection": {
+          "capacity": 1.0,
+          "bond_order": 1.0,
+          "ionic_character": 0.1975308641975308,
+          "phase_contact_weight": 0.0,
+          "ionic_route_weight": 0.0,
+          "gas_alkali_halide_weight": 0.0,
+          "metal_hydride_weight": 0.0,
+          "hydrogen_acceptor_weight": 1.0,
+          "halogen_open_channel_weight": 0.0,
+          "period3_weight": 0.0,
+          "anchor_share": 0.2,
+          "gamma": 0.4,
+          "strong": 0.5,
+          "occupancy": 1.0,
+          "open_channel_fraction": 0.0,
+          "polarity": 0.1975308641975308,
+          "polarity_amplitude": 0.44444444444444436,
+          "base_share": 0.2,
+          "length_share": 0.18024691358024691,
+          "gas_polar_separation_scale": 1.0,
+          "gas_metal_hydride_length_scale": 1.0,
+          "halogen_open_channel_length_scale": 1.0,
+          "period3_hydrogen_acceptor_length_soft": 1.0,
+          "network_open_channel_packing_scale": 1.0,
+          "contact_length_dress_scale": 1.0,
+          "energy_share": 0.23950617283950618,
+          "hydrogen_acceptor_energy_scale": 1.0444444444444445,
+          "energy_exponent_share": 0.04888888888888885,
+          "stiffness_share": 0.20777451344603876
+        },
+        "spectroscopy_route_weights": {
+          "ionic_outside_contact": 0.0,
+          "period3_halogen_open_channel": 0.0,
+          "covalent_nested_wf": 1.0
+        },
+        "feedback_scales": {
+          "em": 1.1990504669728106,
+          "alpha": 0.10814814814814815,
+          "length_scale": 1.0198261072369663,
+          "volumetric_density_scale": 0.9428044490236874,
+          "areal_density_scale": 0.96149659113352,
+          "inverse_length_binding_scale": 0.9805593256573107,
+          "stiffness_scale": 0.9244756947613795
+        },
+        "length_feedback_scales": {
+          "em": 1.1990504669728106,
+          "alpha": 0.10814814814814815,
+          "length_scale": 1.0198261072369663,
+          "volumetric_density_scale": 0.9428044490236874,
+          "areal_density_scale": 0.96149659113352,
+          "inverse_length_binding_scale": 0.9805593256573107,
+          "stiffness_scale": 0.9244756947613795
+        },
+        "energy_feedback_scales": {
+          "em": 1.1990504669728106,
+          "energy_exponent_share": 0.04888888888888885,
+          "hydrogen_acceptor_energy_scale": 1.0444444444444445,
+          "energy_scale": 1.0500208183194182
+        }
+      },
+      "unpinned_outputs": {
+        "r_e_angstrom": 0.923433168835479,
+        "r_e_one_way_anchor_angstrom": 0.923433168835479,
+        "r_e_route_geometric_angstrom": 0.9054810053229109,
+        "r_e_route_geometric_dressed_angstrom": 0.9054810053229109,
+        "r_e_route_geometric_anchor_angstrom": 0.923433168835479,
+        "D_e_ev_inverse_length_proxy": 6.146385984979073,
+        "B_e_cm1": 20.657554686587122
+      },
+      "baseline_outputs": {
+        "r_e_angstrom": 0.9054810053229109,
+        "r_e_route_geometric_angstrom": 0.9054810053229109,
+        "r_e_route_geometric_dressed_angstrom": 0.9054810053229109,
+        "D_e_ev": 5.853584879218396,
+        "B_e_cm1": 21.48479243408828
+      },
+      "comparison_quarantine": {
+        "r_e_error_pct_baseline": -1.2346198382514266,
+        "r_e_error_pct_anchor": 0.7235131801351485,
+        "r_e_route_geometric_error_pct": -1.2346198382514266,
+        "r_e_route_geometric_anchor_error_pct": 0.7235131801351485,
+        "D_e_error_pct_baseline": -4.384435164678266,
+        "D_e_error_pct_anchor": 0.3983336324579071,
+        "B_e_error_pct_baseline": 2.523346221074065,
+        "B_e_error_pct_anchor": -1.4241520968356416,
+        "multiplicative": {
+          "r_e": {
+            "factor_baseline": 1.0125005324358545,
+            "factor_anchor": 1.0072351318013515,
+            "pct_baseline": 1.2500532435854472,
+            "pct_anchor": 0.7235131801351491
+          },
+          "r_e_route_geometric": {
+            "factor_baseline": 1.0125005324358545,
+            "factor_anchor": 1.0072351318013515,
+            "pct_baseline": 1.2500532435854472,
+            "pct_anchor": 0.7235131801351491
+          },
+          "D_e": {
+            "factor_baseline": 1.045854826797599,
+            "factor_anchor": 1.0039833363245791,
+            "pct_baseline": 4.585482679759889,
+            "pct_anchor": 0.39833363245791453
+          },
+          "B_e": {
+            "factor_baseline": 1.0252334622107406,
+            "factor_anchor": 1.0144472720968594,
+            "pct_baseline": 2.523346221074063,
+            "pct_anchor": 1.4447272096859365
+          }
+        }
+      },
+      "policy": "omega_e is the single spectral scale anchor here; r_e, D_e, and B_e are scored as unpinned downstream outputs"
+    },
+    {
+      "name": "LiF",
+      "geometry_reliable": true,
+      "comparison_regime": "gas_vapor",
+      "geometry_route": "covalent_nested_wf",
+      "pin": {
+        "observable": "omega_e_cm1",
+        "omega_pin_cm1": 910.34,
+        "omega_diffuse_cm1": 706.3019154106539,
+        "omega_concentrated_cm1": 5664.222675121196,
+        "s_star": 0.12189708554348834,
+        "em_star": 1.0609485427717442,
+        "contact_share": 0.2,
+        "closure": "geometric_log_space",
+        "shell_projection": {
+          "capacity": 1.0,
+          "bond_order": 1.0,
+          "ionic_character": 0.4444444444444444,
+          "phase_contact_weight": 0.0,
+          "ionic_route_weight": 1.0,
+          "gas_alkali_halide_weight": 1.0,
+          "metal_hydride_weight": 0.0,
+          "hydrogen_acceptor_weight": 0.0,
+          "halogen_open_channel_weight": 0.0,
+          "period3_weight": 0.0,
+          "anchor_share": 0.2,
+          "gamma": 0.4,
+          "strong": 0.5,
+          "occupancy": 1.0,
+          "open_channel_fraction": 0.0,
+          "polarity": 0.4444444444444444,
+          "polarity_amplitude": 0.6666666666666666,
+          "base_share": 0.2,
+          "length_share": 0.25925925925925924,
+          "gas_polar_separation_scale": 1.0666666666666667,
+          "gas_metal_hydride_length_scale": 1.0,
+          "halogen_open_channel_length_scale": 1.0,
+          "period3_hydrogen_acceptor_length_soft": 1.0,
+          "network_open_channel_packing_scale": 1.0,
+          "contact_length_dress_scale": 1.0666666666666667,
+          "energy_share": 0.2888888888888889,
+          "hydrogen_acceptor_energy_scale": 1.0,
+          "energy_exponent_share": 0.17333333333333334,
+          "stiffness_share": 0.2736733807690543
+        },
+        "spectroscopy_route_weights": {
+          "ionic_outside_contact": 0.0,
+          "period3_halogen_open_channel": 0.0,
+          "covalent_nested_wf": 1.0
+        },
+        "feedback_scales": {
+          "em": 1.0609485427717442,
+          "alpha": 0.15555555555555553,
+          "length_scale": 1.009245668841839,
+          "volumetric_density_scale": 0.9727680926166764,
+          "areal_density_scale": 0.9817619842609175,
+          "inverse_length_binding_scale": 0.9908390304489006,
+          "stiffness_scale": 0.963856593739934
+        },
+        "length_feedback_scales": {
+          "em": 1.0609485427717442,
+          "alpha": 0.15555555555555553,
+          "length_scale": 1.009245668841839,
+          "volumetric_density_scale": 0.9727680926166764,
+          "areal_density_scale": 0.9817619842609175,
+          "inverse_length_binding_scale": 0.9908390304489006,
+          "stiffness_scale": 0.963856593739934
+        },
+        "energy_feedback_scales": {
+          "em": 1.0609485427717442,
+          "energy_exponent_share": 0.17333333333333334,
+          "hydrogen_acceptor_energy_scale": 1.0,
+          "energy_scale": 1.0061719579277764
+        }
+      },
+      "unpinned_outputs": {
+        "r_e_angstrom": 1.5661985904943023,
+        "r_e_one_way_anchor_angstrom": 1.4683111785884082,
+        "r_e_route_geometric_angstrom": 1.4548600245898213,
+        "r_e_route_geometric_dressed_angstrom": 1.5518506928958093,
+        "r_e_route_geometric_anchor_angstrom": 1.5661985904943023,
+        "D_e_ev_inverse_length_proxy": 5.932787716241302,
+        "B_e_cm1": 1.3475054158173536
+      },
+      "baseline_outputs": {
+        "r_e_angstrom": 1.454860024589821,
+        "r_e_route_geometric_angstrom": 1.4548600245898213,
+        "r_e_route_geometric_dressed_angstrom": 1.5518506928958093,
+        "D_e_ev": 5.89639541183393,
+        "B_e_cm1": 1.561642986926584
+      },
+      "comparison_quarantine": {
+        "r_e_error_pct_baseline": -6.972311235384549,
+        "r_e_error_pct_anchor": 0.1469780992584088,
+        "r_e_route_geometric_error_pct": -6.972311235384534,
+        "r_e_route_geometric_anchor_error_pct": 0.1469780992584088,
+        "D_e_error_pct_baseline": -1.5791118038068768,
+        "D_e_error_pct_anchor": -0.9716622226455948,
+        "B_e_error_pct_baseline": 16.081393512717167,
+        "B_e_error_pct_anchor": 0.1639348708357744,
+        "multiplicative": {
+          "r_e": {
+            "factor_baseline": 1.0749487741550403,
+            "factor_anchor": 1.001469780992584,
+            "pct_baseline": 7.494877415504031,
+            "pct_anchor": 0.1469780992584102
+          },
+          "r_e_route_geometric": {
+            "factor_baseline": 1.00776447577035,
+            "factor_anchor": 1.001469780992584,
+            "pct_baseline": 0.776447577035011,
+            "pct_anchor": 0.1469780992584102
+          },
+          "D_e": {
+            "factor_baseline": 1.016044478288583,
+            "factor_anchor": 1.0098119613481769,
+            "pct_baseline": 1.6044478288582908,
+            "pct_anchor": 0.9811961348176856
+          },
+          "B_e": {
+            "factor_baseline": 1.1608139351271716,
+            "factor_anchor": 1.0016393487083577,
+            "pct_baseline": 16.081393512717156,
+            "pct_anchor": 0.16393487083576908
+          }
+        }
+      },
+      "policy": "omega_e is the single spectral scale anchor here; r_e, D_e, and B_e are scored as unpinned downstream outputs"
+    },
+    {
+      "name": "HCl",
+      "geometry_reliable": true,
+      "comparison_regime": "gas_vapor",
+      "geometry_route": "covalent_nested_wf",
+      "pin": {
+        "observable": "omega_e_cm1",
+        "omega_pin_cm1": 2990.95,
+        "omega_diffuse_cm1": 1221.4431922276651,
+        "omega_concentrated_cm1": 16262.458743153516,
+        "s_star": 0.3459320512295561,
+        "em_star": 1.172966025614778,
+        "contact_share": 0.2,
+        "closure": "geometric_log_space",
+        "shell_projection": {
+          "capacity": 1.0,
+          "bond_order": 1.0,
+          "ionic_character": 0.17522985397512184,
+          "phase_contact_weight": 0.0,
+          "ionic_route_weight": 0.0,
+          "gas_alkali_halide_weight": 0.0,
+          "metal_hydride_weight": 0.0,
+          "hydrogen_acceptor_weight": 1.0,
+          "halogen_open_channel_weight": 0.0,
+          "period3_weight": 1.0,
+          "anchor_share": 0.2,
+          "gamma": 0.4,
+          "strong": 0.5,
+          "occupancy": 1.0,
+          "open_channel_fraction": 0.0,
+          "polarity": 0.17522985397512184,
+          "polarity_amplitude": 0.4186046511627909,
+          "base_share": 0.2,
+          "length_share": 0.18247701460248783,
+          "gas_polar_separation_scale": 1.0,
+          "gas_metal_hydride_length_scale": 1.0,
+          "halogen_open_channel_length_scale": 1.0,
+          "period3_hydrogen_acceptor_length_soft": 0.9665116279069768,
+          "network_open_channel_packing_scale": 1.0,
+          "contact_length_dress_scale": 0.9665116279069768,
+          "energy_share": 0.23504597079502437,
+          "hydrogen_acceptor_energy_scale": 1.041860465116279,
+          "energy_exponent_share": 0.0344186046511629,
+          "stiffness_share": 0.20710018600913813
+        },
+        "spectroscopy_route_weights": {
+          "ionic_outside_contact": 0.0,
+          "period3_halogen_open_channel": 0.0,
+          "covalent_nested_wf": 1.0
+        },
+        "feedback_scales": {
+          "em": 1.172966025614778,
+          "alpha": 0.10948620876149269,
+          "length_scale": 1.0176203878343584,
+          "volumetric_density_scale": 0.9489484085613282,
+          "areal_density_scale": 0.9656692475549761,
+          "inverse_length_binding_scale": 0.9826847142166077,
+          "stiffness_scale": 0.9325170956733936
+        },
+        "length_feedback_scales": {
+          "em": 1.172966025614778,
+          "alpha": 0.10948620876149269,
+          "length_scale": 1.0176203878343584,
+          "volumetric_density_scale": 0.9489484085613282,
+          "areal_density_scale": 0.9656692475549761,
+          "inverse_length_binding_scale": 0.9826847142166077,
+          "stiffness_scale": 0.9325170956733936
+        },
+        "energy_feedback_scales": {
+          "em": 1.172966025614778,
+          "energy_exponent_share": 0.0344186046511629,
+          "hydrogen_acceptor_energy_scale": 1.041860465116279,
+          "energy_scale": 1.0452986347686708
+        }
+      },
+      "unpinned_outputs": {
+        "r_e_angstrom": 1.260649084966984,
+        "r_e_one_way_anchor_angstrom": 1.30432893776661,
+        "r_e_route_geometric_angstrom": 1.2817441094536328,
+        "r_e_route_geometric_dressed_angstrom": 1.2388205857882089,
+        "r_e_route_geometric_anchor_angstrom": 1.260649084966984,
+        "D_e_ev_inverse_length_proxy": 4.719376250300186,
+        "B_e_cm1": 10.82918141089625
+      },
+      "baseline_outputs": {
+        "r_e_angstrom": 1.2817441094536328,
+        "r_e_route_geometric_angstrom": 1.2817441094536328,
+        "r_e_route_geometric_dressed_angstrom": 1.2388205857882089,
+        "D_e_ev": 4.514859288364617,
+        "B_e_cm1": 10.47566000162305
+      },
+      "comparison_quarantine": {
+        "r_e_error_pct_baseline": 0.560498152646545,
+        "r_e_error_pct_anchor": -1.0945327971925256,
+        "r_e_route_geometric_error_pct": 0.560498152646545,
+        "r_e_route_geometric_anchor_error_pct": -1.0945327971925256,
+        "D_e_error_pct_baseline": -2.233449797214883,
+        "D_e_error_pct_anchor": 2.1952414530139897,
+        "B_e_error_pct_baseline": -1.107712625101013,
+        "B_e_error_pct_anchor": 2.2295988945176113,
+        "multiplicative": {
+          "r_e": {
+            "factor_baseline": 1.0056049815264654,
+            "factor_anchor": 1.0110664539397825,
+            "pct_baseline": 0.560498152646538,
+            "pct_anchor": 1.106645393978245
+          },
+          "r_e_route_geometric": {
+            "factor_baseline": 1.0288818369845107,
+            "factor_anchor": 1.0110664539397825,
+            "pct_baseline": 2.8881836984510745,
+            "pct_anchor": 1.106645393978245
+          },
+          "D_e": {
+            "factor_baseline": 1.0228447234006142,
+            "factor_anchor": 1.02195241453014,
+            "pct_baseline": 2.2844723400614164,
+            "pct_anchor": 2.1952414530139963
+          },
+          "B_e": {
+            "factor_baseline": 1.0112012033951818,
+            "factor_anchor": 1.0222959889451761,
+            "pct_baseline": 1.1201203395181825,
+            "pct_anchor": 2.229598894517615
+          }
+        }
+      },
+      "policy": "omega_e is the single spectral scale anchor here; r_e, D_e, and B_e are scored as unpinned downstream outputs"
+    },
+    {
+      "name": "CO",
+      "geometry_reliable": true,
+      "comparison_regime": "gas_vapor",
+      "geometry_route": "covalent_nested_wf",
+      "pin": {
+        "observable": "omega_e_cm1",
+        "omega_pin_cm1": 2169.81,
+        "omega_diffuse_cm1": 862.252782343219,
+        "omega_concentrated_cm1": 9356.521389987332,
+        "s_star": 0.38705448234075907,
+        "em_star": 1.1935272411703794,
+        "contact_share": 0.2,
+        "closure": "geometric_log_space",
+        "shell_projection": {
+          "capacity": 3.0,
+          "bond_order": 2.0,
+          "ionic_character": 0.027777777777777776,
+          "phase_contact_weight": 0.0,
+          "ionic_route_weight": 0.0,
+          "gas_alkali_halide_weight": 0.0,
+          "metal_hydride_weight": 0.0,
+          "hydrogen_acceptor_weight": 0.0,
+          "halogen_open_channel_weight": 0.0,
+          "period3_weight": 0.0,
+          "anchor_share": 0.2,
+          "gamma": 0.4,
+          "strong": 0.5,
+          "occupancy": 0.6666666666666666,
+          "open_channel_fraction": 0.33333333333333337,
+          "polarity": 0.027777777777777776,
+          "polarity_amplitude": 0.16666666666666666,
+          "base_share": 0.2,
+          "length_share": 0.23009259259259263,
+          "gas_polar_separation_scale": 1.0,
+          "gas_metal_hydride_length_scale": 1.0,
+          "halogen_open_channel_length_scale": 1.0,
+          "period3_hydrogen_acceptor_length_soft": 1.0,
+          "network_open_channel_packing_scale": 1.0222222222222221,
+          "contact_length_dress_scale": 1.0,
+          "energy_share": 0.17129629629629628,
+          "hydrogen_acceptor_energy_scale": 1.0,
+          "energy_exponent_share": -0.10666666666666669,
+          "stiffness_share": 0.19852961722706192
+        },
+        "spectroscopy_route_weights": {
+          "ionic_outside_contact": 0.0,
+          "period3_halogen_open_channel": 0.0,
+          "covalent_nested_wf": 1.0
+        },
+        "feedback_scales": {
+          "em": 1.1935272411703794,
+          "alpha": 0.13805555555555557,
+          "length_scale": 1.0247245259284858,
+          "volumetric_density_scale": 0.9293485112710311,
+          "areal_density_scale": 0.9523262126345515,
+          "inverse_length_binding_scale": 0.9758720267712112,
+          "stiffness_scale": 0.9069252152708689
+        },
+        "length_feedback_scales": {
+          "em": 1.1935272411703794,
+          "alpha": 0.13805555555555557,
+          "length_scale": 1.0247245259284858,
+          "volumetric_density_scale": 0.9293485112710311,
+          "areal_density_scale": 0.9523262126345515,
+          "inverse_length_binding_scale": 0.9758720267712112,
+          "stiffness_scale": 0.9069252152708689
+        },
+        "energy_feedback_scales": {
+          "em": 1.1935272411703794,
+          "energy_exponent_share": -0.10666666666666669,
+          "hydrogen_acceptor_energy_scale": 1.0,
+          "energy_scale": 0.9887414260589218
+        }
+      },
+      "unpinned_outputs": {
+        "r_e_angstrom": 1.1181230617425824,
+        "r_e_one_way_anchor_angstrom": 1.1181230617425824,
+        "r_e_route_geometric_angstrom": 1.0911450184423659,
+        "r_e_route_geometric_dressed_angstrom": 1.0911450184423659,
+        "r_e_route_geometric_anchor_angstrom": 1.1181230617425824,
+        "D_e_ev_inverse_length_proxy": 11.644631414542445,
+        "B_e_cm1": 1.9718160458782317
+      },
+      "baseline_outputs": {
+        "r_e_angstrom": 1.0911450184423659,
+        "r_e_route_geometric_angstrom": 1.0911450184423659,
+        "r_e_route_geometric_dressed_angstrom": 1.0911450184423659,
+        "D_e_ev": 11.777226186382636,
+        "B_e_cm1": 2.0705258552353873
+      },
+      "comparison_quarantine": {
+        "r_e_error_pct_baseline": -3.2930055444149775,
+        "r_e_error_pct_anchor": -0.901970952531926,
+        "r_e_route_geometric_error_pct": -3.2930055444149775,
+        "r_e_route_geometric_anchor_error_pct": -0.901970952531926,
+        "D_e_error_pct_baseline": 4.779592405539466,
+        "D_e_error_pct_anchor": 3.599923616925667,
+        "B_e_error_pct_baseline": 7.208919134023058,
+        "B_e_error_pct_anchor": 2.0978639195480584,
+        "multiplicative": {
+          "r_e": {
+            "factor_baseline": 1.0340513689103157,
+            "factor_anchor": 1.009101805164055,
+            "pct_baseline": 3.4051368910315682,
+            "pct_anchor": 0.910180516405501
+          },
+          "r_e_route_geometric": {
+            "factor_baseline": 1.0340513689103157,
+            "factor_anchor": 1.009101805164055,
+            "pct_baseline": 3.4051368910315682,
+            "pct_anchor": 0.910180516405501
+          },
+          "D_e": {
+            "factor_baseline": 1.0477959240553947,
+            "factor_anchor": 1.0359992361692567,
+            "pct_baseline": 4.779592405539468,
+            "pct_anchor": 3.599923616925671
+          },
+          "B_e": {
+            "factor_baseline": 1.0720891913402306,
+            "factor_anchor": 1.0209786391954805,
+            "pct_baseline": 7.208919134023062,
+            "pct_anchor": 2.0978639195480486
+          }
+        }
+      },
+      "policy": "omega_e is the single spectral scale anchor here; r_e, D_e, and B_e are scored as unpinned downstream outputs"
+    },
+    {
+      "name": "N2",
+      "geometry_reliable": true,
+      "comparison_regime": "gas_vapor",
+      "geometry_route": "covalent_nested_wf",
+      "pin": {
+        "observable": "omega_e_cm1",
+        "omega_pin_cm1": 2358.57,
+        "omega_diffuse_cm1": 791.5666714070992,
+        "omega_concentrated_cm1": 8619.077724269697,
+        "s_star": 0.4572550435689653,
+        "em_star": 1.2286275217844826,
+        "contact_share": 0.2,
+        "closure": "geometric_log_space",
+        "shell_projection": {
+          "capacity": 3.0,
+          "bond_order": 3.0,
+          "ionic_character": 0.0,
+          "phase_contact_weight": 0.0,
+          "ionic_route_weight": 0.0,
+          "gas_alkali_halide_weight": 0.0,
+          "metal_hydride_weight": 0.0,
+          "hydrogen_acceptor_weight": 0.0,
+          "halogen_open_channel_weight": 0.0,
+          "period3_weight": 0.0,
+          "anchor_share": 0.2,
+          "gamma": 0.4,
+          "strong": 0.5,
+          "occupancy": 1.0,
+          "open_channel_fraction": 0.0,
+          "polarity": 0.0,
+          "polarity_amplitude": 0.0,
+          "base_share": 0.2,
+          "length_share": 0.2,
+          "gas_polar_separation_scale": 1.0,
+          "gas_metal_hydride_length_scale": 1.0,
+          "halogen_open_channel_length_scale": 1.0,
+          "period3_hydrogen_acceptor_length_soft": 1.0,
+          "network_open_channel_packing_scale": 1.0,
+          "contact_length_dress_scale": 1.0,
+          "energy_share": 0.2,
+          "hydrogen_acceptor_energy_scale": 1.0,
+          "energy_exponent_share": -0.2,
+          "stiffness_share": 0.2
+        },
+        "spectroscopy_route_weights": {
+          "ionic_outside_contact": 0.0,
+          "period3_halogen_open_channel": 0.0,
+          "covalent_nested_wf": 1.0
+        },
+        "feedback_scales": {
+          "em": 1.2286275217844826,
+          "alpha": 0.12,
+          "length_scale": 1.0250154905946052,
+          "volumetric_density_scale": 0.9285573110497342,
+          "areal_density_scale": 0.9517856277308507,
+          "inverse_length_binding_scale": 0.9755950121494321,
+          "stiffness_scale": 0.9058958811550095
+        },
+        "length_feedback_scales": {
+          "em": 1.2286275217844826,
+          "alpha": 0.12,
+          "length_scale": 1.0250154905946052,
+          "volumetric_density_scale": 0.9285573110497342,
+          "areal_density_scale": 0.9517856277308507,
+          "inverse_length_binding_scale": 0.9755950121494321,
+          "stiffness_scale": 0.9058958811550095
+        },
+        "energy_feedback_scales": {
+          "em": 1.2286275217844826,
+          "energy_exponent_share": -0.2,
+          "hydrogen_acceptor_energy_scale": 1.0,
+          "energy_scale": 0.9755950121494321
+        }
+      },
+      "unpinned_outputs": {
+        "r_e_angstrom": 1.1069690580514762,
+        "r_e_one_way_anchor_angstrom": 1.1069690580514762,
+        "r_e_route_geometric_angstrom": 1.0799534916387754,
+        "r_e_route_geometric_dressed_angstrom": 1.0799534916387754,
+        "r_e_route_geometric_anchor_angstrom": 1.1069690580514762,
+        "D_e_ev_inverse_length_proxy": 9.886467475851719,
+        "B_e_cm1": 1.9703490107858364
+      },
+      "baseline_outputs": {
+        "r_e_angstrom": 1.0799534916387754,
+        "r_e_route_geometric_angstrom": 1.0799534916387754,
+        "r_e_route_geometric_dressed_angstrom": 1.0799534916387754,
+        "D_e_ev": 10.133782310007758,
+        "B_e_cm1": 2.0701604997790723
+      },
+      "comparison_quarantine": {
+        "r_e_error_pct_baseline": -1.616699313220779,
+        "r_e_error_pct_anchor": 0.8444072197755548,
+        "r_e_route_geometric_error_pct": -1.616699313220779,
+        "r_e_route_geometric_anchor_error_pct": 0.8444072197755548,
+        "D_e_error_pct_baseline": 2.320096021887705,
+        "D_e_error_pct_anchor": -0.1770246783954092,
+        "B_e_error_pct_baseline": 3.601266128469241,
+        "B_e_error_pct_anchor": -1.3938038842039648,
+        "multiplicative": {
+          "r_e": {
+            "factor_baseline": 1.0164326598308369,
+            "factor_anchor": 1.0084440721977554,
+            "pct_baseline": 1.643265983083686,
+            "pct_anchor": 0.8444072197755448
+          },
+          "r_e_route_geometric": {
+            "factor_baseline": 1.0164326598308369,
+            "factor_anchor": 1.0084440721977554,
+            "pct_baseline": 1.643265983083686,
+            "pct_anchor": 0.8444072197755448
+          },
+          "D_e": {
+            "factor_baseline": 1.023200960218877,
+            "factor_anchor": 1.0017733861150209,
+            "pct_baseline": 2.3200960218876965,
+            "pct_anchor": 0.17733861150208696
+          },
+          "B_e": {
+            "factor_baseline": 1.0360126612846925,
+            "factor_anchor": 1.0141350537705276,
+            "pct_baseline": 3.6012661284692493,
+            "pct_anchor": 1.4135053770527595
+          }
+        }
+      },
+      "policy": "omega_e is the single spectral scale anchor here; r_e, D_e, and B_e are scored as unpinned downstream outputs"
+    },
+    {
+      "name": "O2",
+      "geometry_reliable": true,
+      "comparison_regime": "gas_vapor",
+      "geometry_route": "covalent_nested_wf",
+      "pin": {
+        "observable": "omega_e_cm1",
+        "omega_pin_cm1": 1580.19,
+        "omega_diffuse_cm1": 538.1243335362265,
+        "omega_concentrated_cm1": 7328.0860127371925,
+        "s_star": 0.4125063117281797,
+        "em_star": 1.2062531558640899,
+        "contact_share": 0.2,
+        "closure": "geometric_log_space",
+        "shell_projection": {
+          "capacity": 3.0,
+          "bond_order": 2.0,
+          "ionic_character": 0.0,
+          "phase_contact_weight": 0.0,
+          "ionic_route_weight": 0.0,
+          "gas_alkali_halide_weight": 0.0,
+          "metal_hydride_weight": 0.0,
+          "hydrogen_acceptor_weight": 0.0,
+          "halogen_open_channel_weight": 0.0,
+          "period3_weight": 0.0,
+          "anchor_share": 0.2,
+          "gamma": 0.4,
+          "strong": 0.5,
+          "occupancy": 0.6666666666666666,
+          "open_channel_fraction": 0.33333333333333337,
+          "polarity": 0.0,
+          "polarity_amplitude": 0.0,
+          "base_share": 0.2,
+          "length_share": 0.23333333333333336,
+          "gas_polar_separation_scale": 1.0,
+          "gas_metal_hydride_length_scale": 1.0,
+          "halogen_open_channel_length_scale": 1.0,
+          "period3_hydrogen_acceptor_length_soft": 1.0,
+          "network_open_channel_packing_scale": 1.0222222222222221,
+          "contact_length_dress_scale": 1.0,
+          "energy_share": 0.16666666666666666,
+          "hydrogen_acceptor_energy_scale": 1.0,
+          "energy_exponent_share": -0.2,
+          "stiffness_share": 0.19720265943665388
+        },
+        "spectroscopy_route_weights": {
+          "ionic_outside_contact": 0.0,
+          "period3_halogen_open_channel": 0.0,
+          "covalent_nested_wf": 1.0
+        },
+        "feedback_scales": {
+          "em": 1.2062531558640899,
+          "alpha": 0.14,
+          "length_scale": 1.0266002950919595,
+          "volumetric_density_scale": 0.9242635915618423,
+          "areal_density_scale": 0.9488492758401417,
+          "inverse_length_binding_scale": 0.9740889465752816,
+          "stiffness_scale": 0.9003149482623614
+        },
+        "length_feedback_scales": {
+          "em": 1.2062531558640899,
+          "alpha": 0.14,
+          "length_scale": 1.0266002950919595,
+          "volumetric_density_scale": 0.9242635915618423,
+          "areal_density_scale": 0.9488492758401417,
+          "inverse_length_binding_scale": 0.9740889465752816,
+          "stiffness_scale": 0.9003149482623614
+        },
+        "energy_feedback_scales": {
+          "em": 1.2062531558640899,
+          "energy_exponent_share": -0.2,
+          "hydrogen_acceptor_energy_scale": 1.0,
+          "energy_scale": 0.977749009104801
+        }
+      },
+      "unpinned_outputs": {
+        "r_e_angstrom": 1.2126193769396427,
+        "r_e_one_way_anchor_angstrom": 1.2126193769396427,
+        "r_e_route_geometric_angstrom": 1.1811991314799108,
+        "r_e_route_geometric_dressed_angstrom": 1.1811991314799108,
+        "r_e_route_geometric_anchor_angstrom": 1.2126193769396427,
+        "D_e_ev_inverse_length_proxy": 5.234665755062276,
+        "B_e_cm1": 1.4359648644837084
+      },
+      "baseline_outputs": {
+        "r_e_angstrom": 1.1811991314799108,
+        "r_e_route_geometric_angstrom": 1.1811991314799108,
+        "r_e_route_geometric_dressed_angstrom": 1.1811991314799108,
+        "D_e_ev": 5.3537929533214115,
+        "B_e_cm1": 1.5133750966003099
+      },
+      "comparison_quarantine": {
+        "r_e_error_pct_baseline": -2.1781257573572814,
+        "r_e_error_pct_anchor": 0.4239649639455657,
+        "r_e_route_geometric_error_pct": -2.1781257573572814,
+        "r_e_route_geometric_anchor_error_pct": 0.4239649639455657,
+        "D_e_error_pct_baseline": 2.7008047826858124,
+        "D_e_error_pct_anchor": 0.4156101105366642,
+        "B_e_error_pct_baseline": 4.6883713752289635,
+        "B_e_error_pct_anchor": -0.6665146317301869,
+        "multiplicative": {
+          "r_e": {
+            "factor_baseline": 1.0222662443775565,
+            "factor_anchor": 1.0042396496394557,
+            "pct_baseline": 2.226624437755653,
+            "pct_anchor": 0.4239649639455667
+          },
+          "r_e_route_geometric": {
+            "factor_baseline": 1.0222662443775565,
+            "factor_anchor": 1.0042396496394557,
+            "pct_baseline": 2.226624437755653,
+            "pct_anchor": 0.4239649639455667
+          },
+          "D_e": {
+            "factor_baseline": 1.0270080478268582,
+            "factor_anchor": 1.0041561011053666,
+            "pct_baseline": 2.7008047826858173,
+            "pct_anchor": 0.4156101105366572
+          },
+          "B_e": {
+            "factor_baseline": 1.0468837137522897,
+            "factor_anchor": 1.0067098685731115,
+            "pct_baseline": 4.688371375228972,
+            "pct_anchor": 0.670986857311151
+          }
+        }
+      },
+      "policy": "omega_e is the single spectral scale anchor here; r_e, D_e, and B_e are scored as unpinned downstream outputs"
+    },
+    {
+      "name": "F2",
+      "geometry_reliable": true,
+      "comparison_regime": "gas_vapor",
+      "geometry_route": "covalent_nested_wf",
+      "pin": {
+        "observable": "omega_e_cm1",
+        "omega_pin_cm1": 916.64,
+        "omega_diffuse_cm1": 277.8621824354315,
+        "omega_concentrated_cm1": 4607.894360075124,
+        "s_star": 0.42500681086906583,
+        "em_star": 1.212503405434533,
+        "contact_share": 0.2,
+        "closure": "geometric_log_space",
+        "shell_projection": {
+          "capacity": 3.0,
+          "bond_order": 1.0,
+          "ionic_character": 0.0,
+          "phase_contact_weight": 0.0,
+          "ionic_route_weight": 0.0,
+          "gas_alkali_halide_weight": 0.0,
+          "metal_hydride_weight": 0.0,
+          "hydrogen_acceptor_weight": 0.0,
+          "halogen_open_channel_weight": 0.6666666666666666,
+          "period3_weight": 0.0,
+          "anchor_share": 0.2,
+          "gamma": 0.4,
+          "strong": 0.5,
+          "occupancy": 0.3333333333333333,
+          "open_channel_fraction": 0.6666666666666667,
+          "polarity": 0.0,
+          "polarity_amplitude": 0.0,
+          "base_share": 0.2,
+          "length_share": 0.2666666666666667,
+          "gas_polar_separation_scale": 1.0,
+          "gas_metal_hydride_length_scale": 1.0,
+          "halogen_open_channel_length_scale": 1.0533333333333332,
+          "period3_hydrogen_acceptor_length_soft": 1.0,
+          "network_open_channel_packing_scale": 1.088888888888889,
+          "contact_length_dress_scale": 1.0533333333333332,
+          "energy_share": 0.13333333333333333,
+          "hydrogen_acceptor_energy_scale": 1.0,
+          "energy_exponent_share": -0.2,
+          "stiffness_share": 0.1885618083164127
+        },
+        "spectroscopy_route_weights": {
+          "ionic_outside_contact": 0.0,
+          "period3_halogen_open_channel": 0.0,
+          "covalent_nested_wf": 1.0
+        },
+        "feedback_scales": {
+          "em": 1.212503405434533,
+          "alpha": 0.16000000000000003,
+          "length_scale": 1.0313101089028127,
+          "volumetric_density_scale": 0.9116584795968132,
+          "areal_density_scale": 0.940202605875162,
+          "inverse_length_binding_scale": 0.9696404518558217,
+          "stiffness_scale": 0.8839809400944453
+        },
+        "length_feedback_scales": {
+          "em": 1.212503405434533,
+          "alpha": 0.16000000000000003,
+          "length_scale": 1.0313101089028127,
+          "volumetric_density_scale": 0.9116584795968132,
+          "areal_density_scale": 0.940202605875162,
+          "inverse_length_binding_scale": 0.9696404518558217,
+          "stiffness_scale": 0.8839809400944453
+        },
+        "energy_feedback_scales": {
+          "em": 1.212503405434533,
+          "energy_exponent_share": -0.2,
+          "hydrogen_acceptor_energy_scale": 1.0,
+          "energy_scale": 0.9771428172061415
+        }
+      },
+      "unpinned_outputs": {
+        "r_e_angstrom": 1.4257248265018354,
+        "r_e_one_way_anchor_angstrom": 1.353536227691616,
+        "r_e_route_geometric_angstrom": 1.312443479422123,
+        "r_e_route_geometric_dressed_angstrom": 1.3824404649913027,
+        "r_e_route_geometric_anchor_angstrom": 1.4257248265018354,
+        "D_e_ev_inverse_length_proxy": 1.6568085102305605,
+        "B_e_cm1": 0.8742601839438014
+      },
+      "baseline_outputs": {
+        "r_e_angstrom": 1.312443479422123,
+        "r_e_route_geometric_angstrom": 1.312443479422123,
+        "r_e_route_geometric_dressed_angstrom": 1.3824404649913027,
+        "D_e_ev": 1.6955643341550903,
+        "B_e_cm1": 1.0316940008741966
+      },
+      "comparison_quarantine": {
+        "r_e_error_pct_baseline": -7.044161808759616,
+        "r_e_error_pct_anchor": 0.9791647072622335,
+        "r_e_route_geometric_error_pct": -7.044161808759616,
+        "r_e_route_geometric_anchor_error_pct": 0.9791647072622335,
+        "D_e_error_pct_baseline": 2.142429768378941,
+        "D_e_error_pct_anchor": -0.19225841984574657,
+        "B_e_error_pct_baseline": 15.894630518332578,
+        "B_e_error_pct_anchor": -1.7905881887439385,
+        "multiplicative": {
+          "r_e": {
+            "factor_baseline": 1.0757796599527991,
+            "factor_anchor": 1.0097916470726223,
+            "pct_baseline": 7.577965995279912,
+            "pct_anchor": 0.9791647072622256
+          },
+          "r_e_route_geometric": {
+            "factor_baseline": 1.0213098037526576,
+            "factor_anchor": 1.0097916470726223,
+            "pct_baseline": 2.1309803752657563,
+            "pct_anchor": 0.9791647072622256
+          },
+          "D_e": {
+            "factor_baseline": 1.0214242976837895,
+            "factor_anchor": 1.0019262876486525,
+            "pct_baseline": 2.1424297683789506,
+            "pct_anchor": 0.1926287648652547
+          },
+          "B_e": {
+            "factor_baseline": 1.1589463051833258,
+            "factor_anchor": 1.0182323481601252,
+            "pct_baseline": 15.894630518332576,
+            "pct_anchor": 1.82323481601252
+          }
+        }
+      },
+      "policy": "omega_e is the single spectral scale anchor here; r_e, D_e, and B_e are scored as unpinned downstream outputs"
+    },
+    {
+      "name": "Cl2",
+      "geometry_reliable": true,
+      "comparison_regime": "gas_vapor",
+      "geometry_route": "period3_halogen_open_channel",
+      "pin": {
+        "observable": "omega_e_cm1",
+        "omega_pin_cm1": 559.72,
+        "omega_diffuse_cm1": 213.78367661615076,
+        "omega_concentrated_cm1": 9273.27631740023,
+        "s_star": 0.255302533560911,
+        "em_star": 1.1276512667804555,
+        "contact_share": 0.2,
+        "closure": "geometric_log_space",
+        "shell_projection": {
+          "capacity": 3.0,
+          "bond_order": 1.0,
+          "ionic_character": 0.0,
+          "phase_contact_weight": 0.0,
+          "ionic_route_weight": 0.0,
+          "gas_alkali_halide_weight": 0.0,
+          "metal_hydride_weight": 0.0,
+          "hydrogen_acceptor_weight": 0.0,
+          "halogen_open_channel_weight": 0.6666666666666666,
+          "period3_weight": 1.0,
+          "anchor_share": 0.2,
+          "gamma": 0.4,
+          "strong": 0.5,
+          "occupancy": 0.3333333333333333,
+          "open_channel_fraction": 0.6666666666666667,
+          "polarity": 0.0,
+          "polarity_amplitude": 0.0,
+          "base_share": 0.2,
+          "length_share": 0.2666666666666667,
+          "gas_polar_separation_scale": 1.0,
+          "gas_metal_hydride_length_scale": 1.0,
+          "halogen_open_channel_length_scale": 1.0533333333333332,
+          "period3_hydrogen_acceptor_length_soft": 1.0,
+          "network_open_channel_packing_scale": 1.088888888888889,
+          "contact_length_dress_scale": 1.0533333333333332,
+          "energy_share": 0.13333333333333333,
+          "hydrogen_acceptor_energy_scale": 1.0,
+          "energy_exponent_share": -0.2,
+          "stiffness_share": 0.1885618083164127
+        },
+        "spectroscopy_route_weights": {
+          "ionic_outside_contact": 0.0,
+          "period3_halogen_open_channel": 1.0,
+          "covalent_nested_wf": 0.0
+        },
+        "feedback_scales": {
+          "em": 1.1276512667804555,
+          "alpha": 0.16000000000000003,
+          "length_scale": 1.0194078414745718,
+          "volumetric_density_scale": 0.94396543080444,
+          "areal_density_scale": 0.9622857622429684,
+          "inverse_length_binding_scale": 0.9809616517698173,
+          "stiffness_scale": 0.9259938882155306
+        },
+        "length_feedback_scales": {
+          "em": 1.1276512667804555,
+          "alpha": 0.16000000000000003,
+          "length_scale": 1.0194078414745718,
+          "volumetric_density_scale": 0.94396543080444,
+          "areal_density_scale": 0.9622857622429684,
+          "inverse_length_binding_scale": 0.9809616517698173,
+          "stiffness_scale": 0.9259938882155306
+        },
+        "energy_feedback_scales": {
+          "em": 1.1276512667804555,
+          "energy_exponent_share": -0.2,
+          "hydrogen_acceptor_energy_scale": 1.0,
+          "energy_scale": 0.9856869858457536
+        }
+      },
+      "unpinned_outputs": {
+        "r_e_angstrom": 2.032658921828048,
+        "r_e_one_way_anchor_angstrom": 1.929739482748147,
+        "r_e_route_geometric_angstrom": 1.8930004304820554,
+        "r_e_route_geometric_dressed_angstrom": 1.9939604534410982,
+        "r_e_route_geometric_anchor_angstrom": 2.032658921828048,
+        "D_e_ev_inverse_length_proxy": 2.4210586066896234,
+        "B_e_cm1": 0.2339880827579995
+      },
+      "baseline_outputs": {
+        "r_e_angstrom": 1.8930004304820554,
+        "r_e_route_geometric_angstrom": 1.8930004304820554,
+        "r_e_route_geometric_dressed_angstrom": 1.9939604534410982,
+        "D_e_ev": 2.4562144387168416,
+        "B_e_cm1": 0.26978719614687274
+      },
+      "comparison_quarantine": {
+        "r_e_error_pct_baseline": -4.773860330899172,
+        "r_e_error_pct_anchor": 2.2515680782759793,
+        "r_e_route_geometric_error_pct": -4.773860330899172,
+        "r_e_route_geometric_anchor_error_pct": 2.2515680782759793,
+        "D_e_error_pct_baseline": -2.298550568144716,
+        "D_e_error_pct_anchor": -3.6969527967532394,
+        "B_e_error_pct_baseline": 10.568523011013422,
+        "B_e_error_pct_anchor": -4.103244771311673,
+        "multiplicative": {
+          "r_e": {
+            "factor_baseline": 1.0501318266968267,
+            "factor_anchor": 1.0225156807827598,
+            "pct_baseline": 5.01318266968267,
+            "pct_anchor": 2.2515680782759784
+          },
+          "r_e_route_geometric": {
+            "factor_baseline": 1.0030486711811952,
+            "factor_anchor": 1.0225156807827598,
+            "pct_baseline": 0.30486711811952283,
+            "pct_anchor": 2.2515680782759784
+          },
+          "D_e": {
+            "factor_baseline": 1.02352626886818,
+            "factor_anchor": 1.0383887416246638,
+            "pct_baseline": 2.35262688681801,
+            "pct_anchor": 3.838874162466377
+          },
+          "B_e": {
+            "factor_baseline": 1.1056852301101343,
+            "factor_anchor": 1.0427881502510332,
+            "pct_baseline": 10.568523011013431,
+            "pct_anchor": 4.278815025103322
+          }
+        }
+      },
+      "policy": "omega_e is the single spectral scale anchor here; r_e, D_e, and B_e are scored as unpinned downstream outputs"
+    }
+  ],
+  "summary": {
+    "count": 9,
+    "mean_s_star": 0.31882334159739767,
+    "mean_em_star": 1.1594116707986988,
+    "geometric_mean_em_star": 1.1574561541760195,
+    "geometric_error_all": {
+      "count": 9,
+      "r_e": {
+        "count": 9,
+        "geometric_mean_factor_baseline": 1.0618954031956687,
+        "geometric_mean_factor_anchor": 1.008345656589536,
+        "geometric_mean_error_pct_baseline": 6.189540319566866,
+        "geometric_mean_error_pct_anchor": 0.8345656589535899,
+        "improved_count": 8
+      },
+      "r_e_route_geometric": {
+        "count": 9,
+        "geometric_mean_factor_baseline": 1.016904405876059,
+        "geometric_mean_factor_anchor": 1.008345656589536,
+        "geometric_mean_error_pct_baseline": 1.6904405876059014,
+        "geometric_mean_error_pct_anchor": 0.8345656589535899,
+        "improved_count": 8
+      },
+      "D_e": {
+        "count": 9,
+        "geometric_mean_factor_baseline": 1.0264992144041865,
+        "geometric_mean_factor_anchor": 1.0142340605588809,
+        "geometric_mean_error_pct_baseline": 2.6499214404186455,
+        "geometric_mean_error_pct_anchor": 1.4234060558880879,
+        "improved_count": 8
+      },
+      "B_e": {
+        "count": 9,
+        "geometric_mean_factor_baseline": 1.1296978273289924,
+        "geometric_mean_factor_anchor": 1.0160147603138538,
+        "geometric_mean_error_pct_baseline": 12.969782732899237,
+        "geometric_mean_error_pct_anchor": 1.6014760313853849,
+        "improved_count": 8
+      }
+    },
+    "geometric_error_reliable_geometry": {
+      "count": 9,
+      "r_e": {
+        "count": 9,
+        "geometric_mean_factor_baseline": 1.0618954031956687,
+        "geometric_mean_factor_anchor": 1.008345656589536,
+        "geometric_mean_error_pct_baseline": 6.189540319566866,
+        "geometric_mean_error_pct_anchor": 0.8345656589535899,
+        "improved_count": 8
+      },
+      "r_e_route_geometric": {
+        "count": 9,
+        "geometric_mean_factor_baseline": 1.016904405876059,
+        "geometric_mean_factor_anchor": 1.008345656589536,
+        "geometric_mean_error_pct_baseline": 1.6904405876059014,
+        "geometric_mean_error_pct_anchor": 0.8345656589535899,
+        "improved_count": 8
+      },
+      "D_e": {
+        "count": 9,
+        "geometric_mean_factor_baseline": 1.0264992144041865,
+        "geometric_mean_factor_anchor": 1.0142340605588809,
+        "geometric_mean_error_pct_baseline": 2.6499214404186455,
+        "geometric_mean_error_pct_anchor": 1.4234060558880879,
+        "improved_count": 8
+      },
+      "B_e": {
+        "count": 9,
+        "geometric_mean_factor_baseline": 1.1296978273289924,
+        "geometric_mean_factor_anchor": 1.0160147603138538,
+        "geometric_mean_error_pct_baseline": 12.969782732899237,
+        "geometric_mean_error_pct_anchor": 1.6014760313853849,
+        "improved_count": 8
+      }
+    }
+  }
+}

@@ -152,8 +152,12 @@ GALACTIC_NORTH_RA_DEG = 192.85948
 GALACTIC_NORTH_DEC_DEG = 27.12825
 GALACTIC_CENTER_RA_DEG = 266.4051
 GALACTIC_CENTER_DEC_DEG = -28.936175
-# Hubble rate (s⁻¹); φ_hom ≈ 2cH in the HQVM homogeneous limit (paper main.tex).
+# Hubble rate (s⁻¹); legacy bridge φ_hom ≈ 2cH₀.
+# Prefer lock-in impedance age (`phi_acceleration_homogeneous_si`, default)
+# matching SPARC derived dynamics — see `--phi-source legacy|derived`.
 H0_SI = 2.27e-18
+#: ``derived`` = proton-pin Route-A φ_hom; ``legacy`` = 2cH₀ bridge.
+PHI_SOURCE = "derived"
 
 
 def _dot(a: Vec3, b: Vec3) -> float:
@@ -1428,15 +1432,31 @@ def hqiv_inertia_factor(a_loc: float, phi: float) -> float:
 
 
 def phi_acceleration_homogeneous_si() -> float:
-    """Homogeneous-limit acceleration scale φ ≈ 2cH (paper HQVM; Brodie overlap)."""
-    return 2.0 * C_LIGHT * H0_SI
+    """Homogeneous-limit acceleration scale φ_hom (m/s²).
+
+    Default ``PHI_SOURCE='derived'``: lock-in impedance age (same Route-A
+    proton-pin floor as SPARC ``hqiv_galaxy_derived_dynamics``).
+    ``PHI_SOURCE='legacy'``: apparent-age bridge ``2c H₀`` with hardcoded H₀.
+
+    Flyby excesses are Doppler/L–T dominated at Earth — swapping floors changes
+    NEAR/Galileo HQIV−classical by ≲0.01 mm/s (checked); still use derived for
+    stack consistency with SPARC/wide binaries.
+    """
+    if PHI_SOURCE == "legacy":
+        return 2.0 * C_LIGHT * H0_SI
+    try:
+        import hqiv_galaxy_derived_dynamics as _der
+
+        return float(_der.phi_acceleration_homogeneous_derived_si())
+    except Exception:
+        return 2.0 * C_LIGHT * H0_SI
 
 
 def phi_acceleration_si(r: Vec3, body: RotatingBody) -> float:
     """
     Local φ as an acceleration scale (m/s²) for the inertia screen.
 
-    Uses φ_hom = 2cH modulated by radial geometry.  Solar-system propagation uses
+    Uses φ_hom modulated by radial geometry.  Solar-system propagation uses
     ξ = 1 (not shell 4).  Earth's local curvature supplies a small multiplicative
     delta from orbital phase geometry when available.
     """
@@ -2798,6 +2818,39 @@ def paper_nominal_coupling() -> HQIVOrbitCoupling:
     )
 
 
+def paper_defensible_coupling() -> HQIVOrbitCoupling:
+    """Audit-minimal flyby coupling: load-bearing terms only.
+
+    Kept (scored-mission ablation or Lean equation identity):
+      - ε_spin co-spin lapse + horizon repartition + metric channel
+      - derived λ = γ sin²θ ρ_pol (L–T vector split)
+      - angular-momentum / polar-fiber inertia blend
+      - orbital angular Rindler scale (geometry-dependent; inert on NEAR,
+        O(0.25–0.76) mm/s on Galileo/Cassini/Rosetta)
+      - screened G_eff time factor
+      - paper inertia screen + modified geodesic (locked f = a/(a+φ/6);
+        geodesic branch is numerically inert when ⟨f⟩≈1 but kept for identity)
+      - spin vacuum suppressed (avoids double-count with ε)
+
+    Dropped as catalog-inert clutter (|Δ| ≲ 0.001 mm/s on scored Earth flybys):
+      - galactic disk lapse (~10⁻¹⁰)
+      - velocity screen (1−β²)
+      - phase-geometry φ mass delta
+      - annual lapse (already off in nominal)
+      - chord / coherence gates (experimental)
+    """
+    return replace(
+        paper_nominal_coupling(),
+        galactic_disk_lapse_phi=False,
+        velocity_screen=False,
+        phase_geometry_source=False,
+        annual_lapse_phi=False,
+        chord_source_gate=False,
+        lapse_drag_coherence_gate=False,
+        kappa_l=0.0,
+    )
+
+
 def paper_chord_source_coupling() -> HQIVOrbitCoupling:
     """Nominal repartitioned horizon plus chord-gated phase-geometry source boost."""
     return replace(
@@ -2890,6 +2943,12 @@ def main(argv: Sequence[str] | None = None) -> int:
     )
     parser.add_argument("--case", default="galileo_1990", help="case id from active --catalog")
     parser.add_argument("--list-cases", action="store_true")
+    parser.add_argument(
+        "--phi-source",
+        choices=("derived", "legacy"),
+        default="derived",
+        help="φ_hom: derived lock-in impedance (default; SPARC-aligned) or legacy 2cH₀",
+    )
     parser.add_argument("--hqiv-scale", type=float, default=100.0, help="vacuum_scale for g_vac probe")
     parser.add_argument("--metric-scale", type=float, default=1.0e3, help="metric_phi_scale")
     parser.add_argument("--kappa-l", type=float, default=0.0, help="longitudinal stress coefficient")
@@ -2993,7 +3052,14 @@ def main(argv: Sequence[str] | None = None) -> int:
         action="store_true",
         help="use nominal coupling (κ=1, φ_hom geometric readout, spin vacuum off)",
     )
+    parser.add_argument(
+        "--paper-defensible",
+        action="store_true",
+        help="audit-minimal coupling: load-bearing horizon/L–T/inertia only",
+    )
     args = parser.parse_args(argv)
+    global PHI_SOURCE
+    PHI_SOURCE = args.phi_source
 
     if args.equations:
         from hqiv_flyby_equations import print_equations
@@ -3060,7 +3126,9 @@ def main(argv: Sequence[str] | None = None) -> int:
             central_body=case.central_body,
             encounter_date=case.encounter_date,
         )
-    if args.paper_nominal:
+    if args.paper_defensible:
+        coupling = paper_defensible_coupling()
+    elif args.paper_nominal:
         coupling = paper_nominal_coupling()
         if args.annual_lapse:
             coupling = replace(

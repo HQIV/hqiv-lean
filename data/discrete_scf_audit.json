@@ -1,0 +1,730 @@
+{
+  "source": "scripts/hqiv_discrete_scf_readout.py",
+  "lean_modules": [
+    "Hqiv.QuantumChemistry.OutsideContactReducedDeltas"
+  ],
+  "formula": {
+    "charge_excess": "\u03b4 = clamp01(\u03b9 \u00b7 \u03b3 \u00b7 E_c / (E_g + E_c))",
+    "dress": "f = 1 + (4/8)\u00b7\u03b4",
+    "gap": "E_g' = f \u00b7 E_g",
+    "hopping": "t' = t / f",
+    "mix": "\u03b4 \u2190 (1\u2212\u03b1)\u00b7\u03b4 + \u03b1\u00b7\u03b4_new",
+    "identity": "\u03b9=0 \u21d2 \u03b4=0, f=1"
+  },
+  "identity_checks": {
+    "dress_zero_is_one": true,
+    "zero_ionic_zero_charge": true,
+    "covalent_identity": true,
+    "all_covalent_metal_identity": true,
+    "ionic_dress_gt_one": true,
+    "scf_gap_matches_dressed": true,
+    "nacl_converged": true
+  },
+  "all_identity_checks_pass": true,
+  "rows": [
+    {
+      "name": "NaCl",
+      "crystal_kind": "ionic",
+      "ionic_character": 0.28924510980862933,
+      "contact_electronic_scale_eV": 1.940790101225132,
+      "bare_band_gap_eV": 10.15053171130788,
+      "bare_hopping_eV": 0.16173250843542766,
+      "scf": {
+        "charge_excess": 0.018428262550589207,
+        "dress": 1.0092141312752947,
+        "band_gap_eV": 10.244060043009911,
+        "hopping_eV": 0.16025588963073098,
+        "iterations": 21,
+        "converged": true,
+        "history": [
+          {
+            "iter": 0.0,
+            "delta": 0.0,
+            "dress": 1.0,
+            "band_gap_eV": 10.15053171130788,
+            "hopping_eV": 0.16173250843542766,
+            "delta_new": 0.011142484925593374
+          },
+          {
+            "iter": 1.0,
+            "delta": 0.011142484925593374,
+            "dress": 1.0055712424627967,
+            "band_gap_eV": 10.207082784597882,
+            "hopping_eV": 0.16083644957797338,
+            "delta_new": 0.015547608129023857
+          },
+          {
+            "iter": 2.0,
+            "delta": 0.015547608129023857,
+            "dress": 1.007773804064512,
+            "band_gap_eV": 10.229439955982201,
+            "hopping_eV": 0.16048493003403616,
+            "delta_new": 0.017289283534114346
+          },
+          {
+            "iter": 3.0,
+            "delta": 0.017289283534114346,
+            "dress": 1.0086446417670571,
+            "band_gap_eV": 10.238279421697289,
+            "hopping_eV": 0.16034637149520417,
+            "delta_new": 0.017977919009325674
+          },
+          {
+            "iter": 4.0,
+            "delta": 0.017977919009325674,
+            "dress": 1.0089889595046628,
+            "band_gap_eV": 10.241774429811622,
+            "hopping_eV": 0.1602916532553796,
+            "delta_new": 0.01825019960667275
+          },
+          {
+            "iter": 5.0,
+            "delta": 0.01825019960667275,
+            "dress": 1.0091250998033363,
+            "band_gap_eV": 10.243156326230494,
+            "hopping_eV": 0.16027002843051566,
+            "delta_new": 0.018357857536360298
+          },
+          {
+            "iter": 6.0,
+            "delta": 0.018357857536360298,
+            "dress": 1.00917892876818,
+            "band_gap_eV": 10.243702718845126,
+            "hopping_eV": 0.16026147972871466,
+            "delta_new": 0.018400424841221785
+          },
+          {
+            "iter": 7.0,
+            "delta": 0.018400424841221785,
+            "dress": 1.009200212420611,
+            "band_gap_eV": 10.24391875923406,
+            "hopping_eV": 0.16025809987445916,
+            "delta_new": 0.018417255712567738
+          },
+          {
+            "iter": 8.0,
+            "delta": 0.018417255712567738,
+            "dress": 1.009208627856284,
+            "band_gap_eV": 10.244004180380722,
+            "hopping_eV": 0.16025676353854867,
+            "delta_new": 0.018423910545727208
+          },
+          {
+            "iter": 9.0,
+            "delta": 0.018423910545727208,
+            "dress": 1.0092119552728636,
+            "band_gap_eV": 10.244037955428231,
+            "hopping_eV": 0.16025623516489118,
+            "delta_new": 0.018426541830140017
+          },
+          {
+            "iter": 10.0,
+            "delta": 0.018426541830140017,
+            "dress": 1.00921327091507,
+            "band_gap_eV": 10.244051309896168,
+            "hopping_eV": 0.16025602624981553,
+            "delta_new": 0.018427582225564978
+          },
+          {
+            "iter": 11.0,
+            "delta": 0.018427582225564978,
+            "dress": 1.0092137911127825,
+            "band_gap_eV": 10.244056590179545,
+            "hopping_eV": 0.16025594364609072,
+            "delta_new": 0.01842799359221706
+          },
+          {
+            "iter": 12.0,
+            "delta": 0.01842799359221706,
+            "dress": 1.0092139967961085,
+            "band_gap_eV": 10.244058677974667,
+            "hopping_eV": 0.16025591098505393,
+            "delta_new": 0.018428156244339106
+          },
+          {
+            "iter": 13.0,
+            "delta": 0.018428156244339106,
+            "dress": 1.0092140781221695,
+            "band_gap_eV": 10.244059503477429,
+            "hopping_eV": 0.16025589807106247,
+            "delta_new": 0.018428220556097837
+          },
+          {
+            "iter": 14.0,
+            "delta": 0.018428220556097837,
+            "dress": 1.009214110278049,
+            "band_gap_eV": 10.244059829876702,
+            "hopping_eV": 0.16025589296494147,
+            "delta_new": 0.01842824598461524
+          },
+          {
+            "iter": 15.0,
+            "delta": 0.01842824598461524,
+            "dress": 1.0092141229923077,
+            "band_gap_eV": 10.24405995893319,
+            "hopping_eV": 0.16025589094600928,
+            "delta_new": 0.018428256038911843
+          },
+          {
+            "iter": 16.0,
+            "delta": 0.018428256038911843,
+            "dress": 1.009214128019456,
+            "band_gap_eV": 10.244060009961418,
+            "hopping_eV": 0.16025589014773456,
+            "delta_new": 0.018428260014325692
+          },
+          {
+            "iter": 17.0,
+            "delta": 0.018428260014325692,
+            "dress": 1.0092141300071629,
+            "band_gap_eV": 10.2440600301377,
+            "hopping_eV": 0.16025588983210112,
+            "delta_new": 0.01842826158618257
+          },
+          {
+            "iter": 18.0,
+            "delta": 0.01842826158618257,
+            "dress": 1.0092141307930913,
+            "band_gap_eV": 10.244060038115292,
+            "hopping_eV": 0.16025588970730137,
+            "delta_new": 0.018428262207686178
+          },
+          {
+            "iter": 19.0,
+            "delta": 0.018428262207686178,
+            "dress": 1.0092141311038432,
+            "band_gap_eV": 10.244060041269588,
+            "hopping_eV": 0.16025588965795623,
+            "delta_new": 0.0184282624534253
+          },
+          {
+            "iter": 20.0,
+            "delta": 0.0184282624534253,
+            "dress": 1.0092141312267127,
+            "band_gap_eV": 10.244060042516779,
+            "hopping_eV": 0.16025588963844545,
+            "delta_new": 0.018428262550589207
+          }
+        ]
+      },
+      "scf_hoppings_eV": {
+        "t_ss": 0.16025588963073098,
+        "t_pp": 0.06410235585229239,
+        "t_sp": 0.101354723937934,
+        "t_pi": 0.032051177926146195
+      },
+      "scf_gap_at_gamma_eV": 10.244060043009911,
+      "identity_covalent_or_metal": false,
+      "nist_optical_gap_eV_quarantine": 8.5,
+      "scf_gamma_vs_nist_ratio": 1.2051835344717543,
+      "formula": "\u03b4=clamp(\u03b9\u00b7\u03b3\u00b7E_c/(E_g+E_c)); f=1+(4/8)\u03b4; E_g'=f E_g; t'=t/f; mix (1\u2212\u03b1)\u03b4+\u03b1\u03b4_new"
+    },
+    {
+      "name": "LiF",
+      "crystal_kind": "ionic",
+      "ionic_character": 0.4444444444444444,
+      "contact_electronic_scale_eV": 2.550374922016071,
+      "bare_band_gap_eV": 7.4385057118081885,
+      "bare_hopping_eV": 0.21253124350133926,
+      "scf": {
+        "charge_excess": 0.044648224900299675,
+        "dress": 1.0223241124501499,
+        "band_gap_eV": 7.604563749779676,
+        "hopping_eV": 0.20789027756762668,
+        "iterations": 22,
+        "converged": true,
+        "history": [
+          {
+            "iter": 0.0,
+            "delta": 0.0,
+            "dress": 1.0,
+            "band_gap_eV": 7.4385057118081885,
+            "hopping_eV": 0.21253124350133926,
+            "delta_new": 0.027234281963540025
+          },
+          {
+            "iter": 1.0,
+            "delta": 0.027234281963540025,
+            "dress": 1.01361714098177,
+            "band_gap_eV": 7.539796892779583,
+            "hopping_eV": 0.20967605509856077,
+            "delta_new": 0.03785460073410389
+          },
+          {
+            "iter": 2.0,
+            "delta": 0.03785460073410389,
+            "dress": 1.018927300367052,
+            "band_gap_eV": 7.579296543697614,
+            "hopping_eV": 0.2085833242712982,
+            "delta_new": 0.04199759692923425
+          },
+          {
+            "iter": 3.0,
+            "delta": 0.04199759692923425,
+            "dress": 1.0209987984646172,
+            "band_gap_eV": 7.594705394128352,
+            "hopping_eV": 0.2081601308649381,
+            "delta_new": 0.043614005554046535
+          },
+          {
+            "iter": 4.0,
+            "delta": 0.043614005554046535,
+            "dress": 1.0218070027770232,
+            "band_gap_eV": 7.600717226522493,
+            "hopping_eV": 0.2079954853741763,
+            "delta_new": 0.04424468824123271
+          },
+          {
+            "iter": 5.0,
+            "delta": 0.04424468824123271,
+            "dress": 1.0221223441206164,
+            "band_gap_eV": 7.60306289490798,
+            "hopping_eV": 0.2079313153888546,
+            "delta_new": 0.04449077013534953
+          },
+          {
+            "iter": 6.0,
+            "delta": 0.04449077013534953,
+            "dress": 1.0222453850676747,
+            "band_gap_eV": 7.603978135695459,
+            "hopping_eV": 0.20790628806533498,
+            "delta_new": 0.04458678797300758
+          },
+          {
+            "iter": 7.0,
+            "delta": 0.04458678797300758,
+            "dress": 1.0222933939865038,
+            "band_gap_eV": 7.604335250312387,
+            "hopping_eV": 0.2078965243750221,
+            "delta_new": 0.04462425295691029
+          },
+          {
+            "iter": 8.0,
+            "delta": 0.04462425295691029,
+            "dress": 1.0223121264784552,
+            "band_gap_eV": 7.604474592060764,
+            "hopping_eV": 0.20789271495139433,
+            "delta_new": 0.04463887135260342
+          },
+          {
+            "iter": 9.0,
+            "delta": 0.04463887135260342,
+            "dress": 1.0223194356763017,
+            "band_gap_eV": 7.604528961570694,
+            "hopping_eV": 0.20789122859700115,
+            "delta_new": 0.0446445752812559
+          },
+          {
+            "iter": 10.0,
+            "delta": 0.0446445752812559,
+            "dress": 1.022322287640628,
+            "band_gap_eV": 7.604550175923625,
+            "hopping_eV": 0.20789064864450002,
+            "delta_new": 0.04464680088855542
+          },
+          {
+            "iter": 11.0,
+            "delta": 0.04464680088855542,
+            "dress": 1.0223234004442776,
+            "band_gap_eV": 7.604558453519929,
+            "hopping_eV": 0.2078904223545878,
+            "delta_new": 0.044647669294967066
+          },
+          {
+            "iter": 12.0,
+            "delta": 0.044647669294967066,
+            "dress": 1.0223238346474834,
+            "band_gap_eV": 7.604561683342956,
+            "hopping_eV": 0.20789033405899612,
+            "delta_new": 0.044648008137186654
+          },
+          {
+            "iter": 13.0,
+            "delta": 0.044648008137186654,
+            "dress": 1.0223240040685933,
+            "band_gap_eV": 7.604562943582849,
+            "hopping_eV": 0.20789029960708952,
+            "delta_new": 0.04464814034953504
+          },
+          {
+            "iter": 14.0,
+            "delta": 0.04464814034953504,
+            "dress": 1.0223240701747676,
+            "band_gap_eV": 7.604563435314004,
+            "hopping_eV": 0.2078902861643537,
+            "delta_new": 0.04464819193727747
+          },
+          {
+            "iter": 15.0,
+            "delta": 0.04464819193727747,
+            "dress": 1.0223240959686388,
+            "band_gap_eV": 7.604563627181863,
+            "hopping_eV": 0.2078902809191528,
+            "delta_new": 0.04464821206622309
+          },
+          {
+            "iter": 16.0,
+            "delta": 0.04464821206622309,
+            "dress": 1.0223241060331116,
+            "band_gap_eV": 7.604563702046501,
+            "hopping_eV": 0.2078902788725356,
+            "delta_new": 0.0446482199203069
+          },
+          {
+            "iter": 17.0,
+            "delta": 0.0446482199203069,
+            "dress": 1.0223241099601534,
+            "band_gap_eV": 7.604563731257824,
+            "hopping_eV": 0.2078902780739691,
+            "delta_new": 0.04464822298488036
+          },
+          {
+            "iter": 18.0,
+            "delta": 0.04464822298488036,
+            "dress": 1.0223241114924402,
+            "band_gap_eV": 7.604563742655747,
+            "hopping_eV": 0.2078902777623776,
+            "delta_new": 0.044648224180641786
+          },
+          {
+            "iter": 19.0,
+            "delta": 0.044648224180641786,
+            "dress": 1.0223241120903208,
+            "band_gap_eV": 7.604563747103086,
+            "hopping_eV": 0.20789027764079818,
+            "delta_new": 0.044648224647214185
+          },
+          {
+            "iter": 20.0,
+            "delta": 0.044648224647214185,
+            "dress": 1.022324112323607,
+            "band_gap_eV": 7.6045637488383875,
+            "hopping_eV": 0.20789027759335924,
+            "delta_new": 0.044648224829265386
+          },
+          {
+            "iter": 21.0,
+            "delta": 0.044648224829265386,
+            "dress": 1.0223241124146327,
+            "band_gap_eV": 7.604563749515482,
+            "hopping_eV": 0.20789027757484912,
+            "delta_new": 0.044648224900299675
+          }
+        ]
+      },
+      "scf_hoppings_eV": {
+        "t_ss": 0.20789027756762668,
+        "t_pp": 0.08315611102705069,
+        "t_sp": 0.13148135610366188,
+        "t_pi": 0.04157805551352534
+      },
+      "scf_gap_at_gamma_eV": 7.604563749779676,
+      "identity_covalent_or_metal": false,
+      "nist_optical_gap_eV_quarantine": 13.6,
+      "scf_gamma_vs_nist_ratio": 0.5591590992485056,
+      "formula": "\u03b4=clamp(\u03b9\u00b7\u03b3\u00b7E_c/(E_g+E_c)); f=1+(4/8)\u03b4; E_g'=f E_g; t'=t/f; mix (1\u2212\u03b1)\u03b4+\u03b1\u03b4_new"
+    },
+    {
+      "name": "LiH",
+      "crystal_kind": "ionic",
+      "ionic_character": 0.09972299168975068,
+      "contact_electronic_scale_eV": 2.5541589919901035,
+      "bare_band_gap_eV": 15.51535595605564,
+      "bare_hopping_eV": 0.21284658266584197,
+      "scf": {
+        "charge_excess": 0.005624827610804248,
+        "dress": 1.0028124138054022,
+        "band_gap_eV": 15.55899155734218,
+        "hopping_eV": 0.21224964882329955,
+        "iterations": 20,
+        "converged": true,
+        "history": [
+          {
+            "iter": 0.0,
+            "delta": 0.0,
+            "dress": 1.0,
+            "band_gap_eV": 15.51535595605564,
+            "hopping_eV": 0.21284658266584197,
+            "delta_new": 0.003383046551032008
+          },
+          {
+            "iter": 1.0,
+            "delta": 0.003383046551032008,
+            "dress": 1.001691523275516,
+            "band_gap_eV": 15.541600541783222,
+            "hopping_eV": 0.2124871556962336,
+            "delta_new": 0.004731358681885019
+          },
+          {
+            "iter": 2.0,
+            "delta": 0.004731358681885019,
+            "dress": 1.0023656793409426,
+            "band_gap_eV": 15.552060313108251,
+            "hopping_eV": 0.21234424427399493,
+            "delta_new": 0.005268732018454128
+          },
+          {
+            "iter": 3.0,
+            "delta": 0.005268732018454128,
+            "dress": 1.0026343660092272,
+            "band_gap_eV": 15.556229082407333,
+            "hopping_eV": 0.2122873401128594,
+            "delta_new": 0.005482904199599506
+          },
+          {
+            "iter": 4.0,
+            "delta": 0.005482904199599506,
+            "dress": 1.0027414520997997,
+            "band_gap_eV": 15.557890561220509,
+            "hopping_eV": 0.21226466924263346,
+            "delta_new": 0.0055682634342942745
+          },
+          {
+            "iter": 5.0,
+            "delta": 0.0055682634342942745,
+            "dress": 1.002784131717147,
+            "band_gap_eV": 15.558552750675721,
+            "hopping_eV": 0.21225563502023892,
+            "delta_new": 0.005602283736555077
+          },
+          {
+            "iter": 6.0,
+            "delta": 0.005602283736555077,
+            "dress": 1.0028011418682776,
+            "band_gap_eV": 15.558816669225378,
+            "hopping_eV": 0.21225203460508257,
+            "delta_new": 0.005615842681696603
+          },
+          {
+            "iter": 7.0,
+            "delta": 0.005615842681696603,
+            "dress": 1.0028079213408483,
+            "band_gap_eV": 15.558921855155505,
+            "hopping_eV": 0.21225059967739995,
+            "delta_new": 0.005621246660930204
+          },
+          {
+            "iter": 8.0,
+            "delta": 0.005621246660930204,
+            "dress": 1.002810623330465,
+            "band_gap_eV": 15.558963777486198,
+            "hopping_eV": 0.2122500277858552,
+            "delta_new": 0.005623400441487066
+          },
+          {
+            "iter": 9.0,
+            "delta": 0.005623400441487066,
+            "dress": 1.0028117002207435,
+            "band_gap_eV": 15.558980485822195,
+            "hopping_eV": 0.21224979985673204,
+            "delta_new": 0.005624258840555799
+          },
+          {
+            "iter": 10.0,
+            "delta": 0.005624258840555799,
+            "dress": 1.0028121294202779,
+            "band_gap_eV": 15.558987145005746,
+            "hopping_eV": 0.21224970901467638,
+            "delta_new": 0.005624600959423154
+          },
+          {
+            "iter": 11.0,
+            "delta": 0.005624600959423154,
+            "dress": 1.0028123004797116,
+            "band_gap_eV": 15.558989799053752,
+            "hopping_eV": 0.21224967280918208,
+            "delta_new": 0.005624737312459735
+          },
+          {
+            "iter": 12.0,
+            "delta": 0.005624737312459735,
+            "dress": 1.0028123686562298,
+            "band_gap_eV": 15.558990856836699,
+            "hopping_eV": 0.2122496583793205,
+            "delta_new": 0.0056247916565850455
+          },
+          {
+            "iter": 13.0,
+            "delta": 0.0056247916565850455,
+            "dress": 1.0028123958282926,
+            "band_gap_eV": 15.558991278420926,
+            "hopping_eV": 0.21224965262823378,
+            "delta_new": 0.005624813315684325
+          },
+          {
+            "iter": 14.0,
+            "delta": 0.005624813315684325,
+            "dress": 1.002812406657842,
+            "band_gap_eV": 15.55899144644524,
+            "hopping_eV": 0.21224965033611204,
+            "delta_new": 0.005624821948017241
+          },
+          {
+            "iter": 15.0,
+            "delta": 0.005624821948017241,
+            "dress": 1.0028124109740086,
+            "band_gap_eV": 15.558991513412101,
+            "hopping_eV": 0.21224964942257643,
+            "delta_new": 0.005624825388472941
+          },
+          {
+            "iter": 16.0,
+            "delta": 0.005624825388472941,
+            "dress": 1.0028124126942364,
+            "band_gap_eV": 15.558991540102046,
+            "hopping_eV": 0.21224964905848268,
+            "delta_new": 0.005624826759682271
+          },
+          {
+            "iter": 17.0,
+            "delta": 0.005624826759682271,
+            "dress": 1.002812413379841,
+            "band_gap_eV": 15.558991550739448,
+            "hopping_eV": 0.21224964891337145,
+            "delta_new": 0.005624827306184011
+          },
+          {
+            "iter": 18.0,
+            "delta": 0.005624827306184011,
+            "dress": 1.002812413653092,
+            "band_gap_eV": 15.558991554979034,
+            "hopping_eV": 0.21224964885553668,
+            "delta_new": 0.005624827523994774
+          },
+          {
+            "iter": 19.0,
+            "delta": 0.005624827523994774,
+            "dress": 1.0028124137619974,
+            "band_gap_eV": 15.558991556668738,
+            "hopping_eV": 0.21224964883248637,
+            "delta_new": 0.005624827610804248
+          }
+        ]
+      },
+      "scf_hoppings_eV": {
+        "t_ss": 0.21224964882329955,
+        "t_pp": 0.08489985952931982,
+        "t_sp": 0.1342384645705008,
+        "t_pi": 0.04244992976465991
+      },
+      "scf_gap_at_gamma_eV": 15.55899155734218,
+      "identity_covalent_or_metal": false,
+      "nist_optical_gap_eV_quarantine": 4.9,
+      "scf_gamma_vs_nist_ratio": 3.1753043994575876,
+      "formula": "\u03b4=clamp(\u03b9\u00b7\u03b3\u00b7E_c/(E_g+E_c)); f=1+(4/8)\u03b4; E_g'=f E_g; t'=t/f; mix (1\u2212\u03b1)\u03b4+\u03b1\u03b4_new"
+    },
+    {
+      "name": "Cu",
+      "crystal_kind": "metallic",
+      "ionic_character": 0.0,
+      "contact_electronic_scale_eV": 2.107910840896127,
+      "bare_band_gap_eV": 0.0,
+      "bare_hopping_eV": 0.08782961837067195,
+      "scf": {
+        "charge_excess": 0.0,
+        "dress": 1.0,
+        "band_gap_eV": 0.0,
+        "hopping_eV": 0.08782961837067195,
+        "iterations": 1,
+        "converged": true,
+        "history": [
+          {
+            "iter": 0.0,
+            "delta": 0.0,
+            "dress": 1.0,
+            "band_gap_eV": 0.0,
+            "hopping_eV": 0.08782961837067195,
+            "delta_new": 0.0
+          }
+        ]
+      },
+      "scf_hoppings_eV": {
+        "t_ss": 0.08782961837067195,
+        "t_pp": 0.03513184734826878,
+        "t_sp": 0.05554832801493804,
+        "t_pi": 0.01756592367413439
+      },
+      "scf_gap_at_gamma_eV": 0.0,
+      "identity_covalent_or_metal": true,
+      "nist_optical_gap_eV_quarantine": 0.0,
+      "scf_gamma_vs_nist_ratio": null,
+      "formula": "\u03b4=clamp(\u03b9\u00b7\u03b3\u00b7E_c/(E_g+E_c)); f=1+(4/8)\u03b4; E_g'=f E_g; t'=t/f; mix (1\u2212\u03b1)\u03b4+\u03b1\u03b4_new"
+    },
+    {
+      "name": "Si",
+      "crystal_kind": "covalent_network",
+      "ionic_character": 0.0,
+      "contact_electronic_scale_eV": 2.2128851217528136,
+      "bare_band_gap_eV": 1.327731073051688,
+      "bare_hopping_eV": 0.2766106402191017,
+      "scf": {
+        "charge_excess": 0.0,
+        "dress": 1.0,
+        "band_gap_eV": 1.327731073051688,
+        "hopping_eV": 0.2766106402191017,
+        "iterations": 1,
+        "converged": true,
+        "history": [
+          {
+            "iter": 0.0,
+            "delta": 0.0,
+            "dress": 1.0,
+            "band_gap_eV": 1.327731073051688,
+            "hopping_eV": 0.2766106402191017,
+            "delta_new": 0.0
+          }
+        ]
+      },
+      "scf_hoppings_eV": {
+        "t_ss": 0.2766106402191017,
+        "t_pp": 0.11064425608764068,
+        "t_sp": 0.17494392962594768,
+        "t_pi": 0.05532212804382034
+      },
+      "scf_gap_at_gamma_eV": 1.327731073051688,
+      "identity_covalent_or_metal": true,
+      "nist_optical_gap_eV_quarantine": 1.12,
+      "scf_gamma_vs_nist_ratio": 1.1854741723675786,
+      "formula": "\u03b4=clamp(\u03b9\u00b7\u03b3\u00b7E_c/(E_g+E_c)); f=1+(4/8)\u03b4; E_g'=f E_g; t'=t/f; mix (1\u2212\u03b1)\u03b4+\u03b1\u03b4_new"
+    },
+    {
+      "name": "Ge",
+      "crystal_kind": "covalent_network",
+      "ionic_character": 0.0,
+      "contact_electronic_scale_eV": 2.1815159812539573,
+      "bare_band_gap_eV": 1.3089095887523743,
+      "bare_hopping_eV": 0.27268949765674466,
+      "scf": {
+        "charge_excess": 0.0,
+        "dress": 1.0,
+        "band_gap_eV": 1.3089095887523743,
+        "hopping_eV": 0.27268949765674466,
+        "iterations": 1,
+        "converged": true,
+        "history": [
+          {
+            "iter": 0.0,
+            "delta": 0.0,
+            "dress": 1.0,
+            "band_gap_eV": 1.3089095887523743,
+            "hopping_eV": 0.27268949765674466,
+            "delta_new": 0.0
+          }
+        ]
+      },
+      "scf_hoppings_eV": {
+        "t_ss": 0.27268949765674466,
+        "t_pp": 0.10907579906269788,
+        "t_sp": 0.17246398132049226,
+        "t_pi": 0.05453789953134894
+      },
+      "scf_gap_at_gamma_eV": 1.3089095887523743,
+      "identity_covalent_or_metal": true,
+      "nist_optical_gap_eV_quarantine": 0.67,
+      "scf_gamma_vs_nist_ratio": 1.9535964011229465,
+      "formula": "\u03b4=clamp(\u03b9\u00b7\u03b3\u00b7E_c/(E_g+E_c)); f=1+(4/8)\u03b4; E_g'=f E_g; t'=t/f; mix (1\u2212\u03b1)\u03b4+\u03b1\u03b4_new"
+    }
+  ],
+  "comparison_policy": "NIST optical gaps are quarantine only",
+  "scope_note": "Discrete charge-dress fixed point on EH bands \u2014 not continuum Fock/KS SCF"
+}

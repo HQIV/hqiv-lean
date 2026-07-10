@@ -28,15 +28,15 @@ class LonePairPartitionTests(unittest.TestCase):
         self.assertEqual(pss.steric_domain_count(5), 3)  # B trigonal
 
     def test_electron_budget_closes(self) -> None:
-        # 2*lone_pairs + bonds == valence for every main-group atom
+        # 2*lone_pairs + bonds == bonding valence for every main-group atom
         for z in range(3, 11):
-            v = pss.valence_electron_count(z)
+            v = pss.bonding_valence_electron_count(z)
             b = pss.bonding_capacity(z)
             self.assertEqual(2 * pss.lone_pair_count(z, b) + b, v)
 
     def test_leftover_is_always_even(self) -> None:
         for z in range(3, 11):
-            v = pss.valence_electron_count(z)
+            v = pss.bonding_valence_electron_count(z)
             b = pss.bonding_capacity(z)
             self.assertEqual((v - b) % 2, 0)
 
@@ -102,6 +102,19 @@ class BondingCapacityTests(unittest.TestCase):
         self.assertEqual(pss.bonding_capacity(3), pss.bonding_capacity(9))
         self.assertEqual(pss.bonding_capacity(4), pss.bonding_capacity(8))
         self.assertEqual(pss.bonding_capacity(5), pss.bonding_capacity(7))
+
+    def test_outer_principal_valence_post_d(self) -> None:
+        # Noble residual ≠ bonding V past closed d: Ge/Ga/Sn use outer s+p.
+        self.assertEqual(pss.valence_electron_count(32), 14)
+        self.assertEqual(pss.outer_principal_valence(32), 4)
+        self.assertEqual(pss.bonding_valence_electron_count(32), 4)
+        self.assertEqual(pss.bonding_capacity(32), 4)
+        self.assertEqual(pss.bonding_capacity(31), 3)  # Ga
+        self.assertEqual(pss.bonding_capacity(50), 4)  # Sn
+        # Open d keeps peel capacity 0 (Fe); closed d¹⁰s² Zn is p-block cap=2.
+        self.assertEqual(pss.bonding_capacity(26), 0)
+        self.assertEqual(pss.bonding_capacity(29), 0)  # Cu open d
+        self.assertEqual(pss.bonding_capacity(30), 2)  # Zn
 
     def test_geometric_bond_order_unifies_homo_and_hetero(self) -> None:
         import math

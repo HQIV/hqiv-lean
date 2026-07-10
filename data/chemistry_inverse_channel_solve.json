@@ -1,0 +1,133 @@
+{
+  "panel_summary": {
+    "mean_density_error_pct_vs_nist": 0.5094736518140255,
+    "mean_refractive_index_error_pct_vs_nist": 0.49570969392052444,
+    "mean_T_sl_error_pct_vs_nist": 0.1888314435767959,
+    "molecular_mean_density_error_pct": 0.3537411851067396,
+    "molecular_mean_n_error_pct": 0.6862671554140342,
+    "all_contact_xi_traces_consistent": true
+  },
+  "per_species": [
+    {
+      "molecule": "H2O",
+      "obs": "rho",
+      "err_pct": 0.4703187622629659
+    },
+    {
+      "molecule": "H2O",
+      "obs": "n",
+      "err_pct": 0.34857050080892454
+    },
+    {
+      "molecule": "H2O",
+      "obs": "T",
+      "err_pct": 0.15915072681543033
+    },
+    {
+      "molecule": "CH4",
+      "obs": "rho",
+      "err_pct": 0.2759736781078404
+    },
+    {
+      "molecule": "CH4",
+      "obs": "n",
+      "err_pct": 0.5287349150677745
+    },
+    {
+      "molecule": "CH4",
+      "obs": "T",
+      "err_pct": 0.2173231232552603
+    },
+    {
+      "molecule": "NH3",
+      "obs": "rho",
+      "err_pct": 0.16353261447210843
+    },
+    {
+      "molecule": "NH3",
+      "obs": "n",
+      "err_pct": 1.0588482427046386
+    },
+    {
+      "molecule": "NH3",
+      "obs": "T",
+      "err_pct": 0.7760138324678454
+    },
+    {
+      "molecule": "HF",
+      "obs": "rho",
+      "err_pct": 0.5051396855840435
+    },
+    {
+      "molecule": "HF",
+      "obs": "n",
+      "err_pct": 0.808914963074799
+    },
+    {
+      "molecule": "HF",
+      "obs": "T",
+      "err_pct": 0.2565606823442483
+    },
+    {
+      "molecule": "NaCl",
+      "obs": "rho",
+      "err_pct": 0.3327610093822491
+    },
+    {
+      "molecule": "NaCl",
+      "obs": "n",
+      "err_pct": 0.7248992357875348
+    },
+    {
+      "molecule": "NaCl",
+      "obs": "T",
+      "err_pct": 0.10160318373158288
+    },
+    {
+      "molecule": "Cu",
+      "obs": "rho",
+      "err_pct": 0.14634463261474295
+    },
+    {
+      "molecule": "Cu",
+      "obs": "T",
+      "err_pct": 0.0
+    },
+    {
+      "molecule": "Si",
+      "obs": "rho",
+      "err_pct": 1.654134374913241
+    },
+    {
+      "molecule": "Si",
+      "obs": "n",
+      "err_pct": 0.0
+    },
+    {
+      "molecule": "Si",
+      "obs": "T",
+      "err_pct": 0.0
+    },
+    {
+      "molecule": "Ge",
+      "obs": "rho",
+      "err_pct": 0.527584457175012
+    },
+    {
+      "molecule": "Ge",
+      "obs": "n",
+      "err_pct": 0.0
+    },
+    {
+      "molecule": "Ge",
+      "obs": "T",
+      "err_pct": 0.0
+    }
+  ],
+  "dresses_applied": [
+    "nuclear_packing_open: nn*=1+(strong\u00b7\u03b3)\u00b7(1-pack)",
+    "ionic_character_lattice: nn*=1/(1+(strong\u00b7\u03b3/8)\u00b7\u03b4\u00b2)",
+    "ionic_optical: E_opt/(1+strong\u00b7\u03b3\u00b7\u03b4\u00b2)",
+    "acceptor_softener: 1/(1+\u03b3\u00b7\u03b1\u00b7w_acc)"
+  ]
+}

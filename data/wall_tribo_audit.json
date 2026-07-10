@@ -1,0 +1,79 @@
+{
+  "source": "scripts/hqiv_wall_tribo_readout.py",
+  "lean_modules": [
+    "Hqiv.QuantumChemistry.OutsideContactReducedDeltas",
+    "Hqiv.QuantumChemistry.VoltageGenerationLedger"
+  ],
+  "formula": {
+    "dry_wall_stress": "max(wall_excess, preferred_axis_gap(polarities))",
+    "dry_wall_dress": "localDefect(stress)",
+    "tribo": "voltage(clamp(gap)) \u00b7 localDefect(stress)",
+    "shared": "one wall spectrum \u21d2 one tribo/localDefect factor"
+  },
+  "identity_checks": {
+    "pristine_tribo_one": true,
+    "pristine_dress_one": true,
+    "unit_excess_dress": true,
+    "unit_tribo_gt_one": true,
+    "motif_ratio_cancels_wall": true,
+    "gap_nonneg": true
+  },
+  "all_identity_checks_pass": true,
+  "rows": [
+    {
+      "label": "pristine",
+      "wall_polarities": [],
+      "wall_coordination_excess": 0.0,
+      "spectral_gap": 0.0,
+      "defect_stress": 0.0,
+      "dry_wall_dress": 1.0,
+      "tribo_channel": 1.0,
+      "shared_factor": 1.0,
+      "formula": "tribo = voltage(g_wall) \u00b7 localDefect(stress_wall)"
+    },
+    {
+      "label": "unit_excess",
+      "wall_polarities": [],
+      "wall_coordination_excess": 1.0,
+      "spectral_gap": 0.0,
+      "defect_stress": 1.0,
+      "dry_wall_dress": 1.2,
+      "tribo_channel": 1.2,
+      "shared_factor": 1.2,
+      "formula": "tribo = voltage(g_wall) \u00b7 localDefect(stress_wall)"
+    },
+    {
+      "label": "polarity_gap",
+      "wall_polarities": [
+        0.0,
+        1.0
+      ],
+      "wall_coordination_excess": 0.0,
+      "spectral_gap": 1.0,
+      "defect_stress": 1.0,
+      "dry_wall_dress": 1.2,
+      "tribo_channel": 1.7999999999999998,
+      "shared_factor": 1.7999999999999998,
+      "formula": "tribo = voltage(g_wall) \u00b7 localDefect(stress_wall)"
+    },
+    {
+      "label": "mixed_interface",
+      "wall_polarities": [
+        0.2,
+        0.8
+      ],
+      "wall_coordination_excess": 0.4,
+      "spectral_gap": 0.6000000000000001,
+      "defect_stress": 0.6000000000000001,
+      "dry_wall_dress": 1.12,
+      "tribo_channel": 1.4560000000000002,
+      "shared_factor": 1.4560000000000002,
+      "formula": "tribo = voltage(g_wall) \u00b7 localDefect(stress_wall)"
+    }
+  ],
+  "carbon_motif_ratio_with_shared_wall": {
+    "graphene_over_diamond_reduced": 1.05,
+    "graphene_over_diamond_motif_only": 1.05
+  },
+  "comparison_policy": "no handbook fit; wall is structural spectrum only"
+}

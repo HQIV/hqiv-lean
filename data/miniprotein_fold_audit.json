@@ -1,55 +1,218 @@
 {
   "source": "scripts/hqiv_miniprotein_fold_audit.py",
+  "closure_engine": "nerf",
   "comparison_policy": "PDB C\u03b1 witnesses grade HQIV fold readouts only",
   "folds": [
     {
       "name": "GG",
       "sequence": "GG",
       "n_residues": 2,
-      "strategy": "beta_strand_dipeptide",
+      "strategy": "extended_dipeptide",
       "network_contacts": 3,
       "bond_geometry_angstrom": {
-        "N_CA": 1.2143618047556726,
-        "CA_C": 1.2143618047556726,
-        "C_N": 1.3297495507058068,
-        "C_O": 1.298220806960941
+        "N_CA": 1.4618695144263627,
+        "CA_C": 1.5505467702911495,
+        "C_N": 1.3339793807648654,
+        "C_O": 1.3023503465345128
       },
-      "predicted_radius_of_gyration_A": 1.650494347728614,
+      "predicted_radius_of_gyration_A": 1.8690772159869413,
       "witness_radius_of_gyration_A": null,
-      "ca_rmsd_angstrom": 1.8189875843673018,
+      "ca_rmsd_angstrom": 0.015228722387828025,
       "ca_rmsd_pass_angstrom": 2.0,
       "passed": true
+    },
+    {
+      "name": "beta_strand_3",
+      "sequence": "LYI",
+      "n_residues": 3,
+      "strategy": "secondary_structure_spine+spine_matrix_readout",
+      "network_contacts": 6,
+      "bond_geometry_angstrom": {
+        "N_CA": 1.4618695144263627,
+        "CA_C": 1.5505467702911495,
+        "C_N": 1.3339793807648654,
+        "C_O": 1.3023503465345128
+      },
+      "predicted_radius_of_gyration_A": 2.5701408700854227,
+      "witness_radius_of_gyration_A": null,
+      "ca_rmsd_angstrom": 0.13148819107592988,
+      "ca_rmsd_pass_angstrom": 2.0,
+      "passed": true
+    },
+    {
+      "name": "hairpin_turn_5",
+      "sequence": "LYIQW",
+      "n_residues": 5,
+      "strategy": "secondary_structure_spine+spine_matrix_readout",
+      "network_contacts": 10,
+      "bond_geometry_angstrom": {
+        "N_CA": 1.4618695144263627,
+        "CA_C": 1.5505467702911495,
+        "C_N": 1.3339793807648654,
+        "C_O": 1.3023503465345128
+      },
+      "predicted_radius_of_gyration_A": 3.5767363139309425,
+      "witness_radius_of_gyration_A": null,
+      "ca_rmsd_angstrom": 1.9918951237131062,
+      "ca_rmsd_pass_angstrom": 2.0,
+      "passed": true
+    },
+    {
+      "name": "alpha_helix_4",
+      "sequence": "LKDG",
+      "n_residues": 4,
+      "strategy": "secondary_structure_spine+spine_matrix_readout",
+      "network_contacts": 8,
+      "bond_geometry_angstrom": {
+        "N_CA": 1.4618695144263627,
+        "CA_C": 1.5505467702911495,
+        "C_N": 1.3339793807648654,
+        "C_O": 1.3023503465345128
+      },
+      "predicted_radius_of_gyration_A": 3.310162092493851,
+      "witness_radius_of_gyration_A": null,
+      "ca_rmsd_angstrom": 2.2241877448367213,
+      "ca_rmsd_pass_angstrom": 2.0,
+      "passed": false
+    },
+    {
+      "name": "helix_6",
+      "sequence": "LKDGGP",
+      "n_residues": 6,
+      "strategy": "secondary_structure_spine+spine_matrix_readout",
+      "network_contacts": 12,
+      "bond_geometry_angstrom": {
+        "N_CA": 1.4618695144263627,
+        "CA_C": 1.5505467702911495,
+        "C_N": 1.3339793807648654,
+        "C_O": 1.3023503465345128
+      },
+      "predicted_radius_of_gyration_A": 3.478886426894898,
+      "witness_radius_of_gyration_A": null,
+      "ca_rmsd_angstrom": 2.1095414027172272,
+      "ca_rmsd_pass_angstrom": 2.0,
+      "passed": false
+    },
+    {
+      "name": "sheet_helix_6",
+      "sequence": "LYIQWL",
+      "n_residues": 6,
+      "strategy": "secondary_structure_spine+spine_matrix_readout+nerf_contact_refinement+macro_ricci_soft_closure",
+      "network_contacts": 12,
+      "bond_geometry_angstrom": {
+        "N_CA": 1.4618695144263627,
+        "CA_C": 1.5505467702911495,
+        "C_N": 1.3339793807648654,
+        "C_O": 1.3023503465345128
+      },
+      "predicted_radius_of_gyration_A": 3.1080634273078687,
+      "witness_radius_of_gyration_A": null,
+      "ca_rmsd_angstrom": 2.948909861656366,
+      "ca_rmsd_pass_angstrom": 2.0,
+      "passed": false
+    },
+    {
+      "name": "sheet_helix_8",
+      "sequence": "LYIQWLKD",
+      "n_residues": 8,
+      "strategy": "secondary_structure_spine+spine_matrix_readout+staged_nerf_contact_refinement+macro_ricci_soft_closure",
+      "network_contacts": 16,
+      "bond_geometry_angstrom": {
+        "N_CA": 1.4618695144263627,
+        "CA_C": 1.5505467702911495,
+        "C_N": 1.3339793807648654,
+        "C_O": 1.3023503465345128
+      },
+      "predicted_radius_of_gyration_A": 4.914351477668398,
+      "witness_radius_of_gyration_A": null,
+      "ca_rmsd_angstrom": 3.0516842724879214,
+      "ca_rmsd_pass_angstrom": 2.0,
+      "passed": false
+    },
+    {
+      "name": "helix_8",
+      "sequence": "LKDGGPSS",
+      "n_residues": 8,
+      "strategy": "secondary_structure_spine+spine_matrix_readout+nerf_contact_refinement+atom_sites+macro_ricci_soft_closure",
+      "network_contacts": 16,
+      "bond_geometry_angstrom": {
+        "N_CA": 1.4618695144263627,
+        "CA_C": 1.5505467702911495,
+        "C_N": 1.3339793807648654,
+        "C_O": 1.3023503465345128
+      },
+      "predicted_radius_of_gyration_A": 4.072180782710689,
+      "witness_radius_of_gyration_A": null,
+      "ca_rmsd_angstrom": 3.073666054647124,
+      "ca_rmsd_pass_angstrom": 2.0,
+      "passed": false
+    },
+    {
+      "name": "sheet_helix_10",
+      "sequence": "LYIQWLKDGGP",
+      "n_residues": 11,
+      "strategy": "secondary_structure_spine+spine_matrix_readout+staged_nerf_contact_refinement+macro_ricci_soft_closure+T310.15K",
+      "network_contacts": 22,
+      "bond_geometry_angstrom": {
+        "N_CA": 1.4618695144263627,
+        "CA_C": 1.5505467702911495,
+        "C_N": 1.3339793807648654,
+        "C_O": 1.3023503465345128
+      },
+      "predicted_radius_of_gyration_A": 5.7656461503753675,
+      "witness_radius_of_gyration_A": null,
+      "ca_rmsd_angstrom": 3.3235625892044895,
+      "ca_rmsd_pass_angstrom": 2.0,
+      "passed": false
+    },
+    {
+      "name": "cage_core_14",
+      "sequence": "LYIQWLKDGGPSSG",
+      "n_residues": 14,
+      "strategy": "secondary_structure_spine+spine_matrix_readout+staged_nerf_contact_refinement+T310.15K",
+      "network_contacts": 28,
+      "bond_geometry_angstrom": {
+        "N_CA": 1.4618695144263627,
+        "CA_C": 1.5505467702911495,
+        "C_N": 1.3339793807648654,
+        "C_O": 1.3023503465345128
+      },
+      "predicted_radius_of_gyration_A": 5.110451296652345,
+      "witness_radius_of_gyration_A": null,
+      "ca_rmsd_angstrom": 3.918539936394334,
+      "ca_rmsd_pass_angstrom": 2.0,
+      "passed": false
     },
     {
       "name": "trp_cage",
       "sequence": "NLYIQWLKDGGPSSGRPPPS",
       "n_residues": 20,
-      "strategy": "secondary_structure_spine+staged_tertiary_contacts",
+      "strategy": "secondary_structure_spine+trp_cage_register+staged_nerf_contact_refinement+macro_ricci_soft_closure+atom_sites+T310.15K",
       "network_contacts": 40,
       "bond_geometry_angstrom": {
-        "N_CA": 1.2143618047556726,
-        "CA_C": 1.2143618047556726,
-        "C_N": 1.3297495507058068,
-        "C_O": 1.298220806960941
+        "N_CA": 1.4618695144263627,
+        "CA_C": 1.5505467702911495,
+        "C_N": 1.3339793807648654,
+        "C_O": 1.3023503465345128
       },
-      "predicted_radius_of_gyration_A": 6.029432668703606,
+      "predicted_radius_of_gyration_A": 6.705105455965022,
       "witness_radius_of_gyration_A": 7.001187790475271,
-      "ca_rmsd_angstrom": 7.258788219425817,
-      "ca_rmsd_pass_angstrom": 5.0,
+      "ca_rmsd_angstrom": 4.50925055291423,
+      "ca_rmsd_pass_angstrom": 2.0,
       "passed": false,
-      "radius_of_gyration_error_pct": 13.87986083009634,
-      "tertiary_contacts": 24,
+      "radius_of_gyration_error_pct": 4.229030035632706,
+      "tertiary_contacts": 23,
       "hydrophobic_pairs": 3,
       "diagnostics": {
         "witness_end_to_end_ca_A": 12.058966498004711,
-        "predicted_end_to_end_ca_A": 10.92348122926829,
+        "predicted_end_to_end_ca_A": 10.819073680403882,
         "notes": "Tertiary graph: helix i\u00b13/4, sheet i+2, helix\u2013sheet register, hydrophobic, compact terminus \u2014 staged closure (SS \u2192 hydro \u2192 terminus). All targets from derived peptide geometry (no PDB inputs)."
       }
     }
   ],
   "summary": {
-    "targets": 2,
-    "passed": 1,
-    "mean_ca_rmsd_angstrom": 4.538887901896559
+    "targets": 11,
+    "passed": 3,
+    "mean_ca_rmsd_angstrom": 2.481632222912298
   }
 }

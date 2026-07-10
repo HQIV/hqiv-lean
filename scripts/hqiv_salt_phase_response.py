@@ -44,16 +44,34 @@ AVOGADRO = pgd.AVOGADRO
 
 # Laboratory validation anchors (not HQIV inputs).
 NIST_SALT_BENCHMARKS = {
-    "NaCl": {
+    "NACL": {
         "T_melt_K": 1074.0,
         "refractive_index_solid": 1.544,
         "density_g_cm3": 2.17,
         "coordination": 6,
     },
-    "LiH": {
+    "LIH": {
         "T_melt_K": 958.0,
         "refractive_index_solid": 1.45,
         "density_g_cm3": 0.82,
+        "coordination": 6,
+    },
+    "KCL": {
+        "T_melt_K": 1045.0,
+        "refractive_index_solid": 1.490,
+        "density_g_cm3": 1.98,
+        "coordination": 6,
+    },
+    "LIF": {
+        "T_melt_K": 1121.0,
+        "refractive_index_solid": 1.392,
+        "density_g_cm3": 2.64,
+        "coordination": 6,
+    },
+    "NAF": {
+        "T_melt_K": 1266.0,
+        "refractive_index_solid": 1.325,
+        "density_g_cm3": 2.56,
         "coordination": 6,
     },
 }
@@ -85,11 +103,15 @@ def material_scales_for_ionic_salt(
     coordination: int = 6,
 ) -> tptp.MaterialThermodynamicScales:
     """Thermodynamic scales from ionic lattice contacts (not tetrahedral bulk_condensed)."""
+    from hqiv_lab.crystal_geometry import ionic_hydride_melt_dress
+
     bind = ibn.ionic_lattice_binding_ev_per_contact(
         salt.cation,
         salt.anion,
         distance_angstrom=salt.lattice_bond_angstrom,
     )
+    # Hydride melt dress (anion Z=1): (1+α)/γ² on the cohesive scale.
+    bind *= ionic_hydride_melt_dress(salt.anion.z_nuclear)
     net = ibn.build_ionic_salt_network(salt)
     xi = lean.xi_from_compton_triplet(net.compton_triplet)
     rho_g = salt_crystal_density_g_cm3(salt, coordination=coordination)
@@ -118,22 +140,37 @@ def salt_solid_refractive_index(
     material: tptp.MaterialThermodynamicScales,
     *,
     coordination: int = 6,
+    temperature_k: float | None = None,
 ) -> float:
     """Clausius–Mossotti n for ionic crystal at derived ρ and B_hom(ξ, ρ)."""
+    import hqiv_selection_weights as sw
+    import hqiv_voltage_generation_ledger as vgl
+
     rho_g = salt_crystal_density_g_cm3(salt, coordination=coordination)
     xi = material.contact_xi
     rho_curv = float(material.medium_density_fraction or 0.0)
     b_hom = hcf.homogeneous_curvature_budget_at_xi(xi, rho_curv)
-    surplus = abs(float(ibn.ionic_bond_surplus_ev(salt.cation, salt.anion)))
-    e_soft = max(tptp.ionic_lattice_melt_cohesive_ev(material), surplus / 2000.0)
+    # Optical gap: surplus × α²·γ/n_coord, softened by ionic character and
+    # Lindemann piezo strain — E_opt / ((1+(4/8)·γ·δ²)·(1+(4/8)·ε·δ²)).
+    ionic = float(
+        sw.bond_ionic_character(salt.cation.z_nuclear, salt.anion.z_nuclear)
+    )
+    t_melt, _ = tptp.characteristic_temperatures_K(material)
+    t_use = float(temperature_k) if temperature_k is not None else float(t_melt)
+    eps = vgl.lindemann_thermal_strain(t_use, t_melt)
+    soft = vgl.ionic_optical_gap_softener_with_piezo(ionic, eps)
+    e_soft = max(tptp.ionic_lattice_optical_gap_ev(material) * soft, 1e-4)
     span = float(salt.lattice_bond_angstrom)
     r_ratio = span / pmr.BOHR_RADIUS_ANGSTROM
     alpha = (
         lean.ALPHA
         * lean.STRONG_CHANNEL_FRACTION
         * (r_ratio**3)
-        * (pmr.RYDBERG_EV / max(e_soft, 1e-4))
+        * (pmr.RYDBERG_EV / e_soft)
         * b_hom
+        * ibn.ionic_period_polarizability_softener(
+            salt.cation.z_nuclear, salt.anion.z_nuclear
+        )
     )
     coord_div = 3.0 if coordination >= 6 else float(coordination)
     cm = pmr.clausius_mossotti_ratio(
@@ -159,7 +196,9 @@ def salt_phase_response_readout(
     mat = material_scales_for_ionic_salt(salt, coordination=coordination)
     t_melt, t_boil = tptp.characteristic_temperatures_K(mat)
     t_sl = tptp.solid_liquid_transition_temperature_K(mat, pressure_Pa=pressure_pa)
-    n_solid = salt_solid_refractive_index(salt, mat, coordination=coordination)
+    n_solid = salt_solid_refractive_index(
+        salt, mat, coordination=coordination, temperature_k=temperature_k
+    )
     rho_g = salt_crystal_density_g_cm3(salt, coordination=coordination)
     env = tptp.ThermodynamicEnvironment(temperature_k, pressure_pa)
     phase_state = tptp.derive_phase(env, mat)
@@ -212,7 +251,11 @@ def salt_phase_response_readout(
 
 def main() -> None:
     parser = argparse.ArgumentParser(description="Salt melt + refractive index witnesses.")
-    parser.add_argument("--salt", default="NaCl", choices=("LiH", "NaCl", "all"))
+    parser.add_argument(
+        "--salt",
+        default="NaCl",
+        choices=("LiH", "NaCl", "KCl", "LiF", "NaF", "all"),
+    )
     parser.add_argument("--json-out", type=Path, default=None)
     args = parser.parse_args()
     keys = list(ibn.SALTS) if args.salt.lower() == "all" else [args.salt.upper()]

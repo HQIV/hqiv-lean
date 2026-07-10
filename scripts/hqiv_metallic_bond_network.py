@@ -49,14 +49,57 @@ import hqiv_curvature_contact_network as ccn
 
 AVOGADRO = 6.02214076e23
 
-# Simple metals on the delocalized-peel spine (no transition-metal d-band table).
-_SIMPLE_METAL_Z = frozenset({3, 11, 19, 37, 4, 12, 20, 13, 29, 30})
-_ALKALI_Z = frozenset({3, 11, 19, 37, 55})
+
+def metallic_bonding_capacity(z: int) -> int:
+    """Octet-side bonding capacity — Lean ``bondingCapacityOfValence`` pipeline."""
+    import hqiv_particle_shell_structure as pss
+
+    return int(pss.bonding_capacity(int(z)))
+
+
+def metallic_valence_count(z: int) -> int:
+    """Bonding valence for metal family keys (outer s+p / open-d residual)."""
+    import hqiv_particle_shell_structure as pss
+
+    return int(pss.bonding_valence_electron_count(int(z)))
+
+
+def is_metallic_element(z: int) -> bool:
+    """
+    First-principles metal predicate (no Z-set):
+
+    * left-side / p-block metals shed to close: ``1 ≤ cap ≤ 3`` and ``V = cap``;
+    * transition / peel metals: ``cap = 0`` with ``Z > 2`` (d-block peel surplus).
+
+    Nonmetals gain to close (``V > cap``): F has cap=1 but V=7 → not metal.
+    Si/Ge have cap=4 → covalent network, not metallic.
+    """
+    z = int(z)
+    if z <= 2:
+        return False
+    cap = metallic_bonding_capacity(z)
+    if cap == 0:
+        return True
+    if 1 <= cap <= 3:
+        return metallic_valence_count(z) == cap
+    return False
+
+
+def metallic_coordination(z: int) -> int:
+    """
+    Bravais coordination from shell capacity (replaces alkali Z-set):
+
+    monovalent shed metals (``cap = V = 1``) → BCC CN=8;
+    else close-pack CN=12.
+    """
+    if metallic_bonding_capacity(z) == 1 and metallic_valence_count(z) == 1:
+        return 8
+    return 12
 
 
 @dataclass(frozen=True)
 class MetalFragment:
-    """Neutral metal atom: peel = inert core, bulk = valence conduction electrons."""
+    """Neutral metal atom: peel = inert core, bulk = conduction / outer-principal electrons."""
 
     label: str
     z_nuclear: int
@@ -64,17 +107,40 @@ class MetalFragment:
 
     @property
     def n_bulk(self) -> int:
-        """Delocalized valence electrons (conduction-band peel narrative)."""
-        return max(evs.valence_electron_count(self.z_nuclear), 1)
+        """
+        Delocalized conduction electrons from the highest Madelung principal shell.
+
+        Main-group alkali/alkaline recover the usual valence count.  Transition metals
+        (e.g. Cu) expose only the outer ``ns`` electrons as bulk, with ``(n−1)d`` in the peel —
+        not the noble-gas residual (which would count all of 3d+4s as “valence”).
+
+        When ``(n−1)d`` is nearly filled (≥ 8 of 10), Madelung places 4s² before completing
+        3d¹⁰; the conduction slot is the residual ``s`` capacity toward a closed ``d¹⁰ s¹``
+        peel narrative (coinage / noble metals), capped at one bulk electron.
+        """
+        import hqiv_atom_construction as ac
+
+        cfg = ac.electron_configuration(self.z_nuclear)
+        if not cfg:
+            return max(evs.valence_electron_count(self.z_nuclear), 1)
+        top_n = max(n for n, _l in cfg)
+        outer_s = sum(1 for n, l in cfg if n == top_n and l == 0)
+        d_prev = sum(1 for n, l in cfg if n == top_n - 1 and l == 2)
+        if d_prev >= 8:
+            return max(min(outer_s, 1), 1) if outer_s else 1
+        outer = sum(1 for n, _l in cfg if n == top_n)
+        return max(outer, 1)
 
     @property
     def n_peel(self) -> int:
-        """Localized core electrons."""
+        """Localized core + d-band electrons."""
         return max(self.electrons - self.n_bulk, 0)
 
     @property
     def mass_amu(self) -> float:
-        return hdc.derived_atomic_mass_amu(self.z_nuclear, self.electrons)
+        from hqiv_lab.crystal_geometry import closed_atomic_mass_amu
+
+        return closed_atomic_mass_amu(self.z_nuclear)
 
     def to_fragment_config(self) -> FragmentConfig:
         return FragmentConfig(self.label, self.z_nuclear, self.electrons)
@@ -94,43 +160,16 @@ class MetallicLattice:
         return self.metal.mass_amu
 
 
-def is_metallic_element(z: int) -> bool:
-    """Metal on the peel surplus spine (simple / close-packed metals)."""
-    return z in _SIMPLE_METAL_Z
-
-
-def metallic_coordination(z: int) -> int:
-    """BCC alkali (8) vs FCC close-packed default (12)."""
-    return 8 if z in _ALKALI_Z else 12
-
-
 def metallic_nearest_neighbor_angstrom(z: int) -> float:
     """
-    Nearest-neighbor distance from φ(m)/Z close-packing + homonuclear floor.
+    Unified nearest-neighbor distance: ``√(nested_wf · φ_pack)`` from ``crystal_geometry``.
 
-    Delocalized Fermi seas expand beyond covalent dimer length; period²/constructiveValleyCap
-    dress captures heavier-element screening (same valley-cap slot as ionic lattice).
+    Replaces the standalone φ(m)/Z branch so network and Lean ``CrystalContactGeometry``
+    share one canonical metallic nn readout.
     """
-    m_s, _ = evs.electronic_compton_shells(z)
-    n_coord = metallic_coordination(z)
-    period = evs.chemical_period(z)
-    pack = (float(n_coord) / 2.0) ** (1.0 / 3.0)
-    cap = float(lean.CONSTRUCTIVE_VALLEY_CAP)
-    phi_m = 2.0 * (float(m_s) + 1.0)
-    homo_ang = ctd.homonuclear_bond_equilibrium_bohr(z) * BOHR_RADIUS_ANGSTROM
-    homo_dressed = homo_ang * (1.0 + lean.GAMMA / 8.0)
-    if z in _ALKALI_Z and period <= 2:
-        return homo_dressed
-    lattice_ang = (
-        phi_m
-        / float(z)
-        * pack
-        * (1.0 + lean.ALPHA)
-        * BOHR_RADIUS_ANGSTROM
-        * 2.0
-        * (float(period) ** 2 / cap)
-    )
-    return max(homo_dressed, lattice_ang)
+    from hqiv_lab.crystal_geometry import metallic_unified_nearest_neighbor_angstrom
+
+    return metallic_unified_nearest_neighbor_angstrom(z, n_coord=metallic_coordination(z))
 
 
 def metallic_peel_surplus_ev(metal: MetalFragment) -> float:

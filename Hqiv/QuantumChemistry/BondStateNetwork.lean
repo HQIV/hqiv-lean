@@ -4,10 +4,19 @@ import Mathlib.Tactic
 import Hqiv.Physics.BoundStates
 
 /-!
-# Bond-state network traces
+# Bond-state network traces (structural bookkeeping)
 
-This module is the structural Lean counterpart of
+This module is the **structural** Lean counterpart of
 `scripts/hqiv_bond_state_network.py` and `Hqiv.QuantumChemistry.CurvatureBondContact`.
+
+**Quantitative binding energies (GMTKN55 / W4-17)** use the dynamic binding chart instead:
+`Hqiv.QuantumChemistry.DynamicBindingChart` /
+`scripts/hqiv_dynamic_binding_chart.py` /
+`AGENTS/BINDING_ENERGY_STACK.md`.
+
+The bond-state network proves trace **identities** only (`closed − separated = edge + hyper`).
+It does **not** include η_p, TUFT vev geomean, or `dynamicBindingCurvatureFeedbackAtXi` —
+do not use it for H₂/LiH eV benchmarks.
 
 Binding energy lives in the same curvature slot as hadron mass (inside trapped
 ratio vs outside contact `G_eff·θ^α`); the network trace is the bookkeeping layer

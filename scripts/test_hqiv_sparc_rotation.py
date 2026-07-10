@@ -138,6 +138,45 @@ class TestSparcSummary(unittest.TestCase):
                 payload["summary"]["chi2_hqiv"],  # type: ignore[index]
                 payload["summary"]["chi2_baryonic"],  # type: ignore[index]
             )
+            self.assertIn("mean_pinch_soft_factor", payload["summary"])
+            self.assertIn("lean_modules", payload["whim_filament"])
+
+    def test_comparison_suite_has_three_variants(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            _write_synthetic_catalog(root)
+            catalog = s.load_sparc_catalog(root / "sparc")
+            suite = s.run_comparison_suite(catalog)
+            self.assertEqual(
+                set(suite["variants"]),  # type: ignore[arg-type]
+                {
+                    "legacy_cosmic_floor",
+                    "legacy_whim",
+                    "legacy_whim_pinch",
+                    "derived_floor",
+                    "derived_whim",
+                },
+            )
+            self.assertIn("head_to_head", suite)
+            self.assertIn("proton_pin_cosmology", suite)
+
+    def test_derived_dynamics_path(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            _write_synthetic_catalog(root)
+            catalog = s.load_sparc_catalog(root / "sparc")
+            payload = s.evaluate_galaxy(
+                catalog["FAKE001"],
+                options=s.SparcOptions(dynamics="derived"),
+            )
+            self.assertIn("derived_dynamics", payload)
+            self.assertEqual(payload["options"]["dynamics"], "derived")
+            self.assertEqual(payload["summary"]["mean_whim_seed_ratio"], 0.0)
+            # No seed/active case: seed_class forced False on derived path.
+            self.assertFalse(payload["summary"]["seed_class"])
+            cosmo = payload["derived_dynamics"]["cosmology"]
+            self.assertEqual(cosmo["reference_m"], 4)
+            self.assertGreater(cosmo["phi_hom_m_s2"], 0.0)
 
 
 class TestSparcCLI(unittest.TestCase):
@@ -161,6 +200,7 @@ class TestSparcCLI(unittest.TestCase):
             data = json.loads(out_path.read_text())
             self.assertEqual(data["summary"]["name"], "FAKE001")
             self.assertIn("rows", data)
+            self.assertIn("pinch_soft_factor", data["rows"][0])
 
 
 if __name__ == "__main__":

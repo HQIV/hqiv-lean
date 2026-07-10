@@ -8,15 +8,23 @@ import hqiv_ionic_bond_network as ibn
 
 
 class TestSaltPhaseResponse(unittest.TestCase):
-    def test_nacl_melt_order_of_magnitude(self) -> None:
+    def test_nacl_melt_near_nist(self) -> None:
         out = spr.salt_phase_response_readout(ibn.NACL_SALT)
-        self.assertGreater(out["T_melt_K"], 800.0)
-        self.assertLess(out["T_melt_K"], 1500.0)
+        ref = 1074.0
+        err = abs(out["T_melt_K"] - ref) / ref * 100.0
+        self.assertLess(err, 2.0)
 
-    def test_nacl_refractive_index_order_of_magnitude(self) -> None:
+    def test_nacl_refractive_near_nist(self) -> None:
         out = spr.salt_phase_response_readout(ibn.NACL_SALT)
-        self.assertGreater(out["refractive_index_solid"], 1.3)
-        self.assertLess(out["refractive_index_solid"], 1.8)
+        ref = 1.544
+        err = abs(out["refractive_index_solid"] - ref) / ref * 100.0
+        self.assertLess(err, 3.0)
+
+    def test_kcl_cation_period_softener_improves_n(self) -> None:
+        out = spr.salt_phase_response_readout(ibn.KCL_SALT)
+        ref = 1.490
+        err = abs(out["refractive_index_solid"] - ref) / ref * 100.0
+        self.assertLess(err, 3.0)
 
     def test_nacl_density_order_of_magnitude(self) -> None:
         out = spr.salt_phase_response_readout(ibn.NACL_SALT)

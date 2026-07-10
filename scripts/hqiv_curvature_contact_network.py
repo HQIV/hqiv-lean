@@ -281,6 +281,10 @@ def outside_geff_contact_dress(
     Outside ``G_eff(θ)`` contact participation dress on the surplus readout.
 
     ``1 + (4/8) · Σ G_eff(θ_bond) / surplus`` — bond geometry only (no fitted κ).
+
+    At dilute gas-phase assay (ρ = 0) ``BondAngularGeometry.geff_theta = 1`` per Lean
+    ``scaleOutsideCouplingForMediumDensity_unity``; intrinsic flatness lives in
+    ``bond_curvature_witness_for_network`` for protein-spine alignment.
     """
     geoms = covalent_bond_geometries(network)
     if not geoms:
@@ -289,6 +293,90 @@ def outside_geff_contact_dress(
         abs(surplus_dimless),
         1e-12,
     )
+
+
+def mean_covalent_eta_linear(
+    network: CurvatureContactNetwork,
+) -> float:
+    """Mean Compton IR participation η = θ/θ₀ over covalent bond contacts."""
+    geoms = covalent_bond_geometries(network)
+    if not geoms:
+        return 0.0
+    theta0 = cbs.phase_theta()
+    if theta0 <= 0.0:
+        return 0.0
+    etas = [
+        min(max(g.mean_compton_angle_rad / theta0, 0.0), 1.0)
+        for g in geoms
+    ]
+    return sum(etas) / len(etas)
+
+
+def bond_corridor_neutrino_witness(
+    network: CurvatureContactNetwork,
+    *,
+    xi: float,
+    phi_gravity_epsilon: float = 0.0,
+) -> dict[str, float]:
+    """Bond-axis relic-ν corridor dress for a covalent contact network."""
+    import hqiv_nuclear_outside_temperature_dynamics as notd
+
+    eta = mean_covalent_eta_linear(network)
+    aperture = notd.bond_corridor_aperture(eta)
+    dress = notd.bonded_bond_corridor_neutrino_dress(xi, phi_gravity_epsilon, eta)
+    low, central, high = notd.bonded_bond_corridor_neutrino_dress_band(
+        xi, phi_gravity_epsilon, eta
+    )
+    return {
+        "mean_eta_linear": eta,
+        "bond_corridor_aperture": aperture,
+        "bond_corridor_neutrino_dress": dress,
+        "bond_corridor_neutrino_dress_low": low,
+        "bond_corridor_neutrino_dress_high": high,
+        "outer_neutrino_suppression": notd.OUTER_NEUTRINO_SUPPRESSION,
+    }
+
+
+def bond_curvature_witness_for_network(
+    network: CurvatureContactNetwork,
+    *,
+    medium_density_fraction: float = 0.0,
+    surplus_dimless: float | None = None,
+) -> dict[str, Any]:
+    """
+    Per-covalent-bond curvature quantification for chart ↔ protein folding spine.
+
+    Reports Compton θ, linear η, intrinsic ``G_eff``, medium-dressed ``G_eff``, and the
+    γ/2 stacked-line breathing scale used in tertiary closure.
+    """
+    import hqiv_curvature_bond_state as cbs
+
+    geoms = covalent_bond_geometries(network)
+    bonds: list[dict[str, float]] = []
+    for g in geoms:
+        w = cbs.bond_curvature_quant_witness(
+            g.mean_compton_angle_rad,
+            medium_density_fraction=medium_density_fraction,
+            surplus_dimless=surplus_dimless,
+        )
+        w["geff_theta_gas_assay"] = g.geff_theta
+        w["geff_combined"] = g.geff_combined
+        bonds.append(w)
+    if not bonds:
+        return {"bond_count": 0, "bonds": []}
+    n = len(bonds)
+    mean = lambda k: sum(b[k] for b in bonds) / n
+    return {
+        "bond_count": n,
+        "medium_density_fraction": medium_density_fraction,
+        "mean_eta_linear": mean("eta_linear"),
+        "mean_g_eff_intrinsic": mean("g_eff_intrinsic"),
+        "mean_g_eff_medium": mean("g_eff_medium"),
+        "mean_flatness_ratio": mean("flatness_ratio"),
+        "mean_protein_contact_breathing": mean("protein_contact_breathing"),
+        "mean_geff_theta_gas_assay": mean("geff_theta_gas_assay"),
+        "bonds": bonds,
+    }
 
 
 def contact_xi_from_network(network: CurvatureContactNetwork) -> float:

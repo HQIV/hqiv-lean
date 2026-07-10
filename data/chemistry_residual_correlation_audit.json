@@ -1,0 +1,2121 @@
+{
+  "source": "scripts/hqiv_chemistry_residual_correlation_audit.py",
+  "comparison_policy": "Residuals use quarantined comparison fields already present in witness JSON; no comparison value is used to tune or correct a readout.",
+  "anchor_policy": {
+    "alpha": "fixed by Lean as alphaRat transverseDim = 3/5",
+    "gamma": "fixed by Lean as gammaRat 3 = 2/5",
+    "referenceM": "fixed by Lean lock-in at referenceM = 4",
+    "counterfactual_anchor_variation": "not performed; varying these would be a falsification/sensitivity diagnostic, not an allowed fit knob"
+  },
+  "second_order_target_policy": "Targets are residual correlations against existing derived slots: curvature density, ionic character, monogamy defect, concentration bracket/weight, and contact topology.",
+  "dynamics_treatment_policy": {
+    "geometry_binding": "OutsideContactGeometry exposes ionicOutsideContactLengthTarget and period3HalogenBondLengthTarget as upstream candidates; headline geometry_reliable quarantines ionic/period-3 routes until theorem promotion",
+    "outside_environment": "outsideEnvironmentModulator = outsideCurvatureBindingModulatorChart * outsideGravityGeffModulator (Lean/Python aligned)",
+    "spectroscopy": "coupledRelaxationStep feeds concentration-flow target into structurally flagged one-way omega_e rows",
+    "material": "linear-chain optical relaxation plus cage-limited thermal conductivity and network curvature propagation fields",
+    "phase": "bounded branchFractionCoupledStep activates only on LDL/HDL mixture rows",
+    "transport": "cageLimitedTransport slot is mirrored in material thermal transport; diffusion benchmarks remain finite Fick/Nernst-Einstein",
+    "activation": "activationRateSlot is available as a finite reaction-gate multiplier; no transition-state benchmark is promoted yet",
+    "network": "networkPropagationStep exposes local-to-neighbour finite register propagation fields"
+  },
+  "condensed_phase": {
+    "n": 4,
+    "small_n_note": "Condensed panel is intentionally small; correlations are target selectors, not statistical claims.",
+    "rows": [
+      {
+        "molecule": "H2O",
+        "motif": "tetrahedral_hbond",
+        "intermolecular_contacts": 4,
+        "contact_xi": 3.6666666666666665,
+        "curvature_density_fraction": 0.7916666666666666,
+        "phase_curvature_density_fraction": 0.8819637726950252,
+        "neighbor_lapse_overlap_factor": 0.95,
+        "halogen_strong_hbond_leg_factor": 1.0,
+        "linear_chain_zigzag_lattice_open_factor": 1.0,
+        "B_hom": 0.9905750608802482,
+        "optical_coupling_level": "feed_forward",
+        "missing_optical_coupled_relaxation_flag": 0,
+        "density_abs_error_pct": 10.517350638489235,
+        "refractive_index_abs_error_pct": 0.34857050080892454,
+        "refractive_index_one_way_abs_error_pct": 0.34857050080892454,
+        "refractive_index_coupled_improvement_abs_pct": 0.0,
+        "T_sl_abs_error_pct": 0.16042789564044113
+      },
+      {
+        "molecule": "CH4",
+        "motif": "apolar_close_pack",
+        "intermolecular_contacts": 4,
+        "contact_xi": 3.6666666666666665,
+        "curvature_density_fraction": 0.9,
+        "phase_curvature_density_fraction": 0.9405779866167785,
+        "neighbor_lapse_overlap_factor": 1.0,
+        "halogen_strong_hbond_leg_factor": 1.0,
+        "linear_chain_zigzag_lattice_open_factor": 1.0,
+        "B_hom": 0.9892853323691243,
+        "optical_coupling_level": "feed_forward",
+        "missing_optical_coupled_relaxation_flag": 0,
+        "density_abs_error_pct": 34.458971839004946,
+        "refractive_index_abs_error_pct": 1.385023745113865,
+        "refractive_index_one_way_abs_error_pct": 1.385023745113865,
+        "refractive_index_coupled_improvement_abs_pct": 0.0,
+        "T_sl_abs_error_pct": 0.21568590282181663
+      },
+      {
+        "molecule": "NH3",
+        "motif": "pyramidal_hbond",
+        "intermolecular_contacts": 4,
+        "contact_xi": 3.6666666666666665,
+        "curvature_density_fraction": 0.9090909090909091,
+        "phase_curvature_density_fraction": 0.9742055097017819,
+        "neighbor_lapse_overlap_factor": 1.0,
+        "halogen_strong_hbond_leg_factor": 1.0,
+        "linear_chain_zigzag_lattice_open_factor": 1.0,
+        "B_hom": 0.9891771034031558,
+        "optical_coupling_level": "feed_forward",
+        "missing_optical_coupled_relaxation_flag": 0,
+        "density_abs_error_pct": 7.492571586262731,
+        "refractive_index_abs_error_pct": 10.148888688872566,
+        "refractive_index_one_way_abs_error_pct": 10.148888688872566,
+        "refractive_index_coupled_improvement_abs_pct": 0.0,
+        "T_sl_abs_error_pct": 0.7767004067128764
+      },
+      {
+        "molecule": "HF",
+        "motif": "linear_chain",
+        "intermolecular_contacts": 2,
+        "contact_xi": 3.6666666666666665,
+        "curvature_density_fraction": 0.9677419354838709,
+        "phase_curvature_density_fraction": 1.0,
+        "neighbor_lapse_overlap_factor": 1.0,
+        "halogen_strong_hbond_leg_factor": 0.9777777777777777,
+        "linear_chain_zigzag_lattice_open_factor": 1.0333333333333334,
+        "B_hom": 0.988478852009811,
+        "optical_coupling_level": "coupled_relaxed",
+        "missing_optical_coupled_relaxation_flag": 1,
+        "density_abs_error_pct": 4.469603330136757,
+        "refractive_index_abs_error_pct": 5.301360329511988,
+        "refractive_index_one_way_abs_error_pct": 13.410938889846346,
+        "refractive_index_coupled_improvement_abs_pct": 8.109578560334358,
+        "T_sl_abs_error_pct": 0.2565606823442483
+      }
+    ],
+    "group_means_by_motif": {
+      "apolar_close_pack": {
+        "n": 1,
+        "mean_abs_error_pct": {
+          "density_abs_error_pct": 34.458971839004946,
+          "refractive_index_abs_error_pct": 1.385023745113865,
+          "refractive_index_one_way_abs_error_pct": 1.385023745113865,
+          "T_sl_abs_error_pct": 0.21568590282181663
+        }
+      },
+      "linear_chain": {
+        "n": 1,
+        "mean_abs_error_pct": {
+          "density_abs_error_pct": 4.469603330136757,
+          "refractive_index_abs_error_pct": 5.301360329511988,
+          "refractive_index_one_way_abs_error_pct": 13.410938889846346,
+          "T_sl_abs_error_pct": 0.2565606823442483
+        }
+      },
+      "pyramidal_hbond": {
+        "n": 1,
+        "mean_abs_error_pct": {
+          "density_abs_error_pct": 7.492571586262731,
+          "refractive_index_abs_error_pct": 10.148888688872566,
+          "refractive_index_one_way_abs_error_pct": 10.148888688872566,
+          "T_sl_abs_error_pct": 0.7767004067128764
+        }
+      },
+      "tetrahedral_hbond": {
+        "n": 1,
+        "mean_abs_error_pct": {
+          "density_abs_error_pct": 10.517350638489235,
+          "refractive_index_abs_error_pct": 0.34857050080892454,
+          "refractive_index_one_way_abs_error_pct": 0.34857050080892454,
+          "T_sl_abs_error_pct": 0.16042789564044113
+        }
+      }
+    },
+    "group_means_by_optical_coupling_level": {
+      "coupled_relaxed": {
+        "n": 1,
+        "mean_abs_error_pct": {
+          "density_abs_error_pct": 4.469603330136757,
+          "refractive_index_abs_error_pct": 5.301360329511988,
+          "refractive_index_one_way_abs_error_pct": 13.410938889846346,
+          "T_sl_abs_error_pct": 0.2565606823442483
+        }
+      },
+      "feed_forward": {
+        "n": 3,
+        "mean_abs_error_pct": {
+          "density_abs_error_pct": 17.489631354585637,
+          "refractive_index_abs_error_pct": 3.960827644931785,
+          "refractive_index_one_way_abs_error_pct": 3.960827644931785,
+          "T_sl_abs_error_pct": 0.38427140172504476
+        }
+      }
+    },
+    "correlations": {
+      "density_abs_error_pct": {
+        "intermolecular_contacts": {
+          "available": true,
+          "n": 4,
+          "pearson_r": 0.4749375818918916,
+          "abs_r": 0.4749375818918916
+        },
+        "contact_xi": {
+          "available": false,
+          "n": 4,
+          "reason": "zero_variance"
+        },
+        "curvature_density_fraction": {
+          "available": true,
+          "n": 4,
+          "pearson_r": -0.10605900530896657,
+          "abs_r": 0.10605900530896657
+        },
+        "phase_curvature_density_fraction": {
+          "available": true,
+          "n": 4,
+          "pearson_r": -0.2809325017842696,
+          "abs_r": 0.2809325017842696
+        },
+        "neighbor_lapse_overlap_factor": {
+          "available": true,
+          "n": 4,
+          "pearson_r": 0.180795615670975,
+          "abs_r": 0.180795615670975
+        },
+        "halogen_strong_hbond_leg_factor": {
+          "available": true,
+          "n": 4,
+          "pearson_r": 0.47493758189189156,
+          "abs_r": 0.47493758189189156
+        },
+        "linear_chain_zigzag_lattice_open_factor": {
+          "available": true,
+          "n": 4,
+          "pearson_r": -0.47493758189189156,
+          "abs_r": 0.47493758189189156
+        },
+        "B_hom": {
+          "available": true,
+          "n": 4,
+          "pearson_r": 0.10605900530900887,
+          "abs_r": 0.10605900530900887
+        }
+      },
+      "refractive_index_abs_error_pct": {
+        "intermolecular_contacts": {
+          "available": true,
+          "n": 4,
+          "pearson_r": -0.15072883690491423,
+          "abs_r": 0.15072883690491423
+        },
+        "contact_xi": {
+          "available": false,
+          "n": 4,
+          "reason": "zero_variance"
+        },
+        "curvature_density_fraction": {
+          "available": true,
+          "n": 4,
+          "pearson_r": 0.5606671695936564,
+          "abs_r": 0.5606671695936564
+        },
+        "phase_curvature_density_fraction": {
+          "available": true,
+          "n": 4,
+          "pearson_r": 0.7172599685508481,
+          "abs_r": 0.7172599685508481
+        },
+        "neighbor_lapse_overlap_factor": {
+          "available": true,
+          "n": 4,
+          "pearson_r": 0.5917901720453053,
+          "abs_r": 0.5917901720453053
+        },
+        "halogen_strong_hbond_leg_factor": {
+          "available": true,
+          "n": 4,
+          "pearson_r": -0.15072883690491423,
+          "abs_r": 0.15072883690491423
+        },
+        "linear_chain_zigzag_lattice_open_factor": {
+          "available": true,
+          "n": 4,
+          "pearson_r": 0.15072883690491426,
+          "abs_r": 0.15072883690491426
+        },
+        "B_hom": {
+          "available": true,
+          "n": 4,
+          "pearson_r": -0.5606671695936767,
+          "abs_r": 0.5606671695936767
+        }
+      },
+      "refractive_index_one_way_abs_error_pct": {
+        "intermolecular_contacts": {
+          "available": true,
+          "n": 4,
+          "pearson_r": -0.7321380188939449,
+          "abs_r": 0.7321380188939449
+        },
+        "contact_xi": {
+          "available": false,
+          "n": 4,
+          "reason": "zero_variance"
+        },
+        "curvature_density_fraction": {
+          "available": true,
+          "n": 4,
+          "pearson_r": 0.8178619031194589,
+          "abs_r": 0.8178619031194589
+        },
+        "phase_curvature_density_fraction": {
+          "available": true,
+          "n": 4,
+          "pearson_r": 0.9115869956344493,
+          "abs_r": 0.9115869956344493
+        },
+        "neighbor_lapse_overlap_factor": {
+          "available": true,
+          "n": 4,
+          "pearson_r": 0.617187404064673,
+          "abs_r": 0.617187404064673
+        },
+        "halogen_strong_hbond_leg_factor": {
+          "available": true,
+          "n": 4,
+          "pearson_r": -0.7321380188939448,
+          "abs_r": 0.7321380188939448
+        },
+        "linear_chain_zigzag_lattice_open_factor": {
+          "available": true,
+          "n": 4,
+          "pearson_r": 0.7321380188939448,
+          "abs_r": 0.7321380188939448
+        },
+        "B_hom": {
+          "available": true,
+          "n": 4,
+          "pearson_r": -0.8178619031194833,
+          "abs_r": 0.8178619031194833
+        }
+      },
+      "T_sl_abs_error_pct": {
+        "intermolecular_contacts": {
+          "available": true,
+          "n": 4,
+          "pearson_r": 0.2235567223405823,
+          "abs_r": 0.2235567223405823
+        },
+        "contact_xi": {
+          "available": false,
+          "n": 4,
+          "reason": "zero_variance"
+        },
+        "curvature_density_fraction": {
+          "available": true,
+          "n": 4,
+          "pearson_r": 0.2887572607766012,
+          "abs_r": 0.2887572607766012
+        },
+        "phase_curvature_density_fraction": {
+          "available": true,
+          "n": 4,
+          "pearson_r": 0.4537558307628006,
+          "abs_r": 0.4537558307628006
+        },
+        "neighbor_lapse_overlap_factor": {
+          "available": true,
+          "n": 4,
+          "pearson_r": 0.44792975131490653,
+          "abs_r": 0.44792975131490653
+        },
+        "halogen_strong_hbond_leg_factor": {
+          "available": true,
+          "n": 4,
+          "pearson_r": 0.2235567223405823,
+          "abs_r": 0.2235567223405823
+        },
+        "linear_chain_zigzag_lattice_open_factor": {
+          "available": true,
+          "n": 4,
+          "pearson_r": -0.22355672234058233,
+          "abs_r": 0.22355672234058233
+        },
+        "B_hom": {
+          "available": true,
+          "n": 4,
+          "pearson_r": -0.28875726077661557,
+          "abs_r": 0.28875726077661557
+        }
+      }
+    },
+    "largest_residuals": {
+      "density_abs_error_pct": [
+        {
+          "molecule": "CH4",
+          "value_pct": 34.458971839004946
+        },
+        {
+          "molecule": "H2O",
+          "value_pct": 10.517350638489235
+        },
+        {
+          "molecule": "NH3",
+          "value_pct": 7.492571586262731
+        },
+        {
+          "molecule": "HF",
+          "value_pct": 4.469603330136757
+        }
+      ],
+      "refractive_index_abs_error_pct": [
+        {
+          "molecule": "NH3",
+          "value_pct": 10.148888688872566
+        },
+        {
+          "molecule": "HF",
+          "value_pct": 5.301360329511988
+        },
+        {
+          "molecule": "CH4",
+          "value_pct": 1.385023745113865
+        },
+        {
+          "molecule": "H2O",
+          "value_pct": 0.34857050080892454
+        }
+      ],
+      "refractive_index_one_way_abs_error_pct": [
+        {
+          "molecule": "HF",
+          "value_pct": 13.410938889846346
+        },
+        {
+          "molecule": "NH3",
+          "value_pct": 10.148888688872566
+        },
+        {
+          "molecule": "CH4",
+          "value_pct": 1.385023745113865
+        },
+        {
+          "molecule": "H2O",
+          "value_pct": 0.34857050080892454
+        }
+      ],
+      "T_sl_abs_error_pct": [
+        {
+          "molecule": "NH3",
+          "value_pct": 0.7767004067128764
+        },
+        {
+          "molecule": "HF",
+          "value_pct": 0.2565606823442483
+        },
+        {
+          "molecule": "CH4",
+          "value_pct": 0.21568590282181663
+        },
+        {
+          "molecule": "H2O",
+          "value_pct": 0.16042789564044113
+        }
+      ]
+    },
+    "optical_coupled_relaxation_improvements": [
+      {
+        "molecule": "HF",
+        "coupling_level": "coupled_relaxed",
+        "one_way_abs_error_pct": 13.410938889846346,
+        "coupled_abs_error_pct": 5.301360329511988,
+        "improvement_abs_pct": 8.109578560334358
+      }
+    ]
+  },
+  "spectroscopy": {
+    "n": 11,
+    "n_reliable_geometry": 9,
+    "rows": [
+      {
+        "molecule": "H2",
+        "class": "homonuclear",
+        "geometry_reliable": true,
+        "geometry_reliable_numeric": 1.0,
+        "geometry_route": "covalent_nested_wf",
+        "r_e_outside_contact_target_angstrom": 0.7408480952641998,
+        "geometry_outside_candidate_clears_floor": true,
+        "bond_ionic_character": 0.0,
+        "xi_contact": 2.0,
+        "curvature_integral": 0.8372830888193207,
+        "monogamy_channel_defect": 0,
+        "concentration_weight": 0.0,
+        "omega_e_cross_check_spread_pct": 4.5965611905340085,
+        "bracket_contains_reference": false,
+        "bracket_contains_reference_numeric": 0.0,
+        "omega_e_bracket_position": 2.0591603879826357,
+        "omega_e_bracket_width_cm1": 186.9788797070196,
+        "coupling_level": "coupled_relaxed",
+        "missing_coupled_relaxation_flag": 1,
+        "coupled_relaxation_weight": 1.0,
+        "omega_e_one_way_signed_error_pct": -32.18930625713661,
+        "omega_e_one_way_abs_error_pct": 32.18930625713661,
+        "omega_e_coupled_improvement_abs_pct": 23.44126872922803,
+        "omega_e_signed_error_pct": -8.748037527908576,
+        "omega_e_abs_error_pct": 8.748037527908576,
+        "r_e_signed_error_pct": -0.0798317781344647,
+        "r_e_abs_error_pct": 0.0798317781344647,
+        "B_e_abs_error_pct": 0.16154480092826187,
+        "omega_e_xe_abs_error_pct": 8.17219579663295
+      },
+      {
+        "molecule": "LiH",
+        "class": "polar_or_ionic",
+        "geometry_reliable": true,
+        "geometry_reliable_numeric": 1.0,
+        "geometry_route": "covalent_nested_wf",
+        "r_e_outside_contact_target_angstrom": 1.234746825440333,
+        "geometry_outside_candidate_clears_floor": true,
+        "bond_ionic_character": 0.09972299168975068,
+        "xi_contact": 3.6666666666666665,
+        "curvature_integral": 1.8057239122466366,
+        "monogamy_channel_defect": 0,
+        "concentration_weight": 0.19992969292852839,
+        "omega_e_cross_check_spread_pct": 7.95546758481149,
+        "bracket_contains_reference": true,
+        "bracket_contains_reference_numeric": 1.0,
+        "omega_e_bracket_position": 0.06083852341978239,
+        "omega_e_bracket_width_cm1": 1701.0340722979663,
+        "coupling_level": "coupled_relaxed",
+        "missing_coupled_relaxation_flag": 1,
+        "coupled_relaxation_weight": 1.0,
+        "omega_e_one_way_signed_error_pct": 57.21057399168892,
+        "omega_e_one_way_abs_error_pct": 57.21057399168892,
+        "omega_e_coupled_improvement_abs_pct": 47.72776788011789,
+        "omega_e_signed_error_pct": 9.482806111571032,
+        "omega_e_abs_error_pct": 9.482806111571032,
+        "r_e_signed_error_pct": -22.62036564264378,
+        "r_e_abs_error_pct": 22.62036564264378,
+        "B_e_abs_error_pct": 67.12769773228524,
+        "omega_e_xe_abs_error_pct": 29.728916802455384
+      },
+      {
+        "molecule": "HF",
+        "class": "polar_or_ionic",
+        "geometry_reliable": true,
+        "geometry_reliable_numeric": 1.0,
+        "geometry_route": "covalent_nested_wf",
+        "r_e_outside_contact_target_angstrom": 0.9054810053229109,
+        "geometry_outside_candidate_clears_floor": true,
+        "bond_ionic_character": 0.1975308641975308,
+        "xi_contact": 3.6666666666666665,
+        "curvature_integral": 1.8057239122466366,
+        "monogamy_channel_defect": 0,
+        "concentration_weight": 0.3226225907071779,
+        "omega_e_cross_check_spread_pct": 47.16944044031566,
+        "bracket_contains_reference": true,
+        "bracket_contains_reference_numeric": 1.0,
+        "omega_e_bracket_position": 0.20600982868352255,
+        "omega_e_bracket_width_cm1": 10887.675878920632,
+        "coupling_level": "feed_forward",
+        "missing_coupled_relaxation_flag": 0,
+        "coupled_relaxation_weight": 0.0,
+        "omega_e_one_way_signed_error_pct": 2.3047013871284276,
+        "omega_e_one_way_abs_error_pct": 2.3047013871284276,
+        "omega_e_coupled_improvement_abs_pct": 0.0,
+        "omega_e_signed_error_pct": 2.3047013871284276,
+        "omega_e_abs_error_pct": 2.3047013871284276,
+        "r_e_signed_error_pct": -1.2346198382514266,
+        "r_e_abs_error_pct": 1.2346198382514266,
+        "B_e_abs_error_pct": 2.523346221074065,
+        "omega_e_xe_abs_error_pct": 10.134274770247021
+      },
+      {
+        "molecule": "LiF",
+        "class": "polar_or_ionic",
+        "geometry_reliable": true,
+        "geometry_reliable_numeric": 1.0,
+        "geometry_route": "covalent_nested_wf",
+        "r_e_outside_contact_target_angstrom": 1.454860024589821,
+        "geometry_outside_candidate_clears_floor": true,
+        "bond_ionic_character": 0.4444444444444444,
+        "xi_contact": 3.6666666666666665,
+        "curvature_integral": 1.8057239122466366,
+        "monogamy_channel_defect": 0,
+        "concentration_weight": 0.36420391832890664,
+        "omega_e_cross_check_spread_pct": 9.132880345690857,
+        "bracket_contains_reference": true,
+        "bracket_contains_reference_numeric": 1.0,
+        "omega_e_bracket_position": 0.045055241244069844,
+        "omega_e_bracket_width_cm1": 4854.770191792242,
+        "coupling_level": "feed_forward",
+        "missing_coupled_relaxation_flag": 0,
+        "coupled_relaxation_weight": 0.0,
+        "omega_e_one_way_signed_error_pct": 13.917671484379882,
+        "omega_e_one_way_abs_error_pct": 13.917671484379882,
+        "omega_e_coupled_improvement_abs_pct": 0.0,
+        "omega_e_signed_error_pct": 13.917671484379882,
+        "omega_e_abs_error_pct": 13.917671484379882,
+        "r_e_signed_error_pct": -6.972311235384549,
+        "r_e_abs_error_pct": 6.972311235384549,
+        "B_e_abs_error_pct": 16.081393512717167,
+        "omega_e_xe_abs_error_pct": 25.637738479916823
+      },
+      {
+        "molecule": "NaCl",
+        "class": "polar_or_ionic",
+        "geometry_reliable": false,
+        "geometry_reliable_numeric": 0.0,
+        "geometry_route": "ionic_outside_contact",
+        "r_e_outside_contact_target_angstrom": 1.487665673371873,
+        "geometry_outside_candidate_clears_floor": true,
+        "bond_ionic_character": 0.28924510980862933,
+        "xi_contact": 4.333333333333333,
+        "curvature_integral": 2.111380465404685,
+        "monogamy_channel_defect": 0,
+        "concentration_weight": 0.4357586671602561,
+        "omega_e_cross_check_spread_pct": 15.016207794640296,
+        "bracket_contains_reference": false,
+        "bracket_contains_reference_numeric": 0.0,
+        "omega_e_bracket_position": -0.0738855554803767,
+        "omega_e_bracket_width_cm1": 8592.0291192383,
+        "coupling_level": "feed_forward",
+        "missing_coupled_relaxation_flag": 0,
+        "coupled_relaxation_weight": 0.0,
+        "omega_e_one_way_signed_error_pct": 331.27741064098086,
+        "omega_e_one_way_abs_error_pct": 331.27741064098086,
+        "omega_e_coupled_improvement_abs_pct": 0.0,
+        "omega_e_signed_error_pct": 331.27741064098086,
+        "omega_e_abs_error_pct": 331.27741064098086,
+        "r_e_signed_error_pct": -71.90131837302694,
+        "r_e_abs_error_pct": 71.90131837302694,
+        "B_e_abs_error_pct": 1169.7054035645517,
+        "omega_e_xe_abs_error_pct": 830.337655841519
+      },
+      {
+        "molecule": "HCl",
+        "class": "polar_or_ionic",
+        "geometry_reliable": true,
+        "geometry_reliable_numeric": 1.0,
+        "geometry_route": "covalent_nested_wf",
+        "r_e_outside_contact_target_angstrom": 1.2817441094536328,
+        "geometry_outside_candidate_clears_floor": true,
+        "bond_ionic_character": 0.17522985397512184,
+        "xi_contact": 4.333333333333333,
+        "curvature_integral": 2.111380465404685,
+        "monogamy_channel_defect": 0,
+        "concentration_weight": 0.43842322700845626,
+        "omega_e_cross_check_spread_pct": 43.021509695210376,
+        "bracket_contains_reference": true,
+        "bracket_contains_reference_numeric": 1.0,
+        "omega_e_bracket_position": 0.12212490836801611,
+        "omega_e_bracket_width_cm1": 14709.657454062397,
+        "coupling_level": "feed_forward",
+        "missing_coupled_relaxation_flag": 0,
+        "coupled_relaxation_weight": 0.0,
+        "omega_e_one_way_signed_error_pct": -1.2430339675187094,
+        "omega_e_one_way_abs_error_pct": 1.2430339675187094,
+        "omega_e_coupled_improvement_abs_pct": 0.0,
+        "omega_e_signed_error_pct": -1.2430339675187094,
+        "omega_e_abs_error_pct": 1.2430339675187094,
+        "r_e_signed_error_pct": 0.560498152646545,
+        "r_e_abs_error_pct": 0.560498152646545,
+        "B_e_abs_error_pct": 1.107712625101013,
+        "omega_e_xe_abs_error_pct": 18.56778777269134
+      },
+      {
+        "molecule": "CO",
+        "class": "weakly_polar",
+        "geometry_reliable": true,
+        "geometry_reliable_numeric": 1.0,
+        "geometry_route": "covalent_nested_wf",
+        "r_e_outside_contact_target_angstrom": 1.0911450184423659,
+        "geometry_outside_candidate_clears_floor": true,
+        "bond_ionic_character": 0.027777777777777776,
+        "xi_contact": 4.666666666666667,
+        "curvature_integral": 2.2523364132058745,
+        "monogamy_channel_defect": 0,
+        "concentration_weight": 0.38044755166110134,
+        "omega_e_cross_check_spread_pct": 105.7330453233982,
+        "bracket_contains_reference": true,
+        "bracket_contains_reference_numeric": 1.0,
+        "omega_e_bracket_position": 0.1613479358718463,
+        "omega_e_bracket_width_cm1": 8254.68862053759,
+        "coupling_level": "feed_forward",
+        "missing_coupled_relaxation_flag": 0,
+        "coupled_relaxation_weight": 0.0,
+        "omega_e_one_way_signed_error_pct": 6.234422607541313,
+        "omega_e_one_way_abs_error_pct": 6.234422607541313,
+        "omega_e_coupled_improvement_abs_pct": 0.0,
+        "omega_e_signed_error_pct": 6.234422607541313,
+        "omega_e_abs_error_pct": 6.234422607541313,
+        "r_e_signed_error_pct": -3.293005544414977,
+        "r_e_abs_error_pct": 3.293005544414977,
+        "B_e_abs_error_pct": 7.208919134023059,
+        "omega_e_xe_abs_error_pct": 11.419928575257318
+      },
+      {
+        "molecule": "N2",
+        "class": "homonuclear",
+        "geometry_reliable": true,
+        "geometry_reliable_numeric": 1.0,
+        "geometry_route": "covalent_nested_wf",
+        "r_e_outside_contact_target_angstrom": 1.0799534916387754,
+        "geometry_outside_candidate_clears_floor": true,
+        "bond_ionic_character": 0.0,
+        "xi_contact": 5.0,
+        "curvature_integral": 2.386525145752678,
+        "monogamy_channel_defect": 0,
+        "concentration_weight": 0.38044755166110134,
+        "omega_e_cross_check_spread_pct": 154.57909936720694,
+        "bracket_contains_reference": true,
+        "bracket_contains_reference_numeric": 1.0,
+        "omega_e_bracket_position": 0.20019177462800675,
+        "omega_e_bracket_width_cm1": 7827.511052862597,
+        "coupling_level": "feed_forward",
+        "missing_coupled_relaxation_flag": 0,
+        "coupled_relaxation_weight": 0.0,
+        "omega_e_one_way_signed_error_pct": -0.10744735016377963,
+        "omega_e_one_way_abs_error_pct": 0.10744735016377963,
+        "omega_e_coupled_improvement_abs_pct": 0.0,
+        "omega_e_signed_error_pct": -0.10744735016377963,
+        "omega_e_abs_error_pct": 0.10744735016377963,
+        "r_e_signed_error_pct": -1.6166993132207792,
+        "r_e_abs_error_pct": 1.6166993132207792,
+        "B_e_abs_error_pct": 3.601266128469241,
+        "omega_e_xe_abs_error_pct": 18.56473123598725
+      },
+      {
+        "molecule": "O2",
+        "class": "homonuclear",
+        "geometry_reliable": true,
+        "geometry_reliable_numeric": 1.0,
+        "geometry_route": "covalent_nested_wf",
+        "r_e_outside_contact_target_angstrom": 1.1811991314799108,
+        "geometry_outside_candidate_clears_floor": true,
+        "bond_ionic_character": 0.0,
+        "xi_contact": 5.0,
+        "curvature_integral": 2.386525145752678,
+        "monogamy_channel_defect": 1,
+        "concentration_weight": 0.3905115788614411,
+        "omega_e_cross_check_spread_pct": 90.01954273550706,
+        "bracket_contains_reference": true,
+        "bracket_contains_reference_numeric": 1.0,
+        "omega_e_bracket_position": 0.1534715092215959,
+        "omega_e_bracket_width_cm1": 6789.961679200966,
+        "coupling_level": "feed_forward",
+        "missing_coupled_relaxation_flag": 0,
+        "coupled_relaxation_weight": 0.0,
+        "omega_e_one_way_signed_error_pct": 0.42446939910279413,
+        "omega_e_one_way_abs_error_pct": 0.42446939910279413,
+        "omega_e_coupled_improvement_abs_pct": 0.0,
+        "omega_e_signed_error_pct": 0.42446939910279413,
+        "omega_e_abs_error_pct": 0.42446939910279413,
+        "r_e_signed_error_pct": -2.1781257573572814,
+        "r_e_abs_error_pct": 2.1781257573572814,
+        "B_e_abs_error_pct": 4.6883713752289635,
+        "omega_e_xe_abs_error_pct": 21.69862375669658
+      },
+      {
+        "molecule": "F2",
+        "class": "homonuclear",
+        "geometry_reliable": true,
+        "geometry_reliable_numeric": 1.0,
+        "geometry_route": "covalent_nested_wf",
+        "r_e_outside_contact_target_angstrom": 1.312443479422123,
+        "geometry_outside_candidate_clears_floor": true,
+        "bond_ionic_character": 0.0,
+        "xi_contact": 5.0,
+        "curvature_integral": 2.386525145752678,
+        "monogamy_channel_defect": 1,
+        "concentration_weight": 0.39563179998803366,
+        "omega_e_cross_check_spread_pct": 20.910765503955574,
+        "bracket_contains_reference": true,
+        "bracket_contains_reference_numeric": 1.0,
+        "omega_e_bracket_position": 0.14752264910714066,
+        "omega_e_bracket_width_cm1": 4330.032177639692,
+        "coupling_level": "coupled_relaxed",
+        "missing_coupled_relaxation_flag": 1,
+        "coupled_relaxation_weight": 1.0,
+        "omega_e_one_way_signed_error_pct": -19.558796144233245,
+        "omega_e_one_way_abs_error_pct": 19.558796144233245,
+        "omega_e_coupled_improvement_abs_pct": 11.64023358705914,
+        "omega_e_signed_error_pct": -7.9185625571741065,
+        "omega_e_abs_error_pct": 7.9185625571741065,
+        "r_e_signed_error_pct": -7.0441618087596165,
+        "r_e_abs_error_pct": 7.0441618087596165,
+        "B_e_abs_error_pct": 15.894630518332578,
+        "omega_e_xe_abs_error_pct": 15.869078596447537
+      },
+      {
+        "molecule": "Cl2",
+        "class": "homonuclear",
+        "geometry_reliable": false,
+        "geometry_reliable_numeric": 0.0,
+        "geometry_route": "period3_halogen_open_channel",
+        "r_e_outside_contact_target_angstrom": 0.8337876222211136,
+        "geometry_outside_candidate_clears_floor": true,
+        "bond_ionic_character": 0.0,
+        "xi_contact": 6.0,
+        "curvature_integral": 2.754880254891437,
+        "monogamy_channel_defect": 1,
+        "concentration_weight": 0.40866340055039874,
+        "omega_e_cross_check_spread_pct": 51.794742004147786,
+        "bracket_contains_reference": true,
+        "bracket_contains_reference_numeric": 1.0,
+        "omega_e_bracket_position": 0.027939023699744537,
+        "omega_e_bracket_width_cm1": 8964.001775449053,
+        "coupling_level": "feed_forward",
+        "missing_coupled_relaxation_flag": 0,
+        "coupled_relaxation_weight": 0.0,
+        "omega_e_one_way_signed_error_pct": 110.29851669423208,
+        "omega_e_one_way_abs_error_pct": 110.29851669423208,
+        "omega_e_coupled_improvement_abs_pct": 0.0,
+        "omega_e_signed_error_pct": 110.29851669423208,
+        "omega_e_abs_error_pct": 110.29851669423208,
+        "r_e_signed_error_pct": -58.05686290954708,
+        "r_e_abs_error_pct": 58.05686290954708,
+        "B_e_abs_error_pct": 469.93069351657573,
+        "omega_e_xe_abs_error_pct": 553.6275520655089
+      }
+    ],
+    "group_means_by_class": {
+      "homonuclear": {
+        "n": 5,
+        "mean_abs_error_pct": {
+          "omega_e_abs_error_pct": 25.499406705716265,
+          "omega_e_one_way_abs_error_pct": 32.5157071689737,
+          "omega_e_signed_error_pct": 18.789787731617682,
+          "r_e_abs_error_pct": 13.795136313403844,
+          "B_e_abs_error_pct": 98.85530126790695,
+          "omega_e_xe_abs_error_pct": 123.58643629025464
+        }
+      },
+      "polar_or_ionic": {
+        "n": 5,
+        "mean_abs_error_pct": {
+          "omega_e_abs_error_pct": 71.64512471831578,
+          "omega_e_one_way_abs_error_pct": 81.19067829433936,
+          "omega_e_signed_error_pct": 71.14791113130829,
+          "r_e_abs_error_pct": 20.65782264839065,
+          "B_e_abs_error_pct": 251.30911073114584,
+          "omega_e_xe_abs_error_pct": 182.88127473336593
+        }
+      },
+      "weakly_polar": {
+        "n": 1,
+        "mean_abs_error_pct": {
+          "omega_e_abs_error_pct": 6.234422607541313,
+          "omega_e_one_way_abs_error_pct": 6.234422607541313,
+          "omega_e_signed_error_pct": 6.234422607541313,
+          "r_e_abs_error_pct": 3.293005544414977,
+          "B_e_abs_error_pct": 7.208919134023059,
+          "omega_e_xe_abs_error_pct": 11.419928575257318
+        }
+      }
+    },
+    "group_means_reliable_geometry_by_class": {
+      "homonuclear": {
+        "n": 4,
+        "mean_abs_error_pct": {
+          "omega_e_abs_error_pct": 4.299629208587314,
+          "omega_e_one_way_abs_error_pct": 13.070004787659107,
+          "omega_e_signed_error_pct": -4.087394509035917,
+          "r_e_abs_error_pct": 2.7297046643680356,
+          "B_e_abs_error_pct": 6.086453205739761,
+          "omega_e_xe_abs_error_pct": 16.07615734644108
+        }
+      },
+      "polar_or_ionic": {
+        "n": 4,
+        "mean_abs_error_pct": {
+          "omega_e_abs_error_pct": 6.737053237649513,
+          "omega_e_one_way_abs_error_pct": 18.668995207678986,
+          "omega_e_signed_error_pct": 6.115536253890158,
+          "r_e_abs_error_pct": 7.846948717231575,
+          "B_e_abs_error_pct": 21.710037522794373,
+          "omega_e_xe_abs_error_pct": 21.017179456327643
+        }
+      },
+      "weakly_polar": {
+        "n": 1,
+        "mean_abs_error_pct": {
+          "omega_e_abs_error_pct": 6.234422607541313,
+          "omega_e_one_way_abs_error_pct": 6.234422607541313,
+          "omega_e_signed_error_pct": 6.234422607541313,
+          "r_e_abs_error_pct": 3.293005544414977,
+          "B_e_abs_error_pct": 7.208919134023059,
+          "omega_e_xe_abs_error_pct": 11.419928575257318
+        }
+      }
+    },
+    "group_means_by_geometry_reliability": {
+      "False": {
+        "n": 2,
+        "mean_abs_error_pct": {
+          "omega_e_abs_error_pct": 220.78796366760648,
+          "omega_e_one_way_abs_error_pct": 220.78796366760648,
+          "omega_e_signed_error_pct": 220.78796366760648,
+          "r_e_abs_error_pct": 64.979090641287,
+          "B_e_abs_error_pct": 819.8180485405637,
+          "omega_e_xe_abs_error_pct": 691.982603953514
+        }
+      },
+      "True": {
+        "n": 9,
+        "mean_abs_error_pct": {
+          "omega_e_abs_error_pct": 5.5979058213876245,
+          "omega_e_one_way_abs_error_pct": 14.798935843210408,
+          "omega_e_signed_error_pct": 1.5941099541064752,
+          "r_e_abs_error_pct": 5.066624341201491,
+          "B_e_abs_error_pct": 13.154986894239954,
+          "omega_e_xe_abs_error_pct": 17.75480842070358
+        }
+      }
+    },
+    "group_means_by_coupling_level": {
+      "coupled_relaxed": {
+        "n": 3,
+        "mean_abs_error_pct": {
+          "omega_e_abs_error_pct": 8.716468732217905,
+          "omega_e_one_way_abs_error_pct": 36.319558797686256,
+          "omega_e_signed_error_pct": -2.39459799117055,
+          "r_e_abs_error_pct": 9.914786409845954,
+          "B_e_abs_error_pct": 27.727957683848697,
+          "omega_e_xe_abs_error_pct": 17.923397065178623
+        }
+      },
+      "feed_forward": {
+        "n": 8,
+        "mean_abs_error_pct": {
+          "omega_e_abs_error_pct": 58.22595919138098,
+          "omega_e_one_way_abs_error_pct": 58.22595919138098,
+          "omega_e_signed_error_pct": 57.88833886196036,
+          "r_e_abs_error_pct": 18.226680140481196,
+          "B_e_abs_error_pct": 209.35588825971763,
+          "omega_e_xe_abs_error_pct": 186.24853656222803
+        }
+      }
+    },
+    "correlations": {
+      "omega_e_abs_error_pct": {
+        "geometry_reliable_numeric": {
+          "available": true,
+          "n": 11,
+          "pearson_r": -0.8688491896021476,
+          "abs_r": 0.8688491896021476
+        },
+        "bond_ionic_character": {
+          "available": true,
+          "n": 11,
+          "pearson_r": 0.32475935838364234,
+          "abs_r": 0.32475935838364234
+        },
+        "xi_contact": {
+          "available": true,
+          "n": 11,
+          "pearson_r": 0.16081225001731925,
+          "abs_r": 0.16081225001731925
+        },
+        "curvature_integral": {
+          "available": true,
+          "n": 11,
+          "pearson_r": 0.1609455516196798,
+          "abs_r": 0.1609455516196798
+        },
+        "monogamy_channel_defect": {
+          "available": true,
+          "n": 11,
+          "pearson_r": -0.03318213349573974,
+          "abs_r": 0.03318213349573974
+        },
+        "concentration_weight": {
+          "available": true,
+          "n": 11,
+          "pearson_r": 0.285813495166005,
+          "abs_r": 0.285813495166005
+        },
+        "omega_e_cross_check_spread_pct": {
+          "available": true,
+          "n": 11,
+          "pearson_r": -0.26115715331278533,
+          "abs_r": 0.26115715331278533
+        },
+        "bracket_contains_reference_numeric": {
+          "available": true,
+          "n": 11,
+          "pearson_r": -0.6182819116146284,
+          "abs_r": 0.6182819116146284
+        },
+        "omega_e_bracket_position": {
+          "available": true,
+          "n": 11,
+          "pearson_r": -0.23206795268192434,
+          "abs_r": 0.23206795268192434
+        },
+        "omega_e_bracket_width_cm1": {
+          "available": true,
+          "n": 11,
+          "pearson_r": 0.14672112579105726,
+          "abs_r": 0.14672112579105726
+        }
+      },
+      "omega_e_one_way_abs_error_pct": {
+        "geometry_reliable_numeric": {
+          "available": true,
+          "n": 11,
+          "pearson_r": -0.8468863042739565,
+          "abs_r": 0.8468863042739565
+        },
+        "bond_ionic_character": {
+          "available": true,
+          "n": 11,
+          "pearson_r": 0.29987486131374474,
+          "abs_r": 0.29987486131374474
+        },
+        "xi_contact": {
+          "available": true,
+          "n": 11,
+          "pearson_r": 0.0898295418861747,
+          "abs_r": 0.0898295418861747
+        },
+        "curvature_integral": {
+          "available": true,
+          "n": 11,
+          "pearson_r": 0.08942942437686212,
+          "abs_r": 0.08942942437686212
+        },
+        "monogamy_channel_defect": {
+          "available": true,
+          "n": 11,
+          "pearson_r": -0.057600955992422626,
+          "abs_r": 0.057600955992422626
+        },
+        "concentration_weight": {
+          "available": true,
+          "n": 11,
+          "pearson_r": 0.18274962737513162,
+          "abs_r": 0.18274962737513162
+        },
+        "omega_e_cross_check_spread_pct": {
+          "available": true,
+          "n": 11,
+          "pearson_r": -0.3377457564363961,
+          "abs_r": 0.3377457564363961
+        },
+        "bracket_contains_reference_numeric": {
+          "available": true,
+          "n": 11,
+          "pearson_r": -0.6506391131249033,
+          "abs_r": 0.6506391131249033
+        },
+        "omega_e_bracket_position": {
+          "available": true,
+          "n": 11,
+          "pearson_r": -0.1859610407026774,
+          "abs_r": 0.1859610407026774
+        },
+        "omega_e_bracket_width_cm1": {
+          "available": true,
+          "n": 11,
+          "pearson_r": 0.03967774340830776,
+          "abs_r": 0.03967774340830776
+        }
+      },
+      "omega_e_signed_error_pct": {
+        "geometry_reliable_numeric": {
+          "available": true,
+          "n": 11,
+          "pearson_r": -0.8716358509946307,
+          "abs_r": 0.8716358509946307
+        },
+        "bond_ionic_character": {
+          "available": true,
+          "n": 11,
+          "pearson_r": 0.3435802024658274,
+          "abs_r": 0.3435802024658274
+        },
+        "xi_contact": {
+          "available": true,
+          "n": 11,
+          "pearson_r": 0.18560384357284787,
+          "abs_r": 0.18560384357284787
+        },
+        "curvature_integral": {
+          "available": true,
+          "n": 11,
+          "pearson_r": 0.18970171601953584,
+          "abs_r": 0.18970171601953584
+        },
+        "monogamy_channel_defect": {
+          "available": true,
+          "n": 11,
+          "pearson_r": -0.0453280182004297,
+          "abs_r": 0.0453280182004297
+        },
+        "concentration_weight": {
+          "available": true,
+          "n": 11,
+          "pearson_r": 0.31736631754189343,
+          "abs_r": 0.31736631754189343
+        },
+        "omega_e_cross_check_spread_pct": {
+          "available": true,
+          "n": 11,
+          "pearson_r": -0.2317441495868368,
+          "abs_r": 0.2317441495868368
+        },
+        "bracket_contains_reference_numeric": {
+          "available": true,
+          "n": 11,
+          "pearson_r": -0.58233898958029,
+          "abs_r": 0.58233898958029
+        },
+        "omega_e_bracket_position": {
+          "available": true,
+          "n": 11,
+          "pearson_r": -0.27567426460017247,
+          "abs_r": 0.27567426460017247
+        },
+        "omega_e_bracket_width_cm1": {
+          "available": true,
+          "n": 11,
+          "pearson_r": 0.1785218517791429,
+          "abs_r": 0.1785218517791429
+        }
+      },
+      "r_e_abs_error_pct": {
+        "geometry_reliable_numeric": {
+          "available": true,
+          "n": 11,
+          "pearson_r": -0.9603704491051464,
+          "abs_r": 0.9603704491051464
+        },
+        "bond_ionic_character": {
+          "available": true,
+          "n": 11,
+          "pearson_r": 0.18278669393797753,
+          "abs_r": 0.18278669393797753
+        },
+        "xi_contact": {
+          "available": true,
+          "n": 11,
+          "pearson_r": 0.33893667488022494,
+          "abs_r": 0.33893667488022494
+        },
+        "curvature_integral": {
+          "available": true,
+          "n": 11,
+          "pearson_r": 0.3192634728042343,
+          "abs_r": 0.3192634728042343
+        },
+        "monogamy_channel_defect": {
+          "available": true,
+          "n": 11,
+          "pearson_r": 0.16457677359710865,
+          "abs_r": 0.16457677359710865
+        },
+        "concentration_weight": {
+          "available": true,
+          "n": 11,
+          "pearson_r": 0.27322978462654235,
+          "abs_r": 0.27322978462654235
+        },
+        "omega_e_cross_check_spread_pct": {
+          "available": true,
+          "n": 11,
+          "pearson_r": -0.28109706919344374,
+          "abs_r": 0.28109706919344374
+        },
+        "bracket_contains_reference_numeric": {
+          "available": true,
+          "n": 11,
+          "pearson_r": -0.3924366139401364,
+          "abs_r": 0.3924366139401364
+        },
+        "omega_e_bracket_position": {
+          "available": true,
+          "n": 11,
+          "pearson_r": -0.3257042494524921,
+          "abs_r": 0.3257042494524921
+        },
+        "omega_e_bracket_width_cm1": {
+          "available": true,
+          "n": 11,
+          "pearson_r": 0.0836305794086461,
+          "abs_r": 0.0836305794086461
+        }
+      },
+      "B_e_abs_error_pct": {
+        "geometry_reliable_numeric": {
+          "available": true,
+          "n": 11,
+          "pearson_r": -0.9004689735664346,
+          "abs_r": 0.9004689735664346
+        },
+        "bond_ionic_character": {
+          "available": true,
+          "n": 11,
+          "pearson_r": 0.28787033287495795,
+          "abs_r": 0.28787033287495795
+        },
+        "xi_contact": {
+          "available": true,
+          "n": 11,
+          "pearson_r": 0.20992423029945778,
+          "abs_r": 0.20992423029945778
+        },
+        "curvature_integral": {
+          "available": true,
+          "n": 11,
+          "pearson_r": 0.20642018510479812,
+          "abs_r": 0.20642018510479812
+        },
+        "monogamy_channel_defect": {
+          "available": true,
+          "n": 11,
+          "pearson_r": 0.006528557404239285,
+          "abs_r": 0.006528557404239285
+        },
+        "concentration_weight": {
+          "available": true,
+          "n": 11,
+          "pearson_r": 0.2987808002325211,
+          "abs_r": 0.2987808002325211
+        },
+        "omega_e_cross_check_spread_pct": {
+          "available": true,
+          "n": 11,
+          "pearson_r": -0.24633054203867935,
+          "abs_r": 0.24633054203867935
+        },
+        "bracket_contains_reference_numeric": {
+          "available": true,
+          "n": 11,
+          "pearson_r": -0.5800034935491434,
+          "abs_r": 0.5800034935491434
+        },
+        "omega_e_bracket_position": {
+          "available": true,
+          "n": 11,
+          "pearson_r": -0.25946177501943885,
+          "abs_r": 0.25946177501943885
+        },
+        "omega_e_bracket_width_cm1": {
+          "available": true,
+          "n": 11,
+          "pearson_r": 0.15853704109953987,
+          "abs_r": 0.15853704109953987
+        }
+      },
+      "omega_e_xe_abs_error_pct": {
+        "geometry_reliable_numeric": {
+          "available": true,
+          "n": 11,
+          "pearson_r": -0.9749599310915544,
+          "abs_r": 0.9749599310915544
+        },
+        "bond_ionic_character": {
+          "available": true,
+          "n": 11,
+          "pearson_r": 0.20798971538303113,
+          "abs_r": 0.20798971538303113
+        },
+        "xi_contact": {
+          "available": true,
+          "n": 11,
+          "pearson_r": 0.32325490704449333,
+          "abs_r": 0.32325490704449333
+        },
+        "curvature_integral": {
+          "available": true,
+          "n": 11,
+          "pearson_r": 0.30141144867881847,
+          "abs_r": 0.30141144867881847
+        },
+        "monogamy_channel_defect": {
+          "available": true,
+          "n": 11,
+          "pearson_r": 0.13023102838398126,
+          "abs_r": 0.13023102838398126
+        },
+        "concentration_weight": {
+          "available": true,
+          "n": 11,
+          "pearson_r": 0.32855733834731243,
+          "abs_r": 0.32855733834731243
+        },
+        "omega_e_cross_check_spread_pct": {
+          "available": true,
+          "n": 11,
+          "pearson_r": -0.20663767700020097,
+          "abs_r": 0.20663767700020097
+        },
+        "bracket_contains_reference_numeric": {
+          "available": true,
+          "n": 11,
+          "pearson_r": -0.49294609401633555,
+          "abs_r": 0.49294609401633555
+        },
+        "omega_e_bracket_position": {
+          "available": true,
+          "n": 11,
+          "pearson_r": -0.26845867346360663,
+          "abs_r": 0.26845867346360663
+        },
+        "omega_e_bracket_width_cm1": {
+          "available": true,
+          "n": 11,
+          "pearson_r": 0.19907083323375038,
+          "abs_r": 0.19907083323375038
+        }
+      }
+    },
+    "correlations_reliable_geometry": {
+      "omega_e_abs_error_pct": {
+        "geometry_reliable_numeric": {
+          "available": false,
+          "n": 9,
+          "reason": "zero_variance"
+        },
+        "bond_ionic_character": {
+          "available": true,
+          "n": 9,
+          "pearson_r": 0.4653702891215314,
+          "abs_r": 0.4653702891215314
+        },
+        "xi_contact": {
+          "available": true,
+          "n": 9,
+          "pearson_r": -0.48912932768666373,
+          "abs_r": 0.48912932768666373
+        },
+        "curvature_integral": {
+          "available": true,
+          "n": 9,
+          "pearson_r": -0.4646328125082383,
+          "abs_r": 0.4646328125082383
+        },
+        "monogamy_channel_defect": {
+          "available": true,
+          "n": 9,
+          "pearson_r": -0.1673791988552291,
+          "abs_r": 0.1673791988552291
+        },
+        "concentration_weight": {
+          "available": true,
+          "n": 9,
+          "pearson_r": -0.39832801551168584,
+          "abs_r": 0.39832801551168584
+        },
+        "omega_e_cross_check_spread_pct": {
+          "available": true,
+          "n": 9,
+          "pearson_r": -0.7017295781957503,
+          "abs_r": 0.7017295781957503
+        },
+        "bracket_contains_reference_numeric": {
+          "available": true,
+          "n": 9,
+          "pearson_r": -0.24450119591794836,
+          "abs_r": 0.24450119591794836
+        },
+        "omega_e_bracket_position": {
+          "available": true,
+          "n": 9,
+          "pearson_r": 0.178614436532792,
+          "abs_r": 0.178614436532792
+        },
+        "omega_e_bracket_width_cm1": {
+          "available": true,
+          "n": 9,
+          "pearson_r": -0.6624092506271207,
+          "abs_r": 0.6624092506271207
+        }
+      },
+      "omega_e_one_way_abs_error_pct": {
+        "geometry_reliable_numeric": {
+          "available": false,
+          "n": 9,
+          "reason": "zero_variance"
+        },
+        "bond_ionic_character": {
+          "available": true,
+          "n": 9,
+          "pearson_r": -0.05405117454372802,
+          "abs_r": 0.05405117454372802
+        },
+        "xi_contact": {
+          "available": true,
+          "n": 9,
+          "pearson_r": -0.5205931886186466,
+          "abs_r": 0.5205931886186466
+        },
+        "curvature_integral": {
+          "available": true,
+          "n": 9,
+          "pearson_r": -0.5079491997652232,
+          "abs_r": 0.5079491997652232
+        },
+        "monogamy_channel_defect": {
+          "available": true,
+          "n": 9,
+          "pearson_r": -0.1416842765382557,
+          "abs_r": 0.1416842765382557
+        },
+        "concentration_weight": {
+          "available": true,
+          "n": 9,
+          "pearson_r": -0.6812581572389211,
+          "abs_r": 0.6812581572389211
+        },
+        "omega_e_cross_check_spread_pct": {
+          "available": true,
+          "n": 9,
+          "pearson_r": -0.6372960062330011,
+          "abs_r": 0.6372960062330011
+        },
+        "bracket_contains_reference_numeric": {
+          "available": true,
+          "n": 9,
+          "pearson_r": -0.3390142983682088,
+          "abs_r": 0.3390142983682088
+        },
+        "omega_e_bracket_position": {
+          "available": true,
+          "n": 9,
+          "pearson_r": 0.2859117800731566,
+          "abs_r": 0.2859117800731566
+        },
+        "omega_e_bracket_width_cm1": {
+          "available": true,
+          "n": 9,
+          "pearson_r": -0.7615878343187787,
+          "abs_r": 0.7615878343187787
+        }
+      },
+      "omega_e_signed_error_pct": {
+        "geometry_reliable_numeric": {
+          "available": false,
+          "n": 9,
+          "reason": "zero_variance"
+        },
+        "bond_ionic_character": {
+          "available": true,
+          "n": 9,
+          "pearson_r": 0.6759754778099301,
+          "abs_r": 0.6759754778099301
+        },
+        "xi_contact": {
+          "available": true,
+          "n": 9,
+          "pearson_r": 0.05898994865170191,
+          "abs_r": 0.05898994865170191
+        },
+        "curvature_integral": {
+          "available": true,
+          "n": 9,
+          "pearson_r": 0.13544122123008792,
+          "abs_r": 0.13544122123008792
+        },
+        "monogamy_channel_defect": {
+          "available": true,
+          "n": 9,
+          "pearson_r": -0.4056041809924975,
+          "abs_r": 0.4056041809924975
+        },
+        "concentration_weight": {
+          "available": true,
+          "n": 9,
+          "pearson_r": 0.23763743733724121,
+          "abs_r": 0.23763743733724121
+        },
+        "omega_e_cross_check_spread_pct": {
+          "available": true,
+          "n": 9,
+          "pearson_r": -0.011951516486614163,
+          "abs_r": 0.011951516486614163
+        },
+        "bracket_contains_reference_numeric": {
+          "available": true,
+          "n": 9,
+          "pearson_r": 0.5194776561942958,
+          "abs_r": 0.5194776561942958
+        },
+        "omega_e_bracket_position": {
+          "available": true,
+          "n": 9,
+          "pearson_r": -0.5633279679432928,
+          "abs_r": 0.5633279679432928
+        },
+        "omega_e_bracket_width_cm1": {
+          "available": true,
+          "n": 9,
+          "pearson_r": 0.049038128779948904,
+          "abs_r": 0.049038128779948904
+        }
+      },
+      "r_e_abs_error_pct": {
+        "geometry_reliable_numeric": {
+          "available": false,
+          "n": 9,
+          "reason": "zero_variance"
+        },
+        "bond_ionic_character": {
+          "available": true,
+          "n": 9,
+          "pearson_r": 0.11860025108657166,
+          "abs_r": 0.11860025108657166
+        },
+        "xi_contact": {
+          "available": true,
+          "n": 9,
+          "pearson_r": -0.040947968895398396,
+          "abs_r": 0.040947968895398396
+        },
+        "curvature_integral": {
+          "available": true,
+          "n": 9,
+          "pearson_r": 0.0045199615846239155,
+          "abs_r": 0.0045199615846239155
+        },
+        "monogamy_channel_defect": {
+          "available": true,
+          "n": 9,
+          "pearson_r": -0.0365688718537252,
+          "abs_r": 0.0365688718537252
+        },
+        "concentration_weight": {
+          "available": true,
+          "n": 9,
+          "pearson_r": -0.172924879742719,
+          "abs_r": 0.172924879742719
+        },
+        "omega_e_cross_check_spread_pct": {
+          "available": true,
+          "n": 9,
+          "pearson_r": -0.3989849357679585,
+          "abs_r": 0.3989849357679585
+        },
+        "bracket_contains_reference_numeric": {
+          "available": true,
+          "n": 9,
+          "pearson_r": 0.2648207738146916,
+          "abs_r": 0.2648207738146916
+        },
+        "omega_e_bracket_position": {
+          "available": true,
+          "n": 9,
+          "pearson_r": -0.3188457685038911,
+          "abs_r": 0.3188457685038911
+        },
+        "omega_e_bracket_width_cm1": {
+          "available": true,
+          "n": 9,
+          "pearson_r": -0.4823232547973037,
+          "abs_r": 0.4823232547973037
+        }
+      },
+      "B_e_abs_error_pct": {
+        "geometry_reliable_numeric": {
+          "available": false,
+          "n": 9,
+          "reason": "zero_variance"
+        },
+        "bond_ionic_character": {
+          "available": true,
+          "n": 9,
+          "pearson_r": 0.09149652916602687,
+          "abs_r": 0.09149652916602687
+        },
+        "xi_contact": {
+          "available": true,
+          "n": 9,
+          "pearson_r": -0.07635851546976508,
+          "abs_r": 0.07635851546976508
+        },
+        "curvature_integral": {
+          "available": true,
+          "n": 9,
+          "pearson_r": -0.03131393437288241,
+          "abs_r": 0.03131393437288241
+        },
+        "monogamy_channel_defect": {
+          "available": true,
+          "n": 9,
+          "pearson_r": -0.07701885522995633,
+          "abs_r": 0.07701885522995633
+        },
+        "concentration_weight": {
+          "available": true,
+          "n": 9,
+          "pearson_r": -0.214869009688492,
+          "abs_r": 0.214869009688492
+        },
+        "omega_e_cross_check_spread_pct": {
+          "available": true,
+          "n": 9,
+          "pearson_r": -0.38897165054516253,
+          "abs_r": 0.38897165054516253
+        },
+        "bracket_contains_reference_numeric": {
+          "available": true,
+          "n": 9,
+          "pearson_r": 0.23116136324771644,
+          "abs_r": 0.23116136324771644
+        },
+        "omega_e_bracket_position": {
+          "available": true,
+          "n": 9,
+          "pearson_r": -0.28374813660573966,
+          "abs_r": 0.28374813660573966
+        },
+        "omega_e_bracket_width_cm1": {
+          "available": true,
+          "n": 9,
+          "pearson_r": -0.4732835883410465,
+          "abs_r": 0.4732835883410465
+        }
+      },
+      "omega_e_xe_abs_error_pct": {
+        "geometry_reliable_numeric": {
+          "available": false,
+          "n": 9,
+          "reason": "zero_variance"
+        },
+        "bond_ionic_character": {
+          "available": true,
+          "n": 9,
+          "pearson_r": 0.36626634548119114,
+          "abs_r": 0.36626634548119114
+        },
+        "xi_contact": {
+          "available": true,
+          "n": 9,
+          "pearson_r": 0.24616845631566964,
+          "abs_r": 0.24616845631566964
+        },
+        "curvature_integral": {
+          "available": true,
+          "n": 9,
+          "pearson_r": 0.2911909497555807,
+          "abs_r": 0.2911909497555807
+        },
+        "monogamy_channel_defect": {
+          "available": true,
+          "n": 9,
+          "pearson_r": 0.0809070655242677,
+          "abs_r": 0.0809070655242677
+        },
+        "concentration_weight": {
+          "available": true,
+          "n": 9,
+          "pearson_r": 0.23420843078058684,
+          "abs_r": 0.23420843078058684
+        },
+        "omega_e_cross_check_spread_pct": {
+          "available": true,
+          "n": 9,
+          "pearson_r": -0.14248308379372562,
+          "abs_r": 0.14248308379372562
+        },
+        "bracket_contains_reference_numeric": {
+          "available": true,
+          "n": 9,
+          "pearson_r": 0.4983402788729687,
+          "abs_r": 0.4983402788729687
+        },
+        "omega_e_bracket_position": {
+          "available": true,
+          "n": 9,
+          "pearson_r": -0.5567187315965744,
+          "abs_r": 0.5567187315965744
+        },
+        "omega_e_bracket_width_cm1": {
+          "available": true,
+          "n": 9,
+          "pearson_r": -0.16000472577591834,
+          "abs_r": 0.16000472577591834
+        }
+      }
+    },
+    "largest_residuals": {
+      "omega_e_abs_error_pct": [
+        {
+          "molecule": "NaCl",
+          "value_pct": 331.27741064098086
+        },
+        {
+          "molecule": "Cl2",
+          "value_pct": 110.29851669423208
+        },
+        {
+          "molecule": "LiF",
+          "value_pct": 13.917671484379882
+        },
+        {
+          "molecule": "LiH",
+          "value_pct": 9.482806111571032
+        },
+        {
+          "molecule": "H2",
+          "value_pct": 8.748037527908576
+        },
+        {
+          "molecule": "F2",
+          "value_pct": 7.9185625571741065
+        },
+        {
+          "molecule": "CO",
+          "value_pct": 6.234422607541313
+        },
+        {
+          "molecule": "HF",
+          "value_pct": 2.3047013871284276
+        },
+        {
+          "molecule": "HCl",
+          "value_pct": 1.2430339675187094
+        },
+        {
+          "molecule": "O2",
+          "value_pct": 0.42446939910279413
+        },
+        {
+          "molecule": "N2",
+          "value_pct": 0.10744735016377963
+        }
+      ],
+      "omega_e_one_way_abs_error_pct": [
+        {
+          "molecule": "NaCl",
+          "value_pct": 331.27741064098086
+        },
+        {
+          "molecule": "Cl2",
+          "value_pct": 110.29851669423208
+        },
+        {
+          "molecule": "LiH",
+          "value_pct": 57.21057399168892
+        },
+        {
+          "molecule": "H2",
+          "value_pct": 32.18930625713661
+        },
+        {
+          "molecule": "F2",
+          "value_pct": 19.558796144233245
+        },
+        {
+          "molecule": "LiF",
+          "value_pct": 13.917671484379882
+        },
+        {
+          "molecule": "CO",
+          "value_pct": 6.234422607541313
+        },
+        {
+          "molecule": "HF",
+          "value_pct": 2.3047013871284276
+        },
+        {
+          "molecule": "HCl",
+          "value_pct": 1.2430339675187094
+        },
+        {
+          "molecule": "O2",
+          "value_pct": 0.42446939910279413
+        },
+        {
+          "molecule": "N2",
+          "value_pct": 0.10744735016377963
+        }
+      ],
+      "omega_e_signed_error_pct": [
+        {
+          "molecule": "NaCl",
+          "value_pct": 331.27741064098086
+        },
+        {
+          "molecule": "Cl2",
+          "value_pct": 110.29851669423208
+        },
+        {
+          "molecule": "LiF",
+          "value_pct": 13.917671484379882
+        },
+        {
+          "molecule": "LiH",
+          "value_pct": 9.482806111571032
+        },
+        {
+          "molecule": "H2",
+          "value_pct": -8.748037527908576
+        },
+        {
+          "molecule": "F2",
+          "value_pct": -7.9185625571741065
+        },
+        {
+          "molecule": "CO",
+          "value_pct": 6.234422607541313
+        },
+        {
+          "molecule": "HF",
+          "value_pct": 2.3047013871284276
+        },
+        {
+          "molecule": "HCl",
+          "value_pct": -1.2430339675187094
+        },
+        {
+          "molecule": "O2",
+          "value_pct": 0.42446939910279413
+        },
+        {
+          "molecule": "N2",
+          "value_pct": -0.10744735016377963
+        }
+      ],
+      "r_e_abs_error_pct": [
+        {
+          "molecule": "NaCl",
+          "value_pct": 71.90131837302694
+        },
+        {
+          "molecule": "Cl2",
+          "value_pct": 58.05686290954708
+        },
+        {
+          "molecule": "LiH",
+          "value_pct": 22.62036564264378
+        },
+        {
+          "molecule": "F2",
+          "value_pct": 7.0441618087596165
+        },
+        {
+          "molecule": "LiF",
+          "value_pct": 6.972311235384549
+        },
+        {
+          "molecule": "CO",
+          "value_pct": 3.293005544414977
+        },
+        {
+          "molecule": "O2",
+          "value_pct": 2.1781257573572814
+        },
+        {
+          "molecule": "N2",
+          "value_pct": 1.6166993132207792
+        },
+        {
+          "molecule": "HF",
+          "value_pct": 1.2346198382514266
+        },
+        {
+          "molecule": "HCl",
+          "value_pct": 0.560498152646545
+        },
+        {
+          "molecule": "H2",
+          "value_pct": 0.0798317781344647
+        }
+      ],
+      "B_e_abs_error_pct": [
+        {
+          "molecule": "NaCl",
+          "value_pct": 1169.7054035645517
+        },
+        {
+          "molecule": "Cl2",
+          "value_pct": 469.93069351657573
+        },
+        {
+          "molecule": "LiH",
+          "value_pct": 67.12769773228524
+        },
+        {
+          "molecule": "LiF",
+          "value_pct": 16.081393512717167
+        },
+        {
+          "molecule": "F2",
+          "value_pct": 15.894630518332578
+        },
+        {
+          "molecule": "CO",
+          "value_pct": 7.208919134023059
+        },
+        {
+          "molecule": "O2",
+          "value_pct": 4.6883713752289635
+        },
+        {
+          "molecule": "N2",
+          "value_pct": 3.601266128469241
+        },
+        {
+          "molecule": "HF",
+          "value_pct": 2.523346221074065
+        },
+        {
+          "molecule": "HCl",
+          "value_pct": 1.107712625101013
+        },
+        {
+          "molecule": "H2",
+          "value_pct": 0.16154480092826187
+        }
+      ],
+      "omega_e_xe_abs_error_pct": [
+        {
+          "molecule": "NaCl",
+          "value_pct": 830.337655841519
+        },
+        {
+          "molecule": "Cl2",
+          "value_pct": 553.6275520655089
+        },
+        {
+          "molecule": "LiH",
+          "value_pct": 29.728916802455384
+        },
+        {
+          "molecule": "LiF",
+          "value_pct": 25.637738479916823
+        },
+        {
+          "molecule": "O2",
+          "value_pct": 21.69862375669658
+        },
+        {
+          "molecule": "HCl",
+          "value_pct": 18.56778777269134
+        },
+        {
+          "molecule": "N2",
+          "value_pct": 18.56473123598725
+        },
+        {
+          "molecule": "F2",
+          "value_pct": 15.869078596447537
+        },
+        {
+          "molecule": "CO",
+          "value_pct": 11.419928575257318
+        },
+        {
+          "molecule": "HF",
+          "value_pct": 10.134274770247021
+        },
+        {
+          "molecule": "H2",
+          "value_pct": 8.17219579663295
+        }
+      ]
+    },
+    "in_bracket_flow_targets": [
+      {
+        "molecule": "LiH",
+        "bracket_position": 0.06083852341978239,
+        "omega_e_signed_error_pct": 9.482806111571032
+      },
+      {
+        "molecule": "HF",
+        "bracket_position": 0.20600982868352255,
+        "omega_e_signed_error_pct": 2.3047013871284276
+      },
+      {
+        "molecule": "LiF",
+        "bracket_position": 0.045055241244069844,
+        "omega_e_signed_error_pct": 13.917671484379882
+      },
+      {
+        "molecule": "HCl",
+        "bracket_position": 0.12212490836801611,
+        "omega_e_signed_error_pct": -1.2430339675187094
+      },
+      {
+        "molecule": "CO",
+        "bracket_position": 0.1613479358718463,
+        "omega_e_signed_error_pct": 6.234422607541313
+      },
+      {
+        "molecule": "N2",
+        "bracket_position": 0.20019177462800675,
+        "omega_e_signed_error_pct": -0.10744735016377963
+      },
+      {
+        "molecule": "O2",
+        "bracket_position": 0.1534715092215959,
+        "omega_e_signed_error_pct": 0.42446939910279413
+      },
+      {
+        "molecule": "F2",
+        "bracket_position": 0.14752264910714066,
+        "omega_e_signed_error_pct": -7.9185625571741065
+      }
+    ],
+    "coupled_relaxation_improvements": [
+      {
+        "molecule": "H2",
+        "coupling_level": "coupled_relaxed",
+        "one_way_abs_error_pct": 32.18930625713661,
+        "coupled_abs_error_pct": 8.748037527908576,
+        "improvement_abs_pct": 23.44126872922803
+      },
+      {
+        "molecule": "LiH",
+        "coupling_level": "coupled_relaxed",
+        "one_way_abs_error_pct": 57.21057399168892,
+        "coupled_abs_error_pct": 9.482806111571032,
+        "improvement_abs_pct": 47.72776788011789
+      },
+      {
+        "molecule": "F2",
+        "coupling_level": "coupled_relaxed",
+        "one_way_abs_error_pct": 19.558796144233245,
+        "coupled_abs_error_pct": 7.9185625571741065,
+        "improvement_abs_pct": 11.64023358705914
+      }
+    ]
+  },
+  "comparison_confidence": {
+    "rows": [
+      {
+        "source": "Sciortino et al., Nat. Phys. 2025",
+        "label": "LLCP (MB-pol)",
+        "confidence_class": "comparison_only",
+        "role": "comparison_only"
+      },
+      {
+        "source": "Li et al., Nat. Phys. 2026",
+        "label": "two-state A\u21ccB (TIP4P/Ice MD)",
+        "confidence_class": "comparison_only",
+        "role": "comparison_only"
+      },
+      {
+        "source": "Kim et al., Science 2020",
+        "label": "bulk LLPT experimental claim",
+        "confidence_class": "debated_experimental_comparison",
+        "role": "comparison_only"
+      },
+      {
+        "source": "Kim et al., Science 2017",
+        "label": "compressibility maximum ~229 K at 1 atm",
+        "confidence_class": "laboratory_or_database_comparison",
+        "role": "comparison_only"
+      },
+      {
+        "source": "Hoy & Bunker, J. Mol. Spectrosc. 1979",
+        "label": "equilibrium structure \u03b8e (rotovibrational fit)",
+        "confidence_class": "laboratory_or_database_comparison",
+        "role": "comparison_only"
+      },
+      {
+        "source": "NIST CCCBDB (H2O, CAS 7732-18-5)",
+        "label": "ground-state effective angle (aggregated)",
+        "confidence_class": "laboratory_or_database_comparison",
+        "role": "comparison_only"
+      },
+      {
+        "source": "Cook et al., J. Mol. Struct. 1974",
+        "label": "average ground vibrational structure \u3008\u03b8\u3009",
+        "confidence_class": "laboratory_or_database_comparison",
+        "role": "comparison_only"
+      },
+      {
+        "source": "Benedict et al., J. Chem. Phys. 1956",
+        "label": "early microwave rotation spectrum (effective \u03b8)",
+        "confidence_class": "comparison_only",
+        "role": "comparison_only"
+      }
+    ]
+  },
+  "forward_prediction_candidates": {
+    "phase_grid_rows": [
+      {
+        "molecule": "H2O",
+        "temperature_K": 80.0,
+        "pressure_atm": 1.0,
+        "derived_phase": "metastable_liquid",
+        "liquid_subphase": "mixture",
+        "f_low_density": 0.7738936270078396,
+        "rho_curv": 0.8387721610400334,
+        "coordination_fraction": 0.6380049956553946,
+        "benchmark_status": "forward_prediction_or_unscored_grid_row"
+      },
+      {
+        "molecule": "H2O",
+        "temperature_K": 80.0,
+        "pressure_atm": 1250.0,
+        "derived_phase": "metastable_liquid",
+        "liquid_subphase": "high_density",
+        "f_low_density": 2.89727502824809e-09,
+        "rho_curv": 0.999999999396401,
+        "coordination_fraction": 0.6380049956553946,
+        "benchmark_status": "forward_prediction_or_unscored_grid_row"
+      },
+      {
+        "molecule": "H2O",
+        "temperature_K": 200.0,
+        "pressure_atm": 1250.0,
+        "derived_phase": "metastable_liquid",
+        "liquid_subphase": "high_density",
+        "f_low_density": 2.89727502824809e-09,
+        "rho_curv": 0.999999999396401,
+        "coordination_fraction": 0.7700124891384864,
+        "benchmark_status": "forward_prediction_or_unscored_grid_row"
+      },
+      {
+        "molecule": "H2O",
+        "temperature_K": 300.0,
+        "pressure_atm": 1.0,
+        "derived_phase": "liquid",
+        "liquid_subphase": "high_density",
+        "f_low_density": 0.0,
+        "rho_curv": 1.0,
+        "coordination_fraction": 0.808276091448604,
+        "benchmark_status": "forward_prediction_or_unscored_grid_row"
+      }
+    ],
+    "cooling_sweep_rows": [
+      {
+        "molecule": "H2O",
+        "temperature_K": 50.0,
+        "derived_phase": "solid",
+        "preferred_allotrope": "Ih",
+        "T_melt_K": 201.5571827125009,
+        "T_boil_K": 322.49149234000146,
+        "benchmark_status": "forward_prediction_or_unscored_sweep_row"
+      },
+      {
+        "molecule": "H2O",
+        "temperature_K": 205.0,
+        "derived_phase": "molecular_cluster",
+        "preferred_allotrope": null,
+        "T_melt_K": 201.5571827125009,
+        "T_boil_K": 322.49149234000146,
+        "benchmark_status": "forward_prediction_or_unscored_sweep_row"
+      },
+      {
+        "molecule": "H2O",
+        "temperature_K": 325.0,
+        "derived_phase": "gas",
+        "preferred_allotrope": null,
+        "T_melt_K": 201.5571827125009,
+        "T_boil_K": 322.49149234000146,
+        "benchmark_status": "forward_prediction_or_unscored_sweep_row"
+      }
+    ]
+  }
+}

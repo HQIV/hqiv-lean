@@ -94,4 +94,96 @@ theorem effectiveCurvatureBudgetAtXi_ge_homogeneous (ξ ρ δ : ℝ) :
   unfold effectiveCurvatureBudgetAtXi
   linarith [localCurvatureDefectExcess_nonneg δ]
 
+/-! ## Defect formation energy (DFT-slot readout)
+
+Outside `local` column surplus as an energy: the same
+`localCurvatureDefectExcess` that dresses `M_out` multiplies the contact binding
+depth.  Zero excess recovers zero formation cost (identity channel).
+
+Python: ``scripts/hqiv_discrete_saddle_defect_readout.py``.
+-/
+
+/-- Defect formation energy [eV]:
+`E_def = E_bind · localCurvatureDefectExcess(δ)`.
+Equivalent to `E_bind · (outsideLocalDefectChannel(δ) − 1)`. -/
+noncomputable def defectFormationEnergyEv (bindingEv δ_coord : ℝ) : ℝ :=
+  bindingEv * localCurvatureDefectExcess δ_coord
+
+theorem defectFormationEnergyEv_zero_excess (bindingEv : ℝ) :
+    defectFormationEnergyEv bindingEv 0 = 0 := by
+  unfold defectFormationEnergyEv localCurvatureDefectExcess
+  simp
+
+theorem defectFormationEnergyEv_nonneg
+    (bindingEv δ_coord : ℝ) (hE : 0 ≤ bindingEv) :
+    0 ≤ defectFormationEnergyEv bindingEv δ_coord := by
+  unfold defectFormationEnergyEv
+  exact mul_nonneg hE (localCurvatureDefectExcess_nonneg δ_coord)
+
+/-- Cooperative vacancy formation: share the single-site defect across the
+coordination shell ``E_vac = E_def / max(CN, 1)``.
+
+For a monovacancy ``δ = 1/CN`` this is
+``E_bind · γ · (4/8) / CN²``. -/
+noncomputable def vacancyFormationEnergyEv
+    (bindingEv δ_coord nCoord : ℝ) : ℝ :=
+  defectFormationEnergyEv bindingEv δ_coord / max nCoord 1
+
+theorem vacancyFormationEnergyEv_zero_excess (bindingEv nCoord : ℝ) :
+    vacancyFormationEnergyEv bindingEv 0 nCoord = 0 := by
+  unfold vacancyFormationEnergyEv
+  rw [defectFormationEnergyEv_zero_excess]
+  simp
+
+/-- Grain-boundary formation scale: vacancy energy × ``γ``
+(interface share of the cooperative vacancy across a misoriented contact).
+
+``E_gb = γ · E_vac`` (= ``E_bind · γ² · (4/8) / CN²`` for δ=1/CN). -/
+noncomputable def grainBoundaryFormationEnergyEv
+    (bindingEv δ_coord nCoord : ℝ) : ℝ :=
+  gamma_HQIV * vacancyFormationEnergyEv bindingEv δ_coord nCoord
+
+theorem grainBoundaryFormationEnergyEv_zero_excess (bindingEv nCoord : ℝ) :
+    grainBoundaryFormationEnergyEv bindingEv 0 nCoord = 0 := by
+  unfold grainBoundaryFormationEnergyEv
+  rw [vacancyFormationEnergyEv_zero_excess]
+  simp
+
+/-- Contact-edge gate on a rearrangement path = defect formation on that edge. -/
+noncomputable def contactEdgeGateEv (bindingEv δ_coord : ℝ) : ℝ :=
+  defectFormationEnergyEv bindingEv δ_coord
+
+/-- Discrete saddle barrier [eV]: maximum edge gate along a contact-graph path.
+Empty path → 0 (no barrier). -/
+noncomputable def discreteSaddleBarrierEv (edgeGates : List ℝ) : ℝ :=
+  edgeGates.foldl max 0
+
+theorem discreteSaddleBarrierEv_nil :
+    discreteSaddleBarrierEv [] = 0 := by
+  unfold discreteSaddleBarrierEv; simp
+
+theorem discreteSaddleBarrierEv_nonneg (edgeGates : List ℝ) :
+    0 ≤ discreteSaddleBarrierEv edgeGates := by
+  unfold discreteSaddleBarrierEv
+  have h : ∀ (acc : ℝ) (xs : List ℝ), 0 ≤ acc → 0 ≤ xs.foldl max acc := by
+    intro acc xs hacc
+    induction xs generalizing acc with
+    | nil => simpa
+    | cons _ xs ih =>
+      simp only [List.foldl]
+      exact ih _ (le_trans hacc (le_max_left _ _))
+  exact h 0 edgeGates (le_refl 0)
+
+/-- Harmonic Morse saddle scale [eV] from `F²/(2k) = strong² · D`
+(characteristic force / Hessian on the Morse backbone). -/
+noncomputable def harmonicSaddleGateEv (bindingEv : ℝ) : ℝ :=
+  strongChannelFraction ^ 2 * bindingEv
+
+theorem harmonicSaddleGateEv_nonneg (bindingEv : ℝ) (h : 0 ≤ bindingEv) :
+    0 ≤ harmonicSaddleGateEv bindingEv := by
+  unfold harmonicSaddleGateEv
+  have hs : 0 ≤ strongChannelFraction := by
+    unfold strongChannelFraction; norm_num
+  exact mul_nonneg (sq_nonneg _) h
+
 end Hqiv.Physics

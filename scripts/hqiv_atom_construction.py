@@ -182,18 +182,15 @@ def principal_quantum_from_compton_shell(m: int) -> int:
 
 
 # --- Screening coefficients DERIVED from the carrier (no empirical Slater table) ------------
-# A deeper electron screens by Gauss's law: fully enclosed → one whole unit (FULL = 1).
-# A co-radial (same-shell) electron is only *half* enclosed on average → the monogamy half 1/2.
-# The valence carrier penetrates any adjacent shell (same or n−1) by the lapse spread over the
-# monogamy-core / proton-anchor shell: leak = α / referenceM = (3/5)/4 = 0.15.  Hence
-#   same-shell   = 1/2 − α/4 = 0.35,   n−1 shell = 1 − α/4 = 0.85,   deeper = 1.00,
-# reproducing the textbook Slater coefficients exactly from α = 3/5 and referenceM = 4.
-_SCREEN_FULL_ENCLOSURE = 1.0
-_SCREEN_CORADIAL_ENCLOSURE = lean.STRONG_CHANNEL_FRACTION          # monogamy half = 1/2
-_SCREEN_PENETRATION_LEAK = lean.ALPHA / float(lean.REFERENCE_M)    # α / 4 = 0.15
-SLATER_SAME_SHELL = _SCREEN_CORADIAL_ENCLOSURE - _SCREEN_PENETRATION_LEAK   # 0.35
-SLATER_ADJACENT_SHELL = _SCREEN_FULL_ENCLOSURE - _SCREEN_PENETRATION_LEAK   # 0.85
-SLATER_DEEP_SHELL = _SCREEN_FULL_ENCLOSURE                                  # 1.00
+# Mirror ``HqivSpine/Chemistry/Binding.lean`` via ``hqiv_spine_chemistry``.
+import hqiv_spine_chemistry as _sc
+
+_SCREEN_FULL_ENCLOSURE = _sc.SLATER_DEEP_SHELL
+_SCREEN_CORADIAL_ENCLOSURE = _sc.MONOGAMY_HALF
+_SCREEN_PENETRATION_LEAK = _sc.SCREEN_PENETRATION_LEAK
+SLATER_SAME_SHELL = _sc.SLATER_SAME_SHELL
+SLATER_ADJACENT_SHELL = _sc.SLATER_ADJACENT_SHELL
+SLATER_DEEP_SHELL = _sc.SLATER_DEEP_SHELL
 
 
 def config_effective_charge(

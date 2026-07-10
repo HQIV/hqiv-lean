@@ -54,6 +54,9 @@ def adenine : List Bool := [false, true]
 /-- Thymine / uracil WC edge: N3–H donor, O4 acceptor. -/
 def thymine : List Bool := [true, false]
 
+/-- Uracil uses the same Watson–Crick donor/acceptor edge pattern as thymine. -/
+def uracil : List Bool := thymine
+
 /-- Guanine WC edge: O6 acceptor, N1–H donor, N2–H donor. -/
 def guanine : List Bool := [false, true, true]
 
@@ -63,12 +66,18 @@ def cytosine : List Bool := [true, false, false]
 /-- **Adenine·thymine has two hydrogen bonds** — derived from complementarity. -/
 theorem adenine_thymine_two : hbondCount adenine thymine = 2 := by decide
 
+/-- **Adenine·uracil has two hydrogen bonds** — RNA analogue of A·T. -/
+theorem adenine_uracil_two : hbondCount adenine uracil = 2 := by decide
+
 /-- **Guanine·cytosine has three hydrogen bonds** — derived from complementarity. -/
 theorem guanine_cytosine_three : hbondCount guanine cytosine = 3 := by decide
 
 /-- Both canonical pairs are fully complementary Watson–Crick edges. -/
 theorem canonical_pairs : isCanonical adenine thymine ∧ isCanonical guanine cytosine := by
   decide
+
+/-- RNA A·U is fully complementary under the same donor/acceptor rule. -/
+theorem canonical_rna_au : isCanonical adenine uracil := by decide
 
 /-- **G·C is more strongly bonded than A·T** — the basis of GC-rich stability, computed not assumed. -/
 theorem gc_more_bonded_than_at :
@@ -77,6 +86,30 @@ theorem gc_more_bonded_than_at :
 /-- A G·U-style edge-length mismatch is not a canonical pair (wobble), even though it scores
 some complementary contacts. -/
 theorem guanine_thymine_not_canonical : isCanonical guanine thymine = false := by decide
+
+/-! ## Peptide and amino-acid contact witnesses -/
+
+/-- Peptide backbone amide N–H contact: donor. -/
+def peptideBackboneAmideDonor : List Bool := [true]
+
+/-- Peptide backbone carbonyl O contact: acceptor. -/
+def peptideBackboneCarbonylAcceptor : List Bool := [false]
+
+/-- A backbone N–H donor and C=O acceptor form one peptide hydrogen-bond contact. -/
+theorem peptide_backbone_hbond_one :
+    hbondCount peptideBackboneAmideDonor peptideBackboneCarbonylAcceptor = 1 := by
+  decide
+
+/-- Amino-acid ammonium head presents three donor slots in the zwitterion scaffold. -/
+def aminoAcidAmmoniumDonors : List Bool := [true, true, true]
+
+/-- Amino-acid carboxylate tail presents two acceptor slots in the zwitterion scaffold. -/
+def aminoAcidCarboxylateAcceptors : List Bool := [false, false]
+
+/-- The zwitterion head/tail scaffold has two aligned donor--acceptor salt-bridge contacts. -/
+theorem amino_acid_zwitterion_contacts_two :
+    hbondCount aminoAcidAmmoniumDonors aminoAcidCarboxylateAcceptors = 2 := by
+  decide
 
 /-! ## Uniform helix width from one rule
 

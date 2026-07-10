@@ -1,0 +1,87 @@
+{
+  "source": "scripts/hqiv_outside_contact_reduced_deltas.py",
+  "lean_module": "Hqiv.QuantumChemistry.OutsideContactReducedDeltas",
+  "policy": "Gravity/bulk shared; wall = dry-wall spectrum; motif deltas = em \u00d7 network \u03b4 \u00d7 contact only",
+  "ambient": {
+    "phi_epsilon": 0.0,
+    "bulk_target": 1.0,
+    "rho_bulk": 1.0,
+    "dress": 1.0
+  },
+  "wall": {
+    "wall_polarities": [],
+    "wall_coordination_excess": 0.0,
+    "spectral_gap": 0.0,
+    "defect_stress": 0.0,
+    "dress": 1.0
+  },
+  "rows": [
+    {
+      "motif": "graphene",
+      "motif_local": {
+        "n_dielectric": 2.7184940053656135,
+        "coordination_excess": 0.25,
+        "geff_sum": 0.0,
+        "surplus": 1.0,
+        "dress": 1.2412070571226759
+      },
+      "reduced_outside_dress": 1.2412070571226759,
+      "ledger": {
+        "grav": 1.0,
+        "em": 1.1821019591644533,
+        "bulk": 1.0,
+        "local_defect": 1.05,
+        "contact": 1.0,
+        "dress": 1.2412070571226759,
+        "channels": {
+          "grav": "outsideGravityGeffModulator (Ricci / gravitational G_eff)",
+          "em": "1+(4/8)\u00b7curvatureConcentrationWeight (electric / dielectric)",
+          "bulk": "scaleOutsideCouplingForMediumDensity (medium density \u03c1)",
+          "local_defect": "1+localCurvatureDefectExcess (nucleation / wall / interface)",
+          "contact": "outsideGeffSurplus (bond-summed G_eff participation)"
+        }
+      },
+      "electro_unstressed": 1.2412070571226759
+    },
+    {
+      "motif": "diamond",
+      "motif_local": {
+        "n_dielectric": 2.7184940053656135,
+        "coordination_excess": 0.0,
+        "geff_sum": 0.0,
+        "surplus": 1.0,
+        "dress": 1.1821019591644533
+      },
+      "reduced_outside_dress": 1.1821019591644533,
+      "ledger": {
+        "grav": 1.0,
+        "em": 1.1821019591644533,
+        "bulk": 1.0,
+        "local_defect": 1.0,
+        "contact": 1.0,
+        "dress": 1.1821019591644533,
+        "channels": {
+          "grav": "outsideGravityGeffModulator (Ricci / gravitational G_eff)",
+          "em": "1+(4/8)\u00b7curvatureConcentrationWeight (electric / dielectric)",
+          "bulk": "scaleOutsideCouplingForMediumDensity (medium density \u03c1)",
+          "local_defect": "1+localCurvatureDefectExcess (nucleation / wall / interface)",
+          "contact": "outsideGeffSurplus (bond-summed G_eff participation)"
+        }
+      },
+      "electro_unstressed": 1.1821019591644533
+    }
+  ],
+  "fork": {
+    "graphene_over_diamond_reduced": 1.05,
+    "graphene_over_diamond_motif_only": 1.05,
+    "expected_lean_ratio": 1.05,
+    "ambient_cancels": true,
+    "wall_cancels": true,
+    "lesson": "Shared ambient and dry-wall factor out of the graphene/diamond ratio; only motif-local \u03b4 = 1/4 remains (21/20)."
+  },
+  "identities": {
+    "dilute_pristine": 1.0,
+    "unit_wall_dress": 1.2,
+    "unit_wall_expected": 1.2
+  }
+}

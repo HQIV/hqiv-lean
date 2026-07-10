@@ -1,0 +1,300 @@
+{
+  "source": "scripts/hqiv_two_way_feedback_audit.py",
+  "policy": "Promote feedback only when the dependent readout changes the channel that generated it; keep shared ambient and wall factors out of motif fits.",
+  "summary": {
+    "promote_now": [
+      "EM/BE dress -> contact length -> mass-density packing",
+      "spectral scale anchor -> em -> contact length -> BE / density / transport",
+      "phase density -> B_hom -> polarizability/material response -> phase density",
+      "strain / piezo -> contact length -> stiffness -> strain",
+      "conductivity -> Joule/thermal release -> thermo voltage -> conductivity",
+      "thermal conductivity -> temperature profile -> B_hom / release contrast -> thermal conductivity"
+    ],
+    "shared_or_defer": [
+      "wall spectrum -> localDefect / tribo -> contact length -> wall spectrum",
+      "BE -> literal mass defect -> density"
+    ],
+    "top_priority": "EM/BE dress -> contact length -> mass-density packing"
+  },
+  "rows": [
+    {
+      "loop": "EM/BE dress -> contact length -> mass-density packing",
+      "lean": [
+        "OutsideContactReducedDeltas.contactLengthFromEmFeedback",
+        "OutsideContactReducedDeltas.volumetricDensityWithEmFeedback",
+        "OutsideContactReducedDeltas.arealDensityWithEmFeedback"
+      ],
+      "python": [
+        "scripts/hqiv_graphene_mass_pin.py"
+      ],
+      "status": "promote-live",
+      "reason": "Mass is an in-situ scale anchor, not a freeze. The EM/BE channel feeds back into r via r_eff = r_bare \u00b7 em^\u03b1 \u00b7 (1 + base\u00b7open\u00b2), and density follows the packing power law.",
+      "numerical_check": {
+        "em": 1.1821019591644533,
+        "r_scale": 1.1055870988819585,
+        "sigma_scale": 0.8181144725656442,
+        "rho_scale": 0.7399819276047764,
+        "graphene_packing_scale": 1.0617283950617284,
+        "diamond_packing_scale": 1.1125,
+        "graphene_areal_error_pct_frozen": 36.16690821003778,
+        "graphene_areal_error_pct_feedback": -1.1768285413423367,
+        "graphene_abs_error_reduction_pct": 96.74611793049061,
+        "diamond_density_error_pct_frozen": 84.35698398091631,
+        "diamond_density_error_pct_feedback": -0.9212203326899673,
+        "diamond_abs_error_reduction_pct": 98.90795013143385
+      },
+      "next_action": "Generic covalent_network_em_packing_dress is live for length-reliable networks; period\u22653 Si/Ge stay bare until upstream shell geometry promotes."
+    },
+    {
+      "loop": "spectral scale anchor -> em -> contact length -> BE / density / transport",
+      "lean": [
+        "OutsideContactReducedDeltas.spectralConcentrationWeight",
+        "OutsideContactReducedDeltas.outsideEmFromConcentrationWeight",
+        "OutsideContactReducedDeltas.contactLengthFromEmFeedback"
+      ],
+      "python": [
+        "scripts/hqiv_molecular_spectroscopy.py",
+        "scripts/hqiv_outside_contact_reduced_deltas.py",
+        "scripts/hqiv_spectral_scale_anchor_feedback.py"
+      ],
+      "status": "promote-live-scale-anchor",
+      "reason": "A spectral pin should set an in-situ scale, then score other outputs. It should not be evaluated by re-scoring the pinned omega.",
+      "numerical_check": {
+        "summary": {
+          "count": 9,
+          "mean_s_star": 0.31882334159739767,
+          "mean_em_star": 1.1594116707986988,
+          "geometric_mean_em_star": 1.1574561541760195,
+          "geometric_error_all": {
+            "count": 9,
+            "r_e": {
+              "count": 9,
+              "geometric_mean_factor_baseline": 1.0618954031956687,
+              "geometric_mean_factor_anchor": 1.008345656589536,
+              "geometric_mean_error_pct_baseline": 6.189540319566866,
+              "geometric_mean_error_pct_anchor": 0.8345656589535899,
+              "improved_count": 8
+            },
+            "r_e_route_geometric": {
+              "count": 9,
+              "geometric_mean_factor_baseline": 1.016904405876059,
+              "geometric_mean_factor_anchor": 1.008345656589536,
+              "geometric_mean_error_pct_baseline": 1.6904405876059014,
+              "geometric_mean_error_pct_anchor": 0.8345656589535899,
+              "improved_count": 8
+            },
+            "D_e": {
+              "count": 9,
+              "geometric_mean_factor_baseline": 1.0264992144041865,
+              "geometric_mean_factor_anchor": 1.0142340605588809,
+              "geometric_mean_error_pct_baseline": 2.6499214404186455,
+              "geometric_mean_error_pct_anchor": 1.4234060558880879,
+              "improved_count": 8
+            },
+            "B_e": {
+              "count": 9,
+              "geometric_mean_factor_baseline": 1.1296978273289924,
+              "geometric_mean_factor_anchor": 1.0160147603138538,
+              "geometric_mean_error_pct_baseline": 12.969782732899237,
+              "geometric_mean_error_pct_anchor": 1.6014760313853849,
+              "improved_count": 8
+            }
+          },
+          "geometric_error_reliable_geometry": {
+            "count": 9,
+            "r_e": {
+              "count": 9,
+              "geometric_mean_factor_baseline": 1.0618954031956687,
+              "geometric_mean_factor_anchor": 1.008345656589536,
+              "geometric_mean_error_pct_baseline": 6.189540319566866,
+              "geometric_mean_error_pct_anchor": 0.8345656589535899,
+              "improved_count": 8
+            },
+            "r_e_route_geometric": {
+              "count": 9,
+              "geometric_mean_factor_baseline": 1.016904405876059,
+              "geometric_mean_factor_anchor": 1.008345656589536,
+              "geometric_mean_error_pct_baseline": 1.6904405876059014,
+              "geometric_mean_error_pct_anchor": 0.8345656589535899,
+              "improved_count": 8
+            },
+            "D_e": {
+              "count": 9,
+              "geometric_mean_factor_baseline": 1.0264992144041865,
+              "geometric_mean_factor_anchor": 1.0142340605588809,
+              "geometric_mean_error_pct_baseline": 2.6499214404186455,
+              "geometric_mean_error_pct_anchor": 1.4234060558880879,
+              "improved_count": 8
+            },
+            "B_e": {
+              "count": 9,
+              "geometric_mean_factor_baseline": 1.1296978273289924,
+              "geometric_mean_factor_anchor": 1.0160147603138538,
+              "geometric_mean_error_pct_baseline": 12.969782732899237,
+              "geometric_mean_error_pct_anchor": 1.6014760313853849,
+              "improved_count": 8
+            }
+          }
+        },
+        "residual_audit": {
+          "count": 9,
+          "reliable_geometry_count": 9,
+          "slot_counts": {
+            "near-closed after spectral anchor": 9
+          },
+          "max_residual_row": "Cl2",
+          "mean_B_e_independent_multiplicative_pct_reliable": 0.18508436927383698,
+          "diagnosis": "Most B_e residual is length-propagated through B_e ~ 1/r_e^2; after shell length/energy dresses the reliable panel is near-closed, so remaining work is finer contact geometry and non-spectral feedback."
+        },
+        "largest_unpinned_shift": {
+          "name": "LiH",
+          "s_star": 0.06635482159003232,
+          "em_star": 1.0331774107950162,
+          "geometry_reliable": true,
+          "r_e_error_pct_baseline": -22.62036564264378,
+          "r_e_error_pct_anchor": -0.1404869544098772,
+          "D_e_error_pct_baseline": 1.138635305956956,
+          "D_e_error_pct_anchor": 1.0927784048784748,
+          "B_e_error_pct_baseline": 67.12769773228524,
+          "B_e_error_pct_anchor": 0.351273712865427,
+          "multiplicative": {
+            "r_e": {
+              "factor_baseline": 1.292329704456575,
+              "factor_anchor": 1.001406845979168,
+              "pct_baseline": 29.232970445657493,
+              "pct_anchor": 0.14068459791680699
+            },
+            "r_e_route_geometric": {
+              "factor_baseline": 1.006322310847333,
+              "factor_anchor": 1.001406845979168,
+              "pct_baseline": 0.6322310847332924,
+              "pct_anchor": 0.14068459791680699
+            },
+            "D_e": {
+              "factor_baseline": 1.0113863530595695,
+              "factor_anchor": 1.0109277840487847,
+              "pct_baseline": 1.1386353059569476,
+              "pct_anchor": 1.0927784048784694
+            },
+            "B_e": {
+              "factor_baseline": 1.6712769773228524,
+              "factor_anchor": 1.0035127371286543,
+              "pct_baseline": 67.12769773228524,
+              "pct_anchor": 0.35127371286542974
+            }
+          }
+        }
+      },
+      "next_action": "Spectral panel is near-closed; keep shell length closed unless a new reliable row exceeds the near-closed band, and score packing through the live EM/open-channel dress."
+    },
+    {
+      "loop": "phase density -> B_hom -> polarizability/material response -> phase density",
+      "lean": [
+        "PhaseGeometryDensity.phaseCurvatureDensityFraction",
+        "HomogeneousCurvatureSecondOrder.homogeneousCurvatureBudgetAtXi"
+      ],
+      "python": [
+        "scripts/hqiv_phase_geometry_density.py",
+        "scripts/hqiv_phase_material_response.py",
+        "scripts/hqiv_phase_material_feedback_fixed_point.py"
+      ],
+      "status": "promote-live-fixed-point",
+      "reason": "Material response already uses rho_curv to compute polarizability, thermal conductivity, heat capacity, and viscosity. Some of those responses change the effective phase density or contact scale, so one pass is structurally incomplete.",
+      "numerical_check": {
+        "summary": {
+          "count": 5,
+          "converged": 5,
+          "mean_abs_shift": 0.0657624060598043,
+          "max_abs_shift": 0.19656532484619882
+        },
+        "largest_shift": {
+          "molecule": "H2O",
+          "phase": "solid",
+          "allotrope": "Ih",
+          "rho_curv_initial": 0.7916666666666666,
+          "rho_curv_final": 0.9882319915128654,
+          "refractive_index_delta": {
+            "absolute": 0.026859769218550822,
+            "percent": 2.0575360261153497
+          },
+          "thermal_conductivity_delta": {
+            "absolute": -0.21670414428309037,
+            "percent": -16.662629358516824
+          },
+          "B_hom_delta": {
+            "absolute": -0.002340146803868959,
+            "percent": -0.23624123968853503
+          }
+        }
+      },
+      "next_action": "Fixed-point iterator now converges with full updates; use the converged rho_curv as the material-table state, and keep one-way tables only for comparison."
+    },
+    {
+      "loop": "strain / piezo -> contact length -> stiffness -> strain",
+      "lean": [
+        "VoltageGenerationLedger.piezoVoltageChannel",
+        "PhaseElasticity.contactBindingStiffnessPa"
+      ],
+      "python": [
+        "scripts/hqiv_voltage_generation_ledger.py",
+        "scripts/hqiv_crystal_fracture_witness.py"
+      ],
+      "status": "promote-diagnostic-to-dynamics",
+      "reason": "The carbon residual-as-piezo probe was diagnostic only. For real walls, strain should be a mechanical equilibrium variable: strain moves r, r changes stiffness, stiffness changes strain response.",
+      "next_action": "Add a small fixed-point strain closure driven by wall spectrum or external stress; do not infer strain from the scored bond-length error."
+    },
+    {
+      "loop": "conductivity -> Joule/thermal release -> thermo voltage -> conductivity",
+      "lean": [
+        "VoltageGenerationLedger.thermoVoltageChannel",
+        "MolecularTransport.nernstEinsteinConductivitySlot"
+      ],
+      "python": [
+        "scripts/hqiv_phase_material_response.py",
+        "scripts/hqiv_voltage_generation_ledger.py"
+      ],
+      "status": "promote-when-carriers-present",
+      "reason": "Neutral pure media correctly keep carrier_fraction=0. In electrolytes or doped sheets, conductivity changes local heating/release contrast, which feeds back through the thermo channel.",
+      "next_action": "Only enable for explicit carriers/salinity/doping; leave pure neutral rows at identity."
+    },
+    {
+      "loop": "thermal conductivity -> temperature profile -> B_hom / release contrast -> thermal conductivity",
+      "lean": [
+        "HomogeneousCurvatureSecondOrder.homogeneousCurvatureBudgetAtXi",
+        "VoltageGenerationLedger.thermoVoltageChannel"
+      ],
+      "python": [
+        "scripts/hqiv_phase_material_response.py"
+      ],
+      "status": "promote-for-driven-or-gradient-assays",
+      "reason": "k_th currently reads rho_curv and B_hom one-way. Under a gradient, temperature profile and release contrast are dynamic state variables.",
+      "next_action": "Keep isothermal material tables one-way; add a gradient assay mode with finite update steps."
+    },
+    {
+      "loop": "wall spectrum -> localDefect / tribo -> contact length -> wall spectrum",
+      "lean": [
+        "OutsideContactReducedDeltas.DryWallSpectrum",
+        "VoltageGenerationLedger.triboVoltageChannel"
+      ],
+      "python": [
+        "scripts/hqiv_outside_contact_reduced_deltas.py"
+      ],
+      "status": "shared-wall-factor-first",
+      "reason": "Wall/interface should generally be a shared spectrum, not a separate per-molecule fit. Only if adsorption deforms the wall should this become two-way.",
+      "next_action": "Treat wall as shared factor by default; add two-way adsorption only for explicit surface reconstruction / defect growth assays."
+    },
+    {
+      "loop": "BE -> literal mass defect -> density",
+      "lean": [
+        "MolecularEnergyBridge",
+        "AtomFromCharge / atom mass readouts"
+      ],
+      "python": [
+        "scripts/hqiv_atom_construction.py"
+      ],
+      "status": "defer-small-effect",
+      "reason": "The literal eV/c^2 mass defect is real but far too small to explain chemistry-scale density residuals. The important mass feedback is through EM-dressed contact length, not direct mass subtraction.",
+      "next_action": "Record as precision bookkeeping for isotope/mass-ledger work, not as a primary materials feedback."
+    }
+  ]
+}

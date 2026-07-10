@@ -78,7 +78,9 @@ def centre_angle_rad_from_domains(n_domains: int) -> float:
 def centre_angle_bent_dress(theta_tet: float, n_lp: int, n_domains: int) -> float:
     if n_domains == 0:
         return theta_tet
-    return theta_tet - lean.STRONG_CHANNEL_FRACTION * (n_lp / n_domains) * (math.pi / 6.0)
+    n_bonds = max(n_domains - n_lp, 0)
+    torque_sites = max(n_domains + n_bonds, 1)
+    return theta_tet - lean.STRONG_CHANNEL_FRACTION * (n_lp / torque_sites) * (math.pi / 6.0)
 
 
 def dynamic_centre_angle_rad(z: int, n_bonds: int) -> float:
@@ -262,15 +264,9 @@ def homonuclear_bond_equilibrium_bohr(z: int, *, c: float = 1.0) -> float:
         antibond_pairs = max(0, channel_cap - evs.homonuclear_bond_order(z))
         return base * (1.0 + strong / 2.0) ** antibond_pairs
 
-    # Period ≥ 3: existing halogen / open-shell / bond-order routing (TUFT rung scale).
-    if evs.is_homonuclear_halogen(z):
-        phi_m = 2.0 * (float(m_s) + 1.0)
-        r_phi = 2.0 * phi_m / float(z) / mono
-        r = math.sqrt(base * r_phi)
-        chart_denom = float(evs.ELECTRONIC_M_S_PERIOD2 + max(period, 2) - 2)
-        r /= 1.0 + strong / chart_denom
-        r /= period3_hydride_bond_length_scale(z)
-        return r
+    # Period ≥ 3 homonuclear halogens: same open-channel carrier law as period-2.
+    if period >= 3 and evs.is_homonuclear_halogen(z):
+        return period3_halogen_bond_length_bohr(z, c=c)
 
     if evs.homonuclear_open_shell_dimer(z):
         return base * (1.0 + strong / 2.0)
@@ -279,6 +275,228 @@ def homonuclear_bond_equilibrium_bohr(z: int, *, c: float = 1.0) -> float:
         return base
 
     return base * (1.0 + strong / cap)
+
+
+def ionic_charge_asymmetry(z_i: int, z_j: int) -> float:
+    """Lean ``ionicChargeAsymmetry``: ``|Z_i − Z_j| / (Z_i + Z_j)``."""
+    if z_i + z_j == 0:
+        return 0.0
+    return abs(z_i - z_j) / (z_i + z_j)
+
+
+def ionic_outside_contact_dress(z_i: int, z_j: int) -> float:
+    """Lean ``ionicOutsideContactDress``."""
+    return 1.0 + ionic_charge_asymmetry(z_i, z_j) * lean.STRONG_CHANNEL_FRACTION * lean.GAMMA
+
+
+def period3_inert_core_lattice_dress() -> float:
+    """Lean ``period3InertCoreLatticeDress``."""
+    return math.sqrt(1.0 + lean.STRONG_CHANNEL_FRACTION)
+
+
+def ionic_inert_core_length_elongation(z_i: int, z_j: int) -> float:
+    """Lean ``ionicInertCoreLengthElongation`` (outer ``valenceElectronCount``)."""
+    import hqiv_electronic_valence_shells as evs
+
+    period = max(evs.chemical_period(z_i), evs.chemical_period(z_j))
+    if period <= 2 or z_i + z_j == 0:
+        return 1.0
+    n_val = max(
+        evs.valence_electron_count(z_i) + evs.valence_electron_count(z_j),
+        1,
+    )
+    return (z_i + z_j) / n_val
+
+
+def ionic_gas_phase_em_dress() -> float:
+    """Lean ``ionicGasPhaseEmDress``: ``1 + α = 8/5``."""
+    return 1.0 + lean.ALPHA
+
+
+def ionic_gas_outside_contact_bond_length_bohr(
+    m_i: int,
+    z_i: int,
+    m_j: int,
+    z_j: int,
+    *,
+    c: float = 1.0,
+) -> float:
+    """Lean ``ionicGasOutsideContactLengthTarget`` (Bohr)."""
+    return (
+        ionic_outside_contact_bond_length_bohr(m_i, z_i, m_j, z_j, c=c)
+        * ionic_gas_phase_em_dress()
+    )
+
+
+def ionic_outside_contact_bond_length_bohr(
+    m_i: int,
+    z_i: int,
+    m_j: int,
+    z_j: int,
+    *,
+    c: float = 1.0,
+) -> float:
+    """Lean ``ionicOutsideContactLengthTarget`` (Bohr)."""
+    ri = nested_wf_covalent_radius_bohr(m_i, z_i, c)
+    rj = nested_wf_covalent_radius_bohr(m_j, z_j, c)
+    return (
+        (ri + rj)
+        * INFORMATIONAL_MONOGAMY_LENGTH_FACTOR
+        * ionic_outside_contact_dress(z_i, z_j)
+        * period3_inert_core_lattice_dress()
+        * ionic_inert_core_length_elongation(z_i, z_j)
+    )
+
+
+def period3_halogen_open_channel_count(z: int) -> int:
+    """Open p-channel count for homonuclear halogen dimers."""
+    import hqiv_electronic_valence_shells as evs
+
+    channel_cap = 3 if evs.valence_electron_count(z) >= 3 else 1
+    return max(0, channel_cap - evs.homonuclear_bond_order(z))
+
+
+def period3_halogen_open_channel_factor(z: int) -> float:
+    """Lean ``period3HalogenOpenChannelFactor``."""
+    strong = lean.STRONG_CHANNEL_FRACTION
+    return (1.0 + strong / 2.0) ** period3_halogen_open_channel_count(z)
+
+
+def period3_halogen_bond_length_bohr(z: int, *, c: float = 1.0) -> float:
+    """Lean ``period3HalogenBondLengthTarget`` (Bohr)."""
+    import hqiv_electronic_valence_shells as evs
+    import hqiv_atom_construction as ac
+    import hqiv_selection_weights as sw
+
+    m_s, _ = evs.electronic_compton_shells(z)
+    ri_core = nested_wf_covalent_radius_bohr(m_s, z, c)
+    core = 2.0 * ri_core / INFORMATIONAL_MONOGAMY_LENGTH_FACTOR
+    cfg = ac.electron_configuration(z)
+    if not cfg:
+        return core * period3_halogen_open_channel_factor(z)
+    idx = len(cfg) - 1
+    z_eff = ac.config_effective_charge(z, idx, cfg)
+    ri_valence = nested_wf_covalent_radius_bohr(m_s, z_eff, c)
+    valence = 2.0 * ri_valence / INFORMATIONAL_MONOGAMY_LENGTH_FACTOR
+    period_weight = sw.period_participation(z, threshold=3) * (1.0 - lean.GAMMA / 2.0)
+    route = math.exp(
+        (1.0 - period_weight) * math.log(max(core, 1.0e-30))
+        + period_weight * math.log(max(valence, 1.0e-30))
+    )
+    return route * period3_halogen_open_channel_factor(z)
+
+
+def is_ionic_atomic_pair(z_i: int, z_j: int) -> bool:
+    """Algebraic: ``ionic_route_weight > 1/2``."""
+    import hqiv_selection_weights as sw
+
+    return sw.ionic_route_weight(z_i, z_j) > 0.5
+
+
+def geometry_route_for_pair(z_i: int, z_j: int) -> str:
+    """Dominant route label from continuous geometry-route weights (diagnostic)."""
+    import hqiv_selection_weights as sw
+
+    weights = sw.geometry_route_weights(z_i, z_j)
+    return max(weights.items(), key=lambda kv: kv[1])[0]
+
+
+def outside_contact_geometry_target_bohr(z_i: int, z_j: int, *, c: float = 1.0) -> float:
+    """Upstream geometry candidate in Bohr — continuous blend of three routes."""
+    import hqiv_selection_weights as sw
+
+    w = sw.geometry_route_weights(z_i, z_j)
+    routes = outside_contact_geometry_route_components_bohr(z_i, z_j, c=c)
+    return (
+        w["covalent_nested_wf"] * routes["covalent_nested_wf"]
+        + w["ionic_outside_contact"] * routes["ionic_outside_contact"]
+        + w["period3_halogen_open_channel"] * routes["period3_halogen_open_channel"]
+    )
+
+
+def outside_contact_geometry_target_angstrom(z_i: int, z_j: int, *, c: float = 1.0) -> float:
+    """Upstream geometry candidate in Å."""
+    return outside_contact_geometry_target_bohr(z_i, z_j, c=c) * BOHR_RADIUS_ANGSTROM
+
+
+def outside_contact_geometry_route_components_bohr(
+    z_i: int,
+    z_j: int,
+    *,
+    c: float = 1.0,
+) -> dict[str, float]:
+    """Route component lengths before composition.
+
+    Ionic outside-contact uses the **gas-phase** target
+    ``ionicGasOutsideContactLengthTarget`` (core × ``1+α``).  Crystal nn is a
+    separate condensed readout (``ionicLatticeNearestNeighborTarget``).
+    """
+    m_i = bond_contact_compton_shell(z_i, z_j)
+    m_j = bond_contact_compton_shell(z_j, z_i)
+    r_cov = bond_equilibrium_radius_bohr(m_i, z_i, m_j, z_j, c=c)
+    r_ion = ionic_gas_outside_contact_bond_length_bohr(m_i, z_i, m_j, z_j, c=c)
+    r_hal = period3_halogen_bond_length_bohr(z_i, c=c) if z_i == z_j else r_cov
+    return {
+        "covalent_nested_wf": r_cov,
+        "ionic_outside_contact": r_ion,
+        "period3_halogen_open_channel": r_hal,
+    }
+
+
+def outside_contact_geometry_route_components_angstrom(
+    z_i: int,
+    z_j: int,
+    *,
+    c: float = 1.0,
+) -> dict[str, float]:
+    """Route component lengths in Å."""
+    return {
+        key: value * BOHR_RADIUS_ANGSTROM
+        for key, value in outside_contact_geometry_route_components_bohr(z_i, z_j, c=c).items()
+    }
+
+
+def outside_contact_geometry_target_geometric_bohr(
+    z_i: int,
+    z_j: int,
+    *,
+    c: float = 1.0,
+    weights: dict[str, float] | None = None,
+) -> float:
+    """
+    Shell-weighted geometric contact-route composition.
+
+    Route weights are dimensionless participation weights, so route lengths compose
+    multiplicatively: ``r = Π r_route ^ w_route``.  This keeps the contact scale in
+    log space, matching the spectral anchor and avoiding arithmetic overloading of
+    distinct route geometries.
+    """
+    import hqiv_selection_weights as sw
+
+    weights = sw.geometry_route_weights(z_i, z_j) if weights is None else weights
+    routes = outside_contact_geometry_route_components_bohr(z_i, z_j, c=c)
+    total = sum(max(0.0, float(v)) for v in weights.values())
+    if total <= 0.0:
+        return routes["covalent_nested_wf"]
+    log_r = 0.0
+    for key, weight in weights.items():
+        route = max(routes[key], 1.0e-30)
+        log_r += (max(0.0, float(weight)) / total) * math.log(route)
+    return math.exp(log_r)
+
+
+def outside_contact_geometry_target_geometric_angstrom(
+    z_i: int,
+    z_j: int,
+    *,
+    c: float = 1.0,
+    weights: dict[str, float] | None = None,
+) -> float:
+    """Shell-weighted geometric contact-route target in Å."""
+    return (
+        outside_contact_geometry_target_geometric_bohr(z_i, z_j, c=c, weights=weights)
+        * BOHR_RADIUS_ANGSTROM
+    )
 
 
 def bond_order_length_scale(z_i: int, z_j: int) -> float:

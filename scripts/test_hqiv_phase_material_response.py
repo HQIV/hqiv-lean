@@ -29,6 +29,13 @@ class TestPhaseMaterialResponse(unittest.TestCase):
         self.assertGreater(out["refractive_index"], 1.2)
         self.assertLess(out["refractive_index"], 1.5)
 
+    def test_h2o_mixture_response_interpolates(self) -> None:
+        mix = pmr.material_response_mixture_readout("H2O", 0.5, temperature_k=273.15)
+        lo = mix["low_density_branch"]["refractive_index"]
+        hi = mix["high_density_branch"]["refractive_index"]
+        self.assertGreater(mix["refractive_index"], min(lo, hi))
+        self.assertLess(mix["refractive_index"], max(lo, hi))
+
     def test_h2o_ice_thermal_conductivity_order_of_magnitude(self) -> None:
         out = pmr.material_response_readout("H2O", allotrope="Ih", phase="solid")
         k = out["thermal_conductivity_W_mK"]
@@ -69,6 +76,9 @@ class TestPhaseMaterialResponse(unittest.TestCase):
             "thermal_conductivity_W_mK",
             "ionic_conductivity_S_m",
             "clausius_mossotti_ratio",
+            "clausius_mossotti_ratio_one_way",
+            "optical_coupling_level",
+            "refractive_index_one_way",
             "molar_heat_capacity_J_per_mol_K",
             "latent_heat_fusion_J_per_mol",
             "dynamic_viscosity_Pa_s",
@@ -120,6 +130,8 @@ class TestPhaseMaterialResponse(unittest.TestCase):
         hf = pmr.material_response_readout("HF", phase="solid", temperature_k=190.0)
         self.assertGreater(hf["refractive_index"], 1.1)
         self.assertLess(hf["refractive_index"], 1.5)
+        self.assertEqual(hf["optical_coupling_level"], "coupled_relaxed")
+        self.assertLess(hf["refractive_index"], hf["refractive_index_one_way"])
 
     def test_readout_includes_optical_theta(self) -> None:
         out = pmr.material_response_readout("NH3", phase="solid")

@@ -1,0 +1,168 @@
+{
+  "source": "scripts/hqiv_discrete_core_spectroscopy_readout.py",
+  "lean_modules": [
+    "Hqiv.QuantumChemistry.OutsideContactReducedDeltas"
+  ],
+  "formula": {
+    "zeff": "Z_eff=max(1, Z\u2212\u03b3\u00b7(n_occ\u22121))",
+    "binding": "E_core=Z_eff\u00b2/(2n\u00b2)\u00b7Ha\u2192eV",
+    "xps": "E_XPS=f\u00b7E_core",
+    "chem_shift": "\u0394_chem=\u03b3 E_c \u03b4"
+  },
+  "identity_checks": {
+    "zeff_single_is_z": true,
+    "chem_shift_zero_at_delta0": true,
+    "xps_identity_at_delta0": true,
+    "hydrogen_1s_is_rydberg": true,
+    "covalent_no_chem_shift": true,
+    "ionic_has_chem_shift": true,
+    "moseley_z_squared_growth": true
+  },
+  "all_identity_checks_pass": true,
+  "atomic_1s_rows": [
+    {
+      "symbol": "C",
+      "Z": 6,
+      "n_principal": 1,
+      "n_occ": 2.0,
+      "Z_eff": 5.6,
+      "bare_core_eV": 426.67453633709175,
+      "charge_excess": 0.0,
+      "dress": 1.0,
+      "xps_eV": 426.67453633709175,
+      "chem_shift_from_bare_eV": 0.0,
+      "nist_1s_xps_eV_quarantine": 284.2,
+      "xps_vs_nist_ratio": 1.5013178618476135,
+      "valence_ie_eV": 35.92588877335235
+    },
+    {
+      "symbol": "O",
+      "Z": 8,
+      "n_principal": 1,
+      "n_occ": 2.0,
+      "Z_eff": 7.6,
+      "bare_core_eV": 785.8648347841333,
+      "charge_excess": 0.0,
+      "dress": 1.0,
+      "xps_eV": 785.8648347841333,
+      "chem_shift_from_bare_eV": 0.0,
+      "nist_1s_xps_eV_quarantine": 543.1,
+      "xps_vs_nist_ratio": 1.4469984068940036,
+      "valence_ie_eV": 70.4155508156619
+    },
+    {
+      "symbol": "Na",
+      "Z": 11,
+      "n_principal": 1,
+      "n_occ": 2.0,
+      "Z_eff": 10.6,
+      "bare_core_eV": 1528.7356792996059,
+      "charge_excess": 0.0,
+      "dress": 1.0,
+      "xps_eV": 1528.7356792996059,
+      "chem_shift_from_bare_eV": 0.0,
+      "nist_1s_xps_eV_quarantine": 1070.8,
+      "xps_vs_nist_ratio": 1.4276575264284703,
+      "valence_ie_eV": 7.316664728129736
+    },
+    {
+      "symbol": "Si",
+      "Z": 14,
+      "n_principal": 1,
+      "n_occ": 2.0,
+      "Z_eff": 13.6,
+      "bare_core_eV": 2516.5090000289697,
+      "charge_excess": 0.0,
+      "dress": 1.0,
+      "xps_eV": 2516.5090000289697,
+      "chem_shift_from_bare_eV": 0.0,
+      "nist_1s_xps_eV_quarantine": 1839.0,
+      "xps_vs_nist_ratio": 1.368411636774861,
+      "valence_ie_eV": 26.03552935361824
+    },
+    {
+      "symbol": "Cl",
+      "Z": 17,
+      "n_principal": 1,
+      "n_occ": 2.0,
+      "Z_eff": 16.6,
+      "bare_core_eV": 3749.184796972227,
+      "charge_excess": 0.0,
+      "dress": 1.0,
+      "xps_eV": 3749.184796972227,
+      "chem_shift_from_bare_eV": 0.0,
+      "nist_1s_xps_eV_quarantine": 2822.4,
+      "xps_vs_nist_ratio": 1.3283676293127222,
+      "valence_ie_eV": 56.251099175691586
+    }
+  ],
+  "hydrogen_1s": {
+    "symbol": "H",
+    "Z": 1,
+    "n_principal": 1,
+    "n_occ": 1.0,
+    "Z_eff": 1.0,
+    "bare_core_eV": 13.605693122994,
+    "charge_excess": 0.0,
+    "dress": 1.0,
+    "xps_eV": 13.605693122994,
+    "chem_shift_from_bare_eV": 0.0,
+    "nist_1s_xps_eV_quarantine": null,
+    "xps_vs_nist_ratio": null,
+    "valence_ie_eV": 13.59830325539747
+  },
+  "condensed_chem_shift_rows": [
+    {
+      "host": "NaCl",
+      "core_symbol": "Na",
+      "ionic_character": 0.28924510980862933,
+      "scf_dress": 1.0092141312752947,
+      "chem_shift_scale_eV": 0.014306155816384536,
+      "core": {
+        "symbol": "Na",
+        "Z": 11,
+        "n_principal": 1,
+        "n_occ": 2.0,
+        "Z_eff": 10.6,
+        "bare_core_eV": 1528.7356792996059,
+        "charge_excess": 0.018428262550589207,
+        "dress": 1.0092141312752947,
+        "xps_eV": 1542.8216505338992,
+        "chem_shift_from_bare_eV": 14.08597123429331,
+        "nist_1s_xps_eV_quarantine": 1070.8,
+        "xps_vs_nist_ratio": 1.4408121502931446,
+        "valence_ie_eV": 7.316664728129736,
+        "host": "NaCl",
+        "contact_electronic_scale_eV": 1.940790101225132
+      },
+      "identity_zero_ionic_no_shift": false
+    },
+    {
+      "host": "Si",
+      "core_symbol": "Si",
+      "ionic_character": 0.0,
+      "scf_dress": 1.0,
+      "chem_shift_scale_eV": 0.0,
+      "core": {
+        "symbol": "Si",
+        "Z": 14,
+        "n_principal": 1,
+        "n_occ": 2.0,
+        "Z_eff": 13.6,
+        "bare_core_eV": 2516.5090000289697,
+        "charge_excess": 0.0,
+        "dress": 1.0,
+        "xps_eV": 2516.5090000289697,
+        "chem_shift_from_bare_eV": 0.0,
+        "nist_1s_xps_eV_quarantine": 1839.0,
+        "xps_vs_nist_ratio": 1.368411636774861,
+        "valence_ie_eV": 26.03552935361824,
+        "host": "Si",
+        "contact_electronic_scale_eV": 2.2128851217528136
+      },
+      "identity_zero_ionic_no_shift": true
+    }
+  ],
+  "comparison_policy": "NIST 1s XPS lines are quarantine only",
+  "scope_note": "Discrete core XPS on SCF dress \u2014 not continuum TD-DFT/XAS"
+}

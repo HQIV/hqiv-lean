@@ -1,0 +1,161 @@
+{
+  "source": "scripts/hqiv_chemistry_panel_accuracy.py",
+  "role": "Public accuracy panel for the light-cone chemistry paper: final predictions vs quarantined laboratory comparisons",
+  "spectral": {
+    "panel": "spectral_scale_anchor",
+    "count": 9,
+    "reliable_count": 9,
+    "geometric_mean_error_pct": {
+      "r_e": 0.8345656589535899,
+      "D_e": 1.4234060558880879,
+      "B_e": 1.6014760313853849
+    },
+    "rows": [
+      {
+        "name": "LiH",
+        "geometry_reliable": true,
+        "r_e_angstrom": 1.5934582496684815,
+        "r_e_nist_angstrom": 1.5957,
+        "r_e_error_pct": -0.1404869544098772,
+        "D_e_ev": 2.5426855624395035,
+        "D_e_nist_ev": 2.5152,
+        "D_e_error_pct": 1.0927784048784748,
+        "B_e_cm1": 7.539491545321292,
+        "B_e_nist_cm1": 7.5131,
+        "B_e_error_pct": 0.351273712865427
+      },
+      {
+        "name": "HF",
+        "geometry_reliable": true,
+        "r_e_angstrom": 0.923433168835479,
+        "r_e_nist_angstrom": 0.9168,
+        "r_e_error_pct": 0.7235131801351485,
+        "D_e_ev": 6.146385984979073,
+        "D_e_nist_ev": 6.122,
+        "D_e_error_pct": 0.3983336324579071,
+        "B_e_cm1": 20.657554686587122,
+        "B_e_nist_cm1": 20.956,
+        "B_e_error_pct": -1.4241520968356416
+      },
+      {
+        "name": "LiF",
+        "geometry_reliable": true,
+        "r_e_angstrom": 1.5661985904943023,
+        "r_e_nist_angstrom": 1.5639,
+        "r_e_error_pct": 0.1469780992584088,
+        "D_e_ev": 5.932787716241302,
+        "D_e_nist_ev": 5.991,
+        "D_e_error_pct": -0.9716622226455948,
+        "B_e_cm1": 1.3475054158173536,
+        "B_e_nist_cm1": 1.3453,
+        "B_e_error_pct": 0.1639348708357744
+      },
+      {
+        "name": "HCl",
+        "geometry_reliable": true,
+        "r_e_angstrom": 1.260649084966984,
+        "r_e_nist_angstrom": 1.2746,
+        "r_e_error_pct": -1.0945327971925256,
+        "D_e_ev": 4.719376250300186,
+        "D_e_nist_ev": 4.618,
+        "D_e_error_pct": 2.1952414530139897,
+        "B_e_cm1": 10.82918141089625,
+        "B_e_nist_cm1": 10.593,
+        "B_e_error_pct": 2.2295988945176113
+      },
+      {
+        "name": "CO",
+        "geometry_reliable": true,
+        "r_e_angstrom": 1.1181230617425824,
+        "r_e_nist_angstrom": 1.1283,
+        "r_e_error_pct": -0.901970952531926,
+        "D_e_ev": 11.644631414542445,
+        "D_e_nist_ev": 11.24,
+        "D_e_error_pct": 3.599923616925667,
+        "B_e_cm1": 1.9718160458782317,
+        "B_e_nist_cm1": 1.9313,
+        "B_e_error_pct": 2.0978639195480584
+      },
+      {
+        "name": "N2",
+        "geometry_reliable": true,
+        "r_e_angstrom": 1.1069690580514762,
+        "r_e_nist_angstrom": 1.0977,
+        "r_e_error_pct": 0.8444072197755548,
+        "D_e_ev": 9.886467475851719,
+        "D_e_nist_ev": 9.904,
+        "D_e_error_pct": -0.1770246783954092,
+        "B_e_cm1": 1.9703490107858364,
+        "B_e_nist_cm1": 1.9982,
+        "B_e_error_pct": -1.3938038842039648
+      },
+      {
+        "name": "O2",
+        "geometry_reliable": true,
+        "r_e_angstrom": 1.2126193769396427,
+        "r_e_nist_angstrom": 1.2075,
+        "r_e_error_pct": 0.4239649639455657,
+        "D_e_ev": 5.234665755062276,
+        "D_e_nist_ev": 5.213,
+        "D_e_error_pct": 0.4156101105366642,
+        "B_e_cm1": 1.4359648644837084,
+        "B_e_nist_cm1": 1.4456,
+        "B_e_error_pct": -0.6665146317301869
+      },
+      {
+        "name": "F2",
+        "geometry_reliable": true,
+        "r_e_angstrom": 1.4257248265018354,
+        "r_e_nist_angstrom": 1.4119,
+        "r_e_error_pct": 0.9791647072622335,
+        "D_e_ev": 1.6568085102305605,
+        "D_e_nist_ev": 1.66,
+        "D_e_error_pct": -0.19225841984574657,
+        "B_e_cm1": 0.8742601839438014,
+        "B_e_nist_cm1": 0.8902,
+        "B_e_error_pct": -1.7905881887439385
+      },
+      {
+        "name": "Cl2",
+        "geometry_reliable": true,
+        "r_e_angstrom": 2.032658921828048,
+        "r_e_nist_angstrom": 1.9879,
+        "r_e_error_pct": 2.2515680782759793,
+        "D_e_ev": 2.4210586066896234,
+        "D_e_nist_ev": 2.514,
+        "D_e_error_pct": -3.6969527967532394,
+        "B_e_cm1": 0.2339880827579995,
+        "B_e_nist_cm1": 0.244,
+        "B_e_error_pct": -4.103244771311673
+      }
+    ],
+    "comparison_policy": "NIST/CRC constants are comparison quarantine only; omega_e may be used as an in-situ spectral scale pin"
+  },
+  "carbon": {
+    "panel": "carbon_network_packing",
+    "count": 2,
+    "rows": [
+      {
+        "name": "graphene",
+        "quantity": "areal_density_mg_m2",
+        "pred": 0.760938420231664,
+        "nist": 0.77,
+        "error_pct": -1.1768285413423367,
+        "bond_angstrom": 1.4198075139644644,
+        "bond_nist_angstrom": 1.421,
+        "bond_error_pct": -0.08391879208555089
+      },
+      {
+        "name": "diamond",
+        "quantity": "volumetric_density_g_cm3",
+        "pred": 3.477665166322582,
+        "nist": 3.51,
+        "error_pct": -0.9212203326899673,
+        "bond_angstrom": 1.5496899782233864,
+        "bond_nist_angstrom": 1.544,
+        "bond_error_pct": 0.36852190565973764
+      }
+    ],
+    "comparison_policy": "CRC/NIST bond lengths and densities are comparison quarantine only"
+  }
+}

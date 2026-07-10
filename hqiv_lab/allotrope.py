@@ -86,6 +86,36 @@ def liquid_reference_density_g_cm3(
     )
 
 
+def packing_disorder_score(
+    *,
+    periodic_weight: float,
+    mean_coordination: float,
+    coordination_variance: float,
+    open_fraction: float,
+) -> float:
+    """
+    Glass / amorphous disorder score (Lean ``packingDisorderScore``):
+
+      S = γ · [(1 − w_periodic) + Var(CN)/⟨CN⟩ + open²]
+
+    Prefer amorphous packing when ``S > α``.
+    """
+    w = max(0.0, min(1.0, float(periodic_weight)))
+    cn = max(float(mean_coordination), 1e-9)
+    var_term = max(0.0, float(coordination_variance)) / cn
+    open_sq = max(0.0, float(open_fraction)) ** 2
+    return lean.GAMMA * ((1.0 - w) + var_term + open_sq)
+
+
+def _template_open_fraction(template: PackingTemplate) -> float:
+    """Openness from packing template scale (amorphous / Ic excess over identity)."""
+    if template.label == "amorphous":
+        return max(0.0, template.a_factor - 1.0)
+    if template.label == "Ic":
+        return max(0.0, template.a_factor - 1.0) * lean.GAMMA
+    return 0.0
+
+
 def _score_candidate(
     spec: MoleculeSpec,
     mono: MonomerGeometry,
@@ -100,6 +130,7 @@ def _score_candidate(
     Rank allotropes: network cohesion + density match to liquid reference.
 
     Higher is better. No fitted coefficients beyond lattice α, γ.
+    Amorphous templates are gated by packing disorder score ``S > α``.
     """
     rho_liq = liquid_reference_density_g_cm3(spec)
     rho_frac = min(1.0, max(0.0, rho_g / rho_liq)) if rho_liq > 0 else 0.0
@@ -126,11 +157,34 @@ def _score_candidate(
     opening_bonus = lean.PHASE_LIFT_3 if template.label == "Ih" else 1.0
     melt_proximity = 1.0 / (1.0 + abs(temperature_k - t_melt) / max(t_melt, 1.0))
 
+    # Ordered ice / molecular solids: full periodic weight, zero CN variance.
+    # Amorphous: lose periodic weight and inflate CN variance (disordered shell).
+    cn = float(max(mono.intermolecular_contacts, 1))
+    if template.label == "amorphous":
+        w_per = phase.periodic_weight * lean.GAMMA
+        cn_var = cn * lean.STRONG_CHANNEL_FRACTION
+    else:
+        w_per = phase.periodic_weight
+        cn_var = 0.0
+    disorder = packing_disorder_score(
+        periodic_weight=w_per,
+        mean_coordination=cn,
+        coordination_variance=cn_var,
+        open_fraction=_template_open_fraction(template),
+    )
+    # Amorphous only scores when disorder exceeds α; otherwise penalize.
+    if template.label == "amorphous":
+        amorphous_bonus = lean.ALPHA if disorder > lean.ALPHA else -1.0
+    else:
+        amorphous_bonus = 0.0
+
     return (
         solid_bonus
         + opening_bonus * melt_proximity
         - density_penalty
         + lean.ALPHA * rho_frac
+        + amorphous_bonus
+        - lean.GAMMA * disorder  # ordered templates prefer low disorder
     )
 
 
@@ -139,14 +193,29 @@ def derive_allotropes(
     *,
     temperature_k: float = 273.15,
     pressure_pa: float = tptp.STP_PRESSURE_PA,
+    melt_k: float | None = None,
 ) -> tuple[AllotropeCandidate, ...]:
     """All allotrope candidates for this monomer, sorted by score (best first)."""
     mono = infer_monomer_geometry(spec)
     templates = templates_for_motif(mono.motif, spec=spec)
     candidates: list[AllotropeCandidate] = []
+    t_melt = melt_k
+    if t_melt is None:
+        try:
+            from hqiv_lab.species_panel import panel_entry
+
+            t_melt = float(panel_entry(spec.name).nist_melt_k)
+        except Exception:
+            t_melt = temperature_k
 
     for tmpl in templates:
-        cell = unit_cell_for_allotrope(spec, tmpl, mono, temperature_k=temperature_k)
+        cell = unit_cell_for_allotrope(
+            spec,
+            tmpl,
+            mono,
+            temperature_k=temperature_k,
+            melt_k=t_melt,
+        )
         rho = density_g_cm3(cell)
         rho_liq = liquid_reference_density_g_cm3(spec)
         rho_frac = min(1.0, max(0.0, rho / rho_liq)) if rho_liq > 0 else 0.0
@@ -177,9 +246,15 @@ def preferred_allotrope(
     *,
     temperature_k: float = 273.15,
     pressure_pa: float = tptp.STP_PRESSURE_PA,
+    melt_k: float | None = None,
 ) -> AllotropeCandidate:
     """Highest-scoring allotrope at (T, P)."""
-    cands = derive_allotropes(spec, temperature_k=temperature_k, pressure_pa=pressure_pa)
+    cands = derive_allotropes(
+        spec,
+        temperature_k=temperature_k,
+        pressure_pa=pressure_pa,
+        melt_k=melt_k,
+    )
     if not cands:
         raise ValueError(f"no allotrope candidates for {spec.name}")
     return cands[0]

@@ -1,0 +1,512 @@
+{
+  "source": "scripts/hqiv_bond_rearrangement_path.py",
+  "lean_modules": [
+    "Hqiv.QuantumChemistry.BondRearrangementPath",
+    "Hqiv.QuantumChemistry.MolecularReactionTransport"
+  ],
+  "subset": [
+    "H2",
+    "HF",
+    "LiH",
+    "N2",
+    "H2O",
+    "CH4",
+    "NH3",
+    "HCl",
+    "H2S",
+    "HCN",
+    "C2H2",
+    "PH3"
+  ],
+  "core_subset": [
+    "H2",
+    "HF",
+    "LiH",
+    "N2",
+    "H2O",
+    "CH4"
+  ],
+  "formula": {
+    "break_delta": "max(1/CN_i, 1/CN_j)  (= vacancy-style coordination excess)",
+    "edge_gate_eV": "D_edge \u00b7 \u03b3 \u00b7 (4/8) \u00b7 \u03b4",
+    "path_barrier_eV": "max_step edge_gate",
+    "atomization_ladder": "n sequential breaks; \u03b4_k = max(1/(CN0\u2212k), 1)",
+    "transmission": "1 / (1 + B / max(strong \u00b7 D, \u03b5))",
+    "activation": "contact_rate \u00b7 transmission",
+    "activated_transport": "transportRateSlot \u00b7 path transmission"
+  },
+  "identity_checks": {
+    "break_cn1": true,
+    "break_cn4": true,
+    "break_cn2": true,
+    "nil_path_barrier": true,
+    "nil_path_activation": true,
+    "nil_activated_transport": true,
+    "ch4_ladder_n4": true,
+    "h2o_ladder_n2": true,
+    "all_rows_ok": true
+  },
+  "all_identity_checks_pass": true,
+  "rows": [
+    {
+      "molecule": "H2",
+      "kind": "dissociation",
+      "reference_ev_quarantine": 4.478,
+      "total_binding_ev": 4.487007189311841,
+      "path_label": "H2:break[0] covalent_bond",
+      "edge_index": 0,
+      "contact_kind": "covalent_bond",
+      "distance_angstrom": 0.7408480952641998,
+      "node_i": 0,
+      "node_j": 1,
+      "binding_ev_edge": 4.487007189311841,
+      "delta_coord": 1.0,
+      "edge_gate_ev": 0.8974014378623683,
+      "path_barrier_ev": 0.8974014378623683,
+      "break_reform_barrier_ev": 0.8974014378623683,
+      "harmonic_saddle_gate_ev": 1.1217517973279603,
+      "barrier_transmission": 0.7142857142857143,
+      "activation_rate_unit_contact": 0.7142857142857143,
+      "activated_transport_unit_contact": 0.7142857142857143,
+      "atomization_ladder": null,
+      "coordination": {
+        "0": 1,
+        "1": 1
+      },
+      "network_coordination_with_steric": {
+        "0": 1,
+        "1": 1
+      },
+      "n_bonding_contacts": 1,
+      "comparison_policy": "GMTKN/W4-17 reference_ev is quarantine only"
+    },
+    {
+      "molecule": "HF",
+      "kind": "dissociation",
+      "reference_ev_quarantine": 5.87,
+      "total_binding_ev": 5.853584879218396,
+      "path_label": "HF:break[0] covalent_bond",
+      "edge_index": 0,
+      "contact_kind": "covalent_bond",
+      "distance_angstrom": 0.9054810053229109,
+      "node_i": 0,
+      "node_j": 1,
+      "binding_ev_edge": 5.853584879218396,
+      "delta_coord": 1.0,
+      "edge_gate_ev": 1.1707169758436793,
+      "path_barrier_ev": 1.1707169758436793,
+      "break_reform_barrier_ev": 1.1707169758436793,
+      "harmonic_saddle_gate_ev": 1.463396219804599,
+      "barrier_transmission": 0.7142857142857143,
+      "activation_rate_unit_contact": 0.7142857142857143,
+      "activated_transport_unit_contact": 0.7142857142857143,
+      "atomization_ladder": null,
+      "coordination": {
+        "0": 1,
+        "1": 1
+      },
+      "network_coordination_with_steric": {
+        "0": 1,
+        "1": 1
+      },
+      "n_bonding_contacts": 1,
+      "comparison_policy": "GMTKN/W4-17 reference_ev is quarantine only"
+    },
+    {
+      "molecule": "LiH",
+      "kind": "dissociation",
+      "reference_ev_quarantine": 2.515,
+      "total_binding_ev": 2.5438389552154295,
+      "path_label": "LiH:break[0] ionic_bond",
+      "edge_index": 0,
+      "contact_kind": "ionic_bond",
+      "distance_angstrom": 1.5956,
+      "node_i": 0,
+      "node_j": 1,
+      "binding_ev_edge": 2.5438389552154295,
+      "delta_coord": 1.0,
+      "edge_gate_ev": 0.5087677910430859,
+      "path_barrier_ev": 0.5087677910430859,
+      "break_reform_barrier_ev": 0.5087677910430859,
+      "harmonic_saddle_gate_ev": 0.6359597388038574,
+      "barrier_transmission": 0.7142857142857143,
+      "activation_rate_unit_contact": 0.7142857142857143,
+      "activated_transport_unit_contact": 0.7142857142857143,
+      "atomization_ladder": null,
+      "coordination": {
+        "0": 1,
+        "1": 1
+      },
+      "network_coordination_with_steric": {
+        "0": 1,
+        "1": 1
+      },
+      "n_bonding_contacts": 1,
+      "comparison_policy": "GMTKN/W4-17 reference_ev is quarantine only"
+    },
+    {
+      "molecule": "N2",
+      "kind": "dissociation",
+      "reference_ev_quarantine": 9.91,
+      "total_binding_ev": 10.133782310007758,
+      "path_label": "N2:break[0] covalent_bond",
+      "edge_index": 0,
+      "contact_kind": "covalent_bond",
+      "distance_angstrom": 1.0799534916387754,
+      "node_i": 0,
+      "node_j": 1,
+      "binding_ev_edge": 10.133782310007758,
+      "delta_coord": 1.0,
+      "edge_gate_ev": 2.026756462001552,
+      "path_barrier_ev": 2.026756462001552,
+      "break_reform_barrier_ev": 2.026756462001552,
+      "harmonic_saddle_gate_ev": 2.5334455775019395,
+      "barrier_transmission": 0.7142857142857142,
+      "activation_rate_unit_contact": 0.7142857142857142,
+      "activated_transport_unit_contact": 0.7142857142857142,
+      "atomization_ladder": null,
+      "coordination": {
+        "0": 1,
+        "1": 1
+      },
+      "network_coordination_with_steric": {
+        "0": 1,
+        "1": 1
+      },
+      "n_bonding_contacts": 1,
+      "comparison_policy": "GMTKN/W4-17 reference_ev is quarantine only"
+    },
+    {
+      "molecule": "H2O",
+      "kind": "atomization",
+      "reference_ev_quarantine": 9.51,
+      "total_binding_ev": 9.77730279330452,
+      "path_label": "H2O:break[0] covalent_bond",
+      "edge_index": 0,
+      "contact_kind": "covalent_bond",
+      "distance_angstrom": 0.92606011908025,
+      "node_i": 0,
+      "node_j": 1,
+      "binding_ev_edge": 4.88865139665226,
+      "delta_coord": 1.0,
+      "edge_gate_ev": 0.977730279330452,
+      "path_barrier_ev": 0.977730279330452,
+      "break_reform_barrier_ev": 0.977730279330452,
+      "harmonic_saddle_gate_ev": 1.222162849163065,
+      "barrier_transmission": 0.7142857142857143,
+      "activation_rate_unit_contact": 0.7142857142857143,
+      "activated_transport_unit_contact": 0.7142857142857143,
+      "atomization_ladder": {
+        "label": "H2O:atomization_ladder[centre=0,CN0=2,n=2]",
+        "n_steps": 2,
+        "step_deltas": [
+          1.0,
+          1.0
+        ],
+        "step_gates_ev": [
+          0.977730279330452,
+          0.977730279330452
+        ],
+        "path_barrier_ev": 0.977730279330452,
+        "barrier_transmission": 0.7142857142857143,
+        "activation_rate_unit_contact": 0.7142857142857143,
+        "activated_vs_bare_contact": 0.7142857142857143
+      },
+      "coordination": {
+        "0": 2,
+        "1": 1,
+        "2": 1
+      },
+      "network_coordination_with_steric": {
+        "0": 2,
+        "1": 2,
+        "2": 1
+      },
+      "n_bonding_contacts": 2,
+      "comparison_policy": "GMTKN/W4-17 reference_ev is quarantine only"
+    },
+    {
+      "molecule": "CH4",
+      "kind": "atomization",
+      "reference_ev_quarantine": 17.0,
+      "total_binding_ev": 16.863139972101454,
+      "path_label": "CH4:break[0] covalent_bond",
+      "edge_index": 0,
+      "contact_kind": "covalent_bond",
+      "distance_angstrom": 0.9877974603522665,
+      "node_i": 0,
+      "node_j": 1,
+      "binding_ev_edge": 4.2157849930253635,
+      "delta_coord": 1.0,
+      "edge_gate_ev": 0.8431569986050728,
+      "path_barrier_ev": 0.8431569986050728,
+      "break_reform_barrier_ev": 0.8431569986050728,
+      "harmonic_saddle_gate_ev": 1.0539462482563409,
+      "barrier_transmission": 0.7142857142857143,
+      "activation_rate_unit_contact": 0.7142857142857143,
+      "activated_transport_unit_contact": 0.7142857142857143,
+      "atomization_ladder": {
+        "label": "CH4:atomization_ladder[centre=0,CN0=4,n=4]",
+        "n_steps": 4,
+        "step_deltas": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "step_gates_ev": [
+          0.8431569986050728,
+          0.8431569986050728,
+          0.8431569986050728,
+          0.8431569986050728
+        ],
+        "path_barrier_ev": 0.8431569986050728,
+        "barrier_transmission": 0.7142857142857143,
+        "activation_rate_unit_contact": 0.7142857142857143,
+        "activated_vs_bare_contact": 0.7142857142857143
+      },
+      "coordination": {
+        "0": 4,
+        "1": 1,
+        "2": 1,
+        "3": 1,
+        "4": 1
+      },
+      "network_coordination_with_steric": {
+        "0": 4,
+        "1": 3,
+        "2": 1,
+        "3": 1,
+        "4": 1
+      },
+      "n_bonding_contacts": 4,
+      "comparison_policy": "GMTKN/W4-17 reference_ev is quarantine only"
+    },
+    {
+      "molecule": "NH3",
+      "kind": "atomization",
+      "reference_ev_quarantine": 10.07,
+      "total_binding_ev": 10.467982369786162,
+      "path_label": "NH3:break[0] covalent_bond",
+      "edge_index": 0,
+      "contact_kind": "covalent_bond",
+      "distance_angstrom": 0.9525189796253997,
+      "node_i": 0,
+      "node_j": 1,
+      "binding_ev_edge": 3.4893274565953876,
+      "delta_coord": 1.0,
+      "edge_gate_ev": 0.6978654913190776,
+      "path_barrier_ev": 0.6978654913190776,
+      "break_reform_barrier_ev": 0.6978654913190776,
+      "harmonic_saddle_gate_ev": 0.8723318641488469,
+      "barrier_transmission": 0.7142857142857142,
+      "activation_rate_unit_contact": 0.7142857142857142,
+      "activated_transport_unit_contact": 0.7142857142857142,
+      "atomization_ladder": {
+        "label": "NH3:atomization_ladder[centre=0,CN0=3,n=3]",
+        "n_steps": 3,
+        "step_deltas": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "step_gates_ev": [
+          0.6978654913190775,
+          0.6978654913190775,
+          0.6978654913190775
+        ],
+        "path_barrier_ev": 0.6978654913190775,
+        "barrier_transmission": 0.7142857142857143,
+        "activation_rate_unit_contact": 0.7142857142857143,
+        "activated_vs_bare_contact": 0.7142857142857143
+      },
+      "coordination": {
+        "0": 3,
+        "1": 1,
+        "2": 1,
+        "3": 1
+      },
+      "network_coordination_with_steric": {
+        "0": 3,
+        "1": 3,
+        "2": 1,
+        "3": 1
+      },
+      "n_bonding_contacts": 3,
+      "comparison_policy": "GMTKN/W4-17 reference_ev is quarantine only"
+    },
+    {
+      "molecule": "HCl",
+      "kind": "dissociation",
+      "reference_ev_quarantine": 4.434,
+      "total_binding_ev": 4.514859288364617,
+      "path_label": "HCl:break[0] covalent_bond",
+      "edge_index": 0,
+      "contact_kind": "covalent_bond",
+      "distance_angstrom": 1.2817441094536328,
+      "node_i": 0,
+      "node_j": 1,
+      "binding_ev_edge": 4.514859288364617,
+      "delta_coord": 1.0,
+      "edge_gate_ev": 0.9029718576729234,
+      "path_barrier_ev": 0.9029718576729234,
+      "break_reform_barrier_ev": 0.9029718576729234,
+      "harmonic_saddle_gate_ev": 1.1287148220911543,
+      "barrier_transmission": 0.7142857142857143,
+      "activation_rate_unit_contact": 0.7142857142857143,
+      "activated_transport_unit_contact": 0.7142857142857143,
+      "atomization_ladder": null,
+      "coordination": {
+        "0": 1,
+        "1": 1
+      },
+      "network_coordination_with_steric": {
+        "0": 1,
+        "1": 1
+      },
+      "n_bonding_contacts": 1,
+      "comparison_policy": "GMTKN/W4-17 reference_ev is quarantine only"
+    },
+    {
+      "molecule": "H2S",
+      "kind": "atomization",
+      "reference_ev_quarantine": 8.714,
+      "total_binding_ev": 9.861195987883221,
+      "path_label": "H2S:break[0] covalent_bond",
+      "edge_index": 0,
+      "contact_kind": "covalent_bond",
+      "distance_angstrom": 1.2937604604797608,
+      "node_i": 0,
+      "node_j": 1,
+      "binding_ev_edge": 4.9305979939416105,
+      "delta_coord": 1.0,
+      "edge_gate_ev": 0.9861195987883221,
+      "path_barrier_ev": 0.9861195987883221,
+      "break_reform_barrier_ev": 0.9861195987883221,
+      "harmonic_saddle_gate_ev": 1.2326494984854026,
+      "barrier_transmission": 0.7142857142857143,
+      "activation_rate_unit_contact": 0.7142857142857143,
+      "activated_transport_unit_contact": 0.7142857142857143,
+      "atomization_ladder": null,
+      "coordination": {
+        "0": 2,
+        "1": 1,
+        "2": 1
+      },
+      "network_coordination_with_steric": {
+        "0": 2,
+        "1": 2,
+        "2": 1
+      },
+      "n_bonding_contacts": 2,
+      "comparison_policy": "GMTKN/W4-17 reference_ev is quarantine only"
+    },
+    {
+      "molecule": "HCN",
+      "kind": "atomization",
+      "reference_ev_quarantine": 13.6,
+      "total_binding_ev": 13.746110556306148,
+      "path_label": "HCN:break[0] covalent_bond",
+      "edge_index": 0,
+      "contact_kind": "covalent_bond",
+      "distance_angstrom": 0.9877974603522665,
+      "node_i": 1,
+      "node_j": 0,
+      "binding_ev_edge": 6.747072831096596,
+      "delta_coord": 1.0,
+      "edge_gate_ev": 1.3494145662193193,
+      "path_barrier_ev": 1.3494145662193193,
+      "break_reform_barrier_ev": 1.3494145662193193,
+      "harmonic_saddle_gate_ev": 1.686768207774149,
+      "barrier_transmission": 0.7142857142857143,
+      "activation_rate_unit_contact": 0.7142857142857143,
+      "activated_transport_unit_contact": 0.7142857142857143,
+      "atomization_ladder": null,
+      "coordination": {
+        "0": 1,
+        "1": 2,
+        "2": 1
+      },
+      "network_coordination_with_steric": {
+        "0": 1,
+        "1": 2,
+        "2": 1
+      },
+      "n_bonding_contacts": 2,
+      "comparison_policy": "GMTKN/W4-17 reference_ev is quarantine only"
+    },
+    {
+      "molecule": "C2H2",
+      "kind": "atomization",
+      "reference_ev_quarantine": 17.406,
+      "total_binding_ev": 17.316892496798935,
+      "path_label": "C2H2:break[0] covalent_bond",
+      "edge_index": 0,
+      "contact_kind": "covalent_bond",
+      "distance_angstrom": 0.9877974603522665,
+      "node_i": 1,
+      "node_j": 0,
+      "binding_ev_edge": 5.7450673628694,
+      "delta_coord": 1.0,
+      "edge_gate_ev": 1.14901347257388,
+      "path_barrier_ev": 1.14901347257388,
+      "break_reform_barrier_ev": 1.14901347257388,
+      "harmonic_saddle_gate_ev": 1.43626684071735,
+      "barrier_transmission": 0.7142857142857143,
+      "activation_rate_unit_contact": 0.7142857142857143,
+      "activated_transport_unit_contact": 0.7142857142857143,
+      "atomization_ladder": null,
+      "coordination": {
+        "0": 1,
+        "1": 2,
+        "2": 2,
+        "3": 1
+      },
+      "network_coordination_with_steric": {
+        "0": 2,
+        "1": 2,
+        "2": 2,
+        "3": 1
+      },
+      "n_bonding_contacts": 3,
+      "comparison_policy": "GMTKN/W4-17 reference_ev is quarantine only"
+    },
+    {
+      "molecule": "PH3",
+      "kind": "atomization",
+      "reference_ev_quarantine": 9.32,
+      "total_binding_ev": 9.815256869930263,
+      "path_label": "PH3:break[0] covalent_bond",
+      "edge_index": 0,
+      "contact_kind": "covalent_bond",
+      "distance_angstrom": 1.3073789916427057,
+      "node_i": 0,
+      "node_j": 1,
+      "binding_ev_edge": 3.271752289976755,
+      "delta_coord": 1.0,
+      "edge_gate_ev": 0.654350457995351,
+      "path_barrier_ev": 0.654350457995351,
+      "break_reform_barrier_ev": 0.654350457995351,
+      "harmonic_saddle_gate_ev": 0.8179380724941887,
+      "barrier_transmission": 0.7142857142857143,
+      "activation_rate_unit_contact": 0.7142857142857143,
+      "activated_transport_unit_contact": 0.7142857142857143,
+      "atomization_ladder": null,
+      "coordination": {
+        "0": 3,
+        "1": 1,
+        "2": 1,
+        "3": 1
+      },
+      "network_coordination_with_steric": {
+        "0": 3,
+        "1": 3,
+        "2": 1,
+        "3": 1
+      },
+      "n_bonding_contacts": 3,
+      "comparison_policy": "GMTKN/W4-17 reference_ev is quarantine only"
+    }
+  ],
+  "comparison_policy": "GMTKN/W4-17 reference energies are quarantine only"
+}

@@ -61,6 +61,12 @@ def test_peptide_geometry_refs_are_external_only() -> None:
     assert row.structure_id is not None
 
 
+def test_peptide_fold_competitive_gate() -> None:
+    for row in PEPTIDE_FOLD_REFERENCES:
+        assert row.ca_rmsd_pass_angstrom == 2.0, row.name
+    assert peptide_fold_entry("trp_cage").ca_rmsd_pass_angstrom == 2.0
+
+
 if __name__ == "__main__":
     for fn in (
         test_foundation_json_export,
@@ -69,6 +75,7 @@ if __name__ == "__main__":
         test_peptide_fold_ladder_ordering,
         test_no_builder_imports_foundation_panel,
         test_peptide_geometry_refs_are_external_only,
+        test_peptide_fold_competitive_gate,
     ):
         fn()
     print("test_hqiv_foundation_references: OK")

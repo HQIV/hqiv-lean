@@ -1,0 +1,186 @@
+{
+  "source": "scripts/hqiv_generator_dependent_coupling_audit.py",
+  "policy": "quantum preferred-axis dress 1+(1/2)\u00b7t\u00b7(9/4\u22121)\u00b7g with g=(p_max\u2212p_second)/\u03a3p spectral gap; no molecule-type case; n-body ready",
+  "lean_modules": [
+    "HqivSpine/Physics/GeneratorDependentCoupling.lean",
+    "Hqiv/QuantumChemistry/SystemMatrixFunctors.lean"
+  ],
+  "colour_filter": 2.25,
+  "colour_excess": 1.25,
+  "rows": [
+    {
+      "name": "H2",
+      "abelian_pred_ev": 4.495071236876558,
+      "chart_pred_ev": 4.495071236876558,
+      "reference_ev": 4.478,
+      "abelian_error_pct": 0.3812245841125052,
+      "chart_error_pct": 0.3812245841125052,
+      "eta_p": 0.2408477842003854,
+      "spectral_gap": 0.0,
+      "herfindahl": 0.0,
+      "promotion_t": 0.1204238921001927,
+      "preferred_axis_factor": 1.0,
+      "errors_pct": {
+        "abelian": 0.3812245841125052,
+        "spectral_gap": 0.3812245841125052,
+        "het_bool_half": 0.3812245841125052,
+        "herfindahl_H2": 0.3812245841125052,
+        "herfindahl_H": 0.3812245841125052,
+        "identity": 0.3812245841125052
+      }
+    },
+    {
+      "name": "LiH",
+      "abelian_pred_ev": 2.444087763215554,
+      "chart_pred_ev": 2.5490514768457193,
+      "reference_ev": 2.515,
+      "abelian_error_pct": -2.8195720391429875,
+      "chart_error_pct": 1.353935461062393,
+      "eta_p": 0.1374270959790021,
+      "spectral_gap": 1.0,
+      "herfindahl": 1.0,
+      "promotion_t": 0.06871354798950105,
+      "preferred_axis_factor": 1.0429459674934383,
+      "errors_pct": {
+        "abelian": -2.8195720391429875,
+        "spectral_gap": 1.353935461062393,
+        "het_bool_half": 1.353935461062393,
+        "herfindahl_H2": 1.353935461062393,
+        "herfindahl_H": 1.353935461062393,
+        "identity": -2.8195720391429875
+      }
+    },
+    {
+      "name": "HF",
+      "abelian_pred_ev": 5.6232887645973975,
+      "chart_pred_ev": 5.864786341088013,
+      "reference_ev": 5.87,
+      "abelian_error_pct": -4.202917127812651,
+      "chart_error_pct": -0.08881872081749,
+      "eta_p": 0.1374270959790021,
+      "spectral_gap": 1.0,
+      "herfindahl": 1.0,
+      "promotion_t": 0.06871354798950105,
+      "preferred_axis_factor": 1.0429459674934383,
+      "errors_pct": {
+        "abelian": -4.202917127812651,
+        "spectral_gap": -0.08881872081747486,
+        "het_bool_half": -0.08881872081747486,
+        "herfindahl_H2": -0.08881872081747486,
+        "herfindahl_H": -0.08881872081747486,
+        "identity": -4.202917127812651
+      }
+    },
+    {
+      "name": "H2O",
+      "abelian_pred_ev": 9.796012709823492,
+      "chart_pred_ev": 9.796012709823492,
+      "reference_ev": 9.51,
+      "abelian_error_pct": 3.0074943199105353,
+      "chart_error_pct": 3.0074943199105353,
+      "eta_p": 0.1374270959790021,
+      "spectral_gap": 0.0,
+      "herfindahl": 0.5,
+      "promotion_t": 0.06871354798950105,
+      "preferred_axis_factor": 1.0,
+      "errors_pct": {
+        "abelian": 3.0074943199105353,
+        "spectral_gap": 3.0074943199105353,
+        "het_bool_half": 3.0074943199105353,
+        "herfindahl_H2": 4.113433445571365,
+        "herfindahl_H": 5.219372571232234,
+        "identity": 3.0074943199105353
+      }
+    },
+    {
+      "name": "CH4",
+      "abelian_pred_ev": 16.895409397299357,
+      "chart_pred_ev": 16.895409397299357,
+      "reference_ev": 17.0,
+      "abelian_error_pct": -0.6152388394155478,
+      "chart_error_pct": -0.6152388394155478,
+      "eta_p": 0.1374270959790021,
+      "spectral_gap": 0.0,
+      "herfindahl": 0.25,
+      "promotion_t": 0.06871354798950105,
+      "preferred_axis_factor": 1.0,
+      "errors_pct": {
+        "abelian": -0.6152388394155478,
+        "spectral_gap": -0.6152388394155478,
+        "het_bool_half": -0.6152388394155478,
+        "herfindahl_H2": -0.34847791928144833,
+        "herfindahl_H": 0.4518048411208293,
+        "identity": -0.6152388394155478
+      }
+    },
+    {
+      "name": "NH3",
+      "abelian_pred_ev": 10.488013975680058,
+      "chart_pred_ev": 10.488013975680058,
+      "reference_ev": 10.07,
+      "abelian_error_pct": 4.151082181529869,
+      "chart_error_pct": 4.151082181529869,
+      "eta_p": 0.1374270959790021,
+      "spectral_gap": 0.0,
+      "herfindahl": 0.3333333333333333,
+      "promotion_t": 0.06871354798950105,
+      "preferred_axis_factor": 1.0,
+      "errors_pct": {
+        "abelian": 4.151082181529869,
+        "spectral_gap": 4.151082181529869,
+        "het_bool_half": 4.151082181529869,
+        "herfindahl_H2": 4.648067624838138,
+        "herfindahl_H": 5.6420385114546745,
+        "identity": 4.151082181529869
+      }
+    }
+  ],
+  "summary": {
+    "abelian": {
+      "mean_abs_error_pct": 2.5295881819873496,
+      "max_abs_error_pct": 4.202917127812651,
+      "within_5pct": 6,
+      "within_15pct": 6
+    },
+    "spectral_gap": {
+      "mean_abs_error_pct": 1.5996323511413877,
+      "max_abs_error_pct": 4.151082181529869,
+      "within_5pct": 6,
+      "within_15pct": 6
+    },
+    "het_bool_half": {
+      "mean_abs_error_pct": 1.5996323511413877,
+      "max_abs_error_pct": 4.151082181529869,
+      "within_5pct": 6,
+      "within_15pct": 6
+    },
+    "herfindahl_H2": {
+      "mean_abs_error_pct": 1.8223262926138875,
+      "max_abs_error_pct": 4.648067624838138,
+      "within_5pct": 6,
+      "within_15pct": 6
+    },
+    "herfindahl_H": {
+      "mean_abs_error_pct": 2.1895324483000187,
+      "max_abs_error_pct": 5.6420385114546745,
+      "within_5pct": 4,
+      "within_15pct": 6
+    },
+    "identity": {
+      "mean_abs_error_pct": 2.5295881819873496,
+      "max_abs_error_pct": 4.202917127812651,
+      "within_5pct": 6,
+      "within_15pct": 6
+    }
+  },
+  "recommendation": {
+    "best_mean_variant": "spectral_gap",
+    "best_mean_abs_error_pct": 1.5996323511413877,
+    "abelian_mean_abs_error_pct": 2.5295881819873496,
+    "spectral_gap_mean_abs_error_pct": 1.5996323511413877,
+    "matches_bool_on_panel": true,
+    "improved_vs_abelian": true,
+    "promote_candidate": "spectral_gap",
+    "reason": "Spectral gap g=(p_max\u2212p_second)/\u03a3p is the unique-channel projector on a finite polarity spectrum: g=1 for a single polar bond (bool heteronuclear limit), g=0 under exact top degeneracy (symmetric polyatomics), and continuous in (0,1) for asymmetric n-body networks. Same algebra for diatomics and n-body \u2014 no molecule-type case."
+  }
+}

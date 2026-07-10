@@ -12,6 +12,12 @@ Activity and seeding use **smooth ratios** (no step functions):
     whim_seed_ratio(A)   = (1−A)² / ((1−A)² + A²)  (boosted for seed class)
     whim_active_ratio(A) = A² / (A² + (1−A)²)
 
+Boundary amplitude follows Lean ``solarWhimBoundaryShape``
+(``Hqiv.Physics.SolarDynamics``). Optional spine pinch multiplies the boundary
+hump by a soft-gated form of Lean ``whimPhiPinchEnhancement``
+(``Hqiv.Physics.PlasmaZPinchFilament``): shape × (R/r)², with a soft gate so
+raw flux-conservation compression does not explode the rotation-curve φ.
+
 Torque exchange on the shared WHIM boundary follows the fluid companion
 ``g_vac ∝ φ∇δθ′ + δθ′∇φ`` (wire + coronal papers): the disk and filament receive
 **equal and opposite** exchange torques when the inflow axis is misaligned with
@@ -28,12 +34,17 @@ from typing import Protocol
 
 import hqiv_filament_environment as _fil
 import hqiv_galaxy_rotation as _gal
+import hqiv_plasma_pinch_filament as _pinch
 
 ALPHA_HQIV = 3.0 / 5.0
 M_ISM_DEFAULT = 0
 M_WHIM_DEFAULT = 1
 SB_DISK_ACTIVE_REF = 80.0
 DEFAULT_TORTUOSITY_GAIN = 1.75
+# Soft gate on Lean (R/r)² so SPARC φ stays observationally bounded.
+DEFAULT_PINCH_RADIUS_FRACTION = 0.25  # r_pinch / R_fil → C = 16 at default
+DEFAULT_PINCH_SOFT_GATE = 0.08
+DEFAULT_PINCH_MAX_BOOST = 1.5
 DIFFUSE_HUBBLE_TYPES = frozenset({7, 8, 9, 10, 11})
 GAMMA_HQIV = _gal.GAMMA_HQIV
 C_LIGHT = _gal.C_LIGHT
@@ -60,6 +71,12 @@ class WhimFilamentOptions:
     coupling_log: float = 1.0
     tortuosity_gain: float = DEFAULT_TORTUOSITY_GAIN
     filament_catalog: dict[str, _fil.FilamentEnvironment] | None = None
+    #: Lean ``whimPhiPinchEnhancement`` soft-gated into the boundary φ hump.
+    #: Off by default: soft-gated pinch is an ablation in ``--compare-suite``.
+    use_pinch_enhancement: bool = False
+    pinch_radius_fraction: float = DEFAULT_PINCH_RADIUS_FRACTION
+    pinch_soft_gate: float = DEFAULT_PINCH_SOFT_GATE
+    pinch_max_boost: float = DEFAULT_PINCH_MAX_BOOST
 
 
 @dataclass(frozen=True)
@@ -78,6 +95,10 @@ class WhimFilamentState:
     phi_combined_m_s2: float
     filament_radius_kpc: float
     filament_source: str
+    solar_whim_boundary_shape: float
+    pinch_compression: float
+    pinch_soft_factor: float
+    lean_phi_pinch_enhancement: float
 
 
 @dataclass(frozen=True)
@@ -186,11 +207,15 @@ def whim_shell_delta_phi(m_ism: int, m_whim: int) -> float:
     return 2.0 * float(m_whim - m_ism)
 
 
+def solar_whim_boundary_shape(m_ism: int, m_whim: int) -> float:
+    """Lean ``solarWhimBoundaryShape``: max(0, 2(m_whim−m_ism)) / φ(m_ism)."""
+    return _pinch.solar_whim_boundary_shape(m_ism, m_whim)
+
+
 def _whim_boundary_phi_amplitude(m_ism: int, m_whim: int) -> float:
+    """Boundary φ amplitude = φ_hom × Lean ``solarWhimBoundaryShape``."""
     phi_hom = _gal.phi_acceleration_homogeneous_si()
-    delta_phi = whim_shell_delta_phi(m_ism, m_whim)
-    phi_ref = _gal.phi_of_shell(m_ism)
-    return phi_hom * (delta_phi / max(phi_ref, 1.0e-30))
+    return phi_hom * solar_whim_boundary_shape(m_ism, m_whim)
 
 
 def phi_cosmic_radial(radius_kpc: float, rdisk_kpc: float) -> float:
@@ -198,6 +223,57 @@ def phi_cosmic_radial(radius_kpc: float, rdisk_kpc: float) -> float:
     rd = max(rdisk_kpc, 0.05)
     r = max(radius_kpc, 0.05)
     return phi_hom / (1.0 + r / rd)
+
+
+def pinch_soft_factor(
+    compression: float,
+    *,
+    soft_gate: float = DEFAULT_PINCH_SOFT_GATE,
+    max_boost: float = DEFAULT_PINCH_MAX_BOOST,
+) -> float:
+    """Map Lean (R/r)² compression into a bounded φ boost ≥ 1.
+
+    Raw ``whimPhiPinchEnhancement = shape × C`` is an algebraic scaffold; for
+    rotation-curve φ we keep the Lean compression identity but soft-gate it:
+
+        soft = 1 + (max_boost − 1) · C / (C + 1/soft_gate)
+    """
+    c = max(compression, 0.0)
+    gate = max(soft_gate, 1.0e-12)
+    boost = max(max_boost, 1.0)
+    return 1.0 + (boost - 1.0) * c / (c + 1.0 / gate)
+
+
+def whim_pinch_diagnostics(
+    master: GalaxyMasterLike,
+    *,
+    options: WhimFilamentOptions = WhimFilamentOptions(),
+) -> dict[str, float]:
+    """Lean pinch bookkeeping for the galaxy filament scale."""
+    r_fil_kpc = filament_radius_kpc(master)
+    r_fil_m = max(r_fil_kpc, 0.05) * _gal.KPC
+    frac = max(min(options.pinch_radius_fraction, 0.95), 1.0e-3)
+    r_pinch_m = frac * r_fil_m
+    compression = _pinch.pinch_compression_ratio(r_fil_m, r_pinch_m)
+    shape = solar_whim_boundary_shape(options.m_ism, options.m_whim)
+    lean_enh = shape * compression  # Lean whimPhiPinchEnhancement
+    soft = (
+        pinch_soft_factor(
+            compression,
+            soft_gate=options.pinch_soft_gate,
+            max_boost=options.pinch_max_boost,
+        )
+        if options.use_pinch_enhancement
+        else 1.0
+    )
+    return {
+        "solar_whim_boundary_shape": shape,
+        "pinch_compression": compression,
+        "pinch_soft_factor": soft,
+        "lean_phi_pinch_enhancement": lean_enh,
+        "r_filament_m": r_fil_m,
+        "r_pinch_m": r_pinch_m,
+    }
 
 
 def whim_phi_part(
@@ -217,6 +293,7 @@ def whim_phi_part(
     tort, mis = tortuosity_index(master, r, options=options)
     coherence = math.exp(-tort * options.tortuosity_gain)
     env = _filament_env(master, options)
+    pinch = whim_pinch_diagnostics(master, options=options)
 
     phi_cosmic = phi_cosmic_radial(r, rd)
     phi_whim_amp = _whim_boundary_phi_amplitude(options.m_ism, options.m_whim)
@@ -237,6 +314,10 @@ def whim_phi_part(
             phi_combined_m_s2=phi_cosmic,
             filament_radius_kpc=r_fil,
             filament_source=env.source,
+            solar_whim_boundary_shape=pinch["solar_whim_boundary_shape"],
+            pinch_compression=pinch["pinch_compression"],
+            pinch_soft_factor=1.0,
+            lean_phi_pinch_enhancement=pinch["lean_phi_pinch_enhancement"],
         )
 
     whim_envelope = 1.0 / (1.0 + r / r_fil)
@@ -252,11 +333,17 @@ def whim_phi_part(
     # Outer boundary hump only for non-seed transitional systems (both ratios partial).
     inner_gate = smoothstep(rd, r_fil, r)
     transitional = active_ratio * seed_ratio * (1.0 - seed_ratio) * 4.0
+    pinch_boost = pinch["pinch_soft_factor"] if options.use_pinch_enhancement else 1.0
     if seed and seed_ratio > 0.55:
         phi_boundary = 0.0
     else:
         phi_boundary = (
-            phi_whim_amp * coherence * inner_gate * whim_envelope * transitional
+            phi_whim_amp
+            * coherence
+            * inner_gate
+            * whim_envelope
+            * transitional
+            * pinch_boost
         )
 
     phi_combined = seed_ratio * phi_seed + (1.0 - seed_ratio) * phi_mature + phi_boundary
@@ -277,6 +364,10 @@ def whim_phi_part(
         phi_combined_m_s2=phi_combined,
         filament_radius_kpc=r_fil,
         filament_source=env.source,
+        solar_whim_boundary_shape=pinch["solar_whim_boundary_shape"],
+        pinch_compression=pinch["pinch_compression"],
+        pinch_soft_factor=pinch_boost,
+        lean_phi_pinch_enhancement=pinch["lean_phi_pinch_enhancement"],
     )
 
 
@@ -333,6 +424,7 @@ def galaxy_whim_metadata(
     state = whim_phi_part(master, r_mid, options=options)
     env_meta = _fil.filament_environment_metadata(master, options.filament_catalog)
     torque = hqiv_torque_exchange_diagnostics(master, options=options, radius_kpc=r_mid)
+    pinch = whim_pinch_diagnostics(master, options=options)
     return {
         "seed_class": state.seed_class,
         "activity_index": state.activity_index,
@@ -348,6 +440,18 @@ def galaxy_whim_metadata(
         "torque_exchange": torque.as_dict(),
         "m_ism": options.m_ism,
         "m_whim": options.m_whim,
+        "use_pinch_enhancement": options.use_pinch_enhancement,
+        "solar_whim_boundary_shape": state.solar_whim_boundary_shape,
+        "pinch_compression": state.pinch_compression,
+        "pinch_soft_factor": state.pinch_soft_factor,
+        "lean_phi_pinch_enhancement": state.lean_phi_pinch_enhancement,
+        "pinch_radius_fraction": options.pinch_radius_fraction,
+        "r_pinch_m": pinch["r_pinch_m"],
+        "lean_modules": [
+            "Hqiv.Physics.SolarDynamics.solarWhimBoundaryShape",
+            "Hqiv.Physics.PlasmaZPinchFilament.whimPhiPinchEnhancement",
+            "Hqiv.Physics.HQIVFluidClosureScaffold.hqivFluidInertiaFactor",
+        ],
     }
 
 

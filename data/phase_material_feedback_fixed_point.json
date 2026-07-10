@@ -1,0 +1,1349 @@
+{
+  "source": "scripts/hqiv_phase_material_feedback_fixed_point.py",
+  "loop": "phase density -> B_hom/material response -> phase density",
+  "lean_modules": [
+    "Hqiv.QuantumChemistry.PhaseGeometryDensity",
+    "Hqiv.QuantumChemistry.PhaseMaterialResponse",
+    "Hqiv.QuantumChemistry.HomogeneousCurvatureSecondOrder"
+  ],
+  "max_steps": 40,
+  "tolerance": 1e-06,
+  "damping": 1.0,
+  "summary": {
+    "count": 5,
+    "converged": 5,
+    "mean_abs_shift": 0.0657624060598043,
+    "max_abs_shift": 0.19656532484619882
+  },
+  "rows": [
+    {
+      "molecule": "H2O",
+      "phase": "solid",
+      "allotrope": "Ih",
+      "temperature_K": 273.15,
+      "feedback_policy": "rho_curv starts from phase geometry; each step reads the material network-propagated curvature density and clamps it to [0,1]",
+      "initial_response": {
+        "refractive_index": 1.3054337264394031,
+        "dielectric_constant": 1.7041572141254664,
+        "thermal_conductivity_W_mK": 1.3005399065203695,
+        "ionic_conductivity_S_m": 0.0,
+        "molar_heat_capacity_J_per_mol_K": 118.59983012395719,
+        "dynamic_viscosity_Pa_s": Infinity,
+        "B_hom": 0.9905750608802482
+      },
+      "fixed_point_response": {
+        "refractive_index": 1.332293495657954,
+        "dielectric_constant": 1.7750059585724907,
+        "thermal_conductivity_W_mK": 1.0838357622372792,
+        "ionic_conductivity_S_m": 0.0,
+        "molar_heat_capacity_J_per_mol_K": 118.31964841500385,
+        "dynamic_viscosity_Pa_s": Infinity,
+        "B_hom": 0.9882349140763792
+      },
+      "response_delta": {
+        "refractive_index": {
+          "absolute": 0.026859769218550822,
+          "percent": 2.0575360261153497
+        },
+        "dielectric_constant": {
+          "absolute": 0.07084874444702427,
+          "percent": 4.157406597218332
+        },
+        "thermal_conductivity_W_mK": {
+          "absolute": -0.21670414428309037,
+          "percent": -16.662629358516824
+        },
+        "ionic_conductivity_S_m": {
+          "absolute": 0.0,
+          "percent": null
+        },
+        "molar_heat_capacity_J_per_mol_K": {
+          "absolute": -0.28018170895333583,
+          "percent": -0.23624123968853736
+        },
+        "dynamic_viscosity_Pa_s": {
+          "absolute": null,
+          "percent": null
+        },
+        "B_hom": {
+          "absolute": -0.002340146803868959,
+          "percent": -0.23624123968853503
+        }
+      },
+      "trace": {
+        "initial_state": 0.7916666666666666,
+        "final_state": 0.9882319915128654,
+        "converged": true,
+        "tolerance": 1e-06,
+        "steps": [
+          {
+            "index": 0,
+            "state": 0.7916666666666666,
+            "next_state": 0.8394046812779262,
+            "delta": 0.047738014611259594
+          },
+          {
+            "index": 1,
+            "state": 0.8394046812779262,
+            "next_state": 0.8755491731931722,
+            "delta": 0.036144491915245935
+          },
+          {
+            "index": 2,
+            "state": 0.8755491731931722,
+            "next_state": 0.9029157133907434,
+            "delta": 0.027366540197571232
+          },
+          {
+            "index": 3,
+            "state": 0.9029157133907434,
+            "next_state": 0.9236360910389179,
+            "delta": 0.02072037764817447
+          },
+          {
+            "index": 4,
+            "state": 0.9236360910389179,
+            "next_state": 0.9393243748622807,
+            "delta": 0.015688283823362847
+          },
+          {
+            "index": 5,
+            "state": 0.9393243748622807,
+            "next_state": 0.9512026453022054,
+            "delta": 0.011878270439924732
+          },
+          {
+            "index": 6,
+            "state": 0.9512026453022054,
+            "next_state": 0.96019619171127,
+            "delta": 0.008993546409064579
+          },
+          {
+            "index": 7,
+            "state": 0.96019619171127,
+            "next_state": 0.9670055902193335,
+            "delta": 0.006809398508063502
+          },
+          {
+            "index": 8,
+            "state": 0.9670055902193335,
+            "next_state": 0.9721612769676538,
+            "delta": 0.005155686748320232
+          },
+          {
+            "index": 9,
+            "state": 0.9721612769676538,
+            "next_state": 0.9760648678377326,
+            "delta": 0.0039035908700788546
+          },
+          {
+            "index": 10,
+            "state": 0.9760648678377326,
+            "next_state": 0.9790204433846619,
+            "delta": 0.0029555755469292677
+          },
+          {
+            "index": 11,
+            "state": 0.9790204433846619,
+            "next_state": 0.9812582359977565,
+            "delta": 0.002237792613094647
+          },
+          {
+            "index": 12,
+            "state": 0.9812582359977565,
+            "next_state": 0.9829525644626215,
+            "delta": 0.001694328464864947
+          },
+          {
+            "index": 13,
+            "state": 0.9829525644626215,
+            "next_state": 0.9842354129848899,
+            "delta": 0.0012828485222684538
+          },
+          {
+            "index": 14,
+            "state": 0.9842354129848899,
+            "next_state": 0.9852067124496707,
+            "delta": 0.000971299464780806
+          },
+          {
+            "index": 15,
+            "state": 0.9852067124496707,
+            "next_state": 0.9859421248026549,
+            "delta": 0.0007354123529841328
+          },
+          {
+            "index": 16,
+            "state": 0.9859421248026549,
+            "next_state": 0.9864989369378737,
+            "delta": 0.0005568121352188538
+          },
+          {
+            "index": 17,
+            "state": 0.9864989369378737,
+            "next_state": 0.986920523212117,
+            "delta": 0.00042158627424326856
+          },
+          {
+            "index": 18,
+            "state": 0.986920523212117,
+            "next_state": 0.9872397242053935,
+            "delta": 0.00031920099327653606
+          },
+          {
+            "index": 19,
+            "state": 0.9872397242053935,
+            "next_state": 0.9874814049249369,
+            "delta": 0.0002416807195433357
+          },
+          {
+            "index": 20,
+            "state": 0.9874814049249369,
+            "next_state": 0.9876643917308344,
+            "delta": 0.000182986805897567
+          },
+          {
+            "index": 21,
+            "state": 0.9876643917308344,
+            "next_state": 0.987802938865235,
+            "delta": 0.00013854713440053512
+          },
+          {
+            "index": 22,
+            "state": 0.987802938865235,
+            "next_state": 0.9879078388243137,
+            "delta": 0.00010489995907869698
+          },
+          {
+            "index": 23,
+            "state": 0.9879078388243137,
+            "next_state": 0.9879872630683613,
+            "delta": 7.942424404761006e-05
+          },
+          {
+            "index": 24,
+            "state": 0.9879872630683613,
+            "next_state": 0.988047398559337,
+            "delta": 6.013549097572124e-05
+          },
+          {
+            "index": 25,
+            "state": 0.988047398559337,
+            "next_state": 0.9880929297106655,
+            "delta": 4.553115132854835e-05
+          },
+          {
+            "index": 26,
+            "state": 0.9880929297106655,
+            "next_state": 0.9881274032920343,
+            "delta": 3.447358136876577e-05
+          },
+          {
+            "index": 27,
+            "state": 0.9881274032920343,
+            "next_state": 0.9881535047144169,
+            "delta": 2.6101422382573958e-05
+          },
+          {
+            "index": 28,
+            "state": 0.9881535047144169,
+            "next_state": 0.9881732672172768,
+            "delta": 1.9762502859954623e-05
+          },
+          {
+            "index": 29,
+            "state": 0.9881732672172768,
+            "next_state": 0.9881882302531438,
+            "delta": 1.4963035867010532e-05
+          },
+          {
+            "index": 30,
+            "state": 0.9881882302531438,
+            "next_state": 0.9881995594073478,
+            "delta": 1.132915420398728e-05
+          },
+          {
+            "index": 31,
+            "state": 0.9881995594073478,
+            "next_state": 0.9882081371943771,
+            "delta": 8.577787029229178e-06
+          },
+          {
+            "index": 32,
+            "state": 0.9882081371943771,
+            "next_state": 0.9882146318036826,
+            "delta": 6.494609305573995e-06
+          },
+          {
+            "index": 33,
+            "state": 0.9882146318036826,
+            "next_state": 0.9882195491500668,
+            "delta": 4.917346384192278e-06
+          },
+          {
+            "index": 34,
+            "state": 0.9882195491500668,
+            "next_state": 0.988223272283257,
+            "delta": 3.7231331901921294e-06
+          },
+          {
+            "index": 35,
+            "state": 0.988223272283257,
+            "next_state": 0.9882260912265789,
+            "delta": 2.818943321880596e-06
+          },
+          {
+            "index": 36,
+            "state": 0.9882260912265789,
+            "next_state": 0.9882282255690927,
+            "delta": 2.134342513837595e-06
+          },
+          {
+            "index": 37,
+            "state": 0.9882282255690927,
+            "next_state": 0.9882298415710643,
+            "delta": 1.6160019715716345e-06
+          },
+          {
+            "index": 38,
+            "state": 0.9882298415710643,
+            "next_state": 0.9882310651152497,
+            "delta": 1.2235441854135942e-06
+          },
+          {
+            "index": 39,
+            "state": 0.9882310651152497,
+            "next_state": 0.9882319915128654,
+            "delta": 9.263976157303233e-07
+          }
+        ]
+      }
+    },
+    {
+      "molecule": "H2O",
+      "phase": "liquid",
+      "allotrope": "Ih",
+      "temperature_K": 273.15,
+      "feedback_policy": "rho_curv starts from phase geometry; each step reads the material network-propagated curvature density and clamps it to [0,1]",
+      "initial_response": {
+        "refractive_index": 1.3623580472936323,
+        "dielectric_constant": 1.856019449025719,
+        "thermal_conductivity_W_mK": 1.070925812968937,
+        "ionic_conductivity_S_m": 0.0,
+        "molar_heat_capacity_J_per_mol_K": 73.93929652855064,
+        "dynamic_viscosity_Pa_s": 0.00010696220119075516,
+        "B_hom": 0.9880948137434714
+      },
+      "fixed_point_response": {
+        "refractive_index": 1.3605779552373942,
+        "dielectric_constant": 1.8511723722779687,
+        "thermal_conductivity_W_mK": 1.0838295290321676,
+        "ionic_conductivity_S_m": 0.0,
+        "molar_heat_capacity_J_per_mol_K": 73.9497751990123,
+        "dynamic_viscosity_Pa_s": 0.00010620554084662206,
+        "B_hom": 0.9882348464517091
+      },
+      "response_delta": {
+        "refractive_index": {
+          "absolute": -0.0017800920562380806,
+          "percent": -0.13066257139775334
+        },
+        "dielectric_constant": {
+          "absolute": -0.004847076747750201,
+          "percent": -0.2611544157198665
+        },
+        "thermal_conductivity_W_mK": {
+          "absolute": 0.012903716063230597,
+          "percent": 1.2049122270624435
+        },
+        "ionic_conductivity_S_m": {
+          "absolute": 0.0,
+          "percent": null
+        },
+        "molar_heat_capacity_J_per_mol_K": {
+          "absolute": 0.010478670461651518,
+          "percent": 0.01417199101644864
+        },
+        "dynamic_viscosity_Pa_s": {
+          "absolute": -7.566603441330977e-07,
+          "percent": -0.7074090993917359
+        },
+        "B_hom": {
+          "absolute": 0.00014003270823770286,
+          "percent": 0.014171991016446938
+        }
+      },
+      "trace": {
+        "initial_state": 1.0,
+        "final_state": 0.9882376717826749,
+        "converged": true,
+        "tolerance": 1e-06,
+        "steps": [
+          {
+            "index": 0,
+            "state": 1.0,
+            "next_state": 0.9971427552984331,
+            "delta": 0.0028572447015668967
+          },
+          {
+            "index": 1,
+            "state": 0.9971427552984331,
+            "next_state": 0.9949794131725269,
+            "delta": 0.002163342125906187
+          },
+          {
+            "index": 2,
+            "state": 0.9949794131725269,
+            "next_state": 0.9933414543546651,
+            "delta": 0.0016379588178617732
+          },
+          {
+            "index": 3,
+            "state": 0.9933414543546651,
+            "next_state": 0.9921012857022439,
+            "delta": 0.0012401686524212696
+          },
+          {
+            "index": 4,
+            "state": 0.9921012857022439,
+            "next_state": 0.9911623009917149,
+            "delta": 0.0009389847105290006
+          },
+          {
+            "index": 5,
+            "state": 0.9911623009917149,
+            "next_state": 0.9904513555208019,
+            "delta": 0.0007109454709129936
+          },
+          {
+            "index": 6,
+            "state": 0.9904513555208019,
+            "next_state": 0.9899130683080879,
+            "delta": 0.0005382872127139837
+          },
+          {
+            "index": 7,
+            "state": 0.9899130683080879,
+            "next_state": 0.9895055080447117,
+            "delta": 0.00040756026337618323
+          },
+          {
+            "index": 8,
+            "state": 0.9895055080447117,
+            "next_state": 0.9891969267439489,
+            "delta": 0.0003085813007628335
+          },
+          {
+            "index": 9,
+            "state": 0.9891969267439489,
+            "next_state": 0.9889632866476558,
+            "delta": 0.00023364009629311955
+          },
+          {
+            "index": 10,
+            "state": 0.9889632866476558,
+            "next_state": 0.9887863877414003,
+            "delta": 0.00017689890625549598
+          },
+          {
+            "index": 11,
+            "state": 0.9887863877414003,
+            "next_state": 0.9886524500161087,
+            "delta": 0.00013393772529157744
+          },
+          {
+            "index": 12,
+            "state": 0.9886524500161087,
+            "next_state": 0.988551040037743,
+            "delta": 0.00010140997836571852
+          },
+          {
+            "index": 13,
+            "state": 0.988551040037743,
+            "next_state": 0.9884742582073084,
+            "delta": 7.67818304345802e-05
+          },
+          {
+            "index": 14,
+            "state": 0.9884742582073084,
+            "next_state": 0.9884161234006563,
+            "delta": 5.813480665206594e-05
+          },
+          {
+            "index": 15,
+            "state": 0.9884161234006563,
+            "next_state": 0.988372107052969,
+            "delta": 4.401634768735896e-05
+          },
+          {
+            "index": 16,
+            "state": 0.988372107052969,
+            "next_state": 0.9883387803942029,
+            "delta": 3.332665876609742e-05
+          },
+          {
+            "index": 17,
+            "state": 0.9883387803942029,
+            "next_state": 0.9883135473559598,
+            "delta": 2.5233038243088757e-05
+          },
+          {
+            "index": 18,
+            "state": 0.9883135473559598,
+            "next_state": 0.9882944423438599,
+            "delta": 1.91050120998959e-05
+          },
+          {
+            "index": 19,
+            "state": 0.9882944423438599,
+            "next_state": 0.9882799771223586,
+            "delta": 1.4465221501280823e-05
+          },
+          {
+            "index": 20,
+            "state": 0.9882799771223586,
+            "next_state": 0.988269024884695,
+            "delta": 1.0952237663564013e-05
+          },
+          {
+            "index": 21,
+            "state": 0.988269024884695,
+            "next_state": 0.9882607324772937,
+            "delta": 8.292407401300217e-06
+          },
+          {
+            "index": 22,
+            "state": 0.9882607324772937,
+            "next_state": 0.9882544539411059,
+            "delta": 6.278536187842576e-06
+          },
+          {
+            "index": 23,
+            "state": 0.9882544539411059,
+            "next_state": 0.9882497001929174,
+            "delta": 4.753748188535134e-06
+          },
+          {
+            "index": 24,
+            "state": 0.9882497001929174,
+            "next_state": 0.9882461009269159,
+            "delta": 3.5992660014638744e-06
+          },
+          {
+            "index": 25,
+            "state": 0.9882461009269159,
+            "next_state": 0.9882433757687386,
+            "delta": 2.7251581773413136e-06
+          },
+          {
+            "index": 26,
+            "state": 0.9882433757687386,
+            "next_state": 0.9882413124349675,
+            "delta": 2.0633337710629363e-06
+          },
+          {
+            "index": 27,
+            "state": 0.9882413124349675,
+            "next_state": 0.988239750196751,
+            "delta": 1.562238216457068e-06
+          },
+          {
+            "index": 28,
+            "state": 0.988239750196751,
+            "next_state": 0.9882385673594034,
+            "delta": 1.1828373476241438e-06
+          },
+          {
+            "index": 29,
+            "state": 0.9882385673594034,
+            "next_state": 0.9882376717826749,
+            "delta": 8.955767285545591e-07
+          }
+        ]
+      }
+    },
+    {
+      "molecule": "CH4",
+      "phase": "solid",
+      "allotrope": "solid_I",
+      "temperature_K": 90.7,
+      "feedback_policy": "rho_curv starts from phase geometry; each step reads the material network-propagated curvature density and clamps it to [0,1]",
+      "initial_response": {
+        "refractive_index": 1.1151666217656773,
+        "dielectric_constant": 1.2435965943002731,
+        "thermal_conductivity_W_mK": 2.6536820508491314,
+        "ionic_conductivity_S_m": 0.0,
+        "molar_heat_capacity_J_per_mol_K": 197.40902195208932,
+        "dynamic_viscosity_Pa_s": Infinity,
+        "B_hom": 0.9892853323691243
+      },
+      "fixed_point_response": {
+        "refractive_index": 1.1192299938626222,
+        "dielectric_constant": 1.2526757791617253,
+        "thermal_conductivity_W_mK": 2.4356474988798587,
+        "ionic_conductivity_S_m": 0.0,
+        "molar_heat_capacity_J_per_mol_K": 197.19941425948545,
+        "dynamic_viscosity_Pa_s": Infinity,
+        "B_hom": 0.9882349152514351
+      },
+      "response_delta": {
+        "refractive_index": {
+          "absolute": 0.004063372096944962,
+          "percent": 0.36437354002860134
+        },
+        "dielectric_constant": {
+          "absolute": 0.009079184861452205,
+          "percent": 0.7300747608239258
+        },
+        "thermal_conductivity_W_mK": {
+          "absolute": -0.2180345519692728,
+          "percent": -8.216302774460324
+        },
+        "ionic_conductivity_S_m": {
+          "absolute": 0.0,
+          "percent": null
+        },
+        "molar_heat_capacity_J_per_mol_K": {
+          "absolute": -0.2096076926038677,
+          "percent": -0.10617938862730344
+        },
+        "dynamic_viscosity_Pa_s": {
+          "absolute": null,
+          "percent": null
+        },
+        "B_hom": {
+          "absolute": -0.001050417117689162,
+          "percent": -0.10617938862730737
+        }
+      },
+      "trace": {
+        "initial_state": 0.9,
+        "final_state": 0.988231892811681,
+        "converged": true,
+        "tolerance": 1e-06,
+        "steps": [
+          {
+            "index": 0,
+            "state": 0.9,
+            "next_state": 0.9214284797685899,
+            "delta": 0.02142847976858986
+          },
+          {
+            "index": 1,
+            "state": 0.9214284797685899,
+            "next_state": 0.9376528979824367,
+            "delta": 0.016224418213846792
+          },
+          {
+            "index": 2,
+            "state": 0.9376528979824367,
+            "next_state": 0.9499370986919827,
+            "delta": 0.012284200709546056
+          },
+          {
+            "index": 3,
+            "state": 0.9499370986919827,
+            "next_state": 0.9592379922638474,
+            "delta": 0.009300893571864699
+          },
+          {
+            "index": 4,
+            "state": 0.9592379922638474,
+            "next_state": 0.9662800964495866,
+            "delta": 0.00704210418573914
+          },
+          {
+            "index": 5,
+            "state": 0.9662800964495866,
+            "next_state": 0.9716119746158757,
+            "delta": 0.005331878166289106
+          },
+          {
+            "index": 6,
+            "state": 0.9716119746158757,
+            "next_state": 0.9756489675416153,
+            "delta": 0.004036992925739669
+          },
+          {
+            "index": 7,
+            "state": 0.9756489675416153,
+            "next_state": 0.9787055474885302,
+            "delta": 0.0030565799469148835
+          },
+          {
+            "index": 8,
+            "state": 0.9787055474885302,
+            "next_state": 0.9810198148513273,
+            "delta": 0.002314267362797051
+          },
+          {
+            "index": 9,
+            "state": 0.9810198148513273,
+            "next_state": 0.9827720456188926,
+            "delta": 0.0017522307675653659
+          },
+          {
+            "index": 10,
+            "state": 0.9827720456188926,
+            "next_state": 0.9840987344501658,
+            "delta": 0.0013266888312731817
+          },
+          {
+            "index": 11,
+            "state": 0.9840987344501658,
+            "next_state": 0.9851032272872996,
+            "delta": 0.0010044928371337747
+          },
+          {
+            "index": 12,
+            "state": 0.9851032272872996,
+            "next_state": 0.9858637717616846,
+            "delta": 0.0007605444743850054
+          },
+          {
+            "index": 13,
+            "state": 0.9858637717616846,
+            "next_state": 0.9864396125005476,
+            "delta": 0.0005758407388629649
+          },
+          {
+            "index": 14,
+            "state": 0.9864396125005476,
+            "next_state": 0.9868756061441832,
+            "delta": 0.00043599364363566817
+          },
+          {
+            "index": 15,
+            "state": 0.9868756061441832,
+            "next_state": 0.9872057155728182,
+            "delta": 0.0003301094286349837
+          },
+          {
+            "index": 16,
+            "state": 0.9872057155728182,
+            "next_state": 0.9874556555351649,
+            "delta": 0.00024993996234667915
+          },
+          {
+            "index": 17,
+            "state": 0.9874556555351649,
+            "next_state": 0.9876448957669153,
+            "delta": 0.00018924023175037608
+          },
+          {
+            "index": 18,
+            "state": 0.9876448957669153,
+            "next_state": 0.987788177637396,
+            "delta": 0.00014328187048073815
+          },
+          {
+            "index": 19,
+            "state": 0.987788177637396,
+            "next_state": 0.9878966624675961,
+            "delta": 0.00010848483020009514
+          },
+          {
+            "index": 20,
+            "state": 0.9878966624675961,
+            "next_state": 0.9879788009708419,
+            "delta": 8.213850324578775e-05
+          },
+          {
+            "index": 21,
+            "state": 0.9879788009708419,
+            "next_state": 0.9880409915435056,
+            "delta": 6.219057266365624e-05
+          },
+          {
+            "index": 22,
+            "state": 0.9880409915435056,
+            "next_state": 0.9880880786850457,
+            "delta": 4.7087141540114175e-05
+          },
+          {
+            "index": 23,
+            "state": 0.9880880786850457,
+            "next_state": 0.9881237303731305,
+            "delta": 3.5651688084836763e-05
+          },
+          {
+            "index": 24,
+            "state": 0.9881237303731305,
+            "next_state": 0.9881507237904781,
+            "delta": 2.69934173475761e-05
+          },
+          {
+            "index": 25,
+            "state": 0.9881507237904781,
+            "next_state": 0.9881711616608635,
+            "delta": 2.043787038541467e-05
+          },
+          {
+            "index": 26,
+            "state": 0.9881711616608635,
+            "next_state": 0.9881866360463596,
+            "delta": 1.547438549609481e-05
+          },
+          {
+            "index": 27,
+            "state": 0.9881866360463596,
+            "next_state": 0.9881983523652307,
+            "delta": 1.1716318871091147e-05
+          },
+          {
+            "index": 28,
+            "state": 0.9881983523652307,
+            "next_state": 0.9882072232911826,
+            "delta": 8.870925951920405e-06
+          },
+          {
+            "index": 29,
+            "state": 0.9882072232911826,
+            "next_state": 0.9882139398484999,
+            "delta": 6.716557317321126e-06
+          },
+          {
+            "index": 30,
+            "state": 0.9882139398484999,
+            "next_state": 0.9882190252412133,
+            "delta": 5.085392713377601e-06
+          },
+          {
+            "index": 31,
+            "state": 0.9882190252412133,
+            "next_state": 0.9882228756094641,
+            "delta": 3.850368250790659e-06
+          },
+          {
+            "index": 32,
+            "state": 0.9882228756094641,
+            "next_state": 0.9882257908878904,
+            "delta": 2.9152784263297704e-06
+          },
+          {
+            "index": 33,
+            "state": 0.9882257908878904,
+            "next_state": 0.9882279981698305,
+            "delta": 2.207281940114214e-06
+          },
+          {
+            "index": 34,
+            "state": 0.9882279981698305,
+            "next_state": 0.9882296693973605,
+            "delta": 1.6712275299202162e-06
+          },
+          {
+            "index": 35,
+            "state": 0.9882296693973605,
+            "next_state": 0.9882309347551772,
+            "delta": 1.2653578167487467e-06
+          },
+          {
+            "index": 36,
+            "state": 0.9882309347551772,
+            "next_state": 0.988231892811681,
+            "delta": 9.58056503796989e-07
+          }
+        ]
+      }
+    },
+    {
+      "molecule": "NH3",
+      "phase": "liquid",
+      "allotrope": "solid",
+      "temperature_K": 195.0,
+      "feedback_policy": "rho_curv starts from phase geometry; each step reads the material network-propagated curvature density and clamps it to [0,1]",
+      "initial_response": {
+        "refractive_index": 1.2634173765065801,
+        "dielectric_constant": 1.5962234672587696,
+        "thermal_conductivity_W_mK": 1.6021054355009696,
+        "ionic_conductivity_S_m": 0.0,
+        "molar_heat_capacity_J_per_mol_K": 98.58572870473418,
+        "dynamic_viscosity_Pa_s": 4.651327487449322e-05,
+        "B_hom": 0.9880948137434714
+      },
+      "fixed_point_response": {
+        "refractive_index": 1.262170234063256,
+        "dielectric_constant": 1.5930736997552941,
+        "thermal_conductivity_W_mK": 1.6214093997837526,
+        "ionic_conductivity_S_m": 0.0,
+        "molar_heat_capacity_J_per_mol_K": 98.59970026534972,
+        "dynamic_viscosity_Pa_s": 4.6184235735605966e-05,
+        "B_hom": 0.9882348464517091
+      },
+      "response_delta": {
+        "refractive_index": {
+          "absolute": -0.001247142443324245,
+          "percent": -0.09871183240907005
+        },
+        "dielectric_constant": {
+          "absolute": -0.003149767503475509,
+          "percent": -0.19732622455956467
+        },
+        "thermal_conductivity_W_mK": {
+          "absolute": 0.019303964282783026,
+          "percent": 1.204912227062433
+        },
+        "ionic_conductivity_S_m": {
+          "absolute": 0.0,
+          "percent": null
+        },
+        "molar_heat_capacity_J_per_mol_K": {
+          "absolute": 0.013971560615544831,
+          "percent": 0.014171991016458252
+        },
+        "dynamic_viscosity_Pa_s": {
+          "absolute": -3.290391388872569e-07,
+          "percent": -0.7074090993917398
+        },
+        "B_hom": {
+          "absolute": 0.00014003270823770286,
+          "percent": 0.014171991016446938
+        }
+      },
+      "trace": {
+        "initial_state": 1.0,
+        "final_state": 0.9882376717826749,
+        "converged": true,
+        "tolerance": 1e-06,
+        "steps": [
+          {
+            "index": 0,
+            "state": 1.0,
+            "next_state": 0.9971427552984331,
+            "delta": 0.0028572447015668967
+          },
+          {
+            "index": 1,
+            "state": 0.9971427552984331,
+            "next_state": 0.9949794131725269,
+            "delta": 0.002163342125906187
+          },
+          {
+            "index": 2,
+            "state": 0.9949794131725269,
+            "next_state": 0.9933414543546651,
+            "delta": 0.0016379588178617732
+          },
+          {
+            "index": 3,
+            "state": 0.9933414543546651,
+            "next_state": 0.9921012857022439,
+            "delta": 0.0012401686524212696
+          },
+          {
+            "index": 4,
+            "state": 0.9921012857022439,
+            "next_state": 0.9911623009917149,
+            "delta": 0.0009389847105290006
+          },
+          {
+            "index": 5,
+            "state": 0.9911623009917149,
+            "next_state": 0.9904513555208019,
+            "delta": 0.0007109454709129936
+          },
+          {
+            "index": 6,
+            "state": 0.9904513555208019,
+            "next_state": 0.9899130683080879,
+            "delta": 0.0005382872127139837
+          },
+          {
+            "index": 7,
+            "state": 0.9899130683080879,
+            "next_state": 0.9895055080447117,
+            "delta": 0.00040756026337618323
+          },
+          {
+            "index": 8,
+            "state": 0.9895055080447117,
+            "next_state": 0.9891969267439489,
+            "delta": 0.0003085813007628335
+          },
+          {
+            "index": 9,
+            "state": 0.9891969267439489,
+            "next_state": 0.9889632866476558,
+            "delta": 0.00023364009629311955
+          },
+          {
+            "index": 10,
+            "state": 0.9889632866476558,
+            "next_state": 0.9887863877414003,
+            "delta": 0.00017689890625549598
+          },
+          {
+            "index": 11,
+            "state": 0.9887863877414003,
+            "next_state": 0.9886524500161087,
+            "delta": 0.00013393772529157744
+          },
+          {
+            "index": 12,
+            "state": 0.9886524500161087,
+            "next_state": 0.988551040037743,
+            "delta": 0.00010140997836571852
+          },
+          {
+            "index": 13,
+            "state": 0.988551040037743,
+            "next_state": 0.9884742582073084,
+            "delta": 7.67818304345802e-05
+          },
+          {
+            "index": 14,
+            "state": 0.9884742582073084,
+            "next_state": 0.9884161234006563,
+            "delta": 5.813480665206594e-05
+          },
+          {
+            "index": 15,
+            "state": 0.9884161234006563,
+            "next_state": 0.988372107052969,
+            "delta": 4.401634768735896e-05
+          },
+          {
+            "index": 16,
+            "state": 0.988372107052969,
+            "next_state": 0.9883387803942029,
+            "delta": 3.332665876609742e-05
+          },
+          {
+            "index": 17,
+            "state": 0.9883387803942029,
+            "next_state": 0.9883135473559598,
+            "delta": 2.5233038243088757e-05
+          },
+          {
+            "index": 18,
+            "state": 0.9883135473559598,
+            "next_state": 0.9882944423438599,
+            "delta": 1.91050120998959e-05
+          },
+          {
+            "index": 19,
+            "state": 0.9882944423438599,
+            "next_state": 0.9882799771223586,
+            "delta": 1.4465221501280823e-05
+          },
+          {
+            "index": 20,
+            "state": 0.9882799771223586,
+            "next_state": 0.988269024884695,
+            "delta": 1.0952237663564013e-05
+          },
+          {
+            "index": 21,
+            "state": 0.988269024884695,
+            "next_state": 0.9882607324772937,
+            "delta": 8.292407401300217e-06
+          },
+          {
+            "index": 22,
+            "state": 0.9882607324772937,
+            "next_state": 0.9882544539411059,
+            "delta": 6.278536187842576e-06
+          },
+          {
+            "index": 23,
+            "state": 0.9882544539411059,
+            "next_state": 0.9882497001929174,
+            "delta": 4.753748188535134e-06
+          },
+          {
+            "index": 24,
+            "state": 0.9882497001929174,
+            "next_state": 0.9882461009269159,
+            "delta": 3.5992660014638744e-06
+          },
+          {
+            "index": 25,
+            "state": 0.9882461009269159,
+            "next_state": 0.9882433757687386,
+            "delta": 2.7251581773413136e-06
+          },
+          {
+            "index": 26,
+            "state": 0.9882433757687386,
+            "next_state": 0.9882413124349675,
+            "delta": 2.0633337710629363e-06
+          },
+          {
+            "index": 27,
+            "state": 0.9882413124349675,
+            "next_state": 0.988239750196751,
+            "delta": 1.562238216457068e-06
+          },
+          {
+            "index": 28,
+            "state": 0.988239750196751,
+            "next_state": 0.9882385673594034,
+            "delta": 1.1828373476241438e-06
+          },
+          {
+            "index": 29,
+            "state": 0.9882385673594034,
+            "next_state": 0.9882376717826749,
+            "delta": 8.955767285545591e-07
+          }
+        ]
+      }
+    },
+    {
+      "molecule": "HF",
+      "phase": "solid",
+      "allotrope": "chain",
+      "temperature_K": 190.0,
+      "feedback_policy": "rho_curv starts from phase geometry; each step reads the material network-propagated curvature density and clamps it to [0,1]",
+      "initial_response": {
+        "refractive_index": 1.2636163239541438,
+        "dielectric_constant": 1.5967262141633838,
+        "thermal_conductivity_W_mK": 0.8188447310650616,
+        "ionic_conductivity_S_m": 0.0,
+        "molar_heat_capacity_J_per_mol_K": 78.89923645315778,
+        "dynamic_viscosity_Pa_s": Infinity,
+        "B_hom": 0.988478852009811
+      },
+      "fixed_point_response": {
+        "refractive_index": 1.2658196161910698,
+        "dielectric_constant": 1.602299300734107,
+        "thermal_conductivity_W_mK": 0.8021947135375969,
+        "ionic_conductivity_S_m": 0.0,
+        "molar_heat_capacity_J_per_mol_K": 78.87976551480808,
+        "dynamic_viscosity_Pa_s": Infinity,
+        "B_hom": 0.9882349128837474
+      },
+      "response_delta": {
+        "refractive_index": {
+          "absolute": 0.0022032922369259467,
+          "percent": 0.17436402135351833
+        },
+        "dielectric_constant": {
+          "absolute": 0.005573086570723307,
+          "percent": 0.3490320708264545
+        },
+        "thermal_conductivity_W_mK": {
+          "absolute": -0.016650017527464755,
+          "percent": -2.033354663686762
+        },
+        "ionic_conductivity_S_m": {
+          "absolute": 0.0,
+          "percent": null
+        },
+        "molar_heat_capacity_J_per_mol_K": {
+          "absolute": -0.019470938349698486,
+          "percent": -0.024678234194646886
+        },
+        "dynamic_viscosity_Pa_s": {
+          "absolute": null,
+          "percent": null
+        },
+        "B_hom": {
+          "absolute": -0.00024393912606357482,
+          "percent": -0.024678234194650595
+        }
+      },
+      "trace": {
+        "initial_state": 0.9677419354838709,
+        "final_state": 0.9882320916903623,
+        "converged": true,
+        "tolerance": 1e-06,
+        "steps": [
+          {
+            "index": 0,
+            "state": 0.9677419354838709,
+            "next_state": 0.9727187954500965,
+            "delta": 0.004976859966225655
+          },
+          {
+            "index": 1,
+            "state": 0.9727187954500965,
+            "next_state": 0.9764869889176591,
+            "delta": 0.0037681934675625195
+          },
+          {
+            "index": 2,
+            "state": 0.9764869889176591,
+            "next_state": 0.9793400493021869,
+            "delta": 0.002853060384527817
+          },
+          {
+            "index": 3,
+            "state": 0.9793400493021869,
+            "next_state": 0.9815002233027611,
+            "delta": 0.002160174000574222
+          },
+          {
+            "index": 4,
+            "state": 0.9815002233027611,
+            "next_state": 0.9831357833974799,
+            "delta": 0.0016355600947187687
+          },
+          {
+            "index": 5,
+            "state": 0.9831357833974799,
+            "next_state": 0.9843741358740514,
+            "delta": 0.0012383524765715581
+          },
+          {
+            "index": 6,
+            "state": 0.9843741358740514,
+            "next_state": 0.9853117454801935,
+            "delta": 0.0009376096061420869
+          },
+          {
+            "index": 7,
+            "state": 0.9853117454801935,
+            "next_state": 0.9860216498007822,
+            "delta": 0.0007099043205887057
+          },
+          {
+            "index": 8,
+            "state": 0.9860216498007822,
+            "next_state": 0.986559148714071,
+            "delta": 0.0005374989132888031
+          },
+          {
+            "index": 9,
+            "state": 0.986559148714071,
+            "next_state": 0.9869661121222484,
+            "delta": 0.0004069634081773632
+          },
+          {
+            "index": 10,
+            "state": 0.9869661121222484,
+            "next_state": 0.9872742415184215,
+            "delta": 0.00030812939617308466
+          },
+          {
+            "index": 11,
+            "state": 0.9872742415184215,
+            "next_state": 0.9875075394584284,
+            "delta": 0.00023329794000692683
+          },
+          {
+            "index": 12,
+            "state": 0.9875075394584284,
+            "next_state": 0.9876841793035307,
+            "delta": 0.0001766398451022999
+          },
+          {
+            "index": 13,
+            "state": 0.9876841793035307,
+            "next_state": 0.9878179208825469,
+            "delta": 0.0001337415790162444
+          },
+          {
+            "index": 14,
+            "state": 0.9878179208825469,
+            "next_state": 0.9879191823501813,
+            "delta": 0.0001012614676343393
+          },
+          {
+            "index": 15,
+            "state": 0.9879191823501813,
+            "next_state": 0.9879958517367914,
+            "delta": 7.666938661010647e-05
+          },
+          {
+            "index": 16,
+            "state": 0.9879958517367914,
+            "next_state": 0.9880539014074164,
+            "delta": 5.8049670625059946e-05
+          },
+          {
+            "index": 17,
+            "state": 0.9880539014074164,
+            "next_state": 0.9880978532949777,
+            "delta": 4.395188756123325e-05
+          },
+          {
+            "index": 18,
+            "state": 0.9880978532949777,
+            "next_state": 0.9881311311482264,
+            "delta": 3.3277853248692146e-05
+          },
+          {
+            "index": 19,
+            "state": 0.9881311311482264,
+            "next_state": 0.9881563272337255,
+            "delta": 2.5196085499112897e-05
+          },
+          {
+            "index": 20,
+            "state": 0.9881563272337255,
+            "next_state": 0.988175404267323,
+            "delta": 1.9077033597492132e-05
+          },
+          {
+            "index": 21,
+            "state": 0.988175404267323,
+            "next_state": 0.9881898483051039,
+            "delta": 1.4444037780947383e-05
+          },
+          {
+            "index": 22,
+            "state": 0.9881898483051039,
+            "next_state": 0.9882007845036671,
+            "delta": 1.0936198563182842e-05
+          },
+          {
+            "index": 23,
+            "state": 0.9882007845036671,
+            "next_state": 0.9882090647671797,
+            "delta": 8.280263512627783e-06
+          },
+          {
+            "index": 24,
+            "state": 0.9882090647671797,
+            "next_state": 0.9882153341087102,
+            "delta": 6.26934153047376e-06
+          },
+          {
+            "index": 25,
+            "state": 0.9882153341087102,
+            "next_state": 0.9882200808952305,
+            "delta": 4.746786520293256e-06
+          },
+          {
+            "index": 26,
+            "state": 0.9882200808952305,
+            "next_state": 0.9882236748902553,
+            "delta": 3.593995024808727e-06
+          },
+          {
+            "index": 27,
+            "state": 0.9882236748902553,
+            "next_state": 0.9882263960575509,
+            "delta": 2.7211672956051203e-06
+          },
+          {
+            "index": 28,
+            "state": 0.9882263960575509,
+            "next_state": 0.9882284563696547,
+            "delta": 2.060312103813189e-06
+          },
+          {
+            "index": 29,
+            "state": 0.9882284563696547,
+            "next_state": 0.9882300163200378,
+            "delta": 1.5599503830898698e-06
+          },
+          {
+            "index": 30,
+            "state": 0.9882300163200378,
+            "next_state": 0.988231197425169,
+            "delta": 1.181105131142779e-06
+          },
+          {
+            "index": 31,
+            "state": 0.988231197425169,
+            "next_state": 0.9882320916903623,
+            "delta": 8.94265193340793e-07
+          }
+        ]
+      }
+    }
+  ]
+}

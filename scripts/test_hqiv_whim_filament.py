@@ -76,6 +76,32 @@ class TestWhimFilament(unittest.TestCase):
                 self.assertLess(abs(val - prev), wf.phi_cosmic_radial(2.0, m.rdisk_kpc) * 0.6)
             prev = val
 
+    def test_solar_whim_boundary_shape_matches_lean(self) -> None:
+        # Lean: max(0, 2(m_whim−m_ism)) / φ(m_ism); φ(0)=2 → shape(0,1)=1
+        self.assertAlmostEqual(wf.solar_whim_boundary_shape(0, 1), 1.0)
+        self.assertAlmostEqual(wf.solar_whim_boundary_shape(0, 8), 8.0)
+
+    def test_pinch_soft_factor_bounded(self) -> None:
+        soft = wf.pinch_soft_factor(16.0, soft_gate=0.08, max_boost=1.5)
+        self.assertGreater(soft, 1.0)
+        self.assertLessEqual(soft, 1.5)
+        self.assertAlmostEqual(wf.pinch_soft_factor(0.0), 1.0)
+
+    def test_pinch_boosts_boundary_when_enabled(self) -> None:
+        # Transitional (not seed-dominated) system so boundary hump is active.
+        master = FakeMaster("NGC2403", 5, 62.0, 2.0, 55.0, 2.0, 0.8, 8.0, 135.0, 3.2)
+        off = wf.WhimFilamentOptions(use_pinch_enhancement=False)
+        on = wf.WhimFilamentOptions(use_pinch_enhancement=True)
+        # Evaluate near filament scale where transitional gate is open.
+        r = max(master.rdisk_kpc * 2.0, 4.0)
+        s_off = wf.whim_phi_part(master, r, options=off)
+        s_on = wf.whim_phi_part(master, r, options=on)
+        self.assertGreater(s_on.lean_phi_pinch_enhancement, 0.0)
+        self.assertAlmostEqual(s_on.solar_whim_boundary_shape, 1.0)
+        self.assertGreater(s_on.pinch_soft_factor, 1.0)
+        if s_off.phi_boundary_m_s2 > 0.0:
+            self.assertGreater(s_on.phi_boundary_m_s2, s_off.phi_boundary_m_s2)
+
 
 if __name__ == "__main__":
     unittest.main()

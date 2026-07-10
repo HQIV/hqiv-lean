@@ -39,14 +39,17 @@ theorem uncentered_ca_rmsd_nonneg (mobile target : List Coord3) :
   unfold uncenteredCaRmsd
   exact Real.sqrt_nonneg _
 
-/-- Fold passes witness gate when Kabsch RMSD ≤ threshold. -/
+/-- Fold passes witness gate when Kabsch RMSD is strictly below the competitive threshold. -/
 def caRmsdPasses (rmsd threshold : ℝ) : Prop :=
-  rmsd ≤ threshold
+  rmsd < threshold
 
-theorem trp_cage_pass_example (rmsd : ℝ) (h : rmsd ≤ trpCageCaRmsdPassAngstrom) :
+theorem trp_cage_pass_example (rmsd : ℝ) (h : rmsd < trpCageCaRmsdPassAngstrom) :
     caRmsdPasses rmsd trpCageCaRmsdPassAngstrom := h
 
-theorem gly_gly_pass_example (rmsd : ℝ) (h : rmsd ≤ glyGlyCaRmsdPassAngstrom) :
+theorem gly_gly_pass_example (rmsd : ℝ) (h : rmsd < glyGlyCaRmsdPassAngstrom) :
     caRmsdPasses rmsd glyGlyCaRmsdPassAngstrom := h
+
+theorem competitive_pass_example (rmsd : ℝ) (h : rmsd < competitiveCaRmsdPassAngstrom) :
+    caRmsdPasses rmsd competitiveCaRmsdPassAngstrom := h
 
 end Hqiv.ProteinResearch

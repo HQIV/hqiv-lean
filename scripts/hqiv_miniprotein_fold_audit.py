@@ -27,10 +27,20 @@ if str(_REPO / "scripts") not in sys.path:
 from hqiv_lab.foundation_panel import peptide_fold_entry
 from hqiv_lab.miniprotein_fold import (
     MiniproteinFoldResult,
+    CURVATURE_WEIGHTED_FOLD_TARGETS,
+    FRAGMENT_FOLD_SPECS,
+    fold_fragment_by_name,
     fold_glycylglycine,
+    fold_miniprotein_fragment,
     fold_trp_cage,
     hydrophobic_contact_pairs,
     radius_of_gyration,
+    run_ladder_with_engine,
+)
+from hqiv_lab.protein_solvent_phase import (
+    CRYO_CRYSTALLOGRAPHY_TEMPERATURE_K,
+    PROTEIN_FOLDING_TEMPERATURE_K,
+    aqueous_bulk_curvature_at_t,
 )
 
 
@@ -103,6 +113,38 @@ def _fetch_trp_cage_ca_from_pdb() -> list[list[float]]:
     return coords
 
 
+def _fetch_pdb_ca_slice(
+  pdb_id: str,
+  *,
+  chain: str = "A",
+  model: int = 1,
+  res_start: int,
+  res_end: int,
+) -> list[list[float]]:
+    """Inclusive 1-based residue Cα slice from wwPDB (model 1 default)."""
+    url = f"https://files.rcsb.org/download/{pdb_id}.pdb"
+    text = urllib.request.urlopen(url, timeout=60).read().decode("utf-8", errors="replace")
+    in_model = False
+    by_res: dict[int, list[float]] = {}
+    for line in text.splitlines():
+        if line.startswith("MODEL"):
+            in_model = int(line.split()[1]) == model
+            continue
+        if line.startswith("ENDMDL") and in_model:
+            break
+        if not in_model or not line.startswith("ATOM"):
+            continue
+        if line[12:16].strip() != "CA" or line[21] != chain:
+            continue
+        res = int(line[22:26])
+        if res_start <= res <= res_end:
+            by_res[res] = [float(line[30:38]), float(line[38:46]), float(line[46:54])]
+    missing = [r for r in range(res_start, res_end + 1) if r not in by_res]
+    if missing:
+        raise RuntimeError(f"{pdb_id} chain {chain}: missing Cα for residues {missing}")
+    return [by_res[r] for r in range(res_start, res_end + 1)]
+
+
 def load_witnesses(path: Path) -> dict[str, Any]:
     payload = json.loads(path.read_text())
     return payload.get("witnesses", payload)
@@ -158,7 +200,119 @@ def audit_fold(
     return row
 
 
-def build_payload(witness_path: Path, *, include_network: bool = False) -> dict[str, Any]:
+def _fold_curvature_weighted_target(
+    name: str,
+    witnesses: dict[str, Any],
+    *,
+    temperature_k: float,
+    include_network: bool,
+    closure_engine: str,
+) -> MiniproteinFoldResult:
+    raw = witnesses.get(name, {}).get("ca_angstrom")
+    witness_ca = [tuple(row) for row in raw] if raw is not None else None
+    if witness_ca is None:
+        raise RuntimeError(f"{name} witness Cα missing — run with --refresh-witnesses")
+    if name == "trp_cage":
+        from hqiv_lab.foundation_panel import peptide_fold_entry
+
+        return fold_trp_cage(
+            witness_ca=list(witness_ca),
+            pass_a=peptide_fold_entry("trp_cage").ca_rmsd_pass_angstrom,
+            include_network=include_network,
+            closure_engine=closure_engine,
+            temperature_k=temperature_k,
+        )
+    return fold_fragment_by_name(
+        name,
+        witness_ca=list(witness_ca),
+        include_network=include_network,
+        closure_engine=closure_engine,
+        temperature_k=temperature_k,
+    )
+
+
+def build_dual_temperature_comparison(
+    witness_path: Path,
+    *,
+    cytosol_k: float = PROTEIN_FOLDING_TEMPERATURE_K,
+    cryo_k: float = CRYO_CRYSTALLOGRAPHY_TEMPERATURE_K,
+    include_network: bool = False,
+    closure_engine: str = "nerf",
+) -> dict[str, Any]:
+    """
+    Cryo vs cytosol fold comparison on curvature-weighted tertiary targets.
+
+    Witness PDB coordinates are fixed; only bulk aqueous ρ and closure dress change with T.
+    """
+    witnesses = load_witnesses(witness_path)
+    rows: list[dict[str, Any]] = []
+    for name in CURVATURE_WEIGHTED_FOLD_TARGETS:
+        cytosol_fold = _fold_curvature_weighted_target(
+            name,
+            witnesses,
+            temperature_k=cytosol_k,
+            include_network=include_network,
+            closure_engine=closure_engine,
+        )
+        cryo_fold = _fold_curvature_weighted_target(
+            name,
+            witnesses,
+            temperature_k=cryo_k,
+            include_network=include_network,
+            closure_engine=closure_engine,
+        )
+        r_cyto = cytosol_fold.ca_rmsd_angstrom
+        r_cryo = cryo_fold.ca_rmsd_angstrom
+        delta = None
+        if r_cyto is not None and r_cryo is not None:
+            delta = r_cryo - r_cyto
+        rows.append(
+            {
+                "name": name,
+                "cytosol_temperature_K": cytosol_k,
+                "cryo_temperature_K": cryo_k,
+                "aqueous_bulk_curvature_cytosol": aqueous_bulk_curvature_at_t(cytosol_k),
+                "aqueous_bulk_curvature_cryo": aqueous_bulk_curvature_at_t(cryo_k),
+                "cytosol": audit_fold(cytosol_fold),
+                "cryo": audit_fold(cryo_fold),
+                "ca_rmsd_delta_cryo_minus_cytosol_A": delta,
+                "cryo_closer_to_witness": (
+                    r_cryo < r_cyto if r_cyto is not None and r_cryo is not None else None
+                ),
+            }
+        )
+    deltas = [
+        r["ca_rmsd_delta_cryo_minus_cytosol_A"]
+        for r in rows
+        if r["ca_rmsd_delta_cryo_minus_cytosol_A"] is not None
+    ]
+    return {
+        "source": "scripts/hqiv_miniprotein_fold_audit.py",
+        "comparison_policy": (
+            "Same PDB witnesses; T dresses bulk aqueous ρ only (ξ lock-in at contact horizon)"
+        ),
+        "closure_engine": closure_engine,
+        "targets": list(CURVATURE_WEIGHTED_FOLD_TARGETS),
+        "cytosol_temperature_K": cytosol_k,
+        "cryo_temperature_K": cryo_k,
+        "comparisons": rows,
+        "summary": {
+            "targets": len(rows),
+            "mean_ca_rmsd_delta_cryo_minus_cytosol_A": (
+                sum(deltas) / len(deltas) if deltas else None
+            ),
+            "cryo_closer_count": sum(1 for r in rows if r.get("cryo_closer_to_witness") is True),
+            "cytosol_closer_count": sum(1 for r in rows if r.get("cryo_closer_to_witness") is False),
+        },
+    }
+
+
+def build_payload(
+    witness_path: Path,
+    *,
+    include_network: bool = False,
+    closure_engine: str = "nerf",
+) -> dict[str, Any]:
     witnesses = load_witnesses(witness_path)
     rows: list[dict[str, Any]] = []
 
@@ -172,6 +326,19 @@ def build_payload(witness_path: Path, *, include_network: bool = False) -> dict[
     )
     rows.append(audit_fold(gg_fold))
 
+    for spec in FRAGMENT_FOLD_SPECS:
+        entry = witnesses.get(spec.name, {})
+        frag_ca = _witness_ca(entry)
+        if frag_ca is None:
+            raise RuntimeError(f"{spec.name} witness Cα missing — run with --refresh-witnesses")
+        frag_fold = fold_miniprotein_fragment(
+            spec,
+            witness_ca=list(frag_ca),
+            include_network=include_network,
+            closure_engine=closure_engine,
+        )
+        rows.append(audit_fold(frag_fold))
+
     tc_ref = peptide_fold_entry("trp_cage")
     tc_w = witnesses.get("trp_cage", {})
     tc_ca = _witness_ca(tc_w)
@@ -182,6 +349,7 @@ def build_payload(witness_path: Path, *, include_network: bool = False) -> dict[
         witness_ca=list(tc_ca),
         pass_a=tc_ref.ca_rmsd_pass_angstrom,
         include_network=include_network,
+        closure_engine=closure_engine,
     )
     tc_row = audit_fold(tc_fold, witness_rg=tc_witness_rg)
     tc_row["tertiary_contacts"] = tc_fold.tertiary_contacts
@@ -199,6 +367,7 @@ def build_payload(witness_path: Path, *, include_network: bool = False) -> dict[
 
     return {
         "source": "scripts/hqiv_miniprotein_fold_audit.py",
+        "closure_engine": closure_engine,
         "comparison_policy": "PDB Cα witnesses grade HQIV fold readouts only",
         "folds": rows,
         "summary": {
@@ -230,11 +399,36 @@ def main() -> int:
         help="Re-fetch 1L2Y + COD:2100438 Cα witnesses from wwPDB/COD",
     )
     parser.add_argument(
+        "--closure-engine",
+        choices=("nerf", "osh"),
+        default="nerf",
+        help="Tertiary closure backend (osh = OSHoracle contact matrix + carrier)",
+    )
+    parser.add_argument(
+        "--compare-osh",
+        action="store_true",
+        help="Print NeRF vs OSH RMSD side-by-side (witness ladder)",
+    )
+    parser.add_argument(
         "--full-network",
         action="store_true",
         help="Build full curvature contact network (slow; default uses O(1) scaffold count)",
     )
     args = parser.parse_args()
+
+    if args.compare_osh:
+        witnesses = load_witnesses(args.witnesses)
+        nerf = run_ladder_with_engine("nerf", witnesses=witnesses, include_network=args.full_network)
+        osh = run_ladder_with_engine("osh", witnesses=witnesses, include_network=args.full_network)
+        print("NeRF vs OSH closure (Cα RMSD vs witnesses)")
+        print("=" * 60)
+        for name in nerf:
+            rn = nerf[name].ca_rmsd_angstrom
+            ro = osh[name].ca_rmsd_angstrom
+            rn_s = f"{rn:.2f}" if rn is not None else "n/a"
+            ro_s = f"{ro:.2f}" if ro is not None else "n/a"
+            print(f"  {name:16s}  nerf={rn_s} Å  osh={ro_s} Å")
+        return 0
 
     if args.refresh_witnesses:
         witnesses = load_witnesses(args.witnesses)
@@ -244,10 +438,28 @@ def main() -> int:
         witnesses.setdefault("GG", {})["ca_angstrom"] = _fetch_gg_ca_from_cod()
         witnesses["GG"]["sequence"] = "GG"
         witnesses["GG"]["structure_id"] = "COD:2100438"
+        fragment_slices = {
+            spec.name: spec.pdb_residue_range
+            for spec in FRAGMENT_FOLD_SPECS
+            if spec.pdb_residue_range is not None
+        }
+        for name, (start, end) in fragment_slices.items():
+            spec = next(s for s in FRAGMENT_FOLD_SPECS if s.name == name)
+            witnesses.setdefault(name, {})
+            witnesses[name]["ca_angstrom"] = _fetch_pdb_ca_slice(
+                "1L2Y", res_start=start, res_end=end
+            )
+            witnesses[name]["sequence"] = spec.sequence
+            witnesses[name]["pdb_id"] = "1L2Y"
+            witnesses[name]["residue_range"] = [start, end]
         save_witnesses(args.witnesses, witnesses)
-        print(f"Refreshed trp_cage + GG witnesses → {args.witnesses}")
+        print(f"Refreshed GG, fragments, and trp_cage witnesses → {args.witnesses}")
 
-    payload = build_payload(args.witnesses, include_network=args.full_network)
+    payload = build_payload(
+        args.witnesses,
+        include_network=args.full_network,
+        closure_engine=args.closure_engine,
+    )
     args.json.parent.mkdir(parents=True, exist_ok=True)
     args.json.write_text(json.dumps(payload, indent=2) + "\n")
 

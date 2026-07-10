@@ -48,6 +48,7 @@ class DerivedPhase(str, Enum):
     GAS = "gas"
     MOLECULAR_CLUSTER = "molecular_cluster"
     LIQUID = "liquid"
+    METASTABLE_LIQUID = "metastable_liquid"
     SOLID = "solid"
     SUPERCRITICAL = "supercritical"
 
@@ -302,16 +303,39 @@ def melt_motif_relative_scale_for_material(material: MaterialThermodynamicScales
 
 def ionic_lattice_melt_cohesive_ev(material: MaterialThermodynamicScales) -> float:
     """
-    Ionic crystal melt slot: κ(ξ)·α²·E_bind / (n_coord²·(1+α)³).
+    Ionic crystal melt slot: κ(ξ)·α²·E_bind / (n_coord²·(1+α)³) · (1+γ)/(1+α).
 
     ``E_bind`` is the per-contact ``ionicBondSurplus`` lattice readout (Python witness);
     ``n_coord`` is the rocksalt coordination (6 for NaCl).  Same κ/α spine as
     ``intermolecular_cohesive_ev``, ionic contact closure instead of tetrahedral H-bond.
+
+    The final ``(1+γ)/(1+α)`` is the monogamy/EM channel ratio — softens the
+    α³ melt denominator by one γ-rung without a salt-name case.
     """
     kappa_xi = lean.dynamic_binding_curvature_coupling_at_xi(material.contact_xi)
     n = float(intermolecular_contact_count(material))
     e_bind = float(material.characteristic_binding_ev)
-    return kappa_xi * KAPPA_MELT * e_bind / (n * n * (1.0 + ALPHA) ** 3)
+    return (
+        kappa_xi
+        * KAPPA_MELT
+        * e_bind
+        / (n * n * (1.0 + ALPHA) ** 3)
+        * (1.0 + GAMMA)
+        / (1.0 + ALPHA)
+    )
+
+
+def ionic_lattice_optical_gap_ev(material: MaterialThermodynamicScales) -> float:
+    """
+    Optical softness for ionic Clausius–Mossotti: ``E_bind · α² · γ / n_coord``.
+
+    Geometric mean of lattice surplus and melt cohesive overshoots or undershoots
+    by salt; the channel product ``α²·γ/n`` is the same HQIV rationals already in
+    the melt spine, applied once to the surplus (no fitted coefficient).
+    """
+    n = float(intermolecular_contact_count(material))
+    e_bind = float(material.characteristic_binding_ev)
+    return e_bind * KAPPA_MELT * GAMMA / max(n, 1.0)
 
 
 def melt_cohesive_ev(material: MaterialThermodynamicScales) -> float:
@@ -397,6 +421,43 @@ def solidification_pressure_Pa(material: MaterialThermodynamicScales) -> float:
     return STP_PRESSURE_PA * max(b_curv * GAMMA, 0.1)
 
 
+def _supports_metastable_liquid_branch(material: MaterialThermodynamicScales) -> bool:
+    """Tetrahedral / H-bond bulk networks admit a supercooled two-liquid branch."""
+    if not material.bulk_condensed:
+        return False
+    motif = material.intermolecular_motif
+    return motif in ("tetrahedral_hbond", "pyramidal_hbond", "polyol_hbond")
+
+
+def _metastable_liquid_kinetic_floor_k(t_melt_k: float) -> float:
+    """Lean ``T_melt · γ·α`` kinetic accessibility floor."""
+    return t_melt_k * GAMMA * ALPHA
+
+
+def _metastable_liquid_allowed(
+    temperature_k: float,
+    pressure_pa: float,
+    t_melt_k: float,
+    material: MaterialThermodynamicScales,
+) -> bool:
+    """
+    Metastable two-liquid branch: deeply supercooled and/or high-pressure path.
+
+    Near ``T_melt`` at 1 atm bulk water crystallizes (solid); high-P or deep
+    supercool (``T < T_melt·α``) opens the metastable liquid slot (LLPT regime).
+    """
+    if not _supports_metastable_liquid_branch(material):
+        return False
+    if temperature_k <= _metastable_liquid_kinetic_floor_k(t_melt_k):
+        return False
+    if temperature_k >= t_melt_k:
+        return False
+    p_metastable = STP_PRESSURE_PA * (1.0 + GAMMA)
+    if pressure_pa >= p_metastable:
+        return True
+    return temperature_k < t_melt_k * ALPHA
+
+
 def derive_phase(
     env: ThermodynamicEnvironment,
     material: MaterialThermodynamicScales,
@@ -441,11 +502,22 @@ def derive_phase(
         periodic = 0.0
         notes = "T ≫ T_boil and P ≫ P_solidify; bulk supercritical fluid"
     elif t < t_melt and p >= p_solid:
-        phase = DerivedPhase.SOLID
-        coord = min(0.95, 0.7 + 0.25 * (p / max(p_solid, 1.0)))
-        persist = 1.0
-        periodic = min(1.0, p / max(p_solid, 1.0))
-        notes = "T < T_melt and P ≥ P_solidify; full coordination + periodic weight"
+        if _metastable_liquid_allowed(t, p, t_melt, material):
+            phase = DerivedPhase.METASTABLE_LIQUID
+            coord = min(0.85, 0.55 + 0.30 * (t / max(t_melt, 1.0)))
+            persist = 0.75 + 0.20 * (p / max(p_solid, 1.0))
+            persist = min(persist, 1.0)
+            periodic = 0.0
+            notes = (
+                "T < T_melt, above kinetic floor: metastable liquid "
+                "(two-liquid branch; LDL/HDL mixture from cohesive ladder)"
+            )
+        else:
+            phase = DerivedPhase.SOLID
+            coord = min(0.95, 0.7 + 0.25 * (p / max(p_solid, 1.0)))
+            persist = 1.0
+            periodic = min(1.0, p / max(p_solid, 1.0))
+            notes = "T < T_melt and P ≥ P_solidify; full coordination + periodic weight"
     elif t_melt <= t <= t_boil and p >= p_vap:
         inter = intermolecular_contact_count(material)
         dilute_assay = (

@@ -20,6 +20,12 @@ HEX_ICE_CA_RATIO = 2.0 * math.sqrt(6.0) / 3.0
 HEX_ICE_A_OVER_R = math.sqrt(8.0 / 3.0)
 # FCC molecular solid: cell edge / centre–centre contact.
 FCC_A_OVER_R = math.sqrt(2.0)
+# FCC metal: cell edge / nn distance.
+FCC_METAL_A_OVER_R = math.sqrt(2.0)
+# BCC alkali: cell edge / nn distance.
+BCC_METAL_A_OVER_R = 2.0 / math.sqrt(3.0)
+# Rocksalt B1: conventional cell edge / nn M–X contact.
+ROCKSALT_A_OVER_R = 2.0
 # Orthorhombic Z=4 molecular: edge / nn (pyramidal / layered H-bond).
 ORTHO_Z4_EDGE_OVER_R = (1.0 + lean.ALPHA) * math.sqrt(3.0 / 2.0)
 
@@ -42,6 +48,9 @@ class BravaisTopology(str, Enum):
     PYRANOSE_CHAIR_Z4 = "pyranose_chair_z4"
     TRIOL_LAYER_Z4 = "triol_layer_z4"
     PEPTIDE_SHEET_Z4 = "peptide_sheet_z4"
+    ROCKSALT_B1 = "rocksalt_b1"
+    FCC_METAL = "fcc_metal"
+    BCC_METAL = "bcc_metal"
     GENERIC_CUBIC = "generic_cubic"
 
 
@@ -233,10 +242,10 @@ def contact_distance_angstrom(
 
 def thermal_contact_scale(temperature_k: float, *, exponent: float | None = None) -> float:
     """
-    Thermal breathing of nn contact distance.
+    Legacy power-law thermal breathing vs ``T_ref = 273.15 K``.
 
-    Low T → tighter pack: ``(T/T_ref)^exponent`` with ``T_ref = 273.15 K``.
-    Apolar solids use ``exponent = γ/16`` (weak zero-point contraction slot).
+    Prefer ``lindemann_contact_scale`` for condensed solids (Brownian piezo).
+    Kept for protein / solvent callers that still use the γ/16 slot.
     """
     t_ref = 273.15
     if temperature_k <= 0.0:
@@ -245,17 +254,179 @@ def thermal_contact_scale(temperature_k: float, *, exponent: float | None = None
     return (temperature_k / t_ref) ** exp
 
 
+def lindemann_thermal_strain_seed(
+    temperature_k: float,
+    melt_k: float,
+    *,
+    motif: IntermolecularMotif | None = None,
+    phonon_cage: float = 0.0,
+) -> float:
+    """Lean ``lindemannThermalStrain`` seed for the piezo↔stiffness fixed point."""
+    import hqiv_voltage_generation_ledger as vgl  # noqa: WPS433
+
+    linear = motif == IntermolecularMotif.LINEAR_CHAIN
+    return float(
+        vgl.lindemann_thermal_strain(
+            temperature_k,
+            melt_k,
+            phonon_cage=phonon_cage,
+            linear_chain=linear,
+        )
+    )
+
+
+def steric_packing_density_dress(
+    n_bonds: int = 0,
+    n_lone_pairs: int = 0,
+) -> float:
+    """
+    Constraint-solve steric fine-tune on condensed density.
+
+    ``1 + (strong·γ/8)·(w_donor − w_apolar)`` with
+    ``w_donor = clamp01((n_σ−n_lp)/n_lp)``, ``w_apolar = 1[n_lp=0]``.
+    Raises NH₃ (donor-rich), softens CH₄ (true apolar); H₂O/HF identity.
+    No motif-name case — steric counts only.
+    """
+    import hqiv_phase_material_response as pmr  # noqa: WPS433
+
+    w_donor = pmr.hbond_donor_excess_weight(n_bonds, n_lone_pairs)
+    w_apolar = 1.0 if n_lone_pairs <= 0 else 0.0
+    amp = lean.STRONG_CHANNEL_FRACTION * lean.GAMMA / 8.0
+    return 1.0 + amp * (w_donor - w_apolar)
+
+
+def density_scale_from_piezo_strain(
+    strain: float,
+    *,
+    motif: IntermolecularMotif | None = None,
+    n_bonds: int = 0,
+    n_lone_pairs: int | None = None,
+) -> float:
+    """
+    ``f = (1+(4/8)·ε) · (1+(4/8)·(γ/2))_apolar / steric_dress`` from equilibrium piezo strain.
+
+    Same volume factor as legacy Lindemann density dress; ε may come from the
+    stiffness fixed point (thermal seed + optional wall stress).  Steric dress
+    from the constraint solve softens true apolars and lifts donor-rich solids.
+    """
+    f = 1.0 + lean.STRONG_CHANNEL_FRACTION * float(strain)
+    if motif == IntermolecularMotif.APOLAR_CLOSE_PACK:
+        # Milder van-der-Waals open: (4/8)·(γ/2) — full γ over-softens CH₄.
+        f *= 1.0 + lean.STRONG_CHANNEL_FRACTION * (lean.GAMMA / 2.0)
+    if n_lone_pairs is not None:
+        dress = steric_packing_density_dress(n_bonds, n_lone_pairs)
+        f /= max(dress, 1e-12)
+    return f
+
+
+def lindemann_density_scale(
+    temperature_k: float,
+    melt_k: float,
+    *,
+    motif: IntermolecularMotif | None = None,
+    phonon_cage: float = 0.0,
+    stress_pa: float = 0.0,
+    r0_angstrom: float | None = None,
+    binding_ev: float | None = None,
+    n_coord: float = 4.0,
+    n_bonds: int = 0,
+    n_lone_pairs: int | None = None,
+) -> float:
+    """
+    Multiplicative density dress ``ρ → ρ / f`` from piezo↔stiffness strain + apolar open
+    + steric fine-tune.
+
+    Seeds ``ε_th = lindemannThermalStrain``, then runs Lean
+    ``strainFromStressStiffness`` fixed point (``piezo_stiffness_equilibrium_strain``).
+    Zero external stress recovers pure Lindemann; wall stress raises ε continuously.
+    ``f = (1+(4/8)·ε*) · (1+(4/8)·γ)_apolar / steric``.  Length scale is ``f^{1/3}``.
+    """
+    eps_th = lindemann_thermal_strain_seed(
+        temperature_k,
+        melt_k,
+        motif=motif,
+        phonon_cage=phonon_cage,
+    )
+    if float(stress_pa) == 0.0 and r0_angstrom is None and binding_ev is None:
+        # Fast path: fixed point is identity at zero stress.
+        return density_scale_from_piezo_strain(
+            eps_th, motif=motif, n_bonds=n_bonds, n_lone_pairs=n_lone_pairs
+        )
+
+    import hqiv_crystal_fracture_witness as cfw  # noqa: WPS433
+
+    r0 = float(r0_angstrom) if r0_angstrom is not None else 5.4
+    be = float(binding_ev) if binding_ev is not None else lean.GAMMA
+    eq = cfw.piezo_stiffness_equilibrium_strain(
+        r0,
+        be,
+        float(n_coord),
+        float(stress_pa),
+        thermal_strain=eps_th,
+    )
+    return density_scale_from_piezo_strain(
+        float(eq["equilibrium_strain"]),
+        motif=motif,
+        n_bonds=n_bonds,
+        n_lone_pairs=n_lone_pairs,
+    )
+
+
+def lindemann_contact_scale(
+    temperature_k: float,
+    melt_k: float,
+    *,
+    motif: IntermolecularMotif | None = None,
+    phonon_cage: float = 0.0,
+    stress_pa: float = 0.0,
+    r0_angstrom: float | None = None,
+    binding_ev: float | None = None,
+    n_coord: float = 4.0,
+    n_bonds: int = 0,
+    n_lone_pairs: int | None = None,
+) -> float:
+    """nn length dress = ``lindemann_density_scale^{1/3}`` (isotropic volume)."""
+    return lindemann_density_scale(
+        temperature_k,
+        melt_k,
+        motif=motif,
+        phonon_cage=phonon_cage,
+        stress_pa=stress_pa,
+        r0_angstrom=r0_angstrom,
+        binding_ev=binding_ev,
+        n_coord=n_coord,
+        n_bonds=n_bonds,
+        n_lone_pairs=n_lone_pairs,
+    ) ** (1.0 / 3.0)
+
+
+def apolar_open_packing_scale() -> float:
+    """Length factor for apolar open alone (γ/2 stress)."""
+    return (1.0 + lean.STRONG_CHANNEL_FRACTION * (lean.GAMMA / 2.0)) ** (1.0 / 3.0)
+
+
 def lattice_constants_from_topology(
     mono: MonomerGeometry,
     template: PackingTemplate,
     *,
     temperature_k: float = 273.15,
+    melt_k: float | None = None,
+    phonon_cage: float = 0.0,
     spec: MoleculeSpec | None = None,
 ) -> tuple[float, float, float]:
     """Bravais (a,b,c) from r_nn and topology — lattice constant ≠ r_nn when Z>1."""
     r = intermolecular_contact_distance_angstrom(mono, spec=spec)
-    if mono.motif == IntermolecularMotif.APOLAR_CLOSE_PACK:
-        r *= thermal_contact_scale(temperature_k, exponent=lean.GAMMA / 16.0)
+    t_melt = float(melt_k) if melt_k is not None and melt_k > 0.0 else max(temperature_k, 1.0)
+    # All condensed motifs: Lindemann / Brownian piezo length dress
+    # (apolar open is folded into lindemann_contact_scale).
+    r *= lindemann_contact_scale(
+        temperature_k,
+        t_melt,
+        motif=mono.motif,
+        phonon_cage=phonon_cage,
+        n_bonds=mono.n_bonds_at_heavy,
+        n_lone_pairs=mono.lone_pair_count,
+    )
     n_dom = _steric_domain_count(mono)
     topo = template.topology
 
@@ -328,6 +499,18 @@ def lattice_constants_from_topology(
         shear = 1.0 + sc * mono.lone_pair_count / max(n_dom, 1)
         open_scale = 1.0 + lean.ALPHA / 8.0
         return edge * open_scale, edge * shear * open_scale, edge / shear * open_scale
+
+    if topo == BravaisTopology.ROCKSALT_B1:
+        a = r * ROCKSALT_A_OVER_R
+        return a, a, a
+
+    if topo == BravaisTopology.FCC_METAL:
+        a = r * FCC_METAL_A_OVER_R
+        return a, a, a
+
+    if topo == BravaisTopology.BCC_METAL:
+        a = r * BCC_METAL_A_OVER_R
+        return a, a, a
 
     # Generic / disordered: legacy factor path.
     a = r * template.a_factor
@@ -497,6 +680,33 @@ def templates_for_motif(
                 description="Dense peptide fcc fallback",
             ),
         )
+    if motif == IntermolecularMotif.IONIC_LATTICE:
+        return (
+            PackingTemplate(
+                "B1",
+                CrystalSystem.CUBIC,
+                4,
+                BravaisTopology.ROCKSALT_B1,
+                description="Rocksalt ionic lattice (CN=6, Z=4 formula units)",
+            ),
+        )
+    if motif == IntermolecularMotif.METALLIC_LATTICE:
+        return (
+            PackingTemplate(
+                "fcc",
+                CrystalSystem.CUBIC,
+                4,
+                BravaisTopology.FCC_METAL,
+                description="FCC metallic close-packed (CN=12)",
+            ),
+            PackingTemplate(
+                "bcc",
+                CrystalSystem.CUBIC,
+                2,
+                BravaisTopology.BCC_METAL,
+                description="BCC alkali metal lattice (CN=8)",
+            ),
+        )
     return (
         PackingTemplate(
             "solid",
@@ -514,9 +724,16 @@ def lattice_constants_from_template(
     template: PackingTemplate,
     *,
     temperature_k: float = 273.15,
+    melt_k: float | None = None,
+    phonon_cage: float = 0.0,
     spec: MoleculeSpec | None = None,
 ) -> tuple[float, float, float]:
     """Return (a, b, c) in ångström from monomer nn contact + Bravais topology."""
     return lattice_constants_from_topology(
-        mono, template, temperature_k=temperature_k, spec=spec
+        mono,
+        template,
+        temperature_k=temperature_k,
+        melt_k=melt_k,
+        phonon_cage=phonon_cage,
+        spec=spec,
     )

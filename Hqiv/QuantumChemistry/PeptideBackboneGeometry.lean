@@ -45,6 +45,29 @@ noncomputable def peptideBondLengthC_N : ℝ := bondLengthAngstromMinTheta 6 7 2
 noncomputable def peptideBondLengthC_O : ℝ :=
   bondLengthAngstromMinTheta 6 8 2 1 1 * (1 - strongChannelFraction / 4)
 
+/-- Bound-system growth coordinate: partial chain occupancy clamped to ``[0,1]``. -/
+noncomputable def boundSystemParticipation (nResidues boundCount : ℕ) : ℝ :=
+  if nResidues = 0 then 1
+  else ((min (max boundCount 1) nResidues : ℕ) : ℝ) / (nResidues : ℝ)
+
+/-- Spectator σ dress grows as the peptide system coagulates. -/
+noncomputable def peptideSigmaDressAtBound (nResidues boundCount : ℕ) : ℝ :=
+  1 + gamma_HQIV / 2 * boundSystemParticipation nResidues boundCount
+
+/-- Cα sp³ exocyclic dress grows with the bound-system participation. -/
+noncomputable def peptideCA_CSp3DressAtBound (nResidues boundCount : ℕ) : ℝ :=
+  Real.sqrt (1 + strongChannelFraction / 4 * boundSystemParticipation nResidues boundCount)
+
+/-- Dynamic N–Cα peptide bond at a partial bound-chain stage. -/
+noncomputable def dynamicPeptideBondLengthN_CA (nResidues boundCount : ℕ) : ℝ :=
+  bondLengthAngstromMinTheta 7 6 2 4 (peptideSigmaDressAtBound nResidues boundCount)
+
+/-- Dynamic Cα–C peptide bond at a partial bound-chain stage. -/
+noncomputable def dynamicPeptideBondLengthCA_C (nResidues boundCount : ℕ) : ℝ :=
+  bondLengthAngstromMinTheta 6 6 4 4
+    (peptideSigmaDressAtBound nResidues boundCount *
+      peptideCA_CSp3DressAtBound nResidues boundCount)
+
 /-- N–Cα–C angle at Cα (sp³ tetrahedral domain). -/
 noncomputable def peptideAngleN_CA_C : ℝ := dynamicCentreAngleRad 6 4
 
@@ -74,6 +97,20 @@ noncomputable def hqivPeptideBondGeometry : PeptideBondGeometry where
   ca_c_n := peptideAngleCA_C_N
   c_n_ca := peptideAngleC_N_CA
 
+/-- Bundled dynamic peptide geometry at a partial bound-chain stage. -/
+noncomputable def dynamicPeptideBondGeometry (nResidues boundCount : ℕ) : PeptideBondGeometry where
+  n_ca := dynamicPeptideBondLengthN_CA nResidues boundCount
+  ca_c := dynamicPeptideBondLengthCA_C nResidues boundCount
+  c_n := peptideBondLengthC_N
+  c_o := peptideBondLengthC_O
+  n_ca_c := peptideAngleN_CA_C
+  ca_c_n := peptideAngleCA_C_N
+  c_n_ca := peptideAngleC_N_CA
+
+/-- Equilibrated full-bound geometry: the growth endpoint for an ``n``-residue chain. -/
+noncomputable def fullBoundPeptideBondGeometry (nResidues : ℕ) : PeptideBondGeometry :=
+  dynamicPeptideBondGeometry nResidues nResidues
+
 /-- Mean backbone bond length along N–Cα–C–N path. -/
 noncomputable def peptideBackboneMeanBond (g : PeptideBondGeometry) : ℝ :=
   (g.n_ca + g.ca_c + g.c_n) / 3
@@ -87,6 +124,52 @@ theorem peptide_backbone_mean_bond_pos (g : PeptideBondGeometry)
   · nlinarith
   · exact h3
 
+theorem boundSystemParticipation_full {n : ℕ} (hn : 0 < n) :
+    boundSystemParticipation n n = 1 := by
+  unfold boundSystemParticipation
+  have hn0 : n ≠ 0 := Nat.ne_of_gt hn
+  have hmax : max n 1 = n := max_eq_left hn
+  simp [hn0, hmax]
+
+theorem peptideSigmaDressAtBound_full {n : ℕ} (hn : 0 < n) :
+    peptideSigmaDressAtBound n n = 1 + gamma_HQIV / 2 := by
+  unfold peptideSigmaDressAtBound
+  rw [boundSystemParticipation_full hn]
+  ring
+
+theorem peptideCA_CSp3DressAtBound_full {n : ℕ} (hn : 0 < n) :
+    peptideCA_CSp3DressAtBound n n =
+      Real.sqrt (1 + strongChannelFraction / 4) := by
+  unfold peptideCA_CSp3DressAtBound
+  rw [boundSystemParticipation_full hn]
+  ring_nf
+
+theorem dynamicPeptideBondLengthN_CA_full {n : ℕ} (hn : 0 < n) :
+    dynamicPeptideBondLengthN_CA n n =
+      bondLengthAngstromMinTheta 7 6 2 4 (1 + gamma_HQIV / 2) := by
+  unfold dynamicPeptideBondLengthN_CA
+  rw [peptideSigmaDressAtBound_full hn]
+
+theorem dynamicPeptideBondLengthCA_C_full {n : ℕ} (hn : 0 < n) :
+    dynamicPeptideBondLengthCA_C n n =
+      bondLengthAngstromMinTheta 6 6 4 4
+        ((1 + gamma_HQIV / 2) * Real.sqrt (1 + strongChannelFraction / 4)) := by
+  unfold dynamicPeptideBondLengthCA_C
+  rw [peptideSigmaDressAtBound_full hn, peptideCA_CSp3DressAtBound_full hn]
+
+theorem fullBoundPeptideBondGeometry_n_ca {n : ℕ} (hn : 0 < n) :
+    (fullBoundPeptideBondGeometry n).n_ca =
+      bondLengthAngstromMinTheta 7 6 2 4 (1 + gamma_HQIV / 2) := by
+  unfold fullBoundPeptideBondGeometry dynamicPeptideBondGeometry
+  exact dynamicPeptideBondLengthN_CA_full hn
+
+theorem fullBoundPeptideBondGeometry_ca_c {n : ℕ} (hn : 0 < n) :
+    (fullBoundPeptideBondGeometry n).ca_c =
+      bondLengthAngstromMinTheta 6 6 4 4
+        ((1 + gamma_HQIV / 2) * Real.sqrt (1 + strongChannelFraction / 4)) := by
+  unfold fullBoundPeptideBondGeometry dynamicPeptideBondGeometry
+  exact dynamicPeptideBondLengthCA_C_full hn
+
 theorem centre_lone_pair_count_c_alpha_sp3 : centreLonePairCount 6 4 = 0 := by decide
 
 theorem steric_domain_count_c_alpha_sp3 : stericDomainCount 4 (centreLonePairCount 6 4) = 4 := by decide
@@ -96,6 +179,22 @@ theorem peptide_angle_n_ca_c_eq_dynamic_centre :
 
 theorem peptide_angle_c_n_ca_eq_dynamic_centre :
     peptideAngleC_N_CA = dynamicCentreAngleRad 7 3 := rfl
+
+theorem peptide_angle_ca_c_n_uses_bent_dress :
+    peptideAngleCA_C_N = Real.pi - dynamicCentreAngleRad 6 3 / 2 := rfl
+
+theorem dynamicCentreAngleRad_c_alpha_sp3_eq_bent :
+    dynamicCentreAngleRad 6 4 =
+      centreAngleBentDress (centreAngleRadFromDomains 4) 0 4 := by
+  dsimp [dynamicCentreAngleRad, centreLonePairCount, stericDomainCount, period2ValenceElectronCount,
+    centreAngleBentDress, centreAngleRadFromDomains]
+  norm_num
+
+theorem dynamicCentreAngleRad_c_alpha_sp3_eq_tetrahedral :
+    dynamicCentreAngleRad 6 4 = centreAngleRadFromDomains 4 := by
+  rw [dynamicCentreAngleRad_c_alpha_sp3_eq_bent]
+  dsimp [centreAngleBentDress, centreAngleRadFromDomains]
+  norm_num
 
 /-- Peptide backbone diameter factor ``2(1 + α + γ/8)`` (sheet layer). -/
 noncomputable def peptideBackboneDiameterFactor : ℝ := 2 * (1 + alpha + gamma_HQIV / 8)

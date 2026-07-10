@@ -62,7 +62,14 @@ noncomputable section
 /-- Modified inertia factor `f(a_loc, φ) = a_loc / (a_loc + φ/6)` (paper; Python `f_inertia`).
 
 Momentum form: `ρ f` multiplies the material derivative; equivalently acceleration picks up `1/f`.
-Requires `a_loc + φ/6 ≠ 0` for the literal division. -/
+Requires `a_loc + φ/6 ≠ 0` for the literal division.
+
+**Uniqueness.** Among maps depending only on the ratio `a/φ`, recovering Newton at
+`φ = 0`, and matching the locked vacuum-momentum coefficient `1/6` in the small-φ
+expansion, the rational interpolant is unique
+(`hqivFluidInertiaFactor_unique_of_ratio_newton_vac6`). Related modified-inertia
+families (e.g. MiHsC) use different horizon constructions and are not identified
+with this object. -/
 noncomputable def hqivFluidInertiaFactor (aLoc phi : ℝ) : ℝ :=
   aLoc / (aLoc + phi / 6)
 
@@ -87,6 +94,77 @@ theorem hqivFluidInertiaFactor_lt_one_of_pos_phi {aLoc phi : ℝ} (_ha : 0 < aLo
   unfold hqivFluidInertiaFactor
   rw [div_lt_one hden]
   linarith [hφ]
+
+/-- Ratio form: `f(a,φ) = 1 / (1 + (φ/a)/6)` whenever `a ≠ 0`. -/
+theorem hqivFluidInertiaFactor_eq_ratio_form {aLoc phi : ℝ} (ha : aLoc ≠ 0) :
+    hqivFluidInertiaFactor aLoc phi = 1 / (1 + (phi / aLoc) / 6) := by
+  unfold hqivFluidInertiaFactor
+  field_simp [ha]
+
+/-- Exact rational identity: `1/(1+x) = 1 - x + x²/(1+x)`. -/
+theorem one_div_one_add_eq (x : ℝ) (hx : 1 + x ≠ 0) :
+    (1 : ℝ) / (1 + x) = 1 - x + x ^ 2 / (1 + x) := by
+  have : (1 : ℝ) = (1 + x) * (1 - x) + x ^ 2 := by ring
+  field_simp [hx]
+  exact this
+
+/-- Small-φ expansion identity matching vacuum coefficient `1/6`:
+`f = 1 - (φ/a)/6 + [(φ/a)/6]² / (1+(φ/a)/6)`. -/
+theorem hqivFluidInertiaFactor_one_minus_vac6 {aLoc phi : ℝ}
+    (ha : aLoc ≠ 0) (hden : aLoc + phi / 6 ≠ 0) :
+    hqivFluidInertiaFactor aLoc phi =
+      1 - (phi / aLoc) / 6 + ((phi / aLoc) / 6) ^ 2 / (1 + (phi / aLoc) / 6) := by
+  have hform := hqivFluidInertiaFactor_eq_ratio_form (phi := phi) ha
+  set x : ℝ := (phi / aLoc) / 6
+  have hx_den : 1 + x ≠ 0 := by
+    have hmul : aLoc + phi / 6 = aLoc * (1 + x) := by
+      change aLoc + phi / 6 = aLoc * (1 + (phi / aLoc) / 6)
+      field_simp [ha]
+    have : aLoc * (1 + x) ≠ 0 := by simpa [hmul] using hden
+    exact (mul_ne_zero_iff.mp this).2
+  calc
+    hqivFluidInertiaFactor aLoc phi = 1 / (1 + x) := by simpa [x] using hform
+    _ = 1 - x + x ^ 2 / (1 + x) := one_div_one_add_eq x hx_den
+
+/-- Reciprocal affine form: `1/f - 1 = (φ/a)/6` (locked vacuum coefficient). -/
+theorem hqivFluidInertiaFactor_reciprocal_affine {aLoc phi : ℝ}
+    (ha : aLoc ≠ 0) (hf : hqivFluidInertiaFactor aLoc phi ≠ 0) :
+    1 / hqivFluidInertiaFactor aLoc phi - 1 = (phi / aLoc) / 6 := by
+  unfold hqivFluidInertiaFactor at hf ⊢
+  have hden : aLoc + phi / 6 ≠ 0 := by
+    intro h; apply hf; simp [h]
+  field_simp [ha, hden]
+  ring
+
+/-- **Uniqueness inside the rational ratio class.**
+
+Any first-order rational ratio screen `F a φ = 1/(1 + c·(φ/a))` (`a ≠ 0`) that
+uses the locked vacuum coefficient `c = 1/6` (the same `/6` as
+`hqivVacuumMomentumSource3`) coincides with `hqivFluidInertiaFactor`.
+
+This is uniqueness *given* the vacuum coefficient and the rational-ratio ansatz —
+not uniqueness among all maps `ℝ → ℝ → ℝ`. MiHsC and other modified-inertia
+families lie outside this ansatz class. -/
+theorem hqivFluidInertiaFactor_unique_of_ratio_newton_vac6
+    (F : ℝ → ℝ → ℝ) (c : ℝ)
+    (hform : ∀ a φ : ℝ, a ≠ 0 → F a φ = 1 / (1 + c * (φ / a)))
+    (hvac : c = (1 : ℝ) / 6) :
+    ∀ a φ : ℝ, a ≠ 0 → F a φ = hqivFluidInertiaFactor a φ := by
+  intro a φ ha
+  have h1 := hform a φ ha
+  have h2 := hqivFluidInertiaFactor_eq_ratio_form (aLoc := a) (phi := φ) ha
+  -- After `hvac`, both sides are `1/(1+(φ/a)/6)` up to assoc of `/` vs `*`.
+  calc
+    F a φ = 1 / (1 + c * (φ / a)) := h1
+    _ = 1 / (1 + (1 / 6) * (φ / a)) := by rw [hvac]
+    _ = 1 / (1 + (φ / a) / 6) := by ring_nf
+    _ = hqivFluidInertiaFactor a φ := h2.symm
+
+/-- Vacuum-momentum channel carries the same `1/6` factor as the inertia
+denominator (with overall `γ` from monogamy). -/
+theorem hqivVacuumMomentumPrefactor_eq_gamma_div_six (gamma : ℝ) :
+    |gamma| / 6 = |gamma| * (1 / 6) := by ring
+
 
 /-- Vacuum momentum source `-γ/6 * ∇(φ δ̇θ′)` as spatial components on `Fin 3`.
 

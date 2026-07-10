@@ -56,6 +56,10 @@ ENTRY_SCRIPTS = [
     "hqiv_bbn_paper_tables.py",
     "test_hqiv_bbn_integrator.py",
     "hqiv_integrator_lean_audit.py",
+    "hqiv_decay_calculator.py",
+    "hqiv_decay_chain.py",
+    "hqiv_post_alpha_binding_program.py",
+    "hqiv_post_alpha_sphere_touching.py",
 ]
 
 DATA_MIRROR = [

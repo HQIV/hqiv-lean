@@ -18,6 +18,31 @@ def zero3 : Coord3 := fun _ => 0
 /-- Componentwise subtraction. -/
 def sub3 (a b : Coord3) : Coord3 := fun i => a i - b i
 
+/-- Componentwise affine relaxation from an assembly-path point toward equilibrium. -/
+def relaxCoord3 (relax : ℝ) (assembly equilibrium : Coord3) : Coord3 :=
+  add3 (smul3 (1 - relax) assembly) (smul3 relax equilibrium)
+
+/-- No relaxation keeps the assembly-path coordinate. -/
+theorem relaxCoord3_zero (assembly equilibrium : Coord3) :
+    relaxCoord3 0 assembly equilibrium = assembly := by
+  funext i
+  unfold relaxCoord3 add3 smul3
+  ring
+
+/-- Unit relaxation recovers the equilibrium coordinate. -/
+theorem relaxCoord3_one (assembly equilibrium : Coord3) :
+    relaxCoord3 1 assembly equilibrium = equilibrium := by
+  funext i
+  unfold relaxCoord3 add3 smul3
+  ring
+
+/-- Relaxing a coordinate toward itself is a no-op at any relaxation parameter. -/
+theorem relaxCoord3_self (relax : ℝ) (p : Coord3) :
+    relaxCoord3 relax p p = p := by
+  funext i
+  unfold relaxCoord3 add3 smul3
+  ring
+
 /-- Euclidean norm. -/
 noncomputable def norm3 (v : Coord3) : ℝ := Real.sqrt (normSq3 v)
 

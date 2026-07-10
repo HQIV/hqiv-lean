@@ -1,0 +1,314 @@
+{
+  "source": "scripts/hqiv_spectral_residual_audit.py",
+  "input": "scripts/hqiv_spectral_scale_anchor_feedback.py",
+  "policy": "After omega* spectral anchoring, classify remaining residuals by independent physical slot; do not fit against NIST residuals.",
+  "summary": {
+    "count": 9,
+    "reliable_geometry_count": 9,
+    "slot_counts": {
+      "near-closed after spectral anchor": 9
+    },
+    "max_residual_row": "Cl2",
+    "mean_B_e_independent_multiplicative_pct_reliable": 0.18508436927383698,
+    "diagnosis": "Most B_e residual is length-propagated through B_e ~ 1/r_e^2; after shell length/energy dresses the reliable panel is near-closed, so remaining work is finer contact geometry and non-spectral feedback."
+  },
+  "rows": [
+    {
+      "name": "Cl2",
+      "geometry_reliable": true,
+      "comparison_regime": "gas_vapor",
+      "geometry_route": "period3_halogen_open_channel",
+      "spectral_pin": {
+        "s_star": 0.255302533560911,
+        "em_star": 1.1276512667804555,
+        "contact_share": 0.2,
+        "length_scale": 1.0194078414745718
+      },
+      "features": {
+        "bond_order": 1,
+        "shared_channel_capacity": 3,
+        "monogamy_channel_defect": 1,
+        "bond_ionic_character": 0.0,
+        "geometry_outside_candidate_clears_floor": true
+      },
+      "residuals": {
+        "r_e_signed_pct": 2.2515680782759784,
+        "D_e_signed_pct": -3.696952796753239,
+        "B_e_signed_pct": -4.103244771311665,
+        "r_e_multiplicative_pct": 2.2515680782759784,
+        "D_e_multiplicative_pct": 3.838874162466377,
+        "B_e_multiplicative_pct": 4.278815025103322,
+        "B_e_expected_from_r_e_signed_pct": -4.35549005586352,
+        "B_e_independent_signed_pct": 0.2637321103941881,
+        "B_e_independent_multiplicative_pct": 0.2637321103941881
+      },
+      "missing_slots": [
+        "near-closed after spectral anchor"
+      ]
+    },
+    {
+      "name": "CO",
+      "geometry_reliable": true,
+      "comparison_regime": "gas_vapor",
+      "geometry_route": "covalent_nested_wf",
+      "spectral_pin": {
+        "s_star": 0.38705448234075907,
+        "em_star": 1.1935272411703794,
+        "contact_share": 0.2,
+        "length_scale": 1.0247245259284858
+      },
+      "features": {
+        "bond_order": 2,
+        "shared_channel_capacity": 3,
+        "monogamy_channel_defect": 0,
+        "bond_ionic_character": 0.027777777777777776,
+        "geometry_outside_candidate_clears_floor": true
+      },
+      "residuals": {
+        "r_e_signed_pct": -0.9019709525319275,
+        "D_e_signed_pct": 3.599923616925671,
+        "B_e_signed_pct": 2.0978639195480486,
+        "r_e_multiplicative_pct": 0.910180516405501,
+        "D_e_multiplicative_pct": 3.599923616925671,
+        "B_e_multiplicative_pct": 2.0978639195480486,
+        "B_e_expected_from_r_e_signed_pct": 1.82864531853546,
+        "B_e_independent_signed_pct": 0.2643839561750294,
+        "B_e_independent_multiplicative_pct": 0.2643839561750294
+      },
+      "missing_slots": [
+        "near-closed after spectral anchor"
+      ]
+    },
+    {
+      "name": "HCl",
+      "geometry_reliable": true,
+      "comparison_regime": "gas_vapor",
+      "geometry_route": "covalent_nested_wf",
+      "spectral_pin": {
+        "s_star": 0.3459320512295561,
+        "em_star": 1.172966025614778,
+        "contact_share": 0.2,
+        "length_scale": 1.0176203878343584
+      },
+      "features": {
+        "bond_order": 1,
+        "shared_channel_capacity": 1,
+        "monogamy_channel_defect": 0,
+        "bond_ionic_character": 0.17522985397512184,
+        "geometry_outside_candidate_clears_floor": true
+      },
+      "residuals": {
+        "r_e_signed_pct": -1.0945327971925267,
+        "D_e_signed_pct": 2.1952414530139963,
+        "B_e_signed_pct": 2.229598894517615,
+        "r_e_multiplicative_pct": 1.106645393978245,
+        "D_e_multiplicative_pct": 2.1952414530139963,
+        "B_e_multiplicative_pct": 2.229598894517615,
+        "B_e_expected_from_r_e_signed_pct": 2.2255374282366125,
+        "B_e_independent_signed_pct": 0.003973044684513205,
+        "B_e_independent_multiplicative_pct": 0.003973044684513205
+      },
+      "missing_slots": [
+        "near-closed after spectral anchor"
+      ]
+    },
+    {
+      "name": "F2",
+      "geometry_reliable": true,
+      "comparison_regime": "gas_vapor",
+      "geometry_route": "covalent_nested_wf",
+      "spectral_pin": {
+        "s_star": 0.42500681086906583,
+        "em_star": 1.212503405434533,
+        "contact_share": 0.2,
+        "length_scale": 1.0313101089028127
+      },
+      "features": {
+        "bond_order": 1,
+        "shared_channel_capacity": 3,
+        "monogamy_channel_defect": 1,
+        "bond_ionic_character": 0.0,
+        "geometry_outside_candidate_clears_floor": true
+      },
+      "residuals": {
+        "r_e_signed_pct": 0.9791647072622256,
+        "D_e_signed_pct": -0.19225841984573666,
+        "B_e_signed_pct": -1.7905881887439357,
+        "r_e_multiplicative_pct": 0.9791647072622256,
+        "D_e_multiplicative_pct": 0.1926287648652325,
+        "B_e_multiplicative_pct": 1.82323481601252,
+        "B_e_expected_from_r_e_signed_pct": -1.929937481025057,
+        "B_e_independent_signed_pct": 0.1420915707626369,
+        "B_e_independent_multiplicative_pct": 0.1420915707626369
+      },
+      "missing_slots": [
+        "near-closed after spectral anchor"
+      ]
+    },
+    {
+      "name": "HF",
+      "geometry_reliable": true,
+      "comparison_regime": "gas_vapor",
+      "geometry_route": "covalent_nested_wf",
+      "spectral_pin": {
+        "s_star": 0.39810093394562124,
+        "em_star": 1.1990504669728106,
+        "contact_share": 0.2,
+        "length_scale": 1.0198261072369663
+      },
+      "features": {
+        "bond_order": 1,
+        "shared_channel_capacity": 1,
+        "monogamy_channel_defect": 0,
+        "bond_ionic_character": 0.1975308641975308,
+        "geometry_outside_candidate_clears_floor": true
+      },
+      "residuals": {
+        "r_e_signed_pct": 0.7235131801351491,
+        "D_e_signed_pct": 0.39833363245791453,
+        "B_e_signed_pct": -1.4241520968356403,
+        "r_e_multiplicative_pct": 0.7235131801351491,
+        "D_e_multiplicative_pct": 0.39833363245791453,
+        "B_e_multiplicative_pct": 1.4447272096859365,
+        "B_e_expected_from_r_e_signed_pct": -1.4314723576605348,
+        "B_e_independent_signed_pct": 0.007426570123336695,
+        "B_e_independent_multiplicative_pct": 0.007426570123336695
+      },
+      "missing_slots": [
+        "near-closed after spectral anchor"
+      ]
+    },
+    {
+      "name": "N2",
+      "geometry_reliable": true,
+      "comparison_regime": "gas_vapor",
+      "geometry_route": "covalent_nested_wf",
+      "spectral_pin": {
+        "s_star": 0.4572550435689653,
+        "em_star": 1.2286275217844826,
+        "contact_share": 0.2,
+        "length_scale": 1.0250154905946052
+      },
+      "features": {
+        "bond_order": 3,
+        "shared_channel_capacity": 3,
+        "monogamy_channel_defect": 0,
+        "bond_ionic_character": 0.0,
+        "geometry_outside_candidate_clears_floor": true
+      },
+      "residuals": {
+        "r_e_signed_pct": 0.8444072197755448,
+        "D_e_signed_pct": -0.17702467839540992,
+        "B_e_signed_pct": -1.393803884203959,
+        "r_e_multiplicative_pct": 0.8444072197755448,
+        "D_e_multiplicative_pct": 0.17733861150208696,
+        "B_e_multiplicative_pct": 1.4135053770527595,
+        "B_e_expected_from_r_e_signed_pct": -1.6676620493548344,
+        "B_e_independent_signed_pct": 0.2785026481200159,
+        "B_e_independent_multiplicative_pct": 0.2785026481200159
+      },
+      "missing_slots": [
+        "near-closed after spectral anchor"
+      ]
+    },
+    {
+      "name": "LiH",
+      "geometry_reliable": true,
+      "comparison_regime": "gas_vapor",
+      "geometry_route": "covalent_nested_wf",
+      "spectral_pin": {
+        "s_star": 0.06635482159003232,
+        "em_star": 1.0331774107950162,
+        "contact_share": 0.2,
+        "length_scale": 1.0049085592812765
+      },
+      "features": {
+        "bond_order": 1,
+        "shared_channel_capacity": 1,
+        "monogamy_channel_defect": 0,
+        "bond_ionic_character": 0.09972299168975068,
+        "geometry_outside_candidate_clears_floor": true
+      },
+      "residuals": {
+        "r_e_signed_pct": -0.14048695440987968,
+        "D_e_signed_pct": 1.0927784048784694,
+        "B_e_signed_pct": 0.35127371286542974,
+        "r_e_multiplicative_pct": 0.14068459791680699,
+        "D_e_multiplicative_pct": 1.0927784048784694,
+        "B_e_multiplicative_pct": 0.35127371286542974,
+        "B_e_expected_from_r_e_signed_pct": 0.2815671173945544,
+        "B_e_independent_signed_pct": 0.06951087570190584,
+        "B_e_independent_multiplicative_pct": 0.06951087570190584
+      },
+      "missing_slots": [
+        "near-closed after spectral anchor"
+      ]
+    },
+    {
+      "name": "LiF",
+      "geometry_reliable": true,
+      "comparison_regime": "gas_vapor",
+      "geometry_route": "covalent_nested_wf",
+      "spectral_pin": {
+        "s_star": 0.12189708554348834,
+        "em_star": 1.0609485427717442,
+        "contact_share": 0.2,
+        "length_scale": 1.009245668841839
+      },
+      "features": {
+        "bond_order": 1,
+        "shared_channel_capacity": 1,
+        "monogamy_channel_defect": 0,
+        "bond_ionic_character": 0.4444444444444444,
+        "geometry_outside_candidate_clears_floor": true
+      },
+      "residuals": {
+        "r_e_signed_pct": 0.1469780992584102,
+        "D_e_signed_pct": -0.9716622226455973,
+        "B_e_signed_pct": 0.16393487083579128,
+        "r_e_multiplicative_pct": 0.1469780992584102,
+        "D_e_multiplicative_pct": 0.9811961348176856,
+        "B_e_multiplicative_pct": 0.16393487083579128,
+        "B_e_expected_from_r_e_signed_pct": -0.2933093893791039,
+        "B_e_independent_signed_pct": 0.4585893458249002,
+        "B_e_independent_multiplicative_pct": 0.4585893458249002
+      },
+      "missing_slots": [
+        "near-closed after spectral anchor"
+      ]
+    },
+    {
+      "name": "O2",
+      "geometry_reliable": true,
+      "comparison_regime": "gas_vapor",
+      "geometry_route": "covalent_nested_wf",
+      "spectral_pin": {
+        "s_star": 0.4125063117281797,
+        "em_star": 1.2062531558640899,
+        "contact_share": 0.2,
+        "length_scale": 1.0266002950919595
+      },
+      "features": {
+        "bond_order": 2,
+        "shared_channel_capacity": 3,
+        "monogamy_channel_defect": 1,
+        "bond_ionic_character": 0.0,
+        "geometry_outside_candidate_clears_floor": true
+      },
+      "residuals": {
+        "r_e_signed_pct": 0.4239649639455667,
+        "D_e_signed_pct": 0.4156101105366572,
+        "B_e_signed_pct": -0.6665146317301751,
+        "r_e_multiplicative_pct": 0.4239649639455667,
+        "D_e_multiplicative_pct": 0.4156101105366572,
+        "B_e_multiplicative_pct": 0.670986857311151,
+        "B_e_expected_from_r_e_signed_pct": -0.8425678608975584,
+        "B_e_independent_signed_pct": 0.1775492016780067,
+        "B_e_independent_multiplicative_pct": 0.1775492016780067
+      },
+      "missing_slots": [
+        "near-closed after spectral anchor"
+      ]
+    }
+  ]
+}

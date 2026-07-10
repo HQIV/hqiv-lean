@@ -1,0 +1,1243 @@
+{
+  "source": "scripts/hqiv_carbon_feedback_tease.py",
+  "parameter_policy": "no fitted coefficients; stresses are assay conditions",
+  "input_policy": "CRC bond lengths only as quarantine residual diagnostics",
+  "foundation": {
+    "alpha": 0.6,
+    "gamma": 0.4,
+    "strong_channel_fraction": 0.5,
+    "xi_carbon": 5.0,
+    "dielectric_CC": {
+      "n_curvature_dielectric": 2.7184940053656135,
+      "clausius_mossotti_s": 0.36420391832890664
+    }
+  },
+  "stress_defaults": {
+    "strain": 0.02,
+    "photon_excess": 0.05,
+    "release_contrast": 0.05,
+    "phase_rate": 0.02,
+    "phi_epsilon": 1e-06,
+    "rho_bulk": 1.0
+  },
+  "graphene": {
+    "motif": "graphene",
+    "label": "sp2 honeycomb",
+    "coordination": 3,
+    "bond_order": 1.3333333333333333,
+    "bond_angstrom": 1.2095479106354288,
+    "bond_angle_deg": 120.00000000000001,
+    "xi_contact": 5.0,
+    "dielectric": {
+      "n_curvature_dielectric": 2.7184940053656135,
+      "clausius_mossotti_s": 0.36420391832890664
+    },
+    "coordination_excess_vs_diamond": 0.25,
+    "length_residual_fraction_quarantine": 0.1488051297428369,
+    "baseline_electro_contact_dress": 1.0,
+    "channels": [
+      {
+        "channel": "baseline_dilute_unstressed",
+        "note": "mass-pin assay: all environment + EMF channels at identity",
+        "outside": {
+          "grav": 1.0,
+          "em": 1.0,
+          "bulk": 1.0,
+          "local_defect": 1.0,
+          "contact": 1.0,
+          "dress": 1.0,
+          "channels": {
+            "grav": "outsideGravityGeffModulator (Ricci / gravitational G_eff)",
+            "em": "1+(4/8)\u00b7curvatureConcentrationWeight (electric / dielectric)",
+            "bulk": "scaleOutsideCouplingForMediumDensity (medium density \u03c1)",
+            "local_defect": "1+localCurvatureDefectExcess (nucleation / wall / interface)",
+            "contact": "outsideGeffSurplus (bond-summed G_eff participation)"
+          }
+        },
+        "voltage": {
+          "chemo": 1.0,
+          "thermo": 1.0,
+          "photo": 1.0,
+          "piezo": 1.0,
+          "tribo": 1.0,
+          "faraday": 1.0,
+          "dress": 1.0,
+          "channels": {
+            "chemo": "galvanic / chemical potential (ionic asymmetry)",
+            "thermo": "thermoelectric / Seebeck (\u0394T / \u03be contrast)",
+            "photo": "photoelectric / photovoltaic (photon-phase excess)",
+            "piezo": "piezoelectric (strain \u2192 polarization)",
+            "tribo": "triboelectric (contact electrification asymmetry)",
+            "faraday": "Faraday induction (phase-rate / flux proxy)"
+          }
+        },
+        "electro_contact_dress": 1.0,
+        "dress_over_baseline": 1.0,
+        "preferred_axis_gap": 0.0,
+        "graph_hyperclosure_weak": 1.2113248654051871,
+        "full_optional_times_axis": 1.2113248654051871
+      },
+      {
+        "channel": "em_only",
+        "note": "C\u2013C curvature dielectric n=2.7185 opens em; bulk/local/grav stay 1",
+        "outside": {
+          "grav": 1.0,
+          "em": 1.1821019591644533,
+          "bulk": 1.0,
+          "local_defect": 1.0,
+          "contact": 1.0,
+          "dress": 1.1821019591644533,
+          "channels": {
+            "grav": "outsideGravityGeffModulator (Ricci / gravitational G_eff)",
+            "em": "1+(4/8)\u00b7curvatureConcentrationWeight (electric / dielectric)",
+            "bulk": "scaleOutsideCouplingForMediumDensity (medium density \u03c1)",
+            "local_defect": "1+localCurvatureDefectExcess (nucleation / wall / interface)",
+            "contact": "outsideGeffSurplus (bond-summed G_eff participation)"
+          }
+        },
+        "voltage": {
+          "chemo": 1.0,
+          "thermo": 1.0,
+          "photo": 1.0,
+          "piezo": 1.0,
+          "tribo": 1.0,
+          "faraday": 1.0,
+          "dress": 1.0,
+          "channels": {
+            "chemo": "galvanic / chemical potential (ionic asymmetry)",
+            "thermo": "thermoelectric / Seebeck (\u0394T / \u03be contrast)",
+            "photo": "photoelectric / photovoltaic (photon-phase excess)",
+            "piezo": "piezoelectric (strain \u2192 polarization)",
+            "tribo": "triboelectric (contact electrification asymmetry)",
+            "faraday": "Faraday induction (phase-rate / flux proxy)"
+          }
+        },
+        "electro_contact_dress": 1.1821019591644533,
+        "dress_over_baseline": 1.1821019591644533,
+        "preferred_axis_gap": 0.0,
+        "graph_hyperclosure_weak": 1.2113248654051871,
+        "full_optional_times_axis": 1.4319094965800894
+      },
+      {
+        "channel": "bulk_only_rho1",
+        "note": "\u03be_C=5.0 has B_hom=1, so bulk(\u03c1=1.0) stays identity (medium-density feedback is a no-op at carbon's Compton shell)",
+        "outside": {
+          "grav": 1.0,
+          "em": 1.0,
+          "bulk": 1.0,
+          "local_defect": 1.0,
+          "contact": 1.0,
+          "dress": 1.0,
+          "channels": {
+            "grav": "outsideGravityGeffModulator (Ricci / gravitational G_eff)",
+            "em": "1+(4/8)\u00b7curvatureConcentrationWeight (electric / dielectric)",
+            "bulk": "scaleOutsideCouplingForMediumDensity (medium density \u03c1)",
+            "local_defect": "1+localCurvatureDefectExcess (nucleation / wall / interface)",
+            "contact": "outsideGeffSurplus (bond-summed G_eff participation)"
+          }
+        },
+        "voltage": {
+          "chemo": 1.0,
+          "thermo": 1.0,
+          "photo": 1.0,
+          "piezo": 1.0,
+          "tribo": 1.0,
+          "faraday": 1.0,
+          "dress": 1.0,
+          "channels": {
+            "chemo": "galvanic / chemical potential (ionic asymmetry)",
+            "thermo": "thermoelectric / Seebeck (\u0394T / \u03be contrast)",
+            "photo": "photoelectric / photovoltaic (photon-phase excess)",
+            "piezo": "piezoelectric (strain \u2192 polarization)",
+            "tribo": "triboelectric (contact electrification asymmetry)",
+            "faraday": "Faraday induction (phase-rate / flux proxy)"
+          }
+        },
+        "electro_contact_dress": 1.0,
+        "dress_over_baseline": 1.0,
+        "preferred_axis_gap": 0.0,
+        "graph_hyperclosure_weak": 1.2113248654051871,
+        "full_optional_times_axis": 1.2113248654051871
+      },
+      {
+        "channel": "localDefect_only",
+        "note": "\u03b4=|k\u22124|/4=0.2500 vs diamond reference; excess=0.0500",
+        "outside": {
+          "grav": 1.0,
+          "em": 1.0,
+          "bulk": 1.0,
+          "local_defect": 1.05,
+          "contact": 1.0,
+          "dress": 1.05,
+          "channels": {
+            "grav": "outsideGravityGeffModulator (Ricci / gravitational G_eff)",
+            "em": "1+(4/8)\u00b7curvatureConcentrationWeight (electric / dielectric)",
+            "bulk": "scaleOutsideCouplingForMediumDensity (medium density \u03c1)",
+            "local_defect": "1+localCurvatureDefectExcess (nucleation / wall / interface)",
+            "contact": "outsideGeffSurplus (bond-summed G_eff participation)"
+          }
+        },
+        "voltage": {
+          "chemo": 1.0,
+          "thermo": 1.0,
+          "photo": 1.0,
+          "piezo": 1.0,
+          "tribo": 1.0,
+          "faraday": 1.0,
+          "dress": 1.0,
+          "channels": {
+            "chemo": "galvanic / chemical potential (ionic asymmetry)",
+            "thermo": "thermoelectric / Seebeck (\u0394T / \u03be contrast)",
+            "photo": "photoelectric / photovoltaic (photon-phase excess)",
+            "piezo": "piezoelectric (strain \u2192 polarization)",
+            "tribo": "triboelectric (contact electrification asymmetry)",
+            "faraday": "Faraday induction (phase-rate / flux proxy)"
+          }
+        },
+        "electro_contact_dress": 1.05,
+        "dress_over_baseline": 1.05,
+        "preferred_axis_gap": 0.0,
+        "graph_hyperclosure_weak": 1.2113248654051871,
+        "full_optional_times_axis": 1.2718911086754465
+      },
+      {
+        "channel": "grav_only_earth_eps",
+        "note": "Earth-scale \u03c6_\u03b5=1e-06 \u2014 tiny Ricci/grav bump",
+        "outside": {
+          "grav": 1.000000239999952,
+          "em": 1.0,
+          "bulk": 1.0,
+          "local_defect": 1.0,
+          "contact": 1.0,
+          "dress": 1.000000239999952,
+          "channels": {
+            "grav": "outsideGravityGeffModulator (Ricci / gravitational G_eff)",
+            "em": "1+(4/8)\u00b7curvatureConcentrationWeight (electric / dielectric)",
+            "bulk": "scaleOutsideCouplingForMediumDensity (medium density \u03c1)",
+            "local_defect": "1+localCurvatureDefectExcess (nucleation / wall / interface)",
+            "contact": "outsideGeffSurplus (bond-summed G_eff participation)"
+          }
+        },
+        "voltage": {
+          "chemo": 1.0,
+          "thermo": 1.0,
+          "photo": 1.0,
+          "piezo": 1.0,
+          "tribo": 1.0,
+          "faraday": 1.0,
+          "dress": 1.0,
+          "channels": {
+            "chemo": "galvanic / chemical potential (ionic asymmetry)",
+            "thermo": "thermoelectric / Seebeck (\u0394T / \u03be contrast)",
+            "photo": "photoelectric / photovoltaic (photon-phase excess)",
+            "piezo": "piezoelectric (strain \u2192 polarization)",
+            "tribo": "triboelectric (contact electrification asymmetry)",
+            "faraday": "Faraday induction (phase-rate / flux proxy)"
+          }
+        },
+        "electro_contact_dress": 1.000000239999952,
+        "dress_over_baseline": 1.000000239999952,
+        "preferred_axis_gap": 0.0,
+        "graph_hyperclosure_weak": 1.2113248654051871,
+        "full_optional_times_axis": 1.2113251561230967
+      },
+      {
+        "channel": "piezo_only",
+        "note": "strain=0.020 \u00d7 dielectric response (piezo)",
+        "outside": {
+          "grav": 1.0,
+          "em": 1.0,
+          "bulk": 1.0,
+          "local_defect": 1.0,
+          "contact": 1.0,
+          "dress": 1.0,
+          "channels": {
+            "grav": "outsideGravityGeffModulator (Ricci / gravitational G_eff)",
+            "em": "1+(4/8)\u00b7curvatureConcentrationWeight (electric / dielectric)",
+            "bulk": "scaleOutsideCouplingForMediumDensity (medium density \u03c1)",
+            "local_defect": "1+localCurvatureDefectExcess (nucleation / wall / interface)",
+            "contact": "outsideGeffSurplus (bond-summed G_eff participation)"
+          }
+        },
+        "voltage": {
+          "chemo": 1.0,
+          "thermo": 1.0,
+          "photo": 1.0,
+          "piezo": 1.003642039183289,
+          "tribo": 1.0,
+          "faraday": 1.0,
+          "dress": 1.003642039183289,
+          "channels": {
+            "chemo": "galvanic / chemical potential (ionic asymmetry)",
+            "thermo": "thermoelectric / Seebeck (\u0394T / \u03be contrast)",
+            "photo": "photoelectric / photovoltaic (photon-phase excess)",
+            "piezo": "piezoelectric (strain \u2192 polarization)",
+            "tribo": "triboelectric (contact electrification asymmetry)",
+            "faraday": "Faraday induction (phase-rate / flux proxy)"
+          }
+        },
+        "electro_contact_dress": 1.003642039183289,
+        "dress_over_baseline": 1.003642039183289,
+        "preferred_axis_gap": 0.0,
+        "graph_hyperclosure_weak": 1.2113248654051871,
+        "full_optional_times_axis": 1.215736558028685
+      },
+      {
+        "channel": "photo_only",
+        "note": "photon-phase excess=0.050",
+        "outside": {
+          "grav": 1.0,
+          "em": 1.0,
+          "bulk": 1.0,
+          "local_defect": 1.0,
+          "contact": 1.0,
+          "dress": 1.0,
+          "channels": {
+            "grav": "outsideGravityGeffModulator (Ricci / gravitational G_eff)",
+            "em": "1+(4/8)\u00b7curvatureConcentrationWeight (electric / dielectric)",
+            "bulk": "scaleOutsideCouplingForMediumDensity (medium density \u03c1)",
+            "local_defect": "1+localCurvatureDefectExcess (nucleation / wall / interface)",
+            "contact": "outsideGeffSurplus (bond-summed G_eff participation)"
+          }
+        },
+        "voltage": {
+          "chemo": 1.0,
+          "thermo": 1.0,
+          "photo": 1.0091050979582226,
+          "piezo": 1.0,
+          "tribo": 1.0,
+          "faraday": 1.0,
+          "dress": 1.0091050979582226,
+          "channels": {
+            "chemo": "galvanic / chemical potential (ionic asymmetry)",
+            "thermo": "thermoelectric / Seebeck (\u0394T / \u03be contrast)",
+            "photo": "photoelectric / photovoltaic (photon-phase excess)",
+            "piezo": "piezoelectric (strain \u2192 polarization)",
+            "tribo": "triboelectric (contact electrification asymmetry)",
+            "faraday": "Faraday induction (phase-rate / flux proxy)"
+          }
+        },
+        "electro_contact_dress": 1.0091050979582226,
+        "dress_over_baseline": 1.0091050979582226,
+        "preferred_axis_gap": 0.0,
+        "graph_hyperclosure_weak": 1.2113248654051871,
+        "full_optional_times_axis": 1.2223540969639322
+      },
+      {
+        "channel": "thermo_only",
+        "note": "\u03be-release / \u0394T contrast=0.050",
+        "outside": {
+          "grav": 1.0,
+          "em": 1.0,
+          "bulk": 1.0,
+          "local_defect": 1.0,
+          "contact": 1.0,
+          "dress": 1.0,
+          "channels": {
+            "grav": "outsideGravityGeffModulator (Ricci / gravitational G_eff)",
+            "em": "1+(4/8)\u00b7curvatureConcentrationWeight (electric / dielectric)",
+            "bulk": "scaleOutsideCouplingForMediumDensity (medium density \u03c1)",
+            "local_defect": "1+localCurvatureDefectExcess (nucleation / wall / interface)",
+            "contact": "outsideGeffSurplus (bond-summed G_eff participation)"
+          }
+        },
+        "voltage": {
+          "chemo": 1.0,
+          "thermo": 1.025,
+          "photo": 1.0,
+          "piezo": 1.0,
+          "tribo": 1.0,
+          "faraday": 1.0,
+          "dress": 1.025,
+          "channels": {
+            "chemo": "galvanic / chemical potential (ionic asymmetry)",
+            "thermo": "thermoelectric / Seebeck (\u0394T / \u03be contrast)",
+            "photo": "photoelectric / photovoltaic (photon-phase excess)",
+            "piezo": "piezoelectric (strain \u2192 polarization)",
+            "tribo": "triboelectric (contact electrification asymmetry)",
+            "faraday": "Faraday induction (phase-rate / flux proxy)"
+          }
+        },
+        "electro_contact_dress": 1.025,
+        "dress_over_baseline": 1.025,
+        "preferred_axis_gap": 0.0,
+        "graph_hyperclosure_weak": 1.2113248654051871,
+        "full_optional_times_axis": 1.2416079870403167
+      },
+      {
+        "channel": "faraday_only",
+        "note": "phase-rate fraction=0.020",
+        "outside": {
+          "grav": 1.0,
+          "em": 1.0,
+          "bulk": 1.0,
+          "local_defect": 1.0,
+          "contact": 1.0,
+          "dress": 1.0,
+          "channels": {
+            "grav": "outsideGravityGeffModulator (Ricci / gravitational G_eff)",
+            "em": "1+(4/8)\u00b7curvatureConcentrationWeight (electric / dielectric)",
+            "bulk": "scaleOutsideCouplingForMediumDensity (medium density \u03c1)",
+            "local_defect": "1+localCurvatureDefectExcess (nucleation / wall / interface)",
+            "contact": "outsideGeffSurplus (bond-summed G_eff participation)"
+          }
+        },
+        "voltage": {
+          "chemo": 1.0,
+          "thermo": 1.0,
+          "photo": 1.0,
+          "piezo": 1.0,
+          "tribo": 1.0,
+          "faraday": 1.01,
+          "dress": 1.01,
+          "channels": {
+            "chemo": "galvanic / chemical potential (ionic asymmetry)",
+            "thermo": "thermoelectric / Seebeck (\u0394T / \u03be contrast)",
+            "photo": "photoelectric / photovoltaic (photon-phase excess)",
+            "piezo": "piezoelectric (strain \u2192 polarization)",
+            "tribo": "triboelectric (contact electrification asymmetry)",
+            "faraday": "Faraday induction (phase-rate / flux proxy)"
+          }
+        },
+        "electro_contact_dress": 1.01,
+        "dress_over_baseline": 1.01,
+        "preferred_axis_gap": 0.0,
+        "graph_hyperclosure_weak": 1.2113248654051871,
+        "full_optional_times_axis": 1.223438114059239
+      },
+      {
+        "channel": "chemo_only",
+        "note": "homonuclear C\u2013C \u21d2 ionic asymmetry 0 \u21d2 chemo identity",
+        "outside": {
+          "grav": 1.0,
+          "em": 1.0,
+          "bulk": 1.0,
+          "local_defect": 1.0,
+          "contact": 1.0,
+          "dress": 1.0,
+          "channels": {
+            "grav": "outsideGravityGeffModulator (Ricci / gravitational G_eff)",
+            "em": "1+(4/8)\u00b7curvatureConcentrationWeight (electric / dielectric)",
+            "bulk": "scaleOutsideCouplingForMediumDensity (medium density \u03c1)",
+            "local_defect": "1+localCurvatureDefectExcess (nucleation / wall / interface)",
+            "contact": "outsideGeffSurplus (bond-summed G_eff participation)"
+          }
+        },
+        "voltage": {
+          "chemo": 1.0,
+          "thermo": 1.0,
+          "photo": 1.0,
+          "piezo": 1.0,
+          "tribo": 1.0,
+          "faraday": 1.0,
+          "dress": 1.0,
+          "channels": {
+            "chemo": "galvanic / chemical potential (ionic asymmetry)",
+            "thermo": "thermoelectric / Seebeck (\u0394T / \u03be contrast)",
+            "photo": "photoelectric / photovoltaic (photon-phase excess)",
+            "piezo": "piezoelectric (strain \u2192 polarization)",
+            "tribo": "triboelectric (contact electrification asymmetry)",
+            "faraday": "Faraday induction (phase-rate / flux proxy)"
+          }
+        },
+        "electro_contact_dress": 1.0,
+        "dress_over_baseline": 1.0,
+        "preferred_axis_gap": 0.0,
+        "graph_hyperclosure_weak": 1.2113248654051871,
+        "full_optional_times_axis": 1.2113248654051871
+      },
+      {
+        "channel": "tribo_only",
+        "note": "g=0 on C\u2013C; tribo reduces to localDefect factor on the voltage side",
+        "outside": {
+          "grav": 1.0,
+          "em": 1.0,
+          "bulk": 1.0,
+          "local_defect": 1.0,
+          "contact": 1.0,
+          "dress": 1.0,
+          "channels": {
+            "grav": "outsideGravityGeffModulator (Ricci / gravitational G_eff)",
+            "em": "1+(4/8)\u00b7curvatureConcentrationWeight (electric / dielectric)",
+            "bulk": "scaleOutsideCouplingForMediumDensity (medium density \u03c1)",
+            "local_defect": "1+localCurvatureDefectExcess (nucleation / wall / interface)",
+            "contact": "outsideGeffSurplus (bond-summed G_eff participation)"
+          }
+        },
+        "voltage": {
+          "chemo": 1.0,
+          "thermo": 1.0,
+          "photo": 1.0,
+          "piezo": 1.0,
+          "tribo": 1.05,
+          "faraday": 1.0,
+          "dress": 1.05,
+          "channels": {
+            "chemo": "galvanic / chemical potential (ionic asymmetry)",
+            "thermo": "thermoelectric / Seebeck (\u0394T / \u03be contrast)",
+            "photo": "photoelectric / photovoltaic (photon-phase excess)",
+            "piezo": "piezoelectric (strain \u2192 polarization)",
+            "tribo": "triboelectric (contact electrification asymmetry)",
+            "faraday": "Faraday induction (phase-rate / flux proxy)"
+          }
+        },
+        "electro_contact_dress": 1.05,
+        "dress_over_baseline": 1.05,
+        "preferred_axis_gap": 0.0,
+        "graph_hyperclosure_weak": 1.2113248654051871,
+        "full_optional_times_axis": 1.2718911086754465
+      },
+      {
+        "channel": "piezo_from_length_residual_diagnostic",
+        "note": "quarantine |\u0394r|/r_lab=0.1488 fed as piezo stress \u2014 shows how large a strain-like feedback would need to be to hear the length residual; not an input to the solve",
+        "outside": {
+          "grav": 1.0,
+          "em": 1.0,
+          "bulk": 1.0,
+          "local_defect": 1.0,
+          "contact": 1.0,
+          "dress": 1.0,
+          "channels": {
+            "grav": "outsideGravityGeffModulator (Ricci / gravitational G_eff)",
+            "em": "1+(4/8)\u00b7curvatureConcentrationWeight (electric / dielectric)",
+            "bulk": "scaleOutsideCouplingForMediumDensity (medium density \u03c1)",
+            "local_defect": "1+localCurvatureDefectExcess (nucleation / wall / interface)",
+            "contact": "outsideGeffSurplus (bond-summed G_eff participation)"
+          }
+        },
+        "voltage": {
+          "chemo": 1.0,
+          "thermo": 1.0,
+          "photo": 1.0,
+          "piezo": 1.0270977056598913,
+          "tribo": 1.0,
+          "faraday": 1.0,
+          "dress": 1.0270977056598913,
+          "channels": {
+            "chemo": "galvanic / chemical potential (ionic asymmetry)",
+            "thermo": "thermoelectric / Seebeck (\u0394T / \u03be contrast)",
+            "photo": "photoelectric / photovoltaic (photon-phase excess)",
+            "piezo": "piezoelectric (strain \u2192 polarization)",
+            "tribo": "triboelectric (contact electrification asymmetry)",
+            "faraday": "Faraday induction (phase-rate / flux proxy)"
+          }
+        },
+        "electro_contact_dress": 1.0270977056598913,
+        "dress_over_baseline": 1.0270977056598913,
+        "preferred_axis_gap": 0.0,
+        "graph_hyperclosure_weak": 1.2113248654051871,
+        "full_optional_times_axis": 1.2441489900664444
+      },
+      {
+        "channel": "combined_condensed_plus_mild_drive",
+        "note": "em + localDefect + tiny grav + piezo/photo/thermo/faraday/tribo; bulk still identity at \u03be_C",
+        "outside": {
+          "grav": 1.000000239999952,
+          "em": 1.1821019591644533,
+          "bulk": 1.0,
+          "local_defect": 1.05,
+          "contact": 1.0,
+          "dress": 1.24120735501231,
+          "channels": {
+            "grav": "outsideGravityGeffModulator (Ricci / gravitational G_eff)",
+            "em": "1+(4/8)\u00b7curvatureConcentrationWeight (electric / dielectric)",
+            "bulk": "scaleOutsideCouplingForMediumDensity (medium density \u03c1)",
+            "local_defect": "1+localCurvatureDefectExcess (nucleation / wall / interface)",
+            "contact": "outsideGeffSurplus (bond-summed G_eff participation)"
+          }
+        },
+        "voltage": {
+          "chemo": 1.0,
+          "thermo": 1.025,
+          "photo": 1.0091050979582226,
+          "piezo": 1.003642039183289,
+          "tribo": 1.05,
+          "faraday": 1.01,
+          "dress": 1.1009048439678304,
+          "channels": {
+            "chemo": "galvanic / chemical potential (ionic asymmetry)",
+            "thermo": "thermoelectric / Seebeck (\u0394T / \u03be contrast)",
+            "photo": "photoelectric / photovoltaic (photon-phase excess)",
+            "piezo": "piezoelectric (strain \u2192 polarization)",
+            "tribo": "triboelectric (contact electrification asymmetry)",
+            "faraday": "Faraday induction (phase-rate / flux proxy)"
+          }
+        },
+        "electro_contact_dress": 1.3664511895015505,
+        "dress_over_baseline": 1.3664511895015505,
+        "preferred_axis_gap": 0.0,
+        "graph_hyperclosure_weak": 1.2113248654051871,
+        "full_optional_times_axis": 1.6552163032057237
+      }
+    ]
+  },
+  "diamond": {
+    "motif": "diamond",
+    "label": "sp3 diamond-cubic",
+    "coordination": 4,
+    "bond_order": 1.0,
+    "bond_angstrom": 1.2599457402452383,
+    "bond_angle_deg": 109.47122063449069,
+    "xi_contact": 5.0,
+    "dielectric": {
+      "n_curvature_dielectric": 2.7184940053656135,
+      "clausius_mossotti_s": 0.36420391832890664
+    },
+    "coordination_excess_vs_diamond": 0.0,
+    "length_residual_fraction_quarantine": 0.18397296616241043,
+    "baseline_electro_contact_dress": 1.0,
+    "channels": [
+      {
+        "channel": "baseline_dilute_unstressed",
+        "note": "mass-pin assay: all environment + EMF channels at identity",
+        "outside": {
+          "grav": 1.0,
+          "em": 1.0,
+          "bulk": 1.0,
+          "local_defect": 1.0,
+          "contact": 1.0,
+          "dress": 1.0,
+          "channels": {
+            "grav": "outsideGravityGeffModulator (Ricci / gravitational G_eff)",
+            "em": "1+(4/8)\u00b7curvatureConcentrationWeight (electric / dielectric)",
+            "bulk": "scaleOutsideCouplingForMediumDensity (medium density \u03c1)",
+            "local_defect": "1+localCurvatureDefectExcess (nucleation / wall / interface)",
+            "contact": "outsideGeffSurplus (bond-summed G_eff participation)"
+          }
+        },
+        "voltage": {
+          "chemo": 1.0,
+          "thermo": 1.0,
+          "photo": 1.0,
+          "piezo": 1.0,
+          "tribo": 1.0,
+          "faraday": 1.0,
+          "dress": 1.0,
+          "channels": {
+            "chemo": "galvanic / chemical potential (ionic asymmetry)",
+            "thermo": "thermoelectric / Seebeck (\u0394T / \u03be contrast)",
+            "photo": "photoelectric / photovoltaic (photon-phase excess)",
+            "piezo": "piezoelectric (strain \u2192 polarization)",
+            "tribo": "triboelectric (contact electrification asymmetry)",
+            "faraday": "Faraday induction (phase-rate / flux proxy)"
+          }
+        },
+        "electro_contact_dress": 1.0,
+        "dress_over_baseline": 1.0,
+        "preferred_axis_gap": 0.0,
+        "graph_hyperclosure_weak": 1.25,
+        "full_optional_times_axis": 1.25
+      },
+      {
+        "channel": "em_only",
+        "note": "C\u2013C curvature dielectric n=2.7185 opens em; bulk/local/grav stay 1",
+        "outside": {
+          "grav": 1.0,
+          "em": 1.1821019591644533,
+          "bulk": 1.0,
+          "local_defect": 1.0,
+          "contact": 1.0,
+          "dress": 1.1821019591644533,
+          "channels": {
+            "grav": "outsideGravityGeffModulator (Ricci / gravitational G_eff)",
+            "em": "1+(4/8)\u00b7curvatureConcentrationWeight (electric / dielectric)",
+            "bulk": "scaleOutsideCouplingForMediumDensity (medium density \u03c1)",
+            "local_defect": "1+localCurvatureDefectExcess (nucleation / wall / interface)",
+            "contact": "outsideGeffSurplus (bond-summed G_eff participation)"
+          }
+        },
+        "voltage": {
+          "chemo": 1.0,
+          "thermo": 1.0,
+          "photo": 1.0,
+          "piezo": 1.0,
+          "tribo": 1.0,
+          "faraday": 1.0,
+          "dress": 1.0,
+          "channels": {
+            "chemo": "galvanic / chemical potential (ionic asymmetry)",
+            "thermo": "thermoelectric / Seebeck (\u0394T / \u03be contrast)",
+            "photo": "photoelectric / photovoltaic (photon-phase excess)",
+            "piezo": "piezoelectric (strain \u2192 polarization)",
+            "tribo": "triboelectric (contact electrification asymmetry)",
+            "faraday": "Faraday induction (phase-rate / flux proxy)"
+          }
+        },
+        "electro_contact_dress": 1.1821019591644533,
+        "dress_over_baseline": 1.1821019591644533,
+        "preferred_axis_gap": 0.0,
+        "graph_hyperclosure_weak": 1.25,
+        "full_optional_times_axis": 1.4776274489555665
+      },
+      {
+        "channel": "bulk_only_rho1",
+        "note": "\u03be_C=5.0 has B_hom=1, so bulk(\u03c1=1.0) stays identity (medium-density feedback is a no-op at carbon's Compton shell)",
+        "outside": {
+          "grav": 1.0,
+          "em": 1.0,
+          "bulk": 1.0,
+          "local_defect": 1.0,
+          "contact": 1.0,
+          "dress": 1.0,
+          "channels": {
+            "grav": "outsideGravityGeffModulator (Ricci / gravitational G_eff)",
+            "em": "1+(4/8)\u00b7curvatureConcentrationWeight (electric / dielectric)",
+            "bulk": "scaleOutsideCouplingForMediumDensity (medium density \u03c1)",
+            "local_defect": "1+localCurvatureDefectExcess (nucleation / wall / interface)",
+            "contact": "outsideGeffSurplus (bond-summed G_eff participation)"
+          }
+        },
+        "voltage": {
+          "chemo": 1.0,
+          "thermo": 1.0,
+          "photo": 1.0,
+          "piezo": 1.0,
+          "tribo": 1.0,
+          "faraday": 1.0,
+          "dress": 1.0,
+          "channels": {
+            "chemo": "galvanic / chemical potential (ionic asymmetry)",
+            "thermo": "thermoelectric / Seebeck (\u0394T / \u03be contrast)",
+            "photo": "photoelectric / photovoltaic (photon-phase excess)",
+            "piezo": "piezoelectric (strain \u2192 polarization)",
+            "tribo": "triboelectric (contact electrification asymmetry)",
+            "faraday": "Faraday induction (phase-rate / flux proxy)"
+          }
+        },
+        "electro_contact_dress": 1.0,
+        "dress_over_baseline": 1.0,
+        "preferred_axis_gap": 0.0,
+        "graph_hyperclosure_weak": 1.25,
+        "full_optional_times_axis": 1.25
+      },
+      {
+        "channel": "localDefect_only",
+        "note": "\u03b4=|k\u22124|/4=0.0000 vs diamond reference; excess=0.0000",
+        "outside": {
+          "grav": 1.0,
+          "em": 1.0,
+          "bulk": 1.0,
+          "local_defect": 1.0,
+          "contact": 1.0,
+          "dress": 1.0,
+          "channels": {
+            "grav": "outsideGravityGeffModulator (Ricci / gravitational G_eff)",
+            "em": "1+(4/8)\u00b7curvatureConcentrationWeight (electric / dielectric)",
+            "bulk": "scaleOutsideCouplingForMediumDensity (medium density \u03c1)",
+            "local_defect": "1+localCurvatureDefectExcess (nucleation / wall / interface)",
+            "contact": "outsideGeffSurplus (bond-summed G_eff participation)"
+          }
+        },
+        "voltage": {
+          "chemo": 1.0,
+          "thermo": 1.0,
+          "photo": 1.0,
+          "piezo": 1.0,
+          "tribo": 1.0,
+          "faraday": 1.0,
+          "dress": 1.0,
+          "channels": {
+            "chemo": "galvanic / chemical potential (ionic asymmetry)",
+            "thermo": "thermoelectric / Seebeck (\u0394T / \u03be contrast)",
+            "photo": "photoelectric / photovoltaic (photon-phase excess)",
+            "piezo": "piezoelectric (strain \u2192 polarization)",
+            "tribo": "triboelectric (contact electrification asymmetry)",
+            "faraday": "Faraday induction (phase-rate / flux proxy)"
+          }
+        },
+        "electro_contact_dress": 1.0,
+        "dress_over_baseline": 1.0,
+        "preferred_axis_gap": 0.0,
+        "graph_hyperclosure_weak": 1.25,
+        "full_optional_times_axis": 1.25
+      },
+      {
+        "channel": "grav_only_earth_eps",
+        "note": "Earth-scale \u03c6_\u03b5=1e-06 \u2014 tiny Ricci/grav bump",
+        "outside": {
+          "grav": 1.000000239999952,
+          "em": 1.0,
+          "bulk": 1.0,
+          "local_defect": 1.0,
+          "contact": 1.0,
+          "dress": 1.000000239999952,
+          "channels": {
+            "grav": "outsideGravityGeffModulator (Ricci / gravitational G_eff)",
+            "em": "1+(4/8)\u00b7curvatureConcentrationWeight (electric / dielectric)",
+            "bulk": "scaleOutsideCouplingForMediumDensity (medium density \u03c1)",
+            "local_defect": "1+localCurvatureDefectExcess (nucleation / wall / interface)",
+            "contact": "outsideGeffSurplus (bond-summed G_eff participation)"
+          }
+        },
+        "voltage": {
+          "chemo": 1.0,
+          "thermo": 1.0,
+          "photo": 1.0,
+          "piezo": 1.0,
+          "tribo": 1.0,
+          "faraday": 1.0,
+          "dress": 1.0,
+          "channels": {
+            "chemo": "galvanic / chemical potential (ionic asymmetry)",
+            "thermo": "thermoelectric / Seebeck (\u0394T / \u03be contrast)",
+            "photo": "photoelectric / photovoltaic (photon-phase excess)",
+            "piezo": "piezoelectric (strain \u2192 polarization)",
+            "tribo": "triboelectric (contact electrification asymmetry)",
+            "faraday": "Faraday induction (phase-rate / flux proxy)"
+          }
+        },
+        "electro_contact_dress": 1.000000239999952,
+        "dress_over_baseline": 1.000000239999952,
+        "preferred_axis_gap": 0.0,
+        "graph_hyperclosure_weak": 1.25,
+        "full_optional_times_axis": 1.25000029999994
+      },
+      {
+        "channel": "piezo_only",
+        "note": "strain=0.020 \u00d7 dielectric response (piezo)",
+        "outside": {
+          "grav": 1.0,
+          "em": 1.0,
+          "bulk": 1.0,
+          "local_defect": 1.0,
+          "contact": 1.0,
+          "dress": 1.0,
+          "channels": {
+            "grav": "outsideGravityGeffModulator (Ricci / gravitational G_eff)",
+            "em": "1+(4/8)\u00b7curvatureConcentrationWeight (electric / dielectric)",
+            "bulk": "scaleOutsideCouplingForMediumDensity (medium density \u03c1)",
+            "local_defect": "1+localCurvatureDefectExcess (nucleation / wall / interface)",
+            "contact": "outsideGeffSurplus (bond-summed G_eff participation)"
+          }
+        },
+        "voltage": {
+          "chemo": 1.0,
+          "thermo": 1.0,
+          "photo": 1.0,
+          "piezo": 1.003642039183289,
+          "tribo": 1.0,
+          "faraday": 1.0,
+          "dress": 1.003642039183289,
+          "channels": {
+            "chemo": "galvanic / chemical potential (ionic asymmetry)",
+            "thermo": "thermoelectric / Seebeck (\u0394T / \u03be contrast)",
+            "photo": "photoelectric / photovoltaic (photon-phase excess)",
+            "piezo": "piezoelectric (strain \u2192 polarization)",
+            "tribo": "triboelectric (contact electrification asymmetry)",
+            "faraday": "Faraday induction (phase-rate / flux proxy)"
+          }
+        },
+        "electro_contact_dress": 1.003642039183289,
+        "dress_over_baseline": 1.003642039183289,
+        "preferred_axis_gap": 0.0,
+        "graph_hyperclosure_weak": 1.25,
+        "full_optional_times_axis": 1.2545525489791112
+      },
+      {
+        "channel": "photo_only",
+        "note": "photon-phase excess=0.050",
+        "outside": {
+          "grav": 1.0,
+          "em": 1.0,
+          "bulk": 1.0,
+          "local_defect": 1.0,
+          "contact": 1.0,
+          "dress": 1.0,
+          "channels": {
+            "grav": "outsideGravityGeffModulator (Ricci / gravitational G_eff)",
+            "em": "1+(4/8)\u00b7curvatureConcentrationWeight (electric / dielectric)",
+            "bulk": "scaleOutsideCouplingForMediumDensity (medium density \u03c1)",
+            "local_defect": "1+localCurvatureDefectExcess (nucleation / wall / interface)",
+            "contact": "outsideGeffSurplus (bond-summed G_eff participation)"
+          }
+        },
+        "voltage": {
+          "chemo": 1.0,
+          "thermo": 1.0,
+          "photo": 1.0091050979582226,
+          "piezo": 1.0,
+          "tribo": 1.0,
+          "faraday": 1.0,
+          "dress": 1.0091050979582226,
+          "channels": {
+            "chemo": "galvanic / chemical potential (ionic asymmetry)",
+            "thermo": "thermoelectric / Seebeck (\u0394T / \u03be contrast)",
+            "photo": "photoelectric / photovoltaic (photon-phase excess)",
+            "piezo": "piezoelectric (strain \u2192 polarization)",
+            "tribo": "triboelectric (contact electrification asymmetry)",
+            "faraday": "Faraday induction (phase-rate / flux proxy)"
+          }
+        },
+        "electro_contact_dress": 1.0091050979582226,
+        "dress_over_baseline": 1.0091050979582226,
+        "preferred_axis_gap": 0.0,
+        "graph_hyperclosure_weak": 1.25,
+        "full_optional_times_axis": 1.2613813724477783
+      },
+      {
+        "channel": "thermo_only",
+        "note": "\u03be-release / \u0394T contrast=0.050",
+        "outside": {
+          "grav": 1.0,
+          "em": 1.0,
+          "bulk": 1.0,
+          "local_defect": 1.0,
+          "contact": 1.0,
+          "dress": 1.0,
+          "channels": {
+            "grav": "outsideGravityGeffModulator (Ricci / gravitational G_eff)",
+            "em": "1+(4/8)\u00b7curvatureConcentrationWeight (electric / dielectric)",
+            "bulk": "scaleOutsideCouplingForMediumDensity (medium density \u03c1)",
+            "local_defect": "1+localCurvatureDefectExcess (nucleation / wall / interface)",
+            "contact": "outsideGeffSurplus (bond-summed G_eff participation)"
+          }
+        },
+        "voltage": {
+          "chemo": 1.0,
+          "thermo": 1.025,
+          "photo": 1.0,
+          "piezo": 1.0,
+          "tribo": 1.0,
+          "faraday": 1.0,
+          "dress": 1.025,
+          "channels": {
+            "chemo": "galvanic / chemical potential (ionic asymmetry)",
+            "thermo": "thermoelectric / Seebeck (\u0394T / \u03be contrast)",
+            "photo": "photoelectric / photovoltaic (photon-phase excess)",
+            "piezo": "piezoelectric (strain \u2192 polarization)",
+            "tribo": "triboelectric (contact electrification asymmetry)",
+            "faraday": "Faraday induction (phase-rate / flux proxy)"
+          }
+        },
+        "electro_contact_dress": 1.025,
+        "dress_over_baseline": 1.025,
+        "preferred_axis_gap": 0.0,
+        "graph_hyperclosure_weak": 1.25,
+        "full_optional_times_axis": 1.28125
+      },
+      {
+        "channel": "faraday_only",
+        "note": "phase-rate fraction=0.020",
+        "outside": {
+          "grav": 1.0,
+          "em": 1.0,
+          "bulk": 1.0,
+          "local_defect": 1.0,
+          "contact": 1.0,
+          "dress": 1.0,
+          "channels": {
+            "grav": "outsideGravityGeffModulator (Ricci / gravitational G_eff)",
+            "em": "1+(4/8)\u00b7curvatureConcentrationWeight (electric / dielectric)",
+            "bulk": "scaleOutsideCouplingForMediumDensity (medium density \u03c1)",
+            "local_defect": "1+localCurvatureDefectExcess (nucleation / wall / interface)",
+            "contact": "outsideGeffSurplus (bond-summed G_eff participation)"
+          }
+        },
+        "voltage": {
+          "chemo": 1.0,
+          "thermo": 1.0,
+          "photo": 1.0,
+          "piezo": 1.0,
+          "tribo": 1.0,
+          "faraday": 1.01,
+          "dress": 1.01,
+          "channels": {
+            "chemo": "galvanic / chemical potential (ionic asymmetry)",
+            "thermo": "thermoelectric / Seebeck (\u0394T / \u03be contrast)",
+            "photo": "photoelectric / photovoltaic (photon-phase excess)",
+            "piezo": "piezoelectric (strain \u2192 polarization)",
+            "tribo": "triboelectric (contact electrification asymmetry)",
+            "faraday": "Faraday induction (phase-rate / flux proxy)"
+          }
+        },
+        "electro_contact_dress": 1.01,
+        "dress_over_baseline": 1.01,
+        "preferred_axis_gap": 0.0,
+        "graph_hyperclosure_weak": 1.25,
+        "full_optional_times_axis": 1.2625
+      },
+      {
+        "channel": "chemo_only",
+        "note": "homonuclear C\u2013C \u21d2 ionic asymmetry 0 \u21d2 chemo identity",
+        "outside": {
+          "grav": 1.0,
+          "em": 1.0,
+          "bulk": 1.0,
+          "local_defect": 1.0,
+          "contact": 1.0,
+          "dress": 1.0,
+          "channels": {
+            "grav": "outsideGravityGeffModulator (Ricci / gravitational G_eff)",
+            "em": "1+(4/8)\u00b7curvatureConcentrationWeight (electric / dielectric)",
+            "bulk": "scaleOutsideCouplingForMediumDensity (medium density \u03c1)",
+            "local_defect": "1+localCurvatureDefectExcess (nucleation / wall / interface)",
+            "contact": "outsideGeffSurplus (bond-summed G_eff participation)"
+          }
+        },
+        "voltage": {
+          "chemo": 1.0,
+          "thermo": 1.0,
+          "photo": 1.0,
+          "piezo": 1.0,
+          "tribo": 1.0,
+          "faraday": 1.0,
+          "dress": 1.0,
+          "channels": {
+            "chemo": "galvanic / chemical potential (ionic asymmetry)",
+            "thermo": "thermoelectric / Seebeck (\u0394T / \u03be contrast)",
+            "photo": "photoelectric / photovoltaic (photon-phase excess)",
+            "piezo": "piezoelectric (strain \u2192 polarization)",
+            "tribo": "triboelectric (contact electrification asymmetry)",
+            "faraday": "Faraday induction (phase-rate / flux proxy)"
+          }
+        },
+        "electro_contact_dress": 1.0,
+        "dress_over_baseline": 1.0,
+        "preferred_axis_gap": 0.0,
+        "graph_hyperclosure_weak": 1.25,
+        "full_optional_times_axis": 1.25
+      },
+      {
+        "channel": "tribo_only",
+        "note": "g=0 on C\u2013C; tribo reduces to localDefect factor on the voltage side",
+        "outside": {
+          "grav": 1.0,
+          "em": 1.0,
+          "bulk": 1.0,
+          "local_defect": 1.0,
+          "contact": 1.0,
+          "dress": 1.0,
+          "channels": {
+            "grav": "outsideGravityGeffModulator (Ricci / gravitational G_eff)",
+            "em": "1+(4/8)\u00b7curvatureConcentrationWeight (electric / dielectric)",
+            "bulk": "scaleOutsideCouplingForMediumDensity (medium density \u03c1)",
+            "local_defect": "1+localCurvatureDefectExcess (nucleation / wall / interface)",
+            "contact": "outsideGeffSurplus (bond-summed G_eff participation)"
+          }
+        },
+        "voltage": {
+          "chemo": 1.0,
+          "thermo": 1.0,
+          "photo": 1.0,
+          "piezo": 1.0,
+          "tribo": 1.0,
+          "faraday": 1.0,
+          "dress": 1.0,
+          "channels": {
+            "chemo": "galvanic / chemical potential (ionic asymmetry)",
+            "thermo": "thermoelectric / Seebeck (\u0394T / \u03be contrast)",
+            "photo": "photoelectric / photovoltaic (photon-phase excess)",
+            "piezo": "piezoelectric (strain \u2192 polarization)",
+            "tribo": "triboelectric (contact electrification asymmetry)",
+            "faraday": "Faraday induction (phase-rate / flux proxy)"
+          }
+        },
+        "electro_contact_dress": 1.0,
+        "dress_over_baseline": 1.0,
+        "preferred_axis_gap": 0.0,
+        "graph_hyperclosure_weak": 1.25,
+        "full_optional_times_axis": 1.25
+      },
+      {
+        "channel": "piezo_from_length_residual_diagnostic",
+        "note": "quarantine |\u0394r|/r_lab=0.1840 fed as piezo stress \u2014 shows how large a strain-like feedback would need to be to hear the length residual; not an input to the solve",
+        "outside": {
+          "grav": 1.0,
+          "em": 1.0,
+          "bulk": 1.0,
+          "local_defect": 1.0,
+          "contact": 1.0,
+          "dress": 1.0,
+          "channels": {
+            "grav": "outsideGravityGeffModulator (Ricci / gravitational G_eff)",
+            "em": "1+(4/8)\u00b7curvatureConcentrationWeight (electric / dielectric)",
+            "bulk": "scaleOutsideCouplingForMediumDensity (medium density \u03c1)",
+            "local_defect": "1+localCurvatureDefectExcess (nucleation / wall / interface)",
+            "contact": "outsideGeffSurplus (bond-summed G_eff participation)"
+          }
+        },
+        "voltage": {
+          "chemo": 1.0,
+          "thermo": 1.0,
+          "photo": 1.0,
+          "piezo": 1.0335018375714706,
+          "tribo": 1.0,
+          "faraday": 1.0,
+          "dress": 1.0335018375714706,
+          "channels": {
+            "chemo": "galvanic / chemical potential (ionic asymmetry)",
+            "thermo": "thermoelectric / Seebeck (\u0394T / \u03be contrast)",
+            "photo": "photoelectric / photovoltaic (photon-phase excess)",
+            "piezo": "piezoelectric (strain \u2192 polarization)",
+            "tribo": "triboelectric (contact electrification asymmetry)",
+            "faraday": "Faraday induction (phase-rate / flux proxy)"
+          }
+        },
+        "electro_contact_dress": 1.0335018375714706,
+        "dress_over_baseline": 1.0335018375714706,
+        "preferred_axis_gap": 0.0,
+        "graph_hyperclosure_weak": 1.25,
+        "full_optional_times_axis": 1.2918772969643384
+      },
+      {
+        "channel": "combined_condensed_plus_mild_drive",
+        "note": "em + localDefect + tiny grav + piezo/photo/thermo/faraday/tribo; bulk still identity at \u03be_C",
+        "outside": {
+          "grav": 1.000000239999952,
+          "em": 1.1821019591644533,
+          "bulk": 1.0,
+          "local_defect": 1.0,
+          "contact": 1.0,
+          "dress": 1.1821022428688666,
+          "channels": {
+            "grav": "outsideGravityGeffModulator (Ricci / gravitational G_eff)",
+            "em": "1+(4/8)\u00b7curvatureConcentrationWeight (electric / dielectric)",
+            "bulk": "scaleOutsideCouplingForMediumDensity (medium density \u03c1)",
+            "local_defect": "1+localCurvatureDefectExcess (nucleation / wall / interface)",
+            "contact": "outsideGeffSurplus (bond-summed G_eff participation)"
+          }
+        },
+        "voltage": {
+          "chemo": 1.0,
+          "thermo": 1.025,
+          "photo": 1.0091050979582226,
+          "piezo": 1.003642039183289,
+          "tribo": 1.0,
+          "faraday": 1.01,
+          "dress": 1.048480803778886,
+          "channels": {
+            "chemo": "galvanic / chemical potential (ionic asymmetry)",
+            "thermo": "thermoelectric / Seebeck (\u0394T / \u03be contrast)",
+            "photo": "photoelectric / photovoltaic (photon-phase excess)",
+            "piezo": "piezoelectric (strain \u2192 polarization)",
+            "tribo": "triboelectric (contact electrification asymmetry)",
+            "faraday": "Faraday induction (phase-rate / flux proxy)"
+          }
+        },
+        "electro_contact_dress": 1.2394115097519731,
+        "dress_over_baseline": 1.2394115097519731,
+        "preferred_axis_gap": 0.0,
+        "graph_hyperclosure_weak": 1.25,
+        "full_optional_times_axis": 1.5492643871899663
+      }
+    ]
+  },
+  "fork": {
+    "exact_shared": {
+      "angle_graphene_deg": 120.00000000000001,
+      "angle_diamond_deg": 109.47122063449069,
+      "bond_order_graphene": 1.3333333333333333,
+      "bond_order_diamond": 1.0,
+      "preferred_axis_gap_CC": 0.0,
+      "chemo_CC": 1.0,
+      "bulk_at_xi5": 1.0
+    },
+    "channel_diffs": [
+      {
+        "channel": "baseline_dilute_unstressed",
+        "graphene_dress": 1.0,
+        "diamond_dress": 1.0,
+        "graphene_over_diamond": 1.0,
+        "graphene_over_baseline": 1.0,
+        "diamond_over_baseline": 1.0
+      },
+      {
+        "channel": "em_only",
+        "graphene_dress": 1.1821019591644533,
+        "diamond_dress": 1.1821019591644533,
+        "graphene_over_diamond": 1.0,
+        "graphene_over_baseline": 1.1821019591644533,
+        "diamond_over_baseline": 1.1821019591644533
+      },
+      {
+        "channel": "bulk_only_rho1",
+        "graphene_dress": 1.0,
+        "diamond_dress": 1.0,
+        "graphene_over_diamond": 1.0,
+        "graphene_over_baseline": 1.0,
+        "diamond_over_baseline": 1.0
+      },
+      {
+        "channel": "localDefect_only",
+        "graphene_dress": 1.05,
+        "diamond_dress": 1.0,
+        "graphene_over_diamond": 1.05,
+        "graphene_over_baseline": 1.05,
+        "diamond_over_baseline": 1.0
+      },
+      {
+        "channel": "grav_only_earth_eps",
+        "graphene_dress": 1.000000239999952,
+        "diamond_dress": 1.000000239999952,
+        "graphene_over_diamond": 1.0,
+        "graphene_over_baseline": 1.000000239999952,
+        "diamond_over_baseline": 1.000000239999952
+      },
+      {
+        "channel": "piezo_only",
+        "graphene_dress": 1.003642039183289,
+        "diamond_dress": 1.003642039183289,
+        "graphene_over_diamond": 1.0,
+        "graphene_over_baseline": 1.003642039183289,
+        "diamond_over_baseline": 1.003642039183289
+      },
+      {
+        "channel": "photo_only",
+        "graphene_dress": 1.0091050979582226,
+        "diamond_dress": 1.0091050979582226,
+        "graphene_over_diamond": 1.0,
+        "graphene_over_baseline": 1.0091050979582226,
+        "diamond_over_baseline": 1.0091050979582226
+      },
+      {
+        "channel": "thermo_only",
+        "graphene_dress": 1.025,
+        "diamond_dress": 1.025,
+        "graphene_over_diamond": 1.0,
+        "graphene_over_baseline": 1.025,
+        "diamond_over_baseline": 1.025
+      },
+      {
+        "channel": "faraday_only",
+        "graphene_dress": 1.01,
+        "diamond_dress": 1.01,
+        "graphene_over_diamond": 1.0,
+        "graphene_over_baseline": 1.01,
+        "diamond_over_baseline": 1.01
+      },
+      {
+        "channel": "chemo_only",
+        "graphene_dress": 1.0,
+        "diamond_dress": 1.0,
+        "graphene_over_diamond": 1.0,
+        "graphene_over_baseline": 1.0,
+        "diamond_over_baseline": 1.0
+      },
+      {
+        "channel": "tribo_only",
+        "graphene_dress": 1.05,
+        "diamond_dress": 1.0,
+        "graphene_over_diamond": 1.05,
+        "graphene_over_baseline": 1.05,
+        "diamond_over_baseline": 1.0
+      },
+      {
+        "channel": "piezo_from_length_residual_diagnostic",
+        "graphene_dress": 1.0270977056598913,
+        "diamond_dress": 1.0335018375714706,
+        "graphene_over_diamond": 0.9938034634494431,
+        "graphene_over_baseline": 1.0270977056598913,
+        "diamond_over_baseline": 1.0335018375714706
+      },
+      {
+        "channel": "combined_condensed_plus_mild_drive",
+        "graphene_dress": 1.3664511895015505,
+        "diamond_dress": 1.2394115097519731,
+        "graphene_over_diamond": 1.1025,
+        "graphene_over_baseline": 1.3664511895015505,
+        "diamond_over_baseline": 1.2394115097519731
+      }
+    ],
+    "lesson": "Exact slots stay exact (angles, orders, g=0, chemo=1, bulk@\u03be5=1). Feedback that actually moves the dress is em (shared), localDefect (graphene\u2260diamond), and stressed voltage routes. Mass pinning freezes all of these; reopening them is the coupling chemistry cannot see from mass+density alone."
+  }
+}

@@ -14,6 +14,26 @@ class TestHQIVOrbitalFlyby(unittest.TestCase):
         delta = orb.orbital_curvature_mass_delta_at(orb.EARTH, orb.R_EARTH * 2.0)
         self.assertAlmostEqual(orb.phi_acceleration_si(r, orb.EARTH), base * (1.0 + delta))
 
+    def test_derived_phi_hom_default_matches_sparc(self) -> None:
+        import hqiv_galaxy_derived_dynamics as d
+
+        self.assertEqual(orb.PHI_SOURCE, "derived")
+        self.assertAlmostEqual(
+            orb.phi_acceleration_homogeneous_si(),
+            d.phi_acceleration_homogeneous_derived_si(),
+            places=12,
+        )
+        # Legacy bridge is larger; switch and restore.
+        prev = orb.PHI_SOURCE
+        try:
+            orb.PHI_SOURCE = "legacy"
+            self.assertGreater(
+                orb.phi_acceleration_homogeneous_si(),
+                d.phi_acceleration_homogeneous_derived_si(),
+            )
+        finally:
+            orb.PHI_SOURCE = prev
+
     def test_orbital_phase_geometry_at_two_radii(self) -> None:
         rho = orb.orbital_curvature_density_at(orb.EARTH, 2.0 * orb.R_EARTH)
         self.assertAlmostEqual(rho, 0.4, places=3)

@@ -1,0 +1,71 @@
+{
+  "lean_module": "Hqiv.QuantumChemistry.PhaseElasticity",
+  "policy": "Griffith-scale candidates from contact binding only; handbook K_IC, Young's modulus, crack geometry, and plasticity are quarantined",
+  "ethics": {
+    "no_tabulated_moduli": true,
+    "no_tabulated_fracture_toughness": true,
+    "not_a_handbook_prediction": true,
+    "open_terms": [
+      "anisotropic elastic tensor",
+      "plastic zone and dislocation mobility",
+      "grain boundaries",
+      "crack-tip shape statistics"
+    ]
+  },
+  "witnesses": [
+    {
+      "name": "NaCl",
+      "crystal_kind": "ionic",
+      "nearest_neighbor_angstrom": 2.8220013650376075,
+      "coordination": 6,
+      "density_g_cm3": 2.135101665564785,
+      "binding_ev_per_contact": 216.9286213926671,
+      "contact_lock": 1.0,
+      "bulk_modulus_proxy_Pa": 9279121084165.086,
+      "young_modulus_proxy_Pa": 27837363252495.258,
+      "griffith_G_c_J_m2": 7.389605960092057e-07,
+      "K_scale_candidate_Pa_sqrt_m": 6414.158485785747,
+      "sound_speed_proxy_m_s": 114183.87271183694,
+      "cleavage_localization_index": 1.0,
+      "ductile_carrier_score": 0.0,
+      "carrier_count": 1.0,
+      "interpretation": "ionic brittle-scale witness; no handbook K_IC input"
+    },
+    {
+      "name": "Cu",
+      "crystal_kind": "metallic",
+      "nearest_neighbor_angstrom": 2.7099021609557084,
+      "coordination": 12,
+      "density_g_cm3": 7.409920388684352,
+      "binding_ev_per_contact": 0.22802432340177423,
+      "contact_lock": 0.005868273028722132,
+      "bulk_modulus_proxy_Pa": 22029872402.86049,
+      "young_modulus_proxy_Pa": 66089617208.58147,
+      "griffith_G_c_J_m2": 1.617779039561214e-09,
+      "K_scale_candidate_Pa_sqrt_m": 14.623159539078223,
+      "sound_speed_proxy_m_s": 2986.481626556493,
+      "cleavage_localization_index": 0.005868273028722132,
+      "ductile_carrier_score": 0.9941317269712778,
+      "carrier_count": 1.0,
+      "interpretation": "metallic delocalized-carrier scale witness; plasticity not yet modeled"
+    },
+    {
+      "name": "Al",
+      "crystal_kind": "metallic",
+      "nearest_neighbor_angstrom": 2.9675145013439335,
+      "coordination": 12,
+      "density_g_cm3": 2.4224910656950756,
+      "binding_ev_per_contact": 2.968524358382388,
+      "contact_lock": 0.03637897498017634,
+      "bulk_modulus_proxy_Pa": 218400539576.12378,
+      "young_modulus_proxy_Pa": 655201618728.3713,
+      "griffith_G_c_J_m2": 1.9232662333300757e-08,
+      "K_scale_candidate_Pa_sqrt_m": 158.75308811632505,
+      "sound_speed_proxy_m_s": 16445.852424953224,
+      "cleavage_localization_index": 0.012126324993392112,
+      "ductile_carrier_score": 2.890863075059471,
+      "carrier_count": 3.0,
+      "interpretation": "metallic delocalized-carrier scale witness; plasticity not yet modeled"
+    }
+  ]
+}

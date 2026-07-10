@@ -19,8 +19,12 @@ matching Anderson et al.\ flyby anomalies in SI.
 * Modified inertia: `hqivFluidInertiaFactor aLoc phi = aLoc / (aLoc + phi/6)`;
   geodesic law \(\mathbf a=\mathbf a_{\rm GR}/f\) (Python `modified_inertia_geodesic`).
 * Chart slot screen: `hqivFlybyScreenWeight aLoc phi = 1 - f` (O-Maxwell only; not the geodesic divisor).
-* **Propagation** shell: `solarSystemPropagationShell = 0` (ξ = 1); not the hadron pin.
-* **Source curvature** from orbital phase geometry (`PhaseGeometryDensity`); legacy shell-4 is calibration only.
+* **Propagation** shell: `solarSystemPropagationShell = 0` (ξ = 1); not the hadron lock-in.
+* **Source curvature** from orbital phase geometry (`PhaseGeometryDensity`).
+* **Stable lock-in** `referenceM = 4` is the minimal null-lattice shell with sector
+  capacity `40` (`referenceM_first_shell_with_sector_capacity`) — a proved threshold,
+  not a free chart choice. Orbital Doppler readouts do **not** walk that shell;
+  `flybyLegacySourceShell` is only a hadron-chart calibration alias.
 * Lattice imprint: `alpha = 3/5` (`alpha_eq_3_5`).
 
 Angular-momentum and O-Maxwell coupling are **hypothesis fields** on the Python side only
@@ -94,15 +98,28 @@ theorem flybyEquatorialAngularScale_eq_withoutAngular_of_zero
   unfold flybyEquatorialAngularScale
   ring
 
-/-- Legacy hadron-chart source shell (calibration witness only; not the orbital readout ξ). -/
-def flybyLegacySourceShell : ℕ := 4
+/-- Hadron-chart calibration alias for the **stable** lock-in shell `referenceM`.
 
-/-- Backward-compatible alias for the legacy source-shell index. -/
+Not a free choice: `referenceM_eq_four_lightcone` and
+`referenceM_first_shell_with_sector_capacity` fix shell~4 as the minimal
+null-lattice shell reaching the 40-mode sector capacity.  Orbital / SPARC
+Doppler readouts use `flybyPropagationXi = 1`, not this index. -/
+def flybyLegacySourceShell : ℕ := referenceM
+
+/-- Backward-compatible alias for the lock-in source-shell index. -/
 def flybyAnchorShell : ℕ := flybyLegacySourceShell
 
+theorem flybyLegacySourceShell_eq_referenceM :
+    flybyLegacySourceShell = referenceM := rfl
+
+theorem flybyLegacySourceShell_eq_four :
+    flybyLegacySourceShell = 4 := by
+  rw [flybyLegacySourceShell_eq_referenceM, referenceM_eq_four_lightcone]
+
 theorem flybyPhiAnchor_eq : phi_of_shell flybyAnchorShell = 10 := by
-  rw [phi_of_shell_closed_form, phiTemperatureCoeff_eq_two]
-  norm_num [flybyAnchorShell, flybyLegacySourceShell]
+  unfold flybyAnchorShell
+  rw [flybyLegacySourceShell_eq_four, phi_of_shell_closed_form, phiTemperatureCoeff_eq_two]
+  norm_num
 
 /-- Propagation-shell index for solar-system orbital readouts (near-pole band). -/
 def solarSystemPropagationShell : ℕ := 0
@@ -166,7 +183,8 @@ The propagation/readout shell and the baryonic source/action shell are distinct
 slots.  Solar-system Doppler propagation stays on the near-pole Kirchhoff
 band (`solarSystemPropagationShell = 0`, ξ = 1).  Source action uses orbital
 phase geometry (`flybyDynamicKappaPhiFromPhase`) when the chord gate is open;
-`flybyLegacySourceShell = referenceM = 4` remains a hadron-chart calibration alias only.
+`flybyLegacySourceShell = referenceM` remains the stable hadron-chart lock-in
+alias only (`referenceM_first_shell_with_sector_capacity`).
 
 The orbit geometry is still a Python-side hypothesis.  Lean records the algebraic
 contract for a **dynamic gate**: when the source gate is closed there is no
@@ -185,13 +203,14 @@ noncomputable def flybyVacuumSourceScale (m : ℕ) : ℝ :=
 
 theorem flybySourceShellStep_anchor_eq :
     flybySourceShellStep flybyAnchorShell = 5 := by
-  unfold flybySourceShellStep flybyAnchorShell flybyLegacySourceShell
+  unfold flybySourceShellStep flybyAnchorShell
+  rw [flybyLegacySourceShell_eq_four]
   norm_num
 
 theorem flybyVacuumSourceScale_anchor_eq :
     flybyVacuumSourceScale flybyAnchorShell = 50 := by
-  unfold flybyVacuumSourceScale flybySourceShellStep flybyAnchorShell flybyLegacySourceShell
-  rw [phi_of_shell_closed_form, phiTemperatureCoeff_eq_two]
+  unfold flybyVacuumSourceScale flybySourceShellStep flybyAnchorShell
+  rw [flybyLegacySourceShell_eq_four, phi_of_shell_closed_form, phiTemperatureCoeff_eq_two]
   norm_num
 
 /-- Dynamic source-shell factor for the metric-phi/horizon source channel.
@@ -235,16 +254,16 @@ theorem flybyDynamicKappaVac_anchor_open :
 
 theorem flybyDynamicKappaPhi_anchor_eq (gate : ℝ) :
     flybyDynamicKappaPhi flybyAnchorShell gate = 1 + 4 * gate := by
-  unfold flybyDynamicKappaPhi flybySourceShellStep flybyAnchorShell flybyLegacySourceShell
+  unfold flybyDynamicKappaPhi flybySourceShellStep flybyAnchorShell
+  rw [flybyLegacySourceShell_eq_four]
   norm_num
   ring
 
 theorem flybyDynamicKappaVac_anchor_eq (gate : ℝ) :
     flybyDynamicKappaVac flybyAnchorShell gate = 1 + 49 * gate := by
   unfold flybyDynamicKappaVac flybyVacuumSourceScale flybySourceShellStep flybyAnchorShell
-    flybyLegacySourceShell
-  rw [phi_of_shell_closed_form, phiTemperatureCoeff_eq_two]
-  norm_num [flybyLegacySourceShell]
+  rw [flybyLegacySourceShell_eq_four, phi_of_shell_closed_form, phiTemperatureCoeff_eq_two]
+  norm_num
   ring
 
 /-- Geometry-side release fraction; its exact orbit construction remains a hypothesis slot. -/
@@ -330,6 +349,63 @@ theorem flybyCoherentHorizonRelease_HQIV_open_at_one (sin2theta : ℝ) :
       flybyHorizonRelease gamma_HQIV sin2theta 1 := by
   rw [flybyVectorCoherenceGate_HQIV_open]
   unfold flybyCoherentHorizonRelease
+  ring
+
+/-!
+## Galaxy thermal screen retention (SPARC derived path)
+
+Python `hqiv_galaxy_derived_dynamics.thermal_screen_retention` mirrors the Lean
+Rindler gate of `hqivIRUVVacuumDivergenceLimit`: activity \(A_R\ge 0\) enters as
+\(1+(\gamma/2)A_R = 1+c_{\rm rindler}A_R\).  Isolated disks are hotter toward the
+centre; local hotness \(h(r)=1/(1+r/R_d)\) modulates the galaxy-scale budget
+\(A_0=\max(0,R_{\rm th}/\ell_{\rm th}-1)\) with \(R_{\rm th}=\max(R_d,R_{\rm eff})\).
+-/
+
+/-- Kirchhoff radial hotness: centre \(=1\), falls toward the cold edge. -/
+noncomputable def galaxyLocalThermalHotness (radius scaleRadius : ℝ) : ℝ :=
+  1 / (1 + radius / scaleRadius)
+
+/-- Galaxy-scale thermal activity budget \(A_0=\max(0,R_{\rm th}/\ell_{\rm th}-1)\). -/
+noncomputable def galaxyThermalActivityBudget (scaleRadius thermalLength : ℝ) : ℝ :=
+  max 0 (scaleRadius / thermalLength - 1)
+
+/-- Lean Rindler thermal screen retention \(C_{\rm th}=1/(1+(\gamma/2)A_R)\). -/
+noncomputable def galaxyThermalScreenRetention (activity : ℝ) : ℝ :=
+  1 / (1 + c_rindler_shared * activity)
+
+theorem galaxyThermalScreenRetention_eq (activity : ℝ) :
+    galaxyThermalScreenRetention activity =
+      1 / (1 + c_rindler_shared * activity) := rfl
+
+theorem galaxyThermalScreenRetention_of_zero_activity :
+    galaxyThermalScreenRetention 0 = 1 := by
+  unfold galaxyThermalScreenRetention
+  ring
+
+theorem galaxyThermalScreenRetention_le_one (activity : ℝ) (hA : 0 ≤ activity) :
+    galaxyThermalScreenRetention activity ≤ 1 := by
+  unfold galaxyThermalScreenRetention
+  have hc : c_rindler_shared = (1 : ℝ) / 5 := by
+    unfold c_rindler_shared
+    rw [gamma_eq_2_5]
+    norm_num
+  have hden : 0 < 1 + c_rindler_shared * activity := by
+    rw [hc]
+    nlinarith
+  have hnum : (1 : ℝ) ≤ 1 + c_rindler_shared * activity := by
+    rw [hc]
+    nlinarith
+  exact (div_le_one hden).mpr hnum
+
+theorem galaxyThermalActivityBudget_nonneg (scaleRadius thermalLength : ℝ) :
+    0 ≤ galaxyThermalActivityBudget scaleRadius thermalLength := by
+  unfold galaxyThermalActivityBudget
+  exact le_max_left _ _
+
+theorem galaxyLocalThermalHotness_at_centre (scaleRadius : ℝ) (hs : 0 < scaleRadius) :
+    galaxyLocalThermalHotness 0 scaleRadius = 1 := by
+  unfold galaxyLocalThermalHotness
+  field_simp
   ring
 
 end

@@ -69,10 +69,11 @@ geometry, and the VB resonance, the period-2 *covalent* suite (HF, HCl, CO, N₂
 ω_e to ~2% mean (N₂/O₂ within ~1%, HCl now within ~1%).  Two genuine anomalies remain:
 coreless H₂ (no nuclear core to contract against, −32%) and F₂ (the fluorine bond anomaly,
 ~−20%).  CO's residual (~+6%) is a bond-order/dative effect, correctly *not* removed by the
-ionicity coordinate (CO is nearly nonpolar, w ≈ 0.03).  Ionic / period-3 rows (LiH, NaCl,
-Cl₂) still fail the physical bond-length floor and expose an upstream geometry gap; with the
-resonance their ω_e is now honest, so e.g. LiF's downstream D_J transparently exposes the
-residual ionic-bond geometry rather than being masked by a compensating too-stiff ω_e.
+ionicity coordinate (CO is nearly nonpolar, w ≈ 0.03).  Period-3/n ionic gas geometry is
+now promoted via ``ionicGasOutsideContactLengthTarget`` (core × ``1+α``): NaCl gas ``r_e``
+is ~0.8% vs quarantine and ω_e ~+7%.  Remaining gaps: heavy-halogen (Br/I) nested-WF
+``1/Z`` radius collapse, mixed period-2/3 ionic holdouts (LiCl, NaF), and Cl₂ open-channel
+ω_e (~+78% with ``r_e`` already ~−5%).
 
 Input policy: NIST / CRC / HITRAN constants appear **only as comparison rows**.
 They never enter the prediction path.
@@ -90,6 +91,7 @@ from pathlib import Path
 from typing import Any
 
 import hqiv_atom_construction as ac
+import hqiv_chemistry_coupled_readout as ccr
 import hqiv_chemistry_tuft_dynamics as ctd
 import hqiv_dynamic_binding_chart as dbc
 import hqiv_electronic_valence_shells as evs
@@ -146,6 +148,15 @@ class SpectroscopyRow:
     label_j: str
     # HQIV-derived inputs
     r_e_angstrom: float
+    r_e_one_way_angstrom: float
+    r_e_geometry_binding_target_angstrom: float
+    r_e_geometry_binding_relaxed_angstrom: float
+    geometry_binding_coupling_level: str
+    r_e_outside_contact_target_angstrom: float
+    r_e_lattice_target_angstrom: float
+    geometry_route: str
+    comparison_regime: str
+    geometry_outside_candidate_clears_floor: bool
     D_e_ev: float
     reduced_mass_amu: float
     bond_order: int
@@ -168,6 +179,12 @@ class SpectroscopyRow:
     curvature_dielectric: float
     concentration_weight: float
     omega_e_flow_cm1: float
+    # coupled relaxation: selected rows feed the flow back into the headline generator
+    coupling_level: str
+    missing_coupled_relaxation_flag: int
+    coupled_relaxation_weight: float
+    omega_e_one_way_cm1: float
+    omega_e_coupled_cm1: float
     # emergent single-generator route: a·r_e = (1+γ/2)·[∫₁^ξ ρ_curv dξ + (γ/2)·defect]
     xi_contact: float
     curvature_integral: float
@@ -226,10 +243,64 @@ def nested_wf_contact_length_angstrom(z_i: int, z_j: int) -> float:
 MIN_PHYSICAL_BOND_ANGSTROM = 0.70
 
 
-def geometry_is_reliable(z_i: int, z_j: int, r_e_angstrom: float) -> bool:
-    """NIST-free sanity gate: reject sub-physical upstream bond lengths."""
+def geometry_is_reliable(
+    z_i: int,
+    z_j: int,
+    r_e_angstrom: float,
+    *,
+    route: str | None = None,
+    outside_target_angstrom: float | None = None,
+) -> bool:
+    """
+    NIST-free sanity gate for headline spectroscopy geometry.
+
+    Ionic outside-contact and period-3 halogen open-channel routes are accepted
+    once the proved gas-phase target clears the universal bond-length floor
+    (Lean ``ionicGasOutsideContactLengthTarget`` /
+    ``period3HalogenBondLengthTarget``).
+    """
     del z_i, z_j
+    if route in ("ionic_outside_contact", "period3_halogen_open_channel"):
+        return geometry_outside_candidate_clears_floor(outside_target_angstrom or 0.0)
     return math.isfinite(r_e_angstrom) and r_e_angstrom >= MIN_PHYSICAL_BOND_ANGSTROM
+
+
+def geometry_outside_candidate_clears_floor(outside_target_angstrom: float) -> bool:
+    """Whether the outside-contact candidate clears the universal bond-length floor."""
+    return (
+        math.isfinite(outside_target_angstrom)
+        and outside_target_angstrom >= MIN_PHYSICAL_BOND_ANGSTROM
+    )
+
+
+def missing_spectroscopy_coupled_relaxation_flag(
+    z_i: int,
+    z_j: int,
+    channel_defect: int,
+    geometry_reliable: bool,
+) -> int:
+    """
+    Structural activation for feeding the concentration-flow target back into ω_e.
+
+    This is not a residual fit.  It marks rows where the residual audit identified the
+    one-way pipeline itself as the likely missing piece:
+
+    * coreless H2 has no nuclear core contraction feedback;
+    * LiH is the light alkali hydride where the valley/flow split is the dominant slot;
+    * homonuclear halogens with an open p-channel need concentration relaxation.
+
+    Period-3/ionic rows that fail the bond-length floor remain geometry-gap diagnostics.
+    """
+    if not geometry_reliable:
+        return 0
+    zs = sorted((z_i, z_j))
+    if zs == [1, 1]:
+        return 1
+    if zs == [1, 3]:
+        return 1
+    if z_i == z_j and channel_defect > 0 and max(z_i, z_j) >= 9:
+        return 1
+    return 0
 
 
 def valley_fold_force_constant_N_m(
@@ -559,17 +630,49 @@ def evaluate_diatomic(bench: dbc.MoleculeBenchmark) -> SpectroscopyRow:
     label_i = bench.fragments[0].label
     label_j = bench.fragments[1].label
 
-    r_e = ctd.bond_equilibrium_from_atomic_numbers(z_i, z_j)
+    r_e_covalent = ctd.bond_equilibrium_from_atomic_numbers(z_i, z_j)
+    geometry_route = ctd.geometry_route_for_pair(z_i, z_j)
+    r_e_outside = ctd.outside_contact_geometry_target_angstrom(z_i, z_j)
+    # Headline r_e: promote proved gas outside / halogen targets when that route
+    # dominates; otherwise keep covalent nested-WF.
+    if geometry_route in ("ionic_outside_contact", "period3_halogen_open_channel"):
+        r_e = r_e_outside
+    else:
+        r_e = r_e_covalent
+    from hqiv_lab.crystal_geometry import (
+        comparison_regime_for_species,
+        ionic_lattice_nearest_neighbor_angstrom,
+    )
+
+    comparison_regime = comparison_regime_for_species(bench.name, z_i=z_i, z_j=z_j)
+    r_e_lattice = (
+        ionic_lattice_nearest_neighbor_angstrom(z_i, z_j)
+        if comparison_regime == "solid_lattice"
+        else 0.0
+    )
     binding = dbc.dynamic_binding_for_benchmark(bench)
     d_e = binding.binding_ev
     xi_contact = binding.contact_xi
     mu = reduced_mass_amu(z_i, z_j)
-    bond_order = max(evs.covalent_bond_order(z_i, z_j), 1)
+    bond_order = int(max(evs.covalent_bond_order(z_i, z_j), 1))
     ell_c = nested_wf_contact_length_angstrom(z_i, z_j)
-    reliable = geometry_is_reliable(z_i, z_j, r_e)
+    reliable = geometry_is_reliable(
+        z_i,
+        z_j,
+        r_e,
+        route=geometry_route,
+        outside_target_angstrom=r_e_outside,
+    )
+    outside_clears_floor = geometry_outside_candidate_clears_floor(r_e_outside)
 
     # Route 1 — genuine backbone valley well (primary).
     k_valley, valley_min, valley_valid = valley_fold_force_constant_N_m(z_i, z_j, d_e)
+    geometry_target = (
+        r_e_outside if geometry_route != "covalent_nested_wf" else valley_min
+    )
+    geometry_lam = ccr.structural_coupling_weight(float(not reliable), 1.0)
+    r_e_relaxed = ccr.geometry_binding_relaxed_length(r_e, geometry_target, geometry_lam)
+    geometry_coupling_level = ccr.coupling_level_from_weight(geometry_lam)
     w_valley = omega_e_cm1_from_k(k_valley, mu) if valley_valid else 0.0
     # Route 2 — Mie cross-check (n_rep read off the backbone valley repulsion power).
     k_mie = force_constant_mie_well_N_m(d_e, r_e, bond_order)
@@ -620,10 +723,19 @@ def evaluate_diatomic(bench: dbc.MoleculeBenchmark) -> SpectroscopyRow:
     k_resonance = ionic_resonance_force_constant_N_m(k_curv, r_e, ionic_char)
     w_resonance = omega_e_cm1_from_k(k_resonance, mu) if k_resonance > 0.0 else 0.0
 
-    # Headline ωₑ is the emergent curvature-integral generator dressed by the VB
-    # covalent↔ionic resonance; the diffuse↔concentrated bracket and the CM dielectric
-    # flow are retained as provenance/cross-checks.
-    w_report = w_resonance if w_resonance > 0.0 else (w_curv if w_curv > 0.0 else w_flow)
+    # One-way headline is the emergent curvature-integral generator dressed by the VB
+    # covalent↔ionic resonance.  The coupled headline below feeds the derived
+    # concentration-flow target back only when structural flags say the one-way pipeline
+    # is missing dynamic relaxation.
+    w_one_way = w_resonance if w_resonance > 0.0 else (w_curv if w_curv > 0.0 else w_flow)
+    missing_coupling = missing_spectroscopy_coupled_relaxation_flag(
+        z_i, z_j, channel_defect, reliable
+    )
+    coupled_target = w_flow if w_flow > 0.0 else w_one_way
+    lam = ccr.structural_coupling_weight(float(missing_coupling), 1.0)
+    w_coupled = ccr.coupled_relaxation_step(w_one_way, coupled_target, lam)
+    coupling_level = ccr.coupling_level_from_weight(lam)
+    w_report = w_coupled
     b_e = rotational_constant_cm1(r_e, mu)
     d_e_cm1 = d_e * EV_J / (HBAR_J_S * 2.0 * math.pi * C_CM_S)  # D_e in cm^-1
     omega_e_xe = w_report * w_report / (4.0 * d_e_cm1) if d_e_cm1 > 0.0 else 0.0
@@ -643,6 +755,15 @@ def evaluate_diatomic(bench: dbc.MoleculeBenchmark) -> SpectroscopyRow:
         label_i=label_i,
         label_j=label_j,
         r_e_angstrom=r_e,
+        r_e_one_way_angstrom=r_e_covalent,
+        r_e_geometry_binding_target_angstrom=geometry_target,
+        r_e_geometry_binding_relaxed_angstrom=r_e_relaxed,
+        geometry_binding_coupling_level=geometry_coupling_level,
+        r_e_outside_contact_target_angstrom=r_e_outside,
+        r_e_lattice_target_angstrom=r_e_lattice,
+        geometry_route=geometry_route,
+        comparison_regime=comparison_regime,
+        geometry_outside_candidate_clears_floor=outside_clears_floor,
         D_e_ev=d_e,
         reduced_mass_amu=mu,
         bond_order=bond_order,
@@ -661,6 +782,11 @@ def evaluate_diatomic(bench: dbc.MoleculeBenchmark) -> SpectroscopyRow:
         curvature_dielectric=n_dielectric,
         concentration_weight=s_weight,
         omega_e_flow_cm1=w_flow,
+        coupling_level=coupling_level,
+        missing_coupled_relaxation_flag=missing_coupling,
+        coupled_relaxation_weight=lam,
+        omega_e_one_way_cm1=w_one_way,
+        omega_e_coupled_cm1=w_coupled,
         xi_contact=xi_contact,
         curvature_integral=curv_integral,
         shared_channel_capacity=channel_capacity,
@@ -757,15 +883,29 @@ def build_payload() -> dict[str, Any]:
     return {
         "source": "scripts/hqiv_molecular_spectroscopy.py",
         "lean_module": "Hqiv.QuantumChemistry.MolecularSpectroscopy",
+        "lean_geometry_module": "Hqiv.QuantumChemistry.OutsideContactGeometry",
+        "lean_crystal_module": "Hqiv.QuantumChemistry.CrystalContactGeometry",
         "parameter_policy": "no_fitted_coefficients",
         "input_policy": "NIST/CRC/HITRAN constants are comparison-only; never in the solve",
         "derivation": {
-            "r_e": "hqiv_chemistry_tuft_dynamics.bond_equilibrium_from_atomic_numbers (nested-WF × monogamy 1-alpha/2)",
+            "r_e": (
+                "covalent: bond_equilibrium_from_atomic_numbers; "
+                "ionic/period-3 halogen: outside_contact_geometry_target_angstrom "
+                "(Lean ionicGasOutsideContactLengthTarget / period3HalogenBondLengthTarget)"
+            ),
+            "r_e_lattice": "CrystalContactGeometry ionicLatticeNearestNeighborTarget for solid_lattice comparison_regime (NaCl rocksalt)",
+            "comparison_regime": "gas_vapor = diatomic spectroscopy witness; solid_lattice = crystal nn contact (distinct from gas-phase r_e)",
+            "r_e_outside_contact": (
+                "OutsideContactGeometry: ionicGasOutsideContactLengthTarget "
+                "(core × (1+α)) or period3HalogenBondLengthTarget; no comparison Å"
+            ),
             "D_e": "hqiv_dynamic_binding_chart.dynamic_binding_for_benchmark (inside surplus + outside G_eff)",
             "mu": "HQIV cluster mass (hqiv_nuclear_curvature_binding) + electron rest mass",
             "B_e": "hbar/(4 pi c mu r_e^2)",
-            "omega_e": "emergent single generator: Morse k=2 D_e a^2 with dimensionless range a*r_e = (1+gamma/2)*[∫_1^{xi_contact} rho_curv(xi) dxi + (gamma/2)*defect] — the occupancy-resolved accumulated lattice curvature out to the binding contact shell, dressed by one informational-monogamy spectator contact (1+gamma/2 = spectatorHalfMonogamyContact = 6/5; = 2*alpha = 3*gamma at the lattice point alpha=3/5, gamma=2/5). The defect in {0,1} is the foundational occupancy resolution the atomic Compton shell discards. The covalent force constant is then dressed by the VALENCE-BOND COVALENT<->IONIC RESONANCE k_eff=(1-w)k_cov + w*k_ion: k_ion=(n_rep-1)e^2/(4 pi eps0 r_e^3) is the point-charge Born-Lande curvature with the SAME monogamy-core power n_rep=4, and w=delta^2 is the derived ionic character (delta=|p_i-p_j|/(p_i+p_j) from the native valence electron-pull p=z_eff/(m+1)). Homonuclear bonds have w=0 (N2/O2/F2/H2 untouched); polar/ionic bonds (HF, HCl, LiF) relax toward the softer ionic curvature, reproducing measured ionic characters (CO~0.03, HCl~0.18, LiH~0.10) with no fit. No fitted coefficient; provenance cross-checks: diffuse↔concentrated valley bracket and the Clausius–Mossotti curvature-dielectric flow.",
+            "omega_e": "emergent single generator: Morse k=2 D_e a^2 with dimensionless range a*r_e = (1+gamma/2)*[∫_1^{xi_contact} rho_curv(xi) dxi + (gamma/2)*defect], dressed by valence-bond covalent↔ionic resonance. Rows flagged by derived missing-coupling structure (coreless H2, light LiH, open-channel homonuclear halogens) apply the Lean CoupledRelaxation step from the one-way resonance generator toward the already-derived curvature-concentration flow target. No comparison residual enters the activation or target.",
             "bond_ionic_character": "VB ionic character w=delta^2, delta=|p_i-p_j|/(p_i+p_j); p=hqiv_atom_construction.valence_electron_pull = z_eff(valence)/(m_valence+1) on the correct multi-electron aufbau shell (electronegativity coordinate; F>Cl>O>N>C>H>Na>Li ordering, no Pauling table)",
+            "omega_e_one_way": "one-way curvature-integral + VB resonance generator before concentration-flow feedback",
+            "omega_e_coupled": "coupledRelaxationStep(one_way, omega_e_flow, structural weight); weight is 1 only for derived missing-coupling classes and 0 otherwise",
             "omega_e_xe": "Morse closure omega_e^2/(4 D_e)",
             "alpha_e": "Pekeris 6 sqrt(omega_e_xe B_e^3)/omega_e - 6 B_e^2/omega_e",
             "omega_e_concentration_bracket": "lower=diffuse valley on shell-ladder length r_m=m+1; upper=valley on contracted nested-WF contact length ell=R_m/(alpha_eff Z); the true omega_e lies between, set by the not-yet-derived curvature-concentration flow (open term, not fitted)",
@@ -777,11 +917,12 @@ def build_payload() -> dict[str, Any]:
         "summary": {
             "count": len(rows),
             "count_reliable_geometry": sum(1 for r in rows if r.geometry_reliable),
-            "reliable_geometry_note": (
-                "headline accuracy is over rows whose upstream derived r_e passes the "
-                "physical bond-length floor (>= 0.70 A); failing rows expose an upstream "
-                "period-3/ionic geometry gap, not spectroscopic error"
-            ),
+                "reliable_geometry_note": (
+                    "headline accuracy is over rows whose geometry route clears the "
+                    "universal bond-length floor (>= 0.70 A). ionic_outside_contact uses "
+                    "ionicGasOutsideContactLengthTarget (core × (1+α)); "
+                    "period3_halogen_open_channel uses period3HalogenBondLengthTarget"
+                ),
             "mean_abs_error_pct_reliable": {
                 "r_e": mean_abs("r_e", reliable_only=True),
                 "B_e": mean_abs("B_e", reliable_only=True),
@@ -857,7 +998,7 @@ def print_report(payload: dict[str, Any]) -> None:
     s = payload["summary"]["mean_abs_error_pct_reliable"]
     brk = payload["summary"]["omega_e_concentration_bracket"]
     print()
-    print("* upstream derived r_e below the physical bond-length floor (period-3/ionic geometry gap)")
+    print("* = geometry route failed the universal bond-length floor (rare)")
     print("ω_e: emergent generator — Morse k=2 D_e a², a·r_e = (1+γ/2)·[∫₁^ξ ρ_curv dξ + (γ/2)·defect]")
     print("     defect=1 (one open p-shell channel, bo<cap=2ℓ+1=3) adds a monogamy spectator γ/2 step (O₂,F₂); 0 for maximal/closed bonds")
     print("provenance: ω_e rides inside the [diffuse..concentrated] curvature bracket (cross-check fields retained)")

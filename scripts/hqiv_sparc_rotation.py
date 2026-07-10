@@ -13,6 +13,14 @@ with horizon repartition
 
     a_HQIV = a_baryonic / f.
 
+Two dynamics modes:
+
+* ``--dynamics legacy`` (default): activity-blend WHIM (paper continuity).
+* ``--dynamics derived``: proton-pin age → φ_hom + geometry-only Lean φ
+  (``hqiv_galaxy_derived_dynamics``; no seed/active cases).
+
+``--compare-suite`` runs legacy floor/WHIM/pinch plus derived floor/WHIM.
+
 Mass-to-light ratios at 3.6 micron use the SPARC literature fiducials
 ``Upsilon_disk = 0.5 Msun/Lsun`` and ``Upsilon_bul = 0.7 Msun/Lsun`` (Lelli+2016,
 McGaugh+2016 PRL 117, 201101). These are external photometric conversions, not
@@ -24,6 +32,8 @@ CLI examples::
     python hqiv_sparc_rotation.py --galaxy NGC3198
     python hqiv_sparc_rotation.py --run-all --quality-cut 2 --min-inclination 30 \
         --write artifacts/sparc_hqiv_full.json
+    python hqiv_sparc_rotation.py --compare-suite --quality-cut 2 --min-inclination 30 \
+        --write artifacts/sparc_hqiv_compare_v3.json
 """
 
 from __future__ import annotations
@@ -37,6 +47,7 @@ from pathlib import Path
 from typing import Iterable
 
 import hqiv_galaxy_rotation as _gal
+import hqiv_galaxy_derived_dynamics as _der
 import hqiv_filament_environment as _fil
 import hqiv_spin_alignment as _spin
 import hqiv_whim_filament as _whim
@@ -260,19 +271,44 @@ class SparcOptions:
     m_whim: int = _whim.M_WHIM_DEFAULT
     tortuosity_gain: float = _whim.DEFAULT_TORTUOSITY_GAIN
     filament_catalog_path: str | None = None
+    use_pinch_enhancement: bool = False
+    pinch_radius_fraction: float = _whim.DEFAULT_PINCH_RADIUS_FRACTION
+    pinch_soft_gate: float = _whim.DEFAULT_PINCH_SOFT_GATE
+    pinch_max_boost: float = _whim.DEFAULT_PINCH_MAX_BOOST
+    #: ``legacy`` = activity-blend WHIM; ``derived`` = proton-pin + geometry-only Lean φ.
+    dynamics: str = "legacy"
+
+    def _filament_catalog(self) -> dict[str, _fil.FilamentEnvironment] | None:
+        if self.filament_catalog_path:
+            return _fil.load_filament_catalog(self.filament_catalog_path)
+        if _fil.DEFAULT_CATALOG_PATH.exists():
+            return _fil.load_filament_catalog(_fil.DEFAULT_CATALOG_PATH)
+        return None
 
     def whim_options(self) -> _whim.WhimFilamentOptions:
-        catalog = None
-        if self.filament_catalog_path:
-            catalog = _fil.load_filament_catalog(self.filament_catalog_path)
-        elif _fil.DEFAULT_CATALOG_PATH.exists():
-            catalog = _fil.load_filament_catalog(_fil.DEFAULT_CATALOG_PATH)
+        catalog = self._filament_catalog()
         return _whim.WhimFilamentOptions(
             enabled=self.whim_filament,
             m_ism=self.m_ism,
             m_whim=self.m_whim,
             tortuosity_gain=self.tortuosity_gain,
             filament_catalog=catalog if catalog else None,
+            use_pinch_enhancement=self.use_pinch_enhancement and self.whim_filament,
+            pinch_radius_fraction=self.pinch_radius_fraction,
+            pinch_soft_gate=self.pinch_soft_gate,
+            pinch_max_boost=self.pinch_max_boost,
+        )
+
+    def derived_options(self) -> _der.DerivedDynamicsOptions:
+        catalog = self._filament_catalog()
+        return _der.DerivedDynamicsOptions(
+            m_ism=self.m_ism,
+            m_whim=self.m_whim,
+            upsilon_disk=self.upsilon_disk,
+            upsilon_bul=self.upsilon_bul,
+            filament_catalog=catalog if catalog else None,
+            use_whim_boundary=self.whim_filament,
+            use_homogeneous_dress=True,
         )
 
 
@@ -297,6 +333,9 @@ class SparcRotationRow:
     activity_index: float
     whim_seed_ratio: float
     misalignment_sin: float
+    pinch_soft_factor: float
+    lean_phi_pinch_enhancement: float
+    solar_whim_boundary_shape: float
 
 
 def baryonic_v_squared_kms2(
@@ -345,6 +384,42 @@ def hqiv_rotation_point_sparc(
     )
     v_b_si = math.sqrt(max(v_b2, 0.0)) * 1.0e3
     a_b = (v_b_si * v_b_si) / r_m if r_m > 0.0 else 0.0
+
+    if options.dynamics == "derived":
+        pt = _der.hqiv_rotation_point_derived(
+            r_m,
+            a_b,
+            master,
+            options=options.derived_options(),
+            projection=options.projection,
+            support_fraction=options.support_fraction,
+            use_rindler_denominator=options.use_rindler_denominator,
+        )
+        return SparcRotationRow(
+            radius_kpc=row.rad_kpc,
+            v_obs_kms=row.v_obs_kms,
+            e_v_kms=row.e_v_kms,
+            v_gas_kms=row.v_gas_kms,
+            v_disk_kms=row.v_disk_kms,
+            v_bul_kms=row.v_bul_kms,
+            v_baryonic_kms=pt["v_baryonic_kms"],
+            v_hqiv_kms=pt["v_hqiv_kms"],
+            baryonic_accel_m_s2=pt["baryonic_accel_m_s2"],
+            hqiv_accel_m_s2=pt["hqiv_accel_m_s2"],
+            inertia_factor_full=pt["inertia_factor_full"],
+            one_minus_f_full=pt["one_minus_f_full"],
+            epsilon_doppler=pt["epsilon_doppler"],
+            phi_accel_si=pt["phi_accel_si"],
+            phi_whim_m_s2=pt["phi_whim_m_s2"],
+            phase_coherence=pt["geometric_coherence"],
+            activity_index=pt["gas_fraction"],  # continuous ρ, not morphology activity
+            whim_seed_ratio=0.0,  # no seed/active case split in derived path
+            misalignment_sin=pt["misalignment_sin"],
+            pinch_soft_factor=1.0,
+            lean_phi_pinch_enhancement=0.0,
+            solar_whim_boundary_shape=pt["solar_whim_boundary_shape"],
+        )
+
     eps = _gal.mass_horizon_doppler_lapse(
         v_b_si,
         projection=options.projection,
@@ -365,6 +440,9 @@ def hqiv_rotation_point_sparc(
         activity = whim_state.activity_index
         seed_ratio = whim_state.whim_seed_ratio
         misalign = whim_state.misalignment_sin
+        pinch_soft = whim_state.pinch_soft_factor
+        lean_pinch = whim_state.lean_phi_pinch_enhancement
+        shape = whim_state.solar_whim_boundary_shape
     else:
         phi_part = _phi_accel_si(r_m, lapse_radius_m, options.phi_shell)
         phi_whim = 0.0
@@ -372,6 +450,9 @@ def hqiv_rotation_point_sparc(
         activity = _whim.galaxy_activity_index(master)
         seed_ratio = 0.0
         misalign = 0.0
+        pinch_soft = 1.0
+        lean_pinch = 0.0
+        shape = _whim.solar_whim_boundary_shape(options.m_ism, options.m_whim)
     phi_full = phi_part + 6.0 * a_b * eps
     f_full = _gal.hqiv_inertia_factor(a_b, phi_full)
     a_hqiv = a_b / max(f_full, 1.0e-30)
@@ -396,6 +477,9 @@ def hqiv_rotation_point_sparc(
         activity_index=activity,
         whim_seed_ratio=seed_ratio,
         misalignment_sin=misalign,
+        pinch_soft_factor=pinch_soft,
+        lean_phi_pinch_enhancement=lean_pinch,
+        solar_whim_boundary_shape=shape,
     )
 
 
@@ -432,6 +516,9 @@ class GalaxySummary:
     mean_phi_whim_m_s2: float
     mean_whim_seed_ratio: float
     mean_misalignment_sin: float
+    mean_pinch_soft_factor: float
+    mean_lean_phi_pinch_enhancement: float
+    solar_whim_boundary_shape: float
 
 
 def _safe_div(num: float, denom: float) -> float:
@@ -459,6 +546,8 @@ def evaluate_galaxy(
     sum_phi_whim = 0.0
     sum_seed_ratio = 0.0
     sum_misalign = 0.0
+    sum_pinch_soft = 0.0
+    sum_lean_pinch = 0.0
     valid = 0
     for r in rows:
         if r.e_v_kms <= 0.0 or not math.isfinite(r.v_obs_kms):
@@ -476,9 +565,57 @@ def evaluate_galaxy(
         sum_phi_whim += r.phi_whim_m_s2
         sum_seed_ratio += r.whim_seed_ratio
         sum_misalign += r.misalignment_sin
+        sum_pinch_soft += r.pinch_soft_factor
+        sum_lean_pinch += r.lean_phi_pinch_enhancement
         valid += 1
     n = max(valid, 1)
     outer = rows[-1] if rows else None
+    if options.dynamics == "derived":
+        der_meta = _der.galaxy_derived_metadata(
+            galaxy.master, options=options.derived_options()
+        )
+        state = der_meta["state_at_rdisk"]
+        assert isinstance(state, dict)
+        summary = GalaxySummary(
+            name=galaxy.master.name,
+            quality=galaxy.master.quality,
+            hubble_label=galaxy.master.hubble_label,
+            distance_mpc=galaxy.master.distance_mpc,
+            inclination_deg=galaxy.master.inclination_deg,
+            rdisk_kpc=galaxy.master.rdisk_kpc,
+            vflat_obs_kms=galaxy.master.vflat_kms,
+            n_points=valid,
+            chi2_hqiv=chi2_h,
+            chi2_baryonic=chi2_b,
+            chi2_red_hqiv=_safe_div(chi2_h, n),
+            chi2_red_baryonic=_safe_div(chi2_b, n),
+            rms_hqiv_kms=math.sqrt(sq_h / n),
+            rms_baryonic_kms=math.sqrt(sq_b / n),
+            mean_residual_hqiv_kms=sum_res_h / n,
+            mean_residual_baryonic_kms=sum_res_b / n,
+            mean_one_minus_f=sum_one_minus_f / n,
+            v_hqiv_outer_kms=outer.v_hqiv_kms if outer is not None else 0.0,
+            v_obs_outer_kms=outer.v_obs_kms if outer is not None else 0.0,
+            outer_radius_kpc=outer.radius_kpc if outer is not None else 0.0,
+            seed_class=False,
+            activity_index=float(state["gas_fraction"]),
+            mean_phase_coherence=sum_coherence / n,
+            mean_phi_whim_m_s2=sum_phi_whim / n,
+            mean_whim_seed_ratio=0.0,
+            mean_misalignment_sin=sum_misalign / n,
+            mean_pinch_soft_factor=1.0,
+            mean_lean_phi_pinch_enhancement=0.0,
+            solar_whim_boundary_shape=float(state["solar_whim_boundary_shape"]),
+        )
+        return {
+            "summary": asdict(summary),
+            "rows": [asdict(r) for r in rows],
+            "options": asdict(options),
+            "derived_dynamics": der_meta,
+            "whim_filament": None,
+            "spin_alignment": None,
+        }
+
     whim_meta = _whim.galaxy_whim_metadata(galaxy.master, options=options.whim_options())
     summary = GalaxySummary(
         name=galaxy.master.name,
@@ -507,6 +644,9 @@ def evaluate_galaxy(
         mean_phi_whim_m_s2=sum_phi_whim / n,
         mean_whim_seed_ratio=sum_seed_ratio / n,
         mean_misalignment_sin=sum_misalign / n,
+        mean_pinch_soft_factor=sum_pinch_soft / n,
+        mean_lean_phi_pinch_enhancement=sum_lean_pinch / n,
+        solar_whim_boundary_shape=float(whim_meta["solar_whim_boundary_shape"]),
     )
     return {
         "summary": asdict(summary),
@@ -669,6 +809,87 @@ def run_catalog(
     ]
 
 
+def run_comparison_suite(
+    catalog: dict[str, SparcGalaxy],
+    *,
+    base_options: SparcOptions = SparcOptions(),
+) -> dict[str, object]:
+    """Ablation: legacy floor/WHIM/pinch vs derived proton-pin dynamics.
+
+    Lean modules exercised:
+      - ``hqivFluidInertiaFactor`` (all variants)
+      - ``solarWhimBoundaryShape`` (WHIM / derived)
+      - ``homogeneousCurvatureBudgetAtXi`` (derived)
+      - ``whimPhiPinchEnhancement`` soft-gated (legacy pinch-on only)
+    """
+    from dataclasses import replace
+
+    variants: dict[str, SparcOptions] = {
+        "legacy_cosmic_floor": replace(
+            base_options,
+            dynamics="legacy",
+            whim_filament=False,
+            use_pinch_enhancement=False,
+        ),
+        "legacy_whim": replace(
+            base_options,
+            dynamics="legacy",
+            whim_filament=True,
+            use_pinch_enhancement=False,
+        ),
+        "legacy_whim_pinch": replace(
+            base_options,
+            dynamics="legacy",
+            whim_filament=True,
+            use_pinch_enhancement=True,
+        ),
+        "derived_floor": replace(
+            base_options,
+            dynamics="derived",
+            whim_filament=False,
+            use_pinch_enhancement=False,
+        ),
+        "derived_whim": replace(
+            base_options,
+            dynamics="derived",
+            whim_filament=True,
+            use_pinch_enhancement=False,
+        ),
+    }
+    out: dict[str, object] = {
+        "n_galaxies": len(catalog),
+        "proton_pin_cosmology": _der.proton_pin_cosmology().as_dict(),
+        "lean_modules": [
+            "Hqiv.Physics.HQIVFluidClosureScaffold.hqivFluidInertiaFactor",
+            "Hqiv.Physics.SolarDynamics.solarWhimBoundaryShape",
+            "Hqiv.Physics.HomogeneousCurvatureSecondOrder.homogeneousCurvatureBudgetAtXi",
+            "Hqiv.Physics.PlasmaZPinchFilament.whimPhiPinchEnhancement",
+            "Hqiv.Physics.OrbitalFlybyScaffold.flybyPropagationXi",
+        ],
+        "variants": {},
+    }
+    for label, opts in variants.items():
+        per = run_catalog(catalog, options=opts)
+        summary = summarize_catalog(per)
+        out["variants"][label] = {
+            "options": asdict(opts),
+            "summary": summary,
+        }
+    # Compact head-to-head table for quick audit.
+    head: dict[str, object] = {}
+    for label, block in out["variants"].items():  # type: ignore[union-attr]
+        s = block["summary"]  # type: ignore[index]
+        head[label] = {
+            "median_chi2_red_hqiv": s.get("median_chi2_red_hqiv"),
+            "median_rms_hqiv_kms": s.get("median_rms_hqiv_kms"),
+            "fraction_hqiv_better": s.get("fraction_hqiv_better"),
+            "ratio_sum_chi2_hqiv_over_baryonic": s.get("ratio_sum_chi2_hqiv_over_baryonic"),
+            "n_hqiv_better_than_baryonic": s.get("n_hqiv_better_than_baryonic"),
+        }
+    out["head_to_head"] = head
+    return out
+
+
 def list_galaxies(catalog: dict[str, SparcGalaxy]) -> list[dict[str, object]]:
     rows: list[dict[str, object]] = []
     for name, gal in sorted(catalog.items()):
@@ -695,6 +916,7 @@ def list_galaxies(catalog: dict[str, SparcGalaxy]) -> list[dict[str, object]]:
 
 
 def _make_options(args: argparse.Namespace) -> SparcOptions:
+    use_pinch = bool(args.use_pinch_enhancement) and not bool(args.no_pinch_enhancement)
     return SparcOptions(
         upsilon_disk=args.upsilon_disk,
         upsilon_bul=args.upsilon_bul,
@@ -708,6 +930,11 @@ def _make_options(args: argparse.Namespace) -> SparcOptions:
         m_whim=args.m_whim,
         tortuosity_gain=args.tortuosity_gain,
         filament_catalog_path=args.filament_catalog,
+        use_pinch_enhancement=use_pinch,
+        pinch_radius_fraction=args.pinch_radius_fraction,
+        pinch_soft_gate=args.pinch_soft_gate,
+        pinch_max_boost=args.pinch_max_boost,
+        dynamics=args.dynamics,
     )
 
 
@@ -717,6 +944,17 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--list-galaxies", action="store_true")
     parser.add_argument("--galaxy", default=None, help="evaluate a single SPARC galaxy")
     parser.add_argument("--run-all", action="store_true")
+    parser.add_argument(
+        "--compare-suite",
+        action="store_true",
+        help="run legacy floor/WHIM/pinch vs derived proton-pin ablation",
+    )
+    parser.add_argument(
+        "--dynamics",
+        choices=("legacy", "derived"),
+        default="legacy",
+        help="legacy=activity-blend WHIM; derived=proton-pin age + geometry-only Lean φ",
+    )
     parser.add_argument("--quality-cut", type=int, default=None, help="keep galaxies with Q <= cut (1=high)")
     parser.add_argument("--min-inclination", type=float, default=None)
     parser.add_argument("--min-points", type=int, default=1)
@@ -740,6 +978,34 @@ def main(argv: list[str] | None = None) -> int:
         default=None,
         help="JSON filament spine vectors (see data/sparc_filament/filament_vectors.json)",
     )
+    parser.add_argument(
+        "--use-pinch-enhancement",
+        action="store_true",
+        help="enable Lean whimPhiPinchEnhancement soft gate on the WHIM boundary φ",
+    )
+    parser.add_argument(
+        "--no-pinch-enhancement",
+        action="store_true",
+        help="explicitly disable pinch (default is already off; kept for ablation CLIs)",
+    )
+    parser.add_argument(
+        "--pinch-radius-fraction",
+        type=float,
+        default=_whim.DEFAULT_PINCH_RADIUS_FRACTION,
+        help="r_pinch / R_fil for Lean (R/r)^2 compression (default 0.25 → C=16)",
+    )
+    parser.add_argument(
+        "--pinch-soft-gate",
+        type=float,
+        default=_whim.DEFAULT_PINCH_SOFT_GATE,
+        help="soft-gate scale for mapping Lean compression into φ boost",
+    )
+    parser.add_argument(
+        "--pinch-max-boost",
+        type=float,
+        default=_whim.DEFAULT_PINCH_MAX_BOOST,
+        help="maximum soft-gated pinch boost on the WHIM boundary hump",
+    )
     parser.add_argument("--write", default=None, help="dump full JSON payload to this path")
     parser.add_argument("--summary-only", action="store_true", help="print only the catalog summary")
     parser.add_argument("--indent", type=int, default=2)
@@ -761,16 +1027,35 @@ def main(argv: list[str] | None = None) -> int:
         print(json.dumps(payload, indent=args.indent))
         return 0
 
-    if args.run_all:
+    if args.compare_suite or args.run_all:
         filtered = select_galaxies(
             catalog,
             quality_cut=args.quality_cut,
             min_inclination_deg=args.min_inclination,
             min_points=args.min_points,
         )
-        per_galaxy = run_catalog(filtered, options=_make_options(args))
+        opts = _make_options(args)
+        if args.compare_suite:
+            suite = run_comparison_suite(filtered, base_options=opts)
+            payload = {
+                "n_in_catalog": len(catalog),
+                "n_evaluated": len(filtered),
+                "filters": {
+                    "quality_cut": args.quality_cut,
+                    "min_inclination_deg": args.min_inclination,
+                    "min_points": args.min_points,
+                },
+                "comparison_suite": suite,
+            }
+            if args.write:
+                Path(args.write).parent.mkdir(parents=True, exist_ok=True)
+                Path(args.write).write_text(json.dumps(payload, indent=args.indent))
+            print(json.dumps(payload, indent=args.indent))
+            return 0
+
+        per_galaxy = run_catalog(filtered, options=opts)
         summary = summarize_catalog(per_galaxy)
-        payload: dict[str, object] = {
+        payload = {
             "n_in_catalog": len(catalog),
             "n_evaluated": len(per_galaxy),
             "filters": {
@@ -778,8 +1063,13 @@ def main(argv: list[str] | None = None) -> int:
                 "min_inclination_deg": args.min_inclination,
                 "min_points": args.min_points,
             },
-            "options": asdict(_make_options(args)),
+            "options": asdict(opts),
             "summary": summary,
+            "lean_modules": [
+                "Hqiv.Physics.HQIVFluidClosureScaffold.hqivFluidInertiaFactor",
+                "Hqiv.Physics.SolarDynamics.solarWhimBoundaryShape",
+                "Hqiv.Physics.PlasmaZPinchFilament.whimPhiPinchEnhancement",
+            ],
         }
         if not args.summary_only:
             payload["per_galaxy"] = per_galaxy

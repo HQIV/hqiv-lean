@@ -56,6 +56,7 @@ inductive DerivedPhase
   | gas
   | molecularCluster
   | liquid
+  | metastableLiquid
   | solid
   | supercritical
   deriving DecidableEq, Repr
@@ -117,7 +118,7 @@ noncomputable def stericRepulsionMultiplierScaffold (contactPoints : ℕ) : ℝ 
 noncomputable def phaseCoordinationFactor (ph : DerivedPhase) (z : ℕ) (zMax : ℕ) : ℝ :=
   match ph with
   | .gas | .molecularCluster => 1
-  | .liquid | .solid | .supercritical => (z : ℝ) / (zMax : ℝ)
+  | .liquid | .metastableLiquid | .solid | .supercritical => (z : ℝ) / (zMax : ℝ)
 
 /-- Network vev uses the same networked cluster factor as `tuftVevFactorNetworkedAtCluster`. -/
 noncomputable def nodeNetworkedVevFactor (m A : ℕ) (c : ℝ := 1) : ℝ :=
